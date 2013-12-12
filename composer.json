@@ -1,0 +1,11 @@
+{
+    "name": "halleck45/php-metrics",
+    "autoload": {
+        "psr-0": {
+            "": "./src/"
+        }
+    },
+    "require": {
+        "phploc/phploc": "~2.0"
+    }
+}
