@@ -7,6 +7,10 @@ Gives metrics about PHP project and classes.
     curl -sS https://getcomposer.org/installer | php
     php composer.phar install
 
+# Usage
+
+    php ./bin/metrics.php <folder or filename>
+
 # Metrics
 
 ## Halstead complexity
@@ -44,7 +48,9 @@ Generally:
 + 10-19 = Warning
 + 20-100 = Ok
 
-# Usage
+
+
+# Use it in code
 
 ## Halstead
 
