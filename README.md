@@ -25,15 +25,15 @@ This indicator provides:
 + Time to implement, in seconds (T)
 + Number of delivered bugs (B)
 
-
-
-    N = N1 + N2
-    n = n1 + n2
-    V = N * log2(n)
-    D = ( n1 / 2 ) * ( N2 / n2 )
-    E = V * D
-    T = E / 18
-    B = ( E ** (2/3) ) / 3000
+```
+N = N1 + N2
+n = n1 + n2
+V = N * log2(n)
+D = ( n1 / 2 ) * ( N2 / n2 )
+E = V * D
+T = E / 18
+B = ( E ** (2/3) ) / 3000
+```
 
 ## Complexity index
 
