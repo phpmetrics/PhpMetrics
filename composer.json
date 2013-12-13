@@ -11,7 +11,7 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/Halleck45/PHPMetrics/issues"
+        "issues": "https://github.com/Halleck45/PhpMetrics/issues"
     },
     "autoload": {
         "psr-0": {
