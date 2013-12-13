@@ -11,6 +11,30 @@ Gives metrics about PHP project and classes.
 
     php ./bin/metrics.php <folder or filename>
 
+Will output:
+
+
+```
+file1.php:
+	Halstead:
+		Volume: 327.43
+		Length: 86
+		Vocabulary: 14
+		Effort: 163
+		Difficulty: 0.5
+		Delivred Bugs: 0.04
+		Time: 9.1
+	LOC:
+		LOC: 68
+		Logical LOC: 42
+		Cyclomatic complexity: 2
+	Maintenability:
+		Maintenability Index: 83.78
+
+file2.php:
+    ...
+```
+
 # Metrics
 
 ## Halstead complexity
@@ -54,22 +78,27 @@ Generally:
 
 ## Halstead
 
-    $halstead = new \Halstead\Halstead(new \Token\TokenType());
-    $rHalstead = $halstead->calculate($filename);
-    var_dump($rHalstead);
+```php
+$halstead = new \Halstead\Halstead(new \Token\TokenType());
+$rHalstead = $halstead->calculate($filename);
+var_dump($rHalstead);
+```
 
 ## PHPLoc
 
 This component uses [phploc](https://github.com/sebastianbergmann/phploc).
 
-    $loc = new \Loc\Loc();
-    $rLoc = $loc->calculate($filename);
-    var_dump($rLoc);
+```php
+$loc = new \Loc\Loc();
+$rLoc = $loc->calculate($filename);
+var_dump($rLoc);
+```
 
 ## Maintenability Index
 
-    $maintenability = new \MaintenabilityIndex\MaintenabilityIndex;
-    $rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
-    var_dump($rMaintenability);
-
+```php
+$maintenability = new \MaintenabilityIndex\MaintenabilityIndex;
+$rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
+var_dump($rMaintenability);
+```
 
