@@ -1,9 +1,18 @@
 <?php
+
+/*
+ * (c) Jean-François Lépine <https://twitter.com/Halleck45>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Loc;
 
 /**
- * Class FileInfo
- * @package Loc
+ * Representation of LOC
+ *
+ * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
 class Result {
 

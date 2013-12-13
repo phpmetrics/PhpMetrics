@@ -1,6 +1,25 @@
 <?php
+
+/*
+ * (c) Jean-François Lépine <https://twitter.com/Halleck45>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Token;
+
+/**
+ * Determins the type of a token (operand, operator...)
+ *
+ * @author Jean-François Lépine <https://twitter.com/Halleck45>
+ */
 class TokenType {
 
+    /**
+     * Available operands
+     * @var array
+     */
     private $operands = array(
         T_VARIABLE
         ,T_VAR
@@ -10,6 +29,11 @@ class TokenType {
         ,T_CONST
         ,T_STRING
     );
+
+    /**
+     * Available operators
+     * @var array
+     */
     private $operators = array(
         T_REQUIRE_ONCE
         ,T_REQUIRE
@@ -139,11 +163,23 @@ class TokenType {
         ,T_DIR
     );
 
+    /**
+     * Check if the token is operand
+     *
+     * @param Token $token
+     * @return boolean
+     */
     public function isOperand(Token $token)
     {
         return in_array($token->getType(), $this->operands);
     }
 
+    /**
+     * Check if the token is operator
+     *
+     * @param Token $token
+     * @return boolean
+     */
     public function isOperator(Token $token)
     {
         return in_array($token->getType(), $this->operators);
