@@ -1,5 +1,18 @@
 {
     "name": "halleck45/php-metrics",
+    "description": "POC of Halstead, Maintenability index for PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jean-François Lépine",
+            "email": "lepinejeanfrancois@yahoo.fr",
+            "homepage": "https://www.twitter.com/Halleck45",
+            "role": "Copyright Holder"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/Halleck45/PHPMetrics/issues"
+    },
     "autoload": {
         "psr-0": {
             "": "./src/"
