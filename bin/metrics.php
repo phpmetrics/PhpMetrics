@@ -7,7 +7,14 @@ $path = isset($argv[1]) ? $argv[1] : false;
 
 if(is_dir($path)) {
     $path = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-    $files = glob($path.'*.php');
+    $directory = new RecursiveDirectoryIterator($path);
+    $iterator = new RecursiveIteratorIterator($directory);
+    $regex = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+    $files = array();
+    foreach($regex as $file) {
+        $files[] = $file[0];
+    }
+
 } elseif(is_file($path)) {
     $files = array($path);
 } else {
