@@ -7,7 +7,8 @@
  * file that was distributed with this source code.
  */
 
-namespace MaintenabilityIndex;
+namespace Hal\MaintenabilityIndex;
+use Hal\Result\ExportableInterface;
 
 
 /**
@@ -15,7 +16,7 @@ namespace MaintenabilityIndex;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result {
+class Result implements ExportableInterface {
 
     /**
      * Maintenability index
@@ -24,6 +25,15 @@ class Result {
      * @var float
      */
     private $maintenabilityIndex;
+
+    /**
+     * @inheritdoc
+     */
+    public function asArray() {
+        return array(
+            'maintenabilityIndex' => (string) $this->getMaintenabilityIndex()
+        );
+    }
 
     /**
      * @param float $maintenabilityIndex

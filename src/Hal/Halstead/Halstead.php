@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Halstead;
+namespace Hal\Halstead;
 
 
 /**
@@ -48,9 +48,9 @@ class Halstead {
     /**
      * Constructor
      *
-     * @param \Token\TokenType $tokenType
+     * @param \Hal\Token\TokenType $tokenType
      */
-    public function __construct(\Token\TokenType $tokenType)
+    public function __construct(\Hal\Token\TokenType $tokenType)
     {
         $this->tokenType = $tokenType;
     }
@@ -67,7 +67,7 @@ class Halstead {
         $tokens = token_get_all(file_get_contents($filename));
 
         foreach($tokens as $data) {
-            $token = new \Token\Token($data);
+            $token = new \Hal\Token\Token($data);
             if($this->tokenType->isOperand($token)) {
                 $this->operands[] = $token;
             }
@@ -97,11 +97,19 @@ class Halstead {
         $N1 = sizeof($this->operands);
         $N2 = sizeof($this->operators);
 
-        $V = ($N1 + $N2)  * log($n1 +  $n2, 2);
-        $D = ($n1 / $N2) / (2 / $n2);
-        $E = $D * $V;
-        $B = $E * 0.667 / 3000;
-        $T = $E / 18;
+        if(($n2 == 0)||($N2 == 0)||($n2 == 2)) {
+            // files without operators
+            $V = $n1 = $n2 = $N1 = $N2 = $E = $D = $B = $T = 0;
+        } else {
+            // "normal" file
+            $V = ($N1 + $N2)  * log($n1 +  $n2, 2);
+            $D = ($n1 / $N2) / (2 / $n2);
+            $E = $D * $V;
+            $B = $E * 0.667 / 3000;
+            $T = $E / 18;
+        }
+
+
 
 
         $result

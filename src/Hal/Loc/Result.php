@@ -7,14 +7,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Loc;
+namespace Hal\Loc;
+use Hal\Result\ExportableInterface;
 
 /**
  * Representation of LOC
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result {
+class Result implements ExportableInterface {
 
     /**
      * Lines of code
@@ -36,6 +37,17 @@ class Result {
      * @var integer
      */
     private $complexityCyclomatic;
+
+    /**
+     * @inheritdoc
+     */
+    public function asArray() {
+        return array (
+            'cyclomaticComplexity' => $this->getComplexityCyclomatic()
+            ,'loc' => $this->getLoc()
+            ,'logicalLoc' => $this->getLogicalLoc()
+        );
+    }
 
     /**
      * @param int $complexityCyclomatic
@@ -87,8 +99,4 @@ class Result {
     {
         return $this->logicalLoc;
     }
-
-
-
-
 }

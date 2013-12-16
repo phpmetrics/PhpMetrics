@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Loc;
+namespace Hal\Loc;
 
 /**
  * Calculates Lines of code

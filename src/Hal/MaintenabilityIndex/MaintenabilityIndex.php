@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace MaintenabilityIndex;
+namespace Hal\MaintenabilityIndex;
 
 /**
  * Calculates Maintenability Index
@@ -23,11 +23,11 @@ class MaintenabilityIndex {
     /**
      * Calculates Maintenability Index
      *
-     * @param \Halstead\Result $rHalstead
-     * @param \Loc\Result $rLoc
+     * @param \Hal\Halstead\Result $rHalstead
+     * @param \Hal\Loc\Result $rLoc
      * @return Result
      */
-    public function calculate(\Halstead\Result $rHalstead, \Loc\Result $rLoc)
+    public function calculate(\Hal\Halstead\Result $rHalstead, \Hal\Loc\Result $rLoc)
     {
         $result = new Result;
         $result->setMaintenabilityIndex(

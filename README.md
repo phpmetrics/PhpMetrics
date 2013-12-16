@@ -35,6 +35,14 @@ file2.php:
     ...
 ```
 
+## Bubbles chart
+
+You can export the result to `json` with:
+
+    php ./bin/metrics.php --json <folder or filename> > renderer/bubbles/results.json
+
+To preview the json, open the file `renderer/bubbles/index.html` in your browser.
+
 # Metrics
 
 ## Halstead complexity

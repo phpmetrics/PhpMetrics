@@ -7,14 +7,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Halstead;
+namespace Hal\Halstead;
+use Hal\Result\ExportableInterface;
 
 /**
  * Representation of Halstead complexity
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result {
+class Result implements ExportableInterface {
     /**
      * Length of a program
      *
@@ -63,6 +64,21 @@ class Result {
      * @var integer
      */
     private $time;
+
+    /**
+     * @inheritdoc
+     */
+    public function asArray() {
+        return array(
+            'volume' => $this->getVolume()
+            ,'length' => $this->getLength()
+            ,'vocabulary' => $this->getVocabulary()
+            ,'effort' => $this->getEffort()
+            ,'difficulty' => (string) $this->getDifficulty()
+            ,'time' => $this->getTime()
+            ,'bugs' => $this->getBugs()
+        );
+    }
 
     /**
      * @param float $bugs

@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Token;
+namespace Hal\Token;
 
 /**
  * Representation of Token

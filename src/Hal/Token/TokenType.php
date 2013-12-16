@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Token;
+namespace Hal\Token;
 
 /**
  * Determins the type of a token (operand, operator...)
