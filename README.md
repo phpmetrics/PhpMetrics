@@ -43,6 +43,14 @@ You can export the result to `json` with:
 
 To preview the json, open the file `report/bubbles/index.html` in your browser.
 
+### Read report
+
++ Each file is symbolized by a circle
++ Size of the circle represents the Cyclomatic complexity
++ Color of the circle represents te Maintenability Index
++ Move your cursor on a circle to have details
+
+Large red circles will be probably hard to maintain.
 
 ### Example : Symfony2 Component
 
@@ -124,3 +132,10 @@ $rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
 var_dump($rMaintenability);
 ```
 
+# Author
+
++ Jean-François Lépine <[blog.lepine.pro](http://blog.lepine.pro)>
+
+# Licence
+
+See the LICENCE file
