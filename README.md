@@ -43,6 +43,20 @@ You can export the result to `json` with:
 
 To preview the json, open the file `report/bubbles/index.html` in your browser.
 
+
+### Example : Symfony2 Component
+
+[open full report](demo/reports/symfony2-component/index.html)
+
+![Symfony2 report](demo/images/preview-symfony2-component.png)
+
+### Example : Zend Framework 2
+
+[open full report](demo/reports/zendframework2/index.html)
+
+![Symfony2 report](demo/images/preview-zendframework2.png)
+
+
 # Metrics
 
 ## Halstead complexity
