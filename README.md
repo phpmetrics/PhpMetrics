@@ -39,9 +39,9 @@ file2.php:
 
 You can export the result to `json` with:
 
-    php ./bin/metrics.php --json <folder or filename> > renderer/bubbles/results.json
+    php ./bin/metrics.php --json <folder or filename> > report/bubbles/results.json
 
-To preview the json, open the file `renderer/bubbles/index.html` in your browser.
+To preview the json, open the file `report/bubbles/index.html` in your browser.
 
 # Metrics
 
