@@ -54,13 +54,13 @@ Large red circles will be probably hard to maintain.
 
 ### Example : Symfony2 Component
 
-[open full report](demo/reports/symfony2-component/index.html)
+[open full report](demo/symfony2-component/index.html)
 
 ![Symfony2 report](demo/images/preview-symfony2-component.png)
 
 ### Example : Zend Framework 2
 
-[open full report](demo/reports/zendframework2/index.html)
+[open full report](demo/zendframework2/index.html)
 
 ![Symfony2 report](demo/images/preview-zendframework2.png)
 
