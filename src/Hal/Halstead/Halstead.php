@@ -110,16 +110,14 @@ class Halstead {
         }
 
 
-
-
         $result
             ->setLength($N1 + $N2)
             ->setVocabulary($n1 + $n2)
             ->setVolume($V)
             ->setDifficulty($D)
-            ->setEffort($E)
-            ->setBugs($B)
-            ->setTime($T)
+            ->setEffort(round($E,2))
+            ->setBugs(round($B, 2))
+            ->setTime(round($T))
         ;
 
         return $result;
