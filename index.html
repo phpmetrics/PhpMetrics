@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Phpmetrics by Halleck45</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Phpmetrics</h1>
+        <p>Static metrics tool for PHP</p>
+
+        <p class="view"><a href="https://github.com/Halleck45/PhpMetrics">View the Project on GitHub <small>Halleck45/PhpMetrics</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/Halleck45/PhpMetrics/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/Halleck45/PhpMetrics/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/Halleck45/PhpMetrics">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="phpmetrics" class="anchor" href="#phpmetrics"><span class="octicon octicon-link"></span></a>PhpMetrics</h1>
+
+<p>Gives metrics about PHP project and classes.</p>
+
+<h1>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<pre><code>curl -sS https://getcomposer.org/installer | php
+php composer.phar install
+</code></pre>
+
+<h1>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<pre><code>php ./bin/metrics.php &lt;folder or filename&gt;
+</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>file1.php:
+    Halstead:
+        Volume: 327.43
+        Length: 86
+        Vocabulary: 14
+        Effort: 163
+        Difficulty: 0.5
+        Delivred Bugs: 0.04
+        Time: 9.1
+    LOC:
+        LOC: 68
+        Logical LOC: 42
+        Cyclomatic complexity: 2
+    Maintenability:
+        Maintenability Index: 83.78
+
+file2.php:
+    ...
+</code></pre>
+
+<h2>
+<a name="bubbles-chart" class="anchor" href="#bubbles-chart"><span class="octicon octicon-link"></span></a> Bubbles chart</h2>
+
+<p>You can export the result to <code>json</code> with:</p>
+
+<pre><code>php ./bin/metrics.php --json &lt;folder or filename&gt; &gt; report/bubbles/results.json
+</code></pre>
+
+<p>To preview the json, open the file <code>report/bubbles/index.html</code> in your browser.</p>
+
+<h3>
+<a name="read-report" class="anchor" href="#read-report"><span class="octicon octicon-link"></span></a> Read report</h3>
+
+<ul>
+<li>Each file is symbolized by a circle</li>
+<li>Size of the circle represents the Cyclomatic complexity</li>
+<li>Color of the circle represents te Maintenability Index</li>
+<li>Move your cursor on a circle to have details</li>
+</ul><p>Large red circles will be probably hard to maintain.</p>
+
+<h3>
+<a name="example--symfony2-component" class="anchor" href="#example--symfony2-component"><span class="octicon octicon-link"></span></a> Example : Symfony2 Component</h3>
+
+<p><a href="demo/symfony2-component/index.html">open full report</a></p>
+
+<p><img src="demo/images/preview-symfony2-component.png" alt="Symfony2 report"></p>
+
+<h3>
+<a name="example--zend-framework-2" class="anchor" href="#example--zend-framework-2"><span class="octicon octicon-link"></span></a> Example : Zend Framework 2</h3>
+
+<p><a href="demo/zendframework2/index.html">open full report</a></p>
+
+<p><img src="demo/images/preview-zendframework2.png" alt="Symfony2 report"></p>
+
+<h1>
+<a name="metrics" class="anchor" href="#metrics"><span class="octicon octicon-link"></span></a> Metrics</h1>
+
+<h2>
+<a name="halstead-complexity" class="anchor" href="#halstead-complexity"><span class="octicon octicon-link"></span></a>Halstead complexity</h2>
+
+<p>This indicator provides:</p>
+
+<ul>
+<li>Program length (N)</li>
+<li>Vocabulary size (n)</li>
+<li>Program volume (V)</li>
+<li>Difficulty level (D)</li>
+<li>Effort to implement (E)</li>
+<li>Time to implement, in seconds (T)</li>
+<li>Number of delivered bugs (B)</li>
+</ul><pre><code>N = N1 + N2
+n = n1 + n2
+V = N * log2(n)
+D = ( n1 / 2 ) * ( N2 / n2 )
+E = V * D
+T = E / 18
+B = ( E ** (2/3) ) / 3000
+</code></pre>
+
+<h2>
+<a name="complexity-index" class="anchor" href="#complexity-index"><span class="octicon octicon-link"></span></a> Complexity index</h2>
+
+<p>According Wikipedia, Maintainability Index is a software metric which measures how maintainable (easy to support and change) the source code is.
+The maintainability index is calculated as a factored formula consisting of Lines Of Code, Cyclomatic Complexity and Halstead volume.</p>
+
+<pre><code>Maintainability Index = 171 - 5.2 * ln(Halstead Volume) - 0.23 * (Cyclomatic Complexity) - 16.2 * ln(Lines of Code))*100 / 171
+</code></pre>
+
+<p>Generally:</p>
+
+<ul>
+<li>0-9 = Danger</li>
+<li>10-19 = Warning</li>
+<li>20-100 = Ok</li>
+</ul><h1>
+<a name="use-it-in-code" class="anchor" href="#use-it-in-code"><span class="octicon octicon-link"></span></a> Use it in code</h1>
+
+<h2>
+<a name="halstead" class="anchor" href="#halstead"><span class="octicon octicon-link"></span></a> Halstead</h2>
+
+<div class="highlight highlight-php"><pre><span class="nv">$halstead</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Halstead\Halstead</span><span class="p">(</span><span class="k">new</span> <span class="nx">\Token\TokenType</span><span class="p">());</span>
+<span class="nv">$rHalstead</span> <span class="o">=</span> <span class="nv">$halstead</span><span class="o">-&gt;</span><span class="na">calculate</span><span class="p">(</span><span class="nv">$filename</span><span class="p">);</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$rHalstead</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="phploc" class="anchor" href="#phploc"><span class="octicon octicon-link"></span></a> PHPLoc</h2>
+
+<p>This component uses <a href="https://github.com/sebastianbergmann/phploc">phploc</a>.</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$loc</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Loc\Loc</span><span class="p">();</span>
+<span class="nv">$rLoc</span> <span class="o">=</span> <span class="nv">$loc</span><span class="o">-&gt;</span><span class="na">calculate</span><span class="p">(</span><span class="nv">$filename</span><span class="p">);</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$rLoc</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="maintenability-index" class="anchor" href="#maintenability-index"><span class="octicon octicon-link"></span></a> Maintenability Index</h2>
+
+<div class="highlight highlight-php"><pre><span class="nv">$maintenability</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\MaintenabilityIndex\MaintenabilityIndex</span><span class="p">;</span>
+<span class="nv">$rMaintenability</span> <span class="o">=</span> <span class="nv">$maintenability</span><span class="o">-&gt;</span><span class="na">calculate</span><span class="p">(</span><span class="nv">$rHalstead</span><span class="p">,</span> <span class="nv">$rLoc</span><span class="p">);</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$rMaintenability</span><span class="p">);</span>
+</pre></div>
+
+<h1>
+<a name="author" class="anchor" href="#author"><span class="octicon octicon-link"></span></a> Author</h1>
+
+<ul>
+<li>Jean-François Lépine &lt;<a href="http://blog.lepine.pro">blog.lepine.pro</a>&gt;</li>
+</ul><h1>
+<a name="licence" class="anchor" href="#licence"><span class="octicon octicon-link"></span></a> Licence</h1>
+
+<p>See the LICENCE file</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/Halleck45">Halleck45</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
