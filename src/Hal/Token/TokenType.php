@@ -142,7 +142,7 @@ class TokenType {
     );
 
     public function __construct() {
-        if(version_compare(PHP_VERSION, '5.4.0')) {
+        if(version_compare(PHP_VERSION, '5.4.0') >= 0) {
             $this->operators = array_merge($this->operators, array(
                 T_INSTEADOF
                 , T_TRAIT
