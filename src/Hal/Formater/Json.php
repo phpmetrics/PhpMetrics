@@ -35,6 +35,6 @@ class Json implements FormaterInterface {
      * @inheritdoc
      */
     public function terminate(){
-        echo json_encode($this->results, JSON_PRETTY_PRINT);
+        echo json_encode($this->results);
     }
 }

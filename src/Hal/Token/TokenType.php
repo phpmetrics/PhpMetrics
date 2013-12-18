@@ -81,15 +81,9 @@ class TokenType {
         ,T_IF
         ,T_ELSEIF
         ,T_ELSE
-        ,T_ENDIF
-            //    ,T_LNUMBER
-            //    ,T_DNUMBER
-            //    ,T_STRING
         ,T_STRING_VARNAME
-            //    ,T_VARIABLE
         ,T_NUM_STRING
         ,T_INLINE_HTML
-            //    ,T_CHARACTER
         ,T_BAD_CHARACTER
         ,T_ENCAPSED_AND_WHITESPACE
         ,T_CONSTANT_ENCAPSED_STRING
@@ -112,13 +106,11 @@ class TokenType {
         ,T_CONTINUE
         ,T_GOTO
         ,T_FUNCTION
-            //    ,T_CONST
         ,T_RETURN
         ,T_TRY
         ,T_CATCH
         ,T_THROW
         ,T_USE
-        ,T_INSTEADOF
         ,T_GLOBAL
         ,T_PUBLIC
         ,T_PROTECTED
@@ -132,37 +124,33 @@ class TokenType {
         ,T_EMPTY
         ,T_HALT_COMPILER
         ,T_CLASS
-        ,T_TRAIT
         ,T_INTERFACE
         ,T_EXTENDS
         ,T_IMPLEMENTS
         ,T_OBJECT_OPERATOR
         ,T_DOUBLE_ARROW
         ,T_LIST
-            //    ,T_ARRAY
-        ,T_CALLABLE
         ,T_CLASS_C
-        ,T_TRAIT_C
         ,T_METHOD_C
         ,T_FUNC_C
         ,T_LINE
         ,T_FILE
-            //    ,T_COMMENT
-            //    ,T_DOC_COMMENT
-            //    ,T_OPEN_TAG
         ,T_OPEN_TAG_WITH_ECHO
-            //    ,T_CLOSE_TAG
-            //    ,T_WHITESPACE
-            //    ,T_START_HEREDOC
-            //    ,T_END_HEREDOC
-            //    ,T_DOLLAR_OPEN_CURLY_BRACES
-            //    ,T_CURLY_OPEN
-            //    ,T_PAAMAYIM_NEKUDOTAYIM
         ,T_NAMESPACE
         ,T_NS_C
         ,T_DIR
     );
 
+    public function __construct() {
+        if(version_compare(PHP_VERSION, '5.4.0')) {
+            $this->operators = array_merge($this->operators, array(
+                T_INSTEADOF
+                , T_TRAIT
+                , T_CALLABLE
+                , T_TRAIT_C
+            ));
+        }
+    }
     /**
      * Check if the token is operand
      *
