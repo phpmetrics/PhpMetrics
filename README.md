@@ -54,15 +54,15 @@ Large red circles will be probably hard to maintain.
 
 ### Example : Symfony2 Component
 
-[open full report](demo/symfony2-component/index.html)
+[open full report](http://halleck45.github.io/PhpMetrics/report/symfony2-component/index.html)
 
-![Symfony2 report](demo/images/preview-symfony2-component.png)
+![Symfony2 report](http://halleck45.github.io/PhpMetrics/images/preview-symfony2-component.png)
 
 ### Example : Zend Framework 2
 
-[open full report](demo/zendframework2/index.html)
+[open full report](http://halleck45.github.io/PhpMetrics/report/zendframework2/index.html)
 
-![Symfony2 report](demo/images/preview-zendframework2.png)
+![Symfony2 report](http://halleck45.github.io/PhpMetrics/images/preview-zendframework2.png)
 
 
 # Metrics
