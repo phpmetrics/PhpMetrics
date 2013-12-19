@@ -2,6 +2,8 @@
 
 Gives metrics about PHP project and classes.
 
+[![Build Status](https://secure.travis-ci.org/Halleck45/PhpMetrics.png)](http://travis-ci.org/Halleck45/PhpMetrics)
+
 # Installation
 
 ## As Phar archive
