@@ -4,11 +4,15 @@ Gives metrics about PHP project and classes.
 
 # Installation
 
+## As Phar archive
+
+    wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar
+    php metrics.phar <folder or filename>
+    
+## With sources:
+
     curl -sS https://getcomposer.org/installer | php
     php composer.phar install
-
-# Usage
-
     php ./bin/metrics.php <folder or filename>
 
 Will output:
@@ -131,6 +135,16 @@ $maintenability = new \MaintenabilityIndex\MaintenabilityIndex;
 $rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
 var_dump($rMaintenability);
 ```
+# Contribute
+
+In order to run unit tests, please install dev dependencies:
+
+    curl -sS https://getcomposer.org/installer | php
+    php composer.phar install --dev
+
+Then, to run the test suite:
+
+    ./vendor/bin/phpunit -c phpunit.xml.dist
 
 # Author
 
