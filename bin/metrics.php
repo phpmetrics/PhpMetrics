@@ -5,13 +5,14 @@ $filename = 'demo/app1.php';
 
 // path is given as last
 $path = isset($argv[$argc - 1]) ? $argv[$argc - 1] : false;
-$options = getopt('', array('json'));
+$options = getopt('', array('json', 'extensions::'));
+$extensions = isset($options['extensions']) ? $options['extensions'] : 'php';
 
 if(is_dir($path)) {
     $path = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
     $directory = new RecursiveDirectoryIterator($path);
     $iterator = new RecursiveIteratorIterator($directory);
-    $regex = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+    $regex = new RegexIterator($iterator, '/^.+\.('. $extensions .')$/i', RecursiveRegexIterator::GET_MATCH);
     $files = array();
     foreach($regex as $file) {
         $files[] = $file[0];
@@ -20,7 +21,7 @@ if(is_dir($path)) {
 } elseif(is_file($path)) {
     $files = array($path);
 } else {
-    die("PHP Metrics by Jean-François Lépine\nUsage: \n\tphp ".basename(__FILE__)." [--json] <directory or filename>\n");
+    die("PHP Metrics by Jean-François Lépine\nUsage: \n\tphp ".basename(__FILE__)." [--json] [--extensions="php|php5|inc|..."] <directory or filename>\n");
 }
 
 
