@@ -17,6 +17,18 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         $this->assertRegExp('/Delivred Bugs/', $output);
     }
 
+    public function testICanRunIsolatedPhar() {
+
+        $path = getcwd();
+        copy(__DIR__.'/../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
+        chdir(sys_get_temp_dir());
+        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar');
+        $output = shell_exec($command);
+        chdir($path);
+
+        $this->assertRegExp('/Delivred Bugs/', $output);
+    }
+
     public function testICanRunPhpFile() {
 
         $command = sprintf('php '.__DIR__.'/../../../bin/metrics.php');

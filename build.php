@@ -12,8 +12,7 @@ $phar->startBuffering();
 
 
 $files = rglob('*.php');
-$exclude = array(':(Compiler.php$!', 'ClassLoader.php$', "!.git!");
-$exclude = '!(Compiler.php$)|(ClassLoader.php$)|(.git)|(.svn)|(Test.php$)!';
+$exclude = '!(Compiler.php$)|(.git)|(.svn)|(Test.php$)!';
 foreach($files as $file) {
     if(preg_match($exclude, $file)) continue;
     $phar->addFromString($file, file_get_contents($file));
