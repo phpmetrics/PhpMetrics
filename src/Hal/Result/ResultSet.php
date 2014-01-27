@@ -114,7 +114,6 @@ class ResultSet implements ExportableInterface {
     public function getMaintenabilityIndex()
     {
         return $this->maintenabilityIndex;
-        return $this;
     }
 
     /**

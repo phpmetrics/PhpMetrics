@@ -92,10 +92,10 @@ class Halstead {
         $uniqueOperators = array_map( 'unserialize', array_unique( array_map( 'serialize', $this->operators ) ) );
         $uniqueOperands = array_map( 'unserialize', array_unique( array_map( 'serialize', $this->operands ) ) );
 
-        $n1 = sizeof($uniqueOperands);
-        $n2 = sizeof($uniqueOperators);
-        $N1 = sizeof($this->operands);
-        $N2 = sizeof($this->operators);
+        $n1 = sizeof($uniqueOperands, COUNT_NORMAL);
+        $n2 = sizeof($uniqueOperators, COUNT_NORMAL);
+        $N1 = sizeof($this->operands, COUNT_NORMAL);
+        $N2 = sizeof($this->operators, COUNT_NORMAL);
 
         if(($n2 == 0)||($N2 == 0)||($n2 == 2)) {
             // files without operators
