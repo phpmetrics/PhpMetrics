@@ -51,7 +51,7 @@ foreach($files as $filename) {
 
     $formater->pushResult($resultSet);
 }
-$formater->terminate();
+echo $formater->terminate();
 
 
 

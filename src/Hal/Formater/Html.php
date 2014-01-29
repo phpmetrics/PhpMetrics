@@ -47,7 +47,7 @@ class Html implements FormaterInterface {
         \Twig_Autoloader::register();
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../templates/html');
         $twig = new \Twig_Environment($loader, array('cache' => false));
-        echo $twig->render('report.html.twig', array(
+        return $twig->render('report.html.twig', array(
             'results' => $this->results->asArray()
             , 'boundaries' => new ResultBoundary($this->results)
         ));
