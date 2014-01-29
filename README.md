@@ -41,13 +41,11 @@ file2.php:
     ...
 ```
 
-## Bubbles chart
+## Bubbles chart and complete report
 
-You can export the result to `json` with:
+If you want to get the complete report (html):
 
-    php ./bin/metrics.php --json <folder or filename> > report/bubbles/results.json
-
-To preview the json, open the file `report/bubbles/index.html` in your browser.
+    php ./bin/metrics.php --format=html <folder or filename> > /path/of/your/choice.html
 
 ### Read report
 
