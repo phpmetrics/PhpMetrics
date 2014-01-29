@@ -22,7 +22,7 @@ class Html implements FormaterInterface {
 
     /**
      * Results
-     * @var array
+     * @var ResultCollection
      */
     private $results;
 
