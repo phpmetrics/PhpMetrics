@@ -11,7 +11,7 @@ $phar->setSignatureAlgorithm(\Phar::SHA1);
 $phar->startBuffering();
 
 
-$files = rglob('*.php');
+$files = array_merge(rglob('*.php'), rglob('*.twig'));
 $exclude = '!(Compiler.php$)|(.git)|(.svn)|(Test.php$)!';
 foreach($files as $file) {
     if(preg_match($exclude, $file)) continue;

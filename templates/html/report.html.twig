@@ -1,0 +1,119 @@
+<html>
+<head>
+    <title>PhpMetrics report</title>
+    <meta charset="utf-8">
+
+    <style type="text/css">
+        {% include "assets/bootstrap.css.twig" %}
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>PhpMetrics report</h1>
+    <div id="svg"></div>
+    <a class="btn btn-primary" id="btn-save" download="phpmetric-bubbles.svg">Download (as SVG)</a>
+
+    <h2>Boundaries</h2>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <th></th>
+            <th>Min</th>
+            <th>Max</th>
+            <th>Average</th>
+        </thead>
+        <tbody>
+            <tr>
+                <th>LLOC</th>
+                <td>{{boundaries.getMin('logicalLoc')}}</td>
+                <td>{{boundaries.getMax('logicalLoc')}}</td>
+                <td>{{boundaries.getAverage('logicalLoc')|round}}</td>
+            </tr>
+            <tr>
+                <th>Complexity</th>
+                <td>{{boundaries.getMin('cyclomaticComplexity')|round}}</td>
+                <td>{{boundaries.getMax('cyclomaticComplexity')|round}}</td>
+                <td>{{boundaries.getAverage('cyclomaticComplexity')|round}}</td>
+            </tr>
+            <tr>
+                <th>Maintenability index</th>
+                <td>{{boundaries.getMin('maintenabilityIndex')|round }}</td>
+                <td>{{boundaries.getMax('maintenabilityIndex')|round }}</td>
+                <td>{{boundaries.getAverage('maintenabilityIndex')|round }}</td>
+            </tr>
+            <tr>
+                <th>Difficulty</th>
+                <td>{{boundaries.getMin('difficulty')|round(2)}}</td>
+                <td>{{boundaries.getMax('difficulty')|round(2)}}</td>
+                <td>{{boundaries.getAverage('difficulty')|round(2)}}</td>
+            </tr>
+            <tr>
+                <th>Vocabulary</th>
+                <td>{{boundaries.getMin('vocabulary')}}</td>
+                <td>{{boundaries.getMax('vocabulary')}}</td>
+                <td>{{boundaries.getAverage('vocabulary')|round}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Details</h2>
+
+    <table class="table table-striped table-condensed" id="table-results">
+        <thead>
+            <th>File</th>
+            <th>LLOC</th>
+            <th>Complexity</th>
+            <th>Maintenability index</th>
+            <th>Difficulty</th>
+            <th>Vocabulary</th>
+        </thead>
+        <tbody>
+        {% for result in results %}
+            <tr>
+                <td>{{result.filename}}</td>
+                <td>{{result.logicalLoc}}</td>
+                <td>{{result.cyclomaticComplexity}}</td>
+                <td>{{result.maintenabilityIndex  |round }}</td>
+                <td>{{result.difficulty |round(2) }}</td>
+                <td>{{result.vocabulary}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    <div>
+        Powered by <a href="https://github.com/Halleck45/PhpMetrics">PhpMetrics</a> - Copyright Jean-François Lépine
+    </div>
+
+
+</div>
+
+
+
+
+
+
+{% include "assets/d3js.js.twig" %}
+{% include "assets/jquery.js.twig" %}
+{% include "assets/tablesorter.js.twig" %}
+{% include "report.js.twig" %}
+
+
+<script type="text/javascript">
+    $(function(){
+        $("#table-results").tablesorter();
+
+        var svg  = document.getElementById('svg').childNodes[0],
+        xml  = new XMLSerializer().serializeToString(svg),
+        data = btoa(xml),
+        img  = new Image();
+        $('#btn-save').attr('href', 'data:application/octet-stream;base64,' + data)
+    });
+</script>
+
+
+</body>
+</html>

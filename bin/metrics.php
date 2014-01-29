@@ -5,7 +5,7 @@ $filename = 'demo/app1.php';
 
 // path is given as last
 $path = isset($argv[$argc - 1]) ? $argv[$argc - 1] : false;
-$options = getopt('', array('json', 'extensions::'));
+$options = getopt('', array('format::', 'extensions::'));
 $extensions = isset($options['extensions']) ? $options['extensions'] : 'php';
 
 if(is_dir($path)) {
@@ -21,12 +21,12 @@ if(is_dir($path)) {
 } elseif(is_file($path)) {
     $files = array($path);
 } else {
-    die("PHP Metrics by Jean-François Lépine\nUsage: \n\tphp ".basename(__FILE__)." [--json] [--extensions=\"php|php5|inc|...\"] <directory or filename>\n");
+    die("PHP Metrics by Jean-François Lépine\nUsage: \n\tphp ".basename(__FILE__)." [--format=json] [--format=html] [--extensions=\"php|php5|inc|...\"] <directory or filename>\n");
 }
 
 
 // choose formater
-$format = isset($options['json']) ? 'json' : 'cli';
+$format = isset($options['format']) ? $options['format'] : 'cli';
 $classname = '\Hal\Formater\\'.ucfirst($format);
 $formater = new $classname;
 
