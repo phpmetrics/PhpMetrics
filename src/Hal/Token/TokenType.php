@@ -27,7 +27,7 @@ class TokenType {
         ,T_DNUMBER
         ,T_ARRAY
         ,T_CONST
-        ,T_STRING
+//        ,T_STRING
     );
 
     /**
@@ -83,9 +83,7 @@ class TokenType {
         ,T_ELSE
         ,T_STRING_VARNAME
         ,T_NUM_STRING
-        ,T_INLINE_HTML
         ,T_BAD_CHARACTER
-        ,T_ENCAPSED_AND_WHITESPACE
         ,T_CONSTANT_ENCAPSED_STRING
         ,T_ECHO
         ,T_DO
@@ -127,7 +125,6 @@ class TokenType {
         ,T_INTERFACE
         ,T_EXTENDS
         ,T_IMPLEMENTS
-        ,T_OBJECT_OPERATOR
         ,T_DOUBLE_ARROW
         ,T_LIST
         ,T_CLASS_C

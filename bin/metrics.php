@@ -43,7 +43,7 @@ foreach($files as $filename) {
     $rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
 
     // formats
-    $resultSet = new \Hal\Result\ResultSet($filename);
+    $resultSet = new \Hal\Result\ResultSet(basename($path) . str_replace($path, '/', $filename));
     $resultSet
         ->setLoc($rLoc)
         ->setHalstead($rHalstead)

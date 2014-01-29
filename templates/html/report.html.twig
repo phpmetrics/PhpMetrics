@@ -50,6 +50,12 @@
                 <td>{{boundaries.getAverage('difficulty')|round(2)}}</td>
             </tr>
             <tr>
+                <th>Volume</th>
+                <td>{{boundaries.getMin('volume')|round}}</td>
+                <td>{{boundaries.getMax('volume')|round}}</td>
+                <td>{{boundaries.getAverage('volume')|round}}</td>
+            </tr>
+            <tr>
                 <th>Vocabulary</th>
                 <td>{{boundaries.getMin('vocabulary')}}</td>
                 <td>{{boundaries.getMax('vocabulary')}}</td>
@@ -66,7 +72,7 @@
             <th>LLOC</th>
             <th>Complexity</th>
             <th>Maintenability index</th>
-            <th>Difficulty</th>
+            <th>Volume</th>
             <th>Vocabulary</th>
         </thead>
         <tbody>
@@ -76,7 +82,7 @@
                 <td>{{result.logicalLoc}}</td>
                 <td>{{result.cyclomaticComplexity}}</td>
                 <td>{{result.maintenabilityIndex  |round }}</td>
-                <td>{{result.difficulty |round(2) }}</td>
+                <td>{{result.volume |round(2) }}</td>
                 <td>{{result.vocabulary}}</td>
             </tr>
         {% endfor %}

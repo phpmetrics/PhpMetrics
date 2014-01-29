@@ -30,12 +30,23 @@ class MaintenabilityIndex {
     public function calculate(\Hal\Halstead\Result $rHalstead, \Hal\Loc\Result $rLoc)
     {
         $result = new Result;
-        $result->setMaintenabilityIndex(
+
+        // I've change the original formula to adapt it to PHP projects
+        // If you want try with the original measure: uncomment this code:
+        //
+        // $result->setMaintenabilityIndex(max(
+        //     171
+        //     - (5.2 * \log($rHalstead->getVolume(),2))
+        //     - (0.23 * $rLoc->getComplexityCyclomatic())
+        //     - (16.2 * \log($rLoc->getLogicalLoc(),2))
+        //     ,0));
+
+        $result->setMaintenabilityIndex(max(
             171
-            - (5.2 * \log($rHalstead->getEffort()))
-            - (0.23 * \log($rLoc->getComplexityCyclomatic()))
-            - (16.2 * \log($rLoc->getLogicalLoc()))
-        );
+            - (1.2 * \log($rHalstead->getVolume(),2))
+            - (0.23 * $rLoc->getComplexityCyclomatic())
+            - (15.2 * \log($rLoc->getLogicalLoc(),2))
+        ,0));
         return $result;
     }
 }
