@@ -30,53 +30,21 @@
       <section>
         <h1>
 <a name="phpmetrics" class="anchor" href="#phpmetrics"><span class="octicon octicon-link"></span></a>PhpMetrics</h1>
+<h2>Static analyze of maintenability for PHP projects</h2>
 
-<p>Gives metrics about PHP project and classes.</p>
-
-<h1>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
-
-<pre><code>curl -sS https://getcomposer.org/installer | php
-php composer.phar install
-</code></pre>
 
 <h1>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h1>
 
-<pre><code>php ./bin/metrics.php &lt;folder or filename&gt;
+<pre><code>wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar
+php metrics.phar --format=html <folder or filename> > /path/of/my/choice.html
 </code></pre>
 
-<p>Will output:</p>
+<p>
+    Will generate report. This report contains a bubble chart. For example, there is the chart for Symfony2 Component (the <a href="report/symfony2-component/index.html">complete report is available here</a>):
+</p>
+<p><img src="images/preview-report-symfony2.png" alt="Symfony2 report"></p>
 
-<pre><code>file1.php:
-    Halstead:
-        Volume: 327.43
-        Length: 86
-        Vocabulary: 14
-        Effort: 163
-        Difficulty: 0.5
-        Delivred Bugs: 0.04
-        Time: 9.1
-    LOC:
-        LOC: 68
-        Logical LOC: 42
-        Cyclomatic complexity: 2
-    Maintenability:
-        Maintenability Index: 83.78
-
-file2.php:
-    ...
-</code></pre>
-
-<h2>
-<a name="bubbles-chart" class="anchor" href="#bubbles-chart"><span class="octicon octicon-link"></span></a> Bubbles chart</h2>
-
-<p>You can export the result to <code>json</code> with:</p>
-
-<pre><code>php ./bin/metrics.php --json &lt;folder or filename&gt; &gt; report/bubbles/results.json
-</code></pre>
-
-<p>To preview the json, open the file <code>report/bubbles/index.html</code> in your browser.</p>
 
 <h3>
 <a name="read-report" class="anchor" href="#read-report"><span class="octicon octicon-link"></span></a> Read report</h3>
@@ -88,19 +56,6 @@ file2.php:
 <li>Move your cursor on a circle to have details</li>
 </ul><p>Large red circles will be probably hard to maintain.</p>
 
-<h3>
-<a name="example--symfony2-component" class="anchor" href="#example--symfony2-component"><span class="octicon octicon-link"></span></a> Example : Symfony2 Component</h3>
-
-<p><a href="report/symfony2-component/index.html">open full report</a></p>
-
-<p><img src="images/preview-symfony2-component.png" alt="Symfony2 report"></p>
-
-<h3>
-<a name="example--zend-framework-2" class="anchor" href="#example--zend-framework-2"><span class="octicon octicon-link"></span></a> Example : Zend Framework 2</h3>
-
-<p><a href="report/zendframework2/index.html">open full report</a></p>
-
-<p><img src="images/preview-zendframework2.png" alt="Symfony2 report"></p>
 
 <h1>
 <a name="metrics" class="anchor" href="#metrics"><span class="octicon octicon-link"></span></a> Metrics</h1>
@@ -143,7 +98,7 @@ The maintainability index is calculated as a factored formula consisting of Line
 <li>10-19 = Warning</li>
 <li>20-100 = Ok</li>
 </ul><h1>
-<a name="use-it-in-code" class="anchor" href="#use-it-in-code"><span class="octicon octicon-link"></span></a> Use it in code</h1>
+<a name="use-it-in-code" class="anchor" href="#use-it-in-code"><span class="octicon octicon-link"></span></a> Reuse components in your code</h1>
 
 <h2>
 <a name="halstead" class="anchor" href="#halstead"><span class="octicon octicon-link"></span></a> Halstead</h2>
