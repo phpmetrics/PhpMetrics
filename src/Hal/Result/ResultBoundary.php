@@ -65,6 +65,7 @@ class ResultBoundary implements ExportableInterface {
         $arrayMerged = call_user_func_array('array_merge_recursive', $array);
 
         foreach($arrayMerged as $key => $values) {
+            $values = (array) $values;
             $this->max[$key] = max($values);
             $this->min[$key] = min($values);
             $this->sum[$key] = array_sum($values);

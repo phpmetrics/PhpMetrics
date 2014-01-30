@@ -19,12 +19,12 @@ use Hal\Result\ExportableInterface;
 class Result implements ExportableInterface {
 
     /**
-     * Maintenability index
+     * Maintenability index without comment
      * Designed in 1991 by Paul Oman and Jack Hagemeister at the University of Idaho
      *
      * @var float
      */
-    private $maintenabilityIndex;
+    private $maintenabilityIndexWithoutComment;
 
 
     /**
@@ -41,17 +41,10 @@ class Result implements ExportableInterface {
      */
     public function asArray() {
         return array(
-            'maintenabilityIndex' => (string) $this->getMaintenabilityIndex()
+            'maintenabilityIndexWithoutComment' => (string) $this->getMaintenabilityIndexWithoutComment()
+            , 'maintenabilityIndex' => (string) $this->getMaintenabilityIndex()
             , 'commentWeight' => (float) $this->getCommentWeight()
         );
-    }
-
-    /**
-     * @param float $maintenabilityIndex
-     */
-    public function setMaintenabilityIndex($maintenabilityIndex)
-    {
-        $this->maintenabilityIndex = $maintenabilityIndex;
     }
 
     /**
@@ -59,7 +52,23 @@ class Result implements ExportableInterface {
      */
     public function getMaintenabilityIndex()
     {
-        return $this->maintenabilityIndex;
+        return $this->maintenabilityIndexWithoutComment + $this->commentWeight;
+    }
+
+    /**
+     * @param float $maintenabilityIndexWithoutComment
+     */
+    public function setMaintenabilityIndexWithoutComment($maintenabilityIndexWithoutComment)
+    {
+        $this->maintenabilityIndexWithoutComment = $maintenabilityIndexWithoutComment;
+
+    }
+    /**
+     * @return float
+     */
+    public function getMaintenabilityIndexWithoutComment()
+    {
+        return $this->maintenabilityIndexWithoutComment;
     }
 
     /**

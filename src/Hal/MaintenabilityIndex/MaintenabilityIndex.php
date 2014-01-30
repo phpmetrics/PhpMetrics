@@ -16,6 +16,14 @@ namespace Hal\MaintenabilityIndex;
  *      support and change) the source code is. The maintainability index is calculated as a factored formula consisting
  *      of Lines Of Code, Cyclomatic Complexity and Halstead volume."
  *
+ *      MIwoc: Maintainability Index without comments
+ *      MIcw: Maintainability Index comment weight
+ *      MI: Maintainability Index = MIwoc + MIcw
+ *
+ *      MIwoc = 171 - 5.2 * ln(aveV) -0.23 * aveG -16.2 * ln(aveLOC)
+ *      MIcw = 50 * sin(sqrt(2.4 * perCM))
+ *      MI = MIwoc + MIcw
+ *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
 class MaintenabilityIndex {
@@ -31,26 +39,15 @@ class MaintenabilityIndex {
     {
         $result = new Result;
 
-        // I've change the original formula to adapt it to PHP projects
-        // If you want try with the original measure: uncomment this code:
-        //
-        // $result->setMaintenabilityIndex(max(
-        //     171
-        //     - (5.2 * \log($rHalstead->getVolume(),2))
-        //     - (0.23 * $rLoc->getComplexityCyclomatic())
-        //     - (16.2 * \log($rLoc->getLogicalLoc(),2))
-        //     ,0));
+         $result->setMaintenabilityIndexWithoutComment(max(
+             171
+             - (5.2 * \log($rHalstead->getVolume(),2))
+             - (0.23 * $rLoc->getComplexityCyclomatic())
+             - (16.2 * \log($rLoc->getLogicalLoc(),2))
+             ,0));
 
-        $result->setMaintenabilityIndex(max(
-            171
-            - (1.2 * \log($rHalstead->getVolume(),2))
-            - (0.23 * $rLoc->getComplexityCyclomatic())
-            - (15.2 * \log($rLoc->getLogicalLoc(),2))
-        ,0));
 
         // comment weight
-        // MIcw = 50 * sin(sqrt(2.4 * perCM))
-        // CM: percent of line comment
         if($rLoc->getLoc() > 0) {
             $CM = $rLoc->getCommentLoc() / $rLoc->getLoc();
             $result->setCommentWeight(

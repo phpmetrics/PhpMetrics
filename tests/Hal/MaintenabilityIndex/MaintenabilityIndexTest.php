@@ -24,10 +24,15 @@ class MaintenabilityIndexTest extends \PHPUnit_Framework_TestCase {
 
     public function testMaintenabilityIndexResultCanBeConvertedToArray() {
 
-
         $result = new Result();
         $array = $result->asArray();
 
         $this->assertArrayHasKey('maintenabilityIndex', $array);
+    }
+
+    public function testMaintenabilityIndexResultContainsCommentWeight() {
+        $result = new Result();
+
+        $this->assertArrayHasKey('commentWeight', $result->asArray());
     }
 }

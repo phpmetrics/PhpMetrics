@@ -24,6 +24,9 @@ if(is_dir($path)) {
     die("PHP Metrics by Jean-François Lépine\nUsage: \n\tphp ".basename(__FILE__)." [--format=json] [--format=html] [--extensions=\"php|php5|inc|...\"] <directory or filename>\n");
 }
 
+if(sizeof($files, COUNT_NORMAL) == 0) {
+    die('no PHP file found');
+}
 
 // choose formater
 $format = isset($options['format']) ? $options['format'] : 'cli';

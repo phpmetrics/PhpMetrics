@@ -93,7 +93,12 @@ B = ( E ** (2/3) ) / 3000
 According Wikipedia, Maintainability Index is a software metric which measures how maintainable (easy to support and change) the source code is.
 The maintainability index is calculated as a factored formula consisting of Lines Of Code, Cyclomatic Complexity and Halstead volume.
 
-    Maintainability Index = 171 - 5.2 * ln(Halstead Volume) - 0.23 * (Cyclomatic Complexity) - 16.2 * ln(Lines of Code))*100 / 171
+    MIwoc: Maintainability Index without comments
+    MIcw: Maintainability Index comment weight
+    MI: Maintainability Index = MIwoc + MIcw
+    MIwoc = 171 - 5.2 * ln(Halstead Volume) - 0.23 * (Cyclomatic Complexity) - 16.2 * ln(Lines of Code))*100 / 171
+    MIcw = 50 * sin(sqrt(2.4 * perCM))
+    MI = MIwoc + MIcw
 
 Generally:
 
