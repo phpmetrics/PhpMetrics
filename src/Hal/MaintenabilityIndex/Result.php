@@ -26,12 +26,23 @@ class Result implements ExportableInterface {
      */
     private $maintenabilityIndex;
 
+
+    /**
+     * Weight of comment
+     * perCM = cpercent of comment lines
+     * MIcw = 50 * sin(sqrt(2.4 * perCM))
+     *
+     * @var int
+     */
+    private $commentWeight = 0;
+
     /**
      * @inheritdoc
      */
     public function asArray() {
         return array(
             'maintenabilityIndex' => (string) $this->getMaintenabilityIndex()
+            , 'commentWeight' => (float) $this->getCommentWeight()
         );
     }
 
@@ -49,5 +60,21 @@ class Result implements ExportableInterface {
     public function getMaintenabilityIndex()
     {
         return $this->maintenabilityIndex;
+    }
+
+    /**
+     * @param int $commentWeight
+     */
+    public function setCommentWeight($commentWeight)
+    {
+        $this->commentWeight = (float) $commentWeight;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCommentWeight()
+    {
+        return $this->commentWeight;
     }
 }

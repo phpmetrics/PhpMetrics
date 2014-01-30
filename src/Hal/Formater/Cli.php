@@ -49,6 +49,7 @@ class Cli implements FormaterInterface {
         $rMaintenability = $resultSet->getMaintenabilityIndex();
         echo ''
             . sprintf("\t\tMaintenability Index: %s\n", round($rMaintenability->getMaintenabilityIndex(),2))
+            . sprintf("\t\tComment weight: %s\n", round($rMaintenability->getCommentWeight(),2))
         ;
     }
 

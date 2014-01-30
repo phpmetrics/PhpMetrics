@@ -47,6 +47,17 @@ class MaintenabilityIndex {
             - (0.23 * $rLoc->getComplexityCyclomatic())
             - (15.2 * \log($rLoc->getLogicalLoc(),2))
         ,0));
+
+        // comment weight
+        // MIcw = 50 * sin(sqrt(2.4 * perCM))
+        // CM: percent of line comment
+        if($rLoc->getLoc() > 0) {
+            $CM = $rLoc->getCommentLoc() / $rLoc->getLoc();
+            $result->setCommentWeight(
+                50 * sin(sqrt(2.4 * $CM))
+            );
+        }
+
         return $result;
     }
 }

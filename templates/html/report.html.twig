@@ -68,6 +68,13 @@
                 <td>{{boundaries.getAverage('vocabulary')|round}}</td>
                 <td>{{boundaries.getSum('vocabulary')|round}}</td>
             </tr>
+            <tr>
+                <th>Comment weight</th>
+                <td>{{boundaries.getMin('commentWeight')|round}}</td>
+                <td>{{boundaries.getMax('commentWeight')|round}}</td>
+                <td>{{boundaries.getAverage('commentWeight')|round}}</td>
+                <td>-</td>
+            </tr>
         </tbody>
     </table>
 
@@ -81,6 +88,7 @@
             <th>Maintenability index</th>
             <th>Volume</th>
             <th>Vocabulary</th>
+            <th>Comment weight</th>
         </thead>
         <tbody>
         {% for result in results %}
@@ -91,6 +99,7 @@
                 <td>{{result.maintenabilityIndex  |round }}</td>
                 <td>{{result.volume |round(2) }}</td>
                 <td>{{result.vocabulary}}</td>
+                <td>{{result.commentWeight|round}}</td>
             </tr>
         {% endfor %}
         </tbody>
