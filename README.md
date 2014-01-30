@@ -10,12 +10,6 @@ Gives metrics about PHP project and classes.
 
     wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar
     php metrics.phar <folder or filename>
-    
-## With sources:
-
-    curl -sS https://getcomposer.org/installer | php
-    php composer.phar install
-    php ./bin/metrics.php <folder or filename>
 
 Will output:
 
@@ -36,6 +30,7 @@ file1.php:
 		Cyclomatic complexity: 2
 	Maintenability:
 		Maintenability Index: 83.78
+		Comment weight: 40.20
 
 file2.php:
     ...
@@ -106,7 +101,12 @@ Generally:
 + 10-19 = Warning
 + 20-100 = Ok
 
+## Maintainability Index comment weight
 
+Comment weight represents the impact of documentation in code.
+
+    perCM = commentLoc / loc
+    MIcw = 50 * sin(sqrt(2.4 * perCM))
 
 # Use it in code
 
