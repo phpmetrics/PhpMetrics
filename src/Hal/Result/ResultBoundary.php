@@ -53,26 +53,15 @@ class ResultBoundary implements ExportableInterface {
     public function __construct(ResultCollection $collection)
     {
         $this->collection = $collection;
-
         $array = $collection->asArray();
-        $avg = array();
-        foreach($array as $values) {
-            foreach($values as $k => $v) {
-                if(!isset($avg[$k])) {
-                    $avg[$k] = array();
-                    $this->min[$k] = $this->max[$k] = $v;
-                }
-                array_push($avg[$k], (float) $v);
-                if($v < $this->min[$k]) {
-                    $this->min[$k] = $v;
-                }
-                if($v > $this->max[$k]) {
-                    $this->max[$k] = $v;
-                }
-            }
-        }
-        foreach($avg as $key => $values) {
-            $this->average[$key] = array_sum($values) / count($values, COUNT_NORMAL);
+
+        $arrayMerged = call_user_func_array('array_merge_recursive', $array);
+        $keys = array_keys($arrayMerged);
+
+        foreach($keys as $key) {
+            $this->max[$key] = max($arrayMerged[$key]);
+            $this->min[$key] = min($arrayMerged[$key]);
+            $this->average[$key] = array_sum($arrayMerged[$key]) / count($arrayMerged[$key], COUNT_NORMAL);
         }
     }
 
