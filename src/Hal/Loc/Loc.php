@@ -35,6 +35,7 @@ class Loc {
         $info
             ->setLoc($data['loc'])
             ->setLogicalLoc($data['ncloc'])
+            ->setCommentlLoc($data['ccloc'])
             ->setComplexityCyclomatic($data['ccn']);
 
         return $info;

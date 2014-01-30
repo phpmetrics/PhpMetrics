@@ -25,6 +25,13 @@ class Result implements ExportableInterface {
     private $loc;
 
     /**
+     * Lines of comments
+     *
+     * @var integer
+     */
+    private $commentLoc;
+
+    /**
      * Logical Lines of code
      *
      * @var integer
@@ -98,5 +105,22 @@ class Result implements ExportableInterface {
     public function getLogicalLoc()
     {
         return $this->logicalLoc;
+    }
+
+    /**
+     * @param int $commentLoc
+     */
+    public function setCommentLoc($commentLoc)
+    {
+        $this->commentLoc = $commentLoc;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCommentLoc()
+    {
+        return $this->commentLoc;
     }
 }
