@@ -46,6 +46,13 @@ class ResultBoundary implements ExportableInterface {
     private $max = array();
 
     /**
+     * Sums
+     *
+     * @var array
+     */
+    private $sum = array();
+
+    /**
      * Constructor
      *
      * @param ResultCollection $collection
@@ -60,7 +67,8 @@ class ResultBoundary implements ExportableInterface {
         foreach($arrayMerged as $key => $values) {
             $this->max[$key] = max($values);
             $this->min[$key] = min($values);
-            $this->average[$key] = array_sum($values) / count($values, COUNT_NORMAL);
+            $this->sum[$key] = array_sum($values);
+            $this->average[$key] = $this->sum[$key] / count($values, COUNT_NORMAL);
         }
     }
 
@@ -103,5 +111,15 @@ class ResultBoundary implements ExportableInterface {
      */
     public function getMax($key) {
         return isset($this->max[$key]) ? $this->max[$key] : null;
+    }
+
+    /**
+     * Get sum for
+     *
+     * @param $key
+     * @return null
+     */
+    public function getSum($key) {
+        return isset($this->sum[$key]) ? $this->sum[$key] : null;
     }
 }

@@ -30,5 +30,6 @@ class BoundariesTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $boundaries->getMin('volume'));
         $this->assertEquals(5, $boundaries->getAverage('volume'));
         $this->assertEquals(10, $boundaries->getMax('volume'));
+        $this->assertEquals(150, $boundaries->getSum('length'));
     }
 }
