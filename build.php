@@ -12,7 +12,7 @@ $phar->startBuffering();
 
 
 $files = array_merge(rglob('*.php'), rglob('*.twig'));
-$exclude = '!(Compiler.php$)|(.git)|(.svn)|(Test.php$)!';
+$exclude = '!(.git)|(.svn)!';
 foreach($files as $file) {
     if(preg_match($exclude, $file)) continue;
     $phar->addFromString($file, file_get_contents($file));
