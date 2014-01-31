@@ -9,8 +9,7 @@ class FormatingExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'gmdate' => new \Twig_Filter_Method($this, 'gmdate')
-            , 'textify' => new \Twig_Filter_Method($this, 'textify')
+            new \Twig_SimpleFilter('textify', array($this, 'textify'))
         );
     }
 

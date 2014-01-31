@@ -102,7 +102,6 @@ class Halstead {
             $V = $n1 = $n2 = $N1 = $N2 = $E = $D = $B = $T = $I = 0;
         } else {
             $devAbility = 3000;
-            $H = $n1 * log($n1, 2) + $n2 * log($n2, 2);
             $N = $N1 + $N2;
             $n = $n1 + $n2;
             $V = $N * log($n ,2);
