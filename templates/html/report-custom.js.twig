@@ -1,0 +1,119 @@
+{% autoescape false %}
+<script type="text/javascript">
+
+
+    function chartCustom(xData, yData, rData) {
+
+        // get bounds
+        var maxX = data.reduce(function(max, arr) {
+            return max >= parseInt(arr[xData]) ? max : parseInt(arr[xData]);
+        }, -Infinity) + 1;
+        var maxY = data.reduce(function(max, arr) {
+            return max >= parseInt(arr[yData]) ? max : parseInt(arr[yData]);
+        }, -Infinity) + 1;
+        var maxR = data.reduce(function(max, arr) {
+            return max >= parseInt(arr[rData]) ? max : parseInt(arr[rData]);
+        }, -Infinity) + 1;
+
+        var width = 580,
+                height = 580,
+                margin = 70;
+
+        d3.select("#svg-custom").select("svg").remove();
+        var svg = d3.select("#svg-custom").append("svg").attr("width",width).attr("height",height);
+        var x=d3.scale.linear().domain([0,maxX]).range([margin,width-margin]);
+        var y=d3.scale.linear().domain([0,maxY]).range([height-margin,margin]);
+        var r=d3.scale.linear().domain([0,maxR]).range([0,20]);
+
+        var pack = d3.layout.pack()
+                .sort(null)
+                .size([width, height])
+                .padding(1.5);
+
+        var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+        var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                ;
+
+
+        svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + (height - margin) + ")")
+                .call(xAxis)
+                .style("fill", '#333')
+                .append("text")
+                .attr("y", 30)
+                .attr("x", width - margin)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text(textify(xData));
+
+        svg.append("g")
+                .attr("class", "y axis")
+                .attr("transform", "translate(" + margin + ",0)")
+                .call(yAxis)
+                .style("fill", '#333')
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -60)
+                .attr("x", -70)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text(textify(yData));
+
+
+        svg.selectAll(".h").data(d3.range(-8,10,2)).enter()
+                .append("line").classed("h",1)
+                .attr("x1",margin).attr("x2",height-margin)
+                .attr("y1",y).attr("y2",y)
+
+        svg.selectAll(".v").data(d3.range(1,5)).enter()
+                .append("line").classed("v",1)
+                .attr("y1",margin).attr("y2",width-margin)
+                .attr("x1",x).attr("x2",x)
+
+
+
+        // transform datas
+
+        svg.selectAll("circle")
+                .data(
+                    pack.nodes(mapDatasStats(data))
+                            .filter(function(d) { return !d.children; })
+                )
+                .enter()
+                .append("circle")
+                .attr("cx",function(d) {return x(d[xData]);})
+                .attr("cy",function(d) {return y(d[yData]);})
+    //            .attr("r",function(d) {return  r(Math.sqrt(d[rData]));})
+                .attr("r",function(d) {return  r(d[rData]);})
+                .style("fill", '#006ac1')
+
+                .append("title")
+                .text(function(d) { return d.name;});
+
+
+
+        function mapDatasStats(root) {
+            var datas = [];
+            var i, color;
+            for(i in root) {
+                var e = root[i];
+                datas.push({
+                    "name": e.filename
+                    {% for key in keys|sort %}
+                        ,"{{key}}": Math.max(0,parseInt(e.{{key}}))
+                    {% endfor %}
+                });
+            }
+            return {"children":datas};
+        }
+    }
+
+
+</script>
+{% endautoescape %}

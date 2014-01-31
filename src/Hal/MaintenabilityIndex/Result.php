@@ -60,6 +60,9 @@ class Result implements ExportableInterface {
      */
     public function setMaintenabilityIndexWithoutComment($maintenabilityIndexWithoutComment)
     {
+        if(is_infinite($maintenabilityIndexWithoutComment)) {
+            $maintenabilityIndexWithoutComment = 171;
+        }
         $this->maintenabilityIndexWithoutComment = $maintenabilityIndexWithoutComment;
 
     }

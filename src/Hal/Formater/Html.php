@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Formater;
+use Hal\Formater\Twig\FormatingExtension;
 use Hal\Result\ResultBoundary;
 use Hal\Result\ResultCollection;
 use Hal\Result\ResultSet;
@@ -47,20 +48,11 @@ class Html implements FormaterInterface {
         \Twig_Autoloader::register();
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../templates/html');
         $twig = new \Twig_Environment($loader, array('cache' => false));
-
-
-        $function = new \Twig_SimpleFunction('gmdate', function ($v) {
-            return sprintf('%s hours, %s minutes and %s seconds'
-                , gmdate('H', $v)
-                , gmdate('m', $v)
-                , gmdate('s', $v)
-            );
-        });
-        $twig->addFunction($function);
-
+        $twig->addExtension(new FormatingExtension());
 
         return $twig->render('report.html.twig', array(
-            'results' => $this->results->asArray()
+            'keys' => array_keys(current($this->results->asArray()))
+            , 'results' => $this->results->asArray()
             , 'boundaries' => new ResultBoundary($this->results)
         ));
     }

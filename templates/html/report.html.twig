@@ -12,8 +12,53 @@
 
 <div class="container">
     <h1>PhpMetrics report</h1>
-    <div id="svg"></div>
-    <a class="btn btn-primary" id="btn-save" download="phpmetric-bubbles.svg">Download (as SVG)</a>
+
+    <div class="row col-sm-6">
+        <h2>Maintenability</h2>
+        <small><a id="btn-save-maintenability" download="phpmetric-bubbles.svg">Download (as SVG)</a></small>
+        <div id="svg-maintenability"></div>
+    </div>
+    <div class="row col-sm-6">
+        <h2>Custom chart</h2>
+        <small><a id="btn-save-custom" download="phpmetric-custom.svg">Download (as SVG)</a></small>
+
+
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <td>X Axis</td>
+                <td>Y Axis</td>
+                <td>Diameter</td>
+            </tr>
+            <tr>
+                <td>
+                    <select id="xAxis" class="form-control" onchange="xAxis = this.value; updateCustomChart();">
+                        {% for key in keys|sort %}
+                            <option value="{{key}}">{{key|textify}} </option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select id="yAxis" class="form-control" onchange="yAxis = this.value; updateCustomChart();">
+                        {% for key in keys|sort %}
+                            <option value="{{key}}">{{key|textify}} </option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select id="rAxis" class="form-control" onchange="rAxis = this.value; updateCustomChart();">
+                        {% for key in keys|sort %}
+                            <option value="{{key}}">{{key|textify}} </option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+        <div id="svg-custom"></div>
+    </div>
+
+
+
 
     <h2>Stats</h2>
 
@@ -49,10 +94,10 @@
             </tr>
             <tr>
                 <th>Difficulty</th>
-                <td>{{boundaries.getMin('difficulty')|round(2)}}</td>
-                <td>{{boundaries.getMax('difficulty')|round(2)}}</td>
-                <td>{{boundaries.getAverage('difficulty')|round(2)}}</td>
-                <td>{{boundaries.getSum('difficulty')|round(2)}}</td>
+                <td>{{boundaries.getMin('difficulty')|round}}</td>
+                <td>{{boundaries.getMax('difficulty')|round}}</td>
+                <td>{{boundaries.getAverage('difficulty')|round}}</td>
+                <td>{{boundaries.getSum('difficulty')|round}}</td>
             </tr>
             <tr>
                 <th>Volume</th>
@@ -75,6 +120,13 @@
                 <td>{{boundaries.getAverage('commentWeight')|round}}</td>
                 <td>{{boundaries.getSum('commentWeight')|round}}</td>
             </tr>
+            <tr>
+                <th>Intelligent content</th>
+                <td>{{boundaries.getMin('intelligentContent')|round}}</td>
+                <td>{{boundaries.getMax('intelligentContent')|round}}</td>
+                <td>{{boundaries.getAverage('intelligentContent')|round}}</td>
+                <td>{{boundaries.getSum('intelligentContent')|round}}</td>
+            </tr>
         </tbody>
     </table>
 
@@ -89,6 +141,8 @@
             <th>Volume</th>
             <th>Vocabulary</th>
             <th>Comment weight</th>
+            <th>Intelligent content</th>
+            <th>Difficulty</th>
         </thead>
         <tbody>
         {% for result in results %}
@@ -97,9 +151,11 @@
                 <td>{{result.logicalLoc}}</td>
                 <td>{{result.cyclomaticComplexity}}</td>
                 <td>{{result.maintenabilityIndex  |round }}</td>
-                <td>{{result.volume |round(2) }}</td>
-                <td>{{result.vocabulary}}</td>
+                <td>{{result.volume |round }}</td>
+                <td>{{result.vocabulary|round}}</td>
                 <td>{{result.commentWeight|round}}</td>
+                <td>{{result.intelligentContent|round}}</td>
+                <td>{{result.difficulty|round}}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -121,19 +177,65 @@
 {% include "assets/d3js.js.twig" %}
 {% include "assets/jquery.js.twig" %}
 {% include "assets/tablesorter.js.twig" %}
-{% include "report.js.twig" %}
+{% include "report-maintenability.js.twig" %}
+{% include "report-custom.js.twig" %}
 
 
 <script type="text/javascript">
     $(function(){
         $("#table-results").tablesorter();
+        updateCustomChart();
+        updateMaintenablityChart();
 
-        var svg  = document.getElementById('svg').childNodes[0],
+        // selects
+        $('#xAxis').val(xAxis);
+        $('#yAxis').val(yAxis);
+        $('#rAxis').val(rAxis);
+    });
+
+    // default selected elements
+    var xAxis = 'intelligentContent';
+    var yAxis = 'cyclomaticComplexity';
+    var rAxis = 'loc';
+
+    /**
+     * Update custom chart
+     */
+    function updateCustomChart() {
+        chartCustom(xAxis, yAxis, rAxis);
+        var svg  = document.getElementById('svg-custom').childNodes[0],
         xml  = new XMLSerializer().serializeToString(svg),
         data = btoa(xml),
         img  = new Image();
-        $('#btn-save').attr('href', 'data:application/octet-stream;base64,' + data)
-    });
+        $('#btn-save-custom').attr('href', 'data:application/octet-stream;base64,' + data)
+    };
+
+    /**
+     * Update maintenability chart (bubbles)
+     */
+    function updateMaintenablityChart() {
+        chartMaintenability(xAxis, yAxis, rAxis);
+        var svg  = document.getElementById('svg-maintenability').childNodes[0],
+                xml  = new XMLSerializer().serializeToString(svg),
+                data = btoa(xml),
+                img  = new Image();
+        $('#btn-save-maintenability').attr('href', 'data:application/octet-stream;base64,' + data)
+    };
+
+    /**
+     * string as readable text
+     *
+     * @param string
+     * @returns {XML|string|void}
+     */
+    function textify(string) {
+        string = string.charAt(0).toUpperCase() + string.slice(1);
+        return string.replace(/([a-z0-9])([A-Z])/, "$1 $2");
+    }
+
+    {% autoescape false %}
+    var data = {{ results | json_encode }}
+    {% endautoescape %}
 </script>
 
 
