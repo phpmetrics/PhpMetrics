@@ -66,6 +66,13 @@ class Result implements ExportableInterface {
     private $time;
 
     /**
+     * Intelligent content
+     *
+     * @var integer
+     */
+    private $intelligentContent;
+
+    /**
      * @inheritdoc
      */
     public function asArray() {
@@ -77,6 +84,7 @@ class Result implements ExportableInterface {
             ,'difficulty' => (string) $this->getDifficulty()
             ,'time' => $this->getTime()
             ,'bugs' => $this->getBugs()
+            ,'intelligentContent' => $this->getIntelligentContent()
         );
     }
 
@@ -197,5 +205,20 @@ class Result implements ExportableInterface {
     public function getVolume()
     {
         return $this->volume;
+    }
+
+    /**
+     * @return float
+     */
+    public function getIntelligentContent() {
+        return $this->intelligentContent;
+    }
+
+    /**
+     * @param float $intelligentContent
+     */
+    public function setIntelligentContent($intelligentContent)
+    {
+        $this->intelligentContent = $intelligentContent;
     }
 }

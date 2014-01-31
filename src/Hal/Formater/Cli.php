@@ -35,6 +35,7 @@ class Cli implements FormaterInterface {
             . sprintf("\t\tDifficulty: %s\n", round($rHalstead->getDifficulty(),2 ))
             . sprintf("\t\tDelivred Bugs: %s\n", round($rHalstead->getBugs(),2 ))
             . sprintf("\t\tTime: %s\n", round($rHalstead->getTime(),2 ))
+            . sprintf("\t\tIntelligent content: %s\n", round($rHalstead->getIntelligentContent() ))
         ;
 
         echo "\tLOC:\n";

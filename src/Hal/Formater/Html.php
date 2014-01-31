@@ -47,6 +47,18 @@ class Html implements FormaterInterface {
         \Twig_Autoloader::register();
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../templates/html');
         $twig = new \Twig_Environment($loader, array('cache' => false));
+
+
+        $function = new \Twig_SimpleFunction('gmdate', function ($v) {
+            return sprintf('%s hours, %s minutes and %s seconds'
+                , gmdate('H', $v)
+                , gmdate('m', $v)
+                , gmdate('s', $v)
+            );
+        });
+        $twig->addFunction($function);
+
+
         return $twig->render('report.html.twig', array(
             'results' => $this->results->asArray()
             , 'boundaries' => new ResultBoundary($this->results)

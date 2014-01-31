@@ -99,16 +99,20 @@ class Halstead {
 
         if(($n2 == 0)||($N2 == 0)||($n2 == 2)) {
             // files without operators
-            $V = $n1 = $n2 = $N1 = $N2 = $E = $D = $B = $T = 0;
+            $V = $n1 = $n2 = $N1 = $N2 = $E = $D = $B = $T = $I = 0;
         } else {
-            // "normal" file
-            $V = ($N1 + $N2)  * log($n1 +  $n2, 2);
-            $D = ($n1 / $N2) / (2 / $n2);
-            $E = $D * $V;
-            $B = $E * 0.667 / 3000;
-            $T = $E / 18;
+            $devAbility = 3000;
+            $H = $n1 * log($n1, 2) + $n2 * log($n2, 2);
+            $N = $N1 + $N2;
+            $n = $n1 + $n2;
+            $V = $N * log($n ,2);
+            $L = (2 / max(1,$n1)) * ($n2 / $N2);
+            $D = ($n1 / 2) * ($N2 / $n2);
+            $E = $V * $D;
+            $B = $V / $devAbility;
+            $T = $E;// / 18;
+            $I = $L * $V;
         }
-
 
         $result
             ->setLength($N1 + $N2)
@@ -118,6 +122,7 @@ class Halstead {
             ->setEffort(round($E,2))
             ->setBugs(round($B, 2))
             ->setTime(round($T))
+            ->setIntelligentContent($I)
         ;
 
         return $result;
