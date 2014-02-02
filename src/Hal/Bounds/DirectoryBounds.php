@@ -9,6 +9,7 @@
 
 namespace Hal\Bounds;
 use Hal\Bounds\Result\DirectoryResult;
+use Hal\Result\ExportableInterface;
 use Hal\Result\ResultCollection;
 
 
@@ -17,7 +18,24 @@ use Hal\Result\ResultCollection;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class DirectoryBounds implements BoundsInterface {
+class DirectoryBounds implements BoundsInterface{
+
+    /**
+     * Depth max
+     *
+     * @var int
+     */
+    private $depth;
+
+    /**
+     * Constructor
+     *
+     * @param int $depth
+     */
+    public function __construct($depth = 0)
+    {
+        $this->depth = (int) $depth;
+    }
 
     /**
      * @inheritdoc
@@ -34,6 +52,10 @@ class DirectoryBounds implements BoundsInterface {
                 array_push($v, ltrim(end($v).DIRECTORY_SEPARATOR.$e, DIRECTORY_SEPARATOR));
                 return $v;
             }, array());
+
+            if($this->depth) {
+                array_splice($namespaces, $this->depth);
+            }
 
             // merge infos for each namespace in the DirectoryResultCollection
             foreach($namespaces as $namespace) {

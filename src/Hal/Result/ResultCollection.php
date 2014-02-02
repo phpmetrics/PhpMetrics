@@ -16,7 +16,7 @@ use Traversable;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class ResultCollection implements ExportableInterface, \IteratorAggregate, \ArrayAccess {
+class ResultCollection implements ExportableInterface, \IteratorAggregate, \ArrayAccess, \Countable {
 
     /**
      * Results
@@ -85,5 +85,13 @@ class ResultCollection implements ExportableInterface, \IteratorAggregate, \Arra
     public function offsetUnset($offset)
     {
         unset($this->results[$offset]);
+    }
+
+    /**
+     * @inheritedDoc
+     */
+    public function count()
+    {
+        return sizeof($this->results, COUNT_NORMAL);
     }
 }

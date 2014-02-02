@@ -5,7 +5,7 @@ $filename = 'demo/app1.php';
 
 // path is given as last
 $path = isset($argv[$argc - 1]) ? $argv[$argc - 1] : false;
-$options = getopt('', array('format::', 'extensions::', 'report::'));
+$options = getopt('', array('format::', 'extensions::', 'report::', 'level::'));
 $extensions = isset($options['extensions']) ? $options['extensions'] : 'php';
 
 if(is_dir($path)) {
@@ -21,20 +21,25 @@ if(is_dir($path)) {
 } elseif(is_file($path)) {
     $files = array($path);
 } else {
-    die("PHP Metrics by Jean-François Lépine\nUsage: \n\tphp ".basename(__FILE__)." [--format=json] [--format=html] [--extensions=\"php|php5|inc|...\"] <directory or filename>\n");
+    die("PHP Metrics by Jean-François Lépine\nUsage: \n\tphp ".basename(__FILE__)." [--report=summary] [--report=details] [--format=json] [--format=html] [--extensions=\"php|php5|inc|...\"] <directory or filename>\n");
 }
 
 if(sizeof($files, COUNT_NORMAL) == 0) {
     die('no PHP file found');
 }
 
+// rules
+$rules = new \Hal\Rule\RuleSet();
+$validator = new \Hal\Rule\Validator($rules);
+
 // report type
 $reportType = isset($options['report']) ? $options['report'] : 'summary';
+$level = isset($options['level']) ? $options['level'] : '3';
 
 // choose formater:
 $format = isset($options['format']) ? $options['format'] : 'cli';
 $classname = '\Hal\Formater\\'.ucfirst($reportType).'\\'.ucfirst($format);
-$formater = new $classname();
+$formater = new $classname($validator, $level);
 
 
 

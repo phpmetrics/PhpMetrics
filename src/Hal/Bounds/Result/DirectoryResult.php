@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Bounds\Result;
+use Hal\Result\ExportableInterface;
 use Hal\Result\ResultBoundary;
 
 /**
@@ -15,7 +16,7 @@ use Hal\Result\ResultBoundary;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class DirectoryResult {
+class DirectoryResult implements ExportableInterface, ResultInterface {
 
     /**
      * @var BoundsResult
@@ -26,7 +27,6 @@ class DirectoryResult {
      * @var string
      */
     private $directory;
-
 
     /**
      * @param $directory
@@ -48,7 +48,7 @@ class DirectoryResult {
      * @return string
      */
     public function getDepth() {
-        return substr_count($this->directory, DIRECTORY_SEPARATOR) - 1;
+        return max(0, substr_count($this->directory, DIRECTORY_SEPARATOR) - 1);
     }
 
     /**
@@ -79,4 +79,31 @@ class DirectoryResult {
         return $this->bounds->getAverage($key);
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function asArray() {
+        return array_merge($this->bounds->asArray(), array(
+            'directory' => $this->directory
+            , 'depth' => $this->depth
+        ));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get($type, $key)
+    {
+        switch($type) {
+            case 'max':
+                return $this->getMax($key);
+            case 'sum':
+                return $this->getSum($key);
+            case 'min':
+                return $this->getMin($key);
+            case 'average':
+                return $this->getAverage($key);
+        }
+        return null;
+    }
 }

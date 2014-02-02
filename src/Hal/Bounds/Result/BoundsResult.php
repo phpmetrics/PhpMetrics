@@ -17,7 +17,7 @@ use Hal\Result\ResultCollection;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class BoundsResult implements ExportableInterface {
+class BoundsResult implements ExportableInterface, ResultInterface {
 
     /**
      * Average values
@@ -72,42 +72,48 @@ class BoundsResult implements ExportableInterface {
     }
 
     /**
-     * Get average for
-     *
-     * @param $key
-     * @return null
+     * @inheritdoc
      */
     public function getAverage($key) {
         return isset($this->average[$key]) ? $this->average[$key] : null;
     }
 
     /**
-     * Get min for
-     *
-     * @param $key
-     * @return null
+     * @inheritdoc
      */
     public function getMin($key) {
         return isset($this->min[$key]) ? $this->min[$key] : null;
     }
 
     /**
-     * Get max for
-     *
-     * @param $key
-     * @return null
+     * @inheritdoc
      */
     public function getMax($key) {
         return isset($this->max[$key]) ? $this->max[$key] : null;
     }
 
     /**
-     * Get sum for
-     *
-     * @param $key
-     * @return null
+     * @inheritdoc
      */
     public function getSum($key) {
         return isset($this->sum[$key]) ? $this->sum[$key] : null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get($type, $key)
+    {
+        switch($type) {
+            case 'max':
+                return $this->getMax($key);
+            case 'sum':
+                return $this->getSum($key);
+            case 'min':
+                return $this->getMin($key);
+            case 'average':
+                return $this->getAverage($key);
+        }
+        return null;
     }
 }
