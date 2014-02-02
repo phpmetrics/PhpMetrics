@@ -17,6 +17,7 @@ use Hal\Result\ResultSet;
 use Hal\Rule\Validator;
 use Symfony\Component\Console\Helper\TableHelper;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\Output;
 
 
 /**
@@ -41,14 +42,22 @@ class Cli implements FormaterInterface {
     private $level;
 
     /**
+     * Output
+     *
+     * @var Output
+     */
+    private $output;
+
+    /**
      * Constructor
      *
      * @param Validator $validator
      */
-    function __construct(Validator $validator, $level)
+    function __construct(Validator $validator, Output $output, $level)
     {
         $this->validator = $validator;
         $this->level = $level;
+        $this->output = $output;
     }
 
     /**
@@ -62,16 +71,14 @@ class Cli implements FormaterInterface {
      */
     public function terminate(ResultCollection $collection){
 
-        $output = new ConsoleOutput();
-
-        $output->writeln('PHPMetrics by Jean-François Lépine <https://twitter.com/Halleck45>');
-        $output->writeln('');
+        $this->output->writeln('PHPMetrics by Jean-François Lépine <https://twitter.com/Halleck45>');
+        $this->output->writeln('');
 
 
         // overview
         $service = new Bounds();
         $total = $service->calculate($collection);
-        $output->writeln(sprintf(
+        $this->output->writeln(sprintf(
             '<info>%d</info> files have been analyzed. Read and understand these <info>%s</info> lines of code will take around <info>%s</info>.'
             , sizeof($collection, COUNT_NORMAL)
             , $total->getSum('loc')
@@ -84,8 +91,8 @@ class Cli implements FormaterInterface {
         $directoryBounds = $service->calculate($collection);
 
 
-        $output->writeln('<info>Avegare for each module:</info>');
-        $output->writeln('');
+        $this->output->writeln('<info>Avegare for each module:</info>');
+        $this->output->writeln('');
 
         $table = new TableHelper();
         $table
@@ -117,7 +124,7 @@ class Cli implements FormaterInterface {
                 , $this->getRow($bound, 'difficulty', 'average', 0)
             ));
         }
-        $table->render($output);
+        $table->render($this->output);
 
 
     }
