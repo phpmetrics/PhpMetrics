@@ -21,7 +21,8 @@ class HtmlTest extends \PHPUnit_Framework_TestCase {
             , array('volume' => 10, 'length' => 50)
             )));
 
-        $formater = new Html();
+        $validator = $this->getMockBuilder('\Hal\Rule\Validator')->disableOriginalConstructor()->getMock();
+        $formater = new Html($validator);
 
         $output = $formater->terminate($collection);
         $this->assertContains('<html>', $output);

@@ -13,6 +13,7 @@ use Hal\Formater\Twig\FormatingExtension;
 use Hal\Result\ResultBoundary;
 use Hal\Result\ResultCollection;
 use Hal\Result\ResultSet;
+use Hal\Rule\Validator;
 
 
 /**
@@ -23,9 +24,19 @@ use Hal\Result\ResultSet;
 class Html implements FormaterInterface {
 
     /**
-     * Constructor
+     * Validator
+     *
+     * @var Validator
      */
-    public function __construct() {
+    private $validator;
+
+    /**
+     * Constructor
+     *
+     * @param $level
+     */
+    public function __construct(Validator $validator) {
+        $this->validator = $validator;
     }
 
     /**
@@ -41,7 +52,7 @@ class Html implements FormaterInterface {
         \Twig_Autoloader::register();
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../../templates/html');
         $twig = new \Twig_Environment($loader, array('cache' => false));
-        $twig->addExtension(new FormatingExtension());
+        $twig->addExtension(new FormatingExtension($this->validator));
 
         return $twig->render('details/report.html.twig', array(
             'keys' => array_keys(current($collection->asArray()))

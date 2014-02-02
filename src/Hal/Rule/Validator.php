@@ -20,22 +20,22 @@ class Validator {
     /**
      * Critical
      */
-    const CRITICAL = 0;
+    const CRITICAL = 'critical';
 
     /**
      * Warning
      */
-    const WARNING = 1;
+    const WARNING = 'warning';
 
     /**
      * Good
      */
-    const GOOD = 2;
+    const GOOD = 'good';
 
     /**
      * unknown
      */
-    const UNKNOWN = 3;
+    const UNKNOWN = 'unknown';
 
     /**
      * @var RuleSet

@@ -27,10 +27,10 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
 
     public function testICanRunPhar() {
 
-        $command = sprintf('php '.__DIR__.'/../../../build/metrics.phar --report=details '.$this->toExplore);
+        $command = sprintf('php '.__DIR__.'/../../../build/metrics.phar '.$this->toExplore);
         $output = shell_exec($command);
 
-        $this->assertRegExp('/Delivred Bugs/', $output);
+        $this->assertRegExp('/Maintenability/', $output);
     }
 
     public function testICanRunIsolatedPhar() {
@@ -38,33 +38,36 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         $path = getcwd();
         copy(__DIR__.'/../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
         chdir(sys_get_temp_dir());
-        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  --report=details  '.$this->toExplore);
+        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  '.$this->toExplore);
         $output = shell_exec($command);
         chdir($path);
 
-        $this->assertRegExp('/Delivred Bugs/', $output);
+        $this->assertRegExp('/Maintenability/', $output);
     }
 
     public function testICanRunPharWithHtmlFormater() {
 
+        $to = sys_get_temp_dir().'/tmpunit.html';
         $path = getcwd();
         copy(__DIR__.'/../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
         chdir(sys_get_temp_dir());
 
-        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  --report=details --format=html '.$this->toExplore);
+        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  --summary-html='.$to.' '.$this->toExplore);
         $output = shell_exec($command);
         chdir($path);
 
-        $this->assertRegExp('<html>', $output);
-        $this->assertRegExp('<body>', $output);
+        $this->assertFileExists($to);
+        $content = file_get_contents($to);
+        $this->assertRegExp('<html>', $content);
+        $this->assertRegExp('<body>', $content);
     }
 
     public function testICanRunPhpFile() {
 
-        $command = sprintf('php '.__DIR__.'/../../../bin/metrics.php  --report=details '.$this->toExplore);
+        $command = sprintf('php '.__DIR__.'/../../../bin/metrics.php   '.$this->toExplore);
         $output = shell_exec($command);
 
-        $this->assertRegExp('/Delivred Bugs/', $output);
+        $this->assertRegExp('/Maintenability/', $output);
     }
 
 }

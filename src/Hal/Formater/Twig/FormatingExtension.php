@@ -1,8 +1,25 @@
 <?php
 namespace Hal\Formater\Twig;
 
+use Hal\Rule\Validator;
+
 class FormatingExtension extends \Twig_Extension
 {
+    /**
+     * @var Validator
+     */
+    private $validator;
+
+    /**
+     * Validator
+     *
+     * @param Validator $validator
+     */
+    function __construct(Validator $validator)
+    {
+        $this->validator = $validator;
+    }
+
     /**
      * @inherit
      */
@@ -10,6 +27,7 @@ class FormatingExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('textify', array($this, 'textify'))
+            , new \Twig_SimpleFilter('rule', array($this, 'rule'))
         );
     }
 
@@ -22,6 +40,17 @@ class FormatingExtension extends \Twig_Extension
     public function textify($v)
     {
         return ucfirst(preg_replace( '/([a-z0-9])([A-Z])/', "$1 $2", $v ));
+    }
+
+    /**
+     * Check value according rule
+     *
+     * @param $v
+     * @return string
+     */
+    public function rule($v, $key)
+    {
+        return $this->validator->validate($key, $v);
     }
 
     /**
