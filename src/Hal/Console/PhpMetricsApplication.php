@@ -22,8 +22,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class PhpMetricsApplication extends Application
 {
 
-    private $dispatcher;
-
     /**
      * Gets the name of the command based on input.
      *

@@ -13,34 +13,13 @@ Gives metrics about PHP project and classes.
 
 Will output:
 
-
-```
-file1.php:
-	Halstead:
-		Volume: 327.43
-		Length: 86
-		Vocabulary: 14
-		Effort: 163
-		Difficulty: 0.5
-		Delivred Bugs: 0.04
-		Time: 9.1
-	LOC:
-		LOC: 68
-		Logical LOC: 42
-		Cyclomatic complexity: 2
-	Maintenability:
-		Maintenability Index: 83.78
-		Comment weight: 40.20
-
-file2.php:
-    ...
-```
+![Standard report](http://halleck45.github.io/PhpMetrics/images/report-standard.png)
 
 ## Bubbles chart and complete report
 
-If you want to get the complete report (html):
+If you want to get the HTMl report (with charts):
 
-    php ./bin/metrics.php --format=html <folder or filename> > /path/of/your/choice.html
+    php ./bin/metrics.php --summary-html=/path/of/your/choice.html <folder or filename>
 
 ### Read report
 
@@ -100,13 +79,7 @@ The maintainability index is calculated as a factored formula consisting of Line
     MIcw = 50 * sin(sqrt(2.4 * perCM))
     MI = MIwoc + MIcw
 
-Generally:
-
-+ 0-9 = Danger
-+ 10-19 = Warning
-+ 20-100 = Ok
-
-## Maintainability Index comment weight
+## Maintainability Index Comment weight
 
 Comment weight represents the impact of documentation in code.
 

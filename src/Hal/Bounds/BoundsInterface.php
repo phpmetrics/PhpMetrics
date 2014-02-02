@@ -22,7 +22,7 @@ interface BoundsInterface {
      * Calculate
      *
      * @param ResultCollection $collection
-     * @return Result
+     * @return Result|array
      */
     public function calculate(ResultCollection $collection);
 }

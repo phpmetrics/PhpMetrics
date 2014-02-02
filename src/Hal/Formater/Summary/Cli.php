@@ -18,6 +18,7 @@ use Hal\Rule\Validator;
 use Symfony\Component\Console\Helper\TableHelper;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\Output;
+use Symfony\Component\Console\Output\OutputInterface;
 
 
 /**
@@ -53,7 +54,7 @@ class Cli implements FormaterInterface {
      *
      * @param Validator $validator
      */
-    function __construct(Validator $validator, Output $output, $level)
+    function __construct(Validator $validator, OutputInterface $output, $level)
     {
         $this->validator = $validator;
         $this->level = $level;

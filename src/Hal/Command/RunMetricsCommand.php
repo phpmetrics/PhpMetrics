@@ -151,22 +151,34 @@ class RunMetricsCommand extends Command
 
         //
         // Generate reports
-        $reports = array('summary-html' => 'Summary HTML', 'details-html' => 'Detailled HTML');
-        foreach($reports as $report => $name) {
-            $out = $input->getOption($report);
-            if($out) {
-                $dir = dirname($out);
-                if(!file_exists($dir)) {
-                    mkdir($dir, 0777, true);
-                }
-                $output->writeln('Generating '.$name.' Report...');
-                $handle = fopen($out, 'w');
-                $stream = new StreamOutput($handle);
-                $report = new Summary\Html($validator, $level);
-                $stream->write($report->terminate($collection));
-                fclose($handle);
+        $out = $input->getOption('summary-html');
+        if($out) {
+            $dir = dirname($out);
+            if(!file_exists($dir)) {
+                mkdir($dir, 0777, true);
             }
+            $output->writeln('Generating Summary HTML Report...');
+            $handle = fopen($out, 'w');
+            $stream = new StreamOutput($handle);
+            $report = new Summary\Html($validator, $level);
+            $stream->write($report->terminate($collection));
+            fclose($handle);
         }
+
+        $out = $input->getOption('details-html');
+        if($out) {
+            $dir = dirname($out);
+            if(!file_exists($dir)) {
+                mkdir($dir, 0777, true);
+            }
+            $output->writeln('Generating Detailled HTML Report...');
+            $handle = fopen($out, 'w');
+            $stream = new StreamOutput($handle);
+            $report = new Details\Html($validator, $level);
+            $stream->write($report->terminate($collection));
+            fclose($handle);
+        }
+
         $output->writeln('<info>done</info>');
 
         return 0;

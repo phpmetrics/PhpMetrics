@@ -41,7 +41,7 @@ class RuleSet {
      * Get rule for key
      *
      * @param $key
-     * @return null
+     * @return array
      */
     public function getRule($key) {
         return isset($this->rules[$key]) ? $this->rules[$key] : null;

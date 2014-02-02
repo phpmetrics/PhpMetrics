@@ -85,7 +85,7 @@ class DirectoryResult implements ExportableInterface, ResultInterface {
     public function asArray() {
         return array_merge($this->bounds->asArray(), array(
             'directory' => $this->directory
-            , 'depth' => $this->depth
+            , 'depth' => $this->getDepth()
         ));
     }
 
