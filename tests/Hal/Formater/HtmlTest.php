@@ -1,7 +1,7 @@
 <?php
 namespace Test\Hal\Formater;
 
-use Hal\Formater\Html;
+use Hal\Formater\Details\Html;
 
 
 /**
@@ -11,17 +11,19 @@ class HtmlTest extends \PHPUnit_Framework_TestCase {
 
     public function testFormaterReturnsHtml() {
 
-        $resultset = $this->getMockBuilder('\Hal\Result\ResultSet')
+        $collection = $this->getMockBuilder('\Hal\Result\ResultCollection')
             ->disableOriginalConstructor()
             ->getMock();
-        $resultset ->expects($this->any())
+        $collection->expects($this->any())
             ->method('asArray')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue(array(
+                array('volume' => 0, 'length' => 100)
+            , array('volume' => 10, 'length' => 50)
+            )));
 
         $formater = new Html();
-        $formater->pushResult($resultset);
 
-        $output = $formater->terminate();
+        $output = $formater->terminate($collection);
         $this->assertContains('<html>', $output);
     }
 }

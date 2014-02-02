@@ -52,7 +52,7 @@ class ResultCollection implements ExportableInterface, \IteratorAggregate, \Arra
      */
     public function getIterator()
     {
-        return $this->results;
+        return new \ArrayIterator($this->results);
     }
 
     /**

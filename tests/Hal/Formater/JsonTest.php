@@ -1,7 +1,7 @@
 <?php
 namespace Test\Hal\Formater;
 
-use Hal\Formater\Json;
+use Hal\Formater\Details\Json;
 
 
 /**
@@ -11,21 +11,19 @@ class JsonTest extends \PHPUnit_Framework_TestCase {
 
     public function testFormaterReturnsJson() {
 
-        $resultset = $this->getMockBuilder('\Hal\Result\ResultSet')
+        $collection = $this->getMockBuilder('\Hal\Result\ResultCollection')
             ->disableOriginalConstructor()
             ->getMock();
-        $resultset ->expects($this->any())
+        $collection->expects($this->once())
             ->method('asArray')
-            ->will($this->returnValue(array()));
-
-        $resultset ->expects($this->any())
-            ->method('getFilename')
-            ->will($this->returnValue('myFilename'));
+            ->will($this->returnValue(array(
+                array('volume' => 0, 'length' => 100)
+            , array('volume' => 10, 'length' => 50)
+            )));
 
         $formater = new Json();
-        $formater->pushResult($resultset);
 
-        $output = $formater->terminate();
-        $this->assertInstanceOf('\StdClass', json_decode($output), 'output is valid json');
+        $output = $formater->terminate($collection);
+        $this->assertTrue(is_array(json_decode($output)), 'output is valid json');
     }
 }

@@ -57,79 +57,6 @@
         <div id="svg-custom"></div>
     </div>
 
-
-
-
-    <h2>Stats</h2>
-
-    <table class="table table-striped table-condensed">
-        <thead>
-            <th></th>
-            <th>Min</th>
-            <th>Max</th>
-            <th>Average</th>
-            <th>Sum</th>
-        </thead>
-        <tbody>
-            <tr>
-                <th>LLOC</th>
-                <td>{{boundaries.getMin('logicalLoc')}}</td>
-                <td>{{boundaries.getMax('logicalLoc')}}</td>
-                <td>{{boundaries.getAverage('logicalLoc')|round}}</td>
-                <td>{{boundaries.getSum('logicalLoc')|round}}</td>
-            </tr>
-            <tr>
-                <th>Complexity</th>
-                <td>{{boundaries.getMin('cyclomaticComplexity')|round}}</td>
-                <td>{{boundaries.getMax('cyclomaticComplexity')|round}}</td>
-                <td>{{boundaries.getAverage('cyclomaticComplexity')|round}}</td>
-                <td>{{boundaries.getSum('cyclomaticComplexity')|round}}</td>
-            </tr>
-            <tr>
-                <th>Maintenability index</th>
-                <td>{{boundaries.getMin('maintenabilityIndex')|round }}</td>
-                <td>{{boundaries.getMax('maintenabilityIndex')|round }}</td>
-                <td>{{boundaries.getAverage('maintenabilityIndex')|round }}</td>
-                <td>{{boundaries.getSum('maintenabilityIndex')|round }}</td>
-            </tr>
-            <tr>
-                <th>Difficulty</th>
-                <td>{{boundaries.getMin('difficulty')|round}}</td>
-                <td>{{boundaries.getMax('difficulty')|round}}</td>
-                <td>{{boundaries.getAverage('difficulty')|round}}</td>
-                <td>{{boundaries.getSum('difficulty')|round}}</td>
-            </tr>
-            <tr>
-                <th>Volume</th>
-                <td>{{boundaries.getMin('volume')|round}}</td>
-                <td>{{boundaries.getMax('volume')|round}}</td>
-                <td>{{boundaries.getAverage('volume')|round}}</td>
-                <td>{{boundaries.getSum('volume')|round}}</td>
-            </tr>
-            <tr>
-                <th>Vocabulary</th>
-                <td>{{boundaries.getMin('vocabulary')}}</td>
-                <td>{{boundaries.getMax('vocabulary')}}</td>
-                <td>{{boundaries.getAverage('vocabulary')|round}}</td>
-                <td>{{boundaries.getSum('vocabulary')|round}}</td>
-            </tr>
-            <tr>
-                <th>Comment weight</th>
-                <td>{{boundaries.getMin('commentWeight')|round}}</td>
-                <td>{{boundaries.getMax('commentWeight')|round}}</td>
-                <td>{{boundaries.getAverage('commentWeight')|round}}</td>
-                <td>{{boundaries.getSum('commentWeight')|round}}</td>
-            </tr>
-            <tr>
-                <th>Intelligent content</th>
-                <td>{{boundaries.getMin('intelligentContent')|round}}</td>
-                <td>{{boundaries.getMax('intelligentContent')|round}}</td>
-                <td>{{boundaries.getAverage('intelligentContent')|round}}</td>
-                <td>{{boundaries.getSum('intelligentContent')|round}}</td>
-            </tr>
-        </tbody>
-    </table>
-
     <h2>Details</h2>
 
     <table class="table table-striped table-condensed" id="table-results">
@@ -177,8 +104,8 @@
 {% include "assets/d3js.js.twig" %}
 {% include "assets/jquery.js.twig" %}
 {% include "assets/tablesorter.js.twig" %}
-{% include "report-maintenability.js.twig" %}
-{% include "report-custom.js.twig" %}
+{% include "summary/report-maintenability.js.twig" %}
+{% include "summary/report-custom.js.twig" %}
 
 
 <script type="text/javascript">

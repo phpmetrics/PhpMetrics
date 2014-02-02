@@ -5,7 +5,7 @@ $filename = 'demo/app1.php';
 
 // path is given as last
 $path = isset($argv[$argc - 1]) ? $argv[$argc - 1] : false;
-$options = getopt('', array('format::', 'extensions::'));
+$options = getopt('', array('format::', 'extensions::', 'report::'));
 $extensions = isset($options['extensions']) ? $options['extensions'] : 'php';
 
 if(is_dir($path)) {
@@ -28,10 +28,17 @@ if(sizeof($files, COUNT_NORMAL) == 0) {
     die('no PHP file found');
 }
 
-// choose formater
+// report type
+$reportType = isset($options['report']) ? $options['report'] : 'summary';
+
+// choose formater:
 $format = isset($options['format']) ? $options['format'] : 'cli';
-$classname = '\Hal\Formater\\'.ucfirst($format);
-$formater = new $classname;
+$classname = '\Hal\Formater\\'.ucfirst($reportType).'\\'.ucfirst($format);
+$formater = new $classname();
+
+
+
+$collection = new \Hal\Result\ResultCollection();
 
 foreach($files as $filename) {
 
@@ -53,8 +60,9 @@ foreach($files as $filename) {
         ->setMaintenabilityIndex($rMaintenability);
 
     $formater->pushResult($resultSet);
+    $collection->push($resultSet);
 }
-echo $formater->terminate();
+echo $formater->terminate($collection);
 
 
 

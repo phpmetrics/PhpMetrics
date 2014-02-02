@@ -7,7 +7,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Hal\Formater;
+namespace Hal\Formater\Details;
+use Hal\Formater\FormaterInterface;
 use Hal\Formater\Twig\FormatingExtension;
 use Hal\Result\ResultBoundary;
 use Hal\Result\ResultCollection;
@@ -22,38 +23,29 @@ use Hal\Result\ResultSet;
 class Html implements FormaterInterface {
 
     /**
-     * Results
-     * @var ResultCollection
-     */
-    private $results;
-
-    /**
      * Constructor
      */
     public function __construct() {
-        $this->results = new ResultCollection();
     }
 
     /**
      * @inheritdoc
      */
     public function pushResult(ResultSet $resultSet) {
-        $this->results[$resultSet->getFilename()] = $resultSet;
     }
 
     /**
      * @inheritdoc
      */
-    public function terminate(){
+    public function terminate(ResultCollection $collection){
         \Twig_Autoloader::register();
-        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../templates/html');
+        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../../templates/html');
         $twig = new \Twig_Environment($loader, array('cache' => false));
         $twig->addExtension(new FormatingExtension());
 
-        return $twig->render('report.html.twig', array(
-            'keys' => array_keys(current($this->results->asArray()))
-            , 'results' => $this->results->asArray()
-            , 'boundaries' => new ResultBoundary($this->results)
+        return $twig->render('details/report.html.twig', array(
+            'keys' => array_keys(current($collection->asArray()))
+            , 'results' => $collection->asArray()
         ));
     }
 }

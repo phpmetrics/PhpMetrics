@@ -7,29 +7,31 @@
  * file that was distributed with this source code.
  */
 
-namespace Hal\Formater;
+namespace Hal\Formater\Summary;
+use Hal\Formater\FormaterInterface;
+use Hal\Formater\Twig\FormatingExtension;
+use Hal\Result\ResultBoundary;
 use Hal\Result\ResultCollection;
 use Hal\Result\ResultSet;
 
 
 /**
- * Formater for cli usage
+ * Formater for html export
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-interface FormaterInterface {
+class Html implements FormaterInterface {
 
     /**
-     * Push resultset
-     *
-     * @param ResultSet $resultSet
+     * @inheritdoc
      */
-    public function pushResult(ResultSet $resultSet);
+    public function pushResult(ResultSet $resultSet) {
+    }
 
     /**
-     * Terminate process
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function terminate(ResultCollection $collection);
+    public function terminate(ResultCollection $collection){
+
+    }
 }

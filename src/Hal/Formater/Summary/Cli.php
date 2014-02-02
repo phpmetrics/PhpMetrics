@@ -7,34 +7,29 @@
  * file that was distributed with this source code.
  */
 
-namespace Hal\Formater;
+namespace Hal\Formater\Summary;
+use Hal\Formater\FormaterInterface;
+use Hal\Result\ResultCollection;
 use Hal\Result\ResultSet;
 
 
 /**
- * Formater for json export
+ * Formater for cli usage
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Json implements FormaterInterface {
-
-    /**
-     * Results
-     * @var array
-     */
-    private $results = array();
+class Cli implements FormaterInterface {
 
     /**
      * @inheritdoc
      */
     public function pushResult(ResultSet $resultSet) {
-        $this->results[$resultSet->getFilename()] = $resultSet->asArray();
     }
 
     /**
      * @inheritdoc
      */
-    public function terminate(){
-        return json_encode($this->results);
+    public function terminate(ResultCollection $collection){
+
     }
 }

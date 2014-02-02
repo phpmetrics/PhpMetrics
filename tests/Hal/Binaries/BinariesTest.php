@@ -27,7 +27,7 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
 
     public function testICanRunPhar() {
 
-        $command = sprintf('php '.__DIR__.'/../../../build/metrics.phar '.$this->toExplore);
+        $command = sprintf('php '.__DIR__.'/../../../build/metrics.phar --report=details '.$this->toExplore);
         $output = shell_exec($command);
 
         $this->assertRegExp('/Delivred Bugs/', $output);
@@ -38,7 +38,7 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         $path = getcwd();
         copy(__DIR__.'/../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
         chdir(sys_get_temp_dir());
-        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar '.$this->toExplore);
+        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  --report=details  '.$this->toExplore);
         $output = shell_exec($command);
         chdir($path);
 
@@ -51,7 +51,7 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         copy(__DIR__.'/../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
         chdir(sys_get_temp_dir());
 
-        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar --format=html '.$this->toExplore);
+        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  --report=details --format=html '.$this->toExplore);
         $output = shell_exec($command);
         chdir($path);
 
@@ -61,7 +61,7 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
 
     public function testICanRunPhpFile() {
 
-        $command = sprintf('php '.__DIR__.'/../../../bin/metrics.php');
+        $command = sprintf('php '.__DIR__.'/../../../bin/metrics.php  --report=details '.$this->toExplore);
         $output = shell_exec($command);
 
         $this->assertRegExp('/Delivred Bugs/', $output);

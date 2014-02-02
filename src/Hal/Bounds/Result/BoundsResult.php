@@ -7,7 +7,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Hal\Result;
+namespace Hal\Bounds\Result;
+use Hal\Result\ExportableInterface;
+use Hal\Result\ResultCollection;
 
 
 /**
@@ -15,14 +17,7 @@ namespace Hal\Result;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class ResultBoundary implements ExportableInterface {
-
-    /**
-     * Resultset collection
-     *
-     * @var ResultCollection
-     */
-    private $collection;
+class BoundsResult implements ExportableInterface {
 
     /**
      * Average values
@@ -57,20 +52,12 @@ class ResultBoundary implements ExportableInterface {
      *
      * @param ResultCollection $collection
      */
-    public function __construct(ResultCollection $collection)
+    public function __construct($min, $max, $average, $sum)
     {
-        $this->collection = $collection;
-        $array = $collection->asArray();
-
-        $arrayMerged = call_user_func_array('array_merge_recursive', $array);
-
-        foreach($arrayMerged as $key => $values) {
-            $values = (array) $values;
-            $this->max[$key] = max($values);
-            $this->min[$key] = min($values);
-            $this->sum[$key] = array_sum($values);
-            $this->average[$key] = $this->sum[$key] / count($values, COUNT_NORMAL);
-        }
+       $this->min = $min;
+       $this->max = $max;
+       $this->average = $average;
+       $this->sum = $sum;
     }
 
     /**
