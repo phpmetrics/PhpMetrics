@@ -1,5 +1,0 @@
-before_commands:
-    - "composer install --prefer-source"
-tools:
-    php_code_coverage:
-        test_command: phpunit
