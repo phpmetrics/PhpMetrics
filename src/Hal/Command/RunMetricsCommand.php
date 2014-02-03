@@ -8,6 +8,8 @@
  */
 
 namespace Hal\Command;
+use Hal\Bounds\Bounds;
+use Hal\Bounds\DirectoryBounds;
 use Hal\Command\Job\DoAnalyze;
 use Hal\Command\Job\Queue;
 use Hal\Command\Job\ReportRenderer;
@@ -59,6 +61,9 @@ class RunMetricsCommand extends Command
                         'details-html', null, InputOption::VALUE_REQUIRED, 'Path to save detailled report in HTML format'
                 )
                 ->addOption(
+                        'summary-xml', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in XML format'
+                )
+                ->addOption(
                         'level', null, InputOption::VALUE_REQUIRED, 'Depth of summary report', 3
                 )
                 ->addOption(
@@ -89,6 +94,7 @@ class RunMetricsCommand extends Command
             ->push(new ReportRenderer($output, new Summary\Cli($validator, $output, $level)))
             ->push(new ReportWriter($input->getOption('summary-html'), $output, new Summary\Html($validator, $level)))
             ->push(new ReportWriter($input->getOption('details-html'), $output, new Details\Html($validator)))
+            ->push(new ReportWriter($input->getOption('summary-xml'), $output, new Summary\Xml($validator, $level)))
             ;
 
         // execute

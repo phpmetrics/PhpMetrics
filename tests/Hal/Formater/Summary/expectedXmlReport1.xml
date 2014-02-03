@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project average-volume="10" average-maintenabilityIndex="80">
+    <modules>
+        <module name="folder1" average-volume="5" average-maintenabilityIndex="100"></module>
+        <module name="folder2" average-volume="15" average-maintenabilityIndex="60"></module>
+    </modules>
+</project>

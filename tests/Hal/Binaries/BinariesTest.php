@@ -62,6 +62,23 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         $this->assertRegExp('<body>', $content);
     }
 
+    public function testICanRunPharWithXmlFormater() {
+
+        $to = sys_get_temp_dir().'/tmpunit.xml';
+        $path = getcwd();
+        copy(__DIR__.'/../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
+        chdir(sys_get_temp_dir());
+
+        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  --summary-xml='.$to.' '.$this->toExplore);
+        $output = shell_exec($command);
+        chdir($path);
+
+        $this->assertFileExists($to);
+        $content = file_get_contents($to);
+        $this->assertRegExp('<modules>', $content);
+        $this->assertRegExp('<project>', $content);
+    }
+
     public function testICanRunPhpFile() {
 
         $command = sprintf('php '.__DIR__.'/../../../bin/metrics.php   '.$this->toExplore);
