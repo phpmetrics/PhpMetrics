@@ -69,7 +69,7 @@ class Cli implements FormaterInterface {
      */
     public function terminate(ResultCollection $collection){
 
-        $output = new BufferedOutput();
+        $output = new BufferedOutput(OutputInterface::VERBOSITY_NORMAL, true);
         
         // overview
         $total = $this->bound->calculate($collection);
