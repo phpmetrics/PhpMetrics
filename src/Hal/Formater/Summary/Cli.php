@@ -9,6 +9,7 @@
 
 namespace Hal\Formater\Summary;
 use Hal\Bounds\Bounds;
+use Hal\Bounds\BoundsAgregateInterface;
 use Hal\Bounds\BoundsInterface;
 use Hal\Bounds\Result\ResultInterface;
 use Hal\Formater\FormaterInterface;
@@ -54,7 +55,7 @@ class Cli implements FormaterInterface {
      * @param BoundsInterface $bound
      * @param BoundsInterface $agregateBounds
      */
-    public function __construct(Validator $validator, BoundsInterface $bound, BoundsInterface $agregateBounds)
+    public function __construct(Validator $validator, BoundsInterface $bound, BoundsAgregateInterface $agregateBounds)
     {
         $this->bound = $bound;
         $this->agregateBounds = $agregateBounds;

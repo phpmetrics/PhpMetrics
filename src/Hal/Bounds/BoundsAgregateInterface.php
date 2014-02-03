@@ -15,13 +15,13 @@ use Hal\Result\ResultCollection;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-interface BoundsInterface {
+interface BoundsAgregateInterface {
 
     /**
      * Calculate
      *
      * @param ResultCollection $collection
-     * @return \Hal\Bounds\Result\ResultInterface
+     * @return array
      */
     public function calculate(ResultCollection $collection);
 }

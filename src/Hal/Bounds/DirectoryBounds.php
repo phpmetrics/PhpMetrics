@@ -17,7 +17,7 @@ use Hal\Result\ResultCollection;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class DirectoryBounds implements BoundsInterface{
+class DirectoryBounds implements BoundsInterface, BoundsAgregateInterface{
 
     /**
      * Depth max
