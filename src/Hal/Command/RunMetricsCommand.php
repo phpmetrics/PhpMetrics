@@ -9,6 +9,7 @@
 
 namespace Hal\Command;
 
+use Hal\File\Finder;
 use Hal\Formater\Summary;
 use Hal\Formater\Details;
 use Symfony\Component\Console\Command\Command;
@@ -75,23 +76,10 @@ class RunMetricsCommand extends Command
     protected function prepare(InputInterface $input, OutputInterface $output)
     {
 
-        $path = $input->getArgument('path');
-        if(is_dir($path)) {
-            $path = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-            $directory = new \RecursiveDirectoryIterator($path);
-            $iterator = new \RecursiveIteratorIterator($directory);
-            $regex = new \RegexIterator($iterator, '/^.+\.('. $input->getOption('extensions') .')$/i', \RecursiveRegexIterator::GET_MATCH);
-            foreach($regex as $file) {
-                $this->files[] = $file[0];
-            }
+        $finder = new Finder($input->getOption('extensions'));
+        $this->files = $finder->find($input->getArgument('path'));
 
-        } elseif(is_file($path)) {
-            $this->files = array($path);
-        } else {
-            throw new \LogicException('No file found');
-        }
-
-        if(sizeof($this->files, COUNT_NORMAL) == 0) {
+        if(empty($this->files)) {
             throw new \LogicException('No file found');
         }
 
