@@ -8,17 +8,18 @@
  */
 
 namespace Hal\Command;
-
+use Hal\Command\Job\DoAnalyze;
+use Hal\Command\Job\Queue;
+use Hal\Command\Job\ReportRenderer;
+use Hal\Command\Job\ReportWriter;
 use Hal\File\Finder;
-use Hal\Formater\Summary;
-use Hal\Formater\Details;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\StreamOutput;
+use Hal\Formater\Summary;
+use Hal\Formater\Details;
 
 /**
  * Command for run analysis
@@ -67,104 +68,32 @@ class RunMetricsCommand extends Command
     }
 
     /**
-     * Prepare procedure
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @throws \LogicException
-     */
-    protected function prepare(InputInterface $input, OutputInterface $output)
-    {
-
-        $finder = new Finder($input->getOption('extensions'));
-        $this->files = $finder->find($input->getArgument('path'));
-
-        if(empty($this->files)) {
-            throw new \LogicException('No file found');
-        }
-
-        $this->progress = new ProgressHelper();
-        $this->progress->start($output, sizeof($this->files, COUNT_NORMAL));
-
-    }
-
-    /**
      * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $this->prepare($input, $output);
-        $path = $input->getArgument('path');
         $level = $input->getOption('level');
+
+        // files
+        $finder = new Finder($input->getOption('extensions'));
 
         // rules
         $rules = new \Hal\Rule\RuleSet();
         $validator = new \Hal\Rule\Validator($rules);
 
-        // CLI formater
-        $summary = new Summary\Cli($validator, $output, $level);
+        // jobs queue planning
+        $queue = new Queue();
+        $queue
+            ->push(new DoAnalyze($output, $finder, $input->getArgument('path')))
+            ->push(new ReportRenderer($output, new Summary\Cli($validator, $output, $level)))
+            ->push(new ReportWriter($input->getOption('summary-html'), $output, new Summary\Html($validator, $level)))
+            ->push(new ReportWriter($input->getOption('details-html'), $output, new Details\Html($validator)))
+            ;
 
-
+        // execute
         $collection = new \Hal\Result\ResultCollection();
-        foreach($this->files as $filename) {
-
-            $this->progress->advance();
-
-            // calculates
-            $halstead = new \Hal\Halstead\Halstead(new \Hal\Token\TokenType());
-            $rHalstead = $halstead->calculate($filename);
-
-            $loc = new \Hal\Loc\Loc();
-            $rLoc = $loc->calculate($filename);
-
-            $maintenability = new \Hal\MaintenabilityIndex\MaintenabilityIndex;
-            $rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
-
-            // formats
-            $resultSet = new \Hal\Result\ResultSet(basename($path) . str_replace($path, '/', $filename));
-            $resultSet
-                ->setLoc($rLoc)
-                ->setHalstead($rHalstead)
-                ->setMaintenabilityIndex($rMaintenability);
-
-            $collection->push($resultSet);
-        }
-        $this->progress->clear();
-        $this->progress->finish();
-
-        $output->write($summary->terminate($collection));
-
-
-        //
-        // Generate reports
-        $out = $input->getOption('summary-html');
-        if($out) {
-            $dir = dirname($out);
-            if(!file_exists($dir)) {
-                mkdir($dir, 0777, true);
-            }
-            $output->writeln('Generating Summary HTML Report...');
-            $handle = fopen($out, 'w');
-            $stream = new StreamOutput($handle);
-            $report = new Summary\Html($validator, $level);
-            $stream->write($report->terminate($collection));
-            fclose($handle);
-        }
-
-        $out = $input->getOption('details-html');
-        if($out) {
-            $dir = dirname($out);
-            if(!file_exists($dir)) {
-                mkdir($dir, 0777, true);
-            }
-            $output->writeln('Generating Detailled HTML Report...');
-            $handle = fopen($out, 'w');
-            $stream = new StreamOutput($handle);
-            $report = new Details\Html($validator, $level);
-            $stream->write($report->terminate($collection));
-            fclose($handle);
-        }
+        $queue->execute($collection);
 
         $output->writeln('<info>done</info>');
 
