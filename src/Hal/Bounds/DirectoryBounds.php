@@ -9,7 +9,6 @@
 
 namespace Hal\Bounds;
 use Hal\Bounds\Result\DirectoryResult;
-use Hal\Result\ExportableInterface;
 use Hal\Result\ResultCollection;
 
 

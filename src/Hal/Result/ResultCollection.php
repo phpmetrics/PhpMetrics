@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Result;
-use Traversable;
 
 
 /**

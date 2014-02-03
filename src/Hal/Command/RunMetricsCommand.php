@@ -9,7 +9,6 @@
 
 namespace Hal\Command;
 
-use Exception;
 use Hal\Formater\Summary;
 use Hal\Formater\Details;
 use Symfony\Component\Console\Command\Command;

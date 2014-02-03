@@ -23,6 +23,7 @@ interface FormaterInterface {
      * Push resultset
      *
      * @param ResultSet $resultSet
+     * @return void
      */
     public function pushResult(ResultSet $resultSet);
 

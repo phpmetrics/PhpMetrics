@@ -16,7 +16,6 @@ use Hal\Result\ResultCollection;
 use Hal\Result\ResultSet;
 use Hal\Rule\Validator;
 use Symfony\Component\Console\Helper\TableHelper;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -134,9 +133,9 @@ class Cli implements FormaterInterface {
      * Get formated row
      *
      * @param ResultInterface $bound
-     * @param $key
-     * @param $type
-     * @param $round
+     * @param string $key
+     * @param string $type
+     * @param integer $round
      * @return string
      */
     private function getRow(ResultInterface $bound, $key, $type, $round) {
@@ -148,8 +147,8 @@ class Cli implements FormaterInterface {
      * Get style, according score
      *
      * @param $key
-     * @param $value
-     * @return null|string
+     * @param double $value
+     * @return string
      */
     private function getStyle($key, $value) {
         $score = $this->validator->validate($key, $value);

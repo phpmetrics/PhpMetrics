@@ -57,7 +57,7 @@ class Validator {
      *
      * @param $key
      * @param $value
-     * @return int
+     * @return string
      */
     public function validate($key, $value) {
         $rule = $this->ruleSet->getRule($key);

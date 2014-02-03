@@ -9,7 +9,6 @@
 
 namespace Hal\Bounds\Result;
 use Hal\Result\ExportableInterface;
-use Hal\Result\ResultCollection;
 
 
 /**
@@ -50,7 +49,6 @@ class BoundsResult implements ExportableInterface, ResultInterface {
     /**
      * Constructor
      *
-     * @param ResultCollection $collection
      */
     public function __construct($min, $max, $average, $sum)
     {

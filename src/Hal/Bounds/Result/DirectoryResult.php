@@ -9,7 +9,6 @@
 
 namespace Hal\Bounds\Result;
 use Hal\Result\ExportableInterface;
-use Hal\Result\ResultBoundary;
 
 /**
  * Boundary for directory (proxy of boundary)
@@ -45,7 +44,7 @@ class DirectoryResult implements ExportableInterface, ResultInterface {
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getDepth() {
         return max(0, substr_count($this->directory, DIRECTORY_SEPARATOR) - 1);

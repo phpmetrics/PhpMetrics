@@ -12,7 +12,6 @@ namespace Hal\Console;
 use Hal\Command\RunMetricsCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Application
