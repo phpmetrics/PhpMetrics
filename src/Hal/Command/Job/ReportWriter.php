@@ -10,7 +10,6 @@
 namespace Hal\Command\Job;
 use Hal\Formater\FormaterInterface;
 use Hal\Result\ResultCollection;
-use Hal\Rule\Validator;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 
@@ -71,7 +70,7 @@ class ReportWriter implements JobInterface
         if(!file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
-        $this->output->writeln('Generating Detailled HTML Report...');
+        $this->output->writeln(sprintf('Generating %s Report...', $this->formater->getName()));
         $handle = fopen($this->destination, 'w');
         $stream = new StreamOutput($handle);
         $stream->write($this->formater->terminate($collection));

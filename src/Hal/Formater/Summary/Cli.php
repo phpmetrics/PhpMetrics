@@ -146,7 +146,7 @@ class Cli implements FormaterInterface {
     /**
      * Get style, according score
      *
-     * @param $key
+     * @param string $key
      * @param double $value
      * @return string
      */
@@ -176,5 +176,12 @@ class Cli implements FormaterInterface {
             , gmdate('m', $v)
             , gmdate('s', $v)
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName() {
+        return 'Summary CLI';
     }
 }

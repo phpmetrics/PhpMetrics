@@ -62,4 +62,11 @@ class Cli implements FormaterInterface {
             ;
         }
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName() {
+        return 'Detailled CLI';
+    }
 }

@@ -33,4 +33,11 @@ interface FormaterInterface {
      * @return void
      */
     public function terminate(ResultCollection $collection);
+
+    /**
+     * Get name of formater
+     *
+     * @return string
+     */
+    public function getName();
 }

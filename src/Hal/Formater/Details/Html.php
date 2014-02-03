@@ -58,4 +58,11 @@ class Html implements FormaterInterface {
             , 'results' => $collection->asArray()
         ));
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName() {
+        return 'Detailled HTML';
+    }
 }

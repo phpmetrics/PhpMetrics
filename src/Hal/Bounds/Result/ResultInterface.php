@@ -52,8 +52,8 @@ interface ResultInterface {
     /**
      * Get any
      *
-     * @param $type
-     * @param $key
+     * @param string $type
+     * @param string $key
      * @return null
      */
     public function get($type, $key);

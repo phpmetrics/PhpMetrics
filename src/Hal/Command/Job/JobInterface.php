@@ -22,6 +22,7 @@ interface JobInterface
      * Execute job
      *
      * @param ResultCollection $collection
+     * @return void
      */
     public function execute(ResultCollection $collection);
 

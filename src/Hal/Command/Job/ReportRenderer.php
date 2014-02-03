@@ -10,9 +10,7 @@
 namespace Hal\Command\Job;
 use Hal\Formater\FormaterInterface;
 use Hal\Result\ResultCollection;
-use Hal\Rule\Validator;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\StreamOutput;
 
 
 /**

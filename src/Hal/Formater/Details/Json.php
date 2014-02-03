@@ -32,4 +32,11 @@ class Json implements FormaterInterface {
     public function terminate(ResultCollection $collection){
         return json_encode($collection->asArray());
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName() {
+        return 'Detailled Json';
+    }
 }

@@ -74,4 +74,11 @@ class Html implements FormaterInterface {
             , 'bounds' => $bounds->calculate($collection)
         ));
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName() {
+        return 'Summary HTML';
+    }
 }
