@@ -26,16 +26,31 @@ class RuleSet {
      *
      * @var array
      */
-    private $rules = array(
-        'cyclomaticComplexity' => array(50, 20, 10)
-        , 'maintenabilityIndex' => array(0, 65, 85)
-        , 'logicalLoc' => array(800, 400, 200)
-        , 'volume' => array(1000, 800, 400)
-        , 'bugs' => array(2, 2, 1)
-        , 'commentWeight' => array(0, 10, 20)
-        , 'vocabulary' => array(30, 26, 25)
-        , 'difficulty' => array(14, 11, 7)
-    );
+    private $rules;
+
+    /**
+     * Constructor
+     *
+     * @param array $rules
+     */
+    public function __construct(array $rules = array())
+    {
+        if(!$rules) {
+            $rules = array(
+                'cyclomaticComplexity' => array(50, 20, 10)
+            , 'maintenabilityIndex' => array(0, 65, 85)
+            , 'logicalLoc' => array(800, 400, 200)
+            , 'volume' => array(1000, 800, 400)
+            , 'bugs' => array(2, 2, 1)
+            , 'commentWeight' => array(0, 10, 20)
+            , 'vocabulary' => array(30, 26, 25)
+            , 'difficulty' => array(14, 11, 7)
+            );
+        }
+
+        $this->rules = $rules;
+    }
+
 
     /**
      * Get rule for key

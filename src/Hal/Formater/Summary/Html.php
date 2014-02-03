@@ -48,13 +48,6 @@ class Html implements FormaterInterface {
         $this->validator = $validator;
     }
 
-
-    /**
-     * @inheritdoc
-     */
-    public function pushResult(ResultSet $resultSet) {
-    }
-
     /**
      * @inheritdoc
      */

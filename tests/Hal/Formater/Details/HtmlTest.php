@@ -1,5 +1,5 @@
 <?php
-namespace Test\Hal\Formater;
+namespace Test\Hal\Formater\Details;
 
 use Hal\Formater\Details\Html;
 
@@ -26,5 +26,11 @@ class HtmlTest extends \PHPUnit_Framework_TestCase {
 
         $output = $formater->terminate($collection);
         $this->assertContains('<html>', $output);
+    }
+
+    public function testFormaterHasName() {
+        $validator = $this->getMockBuilder('\Hal\Rule\Validator')->disableOriginalConstructor()->getMock();
+        $formater = new Html($validator, 2);
+        $this->assertNotNull($formater->getName());
     }
 }

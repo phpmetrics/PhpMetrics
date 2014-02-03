@@ -39,6 +39,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase {
             , array( array(20, 10, 5)   , 10     , Validator::WARNING)
             , array( array(20, 10, 5)   , 20     , Validator::CRITICAL)
             , array( array(20, 10, 5)   , 100     , Validator::CRITICAL)
+
+            , array( null   , 100     , Validator::UNKNOWN)
         );
     }
 }

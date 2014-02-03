@@ -27,6 +27,12 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, sizeof($results));
     }
 
+    public function testICanGiveFilepathInsteadOfDirectory() {
+        $finder = new Finder('txt');
+        $results = $finder->find($this->toExplore.'/tmp.php');
+        $this->assertEquals(1, sizeof($results));
+    }
+
     public function testIFindPhpFilesByDefault() {
         $finder = new Finder();
         $results = $finder->find($this->toExplore);

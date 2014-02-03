@@ -14,6 +14,7 @@ class MaintenabilityIndexTest extends \PHPUnit_Framework_TestCase {
     public function testMaintenabilityIndexServiceReturnsResult() {
 
         $rLoc = $this->getMock('\Hal\Loc\Result');
+        $rLoc->expects($this->any())->method('getLOC')->will($this->returnValue(5));
         $rHalstead = $this->getMock('\Hal\Halstead\Result');
 
         $object = new MaintenabilityIndex();

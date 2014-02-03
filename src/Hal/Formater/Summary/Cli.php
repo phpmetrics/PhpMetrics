@@ -63,12 +63,6 @@ class Cli implements FormaterInterface {
     /**
      * @inheritdoc
      */
-    public function pushResult(ResultSet $resultSet) {
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function terminate(ResultCollection $collection){
 
         $this->output->writeln('PHPMetrics by Jean-François Lépine <https://twitter.com/Halleck45>');

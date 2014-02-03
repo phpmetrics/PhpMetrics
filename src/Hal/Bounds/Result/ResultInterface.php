@@ -21,7 +21,7 @@ interface ResultInterface {
      * Get average for
      *
      * @param $key
-     * @return null
+     * @return null|float
      */
     public function getAverage($key);
 
@@ -29,7 +29,7 @@ interface ResultInterface {
      * Get min for
      *
      * @param $key
-     * @return null
+     * @return null|float
      */
     public function getMin($key);
 
@@ -37,7 +37,7 @@ interface ResultInterface {
      * Get max for
      *
      * @param $key
-     * @return null
+     * @return null|float
      */
     public function getMax($key);
 
@@ -45,7 +45,7 @@ interface ResultInterface {
      * Get sum for
      *
      * @param $key
-     * @return null
+     * @return null|float
      */
     public function getSum($key);
 
@@ -54,7 +54,7 @@ interface ResultInterface {
      *
      * @param string $type
      * @param string $key
-     * @return null
+     * @return null|float
      */
     public function get($type, $key);
 }

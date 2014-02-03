@@ -41,12 +41,6 @@ class Html implements FormaterInterface {
     /**
      * @inheritdoc
      */
-    public function pushResult(ResultSet $resultSet) {
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function terminate(ResultCollection $collection){
         \Twig_Autoloader::register();
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../../templates/html');
