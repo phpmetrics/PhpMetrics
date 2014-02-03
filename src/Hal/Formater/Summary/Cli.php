@@ -9,6 +9,7 @@
 
 namespace Hal\Formater\Summary;
 use Hal\Bounds\Bounds;
+use Hal\Bounds\BoundsInterface;
 use Hal\Bounds\DirectoryBounds;
 use Hal\Bounds\Result\ResultInterface;
 use Hal\Formater\FormaterInterface;
@@ -16,6 +17,7 @@ use Hal\Result\ResultCollection;
 use Hal\Result\ResultSet;
 use Hal\Rule\Validator;
 use Symfony\Component\Console\Helper\TableHelper;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -35,29 +37,31 @@ class Cli implements FormaterInterface {
     private $validator;
 
     /**
-     * Level
+     * Bounds
      *
-     * @var int
+     * @var BoundsInterface
      */
-    private $level;
+    private $bound;
 
     /**
-     * Output
+     * AgregateBounds
      *
-     * @var Output
+     * @var BoundsInterface
      */
-    private $output;
+    private $agregateBounds;
 
     /**
      * Constructor
      *
      * @param Validator $validator
+     * @param BoundsInterface $bound
+     * @param BoundsInterface $agregateBounds
      */
-    function __construct(Validator $validator, OutputInterface $output, $level)
+    public function __construct(Validator $validator, BoundsInterface $bound, BoundsInterface $agregateBounds)
     {
+        $this->bound = $bound;
+        $this->agregateBounds = $agregateBounds;
         $this->validator = $validator;
-        $this->level = $level;
-        $this->output = $output;
     }
 
     /**
@@ -65,14 +69,11 @@ class Cli implements FormaterInterface {
      */
     public function terminate(ResultCollection $collection){
 
-        $this->output->writeln('PHPMetrics by Jean-François Lépine <https://twitter.com/Halleck45>');
-        $this->output->writeln('');
-
-
+        $output = new BufferedOutput();
+        
         // overview
-        $service = new Bounds();
-        $total = $service->calculate($collection);
-        $this->output->writeln(sprintf(
+        $total = $this->bound->calculate($collection);
+        $output->writeln(sprintf(
             '<info>%d</info> files have been analyzed. Read and understand these <info>%s</info> lines of code will take around <info>%s</info>.'
             , sizeof($collection, COUNT_NORMAL)
             , $total->getSum('loc')
@@ -81,12 +82,11 @@ class Cli implements FormaterInterface {
 
 
         // by directory
-        $service = new DirectoryBounds($this->level);
-        $directoryBounds = $service->calculate($collection);
+        $directoryBounds = $this->agregateBounds->calculate($collection);
 
 
-        $this->output->writeln('<info>Avegare for each module:</info>');
-        $this->output->writeln('');
+        $output->writeln('<info>Avegare for each module:</info>');
+        $output->writeln('');
 
         $table = new TableHelper();
         $table
@@ -118,9 +118,9 @@ class Cli implements FormaterInterface {
                 , $this->getRow($bound, 'difficulty', 'average', 0)
             ));
         }
-        $table->render($this->output);
+        $table->render($output);
 
-
+        return $output->fetch();
     }
 
     /**

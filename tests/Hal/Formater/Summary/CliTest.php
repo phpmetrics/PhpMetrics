@@ -1,6 +1,9 @@
 <?php
 namespace Test\Hal\Formater\Summary;
 
+use Hal\Bounds\Bounds;
+use Hal\Bounds\DirectoryBounds;
+use Hal\Bounds\Result\BoundsResult;
 use Hal\Formater\Summary\Cli;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -27,20 +30,18 @@ class CliTest extends \PHPUnit_Framework_TestCase {
 
         $validator = $this->getMockBuilder('\Hal\Rule\Validator')->disableOriginalConstructor()->getMock();
 
-
-        $output = $this->getMock('\Symfony\Component\Console\Output\OutputInterface');
-        $outputFormater = $this->getMock('\Symfony\Component\Console\Formatter\OutputFormatterInterface');
-        $output->expects($this->any())->method('getFormatter')->will($this->returnValue($outputFormater));
-        $output->expects($this->any())->method('write');
-
-        $formater = new Cli($validator, $output, 1);
-        $formater->terminate($collection);
+        $bounds = new Bounds();
+        $agregatedBounds = new DirectoryBounds(0);
+        $formater = new Cli($validator, $bounds, $agregatedBounds);
+        $output = $formater->terminate($collection);
+        $this->assertRegExp('/Maintenability/', $output);
     }
 
     public function testFormaterHasName() {
         $validator = $this->getMockBuilder('\Hal\Rule\Validator')->disableOriginalConstructor()->getMock();
-        $output = $this->getMock('\Symfony\Component\Console\Output\OutputInterface');
-        $formater = new Cli($validator, $output, 1);
+        $bounds = new Bounds();
+        $agregatedBounds = new DirectoryBounds(0);
+        $formater = new Cli($validator, $bounds, $agregatedBounds);
         $this->assertNotNull($formater->getName());
     }
 }

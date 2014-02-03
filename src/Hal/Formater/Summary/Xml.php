@@ -9,6 +9,7 @@
 
 namespace Hal\Formater\Summary;
 use Hal\Bounds\Bounds;
+use Hal\Bounds\BoundsInterface;
 use Hal\Bounds\DirectoryBounds;
 use Hal\Bounds\Result\BoundsResult;
 use Hal\Bounds\Result\ResultInterface;
@@ -25,11 +26,18 @@ use Hal\Rule\Validator;
 class Xml implements FormaterInterface {
 
     /**
-     * Level
+     * Bounds
      *
-     * @var int
+     * @var BoundsInterface
      */
-    private $level;
+    private $bound;
+
+    /**
+     * AgregateBounds
+     *
+     * @var BoundsInterface
+     */
+    private $agregateBounds;
 
     /**
      * Validator
@@ -41,11 +49,14 @@ class Xml implements FormaterInterface {
     /**
      * Constructor
      *
-     * @param $level
+     * @param Validator $validator
+     * @param BoundsInterface $bound
+     * @param BoundsInterface $agregateBounds
      */
-    public function __construct(Validator $validator, $level)
+    public function __construct(Validator $validator, BoundsInterface $bound, BoundsInterface $agregateBounds)
     {
-        $this->level = (int) $level;
+        $this->bound = $bound;
+        $this->agregateBounds = $agregateBounds;
         $this->validator = $validator;
     }
 
@@ -54,11 +65,8 @@ class Xml implements FormaterInterface {
      */
     public function terminate(ResultCollection $collection){
 
-        $cBounds = new Bounds();
-        $cDirectoryBounds = new DirectoryBounds($this->level);
-
-        $bounds = $cBounds->calculate($collection);
-        $directoryBounds = $cDirectoryBounds->calculate($collection);
+        $bounds = $this->bound->calculate($collection);
+        $directoryBounds = $this->agregateBounds->calculate($collection);
 
         // root
         $xml = new \DOMDocument("1.0", "UTF-8");

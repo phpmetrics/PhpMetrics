@@ -14,6 +14,7 @@ use Hal\Command\Job\DoAnalyze;
 use Hal\Command\Job\Queue;
 use Hal\Command\Job\ReportRenderer;
 use Hal\Command\Job\ReportWriter;
+use Hal\Command\Job\SearchBounds;
 use Hal\File\Finder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -78,6 +79,9 @@ class RunMetricsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
+        $output->writeln('PHPMetrics by Jean-François Lépine <https://twitter.com/Halleck45>');
+        $output->writeln('');
+
         $level = $input->getOption('level');
 
         // files
@@ -87,14 +91,20 @@ class RunMetricsCommand extends Command
         $rules = new \Hal\Rule\RuleSet();
         $validator = new \Hal\Rule\Validator($rules);
 
+        // bounds
+        $bounds = new Bounds;
+        $directoryBounds = new DirectoryBounds($level);
+
         // jobs queue planning
         $queue = new Queue();
         $queue
             ->push(new DoAnalyze($output, $finder, $input->getArgument('path')))
-            ->push(new ReportRenderer($output, new Summary\Cli($validator, $output, $level)))
-            ->push(new ReportWriter($input->getOption('summary-html'), $output, new Summary\Html($validator, $level)))
+            ->push(new SearchBounds($output, $bounds))
+            ->push(new SearchBounds($output, $directoryBounds))
+            ->push(new ReportRenderer($output, new Summary\Cli($validator, $bounds, $directoryBounds)))
+            ->push(new ReportWriter($input->getOption('summary-html'), $output, new Summary\Html($validator, $bounds, $directoryBounds)))
             ->push(new ReportWriter($input->getOption('details-html'), $output, new Details\Html($validator)))
-            ->push(new ReportWriter($input->getOption('summary-xml'), $output, new Summary\Xml($validator, $level)))
+            ->push(new ReportWriter($input->getOption('summary-xml'), $output, new Summary\Xml($validator, $bounds, $directoryBounds)))
             ;
 
         // execute

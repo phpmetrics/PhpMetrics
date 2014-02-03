@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Formater\Summary;
+use Hal\Bounds\BoundsInterface;
 use Hal\Bounds\DirectoryBounds;
 use Hal\Formater\FormaterInterface;
 use Hal\Formater\Twig\FormatingExtension;
@@ -24,11 +25,18 @@ use Hal\Rule\Validator;
 class Html implements FormaterInterface {
 
     /**
-     * Level
+     * Bounds
      *
-     * @var int
+     * @var BoundsInterface
      */
-    private $level;
+    private $bound;
+
+    /**
+     * AgregateBounds
+     *
+     * @var BoundsInterface
+     */
+    private $agregateBounds;
 
     /**
      * Validator
@@ -40,11 +48,14 @@ class Html implements FormaterInterface {
     /**
      * Constructor
      *
-     * @param $level
+     * @param Validator $validator
+     * @param BoundsInterface $bound
+     * @param BoundsInterface $agregateBounds
      */
-    public function __construct(Validator $validator, $level)
+    public function __construct(Validator $validator, BoundsInterface $bound, BoundsInterface $agregateBounds)
     {
-        $this->level = (int) $level;
+        $this->bound = $bound;
+        $this->agregateBounds = $agregateBounds;
         $this->validator = $validator;
     }
 
@@ -57,14 +68,11 @@ class Html implements FormaterInterface {
         $twig = new \Twig_Environment($loader, array('cache' => false));
         $twig->addExtension(new FormatingExtension($this->validator));
 
-        $bounds = new DirectoryBounds();
-        $directoryBounds = new DirectoryBounds($this->level);
-
         return $twig->render('summary/report.html.twig', array(
             'keys' => array_keys(current($collection->asArray()))
             , 'results' => $collection->asArray()
-            , 'directoryBounds' => $directoryBounds->calculate($collection)
-            , 'bounds' => $bounds->calculate($collection)
+            , 'directoryBounds' => $this->agregateBounds->calculate($collection)
+            , 'bounds' => $this->bound->calculate($collection)
         ));
     }
 

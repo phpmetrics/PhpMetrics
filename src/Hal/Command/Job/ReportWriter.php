@@ -61,7 +61,6 @@ class ReportWriter implements JobInterface
      * @inheritdoc
      */
     public function execute(ResultCollection $collection) {
-
         if(!$this->destination) {
             return;
         }
