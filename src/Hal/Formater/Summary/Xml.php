@@ -10,7 +10,6 @@
 namespace Hal\Formater\Summary;
 use Hal\Bounds\Bounds;
 use Hal\Bounds\BoundsInterface;
-use Hal\Bounds\DirectoryBounds;
 use Hal\Bounds\Result\BoundsResult;
 use Hal\Bounds\Result\ResultInterface;
 use Hal\Formater\FormaterInterface;

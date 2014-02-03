@@ -10,15 +10,12 @@
 namespace Hal\Formater\Summary;
 use Hal\Bounds\Bounds;
 use Hal\Bounds\BoundsInterface;
-use Hal\Bounds\DirectoryBounds;
 use Hal\Bounds\Result\ResultInterface;
 use Hal\Formater\FormaterInterface;
 use Hal\Result\ResultCollection;
-use Hal\Result\ResultSet;
 use Hal\Rule\Validator;
 use Symfony\Component\Console\Helper\TableHelper;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
 

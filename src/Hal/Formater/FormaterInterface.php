@@ -9,7 +9,6 @@
 
 namespace Hal\Formater;
 use Hal\Result\ResultCollection;
-use Hal\Result\ResultSet;
 
 
 /**

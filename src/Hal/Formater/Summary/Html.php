@@ -9,11 +9,9 @@
 
 namespace Hal\Formater\Summary;
 use Hal\Bounds\BoundsInterface;
-use Hal\Bounds\DirectoryBounds;
 use Hal\Formater\FormaterInterface;
 use Hal\Formater\Twig\FormatingExtension;
 use Hal\Result\ResultCollection;
-use Hal\Result\ResultSet;
 use Hal\Rule\Validator;
 
 

@@ -38,6 +38,7 @@ class DirectoryBounds implements BoundsInterface{
 
     /**
      * @inheritdoc
+     * @return array
      */
     public function calculate(ResultCollection $results) {
 

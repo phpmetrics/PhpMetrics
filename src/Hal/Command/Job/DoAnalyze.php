@@ -48,7 +48,7 @@ class DoAnalyze implements JobInterface
      *
      * @param OutputInterface $output
      * @param Finder $finder
-     * @param Path $path
+     * @param string $path
      */
     function __construct(OutputInterface $output, Finder $finder, $path)
     {

@@ -9,7 +9,6 @@
 
 namespace Hal\Bounds;
 use Hal\Result\ResultCollection;
-use Hal\Bounds\Result\Result;
 
 /**
  * Bounds calculator
@@ -22,7 +21,7 @@ interface BoundsInterface {
      * Calculate
      *
      * @param ResultCollection $collection
-     * @return Result|array
+     * @return \Hal\Bounds\Result\ResultInterface|array
      */
     public function calculate(ResultCollection $collection);
 }

@@ -20,6 +20,7 @@ class Bounds implements BoundsInterface {
 
     /**
      * @inheritdoc
+     * @return \Hal\Bounds\Result\ResultInterface
      */
     public function calculate(ResultCollection $collection) {
         $array = $collection->asArray();
