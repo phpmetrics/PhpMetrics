@@ -83,7 +83,7 @@ class Xml implements FormaterInterface {
         }
 
         $xml->appendChild($root);
-        $xml->appendChild($modules);
+        $root->appendChild($modules);
 
         return $xml->saveXML();
     }
