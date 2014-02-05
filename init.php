@@ -1,14 +1,20 @@
 <?php
-
-spl_autoload_register(function($class) {
-    if (false !== strpos($class, 'Hal')) {
-        $filename = __DIR__ . '/src/' . str_replace('\\', '/', $class) . '.php';
-        if (file_exists($filename)) {
-            require_once(__DIR__ . '/src/' . str_replace('\\', '/', $class) . '.php');
-            return true;
-        }
+function includeIfExists($file)
+{
+    if (file_exists($file)) {
+        return include $file;
     }
-}, true, false);
+}
 
-require_once 'vendor/autoload.php';
-require_once 'bin/metrics.php';
+if (
+    (!$loader = includeIfExists('phar://metrics.phar/vendor/autoload.php'))
+) {
+    die(
+        'You must set up the project dependencies, run the following commands:'.PHP_EOL.
+        'curl -s http://getcomposer.org/installer | php'.PHP_EOL.
+        'php composer.phar install'.PHP_EOL
+    );
+}
+
+$app = new Hal\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '0.0.3');
+$app->run();
