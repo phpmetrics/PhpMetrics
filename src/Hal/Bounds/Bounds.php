@@ -33,7 +33,7 @@ class Bounds implements BoundsInterface {
             $max[$key] = max($values);
             $min[$key] = min($values);
             $sum[$key] = array_sum($values);
-            $average[$key] = $sum[$key] / count($values, COUNT_NORMAL);
+            $average[$key] = round($sum[$key] / count($values, COUNT_NORMAL),2);
         }
 
         return new BoundsResult($min, $max, $average, $sum);
