@@ -51,7 +51,7 @@ class Xml implements FormaterInterface {
      *
      * @param Validator $validator
      * @param BoundsInterface $bound
-     * @param BoundsInterface $agregateBounds
+     * @param BoundsAgregateInterface $agregateBounds
      */
     public function __construct(Validator $validator, BoundsInterface $bound, BoundsAgregateInterface $agregateBounds)
     {

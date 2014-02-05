@@ -53,7 +53,7 @@ class Cli implements FormaterInterface {
      *
      * @param Validator $validator
      * @param BoundsInterface $bound
-     * @param BoundsInterface $agregateBounds
+     * @param BoundsAgregateInterface $agregateBounds
      */
     public function __construct(Validator $validator, BoundsInterface $bound, BoundsAgregateInterface $agregateBounds)
     {
@@ -159,7 +159,7 @@ class Cli implements FormaterInterface {
     /**
      * Format time in text
      *
-     * @param $v
+     * @param null|double $v
      * @return string
      */
     private function formatTime($v) {

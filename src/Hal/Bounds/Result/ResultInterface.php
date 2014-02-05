@@ -20,7 +20,7 @@ interface ResultInterface {
     /**
      * Get average for
      *
-     * @param $key
+     * @param string $key
      * @return null|float
      */
     public function getAverage($key);
@@ -44,7 +44,7 @@ interface ResultInterface {
     /**
      * Get sum for
      *
-     * @param $key
+     * @param string $key
      * @return null|float
      */
     public function getSum($key);

@@ -35,7 +35,7 @@ class Finder
     /**
      * Find files in path
      *
-     * @param $path
+     * @param string $path
      * @return array
      */
     public function find($path) {
