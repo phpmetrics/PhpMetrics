@@ -102,6 +102,10 @@ class Xml implements FormaterInterface {
         $node->setAttribute('maintenabilityIndex', $bound->getAverage('maintenabilityIndex'));
         $node->setAttribute('volume', $bound->getAverage('volume'));
         $node->setAttribute('vocabulary', $bound->getAverage('vocabulary'));
+        $node->setAttribute('difficulty', $bound->getAverage('difficulty'));
+        $node->setAttribute('bugs', $bound->getAverage('bugs'));
+        $node->setAttribute('time', $bound->getAverage('time'));
+        $node->setAttribute('intelligentContent', $bound->getAverage('intelligentContent'));
     }
 
     /**
