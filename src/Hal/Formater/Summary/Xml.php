@@ -71,14 +71,15 @@ class Xml implements FormaterInterface {
         // root
         $xml = new \DOMDocument("1.0", "UTF-8");
         $xml->formatOutput = true;
-        $root = $xml->createElement( "project");
-        $this->injectsBounds($root, $bounds, 'average');
+        $root = $xml->createElement("project");
+        $this->injectsBounds($root, $bounds);
 
         // modules
         $modules = $xml->createElement('modules');
         foreach($directoryBounds as $bound) {
             $module = $xml->createElement('module');
-            $this->injectsBounds($module, $bound, 'average');
+            $this->injectsBounds($module, $bound);
+            $module->setAttribute('namespace', $bound->getDirectory());
             $modules->appendChild($module);
         }
 
@@ -93,13 +94,14 @@ class Xml implements FormaterInterface {
      *
      * @param \DOMElement $node
      * @param BoundsResult $bound
-     * @param string $type
      */
-    private function injectsBounds(\DOMElement $node, ResultInterface $bound, $type) {
-        $boundsAsArray = $bound->asArray();
-        foreach($boundsAsArray[$type] as $k => $v) {
-            $node->setAttribute($type.'-'.$k, round($v,2));
-        }
+    private function injectsBounds(\DOMElement $node, ResultInterface $bound) {
+        $node->setAttribute('loc', $bound->getSum('loc'));
+        $node->setAttribute('lloc', $bound->getSum('logicalLoc'));
+        $node->setAttribute('cyclomaticComplexity', $bound->getAverage('cyclomaticComplexity'));
+        $node->setAttribute('maintenabilityIndex', $bound->getAverage('maintenabilityIndex'));
+        $node->setAttribute('volume', $bound->getAverage('volume'));
+        $node->setAttribute('vocabulary', $bound->getAverage('vocabulary'));
     }
 
     /**
