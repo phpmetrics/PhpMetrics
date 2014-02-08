@@ -31,19 +31,6 @@ use Hal\Formater\Details;
  */
 class RunMetricsCommand extends Command
 {
-
-    /**
-     * @var ProgressHelper
-     */
-    private $progress;
-
-    /**
-     * Files to analyze
-     *
-     * @var array
-     */
-    private $files = array();
-
     /**
      * @inheritdoc
      */

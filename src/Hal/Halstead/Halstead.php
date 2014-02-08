@@ -81,7 +81,7 @@ class Halstead {
     /**
      * Calculate Halstead metrics
      *
-     * @param $filenameN
+     * @param $filename
      * @return Result
      */
     public function calculate($filename)

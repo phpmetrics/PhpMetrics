@@ -31,7 +31,7 @@ class Html implements FormaterInterface {
     /**
      * Constructor
      *
-     * @param $level
+     * @param Validator $validator
      */
     public function __construct(Validator $validator) {
         $this->validator = $validator;

@@ -93,7 +93,7 @@ class Xml implements FormaterInterface {
      * Injects bound in node
      *
      * @param \DOMElement $node
-     * @param BoundsResult $bound
+     * @param ResultInterface $bound
      */
     private function injectsBounds(\DOMElement $node, ResultInterface $bound) {
         $node->setAttribute('loc', $bound->getSum('loc'));

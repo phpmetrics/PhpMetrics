@@ -45,6 +45,7 @@ class FormatingExtension extends \Twig_Extension
     /**
      * Check value according rule
      *
+     * @param $key
      * @param $v
      * @return string
      */

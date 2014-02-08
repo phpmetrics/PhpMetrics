@@ -27,7 +27,7 @@ class TokenType {
         ,T_LNUMBER
         ,T_DNUMBER
         ,T_ARRAY
-//        ,T_CONST
+        ,T_CONST
         ,T_STRING
         ,T_NUM_STRING
 
@@ -124,6 +124,9 @@ class TokenType {
         , ','
     );
 
+    /**
+     * Constructor
+     */
     public function __construct() {
         if(version_compare(PHP_VERSION, '5.4.0') >= 0) {
             $this->operators = array_merge($this->operators, array(

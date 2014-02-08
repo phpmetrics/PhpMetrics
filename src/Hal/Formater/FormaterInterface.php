@@ -22,7 +22,7 @@ interface FormaterInterface {
     /**
      * Terminate process
      *
-     * @return void
+     * @return string
      */
     public function terminate(ResultCollection $collection);
 
