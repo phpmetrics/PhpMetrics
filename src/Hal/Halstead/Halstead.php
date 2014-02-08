@@ -68,11 +68,11 @@ class Halstead {
 
         foreach($tokens as $data) {
             $token = new \Hal\Token\Token($data);
-            if($this->tokenType->isOperand($token)) {
-                $this->operands[] = $token;
-            }
-            else if($this->tokenType->isOperator($token)) {
+            if($this->tokenType->isOperator($token)) {
                 $this->operators[] = $token;
+            }
+            else if($this->tokenType->isOperand($token)) {
+                $this->operands[] = $token;
             }
         }
         return $this;
@@ -92,14 +92,14 @@ class Halstead {
         $uniqueOperators = array_map( 'unserialize', array_unique( array_map( 'serialize', $this->operators ) ) );
         $uniqueOperands = array_map( 'unserialize', array_unique( array_map( 'serialize', $this->operands ) ) );
 
-        $n1 = sizeof($uniqueOperands, COUNT_NORMAL);
-        $n2 = sizeof($uniqueOperators, COUNT_NORMAL);
-        $N1 = sizeof($this->operands, COUNT_NORMAL);
-        $N2 = sizeof($this->operators, COUNT_NORMAL);
+        $n1 = sizeof($uniqueOperators, COUNT_NORMAL);
+        $n2 = sizeof($uniqueOperands, COUNT_NORMAL);
+        $N1 = sizeof($this->operators, COUNT_NORMAL);
+        $N2 = sizeof($this->operands, COUNT_NORMAL);
 
         if(($n2 == 0)||($N2 == 0)||($n2 == 2)) {
             // files without operators
-            $V = $n1 = $n2 = $N1 = $N2 = $E = $D = $B = $T = $I = 0;
+            $V = $n1 = $n2 = $N1 = $N2 = $E = $D = $B = $T = $I = $L = 0;
         } else {
             $devAbility = 3000;
             $N = $N1 + $N2;
@@ -109,21 +109,26 @@ class Halstead {
             $D = ($n1 / 2) * ($N2 / $n2);
             $E = $V * $D;
             $B = $V / $devAbility;
-            $T = $E;// / 18;
+            $T = $E / 18;
             $I = $L * $V;
         }
 
         $result
             ->setLength($N1 + $N2)
             ->setVocabulary($n1 + $n2)
-            ->setVolume($V)
-            ->setDifficulty($D)
+            ->setVolume(round($V,2))
+            ->setDifficulty(round($D,2))
             ->setEffort(round($E,2))
+            ->setLevel(round($L, 2))
             ->setBugs(round($B, 2))
             ->setTime(round($T))
-            ->setIntelligentContent($I)
+            ->setIntelligentContent(round($I,2))
+            ->setNumberOfOperators($N1)
+            ->setNumberOfOperands($N2)
+            ->setNumberOfUniqueOperators($n1)
+            ->setNumberOfUniqueOperands($n2)
         ;
 
         return $result;
     }
-}
+};

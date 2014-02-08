@@ -73,6 +73,31 @@ class Result implements ExportableInterface {
     private $intelligentContent;
 
     /**
+     * @var
+     */
+    private $level;
+
+    /**
+     * @var
+     */
+    private $numberOfOperators;
+
+    /**
+     * @var
+     */
+    private $numberOfUniqueOperators;
+
+
+    /**
+     * @var
+     */
+    private $numberOfOperands;
+
+    /**
+     * @var
+     */
+    private $numberOfUniqueOperands;
+    /**
      * @inheritdoc
      */
     public function asArray() {
@@ -220,5 +245,94 @@ class Result implements ExportableInterface {
     public function setIntelligentContent($intelligentContent)
     {
         $this->intelligentContent = $intelligentContent;
+        return $this;
     }
+
+    /**
+     * @param int $numberOfOperands
+     */
+    public function setNumberOfOperands($numberOfOperands)
+    {
+        $this->numberOfOperands = (int) $numberOfOperands;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfOperands()
+    {
+        return $this->numberOfOperands;
+    }
+
+    /**
+     * @param int $numberOfOperators
+     */
+    public function setNumberOfOperators($numberOfOperators)
+    {
+        $this->numberOfOperators = (int) $numberOfOperators;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfOperators()
+    {
+        return $this->numberOfOperators;
+    }
+
+    /**
+     * @param int $numberOfUniqueOperands
+     */
+    public function setNumberOfUniqueOperands($numberOfUniqueOperands)
+    {
+        $this->numberOfUniqueOperands = (int) $numberOfUniqueOperands;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfUniqueOperands()
+    {
+        return $this->numberOfUniqueOperands;
+    }
+
+    /**
+     * @param int $numberOfUniqueOperators
+     */
+    public function setNumberOfUniqueOperators($numberOfUniqueOperators)
+    {
+        $this->numberOfUniqueOperators = $numberOfUniqueOperators;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfUniqueOperators()
+    {
+        return $this->numberOfUniqueOperators;
+    }
+
+    /**
+     * @param mixed $level
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+
+
 }

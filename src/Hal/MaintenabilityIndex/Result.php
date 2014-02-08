@@ -63,7 +63,7 @@ class Result implements ExportableInterface {
         if(is_infinite($maintenabilityIndexWithoutComment)) {
             $maintenabilityIndexWithoutComment = 171;
         }
-        $this->maintenabilityIndexWithoutComment = $maintenabilityIndexWithoutComment;
+        $this->maintenabilityIndexWithoutComment = round($maintenabilityIndexWithoutComment,2);
 
     }
     /**
@@ -79,7 +79,7 @@ class Result implements ExportableInterface {
      */
     public function setCommentWeight($commentWeight)
     {
-        $this->commentWeight = (float) $commentWeight;
+        $this->commentWeight = (float) round($commentWeight, 2);
     }
 
     /**

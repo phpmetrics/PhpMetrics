@@ -23,15 +23,25 @@ class Token {
     private $type;
 
     /**
+     * Value of token
+     *
+     * @var integer
+     */
+    private $value;
+
+    /**
      * Constructor
      * @param string|array $data
      */
     public function __construct( $data)
     {
         if(!is_array($data)) {
-            $data = array($data);
+            $this->type = T_STRING;
+            $this->value = $data;
+        } else {
+            $this->type = $data[0];
+            $this->value = isset($data[1]) ? $data[1] : null;
         }
-        $this->type = $data[0];
     }
 
     /**
@@ -43,4 +53,15 @@ class Token {
     {
         return $this->type;
     }
+
+    /**
+     * Get value of token
+     *
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
 }

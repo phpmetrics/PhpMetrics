@@ -38,12 +38,12 @@ class MaintenabilityIndex {
     public function calculate(\Hal\Halstead\Result $rHalstead, \Hal\Loc\Result $rLoc)
     {
         $result = new Result;
-
-         $result->setMaintenabilityIndexWithoutComment(max(
-             171
-             - (5.2 * \log($rHalstead->getVolume(),2))
+        $result->setMaintenabilityIndexWithoutComment(max(
+             (171
+             - (5.2 * \log($rHalstead->getVolume()))
              - (0.23 * $rLoc->getComplexityCyclomatic())
-             - (16.2 * \log($rLoc->getLogicalLoc(),2))
+             - (16.2 * \log($rLoc->getLogicalLoc()))
+             ) * 100 / 171
              ,0));
 
 
