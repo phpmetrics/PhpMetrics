@@ -82,6 +82,24 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    public function testDependenciesAreGivenWithoutAlias() {
+
+        $file = __DIR__.'/../../resources/oop/f4.php';
+        $extractor = new Extractor();
+        $result = $extractor->extract($file);
+
+        $classes = $result->getClasses();
+        $this->assertCount(1, $classes);
+
+        $class = $classes[0];
+        $dependencies = $class->getDependencies();
+
+        $expected = array('\Full\AliasedClass', 'Toto');
+
+        $this->assertEquals($expected, $dependencies);
+
+    }
+
     public function providesForMethods() {
         return array(
             array(__DIR__.'/../../resources/oop/f1.php', array())
@@ -103,6 +121,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
                 ))
               )
             )
+
         );
     }
 }

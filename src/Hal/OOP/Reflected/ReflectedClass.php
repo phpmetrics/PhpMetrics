@@ -35,6 +35,20 @@ class ReflectedClass {
     private $methods;
 
     /**
+     * Consolidated dependencies
+     *
+     * @var array array
+     */
+    private $dependencies = array();
+
+    /**
+     * Map of aliases
+     *
+     * @var array
+     */
+    private $aliases = array();
+
+    /**
      * Constructor
      *
      * @param string $name
@@ -82,13 +96,47 @@ class ReflectedClass {
 
     /**
      * Attach method
+     * This method consolidated dependencies
      *
      * @param ReflectedMethod $method
      * @return $this
      */
     public function pushMethod(ReflectedMethod $method) {
         $this->methods->attach($method);
+
+        foreach($method->getArguments() as $argument) {
+
+            $name = $argument->getType();
+            if(!in_array($argument->getType(), array($this->getName(), 'array'))) {
+                $real = isset($this->aliases[$name]) ? $this->aliases[$name] : $name;
+                array_push($this->dependencies, $real);
+            }
+        }
+
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getDependencies()
+    {
+        return $this->dependencies;
+    }
+
+    /**
+     * @param array $aliases
+     */
+    public function setAliases(array $aliases)
+    {
+        $this->aliases = $aliases;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAliases()
+    {
+        return $this->aliases;
+    }
 };

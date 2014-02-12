@@ -41,6 +41,7 @@ class Extractor {
 
         $this->extractors = (object) array(
             'class' => new ClassExtractor($this->searcher)
+            , 'alias' => new AliasExtractor($this->searcher)
             , 'method' => new MethodExtractor($this->searcher)
         );
     }
@@ -60,6 +61,7 @@ class Extractor {
         // default current values
         $class = null;
         $function = null;
+        $mapOfAliases = array();
 
         $len = sizeof($tokens, COUNT_NORMAL);
         for($n = 0; $n < $len; $n++) {
@@ -68,6 +70,12 @@ class Extractor {
 
             switch($token->getType()) {
 
+                case T_USE:
+                    $alias = $this->extractors->alias->extract($n, $tokens);
+                    $mapOfAliases[$alias->alias] = $alias->name;
+                    $class && $class->setAliases($mapOfAliases);
+                    break;
+
                 case T_NAMESPACE:
                     $namespace = '\\'.$this->searcher->getFollowingName($n, $tokens);
                     $this->extractors->class->setNamespace($namespace);
@@ -75,6 +83,7 @@ class Extractor {
 
                 case T_CLASS:
                     $class = $this->extractors->class->extract($n, $tokens);
+                    $class->setAliases($mapOfAliases);
                     $result->pushClass($class);
                     break;
 
