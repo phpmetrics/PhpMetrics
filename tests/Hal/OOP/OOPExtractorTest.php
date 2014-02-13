@@ -16,7 +16,8 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
      */
     public function testClassnameIsFound($filename, $expected) {
 
-        $extractor = new Extractor();
+        $result = new \Hal\OOP\Extractor\Result();
+        $extractor = new Extractor($result);
         $result = $extractor->extract($filename);
 
         $this->assertCount(sizeof($expected), $result->getClasses());
@@ -41,7 +42,8 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
      */
     public function testMethodsAreFound($filename, $expectedMethods) {
 
-        $extractor = new Extractor();
+        $result = new \Hal\OOP\Extractor\Result();
+        $extractor = new Extractor($result);
         $result = $extractor->extract($filename);
 
         foreach($result->getClasses() as $index => $class) {
@@ -85,7 +87,8 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testDependenciesAreGivenWithoutAlias() {
 
         $file = __DIR__.'/../../resources/oop/f4.php';
-        $extractor = new Extractor();
+        $result = new \Hal\OOP\Extractor\Result();
+        $extractor = new Extractor($result);
         $result = $extractor->extract($file);
 
         $classes = $result->getClasses();

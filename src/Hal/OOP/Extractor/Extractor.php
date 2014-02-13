@@ -28,6 +28,11 @@ class Extractor {
     private $searcher;
 
     /**
+     * @var Result
+     */
+    private $result;
+
+    /**
      * @var StdClass
      */
     private $extractors;
@@ -35,9 +40,10 @@ class Extractor {
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct(Result $result) {
 
         $this->searcher = new Searcher();
+        $this->result= new Result();
 
         $this->extractors = (object) array(
             'class' => new ClassExtractor($this->searcher)
@@ -55,7 +61,7 @@ class Extractor {
     public function extract($filename)
     {
 
-        $result = new Result;
+        $this->result = new Result;
         $tokens = token_get_all(file_get_contents($filename));
 
         // default current values
@@ -84,17 +90,23 @@ class Extractor {
                 case T_CLASS:
                     $class = $this->extractors->class->extract($n, $tokens);
                     $class->setAliases($mapOfAliases);
-                    $result->pushClass($class);
+                    $this->result->pushClass($class);
                     break;
 
                 case T_FUNCTION:
-                    $method = $this->extractors->method->extract($n, $tokens);
-                    $class->pushMethod($method);
+                    if($class) {
+                        // avoid closure
+                        if(T_WHITESPACE != $tokens[$n + 1]) {
+                            continue;
+                        }
+                        $method = $this->extractors->method->extract($n, $tokens);
+                        $class->pushMethod($method);
+                    }
                     break;
             }
 
         }
-        return $result;
+        return $this->result;
     }
 
 };
