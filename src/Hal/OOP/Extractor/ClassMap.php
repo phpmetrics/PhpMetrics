@@ -45,7 +45,7 @@ class ClassMap {
     /**
      * Get for filename
      *
-     * @param $filename
+     * @param string $filename
      * @return array
      */
     public function getClassesIn($filename) {

@@ -8,9 +8,6 @@
  */
 
 namespace Hal\OOP\Extractor;
-use Hal\OOP\Reflected\ReflectedArgument;
-use Hal\OOP\Reflected\ReflectedClass;
-use Hal\OOP\Reflected\ReflectedMethod;
 use Hal\Token\Token;
 
 
@@ -24,7 +21,7 @@ class Searcher {
     /**
      * Get value under limiters
      *
-     * @param array $delimiters
+     * @param string[] $delimiters
      * @param int $n
      * @param array $tokens
      * @return null|string

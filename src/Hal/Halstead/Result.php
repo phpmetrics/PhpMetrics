@@ -317,7 +317,7 @@ class Result implements ExportableInterface {
     }
 
     /**
-     * @param mixed $level
+     * @param double $level
      */
     public function setLevel($level)
     {

@@ -9,7 +9,6 @@
 
 namespace Hal\Coupling;
 use Hal\OOP\Extractor\ClassMap;
-use Hal\Token\Token;
 
 
 /**
@@ -34,7 +33,7 @@ class FileCoupling {
      * Constructor
      *
      * @param ClassMap $classMap
-     * @param CouplingMap $couplingMap
+     * @param ResultMap $couplingMap
      */
     public function __construct(ClassMap $classMap, ResultMap $couplingMap)
     {

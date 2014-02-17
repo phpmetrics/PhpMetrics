@@ -14,7 +14,6 @@ use Hal\File\Finder;
 use Hal\OOP\Extractor\ClassMap;
 use Hal\OOP\Extractor\Extractor;
 use Hal\OOP\Extractor\Result;
-use Hal\OOP\Extractor\ResultMap;
 use Hal\Result\ResultCollection;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Output\OutputInterface;

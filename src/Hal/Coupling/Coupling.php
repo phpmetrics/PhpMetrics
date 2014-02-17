@@ -9,8 +9,6 @@
 
 namespace Hal\Coupling;
 use Hal\OOP\Extractor\ClassMap;
-use Hal\OOP\Extractor\Result as PooResult;
-use Hal\Token\Token;
 
 
 /**
@@ -23,7 +21,7 @@ class Coupling {
     /**
      * Calculates coupling
      *
-     * @param \Hal\OOP\Extractor\Result $result
+     * @param ClassMap $result
      * @return ResultMap
      */
     public function calculate(ClassMap $result)
@@ -44,7 +42,7 @@ class Coupling {
     /**
      * Extracts afferent and efferent coupling
      *
-     * @param PooResult $result
+     * @param ClassMap $result
      * @return array
      */
     private function extractCoupling(ClassMap $result) {

@@ -159,7 +159,7 @@ class ResultSet implements ExportableInterface {
     }
 
     /**
-     * @param \OOP\Extractor\Result $oop
+     * @param \Hal\OOP\Extractor\Result $oop
      */
     public function setOop($oop)
     {

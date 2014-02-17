@@ -19,8 +19,6 @@ foreach($files as $file) {
     $phar->addFromString($path, file_get_contents($file));
 }
 
-$phar->addFromString('init.php', file_get_contents(__DIR__.'/init.php'));
-
 $phar->setStub(<<<STUB
 <?php
 

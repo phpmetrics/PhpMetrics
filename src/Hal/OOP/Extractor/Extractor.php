@@ -8,9 +8,6 @@
  */
 
 namespace Hal\OOP\Extractor;
-use Hal\OOP\Reflected\ReflectedArgument;
-use Hal\OOP\Reflected\ReflectedClass;
-use Hal\OOP\Reflected\ReflectedMethod;
 use Hal\Token\Token;
 
 

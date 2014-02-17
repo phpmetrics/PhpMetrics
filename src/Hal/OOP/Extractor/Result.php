@@ -26,7 +26,7 @@ class Result {
     /**
      * Push class
      *
-     * @param ResultClass $class
+     * @param ReflectedClass $class
      * @return $this
      */
     public function pushClass(ReflectedClass $class) {
