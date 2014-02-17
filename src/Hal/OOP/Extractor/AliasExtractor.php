@@ -51,6 +51,7 @@ class AliasExtractor implements ExtractorInterface {
             $alias = $real;
         }
 
+
         return (object) array(
             'name' => $real
             , 'alias' => $alias

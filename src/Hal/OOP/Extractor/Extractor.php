@@ -40,10 +40,10 @@ class Extractor {
     /**
      * Constructor
      */
-    public function __construct(Result $result) {
+    public function __construct() {
 
         $this->searcher = new Searcher();
-        $this->result= new Result();
+        $this->result= new Result;
 
         $this->extractors = (object) array(
             'class' => new ClassExtractor($this->searcher)
@@ -61,7 +61,8 @@ class Extractor {
     public function extract($filename)
     {
 
-        $this->result = new Result;
+        $result = new Result;
+
         $tokens = token_get_all(file_get_contents($filename));
 
         // default current values
@@ -90,13 +91,16 @@ class Extractor {
                 case T_CLASS:
                     $class = $this->extractors->class->extract($n, $tokens);
                     $class->setAliases($mapOfAliases);
+                    // push class AND in global AND in local class map
                     $this->result->pushClass($class);
+                    $result->pushClass($class);
                     break;
 
                 case T_FUNCTION:
                     if($class) {
                         // avoid closure
-                        if(T_WHITESPACE != $tokens[$n + 1]) {
+                        $next = new Token($tokens[$n + 1]);
+                        if(T_WHITESPACE != $next->getType()) {
                             continue;
                         }
                         $method = $this->extractors->method->extract($n, $tokens);
@@ -106,7 +110,7 @@ class Extractor {
             }
 
         }
-        return $this->result;
+        return $result;
     }
 
 };

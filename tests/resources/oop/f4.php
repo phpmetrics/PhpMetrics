@@ -5,7 +5,7 @@ use \Full\AliasedClass as Another;
 
 class Titi {
 
-    public function bar(Another $t1, Toto $t2) {
+    public function bar(Another &$t1, Toto $t2) {
 
     }
 

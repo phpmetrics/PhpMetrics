@@ -107,7 +107,7 @@ class ReflectedClass {
         foreach($method->getArguments() as $argument) {
 
             $name = $argument->getType();
-            if(!in_array($argument->getType(), array($this->getName(), 'array'))) {
+            if(!in_array($argument->getType(), array(null, $this->getName(), 'array'))) {
                 $real = isset($this->aliases[$name]) ? $this->aliases[$name] : $name;
                 array_push($this->dependencies, $real);
             }

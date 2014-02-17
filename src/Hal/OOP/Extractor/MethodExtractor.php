@@ -63,7 +63,12 @@ class MethodExtractor implements ExtractorInterface {
             $elems = preg_split('!([\s=]+)!', $argDecl);
             $isRequired = 2 == sizeof($elems, COUNT_NORMAL);
 
-            list($type, $name) = array_pad($elems, 2, null);
+            if(sizeof($elems, COUNT_NORMAL) == 1) {
+                list($name, $type) = array_pad($elems, 2, null);
+            } else {
+                list($type, $name) = array_pad($elems, 2, null);
+
+            }
 
             $argument = new ReflectedArgument($name, $type, $isRequired);
             $method->pushArgument($argument);

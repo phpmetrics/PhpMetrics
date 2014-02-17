@@ -48,9 +48,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
         foreach($result->getClasses() as $index => $class) {
 
-
             $this->assertCount(sizeof($expectedMethods), $class->getMethods());
-
 
             foreach($class->getMethods() as $method) {
                 $found = false;
@@ -92,14 +90,14 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
         $result = $extractor->extract($file);
 
         $classes = $result->getClasses();
-        $this->assertCount(1, $classes);
+        $this->assertCount(1, $classes, 'all classes are found');
 
         $class = $classes[0];
         $dependencies = $class->getDependencies();
 
         $expected = array('\Full\AliasedClass', 'Toto');
 
-        $this->assertEquals($expected, $dependencies);
+        $this->assertEquals($expected, $dependencies, 'alias found');
 
     }
 
