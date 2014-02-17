@@ -99,6 +99,7 @@ class Cli implements FormaterInterface {
                 , 'Volume'
                 , 'Bugs'
                 , 'Difficulty'
+                , 'Instability'
             ))
             ->setLayout(TableHelper::LAYOUT_DEFAULT);
 
@@ -114,6 +115,7 @@ class Cli implements FormaterInterface {
                 , $this->getRow($bound, 'volume', 'average', 0)
                 , $this->getRow($bound, 'bugs', 'average', 2)
                 , $this->getRow($bound, 'difficulty', 'average', 0)
+                , $this->getRow($bound, 'instability', 'average', 2)
             ));
         }
         $table->render($output);
@@ -131,7 +133,8 @@ class Cli implements FormaterInterface {
      * @return string
      */
     private function getRow(ResultInterface $bound, $key, $type, $round) {
-        $value = round($bound->get($type, $key), $round);
+        $value = $bound->get($type, $key);
+        $value = !is_null($value) ? round($bound->get($type, $key), $round) : '?';
         return sprintf('<%1$s>%2$s</%1$s>', $this->getStyle($key, $value), $value);
     }
 

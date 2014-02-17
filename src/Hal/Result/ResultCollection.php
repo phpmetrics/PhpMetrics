@@ -31,7 +31,7 @@ class ResultCollection implements ExportableInterface, \IteratorAggregate, \Arra
      * @return $this
      */
     public function push(ResultSet $resultset) {
-        array_push($this->results, $resultset);
+        $this->results[$resultset->getFilename()] = $resultset;
         return $this;
     }
 
@@ -92,5 +92,15 @@ class ResultCollection implements ExportableInterface, \IteratorAggregate, \Arra
     public function count()
     {
         return sizeof($this->results, COUNT_NORMAL);
+    }
+
+    /**
+     * Get by file
+     *
+     * @param $key
+     * @return null|ResultSet
+     */
+    public function get($key) {
+        return isset($this->results[$key]) ? $this->results[$key] : null;
     }
 }

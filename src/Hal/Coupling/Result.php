@@ -8,49 +8,115 @@
  */
 
 namespace Hal\Coupling;
+use Hal\Result\ExportableInterface;
 
 
 /**
- * Represents coupling (for class)
+ * Represents coupling (for one class)
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result {
+class Result implements ExportableInterface {
 
     /**
-     * @var array
+     * @var string
      */
-    private $map = array();
+    private $name;
 
     /**
-     * @param array $map
+     * @var int
      */
-    public function __construct(array $map)
+    private $afferentCoupling = 0;
+
+    /**
+     * @var int
+     */
+    private $efferentCoupling = 0;
+
+    /**
+     * @var int
+     */
+    private $instability = 0;
+
+    /**
+     * Constructor
+     *
+     * @param $name
+     */
+    public function __construct($name)
     {
-        $this->map = $map;
+        $this->name = (string) $name;
     }
 
     /**
-     * @param $class
-     * @return null
+     * @inheritdoc
      */
-    public function getAfferentCoupling($class) {
-        return isset($this->map[$class]) ? $this->map[$class]->ca : null;
+    public function asArray()
+    {
+        return array(
+            'instability' => $this->getInstability()
+            , 'ca' => $this->getAfferentCoupling()
+            , 'ce' => $this->getEfferentCoupling()
+        );
+    }
+
+
+    /**
+     * @param int $afferentCoupling
+     */
+    public function setAfferentCoupling($afferentCoupling)
+    {
+        $this->afferentCoupling = $afferentCoupling;
+        return $this;
     }
 
     /**
-     * @param $class
-     * @return null
+     * @return int
      */
-    public function getEfferentCoupling($class) {
-        return isset($this->map[$class]) ? $this->map[$class]->ce : null;
+    public function getAfferentCoupling()
+    {
+        return $this->afferentCoupling;
     }
 
     /**
-     * @param $class
-     * @return null
+     * @param int $efferentCoupling
      */
-    public function getInstability($class) {
-        return isset($this->map[$class]) ? $this->map[$class]->instability : null;
+    public function setEfferentCoupling($efferentCoupling)
+    {
+        $this->efferentCoupling = $efferentCoupling;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEfferentCoupling()
+    {
+        return $this->efferentCoupling;
+    }
+
+    /**
+     * @param int $instability
+     */
+    public function setInstability($instability)
+    {
+        $this->instability = $instability;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInstability()
+    {
+        return $this->instability;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

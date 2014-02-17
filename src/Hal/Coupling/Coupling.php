@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Coupling;
+use Hal\OOP\Extractor\ClassMap;
 use Hal\OOP\Extractor\Result as PooResult;
 use Hal\Token\Token;
 
@@ -23,45 +24,53 @@ class Coupling {
      * Calculates coupling
      *
      * @param \Hal\OOP\Extractor\Result $result
-     * @return Result
+     * @return ResultMap
      */
-    public function calculate(PooResult $result)
+    public function calculate(ClassMap $result)
     {
         $map = $this->extractCoupling($result);
 
         // instability
         foreach($map as &$class) {
-            $class->instability = $class->ce / ($class->ca + $class->ce);
+            if($class->getAfferentCoupling() + $class->getEfferentCoupling() > 0) {
+                $class->setInstability($class->getEfferentCoupling() / ($class->getAfferentCoupling() + $class->getEfferentCoupling()));
+            }
         }
 
-        return new Result($map);
+        return new ResultMap($map);
     }
 
 
     /**
      * Extracts afferent and efferent coupling
      *
-     * @param Result $result
+     * @param PooResult $result
      * @return array
      */
-    private function extractCoupling(PooResult $result) {
-        $classes = $result->getClasses();
+    private function extractCoupling(ClassMap $result) {
+        $results = $result->all();
+
+        $classes = array();
+        foreach($results as $result) {
+            $classes = array_merge($classes, $result->getClasses());
+        }
+
         $map = array();
         foreach($classes as $class) {
 
             if(!isset($map[$class->getName()])) {
-                $map[$class->getName()] = (object) array('ce' => 0, 'ca' => 0);
+                $map[$class->getName()] = new Result($class->getName());
             }
 
             $dependencies = $class->getDependencies();
-            $map[$class->getName()]->ce = sizeof($dependencies, COUNT_NORMAL);
+            $map[$class->getName()]->setEfferentCoupling(sizeof($dependencies, COUNT_NORMAL));
 
             foreach($dependencies as $dependency) {
 
                 if(!isset($map[$dependency])) {
-                    $map[$dependency] = (object) array('ce' => 0, 'ca' => 0);
+                    $map[$dependency] = new Result($dependency);
                 }
-                $map[$dependency]->ca++;
+                $map[$dependency]->setAfferentCoupling($map[$dependency]->getAfferentCoupling() + 1);
             }
         }
         return $map;
