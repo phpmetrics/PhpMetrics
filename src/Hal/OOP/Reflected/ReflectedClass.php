@@ -108,11 +108,22 @@ class ReflectedClass {
 
             $name = $argument->getType();
             if(!in_array($argument->getType(), array(null, $this->getName(), 'array'))) {
-                $real = isset($this->aliases[$name]) ? $this->aliases[$name] : $name;
-                array_push($this->dependencies, $real);
+                $this->pushDependency($name);
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * Push dependency
+     *
+     * @param $name
+     * @return $this
+     */
+    public function pushDependency($name) {
+        $real = isset($this->aliases[$name]) ? $this->aliases[$name] : $name;
+        array_push($this->dependencies, $real);
         return $this;
     }
 

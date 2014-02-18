@@ -8,6 +8,7 @@
  */
 
 namespace Hal\OOP\Extractor;
+use Hal\OOP\Reflected\ReflectedClass;
 use Hal\Token\Token;
 
 
@@ -46,6 +47,7 @@ class Extractor {
             'class' => new ClassExtractor($this->searcher)
             , 'alias' => new AliasExtractor($this->searcher)
             , 'method' => new MethodExtractor($this->searcher)
+            , 'call' => new CallExtractor($this->searcher)
         );
     }
 
@@ -78,6 +80,13 @@ class Extractor {
                     $alias = $this->extractors->alias->extract($n, $tokens);
                     $mapOfAliases[$alias->alias] = $alias->name;
                     $class && $class->setAliases($mapOfAliases);
+                    break;
+
+                case T_PAAMAYIM_NEKUDOTAYIM:
+                case T_NEW:
+                    if($class) {
+                        $class->pushDependency($this->extractors->call->extract($n, $tokens));
+                    }
                     break;
 
                 case T_NAMESPACE:

@@ -97,7 +97,23 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
         $expected = array('\Full\AliasedClass', 'Toto');
 
-        $this->assertEquals($expected, $dependencies, 'alias found');
+        $this->assertEquals($expected, $dependencies, 'Dependencies are given without alias');
+
+    }
+
+    public function testCallsAreFoundAsDependencies() {
+        $file = __DIR__.'/../../resources/oop/f5.php';
+        $result = new \Hal\OOP\Extractor\Result();
+        $extractor = new Extractor($result);
+        $result = $extractor->extract($file);
+        $classes = $result->getClasses();
+        $this->assertCount(1, $classes, 'all classes are found');
+        $class = $classes[0];
+        $dependencies = $class->getDependencies();
+
+        $expected = array('\Example\IAmCalled', 'IAmCalled');
+
+        $this->assertEquals($expected, $dependencies, 'Direct dependencies (calls) are found');
 
     }
 
