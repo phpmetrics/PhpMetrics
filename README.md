@@ -35,6 +35,14 @@ If you want to get informations about OOP model (coupling, instability...), you 
 
 Remember that this feature parse all files, extract declared classes, dependencies of each method... and is really *very slow*.
 
+## Jenkins and PIC integration
+
+You can easily export resut to XML with the `--summary-xml` option:
+
+    php ./bin/metrics.php --summary-xml=/path/of/your/choice.xml <folder or filename>
+
+You will find a tutorial to [integrate PhpMetrics report to Jenkins here](blog.lepine.pro/industrialisation/indice-de-maintenabilite-dun-projet-php-et-jenkins) (in French).
+
 ### Read report
 
 + Each file is symbolized by a circle
