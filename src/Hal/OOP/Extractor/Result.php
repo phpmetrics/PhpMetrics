@@ -9,6 +9,7 @@
 
 namespace Hal\OOP\Extractor;
 use Hal\OOP\Reflected\ReflectedClass;
+use Hal\Result\ExportableInterface;
 
 
 /**
@@ -16,12 +17,21 @@ use Hal\OOP\Reflected\ReflectedClass;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result {
+class Result implements ExportableInterface {
 
     /**
      * @var array
      */
     private $classes = array();
+
+    /**
+     * @inheritdoc
+     */
+    public function asArray() {
+        return array(
+            'noc' => sizeof($this->classes, COUNT_NORMAL)
+        );
+    }
 
     /**
      * Push class

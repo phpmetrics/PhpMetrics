@@ -57,4 +57,12 @@ interface ResultInterface {
      * @return null|float
      */
     public function get($type, $key);
+
+    /**
+     * Has key ?
+     *
+     * @param $key
+     * @return mixed
+     */
+    public function has($key);
 }

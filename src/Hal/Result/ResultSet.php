@@ -77,6 +77,7 @@ class ResultSet implements ExportableInterface {
             , $this->getHalstead() ? $this->getHalstead()->asArray() : array()
             , $this->getMaintenabilityIndex() ? $this->getMaintenabilityIndex()->asArray() : array()
             , $this->getCoupling() ? $this->getCoupling()->asArray() : array()
+            , $this->getOop() ? $this->getOop()->asArray() : array()
         );
     }
 

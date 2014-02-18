@@ -55,8 +55,8 @@ class Result implements ExportableInterface {
     {
         return array(
             'instability' => $this->getInstability()
-            , 'ca' => $this->getAfferentCoupling()
-            , 'ce' => $this->getEfferentCoupling()
+            , 'afferentCoupling' => $this->getAfferentCoupling()
+            , 'efferentCoupling' => $this->getEfferentCoupling()
         );
     }
 
