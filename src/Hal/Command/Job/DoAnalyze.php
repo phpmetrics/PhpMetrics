@@ -88,20 +88,22 @@ class DoAnalyze implements JobInterface
         // class map
         $classMap = new ClassMap();
 
+        $halstead = new \Hal\Halstead\Halstead(new \Hal\Token\TokenType());
+        $maintenability = new \Hal\MaintenabilityIndex\MaintenabilityIndex;
+        $loc = new \Hal\Loc\Loc();
+        $extractor = new Extractor();
+
         foreach($files as $filename) {
 
             $progress->advance();
 
             // HALSTEAD
-            $halstead = new \Hal\Halstead\Halstead(new \Hal\Token\TokenType());
             $rHalstead = $halstead->calculate($filename);
 
             // LOC
-            $loc = new \Hal\Loc\Loc();
             $rLoc = $loc->calculate($filename);
 
             // Maintenability Index
-            $maintenability = new \Hal\MaintenabilityIndex\MaintenabilityIndex;
             $rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
 
 
@@ -114,7 +116,6 @@ class DoAnalyze implements JobInterface
 
             if($this->withOOP) {
                 // OOP
-                $extractor = new Extractor();
                 $rOOP = $extractor->extract($filename);
                 $classMap->push($filename, $rOOP);
                 $resultSet->setOOP($rOOP);
