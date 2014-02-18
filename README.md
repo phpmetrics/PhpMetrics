@@ -17,9 +17,15 @@ Will output:
 
 ## Bubbles chart and complete report
 
-If you want to get the HTMl report (with charts):
+If you want to get the summary HTML report (with charts):
 
     php ./bin/metrics.php --summary-html=/path/of/your/choice.html <folder or filename>
+
+You can change the depth of the summary report with the `--level=<value>` option.
+
+If you want to have a detailled view (file by file):
+
+    php ./bin/metrics.php --details-html=/path/of/your/choice.html <folder or filename>
 
 ## Informations about OOP model
 
