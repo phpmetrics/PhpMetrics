@@ -16,8 +16,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
      */
     public function testClassnameIsFound($filename, $expected) {
 
-        $result = new \Hal\OOP\Extractor\Result();
-        $extractor = new Extractor($result);
+        $extractor = new Extractor();
         $result = $extractor->extract($filename);
 
         $this->assertCount(sizeof($expected), $result->getClasses());
