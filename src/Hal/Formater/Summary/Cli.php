@@ -100,6 +100,8 @@ class Cli implements FormaterInterface {
                 , 'Bugs'
                 , 'Difficulty'
                 , 'Instability'
+                , 'CE'
+                , 'CA'
             ))
             ->setLayout(TableHelper::LAYOUT_DEFAULT);
 
@@ -116,6 +118,8 @@ class Cli implements FormaterInterface {
                 , $this->getRow($bound, 'bugs', 'average', 2)
                 , $this->getRow($bound, 'difficulty', 'average', 0)
                 , $this->getRow($bound, 'instability', 'average', 2)
+                , $this->getRow($bound, 'efferentCoupling', 'average', 2)
+                , $this->getRow($bound, 'afferentCoupling', 'average', 2)
             ));
         }
         $table->render($output);

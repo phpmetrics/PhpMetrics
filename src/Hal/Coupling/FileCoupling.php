@@ -60,7 +60,7 @@ class FileCoupling {
             $declaredClassCoupling = $this->couplingMap->get($declaredClass->getName());
 
             $ce += $declaredClassCoupling->getEfferentCoupling();
-            $ca += $declaredClassCoupling->getEfferentCoupling();
+            $ca += $declaredClassCoupling->getAfferentCoupling();
         }
 
         if($ca + $ce > 0) {
