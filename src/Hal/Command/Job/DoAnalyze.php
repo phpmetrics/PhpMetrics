@@ -8,7 +8,12 @@
  */
 
 namespace Hal\Command\Job;
+use Hal\Coupling\Coupling;
+use Hal\Coupling\FileCoupling;
 use Hal\File\Finder;
+use Hal\OOP\Extractor\ClassMap;
+use Hal\OOP\Extractor\Extractor;
+use Hal\OOP\Extractor\Result;
 use Hal\Result\ResultCollection;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -44,17 +49,26 @@ class DoAnalyze implements JobInterface
     private $finder;
 
     /**
+     * do OOP analyze ?
+     *
+     * @var bool
+     */
+    private $withOOP;
+
+    /**
      * Constructor
      *
      * @param OutputInterface $output
      * @param Finder $finder
      * @param string $path
+     * @param bool $withOOP
      */
-    function __construct(OutputInterface $output, Finder $finder, $path)
+    function __construct(OutputInterface $output, Finder $finder, $path, $withOOP)
     {
         $this->output = $output;
         $this->finder = $finder;
         $this->path = $path;
+        $this->withOOP = $withOOP;
     }
 
     /**
@@ -71,32 +85,62 @@ class DoAnalyze implements JobInterface
         $progress = new ProgressHelper();
         $progress->start($this->output, sizeof($files, COUNT_NORMAL));
 
+        // class map
+        $classMap = new ClassMap();
+
+        $halstead = new \Hal\Halstead\Halstead(new \Hal\Token\TokenType());
+        $maintenability = new \Hal\MaintenabilityIndex\MaintenabilityIndex;
+        $loc = new \Hal\Loc\Loc();
+        $extractor = new Extractor();
+
         foreach($files as $filename) {
 
             $progress->advance();
 
-            // calculates
-            $halstead = new \Hal\Halstead\Halstead(new \Hal\Token\TokenType());
+            // HALSTEAD
             $rHalstead = $halstead->calculate($filename);
 
-            $loc = new \Hal\Loc\Loc();
+            // LOC
             $rLoc = $loc->calculate($filename);
 
-            $maintenability = new \Hal\MaintenabilityIndex\MaintenabilityIndex;
+            // Maintenability Index
             $rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
 
+
             // formats
-            $resultSet = new \Hal\Result\ResultSet(basename($this->path) . str_replace($this->path, '', $filename));
+            $resultSet = new \Hal\Result\ResultSet($filename);
             $resultSet
                 ->setLoc($rLoc)
                 ->setHalstead($rHalstead)
                 ->setMaintenabilityIndex($rMaintenability);
 
+            if($this->withOOP) {
+                // OOP
+                $rOOP = $extractor->extract($filename);
+                $classMap->push($filename, $rOOP);
+                $resultSet->setOOP($rOOP);
+            }
+
+
             $collection->push($resultSet);
         }
-
         $progress->clear();
         $progress->finish();
+
+        if($this->withOOP) {
+            // COUPLING (should be done after parsing files)
+            $this->output->writeln('Analyzing coupling. This will take few minutes...');
+
+            $coupling = new Coupling();
+            $couplingMap = $coupling->calculate($classMap);
+
+            // link between coupling and files
+            $fileCoupling = new FileCoupling($classMap, $couplingMap);
+            foreach($files as $filename) {
+                $rCoupling = $fileCoupling->calculate($filename);
+                $collection->get($filename)->setCoupling($rCoupling);
+            }
+        }
     }
 
 }

@@ -45,6 +45,9 @@ class RuleSet {
             , 'commentWeight' => array(0, 10, 20)
             , 'vocabulary' => array(30, 26, 25)
             , 'difficulty' => array(14, 11, 7)
+            , 'instability' => array(1, .95, .45)
+            , 'afferentCoupling' => array(20, 15, 9)
+            , 'efferentCoupling' => array(15, 11, 7)
             );
         }
 

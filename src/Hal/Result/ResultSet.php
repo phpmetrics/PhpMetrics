@@ -45,6 +45,20 @@ class ResultSet implements ExportableInterface {
     private $maintenabilityIndex;
 
     /**
+     * Coupling
+     *
+     * @var \Hal\Coupling\Result
+     */
+    private $coupling;
+
+    /**
+     * Infos about OOP
+     *
+     * @var \OOP\Extractor\Result
+     */
+    private $oop;
+
+    /**
      * Constructor
      *
      * @param string $filename
@@ -59,9 +73,11 @@ class ResultSet implements ExportableInterface {
     public function asArray() {
         return array_merge(
             array('filename' => $this->getFilename())
-            , $this->getHalstead()->asArray()
-            , $this->getLoc()->asArray()
-            , $this->getMaintenabilityIndex()->asArray()
+            , $this->getLoc() ? $this->getLoc()->asArray() : array()
+            , $this->getHalstead() ? $this->getHalstead()->asArray() : array()
+            , $this->getMaintenabilityIndex() ? $this->getMaintenabilityIndex()->asArray() : array()
+            , $this->getCoupling() ? $this->getCoupling()->asArray() : array()
+            , $this->getOop() ? $this->getOop()->asArray() : array()
         );
     }
 
@@ -124,5 +140,39 @@ class ResultSet implements ExportableInterface {
     public function getFilename()
     {
         return $this->filename;
+    }
+
+    /**
+     * @param \Hal\Coupling\Result $coupling
+     */
+    public function setCoupling($coupling)
+    {
+        $this->coupling = $coupling;
+        return $this;
+    }
+
+    /**
+     * @return \Hal\Coupling\Result
+     */
+    public function getCoupling()
+    {
+        return $this->coupling;
+    }
+
+    /**
+     * @param \Hal\OOP\Extractor\Result $oop
+     */
+    public function setOop($oop)
+    {
+        $this->oop = $oop;
+        return $this;
+    }
+
+    /**
+     * @return \OOP\Extractor\Result
+     */
+    public function getOop()
+    {
+        return $this->oop;
     }
 }

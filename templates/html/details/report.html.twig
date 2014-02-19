@@ -41,6 +41,10 @@
             <th>Intelligent content</th>
             <th>Difficulty</th>
             <th>Bugs</th>
+            <th>Instability</th>
+            <th>Efferent coupling</th>
+            <th>Afferent coupling</th>
+            <th>Num. of classes</th>
         </thead>
         <tbody>
         {% for result in results %}
@@ -74,6 +78,18 @@
                 </td>
                 <td class="validate-{{result.bugs|rule('bugs')}}">
                     {{result.bugs|round}}
+                </td>
+                <td class="validate-{{result.instability|rule('instability')}}">
+                    {{result.instability}}
+                </td>
+                <td class="validate-{{result.efferentCoupling|rule('efferentCoupling')}}">
+                    {{result.efferentCoupling}}
+                </td>
+                <td class="validate-{{result.afferentCoupling|rule('afferentCoupling')}}">
+                    {{result.afferentCoupling}}
+                </td>
+                <td class="validate-{{result.noc|rule('noc')}}">
+                    {{result.noc}}
                 </td>
             </tr>
         {% endfor %}

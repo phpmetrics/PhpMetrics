@@ -18,5 +18,5 @@ if (
     );
 }
 
-$app = new Hal\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '0.0.3');
+$app = new Hal\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '0.0.4');
 $app->run();

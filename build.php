@@ -19,8 +19,6 @@ foreach($files as $file) {
     $phar->addFromString($path, file_get_contents($file));
 }
 
-$phar->addFromString('init.php', file_get_contents(__DIR__.'/init.php'));
-
 $phar->setStub(<<<STUB
 <?php
 
@@ -36,7 +34,7 @@ $phar->setStub(<<<STUB
 Phar::mapPhar('metrics.phar');
 
 require_once 'phar://metrics.phar/vendor/autoload.php';
-\$app = new Hal\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '0.0.3');
+\$app = new Hal\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '0.0.4');
 \$app->run();
 
 __HALT_COMPILER();

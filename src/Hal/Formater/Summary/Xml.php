@@ -11,7 +11,6 @@ namespace Hal\Formater\Summary;
 use Hal\Bounds\Bounds;
 use Hal\Bounds\BoundsAgregateInterface;
 use Hal\Bounds\BoundsInterface;
-use Hal\Bounds\Result\BoundsResult;
 use Hal\Bounds\Result\ResultInterface;
 use Hal\Formater\FormaterInterface;
 use Hal\Result\ResultCollection;

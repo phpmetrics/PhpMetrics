@@ -91,6 +91,13 @@ class DirectoryResult implements ExportableInterface, ResultInterface {
     /**
      * @inheritdoc
      */
+    public function has($key) {
+        return $this->bounds->has($key);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function get($type, $key)
     {
         switch($type) {

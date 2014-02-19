@@ -17,9 +17,31 @@ Will output:
 
 ## Bubbles chart and complete report
 
-If you want to get the HTMl report (with charts):
+If you want to get the summary HTML report (with charts):
 
     php ./bin/metrics.php --summary-html=/path/of/your/choice.html <folder or filename>
+
+You can change the depth of the summary report with the `--level=<value>` option.
+
+If you want to have a detailled view (file by file):
+
+    php ./bin/metrics.php --details-html=/path/of/your/choice.html <folder or filename>
+
+## Informations about OOP model
+
+If you want to get informations about OOP model (coupling, instability...), you should pass the `--oop` parameter:
+
+    php ./bin/metrics.php --oop <folder or filename>
+
+Remember that this feature parse all files, extract declared classes, dependencies of each method... and is really *very slow*.
+
+## Jenkins and PIC integration
+
+You can easily export resut to XML with the `--summary-xml` option:
+
+    php ./bin/metrics.php --summary-xml=/path/of/your/choice.xml <folder or filename>
+
+You will find a tutorial to [integrate PhpMetrics report to Jenkins here](blog.lepine.pro/industrialisation/indice-de-maintenabilite-dun-projet-php-et-jenkins) (in French).
 
 ### Read report
 
@@ -86,6 +108,17 @@ Comment weight represents the impact of documentation in code.
     perCM = commentLoc / loc
     MIcw = 50 * sin(sqrt(2.4 * perCM))
 
+## Coupling and instability
+
+Coupling use two metrics:
+
++ Afferent coupling (CA): number of classes that your classes affects
++ Efferent coupling (CE) : number of classes used by your class
+
+Instability concerns the risk of your class, according coupling:
+
+    I = CE / (CA + CE)
+
 # Use it in code
 
 ## Halstead
@@ -113,6 +146,47 @@ $maintenability = new \MaintenabilityIndex\MaintenabilityIndex;
 $rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
 var_dump($rMaintenability);
 ```
+
+## OOP Extractor
+
+Extracts OOP model of files, and map classes and files:
+
+```php
+$extractor = new Extractor();
+$rOOP = $extractor->extract($filename);
+var_dump($rOOP);
+```
+
+## Coupling
+
+Calculate coupling.
+
+```php
+// build class map
+$classMap = new ClassMap;
+foreach($files as $filename) {
+    $extractor = new Extractor();
+    $rOOP = $extractor->extract($filename);
+    $classMap->push($filename, $rOOP);
+}
+// coupling
+$coupling = new Coupling;
+$couplingMap = $coupling->calculate($classMap);
+$rCoupling = $couplingMap->get('\My\Namespace\ClassName');
+var_dump($rCoupling);
+```
+
+If you want to work with files instead of classes:
+
+```php
+// reuse code above, then
+$fileCoupling = new FileCoupling($classMap, $couplingMap);
+$rCoupling = $fileCoupling->calculate('/path/to/file.php');
+var_dump($rCoupling);
+```
+
+
+
 # Contribute
 
 In order to run unit tests, please install dev dependencies:

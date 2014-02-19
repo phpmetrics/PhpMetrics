@@ -23,14 +23,18 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase {
        $mi = $this->getMock('\Hal\MaintenabilityIndex\Result');
        $mi->expects($this->once())->method('asArray')->will($this->returnValue(array('maintenabilityIndex' => 100)));
 
+       $cg = $this->getMockBuilder('\Hal\Coupling\Result')->disableOriginalConstructor()->getMock();
+       $cg->expects($this->once())->method('asArray')->will($this->returnValue(array('instability' => 1)));
+
        $resultset = new ResultSet('my');
-       $resultset->setHalstead($hs)->setLoc($loc)->setMaintenabilityIndex($mi);
+       $resultset->setHalstead($hs)->setLoc($loc)->setMaintenabilityIndex($mi)->setCoupling($cg);
 
        $expected = array(
            'filename' => 'my'
            , 'loc' => 100
            , 'volume' => 100
            , 'maintenabilityIndex' => 100
+           , 'instability' => 1
        );
 
        $this->assertEquals($expected, $resultset->asArray());

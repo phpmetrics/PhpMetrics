@@ -100,6 +100,13 @@ class BoundsResult implements ExportableInterface, ResultInterface {
     /**
      * @inheritdoc
      */
+    public function has($key) {
+        return isset($this->sum[$key]);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function get($type, $key)
     {
         switch($type) {

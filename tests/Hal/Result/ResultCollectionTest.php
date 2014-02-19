@@ -16,8 +16,10 @@ class ResultCollectionTest extends \PHPUnit_Framework_TestCase {
 
        $rs1 = $this->getMockBuilder('\Hal\Result\ResultSet')->disableOriginalConstructor()->getMock();
        $rs1->expects($this->once())->method('asArray')->will($this->returnValue(array('volume' => 5)));
+       $rs1->expects($this->once())->method('getFilename')->will($this->returnValue('f1.php'));
        $rs2 = $this->getMockBuilder('\Hal\Result\ResultSet')->disableOriginalConstructor()->getMock();
        $rs2->expects($this->once())->method('asArray')->will($this->returnValue(array('volume' => 10)));
+       $rs2->expects($this->once())->method('getFilename')->will($this->returnValue('f2.php'));
 
        $collection = new ResultCollection();
        $collection
@@ -34,11 +36,12 @@ class ResultCollectionTest extends \PHPUnit_Framework_TestCase {
 
     public function testICanAcessToResultCollectionAsAnArray() {
         $rs1 = $this->getMockBuilder('\Hal\Result\ResultSet')->disableOriginalConstructor()->getMock();
+        $rs1->expects($this->once())->method('getFilename')->will($this->returnValue('f1.php'));
         $rs2 = $this->getMockBuilder('\Hal\Result\ResultSet')->disableOriginalConstructor()->getMock();
 
         $collection = new ResultCollection();
         $collection ->push($rs1);
-        $collection[1] = $rs2;
+        $collection['f2.php'] = $rs2;
 
 
         $i = 0;
@@ -46,13 +49,12 @@ class ResultCollectionTest extends \PHPUnit_Framework_TestCase {
             $i++;
         }
 
-
         $this->assertEquals(2, $i);
         $this->assertEquals(2, sizeof($collection));
-        $this->assertEquals($rs1, $collection[0]);
+        $this->assertEquals($rs1, $collection['f1.php']);
 
-        unset($collection[1]);
+        unset($collection['f2.php']);
         $this->assertEquals(1, sizeof($collection));
-        $this->assertFalse(isset($collection[1]));
+        $this->assertFalse(isset($collection['f2.php']));
     }
 }
