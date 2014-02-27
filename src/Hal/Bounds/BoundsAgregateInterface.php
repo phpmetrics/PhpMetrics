@@ -15,13 +15,6 @@ use Hal\Result\ResultCollection;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-interface BoundsAgregateInterface {
+interface BoundsAgregateInterface extends BoundsInterface {
 
-    /**
-     * Calculate
-     *
-     * @param ResultCollection $collection
-     * @return array
-     */
-    public function calculate(ResultCollection $collection);
 }
