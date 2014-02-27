@@ -62,7 +62,7 @@ interface ResultInterface {
      * Has key ?
      *
      * @param $key
-     * @return mixed
+     * @return boolean
      */
     public function has($key);
 }

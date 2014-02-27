@@ -326,7 +326,7 @@ class Result implements ExportableInterface {
     }
 
     /**
-     * @return integer
+     * @return double
      */
     public function getLevel()
     {

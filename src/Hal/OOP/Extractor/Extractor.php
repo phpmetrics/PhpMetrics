@@ -8,7 +8,6 @@
  */
 
 namespace Hal\OOP\Extractor;
-use Hal\OOP\Reflected\ReflectedClass;
 use Hal\Token\Token;
 
 
