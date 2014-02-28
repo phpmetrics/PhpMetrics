@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Hal\McCaybe;
+namespace Hal\McCabe;
 use Hal\Result\ExportableInterface;
 
 /**

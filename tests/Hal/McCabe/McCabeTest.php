@@ -1,8 +1,8 @@
 <?php
 namespace Test\Hal\Halstead;
 
-use Hal\McCaybe\McCaybe;
-use Hal\McCaybe\Result;
+use Hal\McCabe\McCabe;
+use Hal\McCabe\Result;
 
 /**
  * @group mccaybe
@@ -15,7 +15,7 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
      */
     public function testICanCountComplexity($filename, $expectedCCN) {
 
-        $loc = new McCaybe();
+        $loc = new McCabe();
         $r = $loc->calculate($filename);
         $this->assertEquals($expectedCCN, $r->getCyclomaticComplexityNumber());
     }
@@ -30,7 +30,7 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
 
     public function testMcCaybeResultCanBeConvertedToArray() {
 
-        $result = new \Hal\McCaybe\Result();
+        $result = new \Hal\McCabe\Result();
         $array = $result->asArray();
 
         $this->assertArrayHasKey('cyclomaticComplexity', $array);

@@ -91,7 +91,7 @@ class DoAnalyze implements JobInterface
         $halstead = new \Hal\Halstead\Halstead(new \Hal\Token\TokenType());
         $maintenability = new \Hal\MaintenabilityIndex\MaintenabilityIndex;
         $loc = new \Hal\Loc\Loc();
-        $mcCaybe = new \Hal\McCaybe\McCaybe();
+        $mcCabe = new \Hal\McCabe\McCabe();
         $extractor = new Extractor();
 
         foreach($files as $filename) {
@@ -105,10 +105,10 @@ class DoAnalyze implements JobInterface
             $rLoc = $loc->calculate($filename);
 
             // McCaybe
-            $rMcCaybe = $mcCaybe->calculate($filename);
+            $rMcCabe = $mcCabe->calculate($filename);
 
             // Maintenability Index
-            $rMaintenability = $maintenability->calculate($rHalstead, $rLoc, $rMcCaybe);
+            $rMaintenability = $maintenability->calculate($rHalstead, $rLoc, $rMcCabe);
 
 
             // formats

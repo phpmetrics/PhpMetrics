@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Hal\McCaybe;
+namespace Hal\McCabe;
 use Hal\Token\Token;
 
 /**
@@ -15,7 +15,7 @@ use Hal\Token\Token;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class McCaybe {
+class McCabe {
 
     /**
      * Calculate cyclomatic complexity nuler
