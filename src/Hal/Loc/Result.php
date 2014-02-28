@@ -50,8 +50,7 @@ class Result implements ExportableInterface {
      */
     public function asArray() {
         return array (
-            'cyclomaticComplexity' => $this->getComplexityCyclomatic()
-            ,'loc' => $this->getLoc()
+            'loc' => $this->getLoc()
             ,'logicalLoc' => $this->getLogicalLoc()
         );
     }

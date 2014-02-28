@@ -8,12 +8,11 @@
  */
 
 namespace Hal\Loc;
+use Hal\Token\Token;
 
 /**
- * Calculates Lines of code
+ * Calculates McCaybe measure
  *
- * @uses SebastianBergmann\PHPLOC\Analyser
- * @link https://github.com/sebastianbergmann/phploc
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
 class Loc {
@@ -21,22 +20,40 @@ class Loc {
     /**
      * Calculates Lines of code
      *
-     * @param string $file
+     * @param string $filename
      * @return Result
      */
-    public function calculate($file)
+    public function calculate($filename)
     {
 
-        $files = array($file);
-        $analyser = new \SebastianBergmann\PHPLOC\Analyser();
-        $data = $analyser->countFiles($files, false);
-
         $info = new Result;
+        $content = file_get_contents($filename);
+        $tokens = token_get_all($content);
+
+        $cloc = $lloc = 0;
+        foreach($tokens as $data) {
+            $token = new Token($data);
+
+            switch($token->getType()) {
+                case T_STRING:
+                    if(';' == $token->getValue()) {
+                        $lloc++;
+                    }
+                    break;
+                case T_COMMENT:
+                    $cloc++;
+                    break;
+                case T_DOC_COMMENT:
+                    $cloc += substr_count($token->getValue(), PHP_EOL) + 1;
+                    break;
+            }
+        }
+
         $info
-            ->setLoc($data['loc'])
-            ->setLogicalLoc($data['ncloc'])
-            ->setCommentLoc($data['cloc'])
-            ->setComplexityCyclomatic($data['ccn']);
+            ->setLoc(substr_count($content, PHP_EOL))
+            ->setCommentLoc($cloc)
+            ->setLogicalLoc($lloc)
+        ;
 
         return $info;
     }

@@ -19,7 +19,6 @@
         }
     },
     "require": {
-        "phploc/phploc": "~2.0",
         "twig/twig": "v1.15.0",
         "symfony/console": "2.4.*@dev"
     },

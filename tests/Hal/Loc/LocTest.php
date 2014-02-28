@@ -10,13 +10,15 @@ use Hal\Loc\Loc;
  */
 class LocTest extends \PHPUnit_Framework_TestCase {
 
-    public function testLocServiceReturnsResult() {
+    public function testICanCountLoc() {
 
+        $filename = __DIR__.'/../../resources/loc/f1.php';
+        $loc = new Loc;
+        $r = $loc->calculate($filename);
+        $this->assertEquals(14, $r->getCommentLoc());
+        $this->assertEquals(33, $r->getLoc());
+        $this->assertEquals(2, $r->getLogicalLoc());
 
-        $object = new Loc();
-        $filename = tempnam(sys_get_temp_dir(), 'tmp-unit');
-        $this->assertInstanceOf("\Hal\Loc\Result", $object->calculate($filename));
-        unlink($filename);
     }
 
     public function testLocResultCanBeConvertedToArray() {
@@ -24,7 +26,6 @@ class LocTest extends \PHPUnit_Framework_TestCase {
         $result = new \Hal\Loc\Result();
         $array = $result->asArray();
 
-        $this->assertArrayHasKey('cyclomaticComplexity', $array);
         $this->assertArrayHasKey('loc', $array);
         $this->assertArrayHasKey('logicalLoc', $array);
     }
