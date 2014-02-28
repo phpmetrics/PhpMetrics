@@ -16,9 +16,10 @@ class MaintenabilityIndexTest extends \PHPUnit_Framework_TestCase {
         $rLoc = $this->getMock('\Hal\Loc\Result');
         $rLoc->expects($this->any())->method('getLOC')->will($this->returnValue(5));
         $rHalstead = $this->getMock('\Hal\Halstead\Result');
+        $rMcCaybe = $this->getMock('\Hal\McCaybe\Result');
 
         $object = new MaintenabilityIndex();
-        $result = $object->calculate($rHalstead, $rLoc);
+        $result = $object->calculate($rHalstead, $rLoc, $rMcCaybe);
 
         $this->assertInstanceOf("\Hal\MaintenabilityIndex\Result", $result);
     }
@@ -43,13 +44,15 @@ class MaintenabilityIndexTest extends \PHPUnit_Framework_TestCase {
     public function testMaintenabilityIndexWithoutCommentIsWellCalculated($cc, $lloc, $cloc, $volume, $MIwoC) {
 
         $rLoc = $this->getMock('\Hal\Loc\Result');
-        $rLoc->expects($this->once())->method('getComplexityCyclomatic')->will($this->returnValue($cc));
         $rLoc->expects($this->once())->method('getLogicalLoc')->will($this->returnValue($lloc));
         $rHalstead = $this->getMock('\Hal\Halstead\Result');
         $rHalstead->expects($this->once())->method('getVolume')->will($this->returnValue($volume));
+        $rMcCaybe = $this->getMock('\Hal\McCaybe\Result');
+        $rMcCaybe->expects($this->once())->method('getCyclomaticComplexityNumber')->will($this->returnValue($cc));
+
 
         $object = new MaintenabilityIndex();
-        $result = $object->calculate($rHalstead, $rLoc);
+        $result = $object->calculate($rHalstead, $rLoc, $rMcCaybe);
 
         $this->assertEquals($MIwoC, $result->getMaintenabilityIndexWithoutComment());
 
