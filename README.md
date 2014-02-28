@@ -4,9 +4,23 @@ Gives metrics about PHP project and classes.
 
 [![Build Status](https://secure.travis-ci.org/Halleck45/PhpMetrics.png)](http://travis-ci.org/Halleck45/PhpMetrics)  [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/badges/quality-score.png?s=b825f35680c0a469333da2c963226828fed135ba)](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/)
 
-# Installation
 
-## As Phar archive
++ [Installation](#installation)
++ [Bubbles chart and complete report](#bubbles-chart-and-complete-report)
++ [Informations about OOP model](#informations-about-oop-model)
++ [Jenkins and PIC integration](#jenkins-and-pic-integration)
++ [Metrics](#metrics)
++ metric: [Halstead complexity](#halstead-complexity)
++ metric: [Maintenablity index](#maintenability-index)
++ metric: [Lines of code](#lines-of-code)
++ metric: [McCaybe Cyclomatic complexity number](#mccaybe-cyclomatic-complexity-number)
++ metric: [Coupling and instability](#coupling-and-instability)
++ [Use it in your code](#use-it-in-your-code)
+
+
+
+
+# Installation
 
     wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar
     php metrics.phar <folder or filename>
@@ -89,7 +103,7 @@ T = E / 18
 B = ( E ** (2/3) ) / 3000
 ```
 
-## Complexity index
+## Maintenability index
 
 According Wikipedia, Maintainability Index is a software metric which measures how maintainable (easy to support and change) the source code is.
 The maintainability index is calculated as a factored formula consisting of Lines Of Code, Cyclomatic Complexity and Halstead volume.
@@ -109,20 +123,13 @@ It directly measures the number of linearly independent paths through a program'
 Method 1:
 
     CC = E - N + 2P
-    P = number of disconnected parts of the flow graph (e.g. a calling program and a subroutine)
-    E = number of edges (transfers of control)
-    N = number of nodes (sequential group of statements containing only one transfer of control)
+    P: number of disconnected parts of the flow graph (e.g. a calling program and a subroutine)
+    E: number of edges (transfers of control)
+    N: number of nodes (sequential group of statements containing only one transfer of control)
 
 method 2:
 
     CC = number of decisions points in code
-
-## Maintainability Index Comment weight
-
-Comment weight represents the impact of documentation in code.
-
-    perCM = commentLoc / loc
-    MIcw = 50 * sin(sqrt(2.4 * perCM))
 
 ## Coupling and instability
 
@@ -135,7 +142,14 @@ Instability concerns the risk of your class, according coupling:
 
     I = CE / (CA + CE)
 
-# Use it in code
+## Lines of code
+
+    loc: lines of code
+    lloc: logical lines of code
+    cloc: Number of comment lines of code
+
+
+# Use it in your code
 
 ## Halstead
 
