@@ -101,6 +101,22 @@ The maintainability index is calculated as a factored formula consisting of Line
     MIcw = 50 * sin(sqrt(2.4 * perCM))
     MI = MIwoc + MIcw
 
+## McCaybe Cyclomatic complexity number
+
+According Wikipedia,  indicate the complexity of a program. It is a quantitative measure of logical strength of the program.
+It directly measures the number of linearly independent paths through a program's source code.
+
+Method 1:
+
+    CC = E - N + 2P
+    P = number of disconnected parts of the flow graph (e.g. a calling program and a subroutine)
+    E = number of edges (transfers of control)
+    N = number of nodes (sequential group of statements containing only one transfer of control)
+
+method 2:
+
+    CC = number of decisions points in code
+
 ## Maintainability Index Comment weight
 
 Comment weight represents the impact of documentation in code.
@@ -124,17 +140,23 @@ Instability concerns the risk of your class, according coupling:
 ## Halstead
 
 ```php
-$halstead = new \Halstead\Halstead(new \Token\TokenType());
+$halstead = new \Hal\Halstead\Halstead(new \Token\TokenType());
 $rHalstead = $halstead->calculate($filename);
 var_dump($rHalstead);
 ```
 
-## PHPLoc
-
-This component uses [phploc](https://github.com/sebastianbergmann/phploc).
+## McCabe
 
 ```php
-$loc = new \Loc\Loc();
+$mcCabe = new \Hal\McCaybe\McCaybe();
+$rMccabe = $loc->calculate($filename);
+var_dump($rMccabe);
+```
+
+## PHPLoc
+
+```php
+$loc = new \Hal\Loc\Loc();
 $rLoc = $loc->calculate($filename);
 var_dump($rLoc);
 ```
@@ -142,7 +164,7 @@ var_dump($rLoc);
 ## Maintenability Index
 
 ```php
-$maintenability = new \MaintenabilityIndex\MaintenabilityIndex;
+$maintenability = new \Hal\MaintenabilityIndex\MaintenabilityIndex;
 $rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
 var_dump($rMaintenability);
 ```
