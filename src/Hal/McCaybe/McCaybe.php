@@ -1,0 +1,71 @@
+<?php
+
+/*
+ * (c) Jean-François Lépine <https://twitter.com/Halleck45>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Hal\McCaybe;
+use Hal\Token\Token;
+
+/**
+ * Calculates cyclomatic complexity
+ *
+ * @author Jean-François Lépine <https://twitter.com/Halleck45>
+ */
+class McCaybe {
+
+    /**
+     * Calculate cyclomatic complexity nuler
+     *
+     * We can calculate ccn in two ways (we choose the second):
+     *
+     *  1.  Cyclomatic complexity (CC) = E - N + 2P
+     *      Where:
+     *      P = number of disconnected parts of the flow graph (e.g. a calling program and a subroutine)
+     *      E = number of edges (transfers of control)
+     *      N = number of nodes (sequential group of statements containing only one transfer of control)
+     *
+     * 2. CC = Number of each decision point
+     *
+     * @param string $filename
+     * @return Result
+     */
+    public function calculate($filename)
+    {
+
+        $info = new Result;
+        $content = file_get_contents($filename);
+        $tokens = token_get_all($content);
+
+        $ccn = 0;
+        foreach($tokens as $data) {
+            $token = new Token($data);
+
+            switch($token->getType()) {
+                case T_IF:
+                case T_ELSEIF:
+                case T_FOREACH:
+                case T_FOR:
+                case T_WHILE:
+                case T_DO:
+                case T_BOOLEAN_AND:
+                case T_LOGICAL_AND:
+                case T_BOOLEAN_OR:
+                case T_LOGICAL_OR:
+                case T_CASE:
+                case T_DEFAULT:
+                case T_CATCH:
+                case T_CONTINUE:
+                    $ccn++;
+                    break;
+            }
+
+        }
+
+        $info->setCyclomaticComplexityNumber(max(1, $ccn));
+        return $info;
+    }
+}
