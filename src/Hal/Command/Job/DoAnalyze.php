@@ -115,6 +115,7 @@ class DoAnalyze implements JobInterface
             $resultSet = new \Hal\Result\ResultSet($filename);
             $resultSet
                 ->setLoc($rLoc)
+                ->setMcCabe($rMcCabe)
                 ->setHalstead($rHalstead)
                 ->setMaintenabilityIndex($rMaintenability);
 

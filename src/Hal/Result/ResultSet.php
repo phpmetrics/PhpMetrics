@@ -38,6 +38,13 @@ class ResultSet implements ExportableInterface {
     private $loc;
 
     /**
+     * McCabe Result
+     *
+     * @var \Hal\McCabe\Result
+     */
+    private $mcCabe;
+
+    /**
      * Maintenability Result
      *
      * @var \Hal\MaintenabilityIndex\Result
@@ -78,6 +85,7 @@ class ResultSet implements ExportableInterface {
             , $this->getMaintenabilityIndex() ? $this->getMaintenabilityIndex()->asArray() : array()
             , $this->getCoupling() ? $this->getCoupling()->asArray() : array()
             , $this->getOop() ? $this->getOop()->asArray() : array()
+            , $this->getMcCabe() ? $this->getMcCabe()->asArray() : array()
         );
     }
 
@@ -113,6 +121,24 @@ class ResultSet implements ExportableInterface {
     public function getLoc()
     {
         return $this->loc;
+    }
+
+
+    /**
+     * @param \Hal\McCabe\Result $mcCabe
+     */
+    public function setMcCabe(\Hal\McCabe\Result $mcCabe)
+    {
+        $this->mcCabe = $mcCabe;
+        return $this;
+    }
+
+    /**
+     * @return \Hal\McCabe\Result
+     */
+    public function getMcCabe()
+    {
+        return $this->mcCabe;
     }
 
     /**
