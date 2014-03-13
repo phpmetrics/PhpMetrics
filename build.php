@@ -20,6 +20,7 @@ foreach($files as $file) {
 }
 
 $phar->setStub(<<<STUB
+#!/usr/bin/env php
 <?php
 
 /*
