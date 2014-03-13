@@ -1,6 +1,11 @@
 <?php
 chdir(__DIR__);
 
+if (!file_exists('vendor/autoload.php')) {
+  echo '[ERROR] It\'s required to run "composer install" before building PhpMetrics!' . PHP_EOL;
+  exit(1);
+}
+
 $filename = 'build/metrics.phar';
 if (file_exists($filename)) {
     unlink($filename);
