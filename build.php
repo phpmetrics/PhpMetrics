@@ -48,6 +48,8 @@ STUB
 );
 $phar->stopBuffering();
 
+chmod($filename, 0755);
+
 function rglob($pattern='*', $flags = 0, $path='')
 {
     $paths=glob($path.'*', GLOB_MARK|GLOB_ONLYDIR|GLOB_NOSORT);
