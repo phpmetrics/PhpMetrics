@@ -9,6 +9,7 @@
 
 namespace Hal\Loc;
 use Hal\Token\Token;
+use Hal\Token\Tokenizer;
 
 /**
  * Calculates McCaybe measure
@@ -16,6 +17,22 @@ use Hal\Token\Token;
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
 class Loc {
+
+    /**
+     * Tokenizer
+     *
+     * @var \Hal\Token\Tokenizer
+     */
+    private $tokenizer;
+
+    /**
+     * Constructor
+     *
+     * @param Tokenizer $tokenizer
+     */
+    public function __construct(Tokenizer $tokenizer) {
+        $this->tokenizer = $tokenizer;
+    }
 
     /**
      * Calculates Lines of code
@@ -27,8 +44,9 @@ class Loc {
     {
 
         $info = new Result;
+
+        $tokens = $this->tokenizer->tokenize($filename);
         $content = file_get_contents($filename);
-        $tokens = token_get_all($content);
 
         $cloc = $lloc = 0;
         foreach($tokens as $data) {

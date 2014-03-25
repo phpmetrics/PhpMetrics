@@ -15,6 +15,7 @@ use Hal\OOP\Extractor\ClassMap;
 use Hal\OOP\Extractor\Extractor;
 use Hal\OOP\Extractor\Result;
 use Hal\Result\ResultCollection;
+use Hal\Token\Tokenizer;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -88,11 +89,14 @@ class DoAnalyze implements JobInterface
         // class map
         $classMap = new ClassMap();
 
-        $halstead = new \Hal\Halstead\Halstead(new \Hal\Token\TokenType());
-        $maintenability = new \Hal\MaintenabilityIndex\MaintenabilityIndex;
-        $loc = new \Hal\Loc\Loc();
-        $mcCabe = new \Hal\McCabe\McCabe();
-        $extractor = new Extractor();
+        // tokenizer
+        $tokenizer = new Tokenizer();
+
+        $halstead = new \Hal\Halstead\Halstead($tokenizer, new \Hal\Token\TokenType());
+        $maintenability = new \Hal\MaintenabilityIndex\MaintenabilityIndex($tokenizer);
+        $loc = new \Hal\Loc\Loc($tokenizer);
+        $mcCabe = new \Hal\McCabe\McCabe($tokenizer);
+        $extractor = new Extractor($tokenizer);
 
         foreach($files as $filename) {
 

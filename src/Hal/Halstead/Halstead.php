@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Halstead;
+use Hal\Token\Tokenizer;
 
 
 /**
@@ -46,12 +47,21 @@ class Halstead {
     private $tokenType;
 
     /**
+     * Tokenizer
+     *
+     * @var \Hal\Token\Tokenizer
+     */
+    private $tokenizer;
+
+    /**
      * Constructor
      *
+     * @param \Hal\Token\Tokenizer $tokenizer
      * @param \Hal\Token\TokenType $tokenType
      */
-    public function __construct(\Hal\Token\TokenType $tokenType)
+    public function __construct(\Hal\Token\Tokenizer $tokenizer, \Hal\Token\TokenType $tokenType)
     {
+        $this->tokenizer = $tokenizer;
         $this->tokenType = $tokenType;
     }
 
@@ -64,7 +74,8 @@ class Halstead {
     private function inventory($filename)
     {
         $this->operators = $this->operands = array();
-        $tokens = token_get_all(file_get_contents($filename));
+
+        $tokens = $this->tokenizer->tokenize($filename);
 
         foreach($tokens as $data) {
             $token = new \Hal\Token\Token($data);

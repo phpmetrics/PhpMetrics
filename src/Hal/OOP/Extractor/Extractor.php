@@ -9,6 +9,7 @@
 
 namespace Hal\OOP\Extractor;
 use Hal\Token\Token;
+use Hal\Token\Tokenizer;
 
 
 /**
@@ -35,10 +36,16 @@ class Extractor {
     private $extractors;
 
     /**
+     * @var \Hal\Token\Tokenizer
+     */
+    private $tokenizer;
+
+    /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct(Tokenizer $tokenizer) {
 
+        $this->tokenizer = $tokenizer;
         $this->searcher = new Searcher();
         $this->result= new Result;
 
@@ -61,7 +68,7 @@ class Extractor {
 
         $result = new Result;
 
-        $tokens = token_get_all(file_get_contents($filename));
+        $tokens = $this->tokenizer->tokenize($filename);
 
         // default current values
         $class = null;

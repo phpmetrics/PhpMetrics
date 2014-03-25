@@ -9,6 +9,7 @@
 
 namespace Hal\McCabe;
 use Hal\Token\Token;
+use Hal\Token\Tokenizer;
 
 /**
  * Calculates cyclomatic complexity
@@ -16,6 +17,22 @@ use Hal\Token\Token;
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
 class McCabe {
+
+    /**
+     * Tokenizer
+     *
+     * @var \Hal\Token\Tokenizer
+     */
+    private $tokenizer;
+
+    /**
+     * Constructor
+     *
+     * @param Tokenizer $tokenizer
+     */
+    public function __construct(Tokenizer $tokenizer) {
+        $this->tokenizer = $tokenizer;
+    }
 
     /**
      * Calculate cyclomatic complexity nuler
@@ -37,8 +54,7 @@ class McCabe {
     {
 
         $info = new Result;
-        $content = file_get_contents($filename);
-        $tokens = token_get_all($content);
+        $tokens = $this->tokenizer->tokenize($filename);
 
         $ccn = 0;
         foreach($tokens as $data) {

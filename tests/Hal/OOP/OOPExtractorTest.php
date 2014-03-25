@@ -16,7 +16,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
      */
     public function testClassnameIsFound($filename, $expected) {
 
-        $extractor = new Extractor();
+        $extractor = new Extractor(new \Hal\Token\Tokenizer());
         $result = $extractor->extract($filename);
 
         $this->assertCount(sizeof($expected), $result->getClasses());
@@ -42,7 +42,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testMethodsAreFound($filename, $expectedMethods) {
 
         $result = new \Hal\OOP\Extractor\Result();
-        $extractor = new Extractor($result);
+        $extractor = new Extractor(new \Hal\Token\Tokenizer());
         $result = $extractor->extract($filename);
 
         foreach($result->getClasses() as $index => $class) {
@@ -85,7 +85,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
         $file = __DIR__.'/../../resources/oop/f4.php';
         $result = new \Hal\OOP\Extractor\Result();
-        $extractor = new Extractor($result);
+        $extractor = new Extractor(new \Hal\Token\Tokenizer());
         $result = $extractor->extract($file);
 
         $classes = $result->getClasses();
@@ -103,7 +103,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testCallsAreFoundAsDependencies() {
         $file = __DIR__.'/../../resources/oop/f5.php';
         $result = new \Hal\OOP\Extractor\Result();
-        $extractor = new Extractor($result);
+        $extractor = new Extractor(new \Hal\Token\Tokenizer());
         $result = $extractor->extract($file);
         $classes = $result->getClasses();
         $this->assertCount(1, $classes, 'all classes are found');

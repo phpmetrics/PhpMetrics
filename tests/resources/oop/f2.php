@@ -12,7 +12,7 @@ class Titi {
 
     public function baz(\Namespaced\AnotherClass       $c
 
-        , AnotherClass $c2 = 'abc') {
+        , AnotherClass $c2 = null) {
 
     }
 }

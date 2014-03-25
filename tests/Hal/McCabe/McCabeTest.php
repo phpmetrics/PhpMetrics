@@ -15,7 +15,7 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
      */
     public function testICanCountComplexity($filename, $expectedCCN) {
 
-        $loc = new McCabe();
+        $loc = new McCabe(new \Hal\Token\Tokenizer());
         $r = $loc->calculate($filename);
         $this->assertEquals($expectedCCN, $r->getCyclomaticComplexityNumber());
     }
