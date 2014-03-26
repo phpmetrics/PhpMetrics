@@ -23,20 +23,6 @@ class Tokenizer {
      * @return array
      */
     public function tokenize($filename) {
-
-        //
-        // check validity of file
-        if(1 === version_compare('5.0.4', PHP_VERSION)) {
-            if(!\php_check_syntax($filename)) {
-                return array();
-            }
-        } else {
-            $output = shell_exec(sprintf('php -l %s', escapeshellarg($filename)));
-            if(!preg_match('!No syntax errors detected!', $output)) {
-                return array();
-            }
-        }
-
         //
         // fixes memory problems with large files
         // https://github.com/Halleck45/PhpMetrics/issues/13

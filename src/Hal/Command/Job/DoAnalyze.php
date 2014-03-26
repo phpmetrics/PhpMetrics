@@ -11,6 +11,7 @@ namespace Hal\Command\Job;
 use Hal\Coupling\Coupling;
 use Hal\Coupling\FileCoupling;
 use Hal\File\Finder;
+use Hal\File\SyntaxChecker;
 use Hal\OOP\Extractor\ClassMap;
 use Hal\OOP\Extractor\Extractor;
 use Hal\OOP\Extractor\Result;
@@ -97,10 +98,17 @@ class DoAnalyze implements JobInterface
         $loc = new \Hal\Loc\Loc($tokenizer);
         $mcCabe = new \Hal\McCabe\McCabe($tokenizer);
         $extractor = new Extractor($tokenizer);
+        $syntaxChecker = new SyntaxChecker();
 
         foreach($files as $filename) {
 
             $progress->advance();
+
+            // Integrity
+            if(!$syntaxChecker->isCorrect($filename)) {
+                $this->output->writeln(sprintf('<error>file %s is not valid and has been skipped</error>', $filename));
+                continue;
+            }
 
             // HALSTEAD
             $rHalstead = $halstead->calculate($filename);
