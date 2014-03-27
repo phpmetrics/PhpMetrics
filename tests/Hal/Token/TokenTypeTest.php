@@ -17,7 +17,7 @@ class TokenTypeTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider providesTokenTypes
      */
-    public function testTokenTypeDistinguishsTokens($isOperator, $isOperand, $type) {
+    public function testTokenTypeDistinguishsTokens($isOperator, $isOperand, $type, $value) {
 
         $token = $this->getMockBuilder('\Hal\Token\Token')
             ->disableOriginalConstructor()
@@ -25,6 +25,9 @@ class TokenTypeTest extends \PHPUnit_Framework_TestCase {
         $token->expects($this->any())
             ->method('getType')
             ->will($this->returnValue($type));
+        $token->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue($value));
 
         $this->assertEquals($isOperator, $this->object->isOperator($token));
         $this->assertEquals($isOperand, $this->object->isOperand($token));
@@ -32,9 +35,24 @@ class TokenTypeTest extends \PHPUnit_Framework_TestCase {
 
     public function providesTokenTypes() {
         return array(
-            array(true, false, T_BOOLEAN_AND)
-            , array(true, false, T_BOOLEAN_AND)
-            , array(false, true, T_VARIABLE)
+            array(true, false, T_BOOLEAN_AND, '&&')
+            , array(true, false, T_BOOLEAN_AND, '&&')
+            , array(false, true, T_VARIABLE, '$a')
+
+            // operators
+            , array(true, false, T_STRING, ';')
+            , array(true, false, T_STRING, '*')
+            , array(true, false, T_STRING, '#')
+            , array(true, false, T_STRING, '[')
+            , array(true, false, T_STRING, '>>')
+            , array(true, false, T_STRING, '!')
+            , array(true, false, T_STRING, '+')
+            , array(true, false, T_STRING, '?')
+            , array(true, false, T_STRING, '!=')
+            , array(true, false, T_STRING, '%')
+            , array(true, false, T_STRING, '&')
+            , array(true, false, T_STRING, '&&')
+            , array(true, false, T_STRING, '/')
         );
     }
 }
