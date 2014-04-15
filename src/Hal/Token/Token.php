@@ -64,4 +64,13 @@ class Token {
         return $this->value;
     }
 
+    /**
+     * String representation
+     *
+     * @return string
+     */
+    public function asString() {
+        return $this->getValue();
+    }
+
 }
