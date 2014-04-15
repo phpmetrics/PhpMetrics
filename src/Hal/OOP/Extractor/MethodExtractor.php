@@ -10,6 +10,8 @@
 namespace Hal\OOP\Extractor;
 use Hal\OOP\Reflected\ReflectedArgument;
 use Hal\OOP\Reflected\ReflectedMethod;
+use Hal\Token\Token;
+use Hal\Token\TokenCollection;
 
 
 /**
@@ -72,6 +74,47 @@ class MethodExtractor implements ExtractorInterface {
             $method->pushArgument($argument);
         }
 
+        //
+        // Body
+        $method->setContent($this->extractContent($n, $tokens));
+
         return $method;
     }
-};
+
+    /**
+     * Extracts content of method
+     *
+     * @param $n
+     * @param $tokens
+     * @return null|string
+     */
+    private function extractContent(&$n, $tokens) {
+        // search the end of the method
+        $openBrace = 0;
+        $start = null;
+        $len = sizeof($tokens);
+        for($i = $n; $i < $len; $i++) {
+            $token = new Token($tokens[$i]);
+            if(T_STRING == $token->getType()) {
+                switch($token->getValue()) {
+                    case '{':
+                        $openBrace++;
+                        if(is_null($start)) {
+                            $start = $i + 1;
+                        }
+                        break;
+                    case '}':
+                        $openBrace--;
+                        if($openBrace <= 0) {
+                            $concerned = array_slice($tokens, $start, $i - $start );
+                            $collection = new TokenCollection($concerned);
+                            return $collection->asString();
+                        }
+                        break;
+                }
+            }
+        }
+
+        return null;
+    }
+}

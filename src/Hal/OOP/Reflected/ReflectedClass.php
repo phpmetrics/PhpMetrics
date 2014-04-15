@@ -58,7 +58,7 @@ class ReflectedClass {
     {
         $this->name = (string) $name;
         $this->namespace = (string) $namespace;
-        $this->methods= new \SplObjectStorage();
+        $this->methods = array();
     }
 
     /**
@@ -102,7 +102,7 @@ class ReflectedClass {
      * @return $this
      */
     public function pushMethod(ReflectedMethod $method) {
-        $this->methods->attach($method);
+        array_push($this->methods, $method);
 
         foreach($method->getArguments() as $argument) {
 

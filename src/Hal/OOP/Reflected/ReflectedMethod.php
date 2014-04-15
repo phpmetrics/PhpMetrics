@@ -28,6 +28,11 @@ class ReflectedMethod {
     private $arguments = array();
 
     /**
+     * @var string
+     */
+    private $content;
+
+    /**
      * @param string $name
      */
     public function __construct($name)
@@ -62,4 +67,19 @@ class ReflectedMethod {
         return $this;
     }
 
+    /**
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
 };
