@@ -63,7 +63,7 @@ class Html implements FormaterInterface {
      */
     public function terminate(ResultCollection $collection){
         \Twig_Autoloader::register();
-        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../../templates/html');
+        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../../../templates/html');
         $twig = new \Twig_Environment($loader, array('cache' => false));
         $twig->addExtension(new FormatingExtension($this->validator));
 
