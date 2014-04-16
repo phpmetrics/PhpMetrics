@@ -22,8 +22,8 @@ class MyerTest extends \PHPUnit_Framework_TestCase {
 
     public function provideIntervals() {
         return array(
-            array(__DIR__.'/../../../resources/myer/f1.php', '3:4', 1)
-            , array(__DIR__.'/../../../resources/myer/f2.php', '8:15', 7)
+            array(__DIR__.'/../../../../../resources/myer/f1.php', '3:4', 1)
+            , array(__DIR__.'/../../../../../resources/myer/f2.php', '8:15', 7)
         );
     }
 

@@ -5,7 +5,7 @@ use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 use Hal\Metrics\Complexity\Component\McCabe\Result;
 
 /**
- * @group mccaybe
+ * @group mccabe
  * @group metric
  */
 class MacCaybe extends \PHPUnit_Framework_TestCase {
@@ -22,9 +22,9 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
 
     public function provideCCN() {
         return array(
-            array(__DIR__.'/../../../resources/mccaybe/f1.php', 2)
-            ,array(__DIR__.'/../../../resources/mccaybe/f2.php', 3)
-            ,array(__DIR__.'/../../../resources/mccaybe/f3.php', 3)
+            array(__DIR__.'/../../../../../resources/mccaybe/f1.php', 2)
+            ,array(__DIR__.'/../../../../../resources/mccaybe/f2.php', 3)
+            ,array(__DIR__.'/../../../../../resources/mccaybe/f3.php', 3)
         );
     }
 
