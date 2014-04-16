@@ -24,5 +24,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*@dev"
-    }
+    },
+    "bin": [
+        "bin/metrics"
+    ]
 }
