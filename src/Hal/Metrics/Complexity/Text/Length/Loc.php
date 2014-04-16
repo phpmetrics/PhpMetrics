@@ -49,8 +49,7 @@ class Loc {
         $content = file_get_contents($filename);
 
         $cloc = $lloc = 0;
-        foreach($tokens as $data) {
-            $token = new Token($data);
+        foreach($tokens as $token) {
 
             switch($token->getType()) {
                 case T_STRING:

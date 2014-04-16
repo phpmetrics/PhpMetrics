@@ -9,6 +9,7 @@
 
 namespace Hal\Component\OOP\Extractor;
 use Hal\Component\OOP\Reflected\ReflectedMethod;
+use Hal\Component\Token\TokenCollection;
 
 
 /**
@@ -35,10 +36,10 @@ class AliasExtractor implements ExtractorInterface {
      * Extract alias from position
      *
      * @param $n
-     * @param array $tokens
+     * @param TokenCollection $tokens
      * @return ReflectedMethod
      */
-    public function extract(&$n, $tokens)
+    public function extract(&$n, TokenCollection $tokens)
     {
         $expression = $this->searcher->getUnder(array(';'), $n, $tokens);
         if(preg_match('!use\s+(.*)\s+as\s+(.*)!i', $expression, $matches)) {

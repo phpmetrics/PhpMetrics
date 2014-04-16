@@ -42,7 +42,7 @@ class Tokenizer {
             return $tokens;
         }
 
-        return token_get_all(file_get_contents($filename));
+        return new TokenCollection(token_get_all(file_get_contents($filename)));
     }
 
 }

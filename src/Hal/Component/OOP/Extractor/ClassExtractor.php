@@ -9,6 +9,7 @@
 
 namespace Hal\Component\OOP\Extractor;
 use Hal\Component\OOP\Reflected\ReflectedClass;
+use Hal\Component\Token\TokenCollection;
 
 
 /**
@@ -40,10 +41,10 @@ class ClassExtractor implements ExtractorInterface {
      * Extract class from position
      *
      * @param $n
-     * @param array $tokens
+     * @param TokenCollection $tokens
      * @return ReflectedClass
      */
-    public function extract(&$n, $tokens)
+    public function extract(&$n, TokenCollection $tokens)
     {
         $classname = $this->searcher->getFollowingName($n, $tokens);
         return new ReflectedClass($this->namespace, $classname);

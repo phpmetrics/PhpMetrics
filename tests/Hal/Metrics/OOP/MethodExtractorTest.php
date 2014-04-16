@@ -60,8 +60,10 @@ class MethodExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testContentOfMethodIsFound() {
         $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
         $result = $extractor->extract(__DIR__.'/../../../resources/oop/f6.php');
-        $class = reset($result->getClasses());
-        $method = reset($class->getMethods());
+        $classes = $result->getClasses();
+        $class = $classes[0];
+        $methods = $class->getMethods();
+        $method = $methods[0];
         $expected = <<<EOT
 \$a = strtoupper((string)\$a);
 return \$a;

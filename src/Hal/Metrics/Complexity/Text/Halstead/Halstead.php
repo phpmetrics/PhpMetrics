@@ -77,8 +77,7 @@ class Halstead {
 
         $tokens = $this->tokenizer->tokenize($filename);
 
-        foreach($tokens as $data) {
-            $token = new \Hal\Component\Token\Token($data);
+        foreach($tokens as $token) {
             if($this->tokenType->isOperator($token)) {
                 $this->operators[] = $token;
             }

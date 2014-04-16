@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Component\OOP\Extractor;
+use Hal\Component\Token\TokenCollection;
 
 
 /**
@@ -20,8 +21,8 @@ interface ExtractorInterface {
      * Extract method from position
      *
      * @param $n
-     * @param $tokens
+     * @param TokenCollection $tokens
      * @return mixed
      */
-    public function extract(&$n, $tokens);
+    public function extract(&$n, TokenCollection $tokens);
 };

@@ -40,11 +40,11 @@ class MethodExtractor implements ExtractorInterface {
     /**
      * Extract method from position
      *
-     * @param $n
-     * @param $tokens
+     * @param int $n
+     * @param TokenCollection$tokens
      * @return ReflectedMethod
      */
-    public function extract(&$n, $tokens)
+    public function extract(&$n, TokenCollection $tokens)
     {
         $declaration = $this->searcher->getUnder(array(')'), $n, $tokens);
         if(!preg_match('!function\s+(.*)\(\s*(.*)!is', $declaration, $matches)) {
@@ -85,16 +85,16 @@ class MethodExtractor implements ExtractorInterface {
      * Extracts content of method
      *
      * @param $n
-     * @param $tokens
+     * @param TokenCollection $tokens
      * @return null|string
      */
-    private function extractContent(&$n, $tokens) {
+    private function extractContent(&$n, TokenCollection $tokens) {
         // search the end of the method
         $openBrace = 0;
         $start = null;
         $len = sizeof($tokens);
         for($i = $n; $i < $len; $i++) {
-            $token = new Token($tokens[$i]);
+            $token = $tokens[$i];
             if(T_STRING == $token->getType()) {
                 switch($token->getValue()) {
                     case '{':
@@ -106,7 +106,7 @@ class MethodExtractor implements ExtractorInterface {
                     case '}':
                         $openBrace--;
                         if($openBrace <= 0) {
-                            $concerned = array_slice($tokens, $start, $i - $start );
+                            $concerned = array_slice($tokens->asArray(), $start, $i - $start );
                             $collection = new TokenCollection($concerned);
                             return $collection->asString();
                         }

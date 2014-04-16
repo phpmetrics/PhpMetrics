@@ -9,6 +9,7 @@
 
 namespace Hal\Component\OOP\Extractor;
 use Hal\Component\Token\Token;
+use Hal\Component\Token\TokenCollection;
 
 
 /**
@@ -35,13 +36,13 @@ class CallExtractor implements ExtractorInterface {
      * Extract dependency from call
      *
      * @param $n
-     * @param array $tokens
+     * @param TokenCollection $tokens
      * @return string
      */
-    public function extract(&$n, $tokens)
+    public function extract(&$n, TokenCollection $tokens)
     {
 
-        $token = new Token($tokens[$n]);
+        $token = $tokens[$n];
         switch($token->getType()) {
             case T_PAAMAYIM_NEKUDOTAYIM:
                 $prev = $n - 1;

@@ -78,7 +78,7 @@ class Extractor {
         $len = sizeof($tokens, COUNT_NORMAL);
         for($n = 0; $n < $len; $n++) {
 
-            $token = new Token($tokens[$n]);
+            $token = $tokens[$n];
 
             switch($token->getType()) {
 
@@ -111,7 +111,7 @@ class Extractor {
                 case T_FUNCTION:
                     if($class) {
                         // avoid closure
-                        $next = new Token($tokens[$n + 1]);
+                        $next = $tokens[$n + 1];
                         if(T_WHITESPACE != $next->getType()) {
                             continue;
                         }

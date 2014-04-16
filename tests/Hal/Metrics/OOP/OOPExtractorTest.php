@@ -13,6 +13,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @dataProvider providesForClassnames
+     * @group wip
      */
     public function testClassnameIsFound($filename, $expected) {
 

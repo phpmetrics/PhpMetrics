@@ -57,8 +57,7 @@ class McCabe {
         $tokens = $this->tokenizer->tokenize($filename);
 
         $ccn = 0;
-        foreach($tokens as $data) {
-            $token = new Token($data);
+        foreach($tokens as $token) {
 
             switch($token->getType()) {
                 case T_IF:

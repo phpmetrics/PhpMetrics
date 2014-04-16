@@ -8,13 +8,14 @@
  */
 
 namespace Hal\Component\Token;
+use Traversable;
 
 /**
  * Representation of Collection of oken
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class TokenCollection {
+class TokenCollection implements \ArrayAccess, \IteratorAggregate, \Countable {
 
     /**
      * @var array
@@ -59,5 +60,64 @@ class TokenCollection {
         }
         $c = preg_replace('!(\n\s+)!', PHP_EOL, $c);
         return trim($c);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetExists($offset)
+    {
+       return isset($this->tokens[$offset]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetGet($offset)
+    {
+        return $this->tokens[$offset];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetSet($offset, $value)
+    {
+        if(!$value instanceof Token) {
+            $value = new Token($value);
+        }
+        $this->tokens[$offset] = $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->tokens[$offset]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->tokens);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function count() {
+        return sizeof($this->tokens, COUNT_NORMAL);
+    }
+
+    /**
+     * As array representation
+     *
+     * @return array
+     */
+    public function asArray() {
+        return $this->tokens;
     }
 }

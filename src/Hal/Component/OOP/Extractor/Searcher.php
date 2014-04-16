@@ -30,7 +30,7 @@ class Searcher {
         $end = sizeof($tokens, COUNT_NORMAL);
         $value = '';
         while($n < $end) {
-            $token = new Token($tokens[$n]);
+            $token = $tokens[$n];
             if(in_array($token->getValue(), $delimiters)) {
                 return $value;
             }
