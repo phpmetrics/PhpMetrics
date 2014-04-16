@@ -45,6 +45,13 @@ class ResultSet implements ExportableInterface {
     private $mcCabe;
 
     /**
+     * Myer's interval result
+     *
+     * @var \Hal\Metrics\Complexity\Component\Myer\Result
+     */
+    private $myer;
+
+    /**
      * Maintenability Result
      *
      * @var \Hal\Metrics\Design\Component\MaintenabilityIndex\Result
@@ -86,6 +93,7 @@ class ResultSet implements ExportableInterface {
             , $this->getCoupling() ? $this->getCoupling()->asArray() : array()
             , $this->getOop() ? $this->getOop()->asArray() : array()
             , $this->getMcCabe() ? $this->getMcCabe()->asArray() : array()
+            , $this->getMyer() ? $this->getMyer()->asArray() : array()
         );
     }
 
@@ -139,6 +147,23 @@ class ResultSet implements ExportableInterface {
     public function getMcCabe()
     {
         return $this->mcCabe;
+    }
+
+    /**
+     * @param \Hal\Metrics\Complexity\Component\Myer\Result $myer
+     */
+    public function setMyer($myer)
+    {
+        $this->myer = $myer;
+        return $this;
+    }
+
+    /**
+     * @return \Hal\Metrics\Complexity\Component\Myer\Result
+     */
+    public function getMyer()
+    {
+        return $this->myer;
     }
 
     /**

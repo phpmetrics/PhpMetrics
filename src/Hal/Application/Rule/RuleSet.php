@@ -48,6 +48,7 @@ class RuleSet {
             , 'instability' => array(1, .95, .45)
             , 'afferentCoupling' => array(20, 15, 9)
             , 'efferentCoupling' => array(15, 11, 7)
+            , 'myerDistance' => array(10, 5, 2)
             );
         }
 

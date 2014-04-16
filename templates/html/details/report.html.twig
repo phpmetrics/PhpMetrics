@@ -34,6 +34,7 @@
             <th>File</th>
             <th>LLOC</th>
             <th>Complexity</th>
+            <th>Myer Distance</th>
             <th>Maintenability index</th>
             <th>Volume</th>
             <th>Vocabulary</th>
@@ -57,6 +58,9 @@
                 </td>
                 <td class="validate-{{result.cyclomaticComplexity|rule('cyclomaticComplexity')}}">
                     {{result.cyclomaticComplexity|round}}
+                </td>
+                <td class="validate-{{result.myerDistance|rule('myerDistance')}}">
+                    {{result.myerDistance|round}}
                 </td>
                 <td class="validate-{{result.maintenabilityIndex|rule('maintenabilityIndex')}}">
                     {{result.maintenabilityIndex|round}}

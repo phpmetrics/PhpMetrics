@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Application\Command\Job\Analyze;
+use Hal\Metrics\Complexity\Component\Myer\Myer;
 use Hal\Metrics\Complexity\Structural\HenryAndKafura\Coupling;
 use Hal\Metrics\Complexity\Structural\HenryAndKafura\FileCoupling;
 use Hal\Component\File\Finder;
@@ -68,6 +69,11 @@ class FileAnalyzer
     private $mcCabe;
 
     /**
+     * @var Myer
+     */
+    private $myer;
+
+    /**
      * @var Extractor
      */
     private $extractor;
@@ -87,6 +93,7 @@ class FileAnalyzer
      * @param Loc $loc
      * @param MaintenabilityIndex $maintenabilityIndex
      * @param McCabe $mcCabe
+     * @param Myer $myer
      * @param ClassMap $classMap
      */
     public function __construct(
@@ -97,6 +104,7 @@ class FileAnalyzer
         , Loc $loc
         , MaintenabilityIndex $maintenabilityIndex
         , McCabe $mcCabe
+        , Myer $myer
         , ClassMap $classMap
     )
     {
@@ -105,6 +113,7 @@ class FileAnalyzer
         $this->loc = $loc;
         $this->maintenabilityIndex = $maintenabilityIndex;
         $this->mcCabe = $mcCabe;
+        $this->myer = $myer;
         $this->output = $output;
         $this->withOOP = $withOOP;
         $this->classMap = $classMap;
@@ -120,12 +129,14 @@ class FileAnalyzer
         $rHalstead = $this->halstead->calculate($filename);
         $rLoc = $this->loc->calculate($filename);
         $rMcCabe = $this->mcCabe->calculate($filename);
+        $rMyer = $this->myer->calculate($filename);
         $rMaintenability = $this->maintenabilityIndex->calculate($rHalstead, $rLoc, $rMcCabe);
 
         $resultSet = new \Hal\Component\Result\ResultSet($filename);
         $resultSet
             ->setLoc($rLoc)
             ->setMcCabe($rMcCabe)
+            ->setMyer($rMyer)
             ->setHalstead($rHalstead)
             ->setMaintenabilityIndex($rMaintenability);
 

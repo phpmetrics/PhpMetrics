@@ -92,6 +92,7 @@ class Cli implements FormaterInterface {
                 'Directory'
                 , 'LOC'
                 , 'Complexity'
+                , 'Myer Distance'
                 , 'Maintenability'
                 , 'LLOC'
                 , 'Comment weight'
@@ -110,6 +111,7 @@ class Cli implements FormaterInterface {
                 str_repeat('  ', $bound->getDepth()).$directory
                 , $this->getRow($bound, 'loc', 'sum', 0)
                 , $this->getRow($bound, 'cyclomaticComplexity', 'average', 0)
+                , $this->getRow($bound, 'myerDistance', 'average', 0)
                 , $this->getRow($bound, 'maintenabilityIndex', 'average', 0)
                 , $this->getRow($bound, 'logicalLoc', 'average', 0)
                 , $this->getRow($bound, 'commentWeight', 'average', 0)
