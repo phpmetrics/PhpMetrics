@@ -71,8 +71,8 @@ EOT;
 
         $this->assertEquals($expected, $method->getContent());
 
-
-        $method = end($class->getMethods());
+        $methods = $class->getMethods();
+        $method = end($methods);
         $expected = <<<EOT
 \$x = 1 * 2;
 die();
