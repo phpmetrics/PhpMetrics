@@ -2,8 +2,10 @@
 
 Gives metrics about PHP project and classes.
 
+[![License](https://poser.pugx.org/halleck45/php-metrics/license.png)](https://packagist.org/packages/halleck45/php-metrics)
 [![Build Status](https://secure.travis-ci.org/Halleck45/PhpMetrics.png)](http://travis-ci.org/Halleck45/PhpMetrics)  [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/badges/quality-score.png?s=b825f35680c0a469333da2c963226828fed135ba)](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/)
-
+[![Latest Stable Version](https://poser.pugx.org/halleck45/php-metrics/v/stable.png)](https://packagist.org/packages/halleck45/php-metrics)
+[![Dependency Status](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815/badge.png)](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815)
 
 + [Installation](#installation)
 + [Bubbles chart and complete report](#bubbles-chart-and-complete-report)
@@ -14,7 +16,9 @@ Gives metrics about PHP project and classes.
 + metric: [Maintenablity index](#maintenability-index)
 + metric: [Lines of code](#lines-of-code)
 + metric: [McCaybe Cyclomatic complexity number](#mccaybe-cyclomatic-complexity-number)
++ metric: Myer's Interval
 + metric: [Coupling and instability](#coupling-and-instability)
++ metric: Lack of cohesion of methods (LCOM)
 + [Use it in your code](#use-it-in-your-code)
 
 

@@ -1,6 +1,6 @@
 {
     "name": "halleck45/php-metrics",
-    "description": "POC of Halstead, Maintenability index for PHP",
+    "description": "Static analyze tool for PHP : Coupling, Cyclomatic complexity, Maintenability Index, Halstead's metrics... and more !",
     "license": "MIT",
     "authors": [
         {
@@ -19,10 +19,10 @@
         }
     },
     "require": {
-        "twig/twig": "v1.15.0",
-        "symfony/console": "2.4.*@dev"
+        "twig/twig": "1.15.*",
+        "symfony/console": "2.4.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*@dev"
+        "phpunit/phpunit": "3.7.*"
     }
 }

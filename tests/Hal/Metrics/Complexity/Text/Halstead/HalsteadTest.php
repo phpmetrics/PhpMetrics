@@ -68,10 +68,10 @@ class HalsteadTest extends \PHPUnit_Framework_TestCase {
     public function provideFilesAndCounts() {
         return array(
             //                                                          N       V           L       D       E           T       I
-            array(__DIR__.'/../../../../../resources/f1.php', 3 , 4, 3, 3        , 7     , 18.09     , 0.5   , 2     , 36.19     , 2    , 9.05 ) // twice
-            , array(__DIR__.'/../../../../../resources/f2.php', 6, 7, 4, 3       , 13    , 36.5      , 0.21  , 4.67  , 170.31    , 9    , 7.82) // max
-            , array(__DIR__.'/../../../../../resources/f4.php', 14, 14, 9, 6     , 28    , 109.39    , 0.1   , 10.5  , 1148.63   , 64   , 10.42) // f_while
-            , array(__DIR__.'/../../../../../resources/f3.php', 19, 10, 8, 6     , 29    , 110.41    , 0.15  , 6.67  , 736.09    , 41   , 16.56) // f_switch
+            array(__DIR__.'/../../../../../resources/halstead/f1.php', 3 , 4, 3, 3        , 7     , 18.09     , 0.5   , 2     , 36.19     , 2    , 9.05 ) // twice
+            , array(__DIR__.'/../../../../../resources/halstead/f2.php', 6, 7, 4, 3       , 13    , 36.5      , 0.21  , 4.67  , 170.31    , 9    , 7.82) // max
+            , array(__DIR__.'/../../../../../resources/halstead/f4.php', 14, 14, 9, 6     , 28    , 109.39    , 0.1   , 10.5  , 1148.63   , 64   , 10.42) // f_while
+            , array(__DIR__.'/../../../../../resources/halstead/f3.php', 19, 10, 8, 6     , 29    , 110.41    , 0.15  , 6.67  , 736.09    , 41   , 16.56) // f_switch
         );
     }
 }

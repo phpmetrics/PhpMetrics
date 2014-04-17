@@ -63,7 +63,7 @@ class MethodExtractorTest extends \PHPUnit_Framework_TestCase {
         $classes = $result->getClasses();
         $class = $classes[0];
         $methods = $class->getMethods();
-        $method = $methods[0];
+        $method = $methods['foo'];
         $expected = <<<EOT
 \$a = strtoupper((string)\$a);
 return \$a;

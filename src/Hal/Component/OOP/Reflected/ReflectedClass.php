@@ -102,7 +102,7 @@ class ReflectedClass {
      * @return $this
      */
     public function pushMethod(ReflectedMethod $method) {
-        array_push($this->methods, $method);
+        $this->methods[$method->getName()] = $method;
 
         foreach($method->getArguments() as $argument) {
 

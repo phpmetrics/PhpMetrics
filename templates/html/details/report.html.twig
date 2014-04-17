@@ -42,6 +42,7 @@
             <th>Intelligent content</th>
             <th>Difficulty</th>
             <th>Bugs</th>
+            <th>LCOM</th>
             <th>Instability</th>
             <th>Efferent coupling</th>
             <th>Afferent coupling</th>
@@ -82,6 +83,9 @@
                 </td>
                 <td class="validate-{{result.bugs|rule('bugs')}}">
                     {{result.bugs|round}}
+                </td>
+                <td class="validate-{{result.lcom|rule('lcom')}}">
+                    {{result.lcom}}
                 </td>
                 <td class="validate-{{result.instability|rule('instability')}}">
                     {{result.instability}}

@@ -10,6 +10,7 @@
 namespace Hal\Application\Command\Job;
 use Hal\Application\Command\Job\Analyze\CouplingAnalyzer;
 use Hal\Application\Command\Job\Analyze\FileAnalyzer;
+use Hal\Application\Command\Job\Analyze\LcomAnalyzer;
 use Hal\Metrics\Complexity\Structural\HenryAndKafura\Coupling;
 use Hal\Metrics\Complexity\Structural\HenryAndKafura\FileCoupling;
 use Hal\Component\File\Finder;
@@ -129,6 +130,11 @@ class DoAnalyze implements JobInterface
             $this->output->writeln('Analyzing coupling. This will take few minutes...');
             $couplingAnalyzer = new CouplingAnalyzer($classMap, $collection);
             $couplingAnalyzer->execute($files);
+
+            // LCOM (should be done after parsing files)
+            $this->output->writeln('Analyzing lack of cohesion of methods (lcom). This will take few minutes...');
+            $lcomAnalyzer = new LcomAnalyzer($classMap, $collection);
+            $lcomAnalyzer->execute($files);
         }
     }
 

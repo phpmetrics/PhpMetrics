@@ -39,7 +39,7 @@ class Tokenizer {
                 $tokens = array_merge($tokens, token_get_all($content));
                 unset($content);
             }
-            return $tokens;
+            return new TokenCollection($tokens);
         }
 
         return new TokenCollection(token_get_all(file_get_contents($filename)));

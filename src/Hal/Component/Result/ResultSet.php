@@ -73,6 +73,13 @@ class ResultSet implements ExportableInterface {
     private $oop;
 
     /**
+     * Lack of cohesion of methods
+     *
+     * @var
+     */
+    private $lcom;
+
+    /**
      * Constructor
      *
      * @param string $filename
@@ -94,6 +101,7 @@ class ResultSet implements ExportableInterface {
             , $this->getOop() ? $this->getOop()->asArray() : array()
             , $this->getMcCabe() ? $this->getMcCabe()->asArray() : array()
             , $this->getMyer() ? $this->getMyer()->asArray() : array()
+            , $this->getLcom() ? $this->getLcom()->asArray() : array()
         );
     }
 
@@ -220,10 +228,28 @@ class ResultSet implements ExportableInterface {
     }
 
     /**
-     * @return \OOP\Extractor\Result
+     * @return \Hal\Component\OOP\Extractor\Result
      */
     public function getOop()
     {
         return $this->oop;
     }
+
+    /**
+     * @param \Hal\Metrics\Complexity\Structural\LCOM\Result $lcom
+     */
+    public function setLcom(\Hal\Metrics\Complexity\Structural\LCOM\Result $lcom)
+    {
+        $this->lcom = $lcom;
+    }
+
+    /**
+     * @return \Hal\Metrics\Complexity\Structural\LCOM\Result
+     */
+    public function getLcom()
+    {
+        return $this->lcom;
+    }
+
+
 }

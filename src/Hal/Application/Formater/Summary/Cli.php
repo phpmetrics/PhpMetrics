@@ -100,6 +100,7 @@ class Cli implements FormaterInterface {
                 , 'Volume'
                 , 'Bugs'
                 , 'Difficulty'
+                , 'lcom'
                 , 'Instability'
                 , 'CE'
                 , 'CA'
@@ -119,6 +120,7 @@ class Cli implements FormaterInterface {
                 , $this->getRow($bound, 'volume', 'average', 0)
                 , $this->getRow($bound, 'bugs', 'average', 2)
                 , $this->getRow($bound, 'difficulty', 'average', 0)
+                , $this->getRow($bound, 'lcom', 'average', 2)
                 , $this->getRow($bound, 'instability', 'average', 2)
                 , $this->getRow($bound, 'efferentCoupling', 'average', 2)
                 , $this->getRow($bound, 'afferentCoupling', 'average', 2)
