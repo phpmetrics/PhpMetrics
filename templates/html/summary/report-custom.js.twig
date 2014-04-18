@@ -90,7 +90,7 @@
                 .attr("cx",function(d) {return x(d[xData]);})
                 .attr("cy",function(d) {return y(d[yData]);})
     //            .attr("r",function(d) {return  r(Math.sqrt(d[rData]));})
-                .attr("r",function(d) {return  r(d[rData]);})
+                .attr("r",function(d) {return  r(1 + d[rData]);})
                 .style("fill", '#006ac1')
 
                 .append("title")

@@ -105,6 +105,14 @@ class Xml implements FormaterInterface {
         $node->setAttribute('bugs', $bound->getAverage('bugs'));
         $node->setAttribute('time', $bound->getAverage('time'));
         $node->setAttribute('intelligentContent', $bound->getAverage('intelligentContent'));
+
+        $hasOOP = null !== $bound->getSum('instability');
+        if($hasOOP) {
+            $node->setAttribute('lcom', $bound->getAverage('lcom'));
+            $node->setAttribute('instability', $bound->getAverage('instability'));
+            $node->setAttribute('efferentCoupling', $bound->getAverage('efferentCoupling'));
+            $node->setAttribute('afferentCoupling', $bound->getAverage('afferentCoupling'));
+        }
     }
 
     /**

@@ -88,6 +88,7 @@
             <th>Difficulty</th>
             <th>Bugs</th>
             <th>Intelligent content</th>
+            <th>LCOM</th>
             <th>Instability</th>
             <th>Efferent coupling</th>
             <th>Afferent coupling</th>
@@ -121,6 +122,9 @@
                 </td>
                 <td class="validate-{{bound.getAverage('intelligentContent')|rule('intelligentContent')}}">
                     {{bound.getAverage('intelligentContent')|round}}
+                </td>
+                <td class="validate-{{bound.getAverage('lcom')|rule('lcom')}}">
+                    {{bound.getAverage('lcom')}}
                 </td>
                 <td class="validate-{{bound.getAverage('instability')|rule('instability')}}">
                     {{bound.getAverage('instability')}}
@@ -172,7 +176,7 @@
     });
 
     // default selected elements
-    var xAxis = 'intelligentContent';
+    var xAxis = 'lcom';
     var yAxis = 'cyclomaticComplexity';
     var rAxis = 'loc';
 

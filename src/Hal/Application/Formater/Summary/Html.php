@@ -67,11 +67,13 @@ class Html implements FormaterInterface {
         $twig = new \Twig_Environment($loader, array('cache' => false));
         $twig->addExtension(new FormatingExtension($this->validator));
 
+        $bound = $this->bound->calculate($collection);
         return $twig->render('summary/report.html.twig', array(
             'keys' => array_keys(current($collection->asArray()))
             , 'results' => $collection->asArray()
             , 'directoryBounds' => $this->agregateBounds->calculate($collection)
-            , 'bounds' => $this->bound->calculate($collection)
+            , 'bounds' => $bound
+            , 'withOOP' => null !== $bound->getSum('instability')
         ));
     }
 

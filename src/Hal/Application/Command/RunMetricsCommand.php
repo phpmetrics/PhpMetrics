@@ -58,7 +58,7 @@ class RunMetricsCommand extends Command
                         'extensions', null, InputOption::VALUE_REQUIRED, 'Regex of extensions to include', 'php'
                 )
                 ->addOption(
-                        'oop', null, InputOption::VALUE_NONE, 'If provided, tool will extract informations about OOP model'
+                        'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will noy extract informations about OOP model (faster)'
                 )
         ;
     }
@@ -88,7 +88,7 @@ class RunMetricsCommand extends Command
         // jobs queue planning
         $queue = new Queue();
         $queue
-            ->push(new DoAnalyze($output, $finder, $input->getArgument('path'), $input->getOption('oop')))
+            ->push(new DoAnalyze($output, $finder, $input->getArgument('path'), !$input->getOption('without-oop')))
             ->push(new SearchBounds($output, $bounds))
             ->push(new SearchBounds($output, $directoryBounds))
             ->push(new ReportRenderer($output, new Summary\Cli($validator, $bounds, $directoryBounds)))

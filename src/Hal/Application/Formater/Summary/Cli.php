@@ -86,45 +86,56 @@ class Cli implements FormaterInterface {
         $output->writeln('<info>Avegare for each module:</info>');
         $output->writeln('');
 
+        $hasOOP = null !== $total->getSum('instability');
+
         $table = new TableHelper();
         $table
-            ->setHeaders(array(
-                'Directory'
-                , 'LOC'
-                , 'Complexity'
-                , 'Myer Distance'
-                , 'Maintenability'
-                , 'LLOC'
-                , 'Comment weight'
-                , 'Vocabulary'
-                , 'Volume'
-                , 'Bugs'
-                , 'Difficulty'
-                , 'lcom'
-                , 'Instability'
-                , 'CE'
-                , 'CA'
+            ->setHeaders(array_merge(
+                array(
+                    'Directory'
+                    , 'LOC'
+                    , 'Complexity'
+                    , 'Myer Distance'
+                    , 'Maintenability'
+                    , 'LLOC'
+                    , 'Comment weight'
+                    , 'Vocabulary'
+                    , 'Volume'
+                    , 'Bugs'
+                    , 'Difficulty'
+                )
+            , ($hasOOP ? array(
+                    'LCOM'
+                    , 'Instability'
+                    , 'CE'
+                    , 'CA'
+                ) : array())
             ))
             ->setLayout(TableHelper::LAYOUT_DEFAULT);
 
         foreach($directoryBounds as $directory => $bound) {
-            $table->addRow(array(
-                str_repeat('  ', $bound->getDepth()).$directory
-                , $this->getRow($bound, 'loc', 'sum', 0)
-                , $this->getRow($bound, 'cyclomaticComplexity', 'average', 0)
-                , $this->getRow($bound, 'myerDistance', 'average', 0)
-                , $this->getRow($bound, 'maintenabilityIndex', 'average', 0)
-                , $this->getRow($bound, 'logicalLoc', 'average', 0)
-                , $this->getRow($bound, 'commentWeight', 'average', 0)
-                , $this->getRow($bound, 'vocabulary', 'average', 0)
-                , $this->getRow($bound, 'volume', 'average', 0)
-                , $this->getRow($bound, 'bugs', 'average', 2)
-                , $this->getRow($bound, 'difficulty', 'average', 0)
-                , $this->getRow($bound, 'lcom', 'average', 2)
-                , $this->getRow($bound, 'instability', 'average', 2)
-                , $this->getRow($bound, 'efferentCoupling', 'average', 2)
-                , $this->getRow($bound, 'afferentCoupling', 'average', 2)
-            ));
+            $table->addRow(array_merge(
+                array(
+                    str_repeat('  ', $bound->getDepth()).$directory
+                    , $this->getRow($bound, 'loc', 'sum', 0)
+                    , $this->getRow($bound, 'cyclomaticComplexity', 'average', 0)
+                    , $this->getRow($bound, 'myerDistance', 'average', 0)
+                    , $this->getRow($bound, 'maintenabilityIndex', 'average', 0)
+                    , $this->getRow($bound, 'logicalLoc', 'average', 0)
+                    , $this->getRow($bound, 'commentWeight', 'average', 0)
+                    , $this->getRow($bound, 'vocabulary', 'average', 0)
+                    , $this->getRow($bound, 'volume', 'average', 0)
+                    , $this->getRow($bound, 'bugs', 'average', 2)
+                    , $this->getRow($bound, 'difficulty', 'average', 0)
+                )
+                , ($hasOOP ? array(
+                    $this->getRow($bound, 'lcom', 'average', 2)
+                    , $this->getRow($bound, 'instability', 'average', 2)
+                    , $this->getRow($bound, 'efferentCoupling', 'average', 2)
+                    , $this->getRow($bound, 'afferentCoupling', 'average', 2)
+                    ) : array())
+                )
+            );
         }
         $table->render($output);
 
