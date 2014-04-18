@@ -11,6 +11,7 @@ namespace Hal\Application\Command\Job;
 use Hal\Application\Command\Job\Analyze\CouplingAnalyzer;
 use Hal\Application\Command\Job\Analyze\FileAnalyzer;
 use Hal\Application\Command\Job\Analyze\LcomAnalyzer;
+use Hal\Component\Result\ResultSet;
 use Hal\Metrics\Complexity\Structural\HenryAndKafura\Coupling;
 use Hal\Metrics\Complexity\Structural\HenryAndKafura\FileCoupling;
 use Hal\Component\File\Finder;
@@ -107,13 +108,14 @@ class DoAnalyze implements JobInterface
             , $classMap
         );
 
-        foreach($files as $filename) {
+        foreach($files as $k => $filename) {
 
             $progress->advance();
 
             // Integrity
             if(!$syntaxChecker->isCorrect($filename)) {
                 $this->output->writeln(sprintf('<error>file %s is not valid and has been skipped</error>', $filename));
+                unset($files[$k]);
                 continue;
             }
 

@@ -53,6 +53,11 @@ class FileCoupling {
         $rOOP = $this->classMap->getClassesIn($filename);
         $result = new Result($filename);
 
+        // case of file doesn't contain any class
+        if(null === $rOOP) {
+            return $result;
+        }
+
         $instability = $ce = $ca = 0;
 
         $classes = $rOOP->getClasses();

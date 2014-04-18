@@ -46,10 +46,10 @@ class ClassMap {
      * Get for filename
      *
      * @param string $filename
-     * @return array
+     * @return Result|null
      */
     public function getClassesIn($filename) {
-        return isset($this->classes[$filename]) ? $this->classes[$filename] : array();
+        return isset($this->classes[$filename]) ? $this->classes[$filename] : null;
     }
 
     /**
