@@ -73,7 +73,7 @@ class LackOfCohesionOfMethods {
         $toSkip = array_merge($toSkip, $linked, array($method->getName()));
 
 
-        // foreach directly linked methods, recurse
+        // foreach directly linked methods, recurs
         $methods = $class->getMethods();
         foreach($linked as $link) {
             if(!isset( $methods[$link])) {
@@ -139,7 +139,7 @@ class LackOfCohesionOfMethods {
 
             $intersect = array_intersect($members, $otherMembers);
 
-            // remove calls (memebers and calls are mixed : regex is too complex to be read)
+            // remove calls (members and calls are mixed : regex is too complex to be read)
             foreach($intersect as $k => $name) {
                 if(preg_match('!\($!', $name)) {
                     unset($intersect[$k]);

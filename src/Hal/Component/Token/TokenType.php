@@ -10,7 +10,7 @@
 namespace Hal\Component\Token;
 
 /**
- * Determins the type of a token (operand, operator...)
+ * Determines the type of a token (operand, operator...)
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */

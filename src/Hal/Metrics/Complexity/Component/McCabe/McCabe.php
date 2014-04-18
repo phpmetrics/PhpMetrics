@@ -35,7 +35,7 @@ class McCabe {
     }
 
     /**
-     * Calculate cyclomatic complexity nuler
+     * Calculate cyclomatic complexity number
      *
      * We can calculate ccn in two ways (we choose the second):
      *
