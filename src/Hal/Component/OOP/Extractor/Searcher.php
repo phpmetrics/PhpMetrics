@@ -41,6 +41,23 @@ class Searcher {
     }
 
     /**
+     * Get non whitespace previous token
+     *
+     * @param $n
+     * @param $tokens
+     * @return null
+     */
+    public function getPrevious(&$n, $tokens) {
+        $p = $n - 1;
+        for($i = $p ; $i > 0; $i--) {
+            if(T_WHITESPACE !== $tokens[$i]->getType()) {
+                return $tokens[$i];
+            }
+        }
+        return null;
+    }
+
+    /**
      * Get name following token
      *
      * @param $n

@@ -51,6 +51,7 @@ class Extractor {
 
         $this->extractors = (object) array(
             'class' => new ClassExtractor($this->searcher)
+            , 'interface' => new InterfaceExtractor($this->searcher)
             , 'alias' => new AliasExtractor($this->searcher)
             , 'method' => new MethodExtractor($this->searcher)
             , 'call' => new CallExtractor($this->searcher)
@@ -71,8 +72,7 @@ class Extractor {
         $tokens = $this->tokenizer->tokenize($filename);
 
         // default current values
-        $class = null;
-        $function = null;
+        $class = $interface = $function = null;
         $mapOfAliases = array();
 
         $len = sizeof($tokens, COUNT_NORMAL);
@@ -86,6 +86,7 @@ class Extractor {
                     $alias = $this->extractors->alias->extract($n, $tokens);
                     $mapOfAliases[$alias->alias] = $alias->name;
                     $class && $class->setAliases($mapOfAliases);
+                    $interface && $interface->setAliases($mapOfAliases);
                     break;
 
                 case T_PAAMAYIM_NEKUDOTAYIM:
@@ -98,6 +99,14 @@ class Extractor {
                 case T_NAMESPACE:
                     $namespace = '\\'.$this->searcher->getFollowingName($n, $tokens);
                     $this->extractors->class->setNamespace($namespace);
+                    break;
+
+                case T_INTERFACE:
+                    $class = $this->extractors->interface->extract($n, $tokens);
+                    $class->setAliases($mapOfAliases);
+                    // push class AND in global AND in local class map
+                    $this->result->pushClass($class);
+                    $result->pushClass($class);
                     break;
 
                 case T_CLASS:

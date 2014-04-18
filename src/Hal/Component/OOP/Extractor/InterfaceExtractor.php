@@ -8,14 +8,14 @@
  */
 
 namespace Hal\Component\OOP\Extractor;
-use Hal\Component\OOP\Reflected\ReflectedClass;
+use Hal\Component\OOP\Reflected\ReflectedInterface;
 use Hal\Component\Token\TokenCollection;
 
 
 /**
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class ClassExtractor implements ExtractorInterface {
+class InterfaceExtractor implements ExtractorInterface {
 
     /**
      * @var Searcher
@@ -46,14 +46,8 @@ class ClassExtractor implements ExtractorInterface {
      */
     public function extract(&$n, TokenCollection $tokens)
     {
-        // is abstract ?
-        $prev = $this->searcher->getPrevious($n, $tokens);
-        $isAbstract = $prev && T_ABSTRACT === $prev->getType();
-
         $classname = $this->searcher->getFollowingName($n, $tokens);
-        $class = new ReflectedClass($this->namespace, $classname);
-        $class->setAbstract($isAbstract);
-        return $class;
+        return new ReflectedInterface($this->namespace, $classname);
     }
 
     /**

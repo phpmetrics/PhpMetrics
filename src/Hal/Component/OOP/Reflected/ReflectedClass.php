@@ -49,6 +49,13 @@ class ReflectedClass {
     private $aliases = array();
 
     /**
+     * Does the class is abstract ?
+     *
+     * @var bool
+     */
+    private $isAbstract = false;
+
+    /**
      * Constructor
      *
      * @param string $name
@@ -149,5 +156,25 @@ class ReflectedClass {
     public function getAliases()
     {
         return $this->aliases;
+    }
+
+    /**
+     * Set abstractness of method
+     *
+     * @param $bool
+     * @return $this
+     */
+    public function setAbstract($bool) {
+        $this->isAbstract = (bool) $bool;
+        return $this;
+    }
+
+    /**
+     * Is Abstract ?
+     *
+     * @return bool
+     */
+    public function isAbstract() {
+        return $this->isAbstract;
     }
 };
