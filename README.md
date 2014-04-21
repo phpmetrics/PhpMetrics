@@ -26,10 +26,26 @@ Gives metrics about PHP project and classes.
 
 # Installation
 
+As PHAR:
+
     wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar
+
+To run PhpMetrics from the PHAR:
+
     php metrics.phar <folder or filename>
 
-Will output:
+Via Composer (globally):
+    
+    $ ./composer.phar global require fabpot/php-cs-fixer @stable
+
+Then, make sure you have ``~/.composer/vendor/bin`` in your ``PATH``, and
+you're good to go:
+
+    export PATH="$PATH:$HOME/.composer/vendor/bin"
+
+Now you can run PhpMetrics by issuing ```phpmetrics``` in your shell.
+
+Running PhpMetrics will output:
 
 ![Standard report](http://halleck45.github.io/PhpMetrics/images/report-standard.png)
 
