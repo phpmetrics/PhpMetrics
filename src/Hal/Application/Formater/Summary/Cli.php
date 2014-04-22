@@ -83,7 +83,7 @@ class Cli implements FormaterInterface {
         $directoryBounds = $this->agregateBounds->calculate($collection);
 
 
-        $output->writeln('<info>Avegare for each module:</info>');
+        $output->writeln('<info>Average for each module:</info>');
         $output->writeln('');
 
         $hasOOP = null !== $total->getSum('instability');

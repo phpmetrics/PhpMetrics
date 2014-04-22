@@ -26,7 +26,7 @@ class Queue implements JobInterface
     private $jobs;
 
     /**
-     * Construcor
+     * Constructor
      */
     public function __construct() {
         $this->jobs = new \SplQueue();

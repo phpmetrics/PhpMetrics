@@ -56,6 +56,6 @@ class Html implements FormaterInterface {
      * @inheritdoc
      */
     public function getName() {
-        return 'Detailled HTML';
+        return 'Detailed HTML';
     }
 }

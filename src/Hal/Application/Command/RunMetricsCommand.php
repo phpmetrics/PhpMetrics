@@ -46,7 +46,7 @@ class RunMetricsCommand extends Command
                         'summary-html',null, InputOption::VALUE_REQUIRED, 'Path to save summary report in HTML format'
                 )
                 ->addOption(
-                        'details-html', null, InputOption::VALUE_REQUIRED, 'Path to save detailled report in HTML format'
+                        'details-html', null, InputOption::VALUE_REQUIRED, 'Path to save detailed report in HTML format'
                 )
                 ->addOption(
                         'summary-xml', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in XML format'
