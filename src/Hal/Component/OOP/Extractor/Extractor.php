@@ -84,9 +84,11 @@ class Extractor {
 
                 case T_USE:
                     $alias = $this->extractors->alias->extract($n, $tokens);
-                    $mapOfAliases[$alias->alias] = $alias->name;
-                    $class && $class->setAliases($mapOfAliases);
-                    $interface && $interface->setAliases($mapOfAliases);
+                    if (null !== $alias->name && null !== $alias->alias) {
+                        $mapOfAliases[$alias->alias] = $alias->name;
+                        $class && $class->setAliases($mapOfAliases);
+                        $interface && $interface->setAliases($mapOfAliases);
+                    }
                     break;
 
                 case T_PAAMAYIM_NEKUDOTAYIM:

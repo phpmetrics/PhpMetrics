@@ -44,9 +44,11 @@ class AliasExtractor implements ExtractorInterface {
         $expression = $this->searcher->getUnder(array(';'), $n, $tokens);
         if(preg_match('!use\s+(.*)\s+as\s+(.*)!i', $expression, $matches)) {
             list(, $real, $alias) = $matches;
-        } else if(preg_match('!use\s+(.*)\s*!i', $expression, $matches)) {
+        } else if(preg_match('!use\s+([^\s\(]+)\s*!i', $expression, $matches)) {
             list(, $real) = $matches;
             $alias = $real;
+        } else {
+            $alias = $real = null;
         }
 
 
