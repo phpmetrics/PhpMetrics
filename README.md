@@ -18,7 +18,7 @@ Gives metrics about PHP project and classes.
 + metric: [McCaybe Cyclomatic complexity number](#mccaybe-cyclomatic-complexity-number)
 + metric: Myer's Interval
 + metric: [Coupling and instability](#coupling-and-instability)
-+ metric: Lack of cohesion of methods (LCOM)
++ metric: [Lack of cohesion of methods (LCOM)](#lack-of-cohesion-of-methods)
 + [Use it in your code](#use-it-in-your-code)
 
 
@@ -44,14 +44,6 @@ You can change the depth of the summary report with the `--level=<value>` option
 If you want to have a detailled view (file by file):
 
     php ./bin/metrics.php --details-html=/path/of/your/choice.html <folder or filename>
-
-## Informations about OOP model
-
-If you want to get informations about OOP model (coupling, instability...), you should pass the `--oop` parameter:
-
-    php ./bin/metrics.php --oop <folder or filename>
-
-Remember that this feature parse all files, extract declared classes, dependencies of each method... and is really *very slow*.
 
 ## Jenkins and PIC integration
 
@@ -84,6 +76,13 @@ Large red circles will be probably hard to maintain.
 
 
 # Metrics
+
+## Lack of cohesion of methods
+
+This object oriented indicator measure how well the methods of a class are related to each other. This metric indicates roughly the number
+of responsabilities of one class (and is correlated to the Single Responsability Principle)
+
+If there are 2 or more components, the class should probably be split into so many smaller classes.
 
 ## Halstead complexity
 
@@ -155,7 +154,7 @@ Instability concerns the risk of your class, according coupling:
 
 # Use it in your code
 
-## Halstead
+Halstead
 
 ```php
 $halstead = new \Hal\Halstead\Halstead(new \Token\TokenType());
@@ -163,7 +162,7 @@ $rHalstead = $halstead->calculate($filename);
 var_dump($rHalstead);
 ```
 
-## McCabe
+McCabe
 
 ```php
 $mcCabe = new \Hal\McCaybe\McCaybe();
@@ -171,7 +170,7 @@ $rMccabe = $loc->calculate($filename);
 var_dump($rMccabe);
 ```
 
-## PHPLoc
+PHPLoc
 
 ```php
 $loc = new \Hal\Loc\Loc();
@@ -179,7 +178,7 @@ $rLoc = $loc->calculate($filename);
 var_dump($rLoc);
 ```
 
-## Maintenability Index
+Maintenability Index
 
 ```php
 $maintenability = new \Hal\MaintenabilityIndex\MaintenabilityIndex;
@@ -187,7 +186,7 @@ $rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
 var_dump($rMaintenability);
 ```
 
-## OOP Extractor
+OOP Extractor
 
 Extracts OOP model of files, and map classes and files:
 
@@ -197,7 +196,7 @@ $rOOP = $extractor->extract($filename);
 var_dump($rOOP);
 ```
 
-## Coupling
+Coupling
 
 Calculate coupling.
 

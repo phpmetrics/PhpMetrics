@@ -9,6 +9,7 @@
 
 namespace Hal\Component\OOP\Extractor;
 use Hal\Component\OOP\Reflected\ReflectedClass;
+use Hal\Component\OOP\Reflected\ReflectedInterface;
 use Hal\Component\Result\ExportableInterface;
 
 
@@ -28,8 +29,20 @@ class Result implements ExportableInterface {
      * @inheritdoc
      */
     public function asArray() {
+
+        $nocc = $noca = 0;
+        foreach($this->getClasses() as $class) {
+            if($class->isAbstract() ||$class instanceof ReflectedInterface) {
+                $noca++;
+            } else {
+                $nocc++;
+            }
+        }
+
         return array(
             'noc' => sizeof($this->classes, COUNT_NORMAL)
+            , 'noca' => $noca
+            , 'nocc' => $nocc
         );
     }
 
