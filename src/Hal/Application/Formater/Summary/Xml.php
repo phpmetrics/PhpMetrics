@@ -32,13 +32,6 @@ class Xml implements FormaterInterface {
     private $bound;
 
     /**
-     * AgregateBounds
-     *
-     * @var BoundsInterface
-     */
-    private $agregateBounds;
-
-    /**
      * Validator
      *
      * @var Validator
@@ -50,22 +43,19 @@ class Xml implements FormaterInterface {
      *
      * @param Validator $validator
      * @param BoundsInterface $bound
-     * @param BoundsAgregateInterface $agregateBounds
      */
-    public function __construct(Validator $validator, BoundsInterface $bound, BoundsAgregateInterface $agregateBounds)
+    public function __construct(Validator $validator, BoundsInterface $bound)
     {
         $this->bound = $bound;
-        $this->agregateBounds = $agregateBounds;
         $this->validator = $validator;
     }
 
     /**
      * @inheritdoc
      */
-    public function terminate(ResultCollection $collection){
+    public function terminate(ResultCollection $collection, ResultCollection $groupedResults){
 
         $bounds = $this->bound->calculate($collection);
-        $directoryBounds = $this->agregateBounds->calculate($collection);
 
         // root
         $xml = new \DOMDocument("1.0", "UTF-8");
@@ -75,10 +65,10 @@ class Xml implements FormaterInterface {
 
         // modules
         $modules = $xml->createElement('modules');
-        foreach($directoryBounds as $bound) {
+        foreach($groupedResults as $result) {
             $module = $xml->createElement('module');
-            $this->injectsBounds($module, $bound);
-            $module->setAttribute('namespace', $bound->getDirectory());
+            $this->injectsBounds($module, $result->getBounds());
+            $module->setAttribute('namespace', $result->getName());
             $modules->appendChild($module);
         }
 

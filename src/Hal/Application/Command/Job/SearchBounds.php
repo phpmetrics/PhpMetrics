@@ -49,7 +49,7 @@ class SearchBounds implements JobInterface
     /**
      * @inheritdoc
      */
-    public function execute(ResultCollection $collection)
+    public function execute(ResultCollection $collection, ResultCollection $groupedResults)
     {
         $this->bound->calculate($collection);
     }

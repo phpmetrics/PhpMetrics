@@ -50,8 +50,8 @@ class ReportRenderer implements JobInterface
     /**
      * @inheritdoc
      */
-    public function execute(ResultCollection $collection) {
-        $this->output->write($this->formater->terminate($collection));
+    public function execute(ResultCollection $collection, ResultCollection $aggregatedResults) {
+        $this->output->write($this->formater->terminate($collection, $aggregatedResults));
     }
 
 }

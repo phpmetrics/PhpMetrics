@@ -15,7 +15,7 @@ namespace Hal\Component\Result;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class ResultSet implements ExportableInterface {
+class ResultSet implements ExportableInterface, ResultSetInterface {
 
     /**
      * Filename
@@ -86,6 +86,13 @@ class ResultSet implements ExportableInterface {
      */
     public function __construct($filename) {
         $this->filename = (string) $filename;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName() {
+        return $this->filename;
     }
 
     /**

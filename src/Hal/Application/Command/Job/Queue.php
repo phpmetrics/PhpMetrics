@@ -46,9 +46,9 @@ class Queue implements JobInterface
     /**
      * @inheritdoc
      */
-    public function execute(ResultCollection $collection) {
+    public function execute(ResultCollection $collection, ResultCollection $aggregatedResults) {
         foreach($this->jobs as $job) {
-            $job->execute($collection);
+            $job->execute($collection, $aggregatedResults);
         }
     }
 

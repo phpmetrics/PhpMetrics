@@ -2,9 +2,9 @@
 namespace Test\Hal\Application\Formater\Summary;
 
 use Hal\Component\Bounds\Bounds;
-use Hal\Component\Bounds\DirectoryBounds;
 use Hal\Component\Bounds\Result\BoundsResult;
 use Hal\Application\Formater\Summary\Cli;
+use Hal\Component\Result\ResultCollection;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 
@@ -31,17 +31,16 @@ class CliTest extends \PHPUnit_Framework_TestCase {
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
 
         $bounds = new Bounds();
-        $agregatedBounds = new DirectoryBounds(0);
-        $formater = new Cli($validator, $bounds, $agregatedBounds);
-        $output = $formater->terminate($collection);
+        $formater = new Cli($validator, $bounds);
+        $groupedResults = new ResultCollection();
+        $output = $formater->terminate($collection, $groupedResults);
         $this->assertRegExp('/Maintenability/', $output);
     }
 
     public function testFormaterHasName() {
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $bounds = new Bounds();
-        $agregatedBounds = new DirectoryBounds(0);
-        $formater = new Cli($validator, $bounds, $agregatedBounds);
+        $formater = new Cli($validator, $bounds);
         $this->assertNotNull($formater->getName());
     }
 }

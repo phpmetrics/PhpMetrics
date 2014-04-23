@@ -7,20 +7,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Hal\Component\Bounds;
-use Hal\Component\Bounds\Result\DirectoryResult;
+namespace Hal\Component\Aggregator;
+use Hal\Component\Bounds\Result\BoundsResult;
 use Hal\Component\Result\ResultCollection;
 
-
 /**
- * consolidate results by directory
+ * Agregates by directory
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class DirectoryBounds implements BoundsInterface, BoundsAgregateInterface{
+class DirectoryAggregator implements Aggregator {
 
     /**
-     * Depth max
+     * Max depth
      *
      * @var int
      */
@@ -29,21 +28,19 @@ class DirectoryBounds implements BoundsInterface, BoundsAgregateInterface{
     /**
      * Constructor
      *
-     * @param int $depth
+     * @param $depth
      */
-    public function __construct($depth = 0)
+    public function __construct($depth)
     {
-        $this->depth = (int) $depth;
+        $this->depth = $depth;
     }
+
 
     /**
      * @inheritdoc
-     * @return array
      */
-    public function calculate(ResultCollection $results) {
-
-        $array = array();
-
+    public function aggregates(ResultCollection $results) {
+        $array = new ResultCollection();
         foreach($results as $result) {
             $basename = dirname($result->getFilename());
 
@@ -65,19 +62,8 @@ class DirectoryBounds implements BoundsInterface, BoundsAgregateInterface{
                 }
 
                 $array[$namespace]->push($result);
-
             }
         }
-
-        // boundaries
-        $collection = array();
-        $bounds = new Bounds();
-        foreach($array as $namespace => $directoryResultSets) {
-            $boundsResult = $bounds->calculate($directoryResultSets);
-            $collection[$namespace] = new DirectoryResult($namespace, $boundsResult);
-        }
-        ksort($collection);
-
-        return $collection;
+        return $array;
     }
 }

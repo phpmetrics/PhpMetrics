@@ -1,9 +1,11 @@
 <?php
 namespace Test\Hal\Application\Formater\Summary;
 
+use Hal\Component\Aggregator\DirectoryAggregator;
 use Hal\Component\Bounds\Bounds;
-use Hal\Component\Bounds\DirectoryBounds;
 use Hal\Application\Formater\Summary\Xml;
+use Hal\Component\Result\ResultAggregate;
+use Hal\Component\Result\ResultCollection;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 
@@ -12,8 +14,9 @@ use Symfony\Component\Console\Output\ConsoleOutput;
  */
 class XmlTest extends \PHPUnit_Framework_TestCase {
 
-    public function testFormaterReturnsHtml() {
+    public function testFormaterReturnsXml() {
 
+        // all results
         $rs1 = $this->getMockBuilder('\Hal\Component\Result\ResultSet')->disableOriginalConstructor()->getMock();
         $rs1->expects($this->any())->method('asArray')->will($this->returnValue(array('volume' => 5)));
         $rs1->expects($this->any())->method('getFilename')->will($this->returnValue('path2/file1.php'));
@@ -28,20 +31,31 @@ class XmlTest extends \PHPUnit_Framework_TestCase {
             array('volume' => 5)
             , array('volume' => 15)
         )));
-
-        $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
-
         $bounds = new Bounds();
-        $agregatedBounds = new DirectoryBounds(2);
-        $formater = new Xml($validator, $bounds, $agregatedBounds);
-        $output = $formater->terminate($collection);
+
+        // grouped results
+        $groupedResults = new ResultCollection();
+        $result = $this->getMockBuilder('\Hal\Component\Result\ResultAggregate')->disableOriginalConstructor()->getMock();
+        $result->expects($this->any())->method('getName')->will($this->returnValue('path1'));
+        $result->expects($this->any())->method('getBounds')->will($this->returnValue($this->getMock('\Hal\Component\Bounds\Result\ResultInterface')));
+        $groupedResults->push($result);
+        $result = $this->getMockBuilder('\Hal\Component\Result\ResultAggregate')->disableOriginalConstructor()->getMock();
+        $result->expects($this->any())->method('getName')->will($this->returnValue('path2'));
+        $result->expects($this->any())->method('getBounds')->will($this->returnValue($this->getMock('\Hal\Component\Bounds\Result\ResultInterface')));
+        $groupedResults->push($result);
+
+
+        // formater
+        $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
+        $formater = new Xml($validator, $bounds);
+        $output = $formater->terminate($collection, $groupedResults);
+
 
         $xml = new \SimpleXMLElement($output);
         $p = $xml->xpath('//project');
+        $this->assertEquals('10', $p[0]['volume']);
         $m = $xml->xpath('//project/modules/module[@namespace="path1"]');
         $m = $m[0];
-        $this->assertEquals('15', $m['volume']);
-        $this->assertEquals('15', $m['volume']);
         $this->assertCount(2, $xml->xpath('//project/modules/module'));
 
     }
@@ -49,8 +63,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase {
     public function testFormaterHasName() {
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $bounds = new Bounds();
-        $agregatedBounds = new DirectoryBounds(0);
-        $formater = new Xml($validator, $bounds, $agregatedBounds);
+        $formater = new Xml($validator, $bounds);
         $this->assertNotNull($formater->getName());
     }
 }

@@ -66,6 +66,7 @@ class BoundsResult implements ExportableInterface, ResultInterface {
             'average' => $this->average
             , 'min' => $this->min
             , 'max' => $this->max
+            , 'sum' => $this->sum
         );
     }
 

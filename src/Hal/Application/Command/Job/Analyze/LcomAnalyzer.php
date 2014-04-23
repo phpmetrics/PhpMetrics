@@ -47,7 +47,6 @@ class LcomAnalyzer
 
 
     public function execute(array $files) {
-        $lcom = new LackOfCohesionOfMethods();
         $fileCoupling = new FileLackOfCohesionOfMethods($this->classMap);
         foreach($files as $filename) {
             $result = $fileCoupling->calculate($filename);

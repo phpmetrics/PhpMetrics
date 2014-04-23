@@ -2,6 +2,7 @@
 namespace Test\Hal\Application\Formater\Details;
 
 use Hal\Application\Formater\Details\Html;
+use Hal\Component\Result\ResultCollection;
 
 
 /**
@@ -23,8 +24,8 @@ class HtmlTest extends \PHPUnit_Framework_TestCase {
 
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $formater = new Html($validator);
-
-        $output = $formater->terminate($collection);
+        $groupedCollection = new ResultCollection();
+        $output = $formater->terminate($collection, $groupedCollection);
         $this->assertContains('<html>', $output);
     }
 

@@ -89,54 +89,58 @@
             <th>Bugs</th>
             <th>Intelligent content</th>
             <th>LCOM</th>
+            <th>Abstractness</th>
             <th>Instability</th>
             <th>Efferent coupling</th>
             <th>Afferent coupling</th>
             <th>Num. of Classes</th>
         </thead>
         <tbody>
-        {% for directory, bound in directoryBounds %}
+        {% for result in groupedResults %}
             <tr>
-                <th style="padding-left:{{bound.depth}}em;">{{directory}}</th>
-                <td>{{bound.getSum('loc')}}</td>
-                <td class="validate-{{bound.getAverage('cyclomaticComplexity')|rule('cyclomaticComplexity')}}">
-                    {{bound.getAverage('cyclomaticComplexity')|round}}
+                <th style="padding-left:{{result.depth}}em;">{{result.name}}</th>
+                <td>{{result.bounds.getSum('loc')}}</td>
+                <td class="validate-{{result.bounds.getAverage('cyclomaticComplexity')|rule('cyclomaticComplexity')}}">
+                    {{result.bounds.getAverage('cyclomaticComplexity')|round}}
                 </td>
-                <td class="validate-{{bound.getAverage('maintenabilityIndex')|rule('maintenabilityIndex')}}">
-                    {{bound.getAverage('maintenabilityIndex')|round}}
+                <td class="validate-{{result.bounds.getAverage('maintenabilityIndex')|rule('maintenabilityIndex')}}">
+                    {{result.bounds.getAverage('maintenabilityIndex')|round}}
                 </td>
-                <td class="validate-{{bound.getAverage('volume')|rule('volume')}}">
-                    {{bound.getAverage('volume')|round}}
+                <td class="validate-{{result.bounds.getAverage('volume')|rule('volume')}}">
+                    {{result.bounds.getAverage('volume')|round}}
                 </td>
-                <td class="validate-{{bound.getAverage('vocabulary')|rule('vocabulary')}}">
-                    {{bound.getAverage('vocabulary')|round}}
+                <td class="validate-{{result.bounds.getAverage('vocabulary')|rule('vocabulary')}}">
+                    {{result.bounds.getAverage('vocabulary')|round}}
                 </td>
-                <td class="validate-{{bound.getAverage('commentWeight')|rule('commentWeight')}}">
-                    {{bound.getAverage('commentWeight')|round}}
+                <td class="validate-{{result.bounds.getAverage('commentWeight')|rule('commentWeight')}}">
+                    {{result.bounds.getAverage('commentWeight')|round}}
                 </td>
-                <td class="validate-{{bound.getAverage('difficulty')|rule('difficulty')}}">
-                    {{bound.getAverage('difficulty')|round}}
+                <td class="validate-{{result.bounds.getAverage('difficulty')|rule('difficulty')}}">
+                    {{result.bounds.getAverage('difficulty')|round}}
                 </td>
-                <td class="validate-{{bound.getAverage('bugs')|rule('bugs')}}">
-                    {{bound.getAverage('bugs')|round(2)}}
+                <td class="validate-{{result.bounds.getSum('bugs')|rule('bugs')}}">
+                    {{result.bounds.getAverage('bugs')|round(2)}}
                 </td>
-                <td class="validate-{{bound.getAverage('intelligentContent')|rule('intelligentContent')}}">
-                    {{bound.getAverage('intelligentContent')|round}}
+                <td class="validate-{{result.bounds.getAverage('intelligentContent')|rule('intelligentContent')}}">
+                    {{result.bounds.getAverage('intelligentContent')|round}}
                 </td>
-                <td class="validate-{{bound.getAverage('lcom')|rule('lcom')}}">
-                    {{bound.getAverage('lcom')}}
+                <td class="validate-{{result.bounds.getAverage('lcom')|rule('lcom')}}">
+                    {{result.bounds.getAverage('lcom')}}
                 </td>
-                <td class="validate-{{bound.getAverage('instability')|rule('instability')}}">
-                    {{bound.getAverage('instability')}}
+                <td>
+                    {{result.abstractness.abstractness}}
                 </td>
-                <td class="validate-{{bound.getAverage('efferentCoupling')|rule('efferentCoupling')}}">
-                    {{bound.getAverage('efferentCoupling')}}
+                <td>
+                    {{result.instability.instability}}
                 </td>
-                <td class="validate-{{bound.getAverage('afferentCoupling')|rule('afferentCoupling')}}">
-                    {{bound.getAverage('afferentCoupling')}}
+                <td class="validate-{{result.bounds.getAverage('efferentCoupling')|rule('efferentCoupling')}}">
+                    {{result.bounds.getAverage('efferentCoupling')}}
                 </td>
-                <td class="validate-{{bound.getSum('noc')|rule('noc')}}">
-                    {{bound.getAverage('noc')}}
+                <td class="validate-{{result.bounds.getAverage('afferentCoupling')|rule('afferentCoupling')}}">
+                    {{result.bounds.getAverage('afferentCoupling')}}
+                </td>
+                <td class="validate-{{result.bounds.getSum('noc')|rule('noc')}}">
+                    {{result.bounds.getAverage('noc')}}
                 </td>
             </tr>
         {% endfor %}

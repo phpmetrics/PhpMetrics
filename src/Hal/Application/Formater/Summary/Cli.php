@@ -42,33 +42,27 @@ class Cli implements FormaterInterface {
     private $bound;
 
     /**
-     * AgregateBounds
-     *
-     * @var BoundsInterface
-     */
-    private $agregateBounds;
-
-    /**
      * Constructor
      *
      * @param Validator $validator
      * @param BoundsInterface $bound
-     * @param BoundsAgregateInterface $agregateBounds
      */
-    public function __construct(Validator $validator, BoundsInterface $bound, BoundsAgregateInterface $agregateBounds)
+    public function __construct(Validator $validator, BoundsInterface $bound)
     {
         $this->bound = $bound;
-        $this->agregateBounds = $agregateBounds;
         $this->validator = $validator;
     }
 
     /**
      * @inheritdoc
      */
-    public function terminate(ResultCollection $collection){
+    public function terminate(ResultCollection $collection, ResultCollection $groupedResults){
 
         $output = new BufferedOutput(OutputInterface::VERBOSITY_NORMAL, true);
-        
+        $output->write(str_pad("\x0D", 80, "\x20"));
+        $output->writeln('');
+
+
         // overview
         $total = $this->bound->calculate($collection);
         $output->writeln(sprintf(
@@ -77,10 +71,6 @@ class Cli implements FormaterInterface {
             , $total->getSum('loc')
             , $this->formatTime($total->getSum('time'))
         ));
-
-
-        // by directory
-        $directoryBounds = $this->agregateBounds->calculate($collection);
 
 
         $output->writeln('<info>Average for each module:</info>');
@@ -92,8 +82,7 @@ class Cli implements FormaterInterface {
         $table
             ->setHeaders(array_merge(
                 array(
-                    'Directory'
-                    , 'LOC'
+                    'Name'
                     , 'Complexity'
                     , 'Myer Distance'
                     , 'Maintenability'
@@ -104,35 +93,37 @@ class Cli implements FormaterInterface {
                     , 'Bugs'
                     , 'Difficulty'
                 )
-            , ($hasOOP ? array(
-                    'LCOM'
+                , ($hasOOP ? array(
+                    'lcom'
                     , 'Instability'
-                    , 'CE'
-                    , 'CA'
-                ) : array())
+                    , 'Abstractness'
+                    , 'ce'
+                    , 'ca'
+                    ) : array())
+
             ))
             ->setLayout(TableHelper::LAYOUT_DEFAULT);
 
-        foreach($directoryBounds as $directory => $bound) {
+        foreach($groupedResults as $result) {
             $table->addRow(array_merge(
                 array(
-                    str_repeat('  ', $bound->getDepth()).$directory
-                    , $this->getRow($bound, 'loc', 'sum', 0)
-                    , $this->getRow($bound, 'cyclomaticComplexity', 'average', 0)
-                    , $this->getRow($bound, 'myerDistance', 'average', 0)
-                    , $this->getRow($bound, 'maintenabilityIndex', 'average', 0)
-                    , $this->getRow($bound, 'logicalLoc', 'average', 0)
-                    , $this->getRow($bound, 'commentWeight', 'average', 0)
-                    , $this->getRow($bound, 'vocabulary', 'average', 0)
-                    , $this->getRow($bound, 'volume', 'average', 0)
-                    , $this->getRow($bound, 'bugs', 'average', 2)
-                    , $this->getRow($bound, 'difficulty', 'average', 0)
+                    str_repeat('  ', $result->getDepth()).$result->getName()
+                    , $this->getRow($result->getBounds(), 'cyclomaticComplexity', 'average', 0)
+                    , $this->getRow($result->getBounds(), 'myerDistance', 'average', 0)
+                    , $this->getRow($result->getBounds(), 'maintenabilityIndex', 'average', 0)
+                    , $this->getRow($result->getBounds(), 'logicalLoc', 'sum', 0)
+                    , $this->getRow($result->getBounds(), 'commentWeight', 'average', 0)
+                    , $this->getRow($result->getBounds(), 'vocabulary', 'average', 0)
+                    , $this->getRow($result->getBounds(), 'volume', 'average', 0)
+                    , $this->getRow($result->getBounds(), 'bugs', 'sum', 2)
+                    , $this->getRow($result->getBounds(), 'difficulty', 'average', 0)
                 )
                 , ($hasOOP ? array(
-                    $this->getRow($bound, 'lcom', 'average', 2)
-                    , $this->getRow($bound, 'instability', 'average', 2)
-                    , $this->getRow($bound, 'efferentCoupling', 'average', 2)
-                    , $this->getRow($bound, 'afferentCoupling', 'average', 2)
+                    $this->getRow($result->getBounds(), 'LCOM', 'average', 2)
+                    , $result->getInstability()->getInstability()
+                    , $result->getAbstractness()->getAbstractness()
+                    , $this->getRow($result->getBounds(), 'efferentCoupling', 'average', 2)
+                    , $this->getRow($result->getBounds(), 'afferentCoupling', 'average', 2)
                     ) : array())
                 )
             );
@@ -154,7 +145,7 @@ class Cli implements FormaterInterface {
     private function getRow(ResultInterface $bound, $key, $type, $round) {
         $value = $bound->get($type, $key);
         $value = !is_null($value) ? round($bound->get($type, $key), $round) : '?';
-        return sprintf('<%1$s>%2$s</%1$s>', $this->getStyle($key, $value), $value);
+        return sprintf('<%1$s>%2$s</%1$s>', $this->getStyle(($type == 'average' ? $key : null), $value), $value);
     }
 
     /**

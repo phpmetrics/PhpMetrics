@@ -40,7 +40,7 @@ class Html implements FormaterInterface {
     /**
      * @inheritdoc
      */
-    public function terminate(ResultCollection $collection){
+    public function terminate(ResultCollection $collection, ResultCollection $groupedResults){
         \Twig_Autoloader::register();
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../../../templates/html');
         $twig = new \Twig_Environment($loader, array('cache' => false));

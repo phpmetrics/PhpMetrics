@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Application\Command;
+use Hal\Component\Aggregator\DirectoryAggregator;
 use Hal\Component\Bounds\Bounds;
 use Hal\Component\Bounds\DirectoryBounds;
 use Hal\Application\Command\Job\DoAnalyze;
@@ -23,6 +24,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Hal\Application\Formater\Summary;
 use Hal\Application\Formater\Details;
+use Hal\Application\Command\Job\DoAggregatedAnalyze;
 
 /**
  * Command for run analysis
@@ -83,23 +85,23 @@ class RunMetricsCommand extends Command
 
         // bounds
         $bounds = new Bounds;
-        $directoryBounds = new DirectoryBounds($level);
 
         // jobs queue planning
         $queue = new Queue();
         $queue
             ->push(new DoAnalyze($output, $finder, $input->getArgument('path'), !$input->getOption('without-oop')))
             ->push(new SearchBounds($output, $bounds))
-            ->push(new SearchBounds($output, $directoryBounds))
-            ->push(new ReportRenderer($output, new Summary\Cli($validator, $bounds, $directoryBounds)))
-            ->push(new ReportWriter($input->getOption('summary-html'), $output, new Summary\Html($validator, $bounds, $directoryBounds)))
+            ->push(new DoAggregatedAnalyze($output, new DirectoryAggregator($level)))
+            ->push(new ReportRenderer($output, new Summary\Cli($validator, $bounds)))
+            ->push(new ReportWriter($input->getOption('summary-html'), $output, new Summary\Html($validator, $bounds)))
             ->push(new ReportWriter($input->getOption('details-html'), $output, new Details\Html($validator)))
-            ->push(new ReportWriter($input->getOption('summary-xml'), $output, new Summary\Xml($validator, $bounds, $directoryBounds)))
+            ->push(new ReportWriter($input->getOption('summary-xml'), $output, new Summary\Xml($validator, $bounds)))
             ;
 
         // execute
         $collection = new \Hal\Component\Result\ResultCollection();
-        $queue->execute($collection);
+        $aggregatedResults = new \Hal\Component\Result\ResultCollection();
+        $queue->execute($collection, $aggregatedResults);
 
         $output->writeln('<info>done</info>');
 

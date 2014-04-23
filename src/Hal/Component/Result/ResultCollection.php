@@ -27,11 +27,11 @@ class ResultCollection implements ExportableInterface, \IteratorAggregate, \Arra
     /**
      * Push resultset
      *
-     * @param ResultSet $resultset
+     * @param ResultSetInterface $resultset
      * @return $this
      */
-    public function push(ResultSet $resultset) {
-        $this->results[$resultset->getFilename()] = $resultset;
+    public function push(ResultSetInterface $resultset) {
+        $this->results[$resultset->getName()] = $resultset;
         return $this;
     }
 

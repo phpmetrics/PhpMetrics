@@ -2,8 +2,8 @@
 namespace Test\Hal\Application\Formater\Summary;
 
 use Hal\Component\Bounds\Bounds;
-use Hal\Component\Bounds\DirectoryBounds;
 use Hal\Application\Formater\Summary\Html;
+use Hal\Component\Result\ResultCollection;
 
 
 /**
@@ -31,18 +31,17 @@ class HtmlTest extends \PHPUnit_Framework_TestCase {
 
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $bounds = new Bounds();
-        $agregatedBounds = new DirectoryBounds(0);
-        $formater = new Html($validator, $bounds, $agregatedBounds);
+        $formater = new Html($validator, $bounds);
 
-        $output = $formater->terminate($collection);
+        $groupedResults = new ResultCollection();
+        $output = $formater->terminate($collection, $groupedResults);
         $this->assertContains('<html>', $output);
     }
 
     public function testFormaterHasName() {
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $bounds = new Bounds();
-        $agregatedBounds = new DirectoryBounds(0);
-        $formater = new Html($validator, $bounds, $agregatedBounds);
+        $formater = new Html($validator, $bounds);
         $this->assertNotNull($formater->getName());
     }
 }

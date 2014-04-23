@@ -7,14 +7,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Hal\Component\Bounds;
+namespace Hal\Component\Aggregator;
 use Hal\Component\Result\ResultCollection;
 
 /**
- * Bounds calculator
+ * Agregates by directory
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-interface BoundsAgregateInterface extends BoundsInterface {
+interface Aggregator {
 
+
+    /**
+     * Aggregates results by group
+     *
+     * @param ResultCollection $results
+     * @return array
+     */
+    public function aggregates(ResultCollection $results);
 }

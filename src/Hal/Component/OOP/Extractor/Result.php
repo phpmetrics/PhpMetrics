@@ -30,19 +30,10 @@ class Result implements ExportableInterface {
      */
     public function asArray() {
 
-        $nocc = $noca = 0;
-        foreach($this->getClasses() as $class) {
-            if($class->isAbstract() ||$class instanceof ReflectedInterface) {
-                $noca++;
-            } else {
-                $nocc++;
-            }
-        }
-
         return array(
             'noc' => sizeof($this->classes, COUNT_NORMAL)
-            , 'noca' => $noca
-            , 'nocc' => $nocc
+        , 'noca' => sizeof($this->getAbstractClasses(), COUNT_NORMAL)
+        , 'nocc' => sizeof($this->getConcreteClasses(), COUNT_NORMAL)
         );
     }
 
@@ -64,4 +55,34 @@ class Result implements ExportableInterface {
     {
         return $this->classes;
     }
-};
+
+    /**
+     * Get abstract classes
+     *
+     * @return array
+     */
+    public function getAbstractClasses() {
+        $result = array();
+        foreach($this->getClasses() as $class) {
+            if($class->isAbstract() ||$class instanceof ReflectedInterface) {
+                array_push($result, $class);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Get concretes classes
+     *
+     * @return array
+     */
+    public function getConcreteClasses() {
+        $result = array();
+        foreach($this->getClasses() as $class) {
+            if(!$class->isAbstract() &&!$class instanceof ReflectedInterface) {
+                array_push($result, $class);
+            }
+        }
+        return $result;
+    }
+}

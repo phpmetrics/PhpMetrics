@@ -11,6 +11,7 @@ namespace Hal\Application\Command\Job;
 use Hal\Application\Command\Job\Analyze\CouplingAnalyzer;
 use Hal\Application\Command\Job\Analyze\FileAnalyzer;
 use Hal\Application\Command\Job\Analyze\LcomAnalyzer;
+use Hal\Component\Aggregator\DirectoryAggregator;
 use Hal\Component\Result\ResultSet;
 use Hal\Metrics\Complexity\Structural\HenryAndKafura\Coupling;
 use Hal\Metrics\Complexity\Structural\HenryAndKafura\FileCoupling;
@@ -21,6 +22,7 @@ use Hal\Component\OOP\Extractor\Extractor;
 use Hal\Component\OOP\Extractor\Result;
 use Hal\Component\Result\ResultCollection;
 use Hal\Component\Token\Tokenizer;
+use Hal\Metrics\Mood\Abstractness\Abstractness;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -80,7 +82,7 @@ class DoAnalyze implements JobInterface
     /**
      * @inheritdoc
      */
-    public function execute(ResultCollection $collection) {
+    public function execute(ResultCollection $collection, ResultCollection $aggregatedResults) {
 
         $files = $this->finder->find($this->path);
 
@@ -127,17 +129,19 @@ class DoAnalyze implements JobInterface
         $progress->clear();
         $progress->finish();
 
+
         if($this->withOOP) {
             // COUPLING (should be done after parsing files)
-            $this->output->writeln('Analyzing coupling. This will take few minutes...');
+            $this->output->write(str_pad("\x0DAnalyzing coupling. This will take few minutes...", 80, "\x20"));
             $couplingAnalyzer = new CouplingAnalyzer($classMap, $collection);
             $couplingAnalyzer->execute($files);
 
             // LCOM (should be done after parsing files)
-            $this->output->writeln('Analyzing lack of cohesion of methods (lcom). This will take few minutes...');
+            $this->output->write(str_pad("\x0DLack of cohesion of method (lcom). This will take few minutes...", 80, "\x20"));
             $lcomAnalyzer = new LcomAnalyzer($classMap, $collection);
             $lcomAnalyzer->execute($files);
         }
+
     }
 
 }

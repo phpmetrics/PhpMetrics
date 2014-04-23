@@ -22,9 +22,11 @@ interface FormaterInterface {
     /**
      * Terminate process
      *
+     * @param ResultCollection $collection
+     * @param ResultCollection $groupedResults
      * @return string
      */
-    public function terminate(ResultCollection $collection);
+    public function terminate(ResultCollection $collection, ResultCollection $groupedResults);
 
     /**
      * Get name of formater

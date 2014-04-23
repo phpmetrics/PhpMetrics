@@ -31,13 +31,6 @@ class Html implements FormaterInterface {
     private $bound;
 
     /**
-     * AgregateBounds
-     *
-     * @var BoundsInterface
-     */
-    private $agregateBounds;
-
-    /**
      * Validator
      *
      * @var Validator
@@ -51,17 +44,16 @@ class Html implements FormaterInterface {
      * @param BoundsInterface $bound
      * @param BoundsAgregateInterface $agregateBounds
      */
-    public function __construct(Validator $validator, BoundsInterface $bound, BoundsAgregateInterface $agregateBounds)
+    public function __construct(Validator $validator, BoundsInterface $bound)
     {
         $this->bound = $bound;
-        $this->agregateBounds = $agregateBounds;
         $this->validator = $validator;
     }
 
     /**
      * @inheritdoc
      */
-    public function terminate(ResultCollection $collection){
+    public function terminate(ResultCollection $collection, ResultCollection $groupedResults){
         \Twig_Autoloader::register();
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../../../templates/html');
         $twig = new \Twig_Environment($loader, array('cache' => false));
@@ -71,7 +63,7 @@ class Html implements FormaterInterface {
         return $twig->render('summary/report.html.twig', array(
             'keys' => array_keys(current($collection->asArray()))
             , 'results' => $collection->asArray()
-            , 'directoryBounds' => $this->agregateBounds->calculate($collection)
+            , 'groupedResults' => $groupedResults
             , 'bounds' => $bound
             , 'withOOP' => null !== $bound->getSum('instability')
         ));

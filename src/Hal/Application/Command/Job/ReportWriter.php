@@ -60,7 +60,7 @@ class ReportWriter implements JobInterface
     /**
      * @inheritdoc
      */
-    public function execute(ResultCollection $collection) {
+    public function execute(ResultCollection $collection, ResultCollection $aggregatedResults) {
         if(!$this->destination) {
             return;
         }
@@ -72,7 +72,7 @@ class ReportWriter implements JobInterface
         $this->output->writeln(sprintf('Generating %s Report...', $this->formater->getName()));
         $handle = fopen($this->destination, 'w');
         $stream = new StreamOutput($handle);
-        $stream->write($this->formater->terminate($collection));
+        $stream->write($this->formater->terminate($collection, $aggregatedResults));
         fclose($handle);
     }
 
