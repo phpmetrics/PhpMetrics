@@ -96,7 +96,6 @@ class Cli implements FormaterInterface {
                 , ($hasOOP ? array(
                     'lcom'
                     , 'Instability'
-                    , 'Abstractness'
                     , 'ce'
                     , 'ca'
                     ) : array())
@@ -121,7 +120,6 @@ class Cli implements FormaterInterface {
                 , ($hasOOP ? array(
                     $this->getRow($result->getBounds(), 'LCOM', 'average', 2)
                     , $result->getInstability()->getInstability()
-                    , $result->getAbstractness()->getAbstractness()
                     , $this->getRow($result->getBounds(), 'efferentCoupling', 'average', 2)
                     , $this->getRow($result->getBounds(), 'afferentCoupling', 'average', 2)
                     ) : array())

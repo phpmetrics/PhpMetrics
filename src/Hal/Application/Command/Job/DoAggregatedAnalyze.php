@@ -70,13 +70,14 @@ class DoAggregatedAnalyze implements JobInterface
 
         // metrics tools
         $bounds = new Bounds();
+        $instability = new Instability();
 
         foreach($groupedResults as $namespace => $results) {
             $resultAggregate = new ResultAggregate($namespace);
             $resultAggregate
+                ->setInstability($instability->calculate($results))
                 ->setBounds($bounds->calculate($results))
             ;
-
 
             $aggregatedResults->push($resultAggregate);
         }
