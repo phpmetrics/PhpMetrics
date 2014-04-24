@@ -66,14 +66,14 @@ class ResultAggregate implements ExportableInterface, ResultSetInterface {
      * @inheritdoc
      */
     public function asArray() {
-        return array(
+        return
             array_merge(array(
                 'name' => $this->getName()
                 )
                 ,$this->getAbstractness() ? $this->getAbstractness()->asArray() : array()
                 ,$this->getInstability() ? $this->getInstability()->asArray() : array()
                 ,$this->getBounds() ? $this->getBounds()->asArray() : array()
-            )
+
         );
     }
 
