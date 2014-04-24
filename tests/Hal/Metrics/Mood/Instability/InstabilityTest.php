@@ -29,7 +29,7 @@ class InstabilityTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(0.35, $r->getInstability());
     }
 
-    public function testMaintenabilityIndexResultCanBeConvertedToArray() {
+    public function testInstabilityResultCanBeConvertedToArray() {
         $result = new Result();
         $array = $result->asArray();
         $this->assertArrayHasKey('instability', $array);
