@@ -16,7 +16,7 @@ use Hal\Component\Result\ResultCollection;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class DirectoryAggregator implements Aggregator {
+class DirectoryRecursiveAggregator implements Aggregator {
 
     /**
      * Max depth
@@ -44,26 +44,40 @@ class DirectoryAggregator implements Aggregator {
         foreach($results as $result) {
             $basename = dirname($result->getFilename());
 
-            // from 'folder1/folder2/file.php', we want an array with ('folder1', 'folder1/folder2')
-            $namespaces = array_reduce(explode(DIRECTORY_SEPARATOR, $basename), function($v, $e) {
-                array_push($v, ltrim(end($v).DIRECTORY_SEPARATOR.$e, DIRECTORY_SEPARATOR));
-                return $v;
-            }, array());
+            // from 'folder1/folder2/file.php', we want an array with ('folder1', 'folder2')
+            $namespaces = explode(DIRECTORY_SEPARATOR, $basename);
 
             if($this->depth) {
                 array_splice($namespaces, $this->depth);
             }
 
             // merge infos for each namespace in the DirectoryResultCollection
-            foreach($namespaces as $namespace) {
+            $len = sizeof($namespaces, COUNT_NORMAL);
 
-                if(!isset($array[$namespace])) {
-                    $array[$namespace] = new ResultCollection();
+            for($i = 0; $i < $len; $i++) {
+
+                $namespace = $namespaces[$i];
+                if(0 === strlen($namespace)) {
+                    $namespace = '.';
                 }
 
-                $array[$namespace]->push($result);
+                if(0 === $i) {
+                    // root
+                    if(!isset($array[$namespace])) {
+                        $array[$namespace] = new ResultCollection();
+                    }
+                    $parent = &$array[$namespace];
+                } else {
+                    // namespace
+                    if(!isset($parent[$namespace])) {
+                        $parent[$namespace] = new ResultCollection();
+                    }
+                    $parent = &$parent[$namespace];
+                }
             }
+            $parent->push($result);
         }
+        $array = $array['.'];
         return $array;
     }
 }
