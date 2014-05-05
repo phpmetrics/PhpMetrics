@@ -50,7 +50,7 @@ class RunMetricsCommand extends Command
                         'report-html',null, InputOption::VALUE_REQUIRED, 'Path to save report in HTML format. Example: /tmp/report.html'
                 )
                 ->addOption(
-                        'summary-xml', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in XML format. Example: /tmp/report.xml'
+                        'report-xml', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in XML format. Example: /tmp/report.xml'
                 )
                 ->addOption(
                         'level', null, InputOption::VALUE_REQUIRED, 'Depth of summary report', 0
@@ -93,7 +93,7 @@ class RunMetricsCommand extends Command
             ->push(new DoAggregatedAnalyze($output, new DirectoryAggregatorFlat($level)))
             ->push(new ReportRenderer($output, new Summary\Cli($validator, $bounds)))
             ->push(new ReportWriter($input->getOption('report-html'), $output, new Summary\Html($validator, $bounds)))
-            ->push(new ReportWriter($input->getOption('summary-xml'), $output, new Summary\Xml($validator, $bounds)))
+            ->push(new ReportWriter($input->getOption('report-xml'), $output, new Summary\Xml($validator, $bounds)))
             ;
 
         // execute
