@@ -53,6 +53,9 @@ class RunMetricsCommand extends Command
                         'report-xml', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in XML format. Example: /tmp/report.xml'
                 )
                 ->addOption(
+                        'report-csv', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in CSV format. Example: /tmp/report.csv'
+                )
+                ->addOption(
                         'level', null, InputOption::VALUE_REQUIRED, 'Depth of summary report', 0
                 )
                 ->addOption(
@@ -94,6 +97,7 @@ class RunMetricsCommand extends Command
             ->push(new ReportRenderer($output, new Summary\Cli($validator, $bounds)))
             ->push(new ReportWriter($input->getOption('report-html'), $output, new Summary\Html($validator, $bounds)))
             ->push(new ReportWriter($input->getOption('report-xml'), $output, new Summary\Xml($validator, $bounds)))
+            ->push(new ReportWriter($input->getOption('report-csv'), $output, new Details\Csv($validator, $bounds)))
             ;
 
         // execute
