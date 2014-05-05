@@ -31,6 +31,7 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase {
 
        $expected = array(
            'filename' => 'my'
+           , 'name' => 'my'
            , 'loc' => 100
            , 'volume' => 100
            , 'maintenabilityIndex' => 100

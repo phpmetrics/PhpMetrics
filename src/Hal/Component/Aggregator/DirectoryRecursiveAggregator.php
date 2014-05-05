@@ -70,14 +70,13 @@ class DirectoryRecursiveAggregator implements Aggregator {
                 } else {
                     // namespace
                     if(!isset($parent[$namespace])) {
-                        $parent[$namespace] = new ResultCollection();
+                        $parent[$namespace] = new ResultCollection(); // ResultRecursiveCollection -> has getOOP(), etc.
                     }
                     $parent = &$parent[$namespace];
                 }
             }
             $parent->push($result);
         }
-        $array = $array['.'];
         return $array;
     }
 }

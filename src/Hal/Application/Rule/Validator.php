@@ -89,4 +89,13 @@ class Validator {
             }
         }
     }
+
+    /**
+     * Get used ruleset
+     *
+     * @return RuleSet
+     */
+    public function getRuleSet() {
+        return $this->ruleSet;
+    }
 }

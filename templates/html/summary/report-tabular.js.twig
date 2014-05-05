@@ -1,0 +1,121 @@
+{% autoescape false %}
+<script type="text/javascript">
+
+
+    function updateTableView() {
+
+
+        /**
+         * Get column header
+         *
+         * @param label
+         * @param key
+         * @param type [average|sum|min|max]
+         * @returns object
+         */
+        function getCol(label, key, type, help, doValidate) {
+            type = type || false;
+            if(doValidate == undefined) {
+                doValidate = true;
+            }
+            return {
+                format: function(d) {
+                    if(type) {
+                        return d[type] ? d[type][key] : d[key];
+                    }
+                    return d[key];
+                },
+                label: '<abbr title="' + help + '">' + label + '</abbr>',
+                type: type,
+                classes:
+                        ( doValidate
+                            ? function(d) { return validateIn(d,key, type); }
+                            : ''
+                        )
+            };
+        }
+
+        nv.addGraph(function() {
+            var chart = nv.models.indentedTree()
+                    .tableClass('table table-striped') //for bootstrap styling
+                    .columns([
+                        {
+                            key: 'name',
+                            label: 'Name',
+                            showCount: true,
+                            type: 'text',
+                            classes: function(d) {
+                                return  'name '
+                                    + (d.childs ? 'clickable ' : '')
+                                    + 'depth-' + d._depth;
+                            }
+                        },
+                        getCol('loc'            , 'loc'                     , 'sum'     , 'Number of lines of code'                 , false),
+                        getCol('lloc'           , 'logicalLoc'              , 'sum'     , 'Number of logical lines of code'         ,false),
+                        getCol('CommW'          , 'commentWeight'           , 'average' , 'Comment Weight'),
+                        getCol('Length'         , 'length'                  , 'sum'     , 'Halstead length'),
+                        getCol('Volume'         , 'volume'                  , 'average' , 'Halstead Volume'),
+                        getCol('Vocabulary'     , 'vocabulary'              , 'average' , 'Halstead Vocabulary'),
+                        getCol('Eff.'           , 'effort'                  , 'average' , 'Halstead effort'),
+                        getCol('MI'             , 'maintenabilityIndex'     , 'average' , 'Maintenability Index (mi < 65: low ; 65 < mi < 85: correct; 85 < mi: good)'),
+                        getCol('MIwC'           , 'maintenabilityIndexWithoutComment' , 'average', 'Maintenability index without comments'),
+                        getCol('Diff'           , 'difficulty'              , 'average' , 'Halstead difficulty (average)'),
+                        getCol('Bugs'           , 'bugs'                    , 'sum'     , 'Estimated number of bugs'),
+                        getCol('IC'             , 'intelligentContent'      , 'average' , 'Intteligent content'),
+                        getCol('CC'             , 'cyclomaticComplexity'    , 'average' , "Cyclomatic complexity"),
+                        getCol('Dist.'          , 'myerDistance'            , 'average' , "Myer's distance"),
+                        getCol('Oper.'          , 'operators'               , 'sum'     , 'Number of operators'                 , false),
+                        getCol('lcom'           , 'lcom'                    , 'average' , 'Lack of cohesion of methods (LCOM4)'),
+                        getCol('Abstr.'         , 'abstractness'            , false     , 'Abstractness'),
+                        getCol('Inst.'          , 'instability'             , false     , 'Instability'),
+                        getCol('EC'             , 'efferentCoupling'        , 'average' , 'Efferent coupling'),
+                        getCol('AC'             , 'afferentCoupling'        , 'average' , 'Afferent coupling'),
+                        getCol('noc'            , 'noc'                     , 'sum'     , 'Number of classes'                   , false),
+                        getCol('noca'           , 'noca'                    , 'sum'     , 'Numner of abstract classes'          , false),
+                        getCol('nocc'           , 'nocc'                    , 'sum'     , 'Number of concrete classes'          , false)
+
+                    ]);
+
+            d3.select('#chart-tableview')
+                    .datum(tabularize(groupedData))
+                    .call(chart);
+
+            return chart;
+        });
+
+    }
+
+    function tabularize(root) {
+        var result = root;
+
+        var i, len = root.length;
+
+        for(i = 0; i < len; i++) {
+            result[i]._values = root[i].childs;
+            delete result[i].childs;
+            result[i]._depth = result[i].depth;
+        }
+
+        // we want to display results in a tree
+        var parents = [
+            { name: "temporary", _values: []}
+        ];
+        var final, e, level ;
+        for(i = 0; i < len; i++) {
+            e = result[i];
+            level = (e.name.split("/").length - 1)
+            if(!e.name.match(/php$/)) {
+                parents[level + 1] = e;
+                parents[level]._values.push(e);
+            } else {
+                parents[level]._values.push(e);
+            }
+        }
+        final = parents[1];
+        return [final];
+    }
+
+
+
+</script>
+{% endautoescape %}

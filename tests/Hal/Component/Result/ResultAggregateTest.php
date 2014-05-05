@@ -24,6 +24,8 @@ class ResultAggregateTest extends \PHPUnit_Framework_TestCase {
            'name' => 'my'
            , 'abstractness' => 1
            , 'instability' => .3
+           , 'childs' => array()
+           , 'depth' => 1
        );
 
        $this->assertEquals($expected, $resultAggregate->asArray());

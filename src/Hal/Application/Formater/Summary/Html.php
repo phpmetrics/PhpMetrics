@@ -64,6 +64,7 @@ class Html implements FormaterInterface {
             'keys' => array_keys(current($collection->asArray()))
             , 'results' => $collection->asArray()
             , 'groupedResults' => $groupedResults
+            , 'ruleSet' => $this->validator->getRuleSet()
             , 'bounds' => $bound
             , 'withOOP' => null !== $bound->getSum('instability')
         ));

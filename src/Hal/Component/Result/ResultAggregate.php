@@ -38,6 +38,11 @@ class ResultAggregate implements ExportableInterface, ResultSetInterface {
     private $instability;
 
     /**
+     * @var ResultCollection
+     */
+    private $childs;
+
+    /**
      * Constructor
      *
      * @param ResultCollection $collection
@@ -68,7 +73,9 @@ class ResultAggregate implements ExportableInterface, ResultSetInterface {
     public function asArray() {
         return
             array_merge(array(
-                'name' => $this->getName()
+                    'name' => $this->getName()
+                    , 'childs' => $this->getChilds() ? $this->getChilds()->asArray() : array()
+                    , 'depth' => $this->getDepth()
                 )
                 ,$this->getAbstractness() ? $this->getAbstractness()->asArray() : array()
                 ,$this->getInstability() ? $this->getInstability()->asArray() : array()
@@ -129,6 +136,22 @@ class ResultAggregate implements ExportableInterface, ResultSetInterface {
     public function getInstability()
     {
         return $this->instability;
+    }
+
+    /**
+     * @param \Hal\Component\Result\ResultCollection $childs
+     */
+    public function setChilds($childs)
+    {
+        $this->childs = $childs;
+    }
+
+    /**
+     * @return \Hal\Component\Result\ResultCollection
+     */
+    public function getChilds()
+    {
+        return $this->childs;
     }
 
 }

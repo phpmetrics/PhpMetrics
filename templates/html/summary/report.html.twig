@@ -5,22 +5,53 @@
 
     <style type="text/css">
         {% include "assets/bootstrap.css.twig" %}
+        {% include "assets/nv.d3.css.twig" %}
 
-        .validate-critical {
+        .validate-critical, .critical {
             background-color:#B01E00 !important;
             color:#FFF;
         }
-        .validate-warning {
+        .validate-warning, .warning {
             background-color:#f4b300 !important;
             color:#333;
         }
-        .validate-good {
+        .validate-good, .good {
             background-color:#78ba00 !important;
             color:#FFF;
         }
-        .validate-unknown {
+        .validate-unknown, .unknown {
         }
 
+        .table {
+            font-size:0.8em;
+        }
+        .table thead {
+            font-weight:normal;
+        }
+
+        .mytable td {
+            width:4%;
+            text-align:center;
+        }
+        .mytable .sep {
+            border-left:1px solid #CCC;
+        }
+
+
+        #chart-tableview .critical,
+        #chart-tableview .warning,
+        #chart-tableview .good,
+        #chart-tableview .unknown {
+            display:block;
+            text-align: center;
+        }
+
+        #svg-custom,
+        #svg-maintenability,
+        #svg-abstractness {
+            width:300px;
+            height:300px;
+        }
 
     </style>
 </head>
@@ -28,125 +59,69 @@
 <body>
 
 <div class="container">
+
+
+
     <h1>PhpMetrics report</h1>
 
-    <div class="row col-sm-6">
-        <h2>Maintenability</h2>
-        <small><a id="btn-save-maintenability" download="phpmetric-bubbles.svg">Download (as SVG)</a></small>
-        <div id="svg-maintenability"></div>
+    <div id="chart-tableview"></div>
+
+
+    <div class="row">
+
+
+        <div class="col-sm-4">
+            <h3>Maintenability</h3>
+            <small><a id="btn-save-maintenability" download="phpmetric-maintenability.svg">Download (as SVG)</a></small>
+            <div id="svg-maintenability"><svg /></div>
+        </div>
+
+
+        <div class=" col-sm-4">
+
+            <h3 id="title-custom">Custom chart</h3>
+            <small><a id="btn-save-custom" download="phpmetric-custom.svg">Download (as SVG)</a></small>
+            <div id="svg-custom"><svg /></div>
+
+            <table class="table table-condensed table-bordered">
+                <tr>
+                    <td>X Axis</td>
+                    <td>Y Axis</td>
+                    <td>Diameter</td>
+                </tr>
+                <tr>
+                    <td>
+                        <select id="xAxis" class="form-control" onchange="xAxis = this.value; updateCustomChart();">
+                            {% for key in keys|sort %}
+                                <option value="{{key}}">{{key|textify}} </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="yAxis" class="form-control" onchange="yAxis = this.value; updateCustomChart();">
+                            {% for key in keys|sort %}
+                                <option value="{{key}}">{{key|textify}} </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="rAxis" class="form-control" onchange="rAxis = this.value; updateCustomChart();">
+                            {% for key in keys|sort %}
+                                <option value="{{key}}">{{key|textify}} </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="col-sm-4">
+            <h3>Abstractness / Instability</h3>
+            <small><a id="btn-save-abstractness" download="phpmetric-abstractness.svg">Download (as SVG)</a></small>
+            <div id="svg-abstractness"><svg /></div>
+        </div>
     </div>
-    <div class="row col-sm-6">
-        <h2>Custom chart</h2>
-        <small><a id="btn-save-custom" download="phpmetric-custom.svg">Download (as SVG)</a></small>
-
-
-        <table class="table table-condensed table-bordered">
-            <tr>
-                <td>X Axis</td>
-                <td>Y Axis</td>
-                <td>Diameter</td>
-            </tr>
-            <tr>
-                <td>
-                    <select id="xAxis" class="form-control" onchange="xAxis = this.value; updateCustomChart();">
-                        {% for key in keys|sort %}
-                            <option value="{{key}}">{{key|textify}} </option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td>
-                    <select id="yAxis" class="form-control" onchange="yAxis = this.value; updateCustomChart();">
-                        {% for key in keys|sort %}
-                            <option value="{{key}}">{{key|textify}} </option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td>
-                    <select id="rAxis" class="form-control" onchange="rAxis = this.value; updateCustomChart();">
-                        {% for key in keys|sort %}
-                            <option value="{{key}}">{{key|textify}} </option>
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>
-        </table>
-
-        <div id="svg-custom"></div>
-    </div>
-
-    <h2>Average for each module</h2>
-
-    <table class="table table-striped table-condensed" id="table-results">
-        <thead>
-            <th>File</th>
-            <th>LOC (total)</th>
-            <th>Complexity</th>
-            <th>Maintenability index</th>
-            <th>Volume</th>
-            <th>Vocabulary</th>
-            <th>Comment weight</th>
-            <th>Difficulty</th>
-            <th>Bugs</th>
-            <th>Intelligent content</th>
-            <th>LCOM</th>
-            <th>Abstractness</th>
-            <th>Instability</th>
-            <th>Efferent coupling</th>
-            <th>Afferent coupling</th>
-            <th>Num. of Classes</th>
-        </thead>
-        <tbody>
-        {% for result in groupedResults %}
-            <tr>
-                <th style="padding-left:{{result.depth}}em;">{{result.name}}</th>
-                <td>{{result.bounds.getSum('loc')}}</td>
-                <td class="validate-{{result.bounds.getAverage('cyclomaticComplexity')|rule('cyclomaticComplexity')}}">
-                    {{result.bounds.getAverage('cyclomaticComplexity')|round}}
-                </td>
-                <td class="validate-{{result.bounds.getAverage('maintenabilityIndex')|rule('maintenabilityIndex')}}">
-                    {{result.bounds.getAverage('maintenabilityIndex')|round}}
-                </td>
-                <td class="validate-{{result.bounds.getAverage('volume')|rule('volume')}}">
-                    {{result.bounds.getAverage('volume')|round}}
-                </td>
-                <td class="validate-{{result.bounds.getAverage('vocabulary')|rule('vocabulary')}}">
-                    {{result.bounds.getAverage('vocabulary')|round}}
-                </td>
-                <td class="validate-{{result.bounds.getAverage('commentWeight')|rule('commentWeight')}}">
-                    {{result.bounds.getAverage('commentWeight')|round}}
-                </td>
-                <td class="validate-{{result.bounds.getAverage('difficulty')|rule('difficulty')}}">
-                    {{result.bounds.getAverage('difficulty')|round}}
-                </td>
-                <td class="validate-{{result.bounds.getSum('bugs')|rule('bugs')}}">
-                    {{result.bounds.getAverage('bugs')|round(2)}}
-                </td>
-                <td class="validate-{{result.bounds.getAverage('intelligentContent')|rule('intelligentContent')}}">
-                    {{result.bounds.getAverage('intelligentContent')|round}}
-                </td>
-                <td class="validate-{{result.bounds.getAverage('lcom')|rule('lcom')}}">
-                    {{result.bounds.getAverage('lcom')}}
-                </td>
-                <td>
-                    {{result.abstractness.abstractness}}
-                </td>
-                <td>
-                    {{result.instability.instability}}
-                </td>
-                <td class="validate-{{result.bounds.getAverage('efferentCoupling')|rule('efferentCoupling')}}">
-                    {{result.bounds.getAverage('efferentCoupling')}}
-                </td>
-                <td class="validate-{{result.bounds.getAverage('afferentCoupling')|rule('afferentCoupling')}}">
-                    {{result.bounds.getAverage('afferentCoupling')}}
-                </td>
-                <td class="validate-{{result.bounds.getSum('noc')|rule('noc')}}">
-                    {{result.bounds.getAverage('noc')}}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
 
     <div>
         Powered by <a href="https://github.com/Halleck45/PhpMetrics">PhpMetrics</a> - Copyright Jean-François Lépine
@@ -160,17 +135,22 @@
 
 
 
+{% include "assets/functions.js.twig" %}
 {% include "assets/d3js.js.twig" %}
+{% include "assets/nv.d3.min.js.twig" %}
 {% include "assets/jquery.js.twig" %}
-{% include "assets/tablesorter.js.twig" %}
+
+{% include "summary/report-tabular.js.twig" %}
 {% include "summary/report-maintenability.js.twig" %}
 {% include "summary/report-custom.js.twig" %}
+{% include "summary/report-abstractness.js.twig" %}
 
 
 <script type="text/javascript">
     $(function(){
-        $("#table-results").tablesorter();
+        updateTableView();
         updateCustomChart();
+        updateAbstractnessChart();
         updateMaintenablityChart();
 
         // selects
@@ -184,43 +164,11 @@
     var yAxis = 'cyclomaticComplexity';
     var rAxis = 'loc';
 
-    /**
-     * Update custom chart
-     */
-    function updateCustomChart() {
-        chartCustom(xAxis, yAxis, rAxis);
-        var svg  = document.getElementById('svg-custom').childNodes[0],
-        xml  = new XMLSerializer().serializeToString(svg),
-        data = btoa(xml),
-        img  = new Image();
-        $('#btn-save-custom').attr('href', 'data:application/octet-stream;base64,' + data)
-    };
-
-    /**
-     * Update maintenability chart (bubbles)
-     */
-    function updateMaintenablityChart() {
-        chartMaintenability(xAxis, yAxis, rAxis);
-        var svg  = document.getElementById('svg-maintenability').childNodes[0],
-                xml  = new XMLSerializer().serializeToString(svg),
-                data = btoa(xml),
-                img  = new Image();
-        $('#btn-save-maintenability').attr('href', 'data:application/octet-stream;base64,' + data)
-    };
-
-    /**
-     * string as readable text
-     *
-     * @param string
-     * @returns {XML|string|void}
-     */
-    function textify(string) {
-        string = string.charAt(0).toUpperCase() + string.slice(1);
-        return string.replace(/([a-z0-9])([A-Z])/, "$1 $2");
-    }
 
     {% autoescape false %}
     var data = {{ results | json_encode }}
+    var groupedData = {{ groupedResults.asArray() | json_encode }}
+    var ruleSet = {{ ruleSet.asArray() | json_encode }}
     {% endautoescape %}
 </script>
 

@@ -22,7 +22,7 @@ interface Aggregator {
      * Aggregates results by group
      *
      * @param ResultCollection $results
-     * @return array
+     * @return ResultCollection
      */
     public function aggregates(ResultCollection $results);
 }

@@ -9,6 +9,8 @@
 
 namespace Hal\Application\Command;
 use Hal\Component\Aggregator\DirectoryAggregator;
+use Hal\Component\Aggregator\DirectoryAggregatorFlat;
+use Hal\Component\Aggregator\DirectoryRecursiveAggregator;
 use Hal\Component\Bounds\Bounds;
 use Hal\Component\Bounds\DirectoryBounds;
 use Hal\Application\Command\Job\DoAnalyze;
@@ -45,22 +47,19 @@ class RunMetricsCommand extends Command
                         'path', InputArgument::REQUIRED, 'Path to explore'
                 )
                 ->addOption(
-                        'summary-html',null, InputOption::VALUE_REQUIRED, 'Path to save summary report in HTML format'
+                        'report-html',null, InputOption::VALUE_REQUIRED, 'Path to save report in HTML format. Example: /tmp/report.html'
                 )
                 ->addOption(
-                        'details-html', null, InputOption::VALUE_REQUIRED, 'Path to save detailed report in HTML format'
+                        'summary-xml', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in XML format. Example: /tmp/report.xml'
                 )
                 ->addOption(
-                        'summary-xml', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in XML format'
-                )
-                ->addOption(
-                        'level', null, InputOption::VALUE_REQUIRED, 'Depth of summary report', 3
+                        'level', null, InputOption::VALUE_REQUIRED, 'Depth of summary report', 0
                 )
                 ->addOption(
                         'extensions', null, InputOption::VALUE_REQUIRED, 'Regex of extensions to include', 'php'
                 )
                 ->addOption(
-                        'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will noy extract informations about OOP model (faster)'
+                        'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will not extract any informations about OOP model (faster)'
                 )
         ;
     }
@@ -91,10 +90,9 @@ class RunMetricsCommand extends Command
         $queue
             ->push(new DoAnalyze($output, $finder, $input->getArgument('path'), !$input->getOption('without-oop')))
             ->push(new SearchBounds($output, $bounds))
-            ->push(new DoAggregatedAnalyze($output, new DirectoryAggregator($level)))
+            ->push(new DoAggregatedAnalyze($output, new DirectoryAggregatorFlat($level)))
             ->push(new ReportRenderer($output, new Summary\Cli($validator, $bounds)))
-            ->push(new ReportWriter($input->getOption('summary-html'), $output, new Summary\Html($validator, $bounds)))
-            ->push(new ReportWriter($input->getOption('details-html'), $output, new Details\Html($validator)))
+            ->push(new ReportWriter($input->getOption('report-html'), $output, new Summary\Html($validator, $bounds)))
             ->push(new ReportWriter($input->getOption('summary-xml'), $output, new Summary\Xml($validator, $bounds)))
             ;
 

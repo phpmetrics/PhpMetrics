@@ -108,7 +108,7 @@ class Result implements ExportableInterface {
             ,'effort' => $this->getEffort()
             ,'difficulty' => (string) $this->getDifficulty()
             ,'time' => $this->getTime()
-            ,'bugs' => $this->getBugs()
+            ,'bugs' => round($this->getBugs(), 2)
             ,'intelligentContent' => $this->getIntelligentContent()
         );
     }

@@ -2,116 +2,76 @@
 <script type="text/javascript">
 
 
+
+    function updateCustomChart() {
+        chartCustom(xAxis, yAxis, rAxis);
+        document.getElementById('title-custom').innerHTML = textify(xAxis) + ' / ' + textify(yAxis);
+    };
+
+
     function chartCustom(xData, yData, rData) {
 
-        // get bounds
-        var maxX = data.reduce(function(max, arr) {
-            return max >= parseInt(arr[xData]) ? max : parseInt(arr[xData]);
-        }, -Infinity) + 1;
-        var maxY = data.reduce(function(max, arr) {
-            return max >= parseInt(arr[yData]) ? max : parseInt(arr[yData]);
-        }, -Infinity) + 1;
-        var maxR = data.reduce(function(max, arr) {
-            return max >= parseInt(arr[rData]) ? max : parseInt(arr[rData]);
-        }, -Infinity) + 1;
 
-        var width = 580,
-                height = 580,
-                margin = 70;
+        var chart;
+        nv.addGraph(function() {
+            chart = nv.models.scatterChart()
+                    .showDistX(true)
+                    .showDistY(true)
+                    .showLegend(false)
+                    .useVoronoi(false)
+                    .color(d3.scale.category10().range())
+                    .transitionDuration(300)
+            ;
 
-        d3.select("#svg-custom").select("svg").remove();
-        var svg = d3.select("#svg-custom").append("svg").attr("width",width).attr("height",height);
-        var x=d3.scale.linear().domain([0,maxX]).range([margin,width-margin]);
-        var y=d3.scale.linear().domain([0,maxY]).range([height-margin,margin]);
-        var r=d3.scale.linear().domain([0,maxR]).range([0,20]);
-
-        var pack = d3.layout.pack()
-                .sort(null)
-                .size([width, height])
-                .padding(1.5);
-
-        var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom");
-
-        var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left")
-                ;
+            chart.xAxis.tickFormat(d3.format('.02f')).axisLabel(textify(xData));
+            chart.yAxis.tickFormat(d3.format('.02f')).axisLabel(textify(yData));
+            chart.tooltipContent(function(key, x, y, e, graph) {
+                return '<h2>' + e.point.title + '</h2>';
+            });
+            chart.scatter.useVoronoi(false);
 
 
-        svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + (height - margin) + ")")
-                .call(xAxis)
-                .style("fill", '#333')
-                .append("text")
-                .attr("y", 30)
-                .attr("x", width - margin)
-                .attr("dy", ".71em")
-                .style("text-anchor", "end")
-                .text(textify(xData));
+            d3.select("#svg-custom").select("svg")
+                    .attr("width",380)
+                    .attr("height",300)
+                    .datum(mapDatas(data))
+                    .call(chart);
 
-        svg.append("g")
-                .attr("class", "y axis")
-                .attr("transform", "translate(" + margin + ",0)")
-                .call(yAxis)
-                .style("fill", '#333')
-                .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", -60)
-                .attr("x", -70)
-                .attr("dy", ".71em")
-                .style("text-anchor", "end")
-                .text(textify(yData));
+            nv.utils.windowResize(chart.update);
+
+            chart.dispatch.on('stateChange', function(e) { ('New State:', JSON.stringify(e)); });
 
 
-        svg.selectAll(".h").data(d3.range(-8,10,2)).enter()
-                .append("line").classed("h",1)
-                .attr("x1",margin).attr("x2",height-margin)
-                .attr("y1",y).attr("y2",y)
-
-        svg.selectAll(".v").data(d3.range(1,5)).enter()
-                .append("line").classed("v",1)
-                .attr("y1",margin).attr("y2",width-margin)
-                .attr("x1",x).attr("x2",x)
+            // Save as
+            var svg  = document.getElementById('svg-custom').childNodes[0],
+                    xml  = new XMLSerializer().serializeToString(svg),
+                    xmldata = btoa(xml),
+                    img  = new Image();
+            $('#btn-save-custom').attr('href', 'data:application/octet-stream;base64,' + xmldata)
 
 
-
-        // transform datas
-
-        svg.selectAll("circle")
-                .data(
-                    pack.nodes(mapDatasStats(data))
-                            .filter(function(d) { return !d.children; })
-                )
-                .enter()
-                .append("circle")
-                .attr("cx",function(d) {return x(d[xData]);})
-                .attr("cy",function(d) {return y(d[yData]);})
-    //            .attr("r",function(d) {return  r(Math.sqrt(d[rData]));})
-                .attr("r",function(d) {return  r(1 + d[rData]);})
-                .style("fill", '#006ac1')
-
-                .append("title")
-                .text(function(d) { return d.name;});
+            return chart;
+        });
 
 
-
-        function mapDatasStats(root) {
-            var datas = [];
-            var i, color;
+        function mapDatas(root) {
+            var results = [
+                { key: textify(xData) + " / " + textify(yData) + " chart", "values": [] }
+            ];
+            var i;
             for(i in root) {
                 var e = root[i];
-                datas.push({
-                    "name": e.filename
-                    {% for key in keys|sort %}
-                        ,"{{key}}": Math.max(0,parseInt(e.{{key}}))
-                    {% endfor %}
+                results[0].values.push({
+                    "title": e.filename
+                    , "x": Math.max(0,parseFloat(e[xData]))
+                    , "y": Math.max(0,parseFloat(e[yData]))
+                    , size: Math.max(0,parseFloat(e[rData]))
+                    , shape: 'round'
                 });
             }
-            return {"children":datas};
+            return results;
         }
+
     }
 
 

@@ -18,6 +18,8 @@ use Hal\Component\OOP\Extractor\Extractor;
 use Hal\Component\Result\AggregateResultSet;
 use Hal\Component\Result\ResultAggregate;
 use Hal\Component\Result\ResultCollection;
+use Hal\Component\Result\ResultRecursiveCollection;
+use Hal\Component\Result\ResultSet;
 use Hal\Component\Token\Tokenizer;
 use Hal\Metrics\Complexity\Structural\HenryAndKafura\Coupling;
 use Hal\Metrics\Mood\Abstractness\Abstractness;
@@ -74,16 +76,23 @@ class DoAggregatedAnalyze implements JobInterface
         $instability = new Instability();
 
         foreach($groupedResults as $namespace => $results) {
+
+            // we filter aggregates to conserve only direct results
+            $childs = new ResultCollection();
+            foreach($results as $r) {
+                if($namespace === dirname($r->getName())) {
+                    $childs->push($r);
+                }
+            }
             $resultAggregate = new ResultAggregate($namespace);
             $resultAggregate
                 ->setAbstractness($abstractness->calculate($results))
                 ->setInstability($instability->calculate($results))
                 ->setBounds($bounds->calculate($results))
+                ->setChilds($childs)
             ;
-
 
             $aggregatedResults->push($resultAggregate);
         }
     }
-
 }

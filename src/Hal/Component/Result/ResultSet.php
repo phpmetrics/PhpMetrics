@@ -100,7 +100,10 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
      */
     public function asArray() {
         return array_merge(
-            array('filename' => $this->getFilename())
+            array(
+                'filename' => $this->getFilename()
+                , 'name' => $this->getName()
+            )
             , $this->getLoc() ? $this->getLoc()->asArray() : array()
             , $this->getHalstead() ? $this->getHalstead()->asArray() : array()
             , $this->getMaintenabilityIndex() ? $this->getMaintenabilityIndex()->asArray() : array()

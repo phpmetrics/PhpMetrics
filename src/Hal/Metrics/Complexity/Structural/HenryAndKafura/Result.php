@@ -54,7 +54,7 @@ class Result implements ExportableInterface {
     public function asArray()
     {
         return array(
-            'instability' => $this->getInstability()
+            'instability' => round($this->getInstability(), 2)
             , 'afferentCoupling' => $this->getAfferentCoupling()
             , 'efferentCoupling' => $this->getEfferentCoupling()
         );

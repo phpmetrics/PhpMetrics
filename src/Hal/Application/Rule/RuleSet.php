@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Application\Rule;
+use Hal\Component\Result\ExportableInterface;
 
 
 /**
@@ -15,7 +16,7 @@ namespace Hal\Application\Rule;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class RuleSet {
+class RuleSet implements ExportableInterface {
 
     /**
      * Rules
@@ -56,6 +57,12 @@ class RuleSet {
         $this->rules = $rules;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function asArray() {
+        return $this->rules;
+    }
 
     /**
      * Get rule for key

@@ -26,6 +26,8 @@ class DirectoryRecursiveAggregatorTest extends \PHPUnit_Framework_TestCase {
         $results = $aggregator->aggregates($collection);
 
 
+        $this->assertArrayHasKey('.', $results);
+        $results = $results['.'];
         $this->assertEquals(2, sizeof($results, COUNT_NORMAL), 'root');
         $this->assertArrayHasKey('root1', $results);
         $this->assertEquals(2, sizeof($results['root1'], COUNT_NORMAL), 'first level');
