@@ -5,3 +5,4 @@ composer.lock
 Vagrantfile
 provision.sh
 .vagrant
+Makefile
