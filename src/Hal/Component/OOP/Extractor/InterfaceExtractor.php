@@ -42,7 +42,7 @@ class InterfaceExtractor implements ExtractorInterface {
      *
      * @param $n
      * @param TokenCollection $tokens
-     * @return ReflectedClass
+     * @return ReflectedInterface
      */
     public function extract(&$n, TokenCollection $tokens)
     {

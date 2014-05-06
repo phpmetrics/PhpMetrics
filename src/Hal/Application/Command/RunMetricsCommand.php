@@ -8,11 +8,8 @@
  */
 
 namespace Hal\Application\Command;
-use Hal\Component\Aggregator\DirectoryAggregator;
 use Hal\Component\Aggregator\DirectoryAggregatorFlat;
-use Hal\Component\Aggregator\DirectoryRecursiveAggregator;
 use Hal\Component\Bounds\Bounds;
-use Hal\Component\Bounds\DirectoryBounds;
 use Hal\Application\Command\Job\DoAnalyze;
 use Hal\Application\Command\Job\Queue;
 use Hal\Application\Command\Job\ReportRenderer;

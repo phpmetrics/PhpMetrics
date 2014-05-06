@@ -20,7 +20,7 @@ class Tokenizer {
      * Tokenize file
      *
      * @param $filename
-     * @return array
+     * @return TokenCollection
      */
     public function tokenize($filename) {
         //

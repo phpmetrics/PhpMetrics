@@ -10,7 +10,6 @@
 namespace Hal\Component\OOP\Extractor;
 use Hal\Component\OOP\Reflected\ReflectedArgument;
 use Hal\Component\OOP\Reflected\ReflectedMethod;
-use Hal\Component\Token\Token;
 use Hal\Component\Token\TokenCollection;
 
 
@@ -84,7 +83,7 @@ class MethodExtractor implements ExtractorInterface {
     /**
      * Extracts content of method
      *
-     * @param $n
+     * @param integer $n
      * @param TokenCollection $tokens
      * @return null|string
      */

@@ -9,7 +9,6 @@
 
 namespace Hal\Application\Formater\Summary;
 use Hal\Component\Bounds\Bounds;
-use Hal\Component\Bounds\BoundsAgregateInterface;
 use Hal\Component\Bounds\BoundsInterface;
 use Hal\Component\Bounds\Result\ResultInterface;
 use Hal\Application\Formater\FormaterInterface;

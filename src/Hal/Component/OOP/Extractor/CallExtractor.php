@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Component\OOP\Extractor;
-use Hal\Component\Token\Token;
 use Hal\Component\Token\TokenCollection;
 
 

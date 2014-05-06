@@ -9,7 +9,6 @@
 
 namespace Hal\Application\Command\Job;
 use Hal\Component\Aggregator\Aggregator;
-use Hal\Component\Bounds\DirectoryAgregator;
 use Hal\Component\Result\ResultCollection;
 use Symfony\Component\Console\Output\OutputInterface;
 

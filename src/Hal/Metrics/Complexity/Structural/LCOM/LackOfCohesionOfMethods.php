@@ -10,8 +10,6 @@
 namespace Hal\Metrics\Complexity\Structural\LCOM;
 use Hal\Component\OOP\Reflected\ReflectedClass;
 use Hal\Component\OOP\Reflected\ReflectedMethod;
-use Hal\Component\Token\Token;
-use Hal\Component\Token\Tokenizer;
 
 /**
  * Calculates lack of cohesion method

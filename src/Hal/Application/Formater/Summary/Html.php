@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Application\Formater\Summary;
-use Hal\Component\Bounds\BoundsAgregateInterface;
 use Hal\Component\Bounds\BoundsInterface;
 use Hal\Application\Formater\FormaterInterface;
 use Hal\Application\Formater\Twig\FormatingExtension;
@@ -42,7 +41,6 @@ class Html implements FormaterInterface {
      *
      * @param Validator $validator
      * @param BoundsInterface $bound
-     * @param BoundsAgregateInterface $agregateBounds
      */
     public function __construct(Validator $validator, BoundsInterface $bound)
     {

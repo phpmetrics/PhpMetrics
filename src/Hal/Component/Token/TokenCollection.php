@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Component\Token;
-use Traversable;
 
 /**
  * Representation of Collection of oken

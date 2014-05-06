@@ -44,7 +44,7 @@ class Searcher {
      * Get non whitespace previous token
      *
      * @param $n
-     * @param $tokens
+     * @param \Hal\Component\Token\TokenCollection $tokens
      * @return null
      */
     public function getPrevious(&$n, $tokens) {
@@ -61,7 +61,7 @@ class Searcher {
      * Get name following token
      *
      * @param $n
-     * @param $tokens
+     * @param \Hal\Component\Token\TokenCollection $tokens
      * @return null|string
      */
     public function getFollowingName(&$n, $tokens) {

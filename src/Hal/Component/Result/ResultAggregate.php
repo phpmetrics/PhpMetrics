@@ -45,7 +45,6 @@ class ResultAggregate implements ExportableInterface, ResultSetInterface {
     /**
      * Constructor
      *
-     * @param ResultCollection $collection
      */
     public function __construct($namespace) {
         $this->namespace = $namespace;

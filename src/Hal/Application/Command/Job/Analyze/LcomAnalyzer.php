@@ -9,9 +9,8 @@
 
 namespace Hal\Application\Command\Job\Analyze;
 
-use Hal\Component\OOP\Extractor\ClassMap,
-    Hal\Component\Result\ResultCollection,
-    Hal\Metrics\Complexity\Structural\LCOM\LackOfCohesionOfMethods;
+use Hal\Component\OOP\Extractor\ClassMap;
+use Hal\Component\Result\ResultCollection;
 use Hal\Metrics\Complexity\Structural\LCOM\FileLackOfCohesionOfMethods;
 
 

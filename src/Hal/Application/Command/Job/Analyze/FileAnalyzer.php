@@ -9,10 +9,6 @@
 
 namespace Hal\Application\Command\Job\Analyze;
 use Hal\Metrics\Complexity\Component\Myer\Myer;
-use Hal\Metrics\Complexity\Structural\HenryAndKafura\Coupling;
-use Hal\Metrics\Complexity\Structural\HenryAndKafura\FileCoupling;
-use Hal\Component\File\Finder;
-use Hal\Component\File\SyntaxChecker;
 use Hal\Metrics\Complexity\Text\Halstead\Halstead;
 use Hal\Metrics\Complexity\Text\Length\Loc;
 use Hal\Metrics\Design\Component\MaintenabilityIndex\MaintenabilityIndex;
@@ -20,9 +16,6 @@ use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 use Hal\Component\OOP\Extractor\ClassMap;
 use Hal\Component\OOP\Extractor\Extractor;
 use Hal\Component\OOP\Extractor\Result;
-use Hal\Component\Result\ResultCollection;
-use Hal\Component\Token\Tokenizer;
-use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
@@ -87,7 +80,7 @@ class FileAnalyzer
      * Constructor
      *
      * @param OutputInterface $output
-     * @param $withOOP
+     * @param boolean $withOOP
      * @param Extractor $extractor
      * @param Halstead $halstead
      * @param Loc $loc

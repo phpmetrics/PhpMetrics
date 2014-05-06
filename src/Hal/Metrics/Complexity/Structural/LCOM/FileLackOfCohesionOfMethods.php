@@ -9,7 +9,6 @@
 
 namespace Hal\Metrics\Complexity\Structural\LCOM;
 use Hal\Component\OOP\Extractor\ClassMap;
-use Hal\Component\Token\Tokenizer;
 
 
 /**

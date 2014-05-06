@@ -161,7 +161,7 @@ class ReflectedClass {
     /**
      * Set abstractness of method
      *
-     * @param $bool
+     * @param boolean $bool
      * @return $this
      */
     public function setAbstract($bool) {

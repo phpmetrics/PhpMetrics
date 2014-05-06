@@ -9,19 +9,11 @@
 
 namespace Hal\Application\Command\Job;
 
-use Hal\Application\Command\Job\Analyze\CouplingAnalyzer;
 use Hal\Application\Command\Job\JobInterface;
 use Hal\Component\Aggregator\Aggregator;
 use Hal\Component\Bounds\Bounds;
-use Hal\Component\OOP\Extractor\ClassMap;
-use Hal\Component\OOP\Extractor\Extractor;
-use Hal\Component\Result\AggregateResultSet;
 use Hal\Component\Result\ResultAggregate;
 use Hal\Component\Result\ResultCollection;
-use Hal\Component\Result\ResultRecursiveCollection;
-use Hal\Component\Result\ResultSet;
-use Hal\Component\Token\Tokenizer;
-use Hal\Metrics\Complexity\Structural\HenryAndKafura\Coupling;
 use Hal\Metrics\Mood\Abstractness\Abstractness;
 use Hal\Metrics\Mood\Instability\Instability;
 use Symfony\Component\Console\Output\OutputInterface;

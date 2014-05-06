@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Component\Aggregator;
-use Hal\Component\Bounds\Result\BoundsResult;
 use Hal\Component\Result\ResultCollection;
 
 /**

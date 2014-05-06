@@ -84,7 +84,7 @@ class Result implements ExportableInterface {
     /**
      * Set number of operators
      *
-     * @param $numberOfOperators
+     * @param integer $numberOfOperators
      * @return $this
      */
     public function setNumberOfOperators($numberOfOperators)
