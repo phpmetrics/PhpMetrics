@@ -25,29 +25,10 @@ use Hal\Application\Rule\Validator;
 class Csv implements FormaterInterface {
 
     /**
-     * Bounds
-     *
-     * @var BoundsInterface
-     */
-    private $bound;
-
-    /**
-     * Validator
-     *
-     * @var Validator
-     */
-    private $validator;
-
-    /**
      * Constructor
-     *
-     * @param Validator $validator
-     * @param BoundsInterface $bound
      */
-    public function __construct(Validator $validator, BoundsInterface $bound)
+    public function __construct()
     {
-        $this->bound = $bound;
-        $this->validator = $validator;
     }
 
     /**

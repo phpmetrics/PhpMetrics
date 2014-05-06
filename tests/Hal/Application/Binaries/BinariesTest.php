@@ -52,7 +52,7 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         copy(__DIR__.'/../../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
         chdir(sys_get_temp_dir());
 
-        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  --summary-html='.$to.' '.$this->toExplore);
+        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  --report-html='.$to.' '.$this->toExplore);
         $output = shell_exec($command);
         chdir($path);
 
