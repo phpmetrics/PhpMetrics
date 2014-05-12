@@ -1,3 +1,6 @@
 composer.lock
 .idea
 /vendor/
+.vagrant
+provision.sh
+Vagrantfile
