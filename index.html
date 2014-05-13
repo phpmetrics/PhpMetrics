@@ -1,147 +1,231 @@
-<!doctype html>
-<html>
-  <head>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Phpmetrics by Halleck45</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>PhpMetrics by Halleck45</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/freelancer.css" rel="stylesheet" type="text/css">
+
+    <!-- Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+    <!-- IE8 support for HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Phpmetrics</h1>
-        <p>Static metrics tool for PHP</p>
 
-        <p class="view"><a href="https://github.com/Halleck45/PhpMetrics">View the Project on GitHub <small>Halleck45/PhpMetrics</small></a></p>
+</head>
 
+<body id="page-top" class="index">
 
-        <ul>
-          <li><a href="https://github.com/Halleck45/PhpMetrics/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/Halleck45/PhpMetrics/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/Halleck45/PhpMetrics">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a name="phpmetrics" class="anchor" href="#phpmetrics"><span class="octicon octicon-link"></span></a>PhpMetrics</h1>
-<h2>Static analyze of maintenability for PHP projects</h2>
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#page-top">PhpMetrics</a>
+            </div>
 
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll"><a href="#usage">Download</a></li>
+                    <li class="page-scroll"><a href="https://github.com/Halleck45/PhpMetrics">Contribute</a></li>
+                    <li class="page-scroll"><a href="#about">About</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
 
-<h1>
-<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h1>
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <img class="img-responsive" src="/images/phpmetrics-maintenability.png" alt="">
+                    <div class="intro-text">
+                        <span class="name">PhpMetrics</span>
+                        <hr class="star-light">
+                        <span class="skills">Static analyze tool for PHP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<pre><code>wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar
-php metrics.phar --summary-html=/path/of/my/choice.html &lt;folder or filename&gt;
-</code></pre>
+    <section id="usage">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 text-center">
+                    <h2>Easy to use</h2>
+                    <hr class="star-primary">
 
-<p>
-    Will generate report. This report contains a bubble chart. For example, there is <a href="report/demo/v0.0.3/index.html">an example of report</a>:
-</p>
-<p><img src="images/preview-report-symfony2.png" alt="Symfony2 report"></p>
+                    <div>
+                        <p>
+                            Download PhpMetrics:
+                        </p>
+                        <pre>wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar</pre>
+                    </div>
 
+                    <div>
+                        <p>
+                            Use it:
+                        </p>
+                        <pre>php metrics.phar --report-html=/path/of/report.html &lt;folder or filename&gt;</pre>
+                    </div>
 
-<h3>
-<a name="read-report" class="anchor" href="#read-report"><span class="octicon octicon-link"></span></a> Read report</h3>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div id="demo">
+                        <a href="#demo-large" class="portfolio-link" data-toggle="modal"><img src="images/demo/animated-demo-of-phpmetrics-small.gif" alt="demo of PhpMetrics" /></a>
+                    </div>
+                </div>
+            </div>
 
-<ul>
-<li>Each file is symbolized by a circle</li>
-<li>Size of the circle represents the Cyclomatic complexity</li>
-<li>Color of the circle represents te Maintenability Index</li>
-<li>Move your cursor on a circle to have details</li>
-</ul><p>Large red circles will be probably hard to maintain.</p>
+        </div>
+    </section>
 
+    <section class="success" id="contribute">
+        <div class="container">
+            <div class="row">
 
-<h1>
-<a name="metrics" class="anchor" href="#metrics"><span class="octicon octicon-link"></span></a> Metrics</h1>
+                <div class="col-lg-6 text-center">
+                    <h2>Various metrics</h2>
+                    <hr class="star-light">
+                    <ul class="centered">
+                        <li>Maintenability Index</li>
+                        <li>Cyclomatic complexity</li>
+                        <li>Halstead's metrics</li>
+                        <li>Lack of cohesion of methods</li>
+                        <li>Abstraction / Instability</li>
+                        <li>...</li>
+                    </ul>
+                </div>
 
-<h2>
-<a name="halstead-complexity" class="anchor" href="#halstead-complexity"><span class="octicon octicon-link"></span></a>Halstead complexity</h2>
+                <div class="col-lg-6 text-center">
+                    <h2>Open Source</h2>
+                    <hr class="star-light">
 
-<p>This indicator provides:</p>
+                    <ul class="centered">
 
-<ul>
-<li>Program length (N)</li>
-<li>Vocabulary size (n)</li>
-<li>Program volume (V)</li>
-<li>Difficulty level (D)</li>
-<li>Effort to implement (E)</li>
-<li>Time to implement, in seconds (T)</li>
-<li>Number of delivered bugs (B)</li>
-</ul><pre><code>N = N1 + N2
-n = n1 + n2
-V = N * log2(n)
-D = ( n1 / 2 ) * ( N2 / n2 )
-E = V * D
-T = E / 18
-B = ( E ** (2/3) ) / 3000
-</code></pre>
+                        <li>MIT License</li>
+                        <li><a href="https://github.com/Halleck45/PhpMetrics"><i class="icon icon-github"></i>View on Github</a></li>
+                    </ul>
 
-<h2>
-<a name="complexity-index" class="anchor" href="#complexity-index"><span class="octicon octicon-link"></span></a> Complexity index</h2>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<p>According Wikipedia, Maintainability Index is a software metric which measures how maintainable (easy to support and change) the source code is.
-The maintainability index is calculated as a factored formula consisting of Lines Of Code, Cyclomatic Complexity and Halstead volume.</p>
+    <section id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>About</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p class="text-center">
+                        PhpMetrics is an Open Source project created by <a href="https://blog.lepine.pro">Jean-François Lépine</a> (<a href="https://twitter.com/Halleck45">Halleck45</a>).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<pre><code>Maintainability Index = 171 - 5.2 * ln(Halstead Volume) - 0.23 * (Cyclomatic Complexity) - 16.2 * ln(Lines of Code))*100 / 171
-</code></pre>
+    <footer class="text-center">
+        <div class="footer-above">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-col col-md-6">
+                        <h3>Contact me</h3>
+                        <p>You can contact me on <a href="https://twitter.com/Halleck45">Twitter</a></p>
+                    </div>
+                    <div class="footer-col col-md-6">
+                        <h3>Find me</h3>
+                        <ul class="list-inline">
+                            <li><a href="https://twitter.com/Halleck45" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a>
+                            </li>
+                            <li><a href="https://www.linkedin.com/profile/view?id=90131737&authType=NAME_SEARCH&authToken=OkW0&locale=fr_FR&srchid=901317371400003230246&srchindex=1&srchtotal=1&trk=vsrp_people_res_name&trkInfo=VSRPsearchId%3A901317371400003230246%2CVSRPtargetId%3A90131737%2CVSRPcmpt%3Aprimary" class="btn-social btn-outline"><i class="fa fa-fw fa-linkedin"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; 2014 - Jean-François Lépine. Theme by <a href="http://startbootstrap.com/">Start Bootstrap</a>.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-<p>Generally:</p>
-
-<ul>
-<li>0-9 = Danger</li>
-<li>10-19 = Warning</li>
-<li>20-100 = Ok</li>
-</ul><h1>
-<a name="use-it-in-code" class="anchor" href="#use-it-in-code"><span class="octicon octicon-link"></span></a> Reuse components in your code</h1>
-
-<h2>
-<a name="halstead" class="anchor" href="#halstead"><span class="octicon octicon-link"></span></a> Halstead</h2>
-
-<div class="highlight highlight-php"><pre><span class="nv">$halstead</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Halstead\Halstead</span><span class="p">(</span><span class="k">new</span> <span class="nx">\Token\TokenType</span><span class="p">());</span>
-<span class="nv">$rHalstead</span> <span class="o">=</span> <span class="nv">$halstead</span><span class="o">-&gt;</span><span class="na">calculate</span><span class="p">(</span><span class="nv">$filename</span><span class="p">);</span>
-<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$rHalstead</span><span class="p">);</span>
-</pre></div>
-
-<h2>
-<a name="phploc" class="anchor" href="#phploc"><span class="octicon octicon-link"></span></a> PHPLoc</h2>
-
-<p>This component uses <a href="https://github.com/sebastianbergmann/phploc">phploc</a>.</p>
-
-<div class="highlight highlight-php"><pre><span class="nv">$loc</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Loc\Loc</span><span class="p">();</span>
-<span class="nv">$rLoc</span> <span class="o">=</span> <span class="nv">$loc</span><span class="o">-&gt;</span><span class="na">calculate</span><span class="p">(</span><span class="nv">$filename</span><span class="p">);</span>
-<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$rLoc</span><span class="p">);</span>
-</pre></div>
-
-<h2>
-<a name="maintenability-index" class="anchor" href="#maintenability-index"><span class="octicon octicon-link"></span></a> Maintenability Index</h2>
-
-<div class="highlight highlight-php"><pre><span class="nv">$maintenability</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\MaintenabilityIndex\MaintenabilityIndex</span><span class="p">;</span>
-<span class="nv">$rMaintenability</span> <span class="o">=</span> <span class="nv">$maintenability</span><span class="o">-&gt;</span><span class="na">calculate</span><span class="p">(</span><span class="nv">$rHalstead</span><span class="p">,</span> <span class="nv">$rLoc</span><span class="p">);</span>
-<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$rMaintenability</span><span class="p">);</span>
-</pre></div>
-
-<h1>
-<a name="author" class="anchor" href="#author"><span class="octicon octicon-link"></span></a> Author</h1>
-
-<ul>
-<li>Jean-François Lépine &lt;<a href="http://blog.lepine.pro">blog.lepine.pro</a>&gt;</li>
-</ul><h1>
-<a name="licence" class="anchor" href="#licence"><span class="octicon octicon-link"></span></a> Licence</h1>
-
-<p>See the LICENCE file</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/Halleck45">Halleck45</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+    <div class="scroll-top page-scroll visible-xs visble-sm">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
+
+    <!-- Portfolio Modals -->
+    <div class="portfolio-modal modal fade" id="demo-large" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div >
+                        <div class="modal-body text-center">
+                            <h2>Demo</h2>
+                            <hr class="star-primary">
+                            <img src="images/demo/animated-demo-of-phpmetrics.gif" alt="demo of PhpMetrics" />
+                            <br />
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="js/classie.js"></script>
+    <script src="js/cbpAnimatedHeader.js"></script>
+    <script src="js/freelancer.js"></script>
+
+</body>
+
 </html>

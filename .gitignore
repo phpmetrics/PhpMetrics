@@ -4,3 +4,4 @@ composer.lock
 .vagrant
 provision.sh
 Vagrantfile
+node_modules
