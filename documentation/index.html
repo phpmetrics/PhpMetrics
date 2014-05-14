@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Documentation of PhpMetrics</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/freelancer.css" rel="stylesheet" type="text/css">
+
+    <!-- Fonts -->
+    <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+    <!-- IE8 support for HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body id="page-top" class="index">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../index.html#page-top">PhpMetrics</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="../index.html#page-top"></a>
+                    </li>
+                    <li class=""><a href="../report/2014-05/report.html">Demo</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Documentation</h2>
+                    <hr class="star-light">
+
+                    <ul class="centered">
+                        <li><a href="#metrics">List of metrics</a></li>
+                        <li><a href="http://blog.lepine.pro/industrialisation/indice-de-maintenabilite-dun-projet-php-et-jenkins">Jenkins integration</a> (french)</li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="metrics">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Metrics</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12 text-center">
+
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th class="th-metric">Metric</th>
+                            <th>Description</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ca</td>
+                                <td>Afferent coupling : Number of classes affected by this class</td>
+                            </tr>
+                            <tr>
+                                <td>bugs</td>
+                                <td>Number of estimated bugs by file (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+                            </tr>
+                            <tr>
+                                <td>commw</td>
+                                <td>Comment weight measure the ratio between logical code and comments</td>
+                            </tr>
+                            <tr>
+                                <td>cc</td>
+                                <td><a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity">Cyclomatic complexity number</a> measures the number of linearly independent paths through a program's source cod</td>
+                            </tr>
+                            <tr>
+                                <td>diff</td>
+                                <td>Difficulty of the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+                            </tr>
+                            <tr>
+                                <td>ce</td>
+                                <td>Efferent coupling : Number of classes that the class depend</td>
+                            </tr>
+                            <tr>
+                                <td>effort</td>
+                                <td>Effort to understand the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+                            </tr>
+                            <tr>
+                                <td>instability</td>
+                                <td>Ratio between ce and ca (I = ce / (ce + ca). Indicates the class's resilience to change</td>
+                            </tr>
+                            <tr>
+                                <td>IC</td>
+                                <td>Intelligent content</td>
+                            </tr>
+                            <tr>
+                                <td>lcom</td>
+                                <td>Lack of cohesion of methods measures the cohesiveness of a class</td>
+                            </tr>
+                            <tr>
+                                <td>length</td>
+                                <td>Length (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+                            </tr>
+                            <tr>
+                                <td>loc</td>
+                                <td>Number of lines of code</td>
+                            </tr>
+                            <tr>
+                                <td>lloc</td>
+                                <td>Number of logical lines of code</td>
+                            </tr>
+                            <tr>
+                                <td>MI</td>
+                                <td><a href="http://en.wikipedia.org/wiki/Maintainability">Maintenability index</a> is based on Halstead's metrics, LOC and Cyclomatic complexity number</td>
+                            </tr>
+                            <tr>
+                                <td>MIwC</td>
+                                <td>Maintenability Index without comments</td>
+                            </tr>
+                            <tr>
+                                <td>distance</td>
+                                <td>Myer's distance is derivated from Cyclomatic complexity</td>
+                            </tr>
+                            <tr>
+                                <td>interval</td>
+                                <td>Myer's interval indicates the distance between cyclomatic complexity number and the number of operators</td>
+                            </tr>
+                            <tr>
+                                <td>noc</td>
+                                <td>Number of classes</td>
+                            </tr>
+                            <tr>
+                                <td>noca</td>
+                                <td>Number of abstract classes</td>
+                            </tr>
+                            <tr>
+                                <td>nocc</td>
+                                <td>Number of concrete classes</td>
+                            </tr>
+                            <tr>
+                                <td>operators</td>
+                                <td>Number of operators</td>
+                            </tr>
+                            <tr>
+                                <td>time</td>
+                                <td>Time to read and understand the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+                            </tr>
+                            <tr>
+                                <td>vocabulary</td>
+                                <td>Vocabulary used in code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+                            </tr>
+                            <tr>
+                                <td>volume</td>
+                                <td>Volume (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="text-center">
+
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; 2014 - Jean-François Lépine. Theme by <a href="http://startbootstrap.com/">Start Bootstrap</a>.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="scroll-top page-scroll visible-xs visble-sm">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+
+
+
+    <script src="../js/jquery-1.10.2.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="../js/classie.js"></script>
+    <script src="../js/cbpAnimatedHeader.js"></script>
+    <script src="../js/freelancer.js"></script>
+
+</body>
+
+</html>

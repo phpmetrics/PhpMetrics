@@ -360,6 +360,21 @@ pre {
 .icon-github {
   background: url("../images/icon-github.png");
 }
-.success a {
+header a,
+.success a,
+header a:hover,
+.success a:hover,
+header a:focus,
+.success a:focus,
+header a:active,
+.success a:active,
+header a.active,
+.success a.active {
   color: #FFF;
+}
+.table {
+  text-align: left;
+}
+.th-metric {
+  width: 100px;
 }
