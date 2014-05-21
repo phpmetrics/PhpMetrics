@@ -9,6 +9,7 @@
 
 namespace Hal\Component\OOP\Extractor;
 use Hal\Component\Token\Token;
+use Hal\Component\Token\TokenCollection;
 
 
 /**
@@ -26,7 +27,7 @@ class Searcher {
      * @param array $tokens
      * @return null|string
      */
-    public function getUnder(array $delimiters, &$n, $tokens) {
+    public function getUnder(array $delimiters, &$n, TokenCollection $tokens) {
         $end = sizeof($tokens, COUNT_NORMAL);
         $value = '';
         while($n < $end) {
@@ -47,7 +48,7 @@ class Searcher {
      * @param \Hal\Component\Token\TokenCollection $tokens
      * @return null
      */
-    public function getPrevious(&$n, $tokens) {
+    public function getPrevious(&$n, TokenCollection $tokens) {
         $p = $n - 1;
         for($i = $p ; $i > 0; $i--) {
             if(T_WHITESPACE !== $tokens[$i]->getType()) {
@@ -64,9 +65,42 @@ class Searcher {
      * @param \Hal\Component\Token\TokenCollection $tokens
      * @return null|string
      */
-    public function getFollowingName(&$n, $tokens) {
+    public function getFollowingName(&$n, TokenCollection $tokens) {
         $n = $n + 2;
         return $this->getUnder(array('{', ' ', ';'), $n, $tokens);
     }
 
+    /**
+     * Get the position of the brace which closes the next brace
+     *
+     * @param $n
+     * @param TokenCollection $tokens
+     * @return null
+     */
+    public function getPositionOfClosingBrace(&$n, TokenCollection $tokens) {
+        // search the end of the method
+        $openBrace = 0;
+        $start = null;
+        $len = sizeof($tokens);
+        for($i = $n; $i < $len; $i++) {
+            $token = $tokens[$i];
+            if(T_STRING == $token->getType()) {
+                switch($token->getValue()) {
+                    case '{':
+                        $openBrace++;
+                        if(is_null($start)) {
+                            $start = $n = $i + 1;
+                        }
+                        break;
+                    case '}':
+                        $openBrace--;
+                        if($openBrace <= 0) {
+                            return $i;
+                        }
+                        break;
+                }
+            }
+        }
+        return null;
+    }
 };

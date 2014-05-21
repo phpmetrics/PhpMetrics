@@ -88,32 +88,11 @@ class MethodExtractor implements ExtractorInterface {
      * @return null|string
      */
     private function extractContent(&$n, TokenCollection $tokens) {
-        // search the end of the method
-        $openBrace = 0;
-        $start = null;
-        $len = sizeof($tokens);
-        for($i = $n; $i < $len; $i++) {
-            $token = $tokens[$i];
-            if(T_STRING == $token->getType()) {
-                switch($token->getValue()) {
-                    case '{':
-                        $openBrace++;
-                        if(is_null($start)) {
-                            $start = $i + 1;
-                        }
-                        break;
-                    case '}':
-                        $openBrace--;
-                        if($openBrace <= 0) {
-                            $concerned = array_slice($tokens->asArray(), $start, $i - $start );
-                            $collection = new TokenCollection($concerned);
-                            return $collection->asString();
-                        }
-                        break;
-                }
-            }
+        $end = $this->searcher->getPositionOfClosingBrace($n, $tokens);
+        if($end > 0) {
+            $concerned = array_slice($tokens->asArray(), $n, $end - $n );
+            $collection = new TokenCollection($concerned);
+            return $collection->asString();
         }
-
-        return null;
     }
 }
