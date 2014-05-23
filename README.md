@@ -37,19 +37,15 @@ Will output:
 
 If you want to get the summary HTML report (with charts):
 
-    php ./bin/metrics.php --summary-html=/path/of/your/choice.html <folder or filename>
+    php ./bin/metrics.php --report-html=/path/of/your/choice.html <folder or filename>
 
 You can change the depth of the summary report with the `--level=<value>` option.
 
-If you want to have a detailled view (file by file):
-
-    php ./bin/metrics.php --details-html=/path/of/your/choice.html <folder or filename>
-
 ## Jenkins and PIC integration
 
-You can easily export resut to XML with the `--summary-xml` option:
+You can easily export resut to XML with the `--report-xml` option:
 
-    php ./bin/metrics.php --summary-xml=/path/of/your/choice.xml <folder or filename>
+    php ./bin/metrics.php --report-xml=/path/of/your/choice.xml <folder or filename>
 
 You will find a tutorial to [integrate PhpMetrics report to Jenkins here](blog.lepine.pro/industrialisation/indice-de-maintenabilite-dun-projet-php-et-jenkins) (in French).
 
