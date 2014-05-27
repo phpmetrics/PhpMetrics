@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Application\Command;
+use Hal\Application\Formater\Violations\Xml;
 use Hal\Component\Aggregator\DirectoryAggregatorFlat;
 use Hal\Component\Bounds\Bounds;
 use Hal\Application\Command\Job\DoAnalyze;
@@ -48,6 +49,9 @@ class RunMetricsCommand extends Command
                 )
                 ->addOption(
                         'report-xml', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in XML format. Example: /tmp/report.xml'
+                )
+                ->addOption(
+                    'violations-xml', null, InputOption::VALUE_REQUIRED, 'Path to save violations in XML format. Example: /tmp/report.xml'
                 )
                 ->addOption(
                         'report-csv', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in CSV format. Example: /tmp/report.csv'
@@ -95,6 +99,7 @@ class RunMetricsCommand extends Command
             ->push(new ReportWriter($input->getOption('report-html'), $output, new Summary\Html($validator, $bounds)))
             ->push(new ReportWriter($input->getOption('report-xml'), $output, new Summary\Xml($validator, $bounds)))
             ->push(new ReportWriter($input->getOption('report-csv'), $output, new Details\Csv($validator, $bounds)))
+            ->push(new ReportWriter($input->getOption('violations-xml'), $output, new Xml($validator, $bounds)))
             ;
 
         // execute
