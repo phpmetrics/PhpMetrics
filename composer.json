@@ -23,7 +23,7 @@
         "symfony/console": "2.4.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.*"
+        "phpunit/phpunit": "4.1.*"
     },
     "bin": [
         "bin/metrics.php"
