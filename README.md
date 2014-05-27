@@ -47,7 +47,7 @@ You can easily export resut to XML with the `--report-xml` option:
 
     php ./bin/metrics.php --report-xml=/path/of/your/choice.xml <folder or filename>
 
-You will find a tutorial to [integrate PhpMetrics report to Jenkins here](blog.lepine.pro/industrialisation/indice-de-maintenabilite-dun-projet-php-et-jenkins) (in French).
+You will find a tutorial to [integrate PhpMetrics report to Jenkins here](http://blog.lepine.pro/industrialisation/indice-de-maintenabilite-dun-projet-php-et-jenkins) (in French).
 
 ### Read report
 
