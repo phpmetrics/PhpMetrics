@@ -5,3 +5,4 @@ composer.lock
 provision.sh
 Vagrantfile
 node_modules
+build

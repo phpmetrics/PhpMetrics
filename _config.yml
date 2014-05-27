@@ -1,0 +1,35 @@
+# General Jekyll Config
+url: http://halleck45.github.io/PhpMetrics
+#url: http://localhost:4000
+exclude: [LICENSE, CNAME, README.md, TODO.md, .gitignore, Makefile, Capfile, config, node_modules, less]
+
+permalink: :title
+lsi: false # articles associés améliorés (lent)
+markdown: rdiscount
+pygments: true
+paginate: 10
+destination: build
+
+
+
+# Theme customization - please change from the defaults!
+theme:
+  google_analytics_key: UA-5363554-7
+
+
+
+sitemap:
+    file: "/sitemap.xml"
+    exclude:
+        - "/atom.xml"
+        - "/feed.xml"
+        - "/feed/index.xml"
+        - "/less"
+        - "/site.json"
+        - "/css"
+        - "/node_modules/*"
+        - "config"
+    include_posts:
+        - "/index.html"
+    change_frequency_name: "change_frequency"
+    priority_name: "priority"
