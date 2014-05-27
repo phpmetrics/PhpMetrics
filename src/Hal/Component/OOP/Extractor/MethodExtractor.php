@@ -77,6 +77,12 @@ class MethodExtractor implements ExtractorInterface {
         // Body
         $method->setContent($this->extractContent($n, $tokens));
 
+        // Tokens
+        $end = $this->searcher->getPositionOfClosingBrace($n, $tokens);
+        if($end > 0) {
+            $method->setTokens($tokens->extract($n, $end));
+        }
+
         return $method;
     }
 
@@ -90,8 +96,7 @@ class MethodExtractor implements ExtractorInterface {
     private function extractContent(&$n, TokenCollection $tokens) {
         $end = $this->searcher->getPositionOfClosingBrace($n, $tokens);
         if($end > 0) {
-            $concerned = array_slice($tokens->asArray(), $n, $end - $n );
-            $collection = new TokenCollection($concerned);
+            $collection = $tokens->extract($n, $end);
             return $collection->asString();
         }
     }

@@ -48,6 +48,18 @@ class TokenCollection implements \ArrayAccess, \IteratorAggregate, \Countable {
     }
 
     /**
+     * Extract part of tokens (equivalent of array_slice())
+     *
+     * @param $start
+     * @param $end
+     * @return TokenCollection
+     */
+    public function extract($start, $end) {
+        $concerned = array_slice($this->asArray(), $start, $end - $start );
+        return new TokenCollection($concerned);
+    }
+
+    /**
      * As string representation
      *
      * @return string

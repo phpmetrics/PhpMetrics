@@ -28,6 +28,11 @@ class ReflectedMethod {
     private $arguments = array();
 
     /**
+     * @var array
+     */
+    private $tokens = array();
+
+    /**
      * @var string
      */
     private $content;
@@ -68,11 +73,13 @@ class ReflectedMethod {
     }
 
     /**
-     * @param string $content
+     * @param $content
+     * @return $this
      */
     public function setContent($content)
     {
         $this->content = $content;
+        return $this;
     }
 
     /**
@@ -81,5 +88,23 @@ class ReflectedMethod {
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * @param $tokens
+     * @return $this
+     */
+    public function setTokens($tokens)
+    {
+        $this->tokens = $tokens;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTokens()
+    {
+        return $this->tokens;
     }
 };
