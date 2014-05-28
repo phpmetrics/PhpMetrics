@@ -2,11 +2,29 @@
 
 Gives metrics about PHP project and classes.
 
+[![License](https://poser.pugx.org/halleck45/php-metrics/license.png)](https://packagist.org/packages/halleck45/php-metrics)
 [![Build Status](https://secure.travis-ci.org/Halleck45/PhpMetrics.png)](http://travis-ci.org/Halleck45/PhpMetrics)  [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/badges/quality-score.png?s=b825f35680c0a469333da2c963226828fed135ba)](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/)
+[![Latest Stable Version](https://poser.pugx.org/halleck45/php-metrics/v/stable.png)](https://packagist.org/packages/halleck45/php-metrics)
+[![Dependency Status](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815/badge.png)](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815)
+
++ [Installation](#installation)
++ [Bubbles chart and complete report](#bubbles-chart-and-complete-report)
++ [Informations about OOP model](#informations-about-oop-model)
++ [Jenkins and PIC integration](#jenkins-and-pic-integration)
++ [Metrics](#metrics)
++ metric: [Halstead complexity](#halstead-complexity)
++ metric: [Maintenablity index](#maintenability-index)
++ metric: [Lines of code](#lines-of-code)
++ metric: [McCaybe Cyclomatic complexity number](#mccaybe-cyclomatic-complexity-number)
++ metric: Myer's Interval
++ metric: [Coupling and instability](#coupling-and-instability)
++ metric: [Lack of cohesion of methods (LCOM)](#lack-of-cohesion-of-methods)
++ [Use it in your code](#use-it-in-your-code)
+
+
+
 
 # Installation
-
-## As Phar archive
 
     wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar
     php metrics.phar <folder or filename>
@@ -19,29 +37,17 @@ Will output:
 
 If you want to get the summary HTML report (with charts):
 
-    php ./bin/metrics.php --summary-html=/path/of/your/choice.html <folder or filename>
+    php ./bin/metrics.php --report-html=/path/of/your/choice.html <folder or filename>
 
 You can change the depth of the summary report with the `--level=<value>` option.
 
-If you want to have a detailled view (file by file):
-
-    php ./bin/metrics.php --details-html=/path/of/your/choice.html <folder or filename>
-
-## Informations about OOP model
-
-If you want to get informations about OOP model (coupling, instability...), you should pass the `--oop` parameter:
-
-    php ./bin/metrics.php --oop <folder or filename>
-
-Remember that this feature parse all files, extract declared classes, dependencies of each method... and is really *very slow*.
-
 ## Jenkins and PIC integration
 
-You can easily export resut to XML with the `--summary-xml` option:
+You can easily export resut to XML with the `--report-xml` option:
 
-    php ./bin/metrics.php --summary-xml=/path/of/your/choice.xml <folder or filename>
+    php ./bin/metrics.php --report-xml=/path/of/your/choice.xml <folder or filename>
 
-You will find a tutorial to [integrate PhpMetrics report to Jenkins here](blog.lepine.pro/industrialisation/indice-de-maintenabilite-dun-projet-php-et-jenkins) (in French).
+You will find a tutorial to [integrate PhpMetrics report to Jenkins here](http://blog.lepine.pro/industrialisation/indice-de-maintenabilite-dun-projet-php-et-jenkins) (in French).
 
 ### Read report
 
@@ -67,6 +73,13 @@ Large red circles will be probably hard to maintain.
 
 # Metrics
 
+## Lack of cohesion of methods
+
+This object oriented indicator measure how well the methods of a class are related to each other. This metric indicates roughly the number
+of responsabilities of one class (and is correlated to the Single Responsability Principle)
+
+If there are 2 or more components, the class should probably be split into so many smaller classes.
+
 ## Halstead complexity
 
 This indicator provides:
@@ -89,7 +102,7 @@ T = E / 18
 B = ( E ** (2/3) ) / 3000
 ```
 
-## Complexity index
+## Maintenability index
 
 According Wikipedia, Maintainability Index is a software metric which measures how maintainable (easy to support and change) the source code is.
 The maintainability index is calculated as a factored formula consisting of Lines Of Code, Cyclomatic Complexity and Halstead volume.
@@ -101,12 +114,21 @@ The maintainability index is calculated as a factored formula consisting of Line
     MIcw = 50 * sin(sqrt(2.4 * perCM))
     MI = MIwoc + MIcw
 
-## Maintainability Index Comment weight
+## McCaybe Cyclomatic complexity number
 
-Comment weight represents the impact of documentation in code.
+According Wikipedia,  indicate the complexity of a program. It is a quantitative measure of logical strength of the program.
+It directly measures the number of linearly independent paths through a program's source code.
 
-    perCM = commentLoc / loc
-    MIcw = 50 * sin(sqrt(2.4 * perCM))
+Method 1:
+
+    CC = E - N + 2P
+    P: number of disconnected parts of the flow graph (e.g. a calling program and a subroutine)
+    E: number of edges (transfers of control)
+    N: number of nodes (sequential group of statements containing only one transfer of control)
+
+method 2:
+
+    CC = number of decisions points in code
 
 ## Coupling and instability
 
@@ -119,35 +141,48 @@ Instability concerns the risk of your class, according coupling:
 
     I = CE / (CA + CE)
 
-# Use it in code
+## Lines of code
 
-## Halstead
+    loc: lines of code
+    lloc: logical lines of code
+    cloc: Number of comment lines of code
+
+
+# Use it in your code
+
+Halstead
 
 ```php
-$halstead = new \Halstead\Halstead(new \Token\TokenType());
+$halstead = new \Hal\Halstead\Halstead(new \Token\TokenType());
 $rHalstead = $halstead->calculate($filename);
 var_dump($rHalstead);
 ```
 
-## PHPLoc
-
-This component uses [phploc](https://github.com/sebastianbergmann/phploc).
+McCabe
 
 ```php
-$loc = new \Loc\Loc();
+$mcCabe = new \Hal\McCaybe\McCaybe();
+$rMccabe = $loc->calculate($filename);
+var_dump($rMccabe);
+```
+
+PHPLoc
+
+```php
+$loc = new \Hal\Loc\Loc();
 $rLoc = $loc->calculate($filename);
 var_dump($rLoc);
 ```
 
-## Maintenability Index
+Maintenability Index
 
 ```php
-$maintenability = new \MaintenabilityIndex\MaintenabilityIndex;
+$maintenability = new \Hal\MaintenabilityIndex\MaintenabilityIndex;
 $rMaintenability = $maintenability->calculate($rHalstead, $rLoc);
 var_dump($rMaintenability);
 ```
 
-## OOP Extractor
+OOP Extractor
 
 Extracts OOP model of files, and map classes and files:
 
@@ -157,7 +192,7 @@ $rOOP = $extractor->extract($filename);
 var_dump($rOOP);
 ```
 
-## Coupling
+Coupling
 
 Calculate coupling.
 

@@ -1,0 +1,26 @@
+$this->a();
+$this->x = 1;
+$this->qdsf;
+
+public function methodA() { $this->methodB(); $this->x = 1; unset($this->x); }
+
+
+
+fooabc
+fooabcbar
+foofoobar
+
+fooabc(
+fooabc
+
+
+coupling => il reste quoi ?
+refractoring par type de métrique
++ text complexity
++ component compexity
++ structural complexity
++ combined complexity
+POO => inheritance tree, etc, lcom
+
+métriques
+complexité : Myer's interval

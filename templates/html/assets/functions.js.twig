@@ -1,0 +1,54 @@
+{% autoescape false %}
+<script type="text/javascript">
+
+
+    function validate() {
+        return 'unknown';
+    }
+
+
+    function validate(key, value) {
+        var rule = ruleSet[key];
+
+        if(typeof(rule) === 'undefined' || rule === undefined) {
+            return 'unknown';
+        }
+
+        // according order
+        if(rule[0] < rule[2]) {
+            // critical < warn < good
+            switch(true) {
+                case value < rule[1]:
+                    return 'critical';
+                case value >= rule[1] && value < rule[2]:
+                    return 'warning';
+                default:
+                    return 'good';
+            }
+        } else {
+            // critical > warn > good
+            switch(true) {
+                case value > rule[1]:
+                    return 'critical';
+                case value < rule[2]:
+                    return 'good';
+                default:
+                    return 'warning';
+            }
+        }
+    }
+
+    function validateIn(results, key, type) {
+        type = type || 'average';
+        var value = results[type] ? results[type][key] : results[key];
+        return validate(key, value);
+    }
+
+
+    function textify(string) {
+        string = string.charAt(0).toUpperCase() + string.slice(1);
+        return string.replace(/([a-z0-9])([A-Z])/, "$1 $2");
+    }
+
+</script>
+{% endautoescape %}

@@ -1,6 +1,11 @@
 <?php
 chdir(__DIR__);
 
+if (!file_exists('vendor/autoload.php')) {
+  echo '[ERROR] It\'s required to run "composer install" before building PhpMetrics!' . PHP_EOL;
+  exit(1);
+}
+
 $filename = 'build/metrics.phar';
 if (file_exists($filename)) {
     unlink($filename);
@@ -20,6 +25,7 @@ foreach($files as $file) {
 }
 
 $phar->setStub(<<<STUB
+#!/usr/bin/env php
 <?php
 
 /*
@@ -34,13 +40,15 @@ $phar->setStub(<<<STUB
 Phar::mapPhar('metrics.phar');
 
 require_once 'phar://metrics.phar/vendor/autoload.php';
-\$app = new Hal\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '0.0.4');
+\$app = new Hal\Application\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '0.0.6');
 \$app->run();
 
 __HALT_COMPILER();
 STUB
 );
 $phar->stopBuffering();
+
+chmod($filename, 0755);
 
 function rglob($pattern='*', $flags = 0, $path='')
 {

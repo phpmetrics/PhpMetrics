@@ -1,8 +1,12 @@
 {% autoescape false %}
 <script type="text/javascript">
 
+    function updateMaintenablityChart() {
+        chartMaintenability(xAxis, yAxis, rAxis);
+    };
+
     function chartMaintenability() {
-        var diameter = 580,
+        var diameter = 300,
         format = d3.format(",d"),
         color = d3.scale.category20c();
 
@@ -11,7 +15,7 @@
             .size([diameter, diameter])
             .padding(1.5);
 
-        var svg = d3.select("#svg-maintenability").append("svg")
+        var svg = d3.select("#svg-maintenability").select("svg")
             .attr("width", diameter)
             .attr("height", diameter)
             .attr("class", "bubble");
@@ -44,6 +48,8 @@
                 .attr("r", function(d) { return d.r; })
                 .style("fill", function(d) { return d.color; });
 
+
+        // Save as
         function mapDatas(root) {
             var datas = [];
             var i, color;
@@ -58,10 +64,10 @@
                     color = '#FF2E12';
                 }
                 datas.push({
-                    "value": e.cyclomaticComplexity + 1
+                    "value": parseFloat(e.cyclomaticComplexity) + 1
                     , "name": e.filename
                     , "color": color
-                    , "cyclomaticComplexity": e.cyclomaticComplexity
+                    , "cyclomaticComplexity": parseFloat(e.cyclomaticComplexity)
                     , "maintenabilityIndex": parseInt(e.maintenabilityIndex)
                 });
             }
@@ -69,6 +75,19 @@
         }
 
         d3.select(self.frameElement).style("height", diameter + "px");
+
+
+        // Save as
+        $('#btn-save-maintenability').hover(function() {
+            var $e = $(this);
+            if(!$e.data('initialized')) {
+                var svgc  = document.getElementById('svg-maintenability').childNodes[0]
+                        , xml  = new XMLSerializer().serializeToString(svgc)
+                        , xmldata = btoa(xml);
+                $e.attr('href', 'data:application/octet-stream;base64,' + xmldata);
+                $e.data('initialized', true);
+            }
+        })
     }
 </script>
 {% endautoescape %}
