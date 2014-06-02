@@ -30,6 +30,11 @@ class ReflectedMethod {
     /**
      * @var array
      */
+    private $returns = array();
+
+    /**
+     * @var array
+     */
     private $tokens = array();
 
     /**
@@ -106,5 +111,27 @@ class ReflectedMethod {
     public function getTokens()
     {
         return $this->tokens;
+    }
+
+    /**
+     * Get the list of returned values
+     *
+     * @return array
+     */
+    public function getReturns() {
+        return $this->returns;
+    }
+
+    /**
+     * Attach ne return information
+     *
+     *      It make no sense for the moment to store any information abour return value / type. Maybe in PHP 6 ? :)
+     *
+     * @param $mixed
+     * @return $this
+     */
+    public function pushReturn($mixed) {
+        array_push($this->returns, $mixed);
+        return $this;
     }
 };

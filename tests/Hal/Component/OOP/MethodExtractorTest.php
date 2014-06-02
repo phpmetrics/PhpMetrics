@@ -1,6 +1,7 @@
 <?php
 namespace Test\Hal\Component\OOP;
 
+use Hal\Component\Token\TokenCollection;
 use Hal\Metrics\Design\Component\MaintenabilityIndex\MaintenabilityIndex;
 use Hal\Metrics\Design\Component\MaintenabilityIndex\Result;
 use Hal\Component\OOP\Extractor\Extractor;
@@ -102,6 +103,29 @@ EOT;
               )
             )
 
+        );
+    }
+
+
+    /**
+     * @dataProvider provideCodeForReturns
+     * @group wip
+     */
+    public function testReturnsAreFound($expected, $code) {
+        $searcher = new Searcher();
+        $methodExtractor = new MethodExtractor($searcher);
+
+        $tokens = new TokenCollection(token_get_all($code));
+        $n = 1;
+        $method = $methodExtractor->extract($n, $tokens);
+        $this->assertEquals($expected, sizeof($method->getReturns(), COUNT_NORMAL));
+    }
+
+    public function provideCodeForReturns() {
+        return array(
+            array(1, '<?php public function foo() { return 1; }')
+            , array(0, '<?php public function foo() { }')
+            , array(2, '<?php public function foo() { if(true) { return 1; } return 2; }')
         );
     }
 }

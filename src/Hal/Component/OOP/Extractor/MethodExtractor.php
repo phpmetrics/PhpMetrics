@@ -83,6 +83,12 @@ class MethodExtractor implements ExtractorInterface {
             $method->setTokens($tokens->extract($n, $end));
         }
 
+        // returns
+        $returns = $this->extractReturns($n, $tokens);
+        foreach($returns as $return) {
+            $method->pushReturn($return);
+        }
+
         return $method;
     }
 
@@ -99,5 +105,24 @@ class MethodExtractor implements ExtractorInterface {
             $collection = $tokens->extract($n, $end);
             return $collection->asString();
         }
+    }
+
+    /**
+     * Extract the list of returned values
+     *
+     * @param $n
+     * @param TokenCollection $tokens
+     * @return array
+     */
+    private function extractReturns($n, TokenCollection $tokens) {
+        $returns =array();
+        $len = sizeof($tokens, COUNT_NORMAL);
+        for($i = $n; $i < $len; $i++) {
+            $token = $tokens[$i];
+            if(T_RETURN === $token->getType()) {
+                array_push($returns, null);
+            }
+        }
+        return $returns;
     }
 }
