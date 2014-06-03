@@ -80,6 +80,13 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
     private $lcom;
 
     /**
+     * System complexity result
+     *
+     * @var \Hal\Metrics\Complexity\Structural\CardAndAgresti\Result
+     */
+    private $systemComplexity;
+
+    /**
      * Constructor
      *
      * @param string $filename
@@ -112,6 +119,7 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
             , $this->getMcCabe() ? $this->getMcCabe()->asArray() : array()
             , $this->getMyer() ? $this->getMyer()->asArray() : array()
             , $this->getLcom() ? $this->getLcom()->asArray() : array()
+            , $this->getSystemComplexity() ? $this->getSystemComplexity()->asArray() : array()
         );
     }
 
@@ -260,6 +268,25 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
     {
         return $this->lcom;
     }
+
+    /**
+     * @param \Hal\Metrics\Complexity\Structural\CardAndAgresti\Result $systemComplexity
+     * @return $this
+     */
+    public function setSystemComplexity( \Hal\Metrics\Complexity\Structural\CardAndAgresti\Result $systemComplexity)
+    {
+        $this->systemComplexity = $systemComplexity;
+        return $this;
+    }
+
+    /**
+     * @return \Hal\Metrics\Complexity\Structural\CardAndAgresti\Result
+     */
+    public function getSystemComplexity()
+    {
+        return $this->systemComplexity;
+    }
+
 
 
 }

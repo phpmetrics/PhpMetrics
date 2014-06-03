@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Application\Command\Job;
+use Hal\Application\Command\Job\Analyze\CardAndAgrestiAnalyzer;
 use Hal\Application\Command\Job\Analyze\CouplingAnalyzer;
 use Hal\Application\Command\Job\Analyze\FileAnalyzer;
 use Hal\Application\Command\Job\Analyze\LcomAnalyzer;
@@ -133,6 +134,11 @@ class DoAnalyze implements JobInterface
             // LCOM (should be done after parsing files)
             $this->output->write(str_pad("\x0DLack of cohesion of method (lcom). This will take few minutes...", 80, "\x20"));
             $lcomAnalyzer = new LcomAnalyzer($classMap, $collection);
+            $lcomAnalyzer->execute($files);
+
+            // Card and Agresti (should be done after parsing files)
+            $this->output->write(str_pad("\x0DAnalyzing System complexity. This will take few minutes...", 80, "\x20"));
+            $lcomAnalyzer = new CardAndAgrestiAnalyzer($classMap, $collection);
             $lcomAnalyzer->execute($files);
         }
 

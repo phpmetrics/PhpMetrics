@@ -17,6 +17,7 @@ Gives metrics about PHP project and classes.
 + metric: [Lines of code](#lines-of-code)
 + metric: [McCaybe Cyclomatic complexity number](#mccaybe-cyclomatic-complexity-number)
 + metric: Myer's Interval
++ metric: Card and Agresti's System complexity
 + metric: [Coupling and instability](#coupling-and-instability)
 + metric: [Lack of cohesion of methods (LCOM)](#lack-of-cohesion-of-methods)
 + [Use it in your code](#use-it-in-your-code)
