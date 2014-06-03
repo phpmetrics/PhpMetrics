@@ -35,6 +35,28 @@ class ReflectedMethod {
     /**
      * @var array
      */
+    private $internalCalls = array();
+
+    /**
+     * @var array
+     */
+    private $externalCalls = array();
+
+    /**
+     * @var array
+     */
+    private $dependencies = array();
+
+    /**
+     * Map of aliases
+     *
+     * @var array
+     */
+    private $aliases = array();
+
+    /**
+     * @var array
+     */
     private $tokens = array();
 
     /**
@@ -133,5 +155,88 @@ class ReflectedMethod {
     public function pushReturn($mixed) {
         array_push($this->returns, $mixed);
         return $this;
+    }
+
+    /**
+     * Get the list of calls
+     *
+     * @return array
+     */
+    public function getCalls() {
+        return array_merge($this->internalCalls, $this->externalCalls);
+    }
+
+    /**
+     * @return array
+     */
+    public function getExternalCalls()
+    {
+        return $this->externalCalls;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInternalCalls()
+    {
+        return $this->internalCalls;
+    }
+
+    /**
+     * Attach new call
+     *
+     * @param $varname
+     * @return $this
+     */
+    public function pushCall($varname) {
+        if(preg_match('!^$this!', $varname)) {
+            array_push($this->internalCalls, $varname);
+        } else {
+            array_push($this->externalCalls, $varname);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Push dependency
+     *
+     * @param $name
+     * @return $this
+     */
+    public function pushDependency($name) {
+        array_push($this->dependencies, $name);
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDependencies()
+    {
+        // on read : compare with aliases. We cannot make it in pushDependency() => aliases aren't yet known
+        $dependencies = array();
+        foreach($this->dependencies as $name) {
+            $real = isset($this->aliases[$name]) ? $this->aliases[$name] : $name;
+            array_push($dependencies, $real);
+        }
+        return array_unique($dependencies);
+    }
+
+    /**
+     * @param array $aliases
+     */
+    public function setAliases(array $aliases)
+    {
+        $this->aliases = $aliases;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAliases()
+    {
+        return $this->aliases;
     }
 };

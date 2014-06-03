@@ -10,6 +10,7 @@ use Hal\Component\OOP\Extractor\Searcher;
 
 /**
  * @group oop
+ * @group extractor
  */
 class MethodExtractorTest extends \PHPUnit_Framework_TestCase {
 
@@ -109,7 +110,6 @@ EOT;
 
     /**
      * @dataProvider provideCodeForReturns
-     * @group wip
      */
     public function testReturnsAreFound($expected, $code) {
         $searcher = new Searcher();
@@ -126,6 +126,7 @@ EOT;
             array(1, '<?php public function foo() { return 1; }')
             , array(0, '<?php public function foo() { }')
             , array(2, '<?php public function foo() { if(true) { return 1; } return 2; }')
+            , array(0, '<?php public function bar() { $x->a();  }')
         );
     }
 }

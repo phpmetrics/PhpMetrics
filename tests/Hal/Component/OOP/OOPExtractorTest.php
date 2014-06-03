@@ -34,6 +34,9 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    /**
+     * @group wip
+     */
     public function testDependenciesAreGivenWithoutAlias() {
 
         $file = __DIR__.'/../../../resources/oop/f4.php';

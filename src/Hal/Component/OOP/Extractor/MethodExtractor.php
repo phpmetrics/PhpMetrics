@@ -75,7 +75,7 @@ class MethodExtractor implements ExtractorInterface {
 
         //
         // Body
-        $method->setContent($this->extractContent($n, $tokens));
+        $this->extractContent($method, $n, $tokens);
 
         // Tokens
         $end = $this->searcher->getPositionOfClosingBrace($n, $tokens);
@@ -83,11 +83,12 @@ class MethodExtractor implements ExtractorInterface {
             $method->setTokens($tokens->extract($n, $end));
         }
 
+        //
+        // Dependencies
+        $this->extractDependencies($method, $n, $tokens);
+
         // returns
-        $returns = $this->extractReturns($n, $tokens);
-        foreach($returns as $return) {
-            $method->pushReturn($return);
-        }
+        $this->extractReturns($method, $method->getContent());
 
         return $method;
     }
@@ -95,34 +96,71 @@ class MethodExtractor implements ExtractorInterface {
     /**
      * Extracts content of method
      *
+     * @param ReflectedMethod $method
      * @param integer $n
      * @param TokenCollection $tokens
-     * @return null|string
+     * @return $this
      */
-    private function extractContent(&$n, TokenCollection $tokens) {
+    private function extractContent(ReflectedMethod $method, $n, TokenCollection $tokens) {
         $end = $this->searcher->getPositionOfClosingBrace($n, $tokens);
         if($end > 0) {
             $collection = $tokens->extract($n, $end);
-            return $collection->asString();
+            $method->setContent($collection->asString());
         }
+        return $this;
+    }
+
+    /**
+     * Extracts content of method
+     *
+     * @param ReflectedMethod $method
+     * @param integer $n
+     * @param TokenCollection $tokens
+     * @return $this
+     */
+    private function extractDependencies(ReflectedMethod $method, $n, TokenCollection $tokens) {
+
+        //
+        // Object creation
+        $dependencies = array();
+        $extractor = new CallExtractor($this->searcher);
+        $start = $n;
+        $len = sizeof($tokens, COUNT_NORMAL);
+        for($i = $start; $i < $len; $i++) {
+            $token = $tokens[$i];
+            switch($token->getType()) {
+                case T_PAAMAYIM_NEKUDOTAYIM:
+                case T_NEW:
+                    $call = $extractor->extract($i, $tokens);
+                    $method->pushDependency($call);
+                    break;
+            }
+        }
+
+        //
+        // Parameters in Method API
+        foreach($method->getArguments() as $argument) {
+            $name = $argument->getType();
+            if(!in_array($argument->getType(), array(null, 'array'))) {
+                $method->pushDependency($name);
+            }
+        }
+
+        return $this;
     }
 
     /**
      * Extract the list of returned values
      *
-     * @param $n
-     * @param TokenCollection $tokens
-     * @return array
+     * @param string $content
+     * @return $this
      */
-    private function extractReturns($n, TokenCollection $tokens) {
-        $returns =array();
-        $len = sizeof($tokens, COUNT_NORMAL);
-        for($i = $n; $i < $len; $i++) {
-            $token = $tokens[$i];
-            if(T_RETURN === $token->getType()) {
-                array_push($returns, null);
+    private function extractReturns(ReflectedMethod $method, $content) {
+        if(preg_match_all('!([\s;]return\s|^return\s)!', $content, $matches)) {
+            foreach($matches[1] as $m) {
+                $method->pushReturn($m);
             }
         }
-        return $returns;
+        return $this;
     }
 }

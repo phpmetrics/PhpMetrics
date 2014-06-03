@@ -35,13 +35,6 @@ class ReflectedClass {
     private $methods;
 
     /**
-     * Consolidated dependencies
-     *
-     * @var array array
-     */
-    private $dependencies = array();
-
-    /**
      * Map of aliases
      *
      * @var array
@@ -111,26 +104,14 @@ class ReflectedClass {
     public function pushMethod(ReflectedMethod $method) {
         $this->methods[$method->getName()] = $method;
 
-        foreach($method->getArguments() as $argument) {
+//        foreach($method->getArguments() as $argument) {
+//
+//            $name = $argument->getType();
+//            if(!in_array($argument->getType(), array(null, $this->getName(), 'array'))) {
+//                $this->pushDependency($name);
+//            }
+//        }
 
-            $name = $argument->getType();
-            if(!in_array($argument->getType(), array(null, $this->getName(), 'array'))) {
-                $this->pushDependency($name);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Push dependency
-     *
-     * @param $name
-     * @return $this
-     */
-    public function pushDependency($name) {
-        $real = isset($this->aliases[$name]) ? $this->aliases[$name] : $name;
-        array_push($this->dependencies, $real);
         return $this;
     }
 
@@ -139,7 +120,11 @@ class ReflectedClass {
      */
     public function getDependencies()
     {
-        return $this->dependencies;
+        $dependencies = array();
+        foreach($this->getMethods() as $method) {
+            $dependencies = array_merge($dependencies, $method->getDependencies());
+        }
+        return $dependencies;
     }
 
     /**

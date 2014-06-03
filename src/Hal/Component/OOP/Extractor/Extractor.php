@@ -72,7 +72,7 @@ class Extractor {
         $tokens = $this->tokenizer->tokenize($filename);
 
         // default current values
-        $class = $interface = $function = null;
+        $class = $interface = $function = $method = null;
         $mapOfAliases = array();
 
         $len = sizeof($tokens, COUNT_NORMAL);
@@ -87,14 +87,8 @@ class Extractor {
                     if (null !== $alias->name && null !== $alias->alias) {
                         $mapOfAliases[$alias->alias] = $alias->name;
                         $class && $class->setAliases($mapOfAliases);
+                        $method && $method->setAliases($mapOfAliases);
                         $interface && $interface->setAliases($mapOfAliases);
-                    }
-                    break;
-
-                case T_PAAMAYIM_NEKUDOTAYIM:
-                case T_NEW:
-                    if($class) {
-                        $class->pushDependency($this->extractors->call->extract($n, $tokens));
                     }
                     break;
 
@@ -127,6 +121,7 @@ class Extractor {
                             continue;
                         }
                         $method = $this->extractors->method->extract($n, $tokens);
+                        $method->setAliases($mapOfAliases);
                         $class->pushMethod($method);
                     }
                     break;
