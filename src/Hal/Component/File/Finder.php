@@ -9,6 +9,10 @@
 
 namespace Hal\Component\File;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RegexIterator;
+
 /**
  * File finder
  *
@@ -18,18 +22,27 @@ class Finder
 {
 
     /**
-     * Extensions to match
+     * Extensions to match (regex)
      *
      * @var string
      */
     private $extensions;
 
     /**
-     * @param string $extensions regex
+     * Subdirectories to exclude (regex)
+     *
+     * @var string
      */
-    function __construct($extensions = 'php')
+    private $excludedDirs;
+
+    /**
+     * @param string $extensions   regex of file extensions to include
+     * @param string $excludedDirs regex of directories to exclude
+     */
+    function __construct($extensions = 'php', $excludedDirs = '')
     {
         $this->extensions = (string) $extensions;
+        $this->excludedDirs = (string) $excludedDirs;
     }
 
     /**
@@ -38,14 +51,27 @@ class Finder
      * @param string $path
      * @return array
      */
-    public function find($path) {
+    public function find($path)
+    {
         $files = array();
         if(is_dir($path)) {
             $path = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-            $directory = new \RecursiveDirectoryIterator($path);
-            $iterator = new \RecursiveIteratorIterator($directory);
-            $regex = new \RegexIterator($iterator, '/^.+\.('. $this->extensions .')$/i', \RecursiveRegexIterator::GET_MATCH);
-            foreach($regex as $file) {
+            $directory = new RecursiveDirectoryIterator($path);
+            $iterator = new RecursiveIteratorIterator($directory);
+
+            $filterRegex = sprintf(
+                '`^%s%s$`',
+                !empty($this->excludedDirs) ? '((?!'.$this->excludedDirs.').)+' : '.+',
+                '\.(' . $this->extensions . ')'
+            );
+
+            $filteredIterator = new RegexIterator(
+                $iterator,
+                $filterRegex,
+                \RecursiveRegexIterator::GET_MATCH
+            );
+
+            foreach($filteredIterator as $file) {
                 $files[] = $file[0];
             }
         } elseif(is_file($path)) {
