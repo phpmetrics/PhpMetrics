@@ -42,28 +42,31 @@ class RunMetricsCommand extends Command
                 ->setName('metrics')
                 ->setDescription('Run analysis')
                 ->addArgument(
-                        'path', InputArgument::REQUIRED, 'Path to explore'
+                    'path', InputArgument::REQUIRED, 'Path to explore'
                 )
                 ->addOption(
-                        'report-html',null, InputOption::VALUE_REQUIRED, 'Path to save report in HTML format. Example: /tmp/report.html'
+                    'report-html',null, InputOption::VALUE_REQUIRED, 'Path to save report in HTML format. Example: /tmp/report.html'
                 )
                 ->addOption(
-                        'report-xml', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in XML format. Example: /tmp/report.xml'
+                    'report-xml', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in XML format. Example: /tmp/report.xml'
                 )
                 ->addOption(
                     'violations-xml', null, InputOption::VALUE_REQUIRED, 'Path to save violations in XML format. Example: /tmp/report.xml'
                 )
                 ->addOption(
-                        'report-csv', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in CSV format. Example: /tmp/report.csv'
+                    'report-csv', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in CSV format. Example: /tmp/report.csv'
                 )
                 ->addOption(
-                        'level', null, InputOption::VALUE_REQUIRED, 'Depth of summary report', 0
+                    'level', null, InputOption::VALUE_REQUIRED, 'Depth of summary report', 0
                 )
                 ->addOption(
-                        'extensions', null, InputOption::VALUE_REQUIRED, 'Regex of extensions to include', 'php'
+                    'extensions', null, InputOption::VALUE_REQUIRED, 'Regex of extensions to include', 'php'
                 )
                 ->addOption(
-                        'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will not extract any informations about OOP model (faster)'
+                    'excludedDirs', null, InputOption::VALUE_REQUIRED, 'Regex of subdirectories to exclude', 'Tests|Features'
+                )
+                ->addOption(
+                    'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will not extract any informations about OOP model (faster)'
                 )
         ;
     }
@@ -80,7 +83,10 @@ class RunMetricsCommand extends Command
         $level = $input->getOption('level');
 
         // files
-        $finder = new Finder($input->getOption('extensions'));
+        $finder = new Finder(
+            $input->getOption('extensions'),
+            $input->getOption('excludedDirs')
+        );
 
         // rules
         $rules = new \Hal\Application\Rule\RuleSet();
