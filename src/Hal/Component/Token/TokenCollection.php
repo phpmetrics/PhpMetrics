@@ -134,13 +134,43 @@ class TokenCollection implements \ArrayAccess, \IteratorAggregate, \Countable {
 
     /**
      * Replace token with another
-     * 
+     *
      * @param $index
      * @param Token $token
      * @return $this
      */
     public function replace($index, Token $token) {
-        $this->tokens[$index]  = $token;
-        return $this;
+        $tokens = $this->tokens;
+        $tokens[$index] = $token;
+        return new TokenCollection($tokens);
+    }
+
+    /**
+     * Remove part of tokens
+     *
+     * @param $index
+     * @param null $end
+     * @return TokenCollection
+     */
+    public function remove($index, $end = null)
+    {
+        $tokens = $this->tokens;
+        if (null === $end) {
+            $end = $index;
+        }
+        for ($i = $index; $i <= $end; $i++) {
+            unset($tokens[$i]);
+        }
+        return new TokenCollection(array_values($tokens));
+    }
+
+    /**
+     * Get token by its index
+     *
+     * @param $index
+     * @return null|Token
+     */
+    public function get($index) {
+        return isset($this->tokens[$index]) ? $this->tokens[$index] : null;
     }
 }
