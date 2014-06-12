@@ -6,3 +6,4 @@ Vagrantfile
 provision.sh
 .vagrant
 Makefile
+/nbproject
