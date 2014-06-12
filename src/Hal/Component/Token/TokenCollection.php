@@ -131,4 +131,16 @@ class TokenCollection implements \ArrayAccess, \IteratorAggregate, \Countable {
     public function asArray() {
         return $this->tokens;
     }
+
+    /**
+     * Replace token with another
+     * 
+     * @param $index
+     * @param Token $token
+     * @return $this
+     */
+    public function replace($index, Token $token) {
+        $this->tokens[$index]  = $token;
+        return $this;
+    }
 }
