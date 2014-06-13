@@ -40,15 +40,17 @@ If you want to get the summary HTML report (with charts):
 
     php ./bin/metrics.php --report-html=/path/of/your/choice.html <folder or filename>
 
-You can change the depth of the summary report with the `--level=<value>` option.
+## Jenkins and IC integration
 
-## Jenkins and PIC integration
+You'll find a complete tutorial in the [documentation](http://halleck45.github.io/PhpMetrics/documentation/jenkins.html)
 
-You can easily export resut to XML with the `--report-xml` option:
+You can easily export results to XML with the `--report-xml` option:
 
     php ./bin/metrics.php --report-xml=/path/of/your/choice.xml <folder or filename>
 
-You will find a tutorial to [integrate PhpMetrics report to Jenkins here](http://blog.lepine.pro/industrialisation/indice-de-maintenabilite-dun-projet-php-et-jenkins) (in French).
+You can also export results as violations (MessDetector report), in XML format with the `--violations-xml` option:
+
+    php ./bin/metrics.php --violations-xml=/path/of/your/choice.xml <folder or filename>
 
 ### Read report
 
@@ -236,7 +238,7 @@ Then, to run the test suite:
 
 # Author
 
-+ Jean-François Lépine <[blog.lepine.pro](http://blog.lepine.pro)>
++ Jean-François Lépine <[www.lepine.pro](http://www.lepine.pro)>
 
 # Licence
 
