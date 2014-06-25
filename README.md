@@ -28,10 +28,15 @@ Gives metrics about PHP project and classes.
 
 # Installation
 
-    wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar
-    php metrics.phar <folder or filename>
+With composer:
 
-Will output:
+    composer.phar global require 'halleck45/php-metrics=0.6'
+
+Or as Phar archive:
+
+    wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar
+
+Then the command `php metrics.phar <folder or filename>` will output:
 
 ![Standard report](http://halleck45.github.io/PhpMetrics/images/report-standard.png)
 
