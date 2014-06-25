@@ -9,7 +9,6 @@
 
 namespace Hal\Application\Command\Job;
 
-use Hal\Application\Command\Job\JobInterface;
 use Hal\Component\Aggregator\Aggregator;
 use Hal\Component\Bounds\Bounds;
 use Hal\Component\Result\ResultAggregate;

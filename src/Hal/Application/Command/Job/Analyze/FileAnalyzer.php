@@ -8,14 +8,13 @@
  */
 
 namespace Hal\Application\Command\Job\Analyze;
+use Hal\Component\OOP\Extractor\ClassMap;
+use Hal\Component\OOP\Extractor\Extractor;
+use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 use Hal\Metrics\Complexity\Component\Myer\Myer;
 use Hal\Metrics\Complexity\Text\Halstead\Halstead;
 use Hal\Metrics\Complexity\Text\Length\Loc;
 use Hal\Metrics\Design\Component\MaintenabilityIndex\MaintenabilityIndex;
-use Hal\Metrics\Complexity\Component\McCabe\McCabe;
-use Hal\Component\OOP\Extractor\ClassMap;
-use Hal\Component\OOP\Extractor\Extractor;
-use Hal\Component\OOP\Extractor\Result;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
@@ -115,6 +114,8 @@ class FileAnalyzer
 
     /**
      * Run analyze
+     *
+     * @param $filename
      * @return \Hal\Component\Result\ResultSet
      */
     public function execute($filename) {
@@ -125,6 +126,7 @@ class FileAnalyzer
         $rMyer = $this->myer->calculate($filename);
         $rMaintenability = $this->maintenabilityIndex->calculate($rHalstead, $rLoc, $rMcCabe);
 
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $resultSet = new \Hal\Component\Result\ResultSet($filename);
         $resultSet
             ->setLoc($rLoc)

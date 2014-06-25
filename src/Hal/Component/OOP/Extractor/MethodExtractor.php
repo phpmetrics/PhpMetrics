@@ -42,6 +42,7 @@ class MethodExtractor implements ExtractorInterface {
      * @param int $n
      * @param TokenCollection$tokens
      * @return ReflectedMethod
+     * @throws \Exception
      */
     public function extract(&$n, TokenCollection $tokens)
     {
@@ -122,7 +123,6 @@ class MethodExtractor implements ExtractorInterface {
 
         //
         // Object creation
-        $dependencies = array();
         $extractor = new CallExtractor($this->searcher);
         $start = $n;
         $len = sizeof($tokens, COUNT_NORMAL);
@@ -152,6 +152,7 @@ class MethodExtractor implements ExtractorInterface {
     /**
      * Extract the list of returned values
      *
+     * @param ReflectedMethod $method
      * @param string $content
      * @return $this
      */

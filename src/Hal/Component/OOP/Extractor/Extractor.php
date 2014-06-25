@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Component\OOP\Extractor;
-use Hal\Component\Token\Token;
 use Hal\Component\Token\Tokenizer;
 
 
@@ -31,7 +30,7 @@ class Extractor {
     private $result;
 
     /**
-     * @var StdClass
+     * @var \StdClass
      */
     private $extractors;
 

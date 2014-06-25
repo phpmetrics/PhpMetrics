@@ -22,6 +22,7 @@ class Abstractness {
      * Calculate abstractness
      *
      * @param ResultCollection $results Array of ResultSet
+     * @return Result
      */
     public function calculate(ResultCollection $results) {
 

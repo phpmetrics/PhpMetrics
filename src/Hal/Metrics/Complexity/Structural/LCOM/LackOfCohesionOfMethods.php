@@ -56,6 +56,7 @@ class LackOfCohesionOfMethods {
      * @param ReflectedClass $class
      * @param ReflectedMethod $method
      * @param array $toSkip (avoid infinite loops)
+     * @return array
      */
     private function getLinkedMethods(ReflectedClass $class, ReflectedMethod $method, array &$toSkip = array()) {
 

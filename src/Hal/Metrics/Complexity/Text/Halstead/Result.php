@@ -115,6 +115,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param float $bugs
+     * @return $this
      */
     public function setBugs($bugs)
     {
@@ -132,6 +133,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param float $difficulty
+     * @return $this
      */
     public function setDifficulty($difficulty)
     {
@@ -149,6 +151,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param float $effort
+     * @return $this
      */
     public function setEffort($effort)
     {
@@ -166,6 +169,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $length
+     * @return $this
      */
     public function setLength($length)
     {
@@ -183,6 +187,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $time
+     * @return $this
      */
     public function setTime($time)
     {
@@ -200,6 +205,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $vocabulary
+     * @return $this
      */
     public function setVocabulary($vocabulary)
     {
@@ -217,6 +223,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $volume
+     * @return $this
      */
     public function setVolume($volume)
     {
@@ -241,6 +248,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param float $intelligentContent
+     * @return $this
      */
     public function setIntelligentContent($intelligentContent)
     {
@@ -250,6 +258,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $numberOfOperands
+     * @return $this
      */
     public function setNumberOfOperands($numberOfOperands)
     {
@@ -267,6 +276,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $numberOfOperators
+     * @return $this
      */
     public function setNumberOfOperators($numberOfOperators)
     {
@@ -284,6 +294,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $numberOfUniqueOperands
+     * @return $this
      */
     public function setNumberOfUniqueOperands($numberOfUniqueOperands)
     {
@@ -301,6 +312,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $numberOfUniqueOperators
+     * @return $this
      */
     public function setNumberOfUniqueOperators($numberOfUniqueOperators)
     {
@@ -318,6 +330,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param double $level
+     * @return $this
      */
     public function setLevel($level)
     {

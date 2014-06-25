@@ -25,7 +25,7 @@ class FileCoupling {
     private $classMap;
 
     /**
-     * @var CouplingMap
+     * @var ResultMap
      */
     private $couplingMap;
 

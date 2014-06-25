@@ -8,10 +8,10 @@
  */
 
 namespace Hal\Application\Command\Job\Analyze;
-use Hal\Metrics\Complexity\Structural\HenryAndKafura\Coupling;
-use Hal\Metrics\Complexity\Structural\HenryAndKafura\FileCoupling;
 use Hal\Component\OOP\Extractor\ClassMap;
 use Hal\Component\Result\ResultCollection;
+use Hal\Metrics\Complexity\Structural\HenryAndKafura\Coupling;
+use Hal\Metrics\Complexity\Structural\HenryAndKafura\FileCoupling;
 
 
 /**

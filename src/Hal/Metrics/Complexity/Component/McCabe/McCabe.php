@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Metrics\Complexity\Component\McCabe;
-use Hal\Component\Token\Token;
 use Hal\Component\Token\Tokenizer;
 
 /**

@@ -57,6 +57,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $complexityCyclomatic
+     * @return $this
      */
     public function setComplexityCyclomatic($complexityCyclomatic)
     {
@@ -74,6 +75,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $loc
+     * @return $this
      */
     public function setLoc($loc)
     {
@@ -91,6 +93,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $logicalLoc
+     * @return $this
      */
     public function setLogicalLoc($logicalLoc)
     {
@@ -108,6 +111,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $commentLoc
+     * @return $this
      */
     public function setCommentLoc($commentLoc)
     {

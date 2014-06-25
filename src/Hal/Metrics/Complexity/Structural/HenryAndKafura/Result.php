@@ -63,6 +63,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $afferentCoupling
+     * @return $this
      */
     public function setAfferentCoupling($afferentCoupling)
     {
@@ -80,6 +81,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $efferentCoupling
+     * @return $this
      */
     public function setEfferentCoupling($efferentCoupling)
     {
@@ -97,6 +99,7 @@ class Result implements ExportableInterface {
 
     /**
      * @param int $instability
+     * @return $this
      */
     public function setInstability($instability)
     {

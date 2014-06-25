@@ -8,7 +8,7 @@
  */
 
 namespace Hal\Metrics\Complexity\Text\Halstead;
-use Hal\Component\Token\Tokenizer;
+use Hal\Component\Token\TokenType;
 
 
 /**
@@ -42,7 +42,7 @@ class Halstead {
     /**
      * Allows to determine what is the type of tokens
      *
-     * @var \TokenType
+     * @var TokenType
      */
     private $tokenType;
 
@@ -59,7 +59,9 @@ class Halstead {
      * @param \Hal\Component\Token\Tokenizer $tokenizer
      * @param \Hal\Component\Token\TokenType $tokenType
      */
-    public function __construct(\Hal\Component\Token\Tokenizer $tokenizer, \Hal\Component\Token\TokenType $tokenType)
+    public function __construct(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        \Hal\Component\Token\Tokenizer $tokenizer, /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+                                \Hal\Component\Token\TokenType $tokenType)
     {
         $this->tokenizer = $tokenizer;
         $this->tokenType = $tokenType;

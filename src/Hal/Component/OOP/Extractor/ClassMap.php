@@ -24,13 +24,6 @@ class ClassMap {
     private $classes = array();
 
     /**
-     * Current file
-     *
-     * @var string
-     */
-    private $filename;
-
-    /**
      * Associates result and filename
      *
      * @param $filename

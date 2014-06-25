@@ -8,12 +8,10 @@
  */
 
 namespace Hal\Application\Formater\Violations;
-use Hal\Component\Bounds\Bounds;
-use Hal\Component\Bounds\BoundsInterface;
-use Hal\Component\Bounds\Result\ResultInterface;
 use Hal\Application\Formater\FormaterInterface;
-use Hal\Component\Result\ResultCollection;
 use Hal\Application\Rule\Validator;
+use Hal\Component\Bounds\BoundsInterface;
+use Hal\Component\Result\ResultCollection;
 
 
 /**

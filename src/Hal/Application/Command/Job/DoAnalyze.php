@@ -93,6 +93,12 @@ class DoAnalyze implements JobInterface
         $tokenizer = new Tokenizer();
         $syntaxChecker = new SyntaxChecker();
 
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $fileAnalyzer = new FileAnalyzer(
             $this->output
             , $this->withOOP

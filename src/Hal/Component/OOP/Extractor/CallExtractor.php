@@ -37,6 +37,7 @@ class CallExtractor implements ExtractorInterface {
      * @param $n
      * @param TokenCollection $tokens
      * @return string
+     * @throws \LogicException
      */
     public function extract(&$n, TokenCollection $tokens)
     {

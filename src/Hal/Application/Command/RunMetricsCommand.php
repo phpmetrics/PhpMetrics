@@ -8,14 +8,17 @@
  */
 
 namespace Hal\Application\Command;
-use Hal\Application\Formater\Violations\Xml;
-use Hal\Component\Aggregator\DirectoryAggregatorFlat;
-use Hal\Component\Bounds\Bounds;
+use Hal\Application\Command\Job\DoAggregatedAnalyze;
 use Hal\Application\Command\Job\DoAnalyze;
 use Hal\Application\Command\Job\Queue;
 use Hal\Application\Command\Job\ReportRenderer;
 use Hal\Application\Command\Job\ReportWriter;
 use Hal\Application\Command\Job\SearchBounds;
+use Hal\Application\Formater\Details;
+use Hal\Application\Formater\Summary;
+use Hal\Application\Formater\Violations\Xml;
+use Hal\Component\Aggregator\DirectoryAggregatorFlat;
+use Hal\Component\Bounds\Bounds;
 use Hal\Component\Evaluation\Evaluator;
 use Hal\Component\File\Finder;
 use Symfony\Component\Console\Command\Command;
@@ -23,9 +26,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Hal\Application\Formater\Summary;
-use Hal\Application\Formater\Details;
-use Hal\Application\Command\Job\DoAggregatedAnalyze;
 
 /**
  * Command for run analysis
@@ -93,7 +93,9 @@ class RunMetricsCommand extends Command
         );
 
         // rules
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $rules = new \Hal\Application\Rule\RuleSet();
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $validator = new \Hal\Application\Rule\Validator($rules);
 
         // bounds
@@ -113,7 +115,9 @@ class RunMetricsCommand extends Command
             ;
 
         // execute
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $collection = new \Hal\Component\Result\ResultCollection();
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $aggregatedResults = new \Hal\Component\Result\ResultCollection();
         $queue->execute($collection, $aggregatedResults);
 

@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Component\OOP\Extractor;
-use Hal\Component\Token\Token;
 use Hal\Component\Token\TokenCollection;
 
 
@@ -24,7 +23,7 @@ class Searcher {
      *
      * @param string[] $delimiters
      * @param int $n
-     * @param array $tokens
+     * @param \Hal\Component\Token\TokenCollection $tokens
      * @return null|string
      */
     public function getUnder(array $delimiters, &$n, TokenCollection $tokens) {

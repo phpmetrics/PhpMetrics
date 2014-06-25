@@ -10,7 +10,7 @@
 namespace Hal\Component\Token;
 
 /**
- * Representation of Collection of oken
+ * Representation of Collection of tokens
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */

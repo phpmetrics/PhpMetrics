@@ -39,6 +39,7 @@ class DirectoryAggregatorFlat implements Aggregator {
      * @inheritdoc
      */
     public function aggregates(ResultCollection $results) {
+        $array = array();
         foreach($results as $result) {
             $basename = dirname($result->getFilename());
 

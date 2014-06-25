@@ -116,16 +116,6 @@ class Result implements ExportableInterface {
     }
 
     /**
-     * @param float $dataComplexity
-     * @return $this
-     */
-    public function setDataComplexity($dataComplexity)
-    {
-        $this->dataComplexity = $dataComplexity;
-        return $this;;
-    }
-
-    /**
      * @param int $relativeDataComplexity
      * @return $this
      */

@@ -9,7 +9,6 @@
 
 namespace Hal\Metrics\Complexity\Structural\CardAndAgresti;
 use Hal\Component\OOP\Extractor\ClassMap;
-use Hal\Metrics\Complexity\Structural\CardAndAgresti\CardAndAgresti;
 
 
 /**
