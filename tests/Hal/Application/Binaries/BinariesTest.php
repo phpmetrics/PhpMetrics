@@ -103,4 +103,18 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         $this->assertRegExp('/Maintenability/', $output);
     }
 
+
+    public function testICanRunPharWithFailureCondition() {
+
+        $path = getcwd();
+        copy(__DIR__.'/../../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
+        chdir(sys_get_temp_dir());
+
+        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar --failure-condition="sum.loc = 0" '.$this->toExplore);
+        $output = shell_exec($command);
+        chdir($path);
+
+        $this->assertNotRegExp('!option does not exist!', $output);
+    }
+
 }

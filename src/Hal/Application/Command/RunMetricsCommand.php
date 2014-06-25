@@ -16,6 +16,7 @@ use Hal\Application\Command\Job\Queue;
 use Hal\Application\Command\Job\ReportRenderer;
 use Hal\Application\Command\Job\ReportWriter;
 use Hal\Application\Command\Job\SearchBounds;
+use Hal\Component\Evaluation\Evaluator;
 use Hal\Component\File\Finder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -68,6 +69,9 @@ class RunMetricsCommand extends Command
                 ->addOption(
                     'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will not extract any informations about OOP model (faster)'
                 )
+                ->addOption(
+                        'failure-condition', null, InputOption::VALUE_REQUIRED, 'Optional failure condition, in english. For example: average.maintenabilityIndex < 50 or sum.loc > 10000', null
+                )
         ;
     }
 
@@ -115,7 +119,10 @@ class RunMetricsCommand extends Command
 
         $output->writeln('<info>done</info>');
 
-        return 0;
+        // evaluation of success
+        $evaluator = new Evaluator($collection, $aggregatedResults, $bounds);
+        $result = $evaluator->evaluate($input->getOption('failure-condition'));
+        return $result->getCode();
     }
 
 }
