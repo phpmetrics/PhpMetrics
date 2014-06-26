@@ -1,6 +1,5 @@
 # General Jekyll Config
-url: http://halleck45.github.io/PhpMetrics
-#url: http://localhost:4000
+url: http://www.phpmetrics.org
 exclude: [LICENSE, CNAME, README.md, TODO.md, .gitignore, Makefile, Capfile, config, node_modules, less]
 
 permalink: :title

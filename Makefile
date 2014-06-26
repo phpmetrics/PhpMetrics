@@ -1,5 +1,4 @@
-build:
-	jekyll build
+server:
+	jekyll server -w --config _config.yml,_config_local.yml
 
-deploy: build
-	cap deploy
+
