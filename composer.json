@@ -1,15 +1,23 @@
 {
-    "name": "halleck45/php-metrics",
-    "description": "Static analyze tool for PHP : Coupling, Cyclomatic complexity, Maintenability Index, Halstead's metrics... and more !",
+    "name": "halleck45/phpmetrics",
+    "replace": "halleck45/php-metrics",
+    "description": "Static analyzis tool for PHP : Coupling, Cyclomatic complexity, Maintenability Index, Halstead's metrics... and more !",
     "license": "MIT",
+    "keywords": [
+        "quality",
+        "analysis",
+        "testing",
+        "qa"
+    ],
     "authors": [
         {
             "name": "Jean-François Lépine",
             "email": "lepinejeanfrancois@yahoo.fr",
-            "homepage": "https://www.twitter.com/Halleck45",
+            "homepage": "http://www.lepine.pro",
             "role": "Copyright Holder"
         }
     ],
+    "homepage": "halleck45.github.io/PhpMetrics/",
     "support": {
         "issues": "https://github.com/Halleck45/PhpMetrics/issues"
     },
@@ -21,13 +29,13 @@
     "require": {
         "twig/twig": "1.15.*",
         "symfony/console": "2.4.*",
-	"hoa/ruler": "dev-master"
+	    "hoa/ruler": "dev-master"
     },
     "minimum-stability": "dev",
     "require-dev": {
         "phpunit/phpunit": "4.1.*"
     },
     "bin": [
-        "bin/metrics.php"
+        "bin/phpmetrics.php"
     ]
 }

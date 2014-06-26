@@ -28,17 +28,16 @@ Gives metrics about PHP project and classes.
 
 # Installation
 
-With composer:
+With Composer:
 
-    composer.phar global require 'halleck45/php-metrics=0.6'
+    php composer.phar global require 'halleck45/phpmetrics=@dev'
 
-Or as Phar archive:
-
-    wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar
-
-Then the command `php metrics.phar <folder or filename>` will output:
+Then the command `vendor/bin/phpmetrics <folder or filename>` will output:
 
 ![Standard report](http://halleck45.github.io/PhpMetrics/images/report-standard.png)
+
+You can also download [PhpMetrics as phar archive](https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar).
+
 
 ## Bubbles chart and complete report
 
