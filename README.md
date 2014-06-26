@@ -38,14 +38,14 @@ No panic : you can read the [How to read the HTML report page](http://halleck45.
 
 ## Conditions of failure
 
-Customizing the conditions of failure is very easy with the`--failure-condition` option. For example :
+Customizing the conditions of failure is very easy with the`--failure-condition` option. For example:
 
     --failure-condition="average.maintenabilityIndex < 100 or sum.loc > 10000"
 
-With this example, PhpMetrics script returns 1 if the avegare of Maintenability index is lower than 100
+With this example, PhpMetrics script returns 1 if the average of Maintenability index is lower than 100
 or if the total number of lines of code is greater than 10000.
 
-You can also work with package :
+You can also work with package:
 
     --failure-condition="My/Package1/XXXX.average.bugs > 0.35"
 
@@ -54,7 +54,7 @@ Remember that in PhpMetrics package are file oriented (and not object oriented).
 Conditions are evaluated with the [Hoa Ruler](https://github.com/hoaproject/Ruler) component. Available operators are
 `and`, `or`, `xor`, `not`, `=` (`is` as an alias), `!=`, `>`, `>=`, `<`, `<=`, `in` and `sum`
 
-List of availables metrics is documented [here](halleck45.github.io/PhpMetrics/documentation/index.html).
+List of availables metrics is documented [here](http://halleck45.github.io/PhpMetrics/documentation/index.html).
 
 
 ## Jenkins and IC integration
@@ -72,7 +72,7 @@ You can also export results as violations (MessDetector report), in XML format w
 
 # Contribute
 
-In order to run unit tests, please install dev dependencies:
+In order to run unit tests, please install the dev dependencies:
 
     curl -sS https://getcomposer.org/installer | php
     php composer.phar install --dev
@@ -87,4 +87,4 @@ Then, to run the test suite:
 
 # Licence
 
-See the LICENCE file
+See the LICENCE file.
