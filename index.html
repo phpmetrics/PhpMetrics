@@ -28,16 +28,23 @@ title: PhpMetrics by Halleck45
 
                 <div>
                     <p>
-                        Download PhpMetrics:
+                        Download PhpMetrics (with composer):
                     </p>
-                    <pre>wget https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar</pre>
+                    <pre>php composer.phar global require 'halleck45/phpmetrics=@dev'</pre>
+                    <p>
+                        If you're installing a global package with Composer for the first time, remember to add the following
+                        line to your `.bashrc` file: `export PATH=~/.composer/vendor/bin:$PATH`
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        Usage:
+                    </p>
+                    <pre>vendor/bin/phpmetrics --report-html=/path/of/report.html &lt;folder or filename&gt;</pre>
                 </div>
 
                 <div>
-                    <p>
-                        Use it:
-                    </p>
-                    <pre>php metrics.phar --report-html=/path/of/report.html &lt;folder or filename&gt;</pre>
+                    <p>PhpMetrics come also as [Phar archive](https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar).</p>
                 </div>
 
             </div>
