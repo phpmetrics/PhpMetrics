@@ -1,4 +1,5 @@
 # General Jekyll Config
+baseurl: http://www.phpmetrics.org
 url: http://www.phpmetrics.org
 exclude: [LICENSE, CNAME, README.md, TODO.md, .gitignore, Makefile, Capfile, config, node_modules, less]
 

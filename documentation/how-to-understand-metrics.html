@@ -1,0 +1,148 @@
+---
+layout: default
+title: How to understand the PhpMetrics' metrics
+---
+
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>How to understand the PhpMetrics' metrics</h2>
+                    <hr class="star-light">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="doc-all">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <p>
+                        According to me, you should understand at least the following metrics at beginning:
+                    </p>
+                    <ul>
+                        <li><a href="#lcom">Lack of cohesion of methods</a></li>
+                        <li><a href="#mi">Maintenability Index</a></li>
+                        <li><a href="#halstead-diff">Halstead's difficulty</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <section id="lcom">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Lack of cohesion of methods</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    <p>
+                        Lack of cohesion of methods (LCOM) is a measure of the number of responsabilities of class.
+                    </p>
+                    <p>
+                        Thus, if you consider the <a href="http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)">SOLID principles</a>, the ideal LCOM is <code>LCOM=1</code>.
+                    </p>
+                    <p>
+                        We can take an example:
+                    </p>
+
+{% highlight php %}
+<?php
+class Example {
+    private $a;
+    private $b;
+
+    public function f1() {
+        $this->a = 1;
+    }
+
+    public function f2() {
+        $this->f3();
+    }
+
+    public function f3() {
+        $this->a = 2;
+    }
+
+    public function f4() {
+        $this->b = 3;
+    }
+
+    public function f5() {
+        $this->b = 4;
+    }
+
+}
+{% endhighlight %}
+
+                    <p>
+                        If we examine this class, we get two flows:
+                    </p>
+                    <ul>
+                        <li><code>f1()</code> share attribute <code>a</code> with <code>f3()</code>, and <code>f2()</code> calls <code>f3()</code></li>
+                        <li><code>f4()</code> share attribute <code>b</code> with <code>f5()</code></li>
+                    </ul>
+                    <p>
+                        Therefore, the LCOM value for <code>Example</code> is <code>2</code>. Indeed, <code>Example</code> has two responsabilities.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+    <section id="mi">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Maintenability Index</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+                    <p>Soon</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="halstead-diff">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Halstead' difficulty</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+                    <p>Soon</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
