@@ -10,6 +10,7 @@ Gives metrics about PHP project and classes.
 + [Installation](#installation)
 + [Usage](#usage)
 + [Conditions of failure](#conditions-of-failure)
++ [IDE integration](#ide-integration)
 + [Jenkins and PIC integration](#jenkins-and-pic-integration)
 
 
@@ -57,6 +58,10 @@ Conditions are evaluated with the [Hoa Ruler](https://github.com/hoaproject/Rule
 List of availables metrics is documented [here](http://halleck45.github.io/PhpMetrics/documentation/index.html).
 
 
+## IDE integration
+
++ [PhpMetrics plugin for PhpStom](http://plugins.jetbrains.com/plugin/7500)
+
 ## Jenkins and IC integration
 
 You'll find a complete tutorial in the [documentation](http://halleck45.github.io/PhpMetrics/documentation/jenkins.html)
@@ -68,7 +73,6 @@ You can easily export results to XML with the `--report-xml` option:
 You can also export results as violations (MessDetector report), in XML format with the `--violations-xml` option:
 
     php ./bin/metrics.php --violations-xml=/path/of/your/choice.xml <folder or filename>
-
 
 # Contribute
 
