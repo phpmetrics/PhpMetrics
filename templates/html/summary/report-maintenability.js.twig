@@ -56,12 +56,12 @@
             for(i in root) {
                 var e = root[i];
                 if(e.maintenabilityIndex > 85 || e.maintenabilityIndex == 'INF') {
-                    color = '#78BA00';
+                    color = '#2DA16F'; //#78BA00
                 }else if(e.maintenabilityIndex > 65) {
-                    color = '#F4B300';
+                    color = '#4AA02C'; //#F4B300
                 }
                 else {
-                    color = '#FF2E12';
+                    color = 'green'; //#FF2E12
                 }
                 datas.push({
                     "value": parseFloat(e.cyclomaticComplexity) + 1
