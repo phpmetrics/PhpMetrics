@@ -126,7 +126,6 @@ class FileAnalyzer
         $rMyer = $this->myer->calculate($filename);
         $rMaintenability = $this->maintenabilityIndex->calculate($rHalstead, $rLoc, $rMcCabe);
 
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $resultSet = new \Hal\Component\Result\ResultSet($filename);
         $resultSet
             ->setLoc($rLoc)

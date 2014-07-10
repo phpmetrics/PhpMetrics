@@ -93,9 +93,7 @@ class RunMetricsCommand extends Command
         );
 
         // rules
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $rules = new \Hal\Application\Rule\RuleSet();
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $validator = new \Hal\Application\Rule\Validator($rules);
 
         // bounds
@@ -115,9 +113,7 @@ class RunMetricsCommand extends Command
             ;
 
         // execute
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $collection = new \Hal\Component\Result\ResultCollection();
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $aggregatedResults = new \Hal\Component\Result\ResultCollection();
         $queue->execute($collection, $aggregatedResults);
 

@@ -36,10 +36,7 @@ class MaintenabilityIndex {
      * @param \Hal\Metrics\Complexity\Component\McCabe\Result $rMcCabe
      * @return Result
      */
-    public function calculate(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hal\Metrics\Complexity\Text\Halstead\Result $rHalstead, /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hal\Metrics\Complexity\Text\Length\Result $rLoc, /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hal\Metrics\Complexity\Component\McCabe\Result $rMcCabe)
+    public function calculate(\Hal\Metrics\Complexity\Text\Halstead\Result $rHalstead, \Hal\Metrics\Complexity\Text\Length\Result $rLoc, \Hal\Metrics\Complexity\Component\McCabe\Result $rMcCabe)
     {
         $result = new Result;
         $result->setMaintenabilityIndexWithoutComment(max(

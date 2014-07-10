@@ -87,8 +87,7 @@ class ResultAggregate implements ExportableInterface, ResultSetInterface {
      * @param \Hal\Metrics\Mood\Abstractness\Result $abstractness
      * @return ResultAggregate
      */
-    public function setAbstractness(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hal\Metrics\Mood\Abstractness\Result $abstractness)
+    public function setAbstractness(\Hal\Metrics\Mood\Abstractness\Result $abstractness)
     {
         $this->abstractness = $abstractness;
         return $this;
@@ -106,8 +105,7 @@ class ResultAggregate implements ExportableInterface, ResultSetInterface {
      * @param \Hal\Component\Bounds\Result\BoundsResult $bounds
      * @return ResultAggregate
      */
-    public function setBounds(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hal\Component\Bounds\Result\BoundsResult $bounds)
+    public function setBounds(\Hal\Component\Bounds\Result\BoundsResult $bounds)
     {
         $this->bounds = $bounds;
         return $this;

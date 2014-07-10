@@ -65,9 +65,7 @@ class Evaluator
         }
 
         $bounds = $this->bound->calculate($this->collection);
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $ruler = new \Hoa\Ruler\Ruler();
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $context = new \Hoa\Ruler\Context();
 
         // general
@@ -91,7 +89,7 @@ class Evaluator
 
         try {
             $result->setValid(true === $ruler->assert($rule, $context));
-        } /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */ catch(\Hoa\Ruler\Exception\Asserter $e) {
+        } catch(\Hoa\Ruler\Exception\Asserter $e) {
             throw new \LogicException(sprintf('Cannot evaluate rule : %s', $e->getMessage()));
         }
         return $result;

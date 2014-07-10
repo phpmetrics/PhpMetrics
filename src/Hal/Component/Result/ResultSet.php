@@ -128,8 +128,7 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
      * @param \Hal\Metrics\Complexity\Text\Halstead\Result $halstead
      * @return $this
      */
-    public function setHalstead(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hal\Metrics\Complexity\Text\Halstead\Result $halstead)
+    public function setHalstead(\Hal\Metrics\Complexity\Text\Halstead\Result $halstead)
     {
         $this->halstead = $halstead;
         return $this;
@@ -147,8 +146,7 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
      * @param \Hal\Metrics\Complexity\Text\Length\Result $loc
      * @return $this
      */
-    public function setLoc(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hal\Metrics\Complexity\Text\Length\Result $loc)
+    public function setLoc(\Hal\Metrics\Complexity\Text\Length\Result $loc)
     {
         $this->loc = $loc;
         return $this;
@@ -167,8 +165,7 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
      * @param \Hal\Metrics\Complexity\Component\McCabe\Result $mcCabe
      * @return $this
      */
-    public function setMcCabe(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hal\Metrics\Complexity\Component\McCabe\Result $mcCabe)
+    public function setMcCabe(\Hal\Metrics\Complexity\Component\McCabe\Result $mcCabe)
     {
         $this->mcCabe = $mcCabe;
         return $this;
@@ -204,8 +201,7 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
      * @param \Hal\Metrics\Design\Component\MaintenabilityIndex\Result $maintenabilityIndex
      * @return $this
      */
-    public function setMaintenabilityIndex(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hal\Metrics\Design\Component\MaintenabilityIndex\Result $maintenabilityIndex)
+    public function setMaintenabilityIndex(\Hal\Metrics\Design\Component\MaintenabilityIndex\Result $maintenabilityIndex)
     {
         $this->maintenabilityIndex = $maintenabilityIndex;
         return $this;
@@ -268,8 +264,7 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
     /**
      * @param \Hal\Metrics\Complexity\Structural\LCOM\Result $lcom
      */
-    public function setLcom(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hal\Metrics\Complexity\Structural\LCOM\Result $lcom)
+    public function setLcom(\Hal\Metrics\Complexity\Structural\LCOM\Result $lcom)
     {
         $this->lcom = $lcom;
     }
@@ -286,8 +281,7 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
      * @param \Hal\Metrics\Complexity\Structural\CardAndAgresti\Result $systemComplexity
      * @return $this
      */
-    public function setSystemComplexity( /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hal\Metrics\Complexity\Structural\CardAndAgresti\Result $systemComplexity)
+    public function setSystemComplexity(\Hal\Metrics\Complexity\Structural\CardAndAgresti\Result $systemComplexity)
     {
         $this->systemComplexity = $systemComplexity;
         return $this;
