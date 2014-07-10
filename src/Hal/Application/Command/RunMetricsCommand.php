@@ -19,6 +19,8 @@ use Hal\Application\Formater\Summary;
 use Hal\Application\Formater\Violations\Xml;
 use Hal\Component\Aggregator\DirectoryAggregatorFlat;
 use Hal\Component\Bounds\Bounds;
+use Hal\Component\Config\Configuration;
+use Hal\Component\Config\Loader;
 use Hal\Component\Evaluation\Evaluator;
 use Hal\Component\File\Finder;
 use Symfony\Component\Console\Command\Command;
@@ -73,7 +75,7 @@ class RunMetricsCommand extends Command
                     'failure-condition', null, InputOption::VALUE_REQUIRED, 'Optional failure condition, in english. For example: average.maintenabilityIndex < 50 or sum.loc > 10000', null
                 )
                 ->addOption(
-                    'config', null, InputOption::VALUE_REQUIRED, 'Config file (YAML)', './phpmetrics.yml'
+                    'config', null, InputOption::VALUE_REQUIRED, 'Config file (YAML)', null
                 )
         ;
     }
@@ -95,8 +97,16 @@ class RunMetricsCommand extends Command
             $input->getOption('excludedDirs')
         );
 
+        // config
+        if(strlen($input->getOption('config')) > 0) {
+            $loader = new Loader();
+            $config = $loader->load($input->getOption('config'));
+        } else {
+            $config = new Configuration;
+        }
+
         // rules
-        $rules = new \Hal\Application\Rule\RuleSet();
+        $rules = $config->getRuleSet();
         $validator = new \Hal\Application\Rule\Validator($rules);
 
         // bounds

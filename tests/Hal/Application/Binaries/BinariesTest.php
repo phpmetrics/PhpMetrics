@@ -117,4 +117,27 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotRegExp('!option does not exist!', $output);
     }
 
+
+    public function testICanRunPharWithConfigFileOption() {
+
+        $path = getcwd();
+        copy(__DIR__.'/../../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
+        chdir(sys_get_temp_dir());
+
+        $content = <<<EOT
+rules:
+    cyclomaticComplexity: [1,2,3]
+EOT;
+        $filename = \tempnam(sys_get_temp_dir(), 'rule.yml');
+        file_put_contents($filename, $content);
+
+
+        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar --config=%s '.$this->toExplore, $filename);
+        $output = shell_exec($command);
+        chdir($path);
+        unlink($filename);
+
+        $this->assertNotRegExp('!option does not exist!', $output);
+    }
+
 }

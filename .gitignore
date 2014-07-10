@@ -7,3 +7,4 @@ provision.sh
 .vagrant
 Makefile
 /nbproject
+phpmetrics.yml.dist
