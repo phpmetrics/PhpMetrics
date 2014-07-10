@@ -70,7 +70,10 @@ class RunMetricsCommand extends Command
                     'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will not extract any informations about OOP model (faster)'
                 )
                 ->addOption(
-                        'failure-condition', null, InputOption::VALUE_REQUIRED, 'Optional failure condition, in english. For example: average.maintenabilityIndex < 50 or sum.loc > 10000', null
+                    'failure-condition', null, InputOption::VALUE_REQUIRED, 'Optional failure condition, in english. For example: average.maintenabilityIndex < 50 or sum.loc > 10000', null
+                )
+                ->addOption(
+                    'config', null, InputOption::VALUE_REQUIRED, 'Config file (YAML)', './phpmetrics.yml'
                 )
         ;
     }
