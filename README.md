@@ -50,7 +50,7 @@ You can also work with package:
 
     --failure-condition="My/Package1/XXXX.average.bugs > 0.35"
 
-Remember that in PhpMetrics package are file oriented (and not object oriented).
+Remember that in PhpMetrics packages are file oriented (and not object oriented).
 
 Conditions are evaluated with the [Hoa Ruler](https://github.com/hoaproject/Ruler) component. Available operators are
 `and`, `or`, `xor`, `not`, `=` (`is` as an alias), `!=`, `>`, `>=`, `<`, `<=`, `in` and `sum`
