@@ -29,13 +29,13 @@
         }
     },
     "require": {
-        "twig/twig": "1.15.*",
-        "symfony/console": "2.4.*",
-	    "hoa/ruler": "dev-master"
+        "twig/twig": "~1.15",
+        "symfony/console": "~2.4",
+        "hoa/ruler": "dev-master"
     },
     "minimum-stability": "dev",
     "require-dev": {
-        "phpunit/phpunit": "4.1.*"
+        "phpunit/phpunit": "~4.1"
     },
     "bin": [
         "bin/phpmetrics.php"
