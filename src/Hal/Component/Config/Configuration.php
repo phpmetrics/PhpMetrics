@@ -25,6 +25,20 @@ class Configuration
     private $ruleset;
 
     /**
+     * Directories to exclude (regex)
+     *
+     * @var string
+     */
+    private $excludeDirs;
+
+    /**
+     * Extensions to include (regex)
+     *
+     * @var string
+     */
+    private $extensions;
+
+    /**
      * Condition of failure
      *
      * @var string
@@ -74,5 +88,42 @@ class Configuration
     {
         return $this->failureCondition;
     }
+
+    /**
+     * @param string $exclude
+     * @return $this
+     */
+    public function setExcludeDirs($exclude)
+    {
+        $this->excludeDirs = $exclude;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExcludeDirs()
+    {
+        return $this->excludeDirs;
+    }
+
+    /**
+     * @param string $extensions
+     * @return $this
+     */
+    public function setExtensions($extensions)
+    {
+        $this->extensions = $extensions;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtensions()
+    {
+        return $this->extensions;
+    }
+
 
 }

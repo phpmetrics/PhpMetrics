@@ -42,6 +42,13 @@ class TreeBuilder implements \Hal\Component\Config\TreeBuilderInterface
                 ->scalarNode('failure')
                     ->defaultValue(null)
                 ->end()
+                ->arrayNode('path')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('exclude')->defaultValue('Tests|tests|Features|features')->end()
+                        ->scalarNode('extensions')->defaultValue('php|inc')->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

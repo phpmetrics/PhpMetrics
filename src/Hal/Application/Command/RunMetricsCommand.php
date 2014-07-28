@@ -65,10 +65,10 @@ class RunMetricsCommand extends Command
                     'level', null, InputOption::VALUE_REQUIRED, 'Depth of summary report', 0
                 )
                 ->addOption(
-                    'extensions', null, InputOption::VALUE_REQUIRED, 'Regex of extensions to include', 'php'
+                    'extensions', null, InputOption::VALUE_REQUIRED, 'Regex of extensions to include', null
                 )
                 ->addOption(
-                    'excludedDirs', null, InputOption::VALUE_REQUIRED, 'Regex of subdirectories to exclude', 'Tests|Features'
+                    'excludedDirs', null, InputOption::VALUE_REQUIRED, 'Regex of subdirectories to exclude', null
                 )
                 ->addOption(
                     'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will not extract any informations about OOP model (faster)'
@@ -93,12 +93,6 @@ class RunMetricsCommand extends Command
 
         $level = $input->getOption('level');
 
-        // files
-        $finder = new Finder(
-            $input->getOption('extensions'),
-            $input->getOption('excludedDirs')
-        );
-
         // config
         if(strlen($input->getOption('config')) > 0) {
             $treeBuilder = new TreeBuilder();
@@ -106,8 +100,18 @@ class RunMetricsCommand extends Command
             $config = $loader->load($input->getOption('config'));
         } else {
             $config = new Configuration;
-            $config->setFailureCondition($input->getOption('failure-condition'));
+            $config
+                ->setFailureCondition($input->getOption('failure-condition'))
+                ->setExcludeDirs($input->getOption('excludedDirs'))
+                ->setExtensions($input->getOption('extensions'))
+            ;
         }
+
+        // files
+        $finder = new Finder(
+            $config->getExtensions()
+            , $config->getExcludeDirs()
+        );
 
         // rules
         $rules = $config->getRuleSet();

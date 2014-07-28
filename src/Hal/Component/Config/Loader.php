@@ -52,10 +52,13 @@ class Loader
 
         // check configuration
         $array = $this->validator->validates($array);
-
         $config = new Configuration;
-        isset($array['rules']) && $config->setRuleSet(new RuleSet( (array) $array['rules']));
-        isset($array['failure']) && $config->setFailureCondition($array['failure']);
+        $config
+            ->setRuleSet(new RuleSet( (array) $array['rules']))
+            ->setFailureCondition($array['failure'])
+            ->setExcludeDirs($array['path']['exclude'])
+            ->setExtensions($array['path']['extensions'])
+        ;
         return $config;
     }
 }

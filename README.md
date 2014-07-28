@@ -82,15 +82,19 @@ The file should be a valid yaml syntax. For example:
 
     # file <my-config.yml>
 
+    # paths to explore
+    path:
+        extensions: php|inc
+        exclude: Features|Tests|tests
+
+    # condition of failure
+    failure: average.maintenabilityIndex < 50 or sum.loc > 10000
+
     # rules used for color
     rules:
       cyclomaticComplexity: [ 10, 6, 2 ]
       maintenabilityIndex: [ 0, 69, 85 ]
       [...]
-
-    # condition of failure
-    failure: average.maintenabilityIndex < 50 or sum.loc > 10000
-
 
 Each rule is composed from three values.
 
