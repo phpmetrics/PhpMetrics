@@ -1,3 +1,5 @@
 default:
     rules:
         cyclomaticComplexity: [ 10, 6, 2 ]
+
+    failure: average.maintenabilityIndex < 50 or sum.loc > 10000

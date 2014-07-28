@@ -39,6 +39,9 @@ class TreeBuilder implements \Hal\Component\Config\TreeBuilderInterface
                         ->end()
                     ->end()
                 ->end()
+                ->scalarNode('failure')
+                    ->defaultValue(null)
+                ->end()
             ->end()
         ;
 

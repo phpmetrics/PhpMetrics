@@ -25,10 +25,18 @@ class Configuration
     private $ruleset;
 
     /**
+     * Condition of failure
+     *
+     * @var string
+     */
+    private $failureCondition;
+
+    /**
      * Constructor
      */
     public function __construct() {
         $this->ruleset = new RuleSet();
+        $this->failureCondition = null;
     }
 
     /**
@@ -47,6 +55,24 @@ class Configuration
     public function getRuleSet()
     {
         return $this->ruleset;
+    }
+
+    /**
+     * @param string $failureCondition
+     * @return $this
+     */
+    public function setFailureCondition($failureCondition)
+    {
+        $this->failureCondition = $failureCondition;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFailureCondition()
+    {
+        return $this->failureCondition;
     }
 
 }

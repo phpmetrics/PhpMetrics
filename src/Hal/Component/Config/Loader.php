@@ -55,6 +55,7 @@ class Loader
 
         $config = new Configuration;
         isset($array['rules']) && $config->setRuleSet(new RuleSet( (array) $array['rules']));
+        isset($array['failure']) && $config->setFailureCondition($array['failure']);
         return $config;
     }
 }

@@ -125,8 +125,9 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         chdir(sys_get_temp_dir());
 
         $content = <<<EOT
-rules:
-    cyclomaticComplexity: [1,2,3]
+default:
+    rules:
+        cyclomaticComplexity: [1,2,3]
 EOT;
         $filename = \tempnam(sys_get_temp_dir(), 'rule.yml');
         file_put_contents($filename, $content);
@@ -138,6 +139,7 @@ EOT;
         unlink($filename);
 
         $this->assertNotRegExp('!option does not exist!', $output);
+        $this->assertRegExp('!PHPMetrics by Jean-François Lépine!', $output);
     }
 
 }

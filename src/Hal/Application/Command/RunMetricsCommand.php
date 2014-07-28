@@ -106,6 +106,7 @@ class RunMetricsCommand extends Command
             $config = $loader->load($input->getOption('config'));
         } else {
             $config = new Configuration;
+            $config->setFailureCondition($input->getOption('failure-condition'));
         }
 
         // rules
@@ -137,7 +138,7 @@ class RunMetricsCommand extends Command
 
         // evaluation of success
         $evaluator = new Evaluator($collection, $aggregatedResults, $bounds);
-        $result = $evaluator->evaluate($input->getOption('failure-condition'));
+        $result = $evaluator->evaluate($config->getFailureCondition());
         return $result->getCode();
     }
 

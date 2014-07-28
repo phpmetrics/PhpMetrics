@@ -76,25 +76,21 @@ You can also export results as violations (MessDetector report), in XML format w
 
 ## Customize rules
 
-You can customize rules (colors) with the `--config=<file>` option.
+You can customize configuration with the `--config=<file>` option.
 
 The file should be a valid yaml syntax. For example:
 
     # file <my-config.yml>
+
+    # rules used for color
     rules:
       cyclomaticComplexity: [ 10, 6, 2 ]
       maintenabilityIndex: [ 0, 69, 85 ]
-      logicalLoc: [ 800, 400, 200 ]
-      volume: [ 1300, 1000, 300 ]
-      bugs: [ 0.35, 0.25, 0.15 ]
-      commentWeight: [ 36, 38, 41 ]
-      vocabulary: [ 51, 34, 27 ]
-      difficulty: [ 18, 15, 5.8 ]
-      instability: [ 1, .95, .45 ]
-      afferentCoupling: [ 20, 15, 9 ]
-      efferentCoupling: [ 15, 11, 7 ]
-      myerDistance: [ 10, 5, 2 ]
-      lcom: [ 3, 2, 1.5 ]
+      [...]
+
+    # condition of failure
+    failure: average.maintenabilityIndex < 50 or sum.loc > 10000
+
 
 Each rule is composed from three values.
 

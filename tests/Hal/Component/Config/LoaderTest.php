@@ -1,6 +1,8 @@
 <?php
 namespace Test\Hal\Component\Config;
+use Hal\Application\Config\TreeBuilder;
 use Hal\Component\Config\Loader;
+use Hal\Component\Config\Validator;
 
 
 /**
@@ -11,12 +13,14 @@ class LoaderTest extends \PHPUnit_Framework_TestCase {
     public function testICanDefineRulesInConfigFile() {
 
         $content = <<<EOT
-rules:
-    example1: [ 1,2,3 ]
+default:
+    rules:
+        example1: [ 1,2,3 ]
 EOT;
         $filename = \tempnam(sys_get_temp_dir(), 'rule.yml');
         file_put_contents($filename, $content);
-        $loader = new Loader();
+        $treebuilder = new TreeBuilder();
+        $loader = new Loader(new Validator($treebuilder->getTree()));
         $config = $loader->load($filename);
         unlink($filename);
 
@@ -31,7 +35,8 @@ EOT;
      * @expectedExceptionMessage configuration file is not accessible
      */
     public function testExplicitExceptionIsThrownWhenConfigFileIsNotFound() {
-        $loader = new Loader();
+        $treebuilder = new TreeBuilder();
+        $loader = new Loader(new Validator($treebuilder->getTree()));
         $config = $loader->load('/pat/to/anything');
     }
 
