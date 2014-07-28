@@ -18,6 +18,21 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Loader
 {
+    /**
+     * Validator of configuration
+     *
+     * @var Validator
+     */
+    private $validator;
+
+    /**
+     * Constructor
+     *
+     * @param Validator $validator
+     */
+    public function __construct(Validator $validator) {
+        $this->validator = $validator;
+    }
 
     /**
      * Load config file
@@ -34,6 +49,9 @@ class Loader
         $content = file_get_contents($filename);
         $parser = new Yaml();
         $array = $parser->parse($content);
+
+        // check configuration
+        $array = $this->validator->validates($array);
 
         $config = new Configuration;
         isset($array['rules']) && $config->setRuleSet(new RuleSet( (array) $array['rules']));

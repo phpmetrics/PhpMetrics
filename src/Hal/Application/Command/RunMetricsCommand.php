@@ -14,6 +14,7 @@ use Hal\Application\Command\Job\Queue;
 use Hal\Application\Command\Job\ReportRenderer;
 use Hal\Application\Command\Job\ReportWriter;
 use Hal\Application\Command\Job\SearchBounds;
+use Hal\Application\Config\TreeBuilder;
 use Hal\Application\Formater\Details;
 use Hal\Application\Formater\Summary;
 use Hal\Application\Formater\Violations\Xml;
@@ -21,6 +22,7 @@ use Hal\Component\Aggregator\DirectoryAggregatorFlat;
 use Hal\Component\Bounds\Bounds;
 use Hal\Component\Config\Configuration;
 use Hal\Component\Config\Loader;
+use Hal\Component\Config\Validator;
 use Hal\Component\Evaluation\Evaluator;
 use Hal\Component\File\Finder;
 use Symfony\Component\Console\Command\Command;
@@ -99,7 +101,8 @@ class RunMetricsCommand extends Command
 
         // config
         if(strlen($input->getOption('config')) > 0) {
-            $loader = new Loader();
+            $treeBuilder = new TreeBuilder();
+            $loader = new Loader(new Validator($treeBuilder->getTree()));
             $config = $loader->load($input->getOption('config'));
         } else {
             $config = new Configuration;

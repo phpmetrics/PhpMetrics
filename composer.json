@@ -31,7 +31,8 @@
     "require": {
         "twig/twig": "1.15.*",
         "symfony/console": "2.4.*",
-	    "hoa/ruler": "dev-master"
+	    "hoa/ruler": "dev-master",
+	    "symfony/config": "~2.4"
     },
     "minimum-stability": "dev",
     "require-dev": {

@@ -1,0 +1,3 @@
+default:
+    rules:
+        cyclomaticComplexity: [ 10, 6, 2 ]
