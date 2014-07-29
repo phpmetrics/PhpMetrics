@@ -25,7 +25,7 @@ EOT;
         unlink($filename);
 
 
-        $this->assertInstanceOf('\Hal\Component\Config\Configuration', $config);
+        $this->assertInstanceOf('\Hal\Application\Config\Configuration', $config);
         $this->assertEquals(array(1,2,3), $config->getRuleSet()->getRule('example1'));
 
     }
