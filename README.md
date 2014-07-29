@@ -12,6 +12,7 @@ Gives metrics about PHP project and classes.
 + [Conditions of failure](#conditions-of-failure)
 + [IDE integration](#ide-integration)
 + [Jenkins and PIC integration](#jenkins-and-pic-integration)
++ [Configuration file](#configuration-file)
 
 
 
@@ -74,11 +75,11 @@ You can also export results as violations (MessDetector report), in XML format w
 
     php ./bin/metrics.php --violations-xml=/path/of/your/choice.xml <folder or filename>
 
-## Customize rules
+## Configuration file
 
 You can customize configuration with the `--config=<file>` option.
 
-The file should be a valid yaml syntax. For example:
+The file should be a valid yaml file. For example:
 
     # file <my-config.yml>
 
@@ -86,6 +87,15 @@ The file should be a valid yaml syntax. For example:
     path:
         extensions: php|inc
         exclude: Features|Tests|tests
+
+    # report and violations files
+    logging:
+        report:
+            xml:    ./log/phpmetrics.xml
+            html:   ./log/phpmetrics.html
+            csv:    ./log/phpmetrics.csv
+        violations:
+            xml:    ./log/violations.xml
 
     # condition of failure
     failure: average.maintenabilityIndex < 50 or sum.loc > 10000

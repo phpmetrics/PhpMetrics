@@ -14,15 +14,13 @@ use Hal\Application\Command\Job\Queue;
 use Hal\Application\Command\Job\ReportRenderer;
 use Hal\Application\Command\Job\ReportWriter;
 use Hal\Application\Command\Job\SearchBounds;
-use Hal\Application\Config\TreeBuilder;
+use Hal\Application\Config\ConfigFactory;
+use Hal\Application\Config\Logging;
 use Hal\Application\Formater\Details;
 use Hal\Application\Formater\Summary;
 use Hal\Application\Formater\Violations\Xml;
 use Hal\Component\Aggregator\DirectoryAggregatorFlat;
 use Hal\Component\Bounds\Bounds;
-use Hal\Component\Config\Configuration;
-use Hal\Component\Config\Loader;
-use Hal\Component\Config\Validator;
 use Hal\Component\Evaluation\Evaluator;
 use Hal\Component\File\Finder;
 use Symfony\Component\Console\Command\Command;
@@ -47,7 +45,7 @@ class RunMetricsCommand extends Command
                 ->setName('metrics')
                 ->setDescription('Run analysis')
                 ->addArgument(
-                    'path', InputArgument::REQUIRED, 'Path to explore'
+                    'path', InputArgument::OPTIONAL, 'Path to explore'
                 )
                 ->addOption(
                     'report-html',null, InputOption::VALUE_REQUIRED, 'Path to save report in HTML format. Example: /tmp/report.html'
@@ -94,23 +92,16 @@ class RunMetricsCommand extends Command
         $level = $input->getOption('level');
 
         // config
-        if(strlen($input->getOption('config')) > 0) {
-            $treeBuilder = new TreeBuilder();
-            $loader = new Loader(new Validator($treeBuilder->getTree()));
-            $config = $loader->load($input->getOption('config'));
-        } else {
-            $config = new Configuration;
-            $config
-                ->setFailureCondition($input->getOption('failure-condition'))
-                ->setExcludeDirs($input->getOption('excludedDirs'))
-                ->setExtensions($input->getOption('extensions'))
-            ;
-        }
+        $configFactory = new ConfigFactory();
+        $config = $configFactory->factory($input);
 
         // files
+        if(null === $config->getPath()->getBasePath()) {
+            throw new \LogicException('Please provide a path to analyze');
+        }
         $finder = new Finder(
-            $config->getExtensions()
-            , $config->getExcludeDirs()
+            $config->getPath()->getExtensions()
+            , $config->getPath()->getExcludedDirs()
         );
 
         // rules
@@ -123,14 +114,14 @@ class RunMetricsCommand extends Command
         // jobs queue planning
         $queue = new Queue();
         $queue
-            ->push(new DoAnalyze($output, $finder, $input->getArgument('path'), !$input->getOption('without-oop')))
+            ->push(new DoAnalyze($output, $finder, $config->getPath()->getBasePath(), !$input->getOption('without-oop')))
             ->push(new SearchBounds($output, $bounds))
             ->push(new DoAggregatedAnalyze($output, new DirectoryAggregatorFlat($level)))
             ->push(new ReportRenderer($output, new Summary\Cli($validator, $bounds)))
-            ->push(new ReportWriter($input->getOption('report-html'), $output, new Summary\Html($validator, $bounds)))
-            ->push(new ReportWriter($input->getOption('report-xml'), $output, new Summary\Xml($validator, $bounds)))
-            ->push(new ReportWriter($input->getOption('report-csv'), $output, new Details\Csv($validator, $bounds)))
-            ->push(new ReportWriter($input->getOption('violations-xml'), $output, new Xml($validator, $bounds)))
+            ->push(new ReportWriter($config->getLogging()->getReport('html'), $output, new Summary\Html($validator, $bounds)))
+            ->push(new ReportWriter($config->getLogging()->getReport('xml'), $output, new Summary\Xml($validator, $bounds)))
+            ->push(new ReportWriter($config->getLogging()->getReport('csv'), $output, new Details\Csv($validator, $bounds)))
+            ->push(new ReportWriter($config->getLogging()->getViolation('xml'), $output, new Xml($validator, $bounds)))
             ;
 
         // execute

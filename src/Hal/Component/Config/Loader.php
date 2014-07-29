@@ -8,6 +8,9 @@
  */
 
 namespace Hal\Component\Config;
+use Hal\Application\Config\Configuration;
+use Hal\Application\Config\LoggingConfiguration;
+use Hal\Application\Config\PathConfiguration;
 use Hal\Application\Rule\RuleSet;
 use Symfony\Component\Yaml\Yaml;
 
@@ -52,12 +55,21 @@ class Loader
 
         // check configuration
         $array = $this->validator->validates($array);
-        $config = new Configuration;
+
+
+        $path = new PathConfiguration();
+        $path
+            ->setBasePath($array['path']['directory'])
+            ->setExtensions($array['path']['extensions'])
+            ->setExcludedDirs($array['path']['exclude'])
+        ;
+
+        $config = new Configuration();
         $config
             ->setRuleSet(new RuleSet( (array) $array['rules']))
             ->setFailureCondition($array['failure'])
-            ->setExcludeDirs($array['path']['exclude'])
-            ->setExtensions($array['path']['extensions'])
+            ->setPath($path)
+            ->setLogging(new LoggingConfiguration($array['logging']))
         ;
         return $config;
     }

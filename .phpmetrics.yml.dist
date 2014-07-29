@@ -3,6 +3,16 @@ default:
         cyclomaticComplexity: [ 10, 6, 2 ]
 
     failure: average.maintenabilityIndex < 50 or sum.loc > 10000
+
     path:
+        directory: src
         extensions: php
         exclude: Features|Tests
+
+    logging:
+        report:
+            xml:    ./log/phpmetrics.xml
+            html:   ./log/phpmetrics.html
+            csv:    ./log/phpmetrics.csv
+        violations:
+            xml:    ./log/violations.xml

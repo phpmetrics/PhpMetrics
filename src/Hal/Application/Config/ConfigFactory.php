@@ -1,0 +1,52 @@
+<?php
+
+/*
+ * (c) Jean-François Lépine <https://twitter.com/Halleck45>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Hal\Application\Config;
+use Hal\Application\Config\Configuration;
+use Hal\Component\Config\Loader;
+use Hal\Component\Config\Validator;
+use Symfony\Component\Console\Input\InputInterface;
+
+/**
+ * Config factory
+ *
+ * @author Jean-François Lépine <https://twitter.com/Halleck45>
+ */
+class ConfigFactory
+{
+    /**
+     * Factory config according Input
+     *
+     * @param InputInterface $input
+     * @return Configuration
+     */
+    public function factory(InputInterface $input) {
+
+        $config = new Configuration();
+
+        // first, load config file
+        if(strlen($input->getOption('config')) > 0) {
+            $treeBuilder = new TreeBuilder();
+            $loader = new Loader(new Validator($treeBuilder->getTree()));
+            $config = $loader->load($input->getOption('config'));
+        }
+
+        // then, overwrite configuration by arguments provided in run
+        strlen($input->getArgument('path')) > 0         && $config->getPath()->setBasePath($input->getArgument('path'));
+        strlen($input->getOption('extensions')) > 0     && $config->getPath()->setExtensions($input->getOption('extensions'));
+        strlen($input->getOption('excludedDirs')) > 0   && $config->getPath()->setExcludedDirs($input->getOption('excludedDirs'));
+        strlen($input->getOption('report-xml')) > 0     && $config->getLogging()->setReport('xml', $input->getOption('report-xml'));
+        strlen($input->getOption('report-html')) > 0    && $config->getLogging()->setReport('html', $input->getOption('report-html'));
+        strlen($input->getOption('report-csv')) > 0     && $config->getLogging()->setReport('csv', $input->getOption('report-csv'));
+        strlen($input->getOption('violations-xml')) > 0 && $config->getLogging()->setViolation('xml', $input->getOption('violations-xml'));
+
+        return $config;
+
+    }
+}
