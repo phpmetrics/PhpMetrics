@@ -38,13 +38,17 @@ If you want to get the summary HTML report (with charts):
 
 No panic : you can read the [How to read the HTML report page](http://halleck45.github.io/PhpMetrics/documentation/how-to-read-report.html)
 
+If you need a pure string representation of the reports, just use e.g.
+
+    php ./bin/metrics.php -q --report-xml=php://stdout <folder or filename>
+
 ## Conditions of failure
 
 Customizing the conditions of failure is very easy with the`--failure-condition` option. For example:
 
-    --failure-condition="average.maintenabilityIndex < 100 or sum.loc > 10000"
+    --failure-condition="average.maintainabilityIndex < 100 or sum.loc > 10000"
 
-With this example, PhpMetrics script returns 1 if the average of Maintenability index is lower than 100
+With this example, PhpMetrics script returns 1 if the average of Maintainability index is lower than 100
 or if the total number of lines of code is greater than 10000.
 
 You can also work with package:

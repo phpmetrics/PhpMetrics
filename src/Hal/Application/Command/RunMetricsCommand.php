@@ -60,6 +60,9 @@ class RunMetricsCommand extends Command
                     'report-csv', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in CSV format. Example: /tmp/report.csv'
                 )
                 ->addOption(
+                    'report-json', null, InputOption::VALUE_REQUIRED, 'Path to save detailed report in JSON format. Example: /tmp/report.json'
+                )
+                ->addOption(
                     'level', null, InputOption::VALUE_REQUIRED, 'Depth of summary report', 0
                 )
                 ->addOption(
@@ -69,7 +72,7 @@ class RunMetricsCommand extends Command
                     'excludedDirs', null, InputOption::VALUE_REQUIRED, 'Regex of subdirectories to exclude', null
                 )
                 ->addOption(
-                    'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will not extract any informations about OOP model (faster)'
+                    'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will not extract any information about OOP model (faster)'
                 )
                 ->addOption(
                     'failure-condition', null, InputOption::VALUE_REQUIRED, 'Optional failure condition, in english. For example: average.maintenabilityIndex < 50 or sum.loc > 10000', null
