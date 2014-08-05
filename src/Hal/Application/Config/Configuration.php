@@ -12,13 +12,14 @@ use Hal\Application\Config\LoggingConfiguration;
 use Hal\Application\Config\PathConfiguration;
 use Hal\Application\Config\Path;
 use Hal\Application\Rule\RuleSet;
+use Hal\Component\Config\ConfigurationInterface;
 
 /**
  * Represents the configuration for analysis
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Configuration
+class Configuration implements ConfigurationInterface
 {
     /**
      * RuleSet
