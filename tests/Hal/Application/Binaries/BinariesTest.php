@@ -97,7 +97,7 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
 
     public function testICanRunPhpFile() {
 
-        $command = sprintf('php '.__DIR__.'/../../../../bin/phpmetrics.php   '.$this->toExplore);
+        $command = sprintf('php '.__DIR__.'/../../../../bin/phpmetrics   '.$this->toExplore);
         $output = shell_exec($command);
 
         $this->assertRegExp('/Maintenability/', $output);
