@@ -122,6 +122,7 @@ class RunMetricsCommand extends Command
             ->push(new DoAggregatedAnalyze($output, new DirectoryAggregatorFlat($level)))
             ->push(new ReportRenderer($output, new Summary\Cli($validator, $bounds)))
             ->push(new ReportWriter($config->getLogging()->getReport('html'), $output, new Summary\Html($validator, $bounds)))
+            ->push(new ReportWriter($config->getLogging()->getReport('json'), $output, new Details\Json($validator, $bounds)))
             ->push(new ReportWriter($config->getLogging()->getReport('xml'), $output, new Summary\Xml($validator, $bounds)))
             ->push(new ReportWriter($config->getLogging()->getReport('csv'), $output, new Details\Csv($validator, $bounds)))
             ->push(new ReportWriter($config->getLogging()->getViolation('xml'), $output, new Xml($validator, $bounds)))
