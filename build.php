@@ -6,12 +6,12 @@ if (!file_exists('vendor/autoload.php')) {
   exit(1);
 }
 
-$filename = 'build/metrics.phar';
+$filename = 'build/phpmetrics.phar';
 if (file_exists($filename)) {
     unlink($filename);
 }
 
-$phar = new \Phar($filename, 0, 'metrics.phar');
+$phar = new \Phar($filename, 0, 'phpmetrics.phar');
 $phar->setSignatureAlgorithm(\Phar::SHA1);
 $phar->startBuffering();
 
@@ -37,9 +37,9 @@ $phar->setStub(<<<STUB
 * with this source code in the file LICENSE.
 */
 
-Phar::mapPhar('metrics.phar');
+Phar::mapPhar('phpmetrics.phar');
 
-require_once 'phar://metrics.phar/vendor/autoload.php';
+require_once 'phar://phpmetrics.phar/vendor/autoload.php';
 \$app = new Hal\Application\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '0.0.7');
 \$app->run();
 

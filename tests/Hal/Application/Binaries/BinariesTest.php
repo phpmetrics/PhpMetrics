@@ -27,7 +27,7 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
 
     public function testICanRunPhar() {
 
-        $command = sprintf('php '.__DIR__.'/../../../../build/metrics.phar '.$this->toExplore);
+        $command = sprintf('php '.__DIR__.'/../../../../build/phpmetrics.phar '.$this->toExplore);
         $output = shell_exec($command);
 
         $this->assertRegExp('/Maintenability/', $output);
@@ -36,9 +36,9 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
     public function testICanRunIsolatedPhar() {
 
         $path = getcwd();
-        copy(__DIR__.'/../../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
+        copy(__DIR__.'/../../../../build/phpmetrics.phar', sys_get_temp_dir().'/phpmetrics.phar');
         chdir(sys_get_temp_dir());
-        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  '.$this->toExplore);
+        $command = sprintf('php '.sys_get_temp_dir().'/phpmetrics.phar  '.$this->toExplore);
         $output = shell_exec($command);
         chdir($path);
 
@@ -49,10 +49,10 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
 
         $to = sys_get_temp_dir().'/tmpunit.html';
         $path = getcwd();
-        copy(__DIR__.'/../../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
+        copy(__DIR__.'/../../../../build/phpmetrics.phar', sys_get_temp_dir().'/phpmetrics.phar');
         chdir(sys_get_temp_dir());
 
-        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  --report-html='.$to.' '.$this->toExplore);
+        $command = sprintf('php '.sys_get_temp_dir().'/phpmetrics.phar  --report-html='.$to.' '.$this->toExplore);
         $output = shell_exec($command);
         chdir($path);
 
@@ -66,10 +66,10 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
 
         $to = sys_get_temp_dir().'/tmpunit.xml';
         $path = getcwd();
-        copy(__DIR__.'/../../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
+        copy(__DIR__.'/../../../../build/phpmetrics.phar', sys_get_temp_dir().'/phpmetrics.phar');
         chdir(sys_get_temp_dir());
 
-        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  --report-xml='.$to.' '.$this->toExplore);
+        $command = sprintf('php '.sys_get_temp_dir().'/phpmetrics.phar  --report-xml='.$to.' '.$this->toExplore);
         $output = shell_exec($command);
         chdir($path);
 
@@ -83,10 +83,10 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
 
         $to = sys_get_temp_dir().'/tmpunit.xml';
         $path = getcwd();
-        copy(__DIR__.'/../../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
+        copy(__DIR__.'/../../../../build/phpmetrics.phar', sys_get_temp_dir().'/phpmetrics.phar');
         chdir(sys_get_temp_dir());
 
-        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar  --violations-xml='.$to.' '.$this->toExplore);
+        $command = sprintf('php '.sys_get_temp_dir().'/phpmetrics.phar  --violations-xml='.$to.' '.$this->toExplore);
         $output = shell_exec($command);
         chdir($path);
 
@@ -107,10 +107,10 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
     public function testICanRunPharWithFailureCondition() {
 
         $path = getcwd();
-        copy(__DIR__.'/../../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
+        copy(__DIR__.'/../../../../build/phpmetrics.phar', sys_get_temp_dir().'/phpmetrics.phar');
         chdir(sys_get_temp_dir());
 
-        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar --failure-condition="sum.loc = 0" '.$this->toExplore);
+        $command = sprintf('php '.sys_get_temp_dir().'/phpmetrics.phar --failure-condition="sum.loc = 0" '.$this->toExplore);
         $output = shell_exec($command);
         chdir($path);
 
@@ -121,7 +121,7 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
     public function testICanRunPharWithConfigFileOption() {
 
         $path = getcwd();
-        copy(__DIR__.'/../../../../build/metrics.phar', sys_get_temp_dir().'/metrics.phar');
+        copy(__DIR__.'/../../../../build/phpmetrics.phar', sys_get_temp_dir().'/phpmetrics.phar');
         chdir(sys_get_temp_dir());
 
         $content = <<<EOT
@@ -133,7 +133,7 @@ EOT;
         file_put_contents($filename, $content);
 
 
-        $command = sprintf('php '.sys_get_temp_dir().'/metrics.phar --config=%s '.$this->toExplore, $filename);
+        $command = sprintf('php '.sys_get_temp_dir().'/phpmetrics.phar --config=%s '.$this->toExplore, $filename);
         $output = shell_exec($command);
         chdir($path);
         unlink($filename);
