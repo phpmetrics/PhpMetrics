@@ -60,7 +60,7 @@ class Evaluator
     public function evaluate($rule) {
         $result = new Evaluation;
 
-        if(is_null($rule)) {
+        if(0 == strlen($rule) ||is_null($rule)) {
             return $result;
         }
 

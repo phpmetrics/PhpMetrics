@@ -17,7 +17,7 @@ namespace Hal\Component\Evaluation;
 class Evaluation
 {
 
-    private $valid = false;
+    private $valid = true;
 
     /**
      * @return int
