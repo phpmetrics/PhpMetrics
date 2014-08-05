@@ -46,7 +46,7 @@ class TreeBuilder implements \Hal\Component\Config\TreeBuilderInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('directory')->defaultValue(null)->end()
-                        ->scalarNode('exclude')->defaultValue('Tests|tests|Features|features')->end()
+                        ->scalarNode('exclude')->defaultValue('Tests|tests|Features|features|.svn|.git|vendor')->end()
                         ->scalarNode('extensions')->defaultValue('php|inc')->end()
                     ->end()
                 ->end()
