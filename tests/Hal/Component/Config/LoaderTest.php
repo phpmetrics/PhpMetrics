@@ -1,6 +1,7 @@
 <?php
 namespace Test\Hal\Component\Config;
 use Hal\Application\Config\TreeBuilder;
+use Hal\Component\Config\Hydrator;
 use Hal\Component\Config\Loader;
 use Hal\Component\Config\Validator;
 
@@ -19,8 +20,9 @@ default:
 EOT;
         $filename = \tempnam(sys_get_temp_dir(), 'rule.yml');
         file_put_contents($filename, $content);
-        $treebuilder = new TreeBuilder();
-        $loader = new Loader(new Validator($treebuilder->getTree()));
+        $treeBuilder = new TreeBuilder();
+        $hydrator = new Hydrator(new Validator($treeBuilder->getTree()));
+        $loader = new Loader($hydrator);
         $config = $loader->load($filename);
         unlink($filename);
 
@@ -35,8 +37,9 @@ EOT;
      * @expectedExceptionMessage configuration file is not accessible
      */
     public function testExplicitExceptionIsThrownWhenConfigFileIsNotFound() {
-        $treebuilder = new TreeBuilder();
-        $loader = new Loader(new Validator($treebuilder->getTree()));
+        $treeBuilder = new TreeBuilder();
+        $hydrator = new Hydrator(new Validator($treeBuilder->getTree()));
+        $loader = new Loader($hydrator);
         $config = $loader->load('/pat/to/anything');
     }
 

@@ -24,17 +24,17 @@ class Loader
     /**
      * Validator of configuration
      *
-     * @var Validator
+     * @var Hydrator
      */
-    private $validator;
+    private $hydrator;
 
     /**
      * Constructor
      *
-     * @param Validator $validator
+     * @param Hydrator $hydrator
      */
-    public function __construct(Validator $validator) {
-        $this->validator = $validator;
+    public function __construct(Hydrator $hydrator) {
+        $this->hydrator = $hydrator;
     }
 
     /**
@@ -53,24 +53,7 @@ class Loader
         $parser = new Yaml();
         $array = $parser->parse($content);
 
-        // check configuration
-        $array = $this->validator->validates($array);
+        return $this->hydrator->hydrates(new Configuration, $array);
 
-
-        $path = new PathConfiguration();
-        $path
-            ->setBasePath($array['path']['directory'])
-            ->setExtensions($array['path']['extensions'])
-            ->setExcludedDirs($array['path']['exclude'])
-        ;
-
-        $config = new Configuration();
-        $config
-            ->setRuleSet(new RuleSet( (array) $array['rules']))
-            ->setFailureCondition($array['failure'])
-            ->setPath($path)
-            ->setLogging(new LoggingConfiguration($array['logging']))
-        ;
-        return $config;
     }
 }
