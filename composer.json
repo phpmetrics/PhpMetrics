@@ -19,7 +19,7 @@
             "role": "Copyright Holder"
         }
     ],
-    "homepage": "http://halleck45.github.io/PhpMetrics/",
+    "homepage": "http://www.phpmetrics.org",
     "support": {
         "issues": "https://github.com/Halleck45/PhpMetrics/issues"
     },
@@ -32,13 +32,14 @@
         "twig/twig": "~1.15",
         "symfony/console": "~2.4",
 	    "hoa/ruler": "dev-master",
-	    "symfony/config": "~2.4"
+	    "symfony/config": "~2.4",
+        "ext-dom": "*"
     },
     "minimum-stability": "dev",
     "require-dev": {
         "phpunit/phpunit": "~4.1"
     },
     "bin": [
-        "bin/phpmetrics.php"
+        "bin/phpmetrics"
     ]
 }
