@@ -34,6 +34,8 @@ With Composer (Make sure you have `~/.composer/vendor/bin/` in your path):
 
 # Usage
 
+> Do not hesitate to visit the [official documentation](http://www.phpmetrics.org/documentation/index.html).
+
 The command command `phpmetrics <folder or filename>` will output:
 
 ![Standard report](http://halleck45.github.io/PhpMetrics/images/report-standard.png)
