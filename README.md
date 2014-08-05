@@ -20,27 +20,31 @@ Gives metrics about PHP project and classes.
 
 # Installation
 
-With Composer:
+As phar archive:
 
+```bash
+wget https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar
+chmod +x phpmetrics.phar
+mv phpmetrics.phar /usr/local/bin/phpmetrics
+```
+
+With Composer (Make sure you have `~/.composer/vendor/bin/` in your path):
+    php composer.phar global config -e # add ,"minimum-stability":"dev"
     php composer.phar global require 'halleck45/phpmetrics=@dev'
-
-You can also download [PhpMetrics as phar archive](https://github.com/Halleck45/PhpMetrics/raw/master/build/metrics.phar).
 
 # Usage
 
-The command command `vendor/bin/phpmetrics <folder or filename>` will output:
+The command command `phpmetrics <folder or filename>` will output:
 
 ![Standard report](http://halleck45.github.io/PhpMetrics/images/report-standard.png)
 
 If you want to get the summary HTML report (with charts):
 
-    php ./bin/metrics.php --report-html=/path/of/your/choice.html <folder or filename>
+    phpmetrics --report-html=/path/of/your/choice.html <folder or filename>
 
 No panic : you can read the [How to read the HTML report page](http://halleck45.github.io/PhpMetrics/documentation/how-to-read-report.html)
 
-If you need a pure string representation of the reports, just use e.g.
-
-    php ./bin/metrics.php -q --report-xml=php://stdout <folder or filename>
+> If you need a pure string representation of the reports in StdOut, just use `phpmetrics -q --report-xml=php://stdout <folder or filename>`
 
 ## Conditions of failure
 
@@ -73,11 +77,11 @@ You'll find a complete tutorial in the [documentation](http://halleck45.github.i
 
 You can easily export results to XML with the `--report-xml` option:
 
-    php ./bin/metrics.php --report-xml=/path/of/your/choice.xml <folder or filename>
+    phpmetrics --report-xml=/path/of/your/choice.xml <folder or filename>
 
 You can also export results as violations (MessDetector report), in XML format with the `--violations-xml` option:
 
-    php ./bin/metrics.php --violations-xml=/path/of/your/choice.xml <folder or filename>
+    phpmetrics --violations-xml=/path/of/your/choice.xml <folder or filename>
 
 ## Configuration file
 
