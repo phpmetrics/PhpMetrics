@@ -107,6 +107,8 @@ The file should be a valid yaml file. For example:
             csv:    ./log/phpmetrics.csv
         violations:
             xml:    ./log/violations.xml
+        chart:
+            bubbles: ./log/bubbles.svg
 
     # condition of failure
     failure: average.maintenabilityIndex < 50 or sum.loc > 10000

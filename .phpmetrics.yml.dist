@@ -16,3 +16,5 @@ default:
             csv:    ./log/phpmetrics.csv
         violations:
             xml:    ./log/violations.xml
+        chart:
+            bubbles: ./log/bubbles.svg

@@ -64,7 +64,7 @@ class RunMetricsCommand extends Command
                     'report-json', null, InputOption::VALUE_REQUIRED, 'Path to save detailed report in JSON format. Example: /tmp/report.json'
                 )
                 ->addOption(
-                    'chart-bubbles', null, InputOption::VALUE_REQUIRED, 'Path to save Bubbles chart, in SVG format. Example: /tmp/chart.svg'
+                    'chart-bubbles', null, InputOption::VALUE_REQUIRED, 'Path to save Bubbles chart, in SVG format. Example: /tmp/chart.svg. Graphviz **IS** required'
                 )
                 ->addOption(
                     'level', null, InputOption::VALUE_REQUIRED, 'Depth of summary report', 0
