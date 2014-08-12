@@ -69,7 +69,7 @@ class RunMetricsCommand extends Command
                     'extensions', null, InputOption::VALUE_REQUIRED, 'Regex of extensions to include', null
                 )
                 ->addOption(
-                    'excludedDirs', null, InputOption::VALUE_REQUIRED, 'Regex of subdirectories to exclude', null
+                    'excluded-dirs', null, InputOption::VALUE_REQUIRED, 'Regex of subdirectories to exclude', null
                 )
                 ->addOption(
                     'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will not extract any information about OOP model (faster)'
