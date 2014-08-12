@@ -16,6 +16,7 @@ use Hal\Application\Command\Job\ReportWriter;
 use Hal\Application\Command\Job\SearchBounds;
 use Hal\Application\Config\ConfigFactory;
 use Hal\Application\Config\Logging;
+use Hal\Application\Formater\Chart\Bubbles;
 use Hal\Application\Formater\Details;
 use Hal\Application\Formater\Summary;
 use Hal\Application\Formater\Violations\Xml;
@@ -61,6 +62,9 @@ class RunMetricsCommand extends Command
                 )
                 ->addOption(
                     'report-json', null, InputOption::VALUE_REQUIRED, 'Path to save detailed report in JSON format. Example: /tmp/report.json'
+                )
+                ->addOption(
+                    'chart-bubbles', null, InputOption::VALUE_REQUIRED, 'Path to save Bubbles chart, in SVG format. Example: /tmp/chart.svg'
                 )
                 ->addOption(
                     'level', null, InputOption::VALUE_REQUIRED, 'Depth of summary report', 0
@@ -126,6 +130,7 @@ class RunMetricsCommand extends Command
             ->push(new ReportWriter($config->getLogging()->getReport('xml'), $output, new Summary\Xml($validator, $bounds)))
             ->push(new ReportWriter($config->getLogging()->getReport('csv'), $output, new Details\Csv($validator, $bounds)))
             ->push(new ReportWriter($config->getLogging()->getViolation('xml'), $output, new Xml($validator, $bounds)))
+            ->push(new ReportWriter($config->getLogging()->getChart('bubbles'), $output, new Bubbles($validator, $bounds)))
             ;
 
         // execute

@@ -29,7 +29,7 @@ class LoggingConfiguration
      * @param array $datas
      */
     public function __construct(array $datas = array()) {
-        $this->datas = array_merge(array('violations'=> array(), 'report' => array()), $datas);
+        $this->datas = array_merge(array('violations'=> array(), 'report' => array(), 'chart' => array()), $datas);
     }
 
     /**
@@ -57,6 +57,18 @@ class LoggingConfiguration
     }
 
     /**
+     * Get target of report by format
+     *
+     * @param $format
+     * @return string|null
+     */
+    public function getChart($format) {
+        return isset($this->datas['chart'], $this->datas['chart'][$format])
+            ? $this->datas['chart'][$format]
+            : null;
+    }
+
+    /**
      * Set report
      *
      * @param $format
@@ -77,6 +89,18 @@ class LoggingConfiguration
      */
     public function setViolation($format, $path) {
         $this->datas['violations'][$format] = $path;
+        return $this;
+    }
+
+    /**
+     * Set report
+     *
+     * @param $format
+     * @param $path
+     * @return $this
+     */
+    public function setChart($format, $path) {
+        $this->datas['chart'][$format] = $path;
         return $this;
     }
 }
