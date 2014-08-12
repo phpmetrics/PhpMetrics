@@ -40,7 +40,7 @@ $phar->setStub(<<<STUB
 Phar::mapPhar('phpmetrics.phar');
 
 require_once 'phar://phpmetrics.phar/vendor/autoload.php';
-\$app = new Hal\Application\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '0.0.7');
+\$app = new Hal\Application\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '0.0.8');
 \$app->run();
 
 __HALT_COMPILER();
