@@ -129,4 +129,27 @@ EOT;
             , array(0, '<?php public function bar() { $x->a();  }')
         );
     }
+
+    /**
+     * @dataProvider provideCodeForNew
+     * @group wip
+     */
+    public function testConstructorAreFound($expected, $code) {
+        $searcher = new Searcher();
+        $methodExtractor = new MethodExtractor($searcher);
+
+        $tokens = new TokenCollection(token_get_all($code));
+        $n = 1;
+        $method = $methodExtractor->extract($n, $tokens);
+
+        $this->assertEquals($expected, $method->getDependencies());
+    }
+
+    public function provideCodeForNew() {
+        return array(
+            array(array(), '<?php public function foo() { return 1; }')
+            , array(array('A'), '<?php public function bar() { new A();  }')
+            , array(array('A'), '<?php public function bar() { new A(1,2,3);  }')
+        );
+    }
 }

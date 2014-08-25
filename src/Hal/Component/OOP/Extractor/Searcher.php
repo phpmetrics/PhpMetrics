@@ -66,7 +66,7 @@ class Searcher {
      */
     public function getFollowingName(&$n, TokenCollection $tokens) {
         $n = $n + 2;
-        return $this->getUnder(array('{', ' ', ';'), $n, $tokens);
+        return $this->getUnder(array('{', ' ', ';', '('), $n, $tokens);
     }
 
     /**
