@@ -72,7 +72,7 @@ List of availables metrics is documented [here](http://halleck45.github.io/PhpMe
 
 ## IDE integration
 
-+ [PhpMetrics plugin for PhpStom](http://plugins.jetbrains.com/plugin/7500)
++ [PhpMetrics plugin for PhpStorm](http://plugins.jetbrains.com/plugin/7500)
 
 ## Jenkins and IC integration
 
