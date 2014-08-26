@@ -150,6 +150,8 @@ EOT;
             array(array(), '<?php public function foo() { return 1; }')
             , array(array('A'), '<?php public function bar() { new A();  }')
             , array(array('A'), '<?php public function bar() { new A(1,2,3);  }')
+            , array(array(), '<?php public function bar($d = false) {  }')
+            , array(array(), '<?php public function bar($d = false) {  }')
         );
     }
 }
