@@ -51,13 +51,13 @@ class NameResolver
             }
         }
 
-        return $name;
+        return $currentNamespace.$name;
     }
 
     /**
      * Push alias
      *
-     * @param StdClass $alias
+     * @param \StdClass $alias
      * @return $this
      */
     public function pushAlias(\StdClass $alias) {

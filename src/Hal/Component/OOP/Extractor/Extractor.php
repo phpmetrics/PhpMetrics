@@ -125,7 +125,6 @@ class Extractor {
                             continue;
                         }
                         $method = $this->extractors->method->extract($n, $tokens);
-//                        $method->setAliases($mapOfAliases);
                         $method->setNameResolver($nameResolver);
                         $class->pushMethod($method);
                     }

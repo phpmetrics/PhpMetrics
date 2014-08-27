@@ -43,6 +43,7 @@ class Graphviz
         $imageFile = tempnam(sys_get_temp_dir(), 'phpmetrics-graphviz');
 
         // dot file
+        $dotContent = str_replace('\\', '/', $dotContent);
         file_put_contents($dotFile, $dotContent);
         file_put_contents('/tmp/tmp.gv', $dotContent);
 
