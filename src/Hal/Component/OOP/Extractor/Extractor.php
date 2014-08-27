@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Component\OOP\Extractor;
+use Hal\Component\OOP\Resolver\NameResolver;
 use Hal\Component\Token\Tokenizer;
 
 
@@ -69,10 +70,11 @@ class Extractor {
         $result = new Result;
 
         $tokens = $this->tokenizer->tokenize($filename);
+        $nameResolver = new NameResolver();
 
         // default current values
         $class = $interface = $function = $method = null;
-        $mapOfAliases = array();
+//        $mapOfAliases = array();
 
         $len = sizeof($tokens, COUNT_NORMAL);
         for($n = 0; $n < $len; $n++) {
@@ -84,10 +86,7 @@ class Extractor {
                 case T_USE:
                     $alias = $this->extractors->alias->extract($n, $tokens);
                     if (null !== $alias->name && null !== $alias->alias) {
-                        $mapOfAliases[$alias->alias] = $alias->name;
-                        $class && $class->setAliases($mapOfAliases);
-                        $method && $method->setAliases($mapOfAliases);
-                        $interface && $interface->setAliases($mapOfAliases);
+                        $nameResolver->pushAlias($alias);
                     }
                     break;
 
@@ -98,15 +97,21 @@ class Extractor {
 
                 case T_INTERFACE:
                     $class = $this->extractors->interface->extract($n, $tokens);
-                    $class->setAliases($mapOfAliases);
+                    $class->setNameResolver($nameResolver);
                     // push class AND in global AND in local class map
                     $this->result->pushClass($class);
                     $result->pushClass($class);
                     break;
 
+                case T_EXTENDS:
+                    $i = $n;
+                    $parent = $this->searcher->getFollowingName($i, $tokens);
+                    $class->setParent(trim($parent));
+                    break;
+
                 case T_CLASS:
                     $class = $this->extractors->class->extract($n, $tokens);
-                    $class->setAliases($mapOfAliases);
+                    $class->setNameResolver($nameResolver);
                     // push class AND in global AND in local class map
                     $this->result->pushClass($class);
                     $result->pushClass($class);
@@ -120,7 +125,8 @@ class Extractor {
                             continue;
                         }
                         $method = $this->extractors->method->extract($n, $tokens);
-                        $method->setAliases($mapOfAliases);
+//                        $method->setAliases($mapOfAliases);
+                        $method->setNameResolver($nameResolver);
                         $class->pushMethod($method);
                     }
                     break;

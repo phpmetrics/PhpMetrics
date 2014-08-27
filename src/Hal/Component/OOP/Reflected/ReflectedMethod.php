@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Component\OOP\Reflected;
+use Hal\Component\OOP\Resolver\NameResolver;
 
 
 /**
@@ -48,11 +49,11 @@ class ReflectedMethod {
     private $dependencies = array();
 
     /**
-     * Map of aliases
+     * Resolver for names
      *
-     * @var array
+     * @var NameResolver
      */
-    private $aliases = array();
+    private $nameResolver;
 
     /**
      * @var array
@@ -70,6 +71,7 @@ class ReflectedMethod {
     public function __construct($name)
     {
         $this->name = (string) $name;
+        $this->nameResolver = new NameResolver();
     }
 
     /**
@@ -218,25 +220,18 @@ class ReflectedMethod {
         // on read : compare with aliases. We cannot make it in pushDependency() => aliases aren't yet known
         $dependencies = array();
         foreach($this->dependencies as $name) {
-            $real = isset($this->aliases[$name]) ? $this->aliases[$name] : $name;
-            array_push($dependencies, $real);
+            array_push($dependencies, $this->nameResolver->resolve($name));
         }
         return array_unique($dependencies);
     }
 
     /**
-     * @param array $aliases
+     * @param NameResolver $resolver
+     * @return $this
      */
-    public function setAliases(array $aliases)
+    public function setNameResolver(NameResolver $resolver)
     {
-        $this->aliases = $aliases;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAliases()
-    {
-        return $this->aliases;
+        $this->nameResolver = $resolver;
+        return $this;
     }
 };

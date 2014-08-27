@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Component\OOP\Reflected;
+use Hal\Component\OOP\Resolver\NameResolver;
 
 
 /**
@@ -35,11 +36,11 @@ class ReflectedClass {
     private $methods;
 
     /**
-     * Map of aliases
+     * Resolver for names
      *
-     * @var array
+     * @var NameResolver
      */
-    private $aliases = array();
+    private $nameResolver;
 
     /**
      * Does the class is abstract ?
@@ -47,6 +48,13 @@ class ReflectedClass {
      * @var bool
      */
     private $isAbstract = false;
+
+    /**
+     * Parent's name
+     *
+     * @var string
+     */
+    private $parent;
 
     /**
      * Constructor
@@ -59,6 +67,7 @@ class ReflectedClass {
         $this->name = (string) $name;
         $this->namespace = (string) $namespace;
         $this->methods = array();
+        $this->nameResolver = new NameResolver();
     }
 
     /**
@@ -103,15 +112,6 @@ class ReflectedClass {
      */
     public function pushMethod(ReflectedMethod $method) {
         $this->methods[$method->getName()] = $method;
-
-//        foreach($method->getArguments() as $argument) {
-//
-//            $name = $argument->getType();
-//            if(!in_array($argument->getType(), array(null, $this->getName(), 'array'))) {
-//                $this->pushDependency($name);
-//            }
-//        }
-
         return $this;
     }
 
@@ -124,15 +124,20 @@ class ReflectedClass {
         foreach($this->getMethods() as $method) {
             $dependencies = array_merge($dependencies, $method->getDependencies());
         }
-        return $dependencies;
+        foreach($dependencies as &$name) {
+            $name = $this->nameResolver->resolve($name, $this->getNamespace());
+        }
+        return array_unique($dependencies);
     }
 
     /**
-     * @param array $aliases
+     * @param NameResolver $resolver
+     * @return $this
      */
-    public function setAliases(array $aliases)
+    public function setNameResolver(NameResolver $resolver)
     {
-        $this->aliases = $aliases;
+        $this->nameResolver = $resolver;
+        return $this;
     }
 
     /**
@@ -161,5 +166,25 @@ class ReflectedClass {
      */
     public function isAbstract() {
         return $this->isAbstract;
+    }
+
+    /**
+     * Set the parent name
+     *
+     * @param $parent
+     * @return $this
+     */
+    public function setParent($parent) {
+        $this->parent = $parent;
+        return $this;
+    }
+
+    /**
+     * Get the parent name
+     *
+     * @return null|string
+     */
+    public function getParent() {
+        return $this->nameResolver->resolve($this->parent, $this->getNamespace());
     }
 };

@@ -7,6 +7,7 @@ use Hal\Component\OOP\Extractor\Extractor;
 
 /**
  * @group oop
+ * @group wip
  */
 class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
@@ -35,11 +36,10 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @group wip
+     * @dataProvider providesForDependenciesWithoutAlias
      */
-    public function testDependenciesAreGivenWithoutAlias() {
+    public function testDependenciesAreGivenWithoutAlias($file, $expected) {
 
-        $file = __DIR__.'/../../../resources/oop/f4.php';
         $result = new \Hal\Component\OOP\Extractor\Result();
         $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
         $result = $extractor->extract($file);
@@ -50,11 +50,16 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
         $class = $classes[0];
         $dependencies = $class->getDependencies();
 
-        $expected = array('\Full\AliasedClass', 'Toto');
-
         $this->assertEquals($expected, $dependencies, 'Dependencies are given without alias');
-
     }
+
+    public function providesForDependenciesWithoutAlias() {
+        return array(
+            array(__DIR__.'/../../../resources/oop/f7.php', array('Symfony\Component\Config\Definition\Processor'))
+            , array(__DIR__.'/../../../resources/oop/f4.php', array('\Full\AliasedClass', 'Toto'))
+        );
+    }
+
 
     public function testCallsAreFoundAsDependencies() {
         $file = __DIR__.'/../../../resources/oop/f5.php';

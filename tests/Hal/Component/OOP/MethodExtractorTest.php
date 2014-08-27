@@ -132,7 +132,6 @@ EOT;
 
     /**
      * @dataProvider provideCodeForNew
-     * @group wip
      */
     public function testConstructorAreFound($expected, $code) {
         $searcher = new Searcher();

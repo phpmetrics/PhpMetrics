@@ -51,7 +51,7 @@ class ClassExtractor implements ExtractorInterface {
         $isAbstract = $prev && T_ABSTRACT === $prev->getType();
 
         $classname = $this->searcher->getFollowingName($n, $tokens);
-        $class = new ReflectedClass($this->namespace, $classname);
+        $class = new ReflectedClass($this->namespace, trim($classname));
         $class->setAbstract($isAbstract);
         return $class;
     }

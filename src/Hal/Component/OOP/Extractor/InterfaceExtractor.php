@@ -47,7 +47,7 @@ class InterfaceExtractor implements ExtractorInterface {
     public function extract(&$n, TokenCollection $tokens)
     {
         $classname = $this->searcher->getFollowingName($n, $tokens);
-        return new ReflectedInterface($this->namespace, $classname);
+        return new ReflectedInterface($this->namespace, trim($classname));
     }
 
     /**
