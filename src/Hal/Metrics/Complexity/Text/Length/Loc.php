@@ -60,13 +60,13 @@ class Loc {
                     $cloc++;
                     break;
                 case T_DOC_COMMENT:
-                    $cloc += substr_count($token->getValue(), PHP_EOL) + 1;
+                    $cloc += count(preg_split('/\r\n|\r|\n/', $token->getValue()));
                     break;
             }
         }
 
         $info
-            ->setLoc(substr_count($content, PHP_EOL))
+            ->setLoc(count(preg_split('/\r\n|\r|\n/', $content)) - 1)
             ->setCommentLoc($cloc)
             ->setLogicalLoc($lloc)
         ;
