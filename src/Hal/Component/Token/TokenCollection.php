@@ -69,7 +69,7 @@ class TokenCollection implements \ArrayAccess, \IteratorAggregate, \Countable {
         foreach($this->tokens as $token) {
             $c .= $token->asString();
         }
-        $c = preg_replace('!(\n\s+)!', PHP_EOL, $c);
+        $c = preg_replace('!(\n\s+)!', "\n", $c);
         return trim($c);
     }
 
