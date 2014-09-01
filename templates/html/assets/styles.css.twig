@@ -46,6 +46,7 @@
 .svg-main {
     margin: 0 auto;
     width:960px;;
+    height:960px;;
 }
 
 
@@ -74,10 +75,10 @@
     font-weight: 700;
 }
 .node--source {
-    fill: #2ca02c;
+    fill: #AE113D;
 }
 .node--target {
-    fill: #d62728;
+    fill: #4617B4;
 }
 .link--source,
 .link--target {
@@ -85,8 +86,26 @@
     stroke-width: 2px;
 }
 .link--source {
-    stroke: #d62728;
+    stroke: #AE113D;
 }
 .link--target {
-    stroke: #2ca02c;
+    stroke: #4617B4;
+}
+.relation-source {
+    background-color: #AE113D;
+}
+.relation-target {
+    background-color: #4617B4;
+}
+
+
+/* ---- tooltip ---- */
+.tooltip {
+    position: absolute;
+    background: #333;
+    border-radius: 5px;
+    padding: 5px 15px;
+    box-shadow: 1px 1px 3px;
+    text-align: left;
+    color:#FFF;
 }

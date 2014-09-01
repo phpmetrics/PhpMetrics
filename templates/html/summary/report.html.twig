@@ -34,6 +34,16 @@
                 <h3>Maintenability</h3>
                 <small><a id="btn-save-maintenability" download="phpmetric-maintenability.svg">Download (as SVG)</a></small>
                 <div id="svg-maintenability"><svg /></div>
+
+                <div class="well ">
+                    <h4>Info</h4>
+                    <p>
+                        Each file is symbolized by a circle.
+                        Size of the circle represents the Cyclomatic complexity.
+                        Color of the circle represents the Maintenability Index.
+                    </p>
+                    <p>Large red circles will be probably hard to maintain.</p>
+                </div>
             </div>
             <div class=" col-sm-4">
 
@@ -41,36 +51,43 @@
                 <small><a id="btn-save-custom" download="phpmetric-custom.svg">Download (as SVG)</a></small>
                 <div id="svg-custom"><svg /></div>
 
-                <table class="table table-condensed table-bordered">
-                    <tr>
-                        <td>X Axis</td>
-                        <td>Y Axis</td>
-                        <td>Diameter</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <select id="xAxis" class="form-control" onchange="xAxis = this.value; updateCustomChart();">
-                                {% for key in keys|sort %}
-                                    <option value="{{key}}">{{key|textify}} </option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <select id="yAxis" class="form-control" onchange="yAxis = this.value; updateCustomChart();">
-                                {% for key in keys|sort %}
-                                    <option value="{{key}}">{{key|textify}} </option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <select id="rAxis" class="form-control" onchange="rAxis = this.value; updateCustomChart();">
-                                {% for key in keys|sort %}
-                                    <option value="{{key}}">{{key|textify}} </option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                    </tr>
-                </table>
+                <div class="well">
+                    <h4>Configuration</h4>
+                    <p>
+                        Select metrics you want to display in chart.
+                    </p>
+                    <table class="table table-condensed table-bordered">
+                        <tr>
+                            <td>X Axis</td>
+                            <td>Y Axis</td>
+                            <td>Diameter</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select id="xAxis" class="form-control" onchange="xAxis = this.value; updateCustomChart();">
+                                    {% for key in keys|sort %}
+                                        <option value="{{key}}">{{key|textify}} </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select id="yAxis" class="form-control" onchange="yAxis = this.value; updateCustomChart();">
+                                    {% for key in keys|sort %}
+                                        <option value="{{key}}">{{key|textify}} </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select id="rAxis" class="form-control" onchange="rAxis = this.value; updateCustomChart();">
+                                    {% for key in keys|sort %}
+                                        <option value="{{key}}">{{key|textify}} </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
             </div>
             <div class="col-sm-4">
                 <h3>Abstractness / Instability</h3>
@@ -84,10 +101,21 @@
 
         <!-- Relations -->
         <div class="tab-pane" id="relations">
+            <h3>Relations</h3>
             <div class="col-sm-12">
-                <h3>Relations</h3>
+                <div class="well">
+                    <p>
+                        Class uses another when it calls, constructs, types hint, extends or implements it.
+                    </p>
+                    <ul>
+                        <li><span class="badge relation-source">Used by</span> : this class is used by hovered element.</li>
+                        <li><span class="badge relation-target">Uses</span> : this class uses hovered element.</li>
+                    </ul>
+
+                </div>
                 <small><a id="btn-save-relations" download="phpmetric-relations.svg">Download (as SVG)</a></small>
                 <div class="svg-main" id="svg-relations"><svg /></div>
+
             </div>
         </div>
         <!-- end: Relations -->

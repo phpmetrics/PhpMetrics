@@ -36,18 +36,41 @@
             .attr("class", "node")
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
-            node
-                .append("title")
-                .text(function(d) { return d.name
-                    + "\n\tCyclomatic Complexity : " + format(d.cyclomaticComplexity)
-                    + "\n\tMaintenability Index: " + format(d.maintenabilityIndex)
-                ; });
+//            node
+//                .append("title")
+//                .text(function(d) { return d.name
+//                    + "\n\tCyclomatic Complexity : " + format(d.cyclomaticComplexity)
+//                    + "\n\tMaintenability Index: " + format(d.maintenabilityIndex)
+//                ; });
 
             node
                 .append("circle")
                 .attr("r", function(d) { return d.r; })
-                .style("fill", function(d) { return d.color; });
+                .style("fill", function(d) { return d.color; })
+                .on('mouseover', function(d) {
+                    var text = '<strong>' + d.name + '</strong>'
+                            + "<br />Cyclomatic Complexity : " + format(d.cyclomaticComplexity)
+                            + "<br />Maintenability Index: " + format(d.maintenabilityIndex);
+                    d3.select('.tooltip').html(text);
+                    d3.select(".tooltip").style("opacity", 1);
+                })
+                .on('mousemove', function() {
+                    d3.select(".tooltip")
+                            .style("left", (d3.event.pageX + 5) + "px")
+                            .style("top",  (d3.event.pageY + 5) + "px");
+                })
+                .on('mouseout', function() {
+                    d3.select(".tooltip").style("opacity", 0);
+                })
 
+            ;
+
+
+        // tooltip
+        d3.select("body")
+                .append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
 
         // Save as
         function mapDatas(root) {
