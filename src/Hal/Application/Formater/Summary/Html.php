@@ -57,15 +57,58 @@ class Html implements FormaterInterface {
         $twig = new \Twig_Environment($loader, array('cache' => false));
         $twig->addExtension(new FormatingExtension($this->validator));
 
+
         $bound = $this->bound->calculate($collection);
         return $twig->render('summary/report.html.twig', array(
             'keys' => array_keys(current($collection->asArray()))
             , 'results' => $collection->asArray()
             , 'groupedResults' => $groupedResults
+            , 'relations' => $this->prepareDataRelations($collection)
             , 'ruleSet' => $this->validator->getRuleSet()
             , 'bounds' => $bound
             , 'withOOP' => null !== $bound->getSum('instability')
         ));
+    }
+
+    /**
+     * Build flat array of relations
+     *
+     * @param ResultCollection $collection
+     * @return array
+     */
+    private function prepareDataRelations(ResultCollection $collection) {
+        $array = array();
+
+        // map of classes an relations
+        foreach($collection as $item) {
+
+            // case of oop is disabled
+            if(!$item->getOOP()) {
+                continue;
+            }
+
+            foreach($item->getOOP()->getClasses() as $class) {
+                $array[$class->getName()] = (object) array(
+                    'name' => $class->getName()
+                    , 'size' => 3000
+                    , 'relations' => array_merge(
+                        !is_null($class->getParent()) ? array($class->getParent()) : array()
+                        , $class->getDependencies()
+                    )
+                );
+            }
+        }
+
+        // dependency can not be in the parsed sources (for example, native PHP classes)
+        foreach($array as $class => $infos) {
+            foreach($infos->relations as $relation) {
+                if(!isset($array[$relation])) {
+                    $array[$relation] = (object) array('name' => $relation, 'relations' => array(), 'size' => 3000);
+                }
+//                array_push($array[$relation]->imports, $class);
+            }
+        }
+        return array_values($array);
     }
 
     /**

@@ -6,53 +6,7 @@
     <style type="text/css">
         {% include "assets/bootstrap.css.twig" %}
         {% include "assets/nv.d3.css.twig" %}
-
-        .validate-critical, .critical {
-            background-color:#B01E00 !important;
-            color:#FFF;
-        }
-        .validate-warning, .warning {
-            background-color:#f4b300 !important;
-            color:#333;
-        }
-        .validate-good, .good {
-            background-color:#78ba00 !important;
-            color:#FFF;
-        }
-        .validate-unknown, .unknown {
-        }
-
-        .table {
-            font-size:0.8em;
-        }
-        .table thead {
-            font-weight:normal;
-        }
-
-        .mytable td {
-            width:4%;
-            text-align:center;
-        }
-        .mytable .sep {
-            border-left:1px solid #CCC;
-        }
-
-
-        #chart-tableview .critical,
-        #chart-tableview .warning,
-        #chart-tableview .good,
-        #chart-tableview .unknown {
-            display:block;
-            text-align: center;
-        }
-
-        #svg-custom,
-        #svg-maintenability,
-        #svg-abstractness {
-            width:300px;
-            height:300px;
-        }
-
+        {% include "assets/styles.css.twig" %}
     </style>
 </head>
 
@@ -64,67 +18,109 @@
 
     <h1>PhpMetrics report</h1>
 
-    <div id="chart-tableview"></div>
+    <ul id="menu" class="nav nav-pills" role="tablist">
+        <li class="active"><a data-toggle="tab" href="#overview">Overview</a></li>
+        <li><a data-toggle="tab" href="#relations">Relations map</a></li>
+        <li><a data-toggle="tab" href="#explore">Explore</a></li>
+        <li><a data-toggle="tab" href="#help">Help</a></li>
+    </ul>
 
 
-    <div class="row">
+    <div class="tab-content row">
 
+        <!-- General overview -->
+        <div class="tab-pane active" id="overview">
+            <div class="col-sm-4">
+                <h3>Maintenability</h3>
+                <small><a id="btn-save-maintenability" download="phpmetric-maintenability.svg">Download (as SVG)</a></small>
+                <div id="svg-maintenability"><svg /></div>
+            </div>
+            <div class=" col-sm-4">
 
-        <div class="col-sm-4">
-            <h3>Maintenability</h3>
-            <small><a id="btn-save-maintenability" download="phpmetric-maintenability.svg">Download (as SVG)</a></small>
-            <div id="svg-maintenability"><svg /></div>
+                <h3 id="title-custom">Custom chart</h3>
+                <small><a id="btn-save-custom" download="phpmetric-custom.svg">Download (as SVG)</a></small>
+                <div id="svg-custom"><svg /></div>
+
+                <table class="table table-condensed table-bordered">
+                    <tr>
+                        <td>X Axis</td>
+                        <td>Y Axis</td>
+                        <td>Diameter</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="xAxis" class="form-control" onchange="xAxis = this.value; updateCustomChart();">
+                                {% for key in keys|sort %}
+                                    <option value="{{key}}">{{key|textify}} </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select id="yAxis" class="form-control" onchange="yAxis = this.value; updateCustomChart();">
+                                {% for key in keys|sort %}
+                                    <option value="{{key}}">{{key|textify}} </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select id="rAxis" class="form-control" onchange="rAxis = this.value; updateCustomChart();">
+                                {% for key in keys|sort %}
+                                    <option value="{{key}}">{{key|textify}} </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-4">
+                <h3>Abstractness / Instability</h3>
+                <small><a id="btn-save-abstractness" download="phpmetric-abstractness.svg">Download (as SVG)</a></small>
+                <div id="svg-abstractness"><svg /></div>
+            </div>
         </div>
+        <!-- end: General overview -->
 
 
-        <div class=" col-sm-4">
 
-            <h3 id="title-custom">Custom chart</h3>
-            <small><a id="btn-save-custom" download="phpmetric-custom.svg">Download (as SVG)</a></small>
-            <div id="svg-custom"><svg /></div>
-
-            <table class="table table-condensed table-bordered">
-                <tr>
-                    <td>X Axis</td>
-                    <td>Y Axis</td>
-                    <td>Diameter</td>
-                </tr>
-                <tr>
-                    <td>
-                        <select id="xAxis" class="form-control" onchange="xAxis = this.value; updateCustomChart();">
-                            {% for key in keys|sort %}
-                                <option value="{{key}}">{{key|textify}} </option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td>
-                        <select id="yAxis" class="form-control" onchange="yAxis = this.value; updateCustomChart();">
-                            {% for key in keys|sort %}
-                                <option value="{{key}}">{{key|textify}} </option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td>
-                        <select id="rAxis" class="form-control" onchange="rAxis = this.value; updateCustomChart();">
-                            {% for key in keys|sort %}
-                                <option value="{{key}}">{{key|textify}} </option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
-            </table>
+        <!-- Relations -->
+        <div class="tab-pane" id="relations">
+            <div class="col-sm-12">
+                <h3>Relations</h3>
+                <small><a id="btn-save-relations" download="phpmetric-relations.svg">Download (as SVG)</a></small>
+                <div class="svg-main" id="svg-relations"><svg /></div>
+            </div>
         </div>
+        <!-- end: Relations -->
 
 
-        <div class="col-sm-4">
-            <h3>Abstractness / Instability</h3>
-            <small><a id="btn-save-abstractness" download="phpmetric-abstractness.svg">Download (as SVG)</a></small>
-            <div id="svg-abstractness"><svg /></div>
+        <!-- Tabular datas -->
+        <div class="tab-pane" id="explore">
+            <div class="col-sm-12">
+                <h3>Explore</h3>
+                <div id="chart-tableview"></div>
+            </div>
         </div>
+        <!-- end: Tabular datas -->
+
+        <!-- Help -->
+        <div class="tab-pane" id="help">
+            <div class="col-sm-12">
+                <h3>Help</h3>
+                <p>
+                    Online help is available on the <a href="http://www.phpmetrics.org/documentation/index.html">PhpMetrics website</a>.
+                </p>
+                <p>
+                    Sources of PhpMetrics are available on <a href="https://github.com/Halleck45/PhpMetrics">Github</a>.
+                </p>
+            </div>
+        </div>
+        <!-- end: Help -->
+
     </div>
 
+
     <div>
-        Powered by <a href="https://github.com/Halleck45/PhpMetrics">PhpMetrics</a> - Copyright Jean-François Lépine
+        Powered by <a href="http://www.phpmetrics.org">PhpMetrics</a> - Copyright Jean-François Lépine
     </div>
 
 
@@ -139,11 +135,14 @@
 {% include "assets/d3js.js.twig" %}
 {% include "assets/nv.d3.min.js.twig" %}
 {% include "assets/jquery.js.twig" %}
+{% include "assets/bootstrap-tabs.js.twig" %}
 
 {% include "summary/report-tabular.js.twig" %}
 {% include "summary/report-maintenability.js.twig" %}
 {% include "summary/report-custom.js.twig" %}
 {% include "summary/report-abstractness.js.twig" %}
+{% include "summary/report-relations.js.twig" %}
+
 
 
 <script type="text/javascript">
@@ -152,6 +151,7 @@
         updateCustomChart();
         updateAbstractnessChart();
         updateMaintenablityChart();
+        updateRelationsChart();
 
         // selects
         $('#xAxis').val(xAxis);
@@ -165,11 +165,19 @@
     var rAxis = 'loc';
 
 
+    $(function() {
+        $('#menu a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+    })
+
     {% autoescape false %}
     var data = {{ results | json_encode }}
     var groupedData = {{ groupedResults.asArray() | json_encode }}
     var ruleSet = {{ ruleSet.asArray() | json_encode }}
     {% endautoescape %}
+
 </script>
 
 

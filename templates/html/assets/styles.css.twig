@@ -1,0 +1,92 @@
+.validate-critical, .critical {
+    background-color:#B01E00 !important;
+    color:#FFF;
+}
+.validate-warning, .warning {
+    background-color:#f4b300 !important;
+    color:#333;
+}
+.validate-good, .good {
+    background-color:#78ba00 !important;
+    color:#FFF;
+}
+.validate-unknown, .unknown {
+}
+
+.table {
+    font-size:0.8em;
+}
+.table thead {
+    font-weight:normal;
+}
+
+.mytable td {
+    width:4%;
+    text-align:center;
+}
+.mytable .sep {
+    border-left:1px solid #CCC;
+}
+
+
+#chart-tableview .critical,
+#chart-tableview .warning,
+#chart-tableview .good,
+#chart-tableview .unknown {
+    display:block;
+    text-align: center;
+}
+
+#svg-custom,
+#svg-maintenability,
+#svg-abstractness {
+    width:300px;
+    height:300px;
+}
+.svg-main {
+    margin: 0 auto;
+    width:960px;;
+}
+
+
+/* ---- maintenability ---- */
+#svg-maintenability svg circle:hover {
+    fill:steelblue !important;
+}
+
+/* ---- relations ---- */
+.node {
+    font: 300 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    fill: #bbb;
+}
+.node:hover {
+    fill: #000;
+}
+.link {
+    stroke: steelblue;
+    stroke-opacity: .4;
+    fill: none;
+    pointer-events: none;
+}
+.node:hover,
+.node--source,
+.node--target {
+    font-weight: 700;
+}
+.node--source {
+    fill: #2ca02c;
+}
+.node--target {
+    fill: #d62728;
+}
+.link--source,
+.link--target {
+    stroke-opacity: 1;
+    stroke-width: 2px;
+}
+.link--source {
+    stroke: #d62728;
+}
+.link--target {
+    stroke: #2ca02c;
+}
