@@ -8,8 +8,6 @@
  */
 
 namespace Hal\Component\Config;
-use Hal\Application\Rule\RuleSet;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Tree of configuration
@@ -22,7 +20,7 @@ interface TreeBuilderInterface
     /**
      * Get the tree used for the application
      *
-     * @return TreeBuilder
+     * @return \Symfony\Component\Config\Definition\NodeInterface
      */
     public function getTree();
 }

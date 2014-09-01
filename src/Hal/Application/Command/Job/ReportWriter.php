@@ -46,7 +46,7 @@ class ReportWriter implements JobInterface
     /**
      * Constructor
      *
-     * @param $destination
+     * @param string|null $destination
      * @param OutputInterface $output
      * @param FormaterInterface $formater
      */

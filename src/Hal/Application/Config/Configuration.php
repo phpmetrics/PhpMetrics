@@ -10,7 +10,6 @@
 namespace Hal\Application\Config;
 use Hal\Application\Config\LoggingConfiguration;
 use Hal\Application\Config\PathConfiguration;
-use Hal\Application\Config\Path;
 use Hal\Application\Rule\RuleSet;
 use Hal\Component\Config\ConfigurationInterface;
 
@@ -113,6 +112,7 @@ class Configuration implements ConfigurationInterface
 
     /**
      * @param PathConfiguration
+     * @param PathConfiguration $path
      * @return $this;
      */
     public function setPath($path)

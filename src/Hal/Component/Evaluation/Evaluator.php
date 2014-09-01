@@ -53,7 +53,7 @@ class Evaluator
     /**
      * Evaluate rule
      *
-     * @param $rule
+     * @param string $rule
      * @throws \LogicException
      * @return Evaluation
      */

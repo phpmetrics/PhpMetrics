@@ -42,7 +42,7 @@ class PathConfiguration
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getBasePath()
     {
@@ -60,7 +60,7 @@ class PathConfiguration
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getExcludedDirs()
     {
@@ -78,7 +78,7 @@ class PathConfiguration
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getExtensions()
     {

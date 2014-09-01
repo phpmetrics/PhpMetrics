@@ -9,9 +9,6 @@
 
 namespace Hal\Component\Config;
 use Hal\Application\Config\Configuration;
-use Hal\Application\Config\LoggingConfiguration;
-use Hal\Application\Config\PathConfiguration;
-use Hal\Application\Rule\RuleSet;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -41,7 +38,7 @@ class Loader
      * Load config file
      *
      * @param $filename
-     * @return array
+     * @return Configuration
      * @throws \RuntimeException
      */
     public function load($filename) {

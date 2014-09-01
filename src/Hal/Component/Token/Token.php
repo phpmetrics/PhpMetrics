@@ -57,7 +57,7 @@ class Token {
     /**
      * Get value of token
      *
-     * @return mixed
+     * @return integer
      */
     public function getValue()
     {
@@ -67,7 +67,7 @@ class Token {
     /**
      * String representation
      *
-     * @return string
+     * @return integer
      */
     public function asString() {
         return $this->getValue();

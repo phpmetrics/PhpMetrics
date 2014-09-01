@@ -72,7 +72,7 @@ class Searcher {
     /**
      * Get the position of the brace which closes the next brace
      *
-     * @param $n
+     * @param integer $n
      * @param TokenCollection $tokens
      * @return null
      */

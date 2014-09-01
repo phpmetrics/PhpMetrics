@@ -21,7 +21,7 @@ class TreeBuilder implements \Hal\Component\Config\TreeBuilderInterface
     /**
      * Get the tree used for the application
      *
-     * @return NodeInterface
+     * @return \Symfony\Component\Config\Definition\NodeInterface
      */
     public function getTree() {
         $treeBuilder = new \Symfony\Component\Config\Definition\Builder\TreeBuilder();

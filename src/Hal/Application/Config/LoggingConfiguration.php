@@ -35,7 +35,7 @@ class LoggingConfiguration
     /**
      * Get target of report by format
      *
-     * @param $format
+     * @param string $format
      * @return string|null
      */
     public function getReport($format) {
@@ -47,7 +47,7 @@ class LoggingConfiguration
     /**
      * Get target of report by format
      *
-     * @param $format
+     * @param string $format
      * @return string|null
      */
     public function getViolation($format) {
@@ -59,7 +59,7 @@ class LoggingConfiguration
     /**
      * Get target of report by format
      *
-     * @param $format
+     * @param string $format
      * @return string|null
      */
     public function getChart($format) {
@@ -71,7 +71,7 @@ class LoggingConfiguration
     /**
      * Set report
      *
-     * @param $format
+     * @param string $format
      * @param $path
      * @return $this
      */
@@ -83,7 +83,7 @@ class LoggingConfiguration
     /**
      * Set violation
      *
-     * @param $format
+     * @param string $format
      * @param $path
      * @return $this
      */
@@ -95,7 +95,7 @@ class LoggingConfiguration
     /**
      * Set report
      *
-     * @param $format
+     * @param string $format
      * @param $path
      * @return $this
      */

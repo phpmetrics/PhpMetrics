@@ -10,9 +10,6 @@
 namespace Hal\Application\Formater\Details;
 
 use Hal\Application\Formater\FormaterInterface;
-use Hal\Application\Rule\Validator;
-use Hal\Component\Bounds\BoundsInterface;
-use Hal\Component\Bounds\Result\ResultInterface;
 use Hal\Component\Result\ResultCollection;
 
 /**

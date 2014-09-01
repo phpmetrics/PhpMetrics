@@ -240,7 +240,7 @@ class Result implements ExportableInterface {
     }
 
     /**
-     * @return float
+     * @return integer
      */
     public function getIntelligentContent() {
         return $this->intelligentContent;

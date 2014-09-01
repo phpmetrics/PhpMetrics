@@ -102,7 +102,7 @@ class ReflectedMethod {
     }
 
     /**
-     * @param $content
+     * @param string $content
      * @return $this
      */
     public function setContent($content)
@@ -120,7 +120,7 @@ class ReflectedMethod {
     }
 
     /**
-     * @param $tokens
+     * @param \Hal\Component\Token\TokenCollection $tokens
      * @return $this
      */
     public function setTokens($tokens)
@@ -151,7 +151,7 @@ class ReflectedMethod {
      *
      *      It make no sense for the moment to store any information abour return value / type. Maybe in PHP 6 ? :)
      *
-     * @param $mixed
+     * @param string $mixed
      * @return $this
      */
     public function pushReturn($mixed) {

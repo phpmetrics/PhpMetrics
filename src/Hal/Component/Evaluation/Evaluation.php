@@ -28,7 +28,7 @@ class Evaluation
     }
 
     /**
-     * @param $valid
+     * @param boolean $valid
      * @return $this
      */
     public function setValid($valid) {

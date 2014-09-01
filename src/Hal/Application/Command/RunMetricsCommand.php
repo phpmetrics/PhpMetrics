@@ -15,7 +15,6 @@ use Hal\Application\Command\Job\ReportRenderer;
 use Hal\Application\Command\Job\ReportWriter;
 use Hal\Application\Command\Job\SearchBounds;
 use Hal\Application\Config\ConfigFactory;
-use Hal\Application\Config\Logging;
 use Hal\Application\Formater\Chart\Bubbles;
 use Hal\Application\Formater\Details;
 use Hal\Application\Formater\Summary;

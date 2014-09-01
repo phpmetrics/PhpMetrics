@@ -32,7 +32,7 @@ class Graphviz
     /**
      * Get image content
      *
-     * @param $dotContent
+     * @param string $dotContent
      * @return string
      */
     public function getImage($dotContent) {

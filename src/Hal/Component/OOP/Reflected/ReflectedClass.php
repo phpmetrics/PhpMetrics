@@ -182,7 +182,7 @@ class ReflectedClass {
     /**
      * Get the parent name
      *
-     * @return null|string
+     * @return string
      */
     public function getParent() {
         return $this->nameResolver->resolve($this->parent, $this->getNamespace());

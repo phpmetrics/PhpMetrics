@@ -12,7 +12,6 @@ use Hal\Application\Config\Configuration;
 use Hal\Application\Config\LoggingConfiguration;
 use Hal\Application\Config\PathConfiguration;
 use Hal\Application\Rule\RuleSet;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Hydrates configuration
