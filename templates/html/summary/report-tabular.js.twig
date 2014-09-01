@@ -105,8 +105,10 @@
         ];
         var final, e, level ;
         for(i = 0; i < len; i++) {
+            var separator;
             e = result[i];
-            level = (e.name.split("/").length - 1)
+            separator = e.name.indexOf("\\") !== -1 ? "\\" : "/";
+            level = (e.name.split(separator).length - 1);
             if(!e.name.match(/php$/)) {
                 parents[level + 1] = e;
                 parents[level]._values.push(e);

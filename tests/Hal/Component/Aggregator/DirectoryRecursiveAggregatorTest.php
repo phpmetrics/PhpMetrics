@@ -16,11 +16,11 @@ class DirectoryRecursiveAggregatorTest extends \PHPUnit_Framework_TestCase {
     public function testICanAggregatesResults() {
 
         $collection = new ResultCollection();
-        $collection->push(new ResultSet('/root1/folder1/file1.php'));
-        $collection->push(new ResultSet('/root1/folder1/file2.php'));
-        $collection->push(new ResultSet('/root1/folder1/file3.php'));
-        $collection->push(new ResultSet('/root1/folder2/file1.php'));
-        $collection->push(new ResultSet('/root2/file1.php'));
+        $collection->push(new ResultSet(str_replace('/', DIRECTORY_SEPARATOR, '/root1/folder1/file1.php')));
+        $collection->push(new ResultSet(str_replace('/', DIRECTORY_SEPARATOR, '/root1/folder1/file2.php')));
+        $collection->push(new ResultSet(str_replace('/', DIRECTORY_SEPARATOR, '/root1/folder1/file3.php')));
+        $collection->push(new ResultSet(str_replace('/', DIRECTORY_SEPARATOR, '/root1/folder2/file1.php')));
+        $collection->push(new ResultSet(str_replace('/', DIRECTORY_SEPARATOR, '/root2/file1.php')));
 
         $aggregator = new DirectoryRecursiveAggregator(0);
         $results = $aggregator->aggregates($collection);
