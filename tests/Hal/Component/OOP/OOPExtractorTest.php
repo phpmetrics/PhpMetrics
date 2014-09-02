@@ -7,7 +7,6 @@ use Hal\Component\OOP\Extractor\Extractor;
 
 /**
  * @group oop
- * @group wip
  */
 class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
@@ -59,7 +58,6 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
             , array(__DIR__.'/../../../resources/oop/f4.php', array('\Full\AliasedClass', '\Toto'))
         );
     }
-
 
     public function testCallsAreFoundAsDependencies() {
         $file = __DIR__.'/../../../resources/oop/f5.php';

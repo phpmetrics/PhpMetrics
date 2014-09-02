@@ -125,6 +125,7 @@ class ReflectedClass {
             $dependencies = array_merge($dependencies, $method->getDependencies());
         }
         foreach($dependencies as &$name) {
+//            $name = preg_replace('!^(\\\\)!', '', $name);
             $name = $this->nameResolver->resolve($name, $this->getNamespace());
         }
         return array_unique($dependencies);
@@ -138,14 +139,6 @@ class ReflectedClass {
     {
         $this->nameResolver = $resolver;
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAliases()
-    {
-        return $this->aliases;
     }
 
     /**

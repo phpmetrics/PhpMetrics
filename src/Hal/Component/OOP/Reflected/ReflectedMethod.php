@@ -220,7 +220,7 @@ class ReflectedMethod {
         // on read : compare with aliases. We cannot make it in pushDependency() => aliases aren't yet known
         $dependencies = array();
         foreach($this->dependencies as $name) {
-            array_push($dependencies, $this->nameResolver->resolve($name));
+            array_push($dependencies, $this->nameResolver->resolve($name, null));
         }
         return array_unique($dependencies);
     }

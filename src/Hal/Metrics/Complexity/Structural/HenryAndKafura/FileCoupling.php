@@ -62,7 +62,7 @@ class FileCoupling {
 
         $classes = $rOOP->getClasses();
         foreach($classes as $declaredClass) {
-            $declaredClassCoupling = $this->couplingMap->get($declaredClass->getName());
+            $declaredClassCoupling = $this->couplingMap->get($declaredClass->getFullname());
 
             $ce += $declaredClassCoupling->getEfferentCoupling();
             $ca += $declaredClassCoupling->getAfferentCoupling();

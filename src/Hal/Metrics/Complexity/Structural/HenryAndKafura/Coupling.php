@@ -56,15 +56,14 @@ class Coupling {
         $map = array();
         foreach($classes as $class) {
 
-            if(!isset($map[$class->getName()])) {
-                $map[$class->getName()] = new Result($class->getName());
+            if(!isset($map[$class->getFullname()])) {
+                $map[$class->getFullname()] = new Result($class->getFullname());
             }
 
             $dependencies = $class->getDependencies();
-            $map[$class->getName()]->setEfferentCoupling(sizeof($dependencies, COUNT_NORMAL));
+            $map[$class->getFullname()]->setEfferentCoupling(sizeof($dependencies, COUNT_NORMAL));
 
             foreach($dependencies as $dependency) {
-
                 if(!isset($map[$dependency])) {
                     $map[$dependency] = new Result($dependency);
                 }

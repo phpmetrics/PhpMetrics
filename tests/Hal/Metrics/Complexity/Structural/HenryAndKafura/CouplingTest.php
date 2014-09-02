@@ -18,7 +18,7 @@ class CouplingTest extends \PHPUnit_Framework_TestCase {
         $classes = array();
         foreach($classesInfos as $classname => $dependencies) {
             $class = $this->getMockBuilder('\Hal\Component\OOP\Reflected\ReflectedClass')->disableOriginalConstructor()->getMock();
-            $class->expects($this->any())->method('getName')->will($this->returnValue($classname));
+            $class->expects($this->any())->method('getFullname')->will($this->returnValue($classname));
             $class->expects($this->once())->method('getDependencies')->will($this->returnValue($dependencies));
             array_push($classes, $class);
         }
