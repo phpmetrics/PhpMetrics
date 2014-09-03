@@ -8,18 +8,8 @@
  */
 
 namespace Hal\Application\Command;
-use Hal\Application\Command\Job\DoAggregatedAnalyze;
-use Hal\Application\Command\Job\DoAnalyze;
-use Hal\Application\Command\Job\Queue;
-use Hal\Application\Command\Job\ReportRenderer;
-use Hal\Application\Command\Job\ReportWriter;
-use Hal\Application\Command\Job\SearchBounds;
+use Hal\Application\Command\Job\QueueFactory;
 use Hal\Application\Config\ConfigFactory;
-use Hal\Application\Formater\Chart\Bubbles;
-use Hal\Application\Formater\Details;
-use Hal\Application\Formater\Summary;
-use Hal\Application\Formater\Violations\Xml;
-use Hal\Component\Aggregator\DirectoryAggregatorFlat;
 use Hal\Component\Bounds\Bounds;
 use Hal\Component\Evaluation\Evaluator;
 use Hal\Component\File\Finder;
@@ -95,8 +85,6 @@ class RunMetricsCommand extends Command
         $output->writeln('PHPMetrics by Jean-François Lépine <https://twitter.com/Halleck45>');
         $output->writeln('');
 
-        $level = $input->getOption('level');
-
         // config
         $configFactory = new ConfigFactory();
         $config = $configFactory->factory($input);
@@ -105,36 +93,21 @@ class RunMetricsCommand extends Command
         if(null === $config->getPath()->getBasePath()) {
             throw new \LogicException('Please provide a path to analyze');
         }
+
+        // files to analyze
         $finder = new Finder(
             $config->getPath()->getExtensions()
             , $config->getPath()->getExcludedDirs()
         );
 
-        // rules
-        $rules = $config->getRuleSet();
-        $validator = new \Hal\Application\Rule\Validator($rules);
-
-        // bounds
-        $bounds = new Bounds;
-
-        // jobs queue planning
-        $queue = new Queue();
-        $queue
-            ->push(new DoAnalyze($output, $finder, $config->getPath()->getBasePath(), !$input->getOption('without-oop')))
-            ->push(new SearchBounds($output, $bounds))
-            ->push(new DoAggregatedAnalyze($output, new DirectoryAggregatorFlat($level)))
-            ->push(new ReportRenderer($output, new Summary\Cli($validator, $bounds)))
-            ->push(new ReportWriter($config->getLogging()->getReport('html'), $output, new Summary\Html($validator, $bounds)))
-            ->push(new ReportWriter($config->getLogging()->getReport('json'), $output, new Details\Json($validator, $bounds)))
-            ->push(new ReportWriter($config->getLogging()->getReport('xml'), $output, new Summary\Xml($validator, $bounds)))
-            ->push(new ReportWriter($config->getLogging()->getReport('csv'), $output, new Details\Csv($validator, $bounds)))
-            ->push(new ReportWriter($config->getLogging()->getViolation('xml'), $output, new Xml($validator, $bounds)))
-            ->push(new ReportWriter($config->getLogging()->getChart('bubbles'), $output, new Bubbles($validator, $bounds)))
-            ;
-
-        // execute
+        // prepare structures
+        $bounds = new Bounds();
         $collection = new \Hal\Component\Result\ResultCollection();
         $aggregatedResults = new \Hal\Component\Result\ResultCollection();
+
+        // execute analyze
+        $queueFactory = new QueueFactory($input, $output, $config);
+        $queue = $queueFactory->factory($finder, $bounds);
         $queue->execute($collection, $aggregatedResults);
 
         $output->writeln('<info>done</info>');
