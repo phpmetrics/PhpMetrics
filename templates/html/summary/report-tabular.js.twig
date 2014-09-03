@@ -103,11 +103,16 @@
         var parents = [
             { name: "temporary", _values: []}
         ];
-        var final, e, level ;
+        var final, e, level, separator;
+        separator = "/";
         for(i = 0; i < len; i++) {
-            var separator;
+            if (result[i].name.indexOf("\\") !== -1) {
+                separator = "\\";
+                break;
+            }
+        }
+        for(i = 0; i < len; i++) {
             e = result[i];
-            separator = e.name.indexOf("\\") !== -1 ? "\\" : "/";
             level = (e.name.split(separator).length - 1);
             if(!e.name.match(/php$/)) {
                 parents[level + 1] = e;
