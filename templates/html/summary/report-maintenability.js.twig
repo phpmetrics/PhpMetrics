@@ -21,6 +21,38 @@
             .attr("class", "bubble");
 
 
+        // accessibility for colorblind
+        var defs= svg.append('defs');
+        defs.append('pattern')
+                    .attr('id', 'hash-warning')
+                    .attr('patternUnits', 'userSpaceOnUse')
+                    .attr('width', 4)
+                    .attr('height', 4)
+                    .append('path')
+                        .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
+                        .attr('stroke', '#000000')
+                        .attr('stroke-width', 1);
+        defs.append('pattern')
+                    .attr('id', 'hash-critical')
+                    .attr('patternUnits', 'userSpaceOnUse')
+                    .attr('width', 4)
+                    .attr('height', 4)
+                    .append('path')
+                        .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
+                        .attr('stroke', '#000000')
+                        .attr('stroke-width', 3);
+        defs.append('pattern')
+                .attr('id', 'hash-good')
+                .attr('patternUnits', 'userSpaceOnUse')
+                .attr('width', 5)
+                .attr('height', 5)
+                .append('circle')
+                    .attr('cx', 2)
+                    .attr('cy', 2)
+                    .attr('r', 2)
+                    .attr('style', "stroke:none;fill:#eee");
+
+        // initialization
         d3
             .select('#svg-maintenability')
             .datum(data)
@@ -33,20 +65,13 @@
                 .filter(function(d) { return !d.children; })
             )
             .enter().append("g")
-            .attr("class", "node")
-            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-
-//            node
-//                .append("title")
-//                .text(function(d) { return d.name
-//                    + "\n\tCyclomatic Complexity : " + format(d.cyclomaticComplexity)
-//                    + "\n\tMaintenability Index: " + format(d.maintenabilityIndex)
-//                ; });
+            .attr("class", "node");
 
             node
-                .append("circle")
+                .append('circle')
                 .attr("r", function(d) { return d.r; })
-                .style("fill", function(d) { return d.color; })
+                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+                // events
                 .on('mouseover', function(d) {
                     var text = '<strong>' + d.name + '</strong>'
                             + "<br />Cyclomatic Complexity : " + format(d.cyclomaticComplexity)
@@ -62,9 +87,27 @@
                 .on('mouseout', function() {
                     d3.select(".tooltip").style("opacity", 0);
                 })
-
-            ;
-
+                // for colorblinds
+                .style("fill", function(d) {
+                    if(accessibilityEnabled) {
+                        return 'url(#hash-'+ validate('maintenabilityIndex', d.maintenabilityIndex) +')'
+                    }
+                    switch(validate('maintenabilityIndex', d.maintenabilityIndex)) {
+                        case 'good':
+                            return '#78BA00';
+                        case 'warning':
+                            return '#F4B300';
+                        case 'critical':
+                            return '#FF2E12';
+                        default:
+                            return '#CCCCCC';
+                    }
+                })
+                .style('stroke-width', function(d) {
+                    return accessibilityEnabled ? 1 : 0;
+                })
+                .style('stroke', '#000')
+        ;
 
         // tooltip
         d3.select("body")
@@ -78,18 +121,9 @@
             var i, color;
             for(i in root) {
                 var e = root[i];
-                if(e.maintenabilityIndex > 85 || e.maintenabilityIndex == 'INF') {
-                    color = '#78BA00';
-                }else if(e.maintenabilityIndex > 65) {
-                    color = '#F4B300';
-                }
-                else {
-                    color = '#FF2E12';
-                }
                 datas.push({
                     "value": parseFloat(e.cyclomaticComplexity) + 1
                     , "name": e.filename
-                    , "color": color
                     , "cyclomaticComplexity": parseFloat(e.cyclomaticComplexity)
                     , "maintenabilityIndex": parseInt(e.maintenabilityIndex)
                 });
@@ -98,7 +132,6 @@
         }
 
         d3.select(self.frameElement).style("height", diameter + "px");
-
 
         // Save as
         $('#btn-save-maintenability').hover(function() {
@@ -110,7 +143,14 @@
                 $e.attr('href', 'data:application/octet-stream;base64,' + xmldata);
                 $e.data('initialized', true);
             }
-        })
+        });
+
     }
+
+
+
+
+
+
 </script>
 {% endautoescape %}

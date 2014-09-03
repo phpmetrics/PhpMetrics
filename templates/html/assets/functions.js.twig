@@ -50,5 +50,12 @@
         return string.replace(/([a-z0-9])([A-Z])/, "$1 $2");
     }
 
+    function toggleAccessibility() {
+        accessibilityEnabled = !!!accessibilityEnabled;
+        $('#svg-maintenability svg').html('');
+        updateMaintenablityChart();
+
+    }
+
 </script>
 {% endautoescape %}

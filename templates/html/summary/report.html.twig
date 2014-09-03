@@ -18,12 +18,24 @@
 
     <h1>PhpMetrics report</h1>
 
-    <ul id="menu" class="nav nav-pills" role="tablist">
-        <li class="active"><a data-toggle="tab" href="#overview">Overview</a></li>
-        <li><a data-toggle="tab" href="#relations">Relations map</a></li>
-        <li><a data-toggle="tab" href="#explore">Explore</a></li>
-        <li><a data-toggle="tab" href="#help">Help</a></li>
-    </ul>
+    <div class="row">
+        <div class="col-sm-10">
+            <ul id="menu" class="nav nav-pills" role="tablist">
+                <li class="active"><a data-toggle="tab" href="#overview">Overview</a></li>
+                <li><a data-toggle="tab" href="#relations">Relations map</a></li>
+                <li><a data-toggle="tab" href="#explore">Explore</a></li>
+                <li><a data-toggle="tab" href="#help">Help</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-2">
+            <div class="well checkbox">
+                <label>
+                    <input type="checkbox" onclick="toggleAccessibility()"> I'm colorblind
+                </label>
+            </div>
+        </div>
+
+    </div>
 
 
     <div class="tab-content row">
@@ -36,7 +48,8 @@
                 <div id="svg-maintenability"><svg /></div>
 
                 <div class="well ">
-                    <h4>Info</h4>
+
+                    <h4>Information</h4>
                     <p>
                         Each file is symbolized by a circle.
                         Size of the circle represents the Cyclomatic complexity.
@@ -44,6 +57,7 @@
                     </p>
                     <p>Large red circles will be probably hard to maintain.</p>
                 </div>
+
             </div>
             <div class=" col-sm-4">
 
@@ -205,6 +219,9 @@
     var groupedData = {{ groupedResults.asArray() | json_encode }}
     var ruleSet = {{ ruleSet.asArray() | json_encode }}
     {% endautoescape %}
+
+    // accessibility for colorblinds
+    var accessibilityEnabled = false;
 
     // fixes links to tab
     // Javascript to enable link to tab
