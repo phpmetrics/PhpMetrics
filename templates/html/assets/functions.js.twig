@@ -39,7 +39,7 @@
     }
 
     function validateIn(results, key, type) {
-        type = type || 'average';
+        type = type || 'average';
         var value = results[type] ? results[type][key] : results[key];
         return validate(key, value);
     }
