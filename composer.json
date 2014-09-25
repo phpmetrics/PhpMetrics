@@ -31,11 +31,10 @@
     "require": {
         "twig/twig": "~1.15",
         "symfony/console": "~2.4",
-	    "hoa/ruler": "dev-master",
-	    "symfony/config": "~2.4",
+        "hoa/ruler": "~1.0",
+        "symfony/config": "~2.4",
         "ext-dom": "*"
     },
-    "minimum-stability": "dev",
     "require-dev": {
         "phpunit/phpunit": "~4.1"
     },
