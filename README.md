@@ -2,10 +2,10 @@
 
 Gives metrics about PHP project and classes.
 
-[![License](https://poser.pugx.org/halleck45/php-metrics/license.png)](https://packagist.org/packages/halleck45/php-metrics)
-[![Build Status](https://secure.travis-ci.org/Halleck45/PhpMetrics.png)](http://travis-ci.org/Halleck45/PhpMetrics)  [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/badges/quality-score.png?s=b825f35680c0a469333da2c963226828fed135ba)](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/)
-[![Latest Stable Version](https://poser.pugx.org/halleck45/php-metrics/v/stable.png)](https://packagist.org/packages/halleck45/php-metrics)
-[![Dependency Status](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815/badge.png)](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815)
+[![License](https://poser.pugx.org/halleck45/php-metrics/license.svg)](https://packagist.org/packages/halleck45/php-metrics)
+[![Build Status](https://secure.travis-ci.org/Halleck45/PhpMetrics.svg)](http://travis-ci.org/Halleck45/PhpMetrics)  [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/halleck45/php-metrics/v/stable.svg)](https://packagist.org/packages/halleck45/php-metrics)
+[![Dependency Status](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815/badge.svg)](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815)
 
 + [Installation](#installation)
 + [Usage](#usage)
