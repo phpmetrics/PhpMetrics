@@ -52,9 +52,26 @@
 
     function toggleAccessibility() {
         accessibilityEnabled = !!!accessibilityEnabled;
-        $('#svg-maintenability svg').html('');
+        document.getElementById('svg-maintenability').firstElementChild.innerHTML = '';
         updateMaintenablityChart();
 
+    }
+
+
+    function displayTab(e, id) {
+
+        var i, tabs = document.getElementsByClassName('tab');
+        for(i = 0; i < tabs.length; i++) {
+            tabs[i].style.display = 'none';
+        }
+        document.getElementById(id).style.display = 'block';
+
+        var child, menu = document.getElementById('menu');
+        for (child = menu.firstNode; child; child = child.nextSibling) {
+            child.className = '';
+        }
+
+        e.className = 'active';
     }
 
 </script>

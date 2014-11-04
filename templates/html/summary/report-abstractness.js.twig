@@ -71,7 +71,7 @@
             var svg = document.getElementById('svg-abstractness').childNodes[0],
                     xml  = new XMLSerializer().serializeToString(svg),
                     xmldata = btoa(xml);
-            $('#btn-save-abstractness').attr('href', 'data:application/octet-stream;base64,' + xmldata)
+            document.getElementById('btn-save-abstractness').href = 'data:application/octet-stream;base64,' + xmldata;
 
             return chart;
         });

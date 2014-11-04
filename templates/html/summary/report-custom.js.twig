@@ -47,7 +47,7 @@
                     xml  = new XMLSerializer().serializeToString(svg),
                     xmldata = btoa(xml),
                     img  = new Image();
-            $('#btn-save-custom').attr('href', 'data:application/octet-stream;base64,' + xmldata)
+            document.getElementById('btn-save-custom').href =  'data:application/octet-stream;base64,' + xmldata;
 
 
             return chart;

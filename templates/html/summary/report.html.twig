@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     {% include "assets/favicon.html.twig" %}
     <style type="text/css">
-        {% include "assets/bootstrap.css.twig" %}
         {% include "assets/nv.d3.css.twig" %}
         {% include "assets/styles.css.twig" %}
     </style>
@@ -19,21 +18,21 @@
     <h1>PhpMetrics report</h1>
 
     <div class="row">
-        <div class="col-sm-10">
-            <ul id="menu" class="nav nav-pills" role="tablist">
-                <li class="active"><a data-toggle="tab" href="#overview">Overview</a></li>
-                <li><a data-toggle="tab" href="#relations">Relations map</a></li>
-                <li><a data-toggle="tab" href="#explore">Explore</a></li>
-                <li><a data-toggle="tab" href="#help">Help</a></li>
+        <div class="accessibility-box">
+            <label>
+                <input type="checkbox" onclick="toggleAccessibility()"> I'm colorblind
+            </label>
+        </div>
+
+        <div class="menu-box">
+            <ul id="menu" class="menu" >
+                <li class="active" onclick="return displayTab(this, 'overview');"><a >Overview</a></li>
+                <li onclick="return displayTab(this, 'relations');"><a  >Relations map</a></li>
+                <li onclick="return displayTab(this, 'explore');"><a >Explore</a></li>
+                <li onclick="return displayTab(this, 'help');"><a  >Help</a></li>
             </ul>
         </div>
-        <div class="col-sm-2">
-            <div class="well checkbox">
-                <label>
-                    <input type="checkbox" onclick="toggleAccessibility()"> I'm colorblind
-                </label>
-            </div>
-        </div>
+
 
     </div>
 
@@ -41,8 +40,8 @@
     <div class="tab-content row">
 
         <!-- General overview -->
-        <div class="tab-pane active" id="overview">
-            <div class="col-sm-4">
+        <div class="row tab active" id="overview">
+            <div class="col-3">
                 <h3>Maintenability</h3>
                 <small><a id="btn-save-maintenability" download="phpmetric-maintenability.svg">Download (as SVG)</a></small>
                 <div id="svg-maintenability"><svg /></div>
@@ -59,7 +58,7 @@
                 </div>
 
             </div>
-            <div class=" col-sm-4">
+            <div class=" col-3">
 
                 <h3 id="title-custom">Custom chart</h3>
                 <small><a id="btn-save-custom" download="phpmetric-custom.svg">Download (as SVG)</a></small>
@@ -103,7 +102,7 @@
                 </div>
 
             </div>
-            <div class="col-sm-4">
+            <div class="col-3">
                 <h3>Abstractness / Instability</h3>
                 <small><a id="btn-save-abstractness" download="phpmetric-abstractness.svg">Download (as SVG)</a></small>
                 <div id="svg-abstractness"><svg /></div>
@@ -114,7 +113,7 @@
 
 
         <!-- Relations -->
-        <div class="tab-pane" id="relations">
+        <div class="tab" id="relations">
             <h3>Relations</h3>
             <div class="col-sm-12">
                 <div class="well">
@@ -136,7 +135,7 @@
 
 
         <!-- Tabular datas -->
-        <div class="tab-pane" id="explore">
+        <div class="tab" id="explore">
             <div class="col-sm-12">
                 <h3>Explore</h3>
                 <div id="chart-tableview"></div>
@@ -145,7 +144,7 @@
         <!-- end: Tabular datas -->
 
         <!-- Help -->
-        <div class="tab-pane" id="help">
+        <div class="tab" id="help">
             <div class="col-sm-12">
                 <h3>Help</h3>
                 <p>
@@ -161,7 +160,7 @@
     </div>
 
 
-    <div>
+    <div class="row">
         Powered by <a href="http://www.phpmetrics.org">PhpMetrics</a> - Copyright Jean-François Lépine
     </div>
 
@@ -176,8 +175,6 @@
 {% include "assets/functions.js.twig" %}
 {% include "assets/d3js.js.twig" %}
 {% include "assets/nv.d3.min.js.twig" %}
-{% include "assets/jquery.js.twig" %}
-{% include "assets/bootstrap-tabs.js.twig" %}
 
 {% include "summary/report-tabular.js.twig" %}
 {% include "summary/report-maintenability.js.twig" %}
@@ -188,18 +185,26 @@
 
 
 <script type="text/javascript">
-    $(function(){
-        updateTableView();
-        updateCustomChart();
-        updateAbstractnessChart();
-        updateMaintenablityChart();
-        updateRelationsChart();
 
-        // selects
-        $('#xAxis').val(xAxis);
-        $('#yAxis').val(yAxis);
-        $('#rAxis').val(rAxis);
-    });
+    document.onreadystatechange = function() {
+        if(document.readyState == 'complete') {
+            // init tabs
+            document.getElementById('menu').firstElementChild.onclick();
+
+            // init charts
+            updateTableView();
+            updateCustomChart();
+            updateAbstractnessChart();
+            updateMaintenablityChart();
+            updateRelationsChart();
+
+            // selects
+            document.getElementById('xAxis').value = xAxis;
+            document.getElementById('yAxis').value = yAxis;
+            document.getElementById('rAxis').value = rAxis;
+        }
+    }
+
 
     // default selected elements
     var xAxis = 'lcom';
@@ -207,12 +212,6 @@
     var rAxis = 'loc';
 
 
-    $(function() {
-        $('#menu a').click(function (e) {
-            e.preventDefault()
-            $(this).tab('show')
-        })
-    })
 
     {% autoescape false %}
     var data = {{ results | json_encode }}
@@ -225,15 +224,15 @@
 
     // fixes links to tab
     // Javascript to enable link to tab
-    var hash = document.location.hash;
-    var prefix = "tab_";
-    if (hash) {
-        $('#menu a[href='+hash.replace(prefix,"")+']').tab('show');
-    }
-    // Change hash for page-reload
-    $('#menu a').on('shown', function (e) {
-        window.location.hash = e.target.hash.replace("#", "#" + prefix);
-    });
+//    var hash = document.location.hash;
+//    var prefix = "tab_";
+//    if (hash) {
+//        $('#menu a[href='+hash.replace(prefix,"")+']').tab('show');
+//    }
+//    // Change hash for page-reload
+//    $('#menu a').on('shown', function (e) {
+//        window.location.hash = e.target.hash.replace("#", "#" + prefix);
+//    });
 
 </script>
 

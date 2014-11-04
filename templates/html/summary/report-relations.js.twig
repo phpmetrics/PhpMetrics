@@ -138,16 +138,16 @@
 
 
     // Save as
-    $('#btn-save-relations').hover(function() {
-        var $e = $(this);
-        if(!$e.data('initialized')) {
+    document.getElementById('btn-save-relations').onmouseover = function() {
+        var e = this;
+        if(e.className != 'initialized') {
             var svgc  = document.getElementById('svg-relations').childNodes[0]
                     , xml  = new XMLSerializer().serializeToString(svgc)
                     , xmldata = btoa(xml);
-            $e.attr('href', 'data:application/octet-stream;base64,' + xmldata);
-            $e.data('initialized', true);
+            e.href = 'data:application/octet-stream;base64,' + xmldata;
+            e.className = 'initialized';
         }
-    })
+    };
 
 
 </script>

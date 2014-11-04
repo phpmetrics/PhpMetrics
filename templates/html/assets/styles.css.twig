@@ -1,3 +1,90 @@
+/* ---- layout ---- */
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: 1em;
+    text-align: center;
+}
+.container {
+    width: 1170px;
+    text-align: left;
+    margin: 0 auto;
+}
+.row {
+    position: relative;
+    clear: left;
+}
+.col-3 {
+    float:left;
+    width:28%;
+    margin-right:2%;
+}
+.col-3:last-child {
+    margin-right: 0;
+}
+.col-3:last-child:after {
+    content:" ";
+    clear:left;
+}
+
+.accessibility-box {
+    float:right;
+    width: 200px;
+}
+
+.menu, .menu li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.menu li {
+    display: inline-block;
+    padding: 10px 15px;
+}
+.menu li.active {
+    background-color: #428bca;
+    border-radius: 4px;
+}
+.menu li.active a {
+    color: #fff;
+}
+
+
+/* ---- tabs ---- */
+.tab-pane {
+    display:none;
+}
+.tab-pane.active {
+    display:block;
+}
+
+
+/* ----- fonts ----- */
+a:hover, a:focus {
+    color: #2a6496;
+    text-decoration: underline;
+}
+a:active, a:hover {
+    outline: 0;
+}
+a {
+    color: #428bca;
+    text-decoration: none;
+    cursor: pointer;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+}
+h4 {
+    font-weight: bold;
+}
+
+
+/* ---- general styles ----- */
 .validate-critical, .critical {
     background-color:#B01E00 !important;
     color:#FFF;
@@ -28,7 +115,19 @@
     border-left:1px solid #CCC;
 }
 
+.well {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+}
 
+
+/* ---- Charts ---- */
 #chart-tableview .critical,
 #chart-tableview .warning,
 #chart-tableview .good,
