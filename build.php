@@ -17,7 +17,7 @@ $phar->startBuffering();
 
 
 $files = array_merge(rglob('*.php'), rglob('*.twig'), rglob('*.json'), rglob('*.pp'));
-$exclude = '!(.git)|(.svn)!';
+$exclude = '!(.git)|(.svn)|(bin)|(tests)|(Tests)!';
 foreach($files as $file) {
     if(preg_match($exclude, $file)) continue;
     $path = str_replace(__DIR__.'/', '', $file);
