@@ -67,8 +67,9 @@
         document.getElementById(id).style.display = 'block';
 
         var child, menu = document.getElementById('menu');
-        for (child = menu.firstNode; child; child = child.nextSibling) {
-            child.className = '';
+        var nodes = menu.childNodes;
+        for(var i = 0; i < nodes.length; i++) {
+            nodes[i].className = '';
         }
 
         e.className = 'active';
