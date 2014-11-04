@@ -131,9 +131,13 @@ In order to run unit tests, please install the dev dependencies:
     curl -sS https://getcomposer.org/installer | php
     php composer.phar install --dev
 
-Then, to run the test suite:
+Then, in order to run the test suite:
 
     ./vendor/bin/phpunit
+
+And to build the `phar`:
+
+    make
 
 # Author
 
