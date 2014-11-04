@@ -93,31 +93,31 @@ You can customize configuration with the `--config=<file>` option.
 The file should be a valid yaml file. For example:
 
     # file <my-config.yml>
+    myconfig:
+        # paths to explore
+        path:
+            extensions: php|inc
+            exclude: Features|Tests|tests
 
-    # paths to explore
-    path:
-        extensions: php|inc
-        exclude: Features|Tests|tests
+        # report and violations files
+        logging:
+            report:
+                xml:    ./log/phpmetrics.xml
+                html:   ./log/phpmetrics.html
+                csv:    ./log/phpmetrics.csv
+            violations:
+                xml:    ./log/violations.xml
+            chart:
+                bubbles: ./log/bubbles.svg
 
-    # report and violations files
-    logging:
-        report:
-            xml:    ./log/phpmetrics.xml
-            html:   ./log/phpmetrics.html
-            csv:    ./log/phpmetrics.csv
-        violations:
-            xml:    ./log/violations.xml
-        chart:
-            bubbles: ./log/bubbles.svg
+        # condition of failure
+        failure: average.maintenabilityIndex < 50 or sum.loc > 10000
 
-    # condition of failure
-    failure: average.maintenabilityIndex < 50 or sum.loc > 10000
-
-    # rules used for color
-    rules:
-      cyclomaticComplexity: [ 10, 6, 2 ]
-      maintenabilityIndex: [ 0, 69, 85 ]
-      [...]
+        # rules used for color
+        rules:
+          cyclomaticComplexity: [ 10, 6, 2 ]
+          maintenabilityIndex: [ 0, 69, 85 ]
+          [...]
 
 Each rule is composed from three values.
 
