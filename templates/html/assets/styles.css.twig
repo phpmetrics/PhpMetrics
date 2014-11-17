@@ -246,4 +246,31 @@ table {
     box-shadow: 1px 1px 3px;
     text-align: left;
     color:#FFF;
+    z-index: 4;
+}
+
+/* ---- zoom ---- */
+.zoomed {
+    position: fixed;
+    z-index: 2;
+    top: 20px;
+    left: 0;
+    width: 100% !important;
+    height: 95% !important;
+    background: #FFF;
+}
+.btn-close {
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    background: #333;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    padding: 3px 0;
+    height: 20px;
+    lien-height: 20px;
+}
+.btn-close a {
+    color: #FFF;
 }

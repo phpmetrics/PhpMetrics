@@ -15,7 +15,7 @@
 
 
 
-    <h1>PhpMetrics report</h1>
+    <h1 id="title">PhpMetrics report</h1>
 
     <div class="row">
         <div class="well accessibility-box">
@@ -43,7 +43,7 @@
         <div class="row tab active" id="overview">
             <div class="col-3">
                 <h3>Maintenability</h3>
-                <small><a id="btn-save-maintenability" download="phpmetric-maintenability.svg">Download (as SVG)</a></small>
+                <small><a id="btn-save-maintenability" download="phpmetric-maintenability.svg">Download (as SVG)</a> | <a onclick="return zoom('svg-maintenability', updateMaintenablityChart);">zoom</a></small>
                 <div id="svg-maintenability"><svg /></div>
 
                 <div class="well ">
@@ -61,7 +61,7 @@
             <div class=" col-3">
 
                 <h3 id="title-custom">Custom chart</h3>
-                <small><a id="btn-save-custom" download="phpmetric-custom.svg">Download (as SVG)</a></small>
+                <small><a id="btn-save-custom" download="phpmetric-custom.svg">Download (as SVG)</a> | <a onclick="return zoom('svg-custom', updateCustomChart);">zoom</a></small>
                 <div id="svg-custom"><svg /></div>
 
                 <div class="well">
@@ -104,7 +104,7 @@
             </div>
             <div class="col-3">
                 <h3>Abstractness / Instability</h3>
-                <small><a id="btn-save-abstractness" download="phpmetric-abstractness.svg">Download (as SVG)</a></small>
+                <small><a id="btn-save-abstractness" download="phpmetric-abstractness.svg">Download (as SVG)</a> | <a onclick="return zoom('svg-abstractness', updateAbstractnessChart);">zoom</a></small>
                 <div id="svg-abstractness"><svg /></div>
             </div>
         </div>

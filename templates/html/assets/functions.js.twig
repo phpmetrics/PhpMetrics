@@ -75,5 +75,46 @@
         e.className = 'active';
     }
 
+    function zoom(id, callback) {
+        var e = document.getElementById(id);
+
+        // preserve olds values
+        e.setAttribute('data-original-width', e.offsetWidth);
+        e.setAttribute('data-original-height', e.offsetHeight);
+
+        // zoom
+        e.className = 'zoomed';
+
+        // add close button
+        var close = document.createElement('div');
+        close.setAttribute('id', 'btn-close');
+        close.innerHTML = '<a>Close</a>';
+        document.body.appendChild(close);
+        close.className = 'btn-close'
+        close.onclick = function(id, callback) {
+            return function() {
+                zoomOut(id, callback);
+            }
+        }(id, callback);
+
+        // apply callback
+        callback();
+    }
+
+    function zoomOut(id, callback) {
+        var e = document.getElementById(id);
+
+        // zoom
+        e.className = '';
+
+        // remove close button
+        var close = document.getElementById('btn-close');
+        close.parentNode.removeChild(close);
+
+        // apply callback
+        var w = e.getAttribute('data-original-width');
+        callback(w);
+    }
+
 </script>
 {% endautoescape %}

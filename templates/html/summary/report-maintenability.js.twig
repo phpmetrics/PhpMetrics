@@ -2,22 +2,30 @@
 <script type="text/javascript">
 
     function updateMaintenablityChart() {
-        chartMaintenability(xAxis, yAxis, rAxis);
+        chartMaintenability();
     };
 
     function chartMaintenability() {
-        var diameter = 300,
-        format = d3.format(",d"),
-        color = d3.scale.category20c();
+        var maxHeight = document.getElementById('svg-maintenability').offsetHeight,
+            maxWidth = document.getElementById('svg-maintenability').offsetWidth,
+            format = d3.format(",d"),
+            color = d3.scale.category20c();
 
         var bubble = d3.layout.pack()
             .sort(null)
-            .size([diameter, diameter])
+            .size([maxWidth, maxHeight])
             .padding(1.5);
 
+        var r = d3.scale.linear().range([1, maxWidth / 4]).domain([1, 100]);
+        var x = d3.scale.linear().range([1, maxWidth]);
+        var y = d3.scale.linear().range([1, maxHeight]);
+
+
+
+        d3.select("#svg-maintenability").html("<svg></svg>");
         var svg = d3.select("#svg-maintenability").select("svg")
-            .attr("width", diameter)
-            .attr("height", diameter)
+            .attr("width", maxWidth)
+            .attr("height", maxHeight)
             .attr("class", "bubble");
 
 
@@ -69,7 +77,12 @@
 
             node
                 .append('circle')
+                // uncomment following line if you want fixed size for your bubble (cyclo=1 => size=1)
+                //.attr("r", function(d) { return r(d.value);})
                 .attr("r", function(d) { return d.r; })
+                .attr("x", function(d) { return x(d.x)})
+                .attr("y", function(d) { return y(d.y)})
+
                 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
                 // events
                 .on('mouseover', function(d) {
@@ -131,7 +144,7 @@
             return {"children":datas};
         }
 
-        d3.select(self.frameElement).style("height", diameter + "px");
+        d3.select(self.frameElement).style("height", maxWidth + "px");
 
 
         // Save as
