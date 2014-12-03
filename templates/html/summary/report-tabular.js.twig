@@ -114,7 +114,7 @@
         for(i = 0; i < len; i++) {
             e = result[i];
             level = (e.name.split(separator).length - 1);
-            if(!e.name.match(/php$/)) {
+            if(!e.name.match(/\.php$/)) {
                 parents[level + 1] = e;
                 parents[level]._values.push(e);
             } else {
