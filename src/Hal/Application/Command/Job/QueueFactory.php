@@ -12,6 +12,8 @@ use Hal\Application\Formater\Chart;
 use Hal\Application\Formater\Details;
 use Hal\Application\Formater\Summary;
 use Hal\Application\Formater\Violations;
+use Hal\Application\Score\ScoreInterface;
+use Hal\Application\Score\Scoring;
 use Hal\Component\Aggregator\DirectoryAggregatorFlat;
 use Hal\Component\Bounds\BoundsInterface;
 use Hal\Component\Config\ConfigurationInterface;
@@ -74,6 +76,7 @@ class QueueFactory
             ->push(new SearchBounds($this->output, $bounds))
             ->push(new DoAggregatedAnalyze($this->output, new DirectoryAggregatorFlat($this->input->getOption('level'))))
             ->push(new ReportRenderer($this->output, new Summary\Cli($validator, $bounds)))
+            ->push(new CalculateScore(new Scoring($bounds)))
             ->push(new ReportWriter($this->config->getLogging()->getReport('html'), $this->output, new Summary\Html($validator, $bounds)))
             ->push(new ReportWriter($this->config->getLogging()->getReport('json'), $this->output, new Details\Json($validator, $bounds)))
             ->push(new ReportWriter($this->config->getLogging()->getReport('xml'), $this->output, new Summary\Xml($validator, $bounds)))

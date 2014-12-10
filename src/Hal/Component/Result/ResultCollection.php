@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Component\Result;
+use Hal\Component\Score\ScoreInterface;
 
 
 /**
@@ -23,6 +24,11 @@ class ResultCollection implements ExportableInterface, \IteratorAggregate, \Arra
      * @var array
      */
     private $results = array();
+
+    /**
+     * @var ScoreInterface
+     */
+    private $score;
 
     /**
      * Push resultset
@@ -102,5 +108,23 @@ class ResultCollection implements ExportableInterface, \IteratorAggregate, \Arra
      */
     public function get($key) {
         return isset($this->results[$key]) ? $this->results[$key] : null;
+    }
+
+    /**
+     * @return ScoreInterface
+     */
+    public function getScore()
+    {
+        return $this->score;
+    }
+
+    /**
+     * @param ScoreInterface $score
+     * @return $this
+     */
+    public function setScore(ScoreInterface $score)
+    {
+        $this->score = $score;
+        return $this;
     }
 }
