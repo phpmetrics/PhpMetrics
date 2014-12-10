@@ -47,6 +47,7 @@ class ConfigFactory
         strlen($input->getOption('extensions')) > 0     && $config->getPath()->setExtensions($input->getOption('extensions'));
         strlen($input->getOption('excluded-dirs')) > 0   && $config->getPath()->setExcludedDirs($input->getOption('excluded-dirs'));
         strlen($input->getOption('report-xml')) > 0     && $config->getLogging()->setReport('xml', $input->getOption('report-xml'));
+        strlen($input->getOption('report-cli')) > 0     && $config->getLogging()->setReport('cli', $input->getOption('report-cli'));
         strlen($input->getOption('report-json')) > 0     && $config->getLogging()->setReport('json', $input->getOption('report-json'));
         strlen($input->getOption('report-html')) > 0    && $config->getLogging()->setReport('html', $input->getOption('report-html'));
         strlen($input->getOption('report-csv')) > 0     && $config->getLogging()->setReport('csv', $input->getOption('report-csv'));

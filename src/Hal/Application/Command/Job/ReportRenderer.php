@@ -36,14 +36,23 @@ class ReportRenderer implements JobInterface
     private $output;
 
     /**
+     * Is enabled ?
+     *
+     * @var bool
+     */
+    private $enabled = false;
+
+    /**
      * Constructor
      *
+     * @param boolean $enabled
      * @param OutputInterface $output
      * @param FormaterInterface $formater
      */
-    function __construct(OutputInterface $output, FormaterInterface $formater)
+    function __construct($enabled, OutputInterface $output, FormaterInterface $formater)
     {
         $this->output = $output;
+        $this->enabled = $enabled;
         $this->formater = $formater;
     }
 
@@ -51,6 +60,10 @@ class ReportRenderer implements JobInterface
      * @inheritdoc
      */
     public function execute(ResultCollection $collection, ResultCollection $aggregatedResults) {
+        if(!$this->enabled) {
+            return;
+        }
+
         $this->output->write($this->formater->terminate($collection, $aggregatedResults));
     }
 

@@ -59,6 +59,7 @@ class TreeBuilder implements \Hal\Component\Config\TreeBuilderInterface
                                 ->scalarNode('xml')->defaultValue(null)->end()
                                 ->scalarNode('csv')->defaultValue(null)->end()
                                 ->scalarNode('json')->defaultValue(null)->end()
+                                ->scalarNode('cli')->defaultValue(null)->end()
                             ->end()
                         ->end()
                         ->arrayNode('violations')

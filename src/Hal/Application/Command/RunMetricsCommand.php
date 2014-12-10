@@ -44,6 +44,9 @@ class RunMetricsCommand extends Command
                     'report-xml', null, InputOption::VALUE_REQUIRED, 'Path to save summary report in XML format. Example: /tmp/report.xml'
                 )
                 ->addOption(
+                    'report-cli', null, InputOption::VALUE_NONE, 'Enable report in terminal'
+                )
+                ->addOption(
                     'violations-xml', null, InputOption::VALUE_REQUIRED, 'Path to save violations in XML format. Example: /tmp/report.xml'
                 )
                 ->addOption(
