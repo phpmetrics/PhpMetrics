@@ -9,6 +9,7 @@
 
 namespace Hal\Metrics\Complexity\Structural\LCOM;
 use Hal\Component\OOP\Extractor\ClassMap;
+use Hal\Component\OOP\Reflected\ReflectedInterface;
 
 
 /**
@@ -50,6 +51,11 @@ class FileLackOfCohesionOfMethods {
         $lcom = new LackOfCohesionOfMethods();
 
         foreach($rOOP->getClasses() as $class) {
+
+            if($class instanceof ReflectedInterface) {
+                continue;
+            }
+
             $r = $lcom->calculate($class);
             $n += $r->getLcom();
         }
