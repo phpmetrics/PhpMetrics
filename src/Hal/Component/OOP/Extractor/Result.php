@@ -30,10 +30,17 @@ class Result implements ExportableInterface {
      */
     public function asArray() {
 
+        $nom = 0;
+        foreach($this->getClasses() as $class) {
+            $nom += sizeof($class->getMethods(), COUNT_NORMAL);
+        }
+
         return array(
             'noc' => sizeof($this->classes, COUNT_NORMAL)
-        , 'noca' => sizeof($this->getAbstractClasses(), COUNT_NORMAL)
-        , 'nocc' => sizeof($this->getConcreteClasses(), COUNT_NORMAL)
+            , 'noca' => sizeof($this->getAbstractClasses(), COUNT_NORMAL)
+            , 'nocc' => sizeof($this->getConcreteClasses(), COUNT_NORMAL)
+            , 'noi' => sizeof($this->getInterfaces(), COUNT_NORMAL)
+            , 'nom' => $nom
         );
     }
 
@@ -65,6 +72,21 @@ class Result implements ExportableInterface {
         $result = array();
         foreach($this->getClasses() as $class) {
             if($class->isAbstract() ||$class instanceof ReflectedInterface) {
+                array_push($result, $class);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Get abstract classes
+     *
+     * @return array
+     */
+    public function getInterfaces() {
+        $result = array();
+        foreach($this->getClasses() as $class) {
+            if($class instanceof ReflectedInterface) {
                 array_push($result, $class);
             }
         }
