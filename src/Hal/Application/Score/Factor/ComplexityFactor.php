@@ -41,13 +41,13 @@ class ComplexityFactor implements FactorInterface {
      * @inheritdoc
      */
     public function calculate(ResultCollection $collection, ResultCollection $groupedResults, ResultInterface $bound) {
-        return round($this->calculator->lowIsBetter(1, 6, $bound->getAverage('cyclomaticComplexity')), 2);
+        return round($this->calculator->lowIsBetter(1, 8, $bound->getAverage('cyclomaticComplexity')), 2);
     }
 
     /**
      * @inheritedDoc
      */
     public function getName() {
-        return 'Complexity';
+        return 'Simplicity';
     }
 }

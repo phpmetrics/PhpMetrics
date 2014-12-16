@@ -26,6 +26,11 @@ use Hal\Component\Score\ScoringInterface;
 class Scoring implements ScoringInterface{
 
     /**
+     * Maximal score
+     */
+    const MAX = 100;
+
+    /**
      * Bounds
      *
      * @var BoundsInterface

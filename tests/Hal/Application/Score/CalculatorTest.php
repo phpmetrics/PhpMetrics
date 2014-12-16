@@ -17,6 +17,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @dataProvider highProvider
+     * @group wip
      */
     public function testHighIsBetter($good, $bad, $note, $expected) {
         $this->assertEquals($expected, $this->object->highIsBetter($good, $bad, $note));
@@ -26,28 +27,31 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase {
      * @dataProvider lowProvider
      */
     public function testLowIsBetter($good, $bad, $note, $expected) {
+        $this->object->lowIsBetter($good, $bad, $note);
         $this->assertEquals($expected, $this->object->lowIsBetter($good, $bad, $note));
     }
 
     public function highProvider() {
         return array(
-            array(105, 65, 65, 12.26)
-            , array(105, 65, 85, 36.3)
-            , array(105, 65, 105, 50)
+            array(30, 10, 31, 100)
+            , array(30, 10, 30, 100)
+            , array(30, 10, 25, 75)
+            , array(30, 10, 20, 50)
+            , array(30, 10, 15, 25)
+            , array(3, 10, 10, 0)
+            , array(30, 10, 9, 0)
         );
     }
 
     public function lowProvider() {
         return array(
-
-            array(2, 10, 2, 50)
-            , array(2, 10, 4, 40)
-            , array(2, 10, 8, 20)
-            , array(2, 10, 9, 15)
-            , array(1800, 24000, 1800, 50)
-            , array(1800, 24000, 10000, 32.92)
-            , array(1800, 24000, 15000, 22.5
-            )
+           array(10,    30, 9   , 100)
+           , array(10,  20, 10  , 100)
+           , array(10,  30, 15  , 75)
+           , array(10,  30, 20  , 50)
+           , array(10,  30, 25  , 25)
+           , array(10,  30, 30  , 0)
+           , array(10,  30, 31  , 0)
         );
     }
 }

@@ -41,7 +41,7 @@ class MaintenabilityFactor implements FactorInterface {
      * @inheritdoc
      */
     public function calculate(ResultCollection $collection, ResultCollection $groupedResults, ResultInterface $bound) {
-        return round($this->calculator->highIsBetter(105, 65, $bound->getAverage('maintenabilityIndex')), 2);
+        return round($this->calculator->highIsBetter(108, 60, $bound->getAverage('maintenabilityIndex')), 2);
     }
 
     /**

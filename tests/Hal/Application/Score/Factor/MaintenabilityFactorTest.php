@@ -32,9 +32,9 @@ class MaintenabilityFactorTest extends \PHPUnit_Framework_TestCase {
 
     public function provider() {
         return array(
-            array( 12.26,  65)
-            , array(36.3, 85)
-            , array(50, 105)
+            array( 10.42,  65)
+            , array(52.08, 85)
+            , array(100, 110)
         );
     }
 }

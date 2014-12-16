@@ -32,9 +32,9 @@ class BugPreventingTest extends \PHPUnit_Framework_TestCase {
 
     public function provider() {
         return array(
-            array( 5.43,  0.5)
-            , array(27.17, 0.3)
-            , array(50, 0.09)
+            array( 32.79,  0.5)
+            , array(65.57, 0.3)
+            , array(100, 0.09)
         );
     }
 }

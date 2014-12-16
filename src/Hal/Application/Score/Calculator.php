@@ -19,29 +19,36 @@ use Hal\Component\Result\ResultCollection;
  */
 class Calculator {
 
+    /**
+     * @var int
+     */
+    private $limit = Scoring::MAX;
 
-
+    /**
+     * @param $good
+     * @param $bad
+     * @param $note
+     * @return float
+     */
     public function highIsBetter($good, $bad, $note) {
-        // we don't want to attribute score of 0. We'll use 90% bad
-        $bad = $bad / 100 * 90;
 
-        $good = $good - $bad;
-        $note = $note - $bad;
-
-        $score = (1-( $good / ($note + $good) )) * 100;
-
+        $score = (($note - $bad) / ($good - $bad)) * $this->limit;
         $score = max(0, $score);
-        $score = min (50, $score);
+        $score = min ($this->limit, $score);
         return round($score, 2);
     }
 
+    /**
+     * @param $good
+     * @param $bad
+     * @param $note
+     * @return float
+     */
     public function lowIsBetter($good, $bad, $note) {
 
-        $limit = 50;
-        // my formula isn't perfect. Do not hesitate to contribute
-        $score = 1000/($good/($good+($bad-$note))*100/$good*$bad)*$limit/10;
+        $score = $this->limit - ($note - $good) / ($bad - $good) * $this->limit;
         $score = max(0, $score);
-        $score = min (50, $score);
+        $score = min ($this->limit, $score);
         return round($score, 2);
     }
 }

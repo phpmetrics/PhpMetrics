@@ -73,6 +73,14 @@
         }
 
         e.className = 'active';
+
+        // update charts
+        updateTableView();
+        updateCustomChart();
+        updateAbstractnessChart();
+        updateMaintenablityChart();
+        updateRelationsChart();
+        updateScoreChart();
     }
 
     function zoom(id, callback) {

@@ -32,9 +32,9 @@ class ComplexityFactorTest extends \PHPUnit_Framework_TestCase {
 
     public function provider() {
         return array(
-            array( 8.33,  6)
-            , array(33.33, 3)
-            , array(50, 1)
+            array( 28.57,  6)
+            , array(71.43, 3)
+            , array(100, 1)
         );
     }
 }

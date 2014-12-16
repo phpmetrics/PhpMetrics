@@ -37,6 +37,6 @@ class ScoringTest extends \PHPUnit_Framework_TestCase {
         $scoring = new Scoring($boundFactory);
         $score = $scoring->calculate($collection, $groupedResults);
 
-        $this->assertEquals(12.26, $score->get('Maintenability'));
+        $this->assertEquals(10.42, $score->get('Maintenability'));
     }
 }

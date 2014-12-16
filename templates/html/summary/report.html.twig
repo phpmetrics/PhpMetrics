@@ -1,10 +1,11 @@
 <html>
 <head>
-    <title>PhpMetrics report</title>
+    <title>PhpMetrics report - by Jean-François Lépine</title>
     <meta charset="utf-8">
     {% include "assets/favicon.html.twig" %}
     <style type="text/css">
         {% include "assets/nv.d3.css.twig" %}
+        {% include "assets/d3js-radar.css.twig" %}
         {% include "assets/styles.css.twig" %}
     </style>
 </head>
@@ -27,7 +28,10 @@
         <div class="menu-box">
             <ul id="menu" class="menu" >
                 <li class="active" onclick="return displayTab(this, 'overview');"><a >Overview</a></li>
+
+                <li  onclick="return displayTab(this, 'score');"><a >Evaluation</a></li>
                 <li onclick="return displayTab(this, 'relations');"><a  >Relations map</a></li>
+                <li onclick="return displayTab(this, 'repartition');"><a  >Repartition</a></li>
                 <li onclick="return displayTab(this, 'explore');"><a >Explore</a></li>
                 <li onclick="return displayTab(this, 'help');"><a  >Help</a></li>
             </ul>
@@ -39,10 +43,11 @@
 
     <div class="tab-content row">
 
-        <!-- General overview -->
+
+        <!-- General details -->
         <div class="row tab active" id="overview">
             <div class="col-3">
-                <h3>Maintenability</h3>
+                <h3>Evaluation</h3>
                 <small><a id="btn-save-maintenability" download="phpmetric-maintenability.svg">Download (as SVG)</a> | <a onclick="return zoom('svg-maintenability', updateMaintenablityChart);">zoom</a></small>
                 <div id="svg-maintenability"><svg /></div>
 
@@ -108,9 +113,48 @@
                 <div id="svg-abstractness"><svg /></div>
             </div>
         </div>
-        <!-- end: General overview -->
+        <!-- end: General details -->
 
+        <!-- Score -->
+        <div class="tab" id="score">
+            <div class="col-sm-12">
+                <h3>Score</h3>
 
+                <div class="col-6">
+                    <div id="chart-score"></div>
+                </div>
+
+                <div class="col-6">
+                    <p>
+                        This score is not absolute. This chart is a comparison of your project relative to a representative average of recent PHP projects.
+                    </p>
+                    <p>
+                        Each score is calculated from various criteria from {{ results |length }} files in your projects.
+                        Your score is a note between 0 (poor) and {{ constant('Hal\\Application\\Score\\Scoring::MAX') }} (excellent).
+                    </p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Factor</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {%  for name,value in scores %}
+                            <tr>
+                                <td>{{ name }}</td>
+                                <td>{{ value }} / {{ constant('Hal\\Application\\Score\\Scoring::MAX') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <p>
+                        <strong>This score does not replace the judgment of an human.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- end: Score -->
 
         <!-- Relations -->
         <div class="tab" id="relations">
@@ -143,16 +187,103 @@
         </div>
         <!-- end: Tabular datas -->
 
+
+        <!-- Volume -->
+        <div class="tab" id="repartition">
+            <h3>Repartition</h3>
+            <div class="col-3">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td>Files</td>
+                            <td>{{ results |length }}</td>
+                        </tr>
+                        <tr>
+                            <td>Classes</td>
+                            <td>{{ root.bounds.getSum('noc') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Interfaces</td>
+                            <td>
+                                {{ root.bounds.getSum('noi') }}
+                                {% if root.bounds.getSum('noc') > 0 %}
+                                    <span class="help">( {{ (root.bounds.getSum('noi') / root.bounds.getSum('noc') * 100) |round(0) }} %)</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Concret classes</td>
+                            <td>
+                                {{ root.bounds.getSum('nocc') }}
+                                {% if root.bounds.getSum('noc') > 0 %}
+                                    <span class="help">( {{ (root.bounds.getSum('nocc') / root.bounds.getSum('noc') * 100) |round(0) }} %)</span>
+                                {%  endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Methods</td>
+                            <td>
+                                {{ bounds.getSum('nom') }}
+                                {% if root.bounds.getSum('noc') > 0 %}
+                                    <span class="help">( {{ (bounds.getSum('nom') / bounds.getSum('noc')) |round(1) }} methods by class )</span>
+                                {%  endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-3">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>Relative system complexity</td>
+                        <td>{{ root.bounds.getAverage('rsysc') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Relative data complexity</td>
+                        <td>{{ root.bounds.getAverage('rdc') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Relative structure complexity</td>
+                        <td>{{ root.bounds.getAverage('rsc') }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-3">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>Lack of cohesion of methods</td>
+                        <td>{{ root.bounds.getAverage('lcom') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Efferent Coupling</td>
+                        <td>{{ root.bounds.getAverage('efferentCoupling') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Afferent Coupling</td>
+                        <td>{{ root.bounds.getAverage('afferentCoupling') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Abstractness</td>
+                        <td>{{ root.abstractness.abstractness }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- end: Volume -->
+
         <!-- Help -->
         <div class="tab" id="help">
             <div class="col-sm-12">
                 <h3>Help</h3>
-                <p>
-                    Online help is available on the <a href="http://www.phpmetrics.org/documentation/index.html">PhpMetrics website</a>.
-                </p>
-                <p>
-                    Sources of PhpMetrics are available on <a href="https://github.com/Halleck45/PhpMetrics">Github</a>.
-                </p>
+                <ul>
+                    <li>Online help is available on the <a href="http://www.phpmetrics.org/documentation/index.html">PhpMetrics website</a>.</li>
+                    <li>Sources of PhpMetrics are available on <a href="https://github.com/Halleck45/PhpMetrics">Github</a>.</li>
+                    <li>PhpMetrics is created by <a href="http://lepine.pro">Jean-François Lépine</a>.</li>
+                </ul>
             </div>
         </div>
         <!-- end: Help -->
@@ -172,10 +303,13 @@
 
 
 
+
 {% include "assets/functions.js.twig" %}
 {% include "assets/d3js.js.twig" %}
 {% include "assets/nv.d3.min.js.twig" %}
+{% include "assets/d3js-radar.js.twig" %}
 
+{% include "summary/report-score.js.twig" %}
 {% include "summary/report-tabular.js.twig" %}
 {% include "summary/report-maintenability.js.twig" %}
 {% include "summary/report-custom.js.twig" %}
@@ -197,6 +331,8 @@
             updateAbstractnessChart();
             updateMaintenablityChart();
             updateRelationsChart();
+            updateScoreChart();
+
 
             // selects
             document.getElementById('xAxis').value = xAxis;

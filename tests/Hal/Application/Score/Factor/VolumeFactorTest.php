@@ -18,7 +18,7 @@ class VolumeFactorTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider provider
      */
-    public function testCalculateAccessibility($expected, $loc, $lloc, $vocabulary) {
+    public function testCalculateVolume($expected, $loc, $lloc, $vocabulary) {
 
         $groupedResults = $this->getMockBuilder('\Hal\Component\Result\ResultCollection')->disableOriginalConstructor()->getMock();
         $collection = $this->getMockBuilder('\Hal\Component\Result\ResultCollection')->disableOriginalConstructor()->getMock();
@@ -37,9 +37,9 @@ class VolumeFactorTest extends \PHPUnit_Framework_TestCase {
 
     public function provider() {
         return array(
-            array( 12.55    ,  103  , 30    , 59)
-            , array(37.89   , 40    , 15    , 45)
-            , array(50      , 65    , 9     , 27)
+            array( 19.1     ,  103  , 30    , 59)
+            , array(71.73   , 40    , 15    , 45)
+            , array(100     , 65    , 9     , 27)
         );
     }
 }

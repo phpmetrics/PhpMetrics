@@ -3,7 +3,7 @@ namespace Test\Hal\Application\Formater\Summary;
 
 use Hal\Component\Bounds\Bounds;
 use Hal\Component\Bounds\Result\BoundsResult;
-use Hal\Application\Formater\Summary\Cli;
+use Hal\Application\Formater\Details\Cli;
 use Hal\Component\Result\ResultCollection;
 use Symfony\Component\Console\Output\ConsoleOutput;
 

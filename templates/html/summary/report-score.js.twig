@@ -1,0 +1,27 @@
+{% autoescape false %}
+<script type="text/javascript">
+
+    function updateScoreChart() {
+        var score = [
+            {
+                className: 'score',
+                axes: [
+                    {%  for name,value in scores %}
+                        {axis: "{{ name }}", value: {{ value |round }} },
+                    {% endfor %}
+                ]
+            }
+        ];
+
+
+        var chart = RadarChart.chart();
+        chart.config({maxValue: 100})
+        var svg = d3.select('#chart-score').append('svg')
+                .attr('width', 500)
+                .attr('height', 500);
+
+        // darw one
+        svg.append('g').classed('focus', 1).datum(score).call(chart);
+    }
+</script>
+{% endautoescape %}

@@ -17,6 +17,7 @@ use Symfony\Component\Console\Helper\TableHelper;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Hal\Application\Score\Scoring;
 
 
 /**
@@ -63,9 +64,12 @@ class Cli implements FormaterInterface {
 
         // score
         $score = $collection->getScore();
-        foreach($score->all() as $name => $value) {
-            $output->writeln(sprintf('%s %s', str_pad($name, 30, '.'), $value.' / 50'));
-        }
+//        if($score) {
+            foreach ($score->all() as $name => $value) {
+                $output->writeln(sprintf('%s %s', str_pad($name, 30, '.'), $value . ' / ' . Scoring::MAX));
+            }
+            $output->writeln('');
+//        }
 
     }
 

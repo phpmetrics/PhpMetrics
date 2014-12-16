@@ -43,7 +43,7 @@ class ReadabilityFactor implements FactorInterface {
     public function calculate(ResultCollection $collection, ResultCollection $groupedResults, ResultInterface $bound) {
         $notes = array(
             $this->calculator->lowIsBetter(5.8, 18, $bound->getAverage('difficulty'))
-            , $this->calculator->highIsBetter(42, 35, $bound->getAverage('commentWeight'))
+            , $this->calculator->highIsBetter(42, 32, $bound->getAverage('commentWeight'))
         );
         return round(array_sum($notes) / count($notes, COUNT_NORMAL), 2);
     }
@@ -52,6 +52,6 @@ class ReadabilityFactor implements FactorInterface {
      * @inheritedDoc
      */
     public function getName() {
-        return 'Readability';
+        return 'Accessibility';
     }
 }

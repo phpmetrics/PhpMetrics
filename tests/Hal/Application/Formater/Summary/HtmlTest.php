@@ -28,6 +28,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase {
                 , array('volume' => 10)
             )));
         $collection->expects($this->any()) ->method('getFilename') ->will($this->returnValue('abc'));
+        $collection->expects($this->any()) ->method('getScore') ->will($this->returnValue(new \Hal\Application\Score\Result()));
 
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $bounds = new Bounds();

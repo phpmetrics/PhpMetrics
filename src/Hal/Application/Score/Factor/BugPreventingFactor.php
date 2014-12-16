@@ -41,7 +41,7 @@ class BugPreventingFactor implements FactorInterface {
      * @inheritdoc
      */
     public function calculate(ResultCollection $collection, ResultCollection $groupedResults, ResultInterface $bound) {
-        return round($this->calculator->lowIsBetter(0.09, 0.46, $bound->getAverage('bugs')), 2);
+        return round($this->calculator->lowIsBetter(0.09, 0.70, $bound->getAverage('bugs')), 2);
     }
 
     /**

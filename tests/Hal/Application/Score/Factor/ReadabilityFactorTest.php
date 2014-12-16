@@ -18,7 +18,7 @@ class ReadabilityFactorTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider provider
      */
-    public function testCalculateAccessibility($expected, $commentWeight, $difficulty) {
+    public function testCalculateReadability($expected, $commentWeight, $difficulty) {
 
         $groupedResults = $this->getMockBuilder('\Hal\Component\Result\ResultCollection')->disableOriginalConstructor()->getMock();
         $collection = $this->getMockBuilder('\Hal\Component\Result\ResultCollection')->disableOriginalConstructor()->getMock();
@@ -36,9 +36,9 @@ class ReadabilityFactorTest extends \PHPUnit_Framework_TestCase {
 
     public function provider() {
         return array(
-            array( 20.56,  35, 18)
-            , array(34.59, 40, 15)
-            , array(50, 42, 5.8)
+            array( 15,  35, 18)
+            , array(52.3, 40, 15)
+            , array(100, 42, 5.8)
         );
     }
 }

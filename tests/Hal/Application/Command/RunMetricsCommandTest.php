@@ -30,7 +30,6 @@ class RunMetricsCommandTest extends \PHPUnit_Framework_TestCase {
     public function testICanExecuteCommand() {
         $command = new RunMetricsCommand();
 
-
         $commandTester = new CommandTester($command);
         $commandTester->execute(
             array(
@@ -39,9 +38,5 @@ class RunMetricsCommandTest extends \PHPUnit_Framework_TestCase {
         );
 
         $this->assertRegExp('/PHPMetrics by Jean-François Lépine/', $commandTester->getDisplay());
-        $this->assertRegExp('/Maintenability/', $commandTester->getDisplay());
-
-
-
     }
 }
