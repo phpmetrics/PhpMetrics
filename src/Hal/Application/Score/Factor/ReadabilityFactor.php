@@ -52,6 +52,6 @@ class ReadabilityFactor implements FactorInterface {
      * @inheritedDoc
      */
     public function getName() {
-        return 'Accessibility';
+        return 'Accessibility for new developers';
     }
 }

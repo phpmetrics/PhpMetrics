@@ -48,6 +48,6 @@ class BugPreventingFactor implements FactorInterface {
      * @inheritedDoc
      */
     public function getName() {
-        return 'Bugs preventing';
+        return 'Reducing bug\'s probability';
     }
 }

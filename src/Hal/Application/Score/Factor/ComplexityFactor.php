@@ -48,6 +48,6 @@ class ComplexityFactor implements FactorInterface {
      * @inheritedDoc
      */
     public function getName() {
-        return 'Simplicity';
+        return 'Simplicity of algorithms';
     }
 }
