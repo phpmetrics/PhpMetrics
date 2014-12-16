@@ -14,6 +14,10 @@
         ];
 
 
+        // remove chart when already added
+        d3.select('#chart-score svg').remove();
+
+        // add new chart
         var chart = RadarChart.chart();
         chart.config({maxValue: 100})
         var svg = d3.select('#chart-score').append('svg')
