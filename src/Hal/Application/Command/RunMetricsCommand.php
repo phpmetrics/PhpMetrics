@@ -111,7 +111,9 @@ class RunMetricsCommand extends Command
         // execute analyze
         $queueFactory = new QueueFactory($input, $output, $config);
         $queue = $queueFactory->factory($finder, $bounds);
+        gc_disable();
         $queue->execute($collection, $aggregatedResults);
+        gc_enable();
 
         $output->writeln('<info>done</info>');
 
