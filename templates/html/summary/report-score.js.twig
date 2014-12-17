@@ -2,6 +2,8 @@
 <script type="text/javascript">
 
     function updateScoreChart() {
+        if(updateScoreChart.initiazed) return;
+        updateScoreChart.initiazed = true;
         var score = [
             {
                 className: 'score',
@@ -12,7 +14,6 @@
                 ]
             }
         ];
-
 
         var chart = RadarChart.chart();
         chart.config({maxValue: 100})

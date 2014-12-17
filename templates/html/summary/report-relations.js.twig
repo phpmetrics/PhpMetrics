@@ -7,6 +7,8 @@
 
     function updateRelationsChart() {
 
+        if(updateRelationsChart.initiazed) return;
+        updateRelationsChart.initiazed = true;
 
         var diameter = 960,
                 radius = diameter / 2,

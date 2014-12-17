@@ -6,6 +6,8 @@
     };
 
     function chartAbstractness() {
+        if(chartAbstractness.initiazed) return;
+        chartAbstractness.initiazed = true;
 
         var xData = 'abstractness';
         var yData = 'instability';
