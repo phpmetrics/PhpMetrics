@@ -1079,13 +1079,12 @@ table {
 
         <div class="menu-box">
             <ul id="menu" class="menu" >
-                <li class="active" onclick="return displayTab(this, 'overview');"><a >Overview</a></li>
-
-                <li  onclick="return displayTab(this, 'score');"><a >Evaluation</a></li>
-                <li onclick="return displayTab(this, 'relations');"><a  >Relations map</a></li>
-                <li onclick="return displayTab(this, 'repartition');"><a  >Repartition</a></li>
-                <li onclick="return displayTab(this, 'explore');"><a >Explore</a></li>
-                <li onclick="return displayTab(this, 'help');"><a  >Help</a></li>
+                <li id="link-overview" class="active"><a >Overview</a></li>
+                <li id="link-score"><a >Evaluation</a></li>
+                <li id="link-relations"><a  >Relations map</a></li>
+                <li id="link-repartition"><a  >Repartition</a></li>
+                <li id="link-explore"><a >Explore</a></li>
+                <li id="link-help"><a  >Help</a></li>
             </ul>
         </div>
 
@@ -1358,6 +1357,10 @@ table {
                             <td>108</td>
                         </tr>
                         <tr>
+                            <td>Lines of code</td>
+                            <td>9058</td>
+                        </tr>
+                        <tr>
                             <td>Classes</td>
                             <td>108</td>
                         </tr>
@@ -1531,14 +1534,6 @@ table {
         }
 
         e.className = 'active';
-
-        // update charts
-        updateTableView();
-        updateCustomChart();
-        updateAbstractnessChart();
-        updateMaintenablityChart();
-        updateRelationsChart();
-        updateScoreChart();
     }
 
     function zoom(id, callback) {
@@ -1604,6 +1599,8 @@ j).color(e.map(function(e,t){return e.color||c(e,t)}).filter(function(t,n){retur
 <script type="text/javascript">
 
     function updateScoreChart() {
+        if(updateScoreChart.initiazed) return;
+        updateScoreChart.initiazed = true;
         var score = [
             {
                 className: 'score',
@@ -1616,7 +1613,6 @@ j).color(e.map(function(e,t){return e.color||c(e,t)}).filter(function(t,n){retur
                                     ]
             }
         ];
-
 
         var chart = RadarChart.chart();
         chart.config({maxValue: 100})
@@ -1633,6 +1629,8 @@ j).color(e.map(function(e,t){return e.color||c(e,t)}).filter(function(t,n){retur
 
     function updateTableView() {
 
+        if(updateTableView.initiazed) return;
+        updateTableView.initiazed = true;
 
         /**
          * Get column header
@@ -2011,6 +2009,8 @@ j).color(e.map(function(e,t){return e.color||c(e,t)}).filter(function(t,n){retur
     };
 
     function chartAbstractness() {
+        if(chartAbstractness.initiazed) return;
+        chartAbstractness.initiazed = true;
 
         var xData = 'abstractness';
         var yData = 'instability';
@@ -2108,6 +2108,8 @@ j).color(e.map(function(e,t){return e.color||c(e,t)}).filter(function(t,n){retur
 
     function updateRelationsChart() {
 
+        if(updateRelationsChart.initiazed) return;
+        updateRelationsChart.initiazed = true;
 
         var diameter = 960,
                 radius = diameter / 2,
@@ -2260,16 +2262,13 @@ j).color(e.map(function(e,t){return e.color||c(e,t)}).filter(function(t,n){retur
     document.onreadystatechange = function() {
         if(document.readyState == 'complete') {
             // init tabs
+            document.getElementById('link-overview').onclick = function() { displayTab(this, 'overview'); updateAbstractnessChart(); updateCustomChart(); updateMaintenablityChart(); };
+            document.getElementById('link-score').onclick = function() { displayTab(this, 'score'); updateScoreChart(); };
+            document.getElementById('link-relations').onclick = function() { displayTab(this, 'relations'); updateRelationsChart(); };
+            document.getElementById('link-explore').onclick = function() { displayTab(this, 'explore'); updateTableView(); };
+            document.getElementById('link-repartition').onclick = function() { displayTab(this, 'repartition'); };
+            document.getElementById('link-help').onclick = function() { displayTab(this, 'help')};
             document.getElementById('menu').firstElementChild.onclick();
-
-            // init charts
-            updateTableView();
-            updateCustomChart();
-            updateAbstractnessChart();
-            updateMaintenablityChart();
-            updateRelationsChart();
-            updateScoreChart();
-
 
             // selects
             document.getElementById('xAxis').value = xAxis;
