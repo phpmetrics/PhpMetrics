@@ -30,8 +30,7 @@ mv phpmetrics.phar /usr/local/bin/phpmetrics
 
 With Composer (Make sure you have `~/.composer/vendor/bin/` in your path):
 
-    php composer.phar global config -e # add ,"minimum-stability":"dev"
-    php composer.phar global require 'halleck45/phpmetrics=@dev'
+    php composer.phar global require 'halleck45/phpmetrics'
 
 # Usage
 
