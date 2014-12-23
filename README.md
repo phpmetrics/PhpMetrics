@@ -142,6 +142,6 @@ And to build the `phar`:
 
 + Jean-François Lépine <[www.lepine.pro](http://www.lepine.pro)>
 
-# Licence
+# License
 
-See the LICENCE file.
+See the LICENSE file.
