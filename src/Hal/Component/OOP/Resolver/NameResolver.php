@@ -52,7 +52,6 @@ class NameResolver
         }
 
         return rtrim($currentNamespace, '\\').'\\'.$name;
-        return $currentNamespace.$name;
 
     }
 

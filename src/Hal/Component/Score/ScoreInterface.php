@@ -9,10 +9,6 @@
 
 namespace Hal\Component\Score;
 
-use Hal\Component\Bounds\BoundsInterface;
-use Hal\Component\Bounds\Result\ResultInterface;
-use Hal\Component\Result\ResultCollection;
-
 /**
  * Score
  *

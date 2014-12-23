@@ -12,7 +12,6 @@ use Hal\Application\Formater\Chart;
 use Hal\Application\Formater\Details;
 use Hal\Application\Formater\Summary;
 use Hal\Application\Formater\Violations;
-use Hal\Application\Score\ScoreInterface;
 use Hal\Application\Score\Scoring;
 use Hal\Component\Aggregator\DirectoryAggregatorFlat;
 use Hal\Component\Bounds\BoundsInterface;

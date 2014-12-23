@@ -8,8 +8,6 @@
  */
 
 namespace Hal\Application\Config;
-use Hal\Application\Config\LoggingConfiguration;
-use Hal\Application\Config\PathConfiguration;
 use Hal\Application\Rule\RuleSet;
 use Hal\Component\Config\ConfigurationInterface;
 

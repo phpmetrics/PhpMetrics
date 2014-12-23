@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Component\Config;
-use Hal\Application\Config\Configuration;
 
 /**
  * Configuration

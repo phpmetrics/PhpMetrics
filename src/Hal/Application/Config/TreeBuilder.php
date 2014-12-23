@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Application\Config;
-use Symfony\Component\Config\Definition\Builder\NodeInterface;
 
 /**
  * Builds Tree of configuration
