@@ -10,7 +10,7 @@
 namespace Hal\Metrics\Design\Component\MaintenabilityIndex;
 
 /**
- * Calculates Maintenability Index
+ * Calculates Maintainability Index
  *
  *      According to Wikipedia, "Maintainability Index is a software metric which measures how maintainable (easy to
  *      support and change) the source code is. The maintainability index is calculated as a factored formula consisting
@@ -29,7 +29,7 @@ namespace Hal\Metrics\Design\Component\MaintenabilityIndex;
 class MaintenabilityIndex {
 
     /**
-     * Calculates Maintenability Index
+     * Calculates Maintainability Index
      *
      * @param \Hal\Metrics\Complexity\Text\Halstead\Result $rHalstead
      * @param \Hal\Metrics\Complexity\Text\Length\Result $rLoc

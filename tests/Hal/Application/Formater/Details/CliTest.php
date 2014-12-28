@@ -34,7 +34,7 @@ class CliTest extends \PHPUnit_Framework_TestCase {
         $formater = new Cli($validator, $bounds);
         $groupedResults = new ResultCollection();
         $output = $formater->terminate($collection, $groupedResults);
-        $this->assertRegExp('/Maintenability/', $output);
+        $this->assertRegExp('/Maintainability/', $output);
     }
 
     public function testFormaterHasName() {

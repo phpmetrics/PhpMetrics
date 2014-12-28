@@ -3,7 +3,7 @@
     "replace": {
         "halleck45/php-metrics": "*"
     },
-    "description": "Static analyzis tool for PHP : Coupling, Cyclomatic complexity, Maintenability Index, Halstead's metrics... and more !",
+    "description": "Static analyzis tool for PHP : Coupling, Cyclomatic complexity, Maintainability Index, Halstead's metrics... and more !",
     "license": "MIT",
     "keywords": [
         "quality",
