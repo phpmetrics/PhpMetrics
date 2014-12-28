@@ -6,8 +6,8 @@
     };
 
     function chartMaintenability() {
-        var maxHeight = document.getElementById('svg-maintenability').offsetHeight,
-            maxWidth = document.getElementById('svg-maintenability').offsetWidth,
+        var maxHeight = document.getElementById('svg-maintainability').offsetHeight,
+            maxWidth = document.getElementById('svg-maintainability').offsetWidth,
             format = d3.format(",d"),
             color = d3.scale.category20c();
 
@@ -22,8 +22,8 @@
 
 
 
-        d3.select("#svg-maintenability").html("<svg></svg>");
-        var svg = d3.select("#svg-maintenability").select("svg")
+        d3.select("#svg-maintainability").html("<svg></svg>");
+        var svg = d3.select("#svg-maintainability").select("svg")
             .attr("width", maxWidth)
             .attr("height", maxHeight)
             .attr("class", "bubble");
@@ -62,7 +62,7 @@
 
         // initialization
         d3
-            .select('#svg-maintenability')
+            .select('#svg-maintainability')
             .datum(data)
             .call(bubble)
                 ;
@@ -88,7 +88,7 @@
                 .on('mouseover', function(d) {
                     var text = '<strong>' + d.name + '</strong>'
                             + "<br />Cyclomatic Complexity : " + format(d.cyclomaticComplexity)
-                            + "<br />Maintenability Index: " + format(d.maintenabilityIndex);
+                            + "<br />Maintainability Index: " + format(d.maintenabilityIndex);
                     d3.select('.tooltip').html(text);
                     d3.select(".tooltip").style("opacity", 1);
                 })
@@ -148,10 +148,10 @@
 
 
         // Save as
-        document.getElementById('btn-save-maintenability').onmouseover = function() {
+        document.getElementById('btn-save-maintainability').onmouseover = function() {
             var e = this;
             if(e.className != 'initialized') {
-                var svgc  = document.getElementById('svg-maintenability').childNodes[0]
+                var svgc  = document.getElementById('svg-maintainability').childNodes[0]
                         , xml  = new XMLSerializer().serializeToString(svgc)
                         , xmldata = btoa(xml);
                 e.href = 'data:application/octet-stream;base64,' + xmldata;

@@ -83,7 +83,7 @@ class Cli implements FormaterInterface {
                     'Name'
                     , 'Complexity'
                     , 'Myer Distance'
-                    , 'Maintenability'
+                    , 'Maintainability'
                     , 'LLOC'
                     , 'Comment weight'
                     , 'Vocabulary'
