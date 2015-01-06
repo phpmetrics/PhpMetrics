@@ -17,7 +17,7 @@ $phar->startBuffering();
 
 
 $files = array_merge(rglob('*.php'), rglob('*.twig'), rglob('*.json'), rglob('*.pp'));
-$exclude = '!(.git)|(.svn)|(bin)|(tests)|(Tests)!';
+$exclude = '!(.git)|(.svn)|(bin)|(tests)|(Tests)|(phpmetrics)!';
 foreach($files as $file) {
     if(preg_match($exclude, $file)) continue;
     $path = str_replace(__DIR__.'/', '', $file);
@@ -40,7 +40,7 @@ $phar->setStub(<<<STUB
 Phar::mapPhar('phpmetrics.phar');
 
 require_once 'phar://phpmetrics.phar/vendor/autoload.php';
-\$app = new Hal\Application\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '1.0.0');
+\$app = new Hal\Application\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '<VERSION>'); // version will be inserted by build.
 \$app->run();
 
 __HALT_COMPILER();

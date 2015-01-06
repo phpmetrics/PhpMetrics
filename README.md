@@ -129,12 +129,13 @@ In order to run unit tests, please install the dev dependencies:
 
     curl -sS https://getcomposer.org/installer | php
     php composer.phar install --dev
+    gem install semver
 
 Then, in order to run the test suite:
 
     ./vendor/bin/phpunit
 
-And to build the `phar`:
+Finally, build the phar:
 
     make
 
