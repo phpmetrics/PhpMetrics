@@ -53,7 +53,7 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
     private $myer;
 
     /**
-     * Maintenability Result
+     * Maintainability Result
      *
      * @var \Hal\Metrics\Design\Component\MaintenabilityIndex\Result
      */

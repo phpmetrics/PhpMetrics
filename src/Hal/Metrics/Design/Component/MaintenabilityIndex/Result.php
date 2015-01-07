@@ -12,14 +12,14 @@ use Hal\Component\Result\ExportableInterface;
 
 
 /**
- * Representation of Maintenability Index
+ * Representation of Maintainability Index
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
 class Result implements ExportableInterface {
 
     /**
-     * Maintenability index without comment
+     * Maintainability index without comment
      * Designed in 1991 by Paul Oman and Jack Hagemeister at the University of Idaho
      *
      * @var float

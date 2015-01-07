@@ -48,6 +48,6 @@ class MaintenabilityFactor implements FactorInterface {
      * @inheritedDoc
      */
     public function getName() {
-        return 'Maintenability';
+        return 'Maintainability';
     }
 }

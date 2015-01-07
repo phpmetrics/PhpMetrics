@@ -30,7 +30,7 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         $command = sprintf('php '.__DIR__.'/../../../../build/phpmetrics.phar '.$this->toExplore);
         $output = shell_exec($command);
 
-        $this->assertRegExp('/Maintenability/', $output);
+        $this->assertRegExp('/Maintainability/', $output);
     }
 
     public function testICanRunIsolatedPhar() {
@@ -42,7 +42,7 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         $output = shell_exec($command);
         chdir($path);
 
-        $this->assertRegExp('/Maintenability/', $output);
+        $this->assertRegExp('/Maintainability/', $output);
     }
 
     public function testICanRunPharWithHtmlFormater() {
@@ -100,7 +100,7 @@ class BinariesTest extends \PHPUnit_Framework_TestCase {
         $command = sprintf('php '.__DIR__.'/../../../../bin/phpmetrics   '.$this->toExplore);
         $output = shell_exec($command);
 
-        $this->assertRegExp('/Maintenability/', $output);
+        $this->assertRegExp('/Maintainability/', $output);
     }
 
 

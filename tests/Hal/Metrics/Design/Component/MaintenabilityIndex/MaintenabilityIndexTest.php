@@ -5,7 +5,7 @@ use Hal\Metrics\Design\Component\MaintenabilityIndex\MaintenabilityIndex;
 use Hal\Metrics\Design\Component\MaintenabilityIndex\Result;
 
 /**
- * @group maintenability
+ * @group maintainability
  * @group metric
  */
 class MaintenabilityIndexTest extends \PHPUnit_Framework_TestCase {
