@@ -9,7 +9,6 @@
 
 namespace Hal\Application\Score\Factor;
 
-use Hal\Application\Score\Calculator;
 use Hal\Component\Bounds\Result\ResultInterface;
 use Hal\Component\Result\ResultCollection;
 

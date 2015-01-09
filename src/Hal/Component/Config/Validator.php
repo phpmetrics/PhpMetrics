@@ -21,7 +21,7 @@ class Validator
     /**
      * @var NodeInterface
      */
-    private $treeBuilder;
+    private $tree;
 
     /**
      * Constructor

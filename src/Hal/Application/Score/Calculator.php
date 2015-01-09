@@ -9,9 +9,6 @@
 
 namespace Hal\Application\Score;
 
-use Hal\Component\Bounds\BoundsInterface;
-use Hal\Component\Result\ResultCollection;
-
 /**
  * Sub component for formulas
  *

@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Application\Config;
-use Hal\Application\Config\Configuration;
 use Hal\Component\Config\Hydrator;
 use Hal\Component\Config\Loader;
 use Hal\Component\Config\Validator;
