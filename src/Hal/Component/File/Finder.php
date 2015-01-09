@@ -22,6 +22,11 @@ class Finder
 {
 
     /**
+     * Follow symlinks
+     */
+    const FOLLOW_SYMLINKS = RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
+
+    /**
      * Extensions to match (regex)
      *
      * @var string
@@ -36,13 +41,22 @@ class Finder
     private $excludedDirs;
 
     /**
+     * Flags for RecursiveDirectoryIterator
+     *
+     * @var integer
+     */
+    private $flags;
+
+    /**
      * @param string $extensions   regex of file extensions to include
      * @param string $excludedDirs regex of directories to exclude
+     * @param integer $flags
      */
-    function __construct($extensions = 'php', $excludedDirs = '')
+    public function __construct($extensions = 'php', $excludedDirs = '', $flags = null)
     {
         $this->extensions = (string) $extensions;
         $this->excludedDirs = (string) $excludedDirs;
+        $this->flags = $flags;
     }
 
     /**
@@ -56,7 +70,7 @@ class Finder
         $files = array();
         if(is_dir($path)) {
             $path = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-            $directory = new RecursiveDirectoryIterator($path);
+            $directory = new RecursiveDirectoryIterator($path, $this->flags);
             $iterator = new RecursiveIteratorIterator($directory);
 
             $filterRegex = sprintf(

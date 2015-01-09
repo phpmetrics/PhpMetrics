@@ -27,6 +27,9 @@ class RunMetricsCommandTest extends \PHPUnit_Framework_TestCase {
         unset($this->toExplore);
     }
 
+    /**
+     * @outputBuffering disabled
+     */
     public function testICanExecuteCommand() {
         $command = new RunMetricsCommand();
 

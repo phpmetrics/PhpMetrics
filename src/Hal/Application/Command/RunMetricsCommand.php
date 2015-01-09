@@ -68,6 +68,9 @@ class RunMetricsCommand extends Command
                     'excluded-dirs', null, InputOption::VALUE_REQUIRED, 'Regex of subdirectories to exclude', null
                 )
                 ->addOption(
+                    'symlinks', null, InputOption::VALUE_NONE, 'Enable following symlinks'
+                )
+                ->addOption(
                     'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will not extract any information about OOP model (faster)'
                 )
                 ->addOption(
@@ -101,6 +104,7 @@ class RunMetricsCommand extends Command
         $finder = new Finder(
             $config->getPath()->getExtensions()
             , $config->getPath()->getExcludedDirs()
+            , $config->getPath()->isFollowSymlinks() ? Finder::FOLLOW_SYMLINKS : null
         );
 
         // prepare structures

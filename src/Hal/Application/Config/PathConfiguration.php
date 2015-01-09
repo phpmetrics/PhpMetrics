@@ -32,6 +32,11 @@ class PathConfiguration
     private $basePath;
 
     /**
+     * @var bool
+     */
+    private $followSymlinks = false;
+
+    /**
      * @param mixed $basePath
      * @return $this;
      */
@@ -84,5 +89,25 @@ class PathConfiguration
     {
         return $this->extensions;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isFollowSymlinks()
+    {
+        return $this->followSymlinks;
+    }
+
+    /**
+     * @param boolean $followSymlinks
+     * @return $this
+     */
+    public function setFollowSymlinks($followSymlinks)
+    {
+        $this->followSymlinks = (bool) $followSymlinks;
+        return $this;
+    }
+
+
 
 }

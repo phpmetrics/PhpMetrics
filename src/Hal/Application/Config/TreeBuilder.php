@@ -48,6 +48,7 @@ class TreeBuilder implements \Hal\Component\Config\TreeBuilderInterface
                         ->scalarNode('directory')->defaultValue(null)->end()
                         ->scalarNode('exclude')->defaultValue('Tests|tests|Features|features|\.svn|\.git|vendor')->end()
                         ->scalarNode('extensions')->defaultValue('php|inc')->end()
+                        ->booleanNode('symlinks')->defaultValue(false)->end()
                     ->end()
                 ->end()
                 ->arrayNode('logging')
