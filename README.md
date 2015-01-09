@@ -11,7 +11,7 @@ Gives metrics about PHP project and classes.
 + [Usage](#usage)
 + [Conditions of failure](#conditions-of-failure)
 + [IDE integration](#ide-integration)
-+ [Jenkins and PIC integration](#jenkins-and-pic-integration)
++ [Jenkins and CI](#jenkins-and-ci)
 + [Configuration file](#configuration-file)
 
 
@@ -73,7 +73,7 @@ List of availables metrics is documented [here](http://halleck45.github.io/PhpMe
 
 + [PhpMetrics plugin for PhpStorm](http://plugins.jetbrains.com/plugin/7500)
 
-## Jenkins and IC integration
+## Jenkins and CI
 
 You'll find a complete tutorial in the [documentation](http://halleck45.github.io/PhpMetrics/documentation/jenkins.html)
 
