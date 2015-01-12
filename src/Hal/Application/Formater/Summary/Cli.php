@@ -63,7 +63,7 @@ class Cli implements FormaterInterface {
         $score = $collection->getScore();
 //        if($score) {
             foreach ($score->all() as $name => $value) {
-                $output->writeln(sprintf('%s %s', str_pad($name, 30, '.'), $value . ' / ' . Scoring::MAX));
+                $output->writeln(sprintf('%s %s', str_pad($name, 35, '.'),  str_pad($value, 5, ' ', STR_PAD_LEFT). ' / ' . Scoring::MAX));
             }
             $output->writeln('');
 //        }
