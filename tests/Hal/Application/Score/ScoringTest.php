@@ -27,6 +27,6 @@ class ScoringTest extends \PHPUnit_Framework_TestCase {
         $score = $scoring->calculate($collection, $groupedResults);
 
         $this->assertInstanceOf('Hal\Application\Score\Result', $score);
-        $this->assertEquals(10.42, $score->get('Maintenability'), '', 0.00);
+        $this->assertEquals(10.42, $score->get('Maintenability'), '', 0.2);
     }
 }
