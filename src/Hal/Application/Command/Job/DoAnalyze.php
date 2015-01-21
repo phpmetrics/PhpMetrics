@@ -18,7 +18,7 @@ use Hal\Component\OOP\Extractor\ClassMap;
 use Hal\Component\OOP\Extractor\Extractor;
 use Hal\Component\Result\ResultCollection;
 use Hal\Component\Token\Tokenizer;
-use Symfony\Component\Console\Helper\ProgressHelper;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
@@ -85,8 +85,8 @@ class DoAnalyze implements JobInterface
             throw new \LogicException('No file found');
         }
 
-        $progress = new ProgressHelper();
-        $progress->start($this->output, sizeof($files, COUNT_NORMAL));
+        $progress = new ProgressBar($this->output);
+        $progress->start(sizeof($files, COUNT_NORMAL));
 
         // tools
         $classMap = new ClassMap();
