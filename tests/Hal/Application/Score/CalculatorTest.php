@@ -38,7 +38,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase {
             , array(30, 10, 25, 75)
             , array(30, 10, 20, 50)
             , array(30, 10, 15, 25)
-            , array(3, 10, 10, 0)
+            , array(30, 10, 10, 0)
             , array(30, 10, 9, 0)
         );
     }
