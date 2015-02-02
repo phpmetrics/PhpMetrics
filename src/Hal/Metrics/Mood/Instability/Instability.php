@@ -30,8 +30,10 @@ class Instability {
 
         foreach($results as $result) {
             $r = $result->getCoupling();
-            $ce += $r->getEfferentCoupling();
-            $ca += $r->getAfferentCoupling();
+            if(is_object($r)) {
+                $ce += $r->getEfferentCoupling();
+                $ca += $r->getAfferentCoupling();
+            }
         }
 
         $result = new Result;
