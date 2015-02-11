@@ -46,11 +46,13 @@ class CallExtractor implements ExtractorInterface {
         switch($token->getType()) {
             case T_PAAMAYIM_NEKUDOTAYIM:
                 $prev = $n - 1;
-                return $this->searcher->getUnder(array('::'), $prev, $tokens);
-                break;
+                $value = $this->searcher->getUnder(array('::'), $prev, $tokens);
+                if ($value === 'parent' || $value === 'self') {
+                    return null;
+                }
+                return $value;
             case T_NEW:
                 return $this->searcher->getFollowingName($n, $tokens);
-                break;
         }
         throw new \LogicException('Classname of call not found');
     }
