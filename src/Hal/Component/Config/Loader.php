@@ -49,6 +49,9 @@ class Loader
         $content = file_get_contents($filename);
         $parser = new Yaml();
         $array = $parser->parse($content);
+        if (null === $array) {
+            throw new \RuntimeException('configuration file is empty');
+        }
 
         return $this->hydrator->hydrates(new Configuration, $array);
 
