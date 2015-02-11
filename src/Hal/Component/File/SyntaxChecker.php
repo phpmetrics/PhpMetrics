@@ -9,6 +9,9 @@
 
 namespace Hal\Component\File;
 
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessUtils;
+
 /**
  * Checks syntax of file
  *
@@ -27,8 +30,15 @@ class SyntaxChecker
         if(1 === version_compare('5.0.4', PHP_VERSION)) {
             return php_check_syntax($filename);
         } else {
-            $output = shell_exec(sprintf('php -l %s 2>&1', escapeshellarg($filename)));
-            return preg_match('!No syntax errors detected!', $output);
+            if (!is_file($filename)) {
+                return false;
+            }
+
+            $process = new Process('php -l ' . ProcessUtils::escapeArgument($filename));
+            $process->setTimeout(null);
+            $process->run();
+
+            return $process->isSuccessful();
         }
     }
 }
