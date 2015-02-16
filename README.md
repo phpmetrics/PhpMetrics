@@ -128,7 +128,7 @@ Each rule is composed from three values.
 In order to run unit tests, please install the dev dependencies:
 
     curl -sS https://getcomposer.org/installer | php
-    php composer.phar install --dev
+    php composer.phar install
     gem install semver
 
 Then, in order to run the test suite:
