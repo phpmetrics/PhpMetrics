@@ -9,20 +9,9 @@ use Hal\Application\Score\Scoring;
 class ScoringTest extends \PHPUnit_Framework_TestCase {
 
 
-
     public function testCalculateScore() {
-
         $groupedResults = $this->getMockBuilder('\Hal\Component\Result\ResultCollection')->disableOriginalConstructor()->getMock();
         $collection = $this->getMockBuilder('\Hal\Component\Result\ResultCollection')->disableOriginalConstructor()->getMock();
-
-        $bound = $this->getMockBuilder('\Hal\Component\Bounds\Result\ResultInterface')->disableOriginalConstructor()->getMock();
-        $bound->expects($this->any())->method('getAverage')->will($this->returnValue(65));
-
-
-        $map = array(
-            array('maintenabilityIndex', 65),
-            array('effort', 12)
-        );
 
         $bound = $this->getMockBuilder('\Hal\Component\Bounds\Result\ResultInterface')->disableOriginalConstructor()->getMock();
         $map = array(
@@ -37,6 +26,7 @@ class ScoringTest extends \PHPUnit_Framework_TestCase {
         $scoring = new Scoring($boundFactory);
         $score = $scoring->calculate($collection, $groupedResults);
 
-        $this->assertEquals(10.42, $score->get('Maintenability'));
+        $this->assertInstanceOf('Hal\Application\Score\Result', $score);
+        $this->assertEquals(10.42, $score->get('Maintenability'), '', 0.2);
     }
 }
