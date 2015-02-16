@@ -47,7 +47,7 @@
         <div class="row tab active" id="overview">
             <div class="col-3">
                 <h3>Evaluation</h3>
-                <small><a id="btn-save-maintainability" download="phpmetric-maintainability.svg">Download (as SVG)</a> | <a onclick="return zoom('svg-maintainability', updateMaintenablityChart);">zoom</a></small>
+                <small><a id="btn-save-maintainability" download="phpmetric-maintainability.svg">Download (as SVG)</a> | <a onclick="return zoom('svg-maintainability', updateMaintainabilityChart);">zoom</a></small>
                 <div id="svg-maintainability"><svg /></div>
 
                 <div class="well ">
@@ -327,7 +327,7 @@
     document.onreadystatechange = function() {
         if(document.readyState == 'complete') {
             // init tabs
-            document.getElementById('link-overview').onclick = function() { displayTab(this, 'overview'); updateAbstractnessChart(); updateCustomChart(); updateMaintenablityChart(); };
+            document.getElementById('link-overview').onclick = function() { displayTab(this, 'overview'); updateAbstractnessChart(); updateCustomChart(); updateMaintainabilityChart(); };
             document.getElementById('link-score').onclick = function() { displayTab(this, 'score'); updateScoreChart(); };
             document.getElementById('link-relations').onclick = function() { displayTab(this, 'relations'); updateRelationsChart(); };
             document.getElementById('link-explore').onclick = function() { displayTab(this, 'explore'); updateTableView(); };

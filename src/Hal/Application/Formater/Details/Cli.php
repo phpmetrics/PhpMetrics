@@ -109,7 +109,7 @@ class Cli implements FormaterInterface {
                     str_repeat('  ', $result->getDepth()).$result->getName()
                     , $this->getRow($result->getBounds(), 'cyclomaticComplexity', 'average', 0)
                     , $this->getRow($result->getBounds(), 'myerDistance', 'average', 0)
-                    , $this->getRow($result->getBounds(), 'maintenabilityIndex', 'average', 0)
+                    , $this->getRow($result->getBounds(), 'maintainabilityIndex', 'average', 0)
                     , $this->getRow($result->getBounds(), 'logicalLoc', 'sum', 0)
                     , $this->getRow($result->getBounds(), 'commentWeight', 'average', 0)
                     , $this->getRow($result->getBounds(), 'vocabulary', 'average', 0)

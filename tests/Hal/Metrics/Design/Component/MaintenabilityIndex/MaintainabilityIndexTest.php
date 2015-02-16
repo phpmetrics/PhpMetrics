@@ -1,38 +1,38 @@
 <?php
 namespace Test\Hal\Metrics\Complexity\Text\Halstead;
 
-use Hal\Metrics\Design\Component\MaintenabilityIndex\MaintenabilityIndex;
-use Hal\Metrics\Design\Component\MaintenabilityIndex\Result;
+use Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex;
+use Hal\Metrics\Design\Component\MaintainabilityIndex\Result;
 
 /**
  * @group maintainability
  * @group metric
  */
-class MaintenabilityIndexTest extends \PHPUnit_Framework_TestCase {
+class MaintainabilityIndexTest extends \PHPUnit_Framework_TestCase {
 
 
-    public function testMaintenabilityIndexServiceReturnsResult() {
+    public function testMaintainabilityIndexServiceReturnsResult() {
 
         $rLoc = $this->getMock('\Hal\Metrics\Complexity\Text\Length\Result');
         $rLoc->expects($this->any())->method('getLOC')->will($this->returnValue(5));
         $rHalstead = $this->getMock('\Hal\Metrics\Complexity\Text\Halstead\Result');
         $rMcCabe = $this->getMock('\Hal\Metrics\Complexity\Component\McCabe\Result');
 
-        $object = new MaintenabilityIndex();
+        $object = new MaintainabilityIndex();
         $result = $object->calculate($rHalstead, $rLoc, $rMcCabe);
 
-        $this->assertInstanceOf("\Hal\Metrics\Design\Component\MaintenabilityIndex\Result", $result);
+        $this->assertInstanceOf("\Hal\Metrics\Design\Component\MaintainabilityIndex\Result", $result);
     }
 
-    public function testMaintenabilityIndexResultCanBeConvertedToArray() {
+    public function testMaintainabilityIndexResultCanBeConvertedToArray() {
 
         $result = new Result();
         $array = $result->asArray();
 
-        $this->assertArrayHasKey('maintenabilityIndex', $array);
+        $this->assertArrayHasKey('maintainabilityIndex', $array);
     }
 
-    public function testMaintenabilityIndexResultContainsCommentWeight() {
+    public function testMaintainabilityIndexResultContainsCommentWeight() {
         $result = new Result();
 
         $this->assertArrayHasKey('commentWeight', $result->asArray());
@@ -41,7 +41,7 @@ class MaintenabilityIndexTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider provideValues
      */
-    public function testMaintenabilityIndexWithoutCommentIsWellCalculated($cc, $lloc, $cloc, $volume, $MIwoC) {
+    public function testMaintainabilityIndexWithoutCommentIsWellCalculated($cc, $lloc, $cloc, $volume, $MIwoC) {
 
         $rLoc = $this->getMock('\Hal\Metrics\Complexity\Text\Length\Result');
         $rLoc->expects($this->once())->method('getLogicalLoc')->will($this->returnValue($lloc));
@@ -51,10 +51,10 @@ class MaintenabilityIndexTest extends \PHPUnit_Framework_TestCase {
         $rMcCabe->expects($this->once())->method('getCyclomaticComplexityNumber')->will($this->returnValue($cc));
 
 
-        $object = new MaintenabilityIndex();
+        $object = new MaintainabilityIndex();
         $result = $object->calculate($rHalstead, $rLoc, $rMcCabe);
 
-        $this->assertEquals($MIwoC, $result->getMaintenabilityIndexWithoutComment());
+        $this->assertEquals($MIwoC, $result->getMaintainabilityIndexWithoutComment());
 
 
     }

@@ -14,11 +14,11 @@ use Hal\Component\Bounds\Result\ResultInterface;
 use Hal\Component\Result\ResultCollection;
 
 /**
- * Is the code maintenable ?
+ * Is the code maintainable ?
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class MaintenabilityFactor implements FactorInterface {
+class MaintainabilityFactor implements FactorInterface {
 
     /**
      * Bounds
@@ -41,7 +41,7 @@ class MaintenabilityFactor implements FactorInterface {
      * @inheritdoc
      */
     public function calculate(ResultCollection $collection, ResultCollection $groupedResults, ResultInterface $bound) {
-        return round($this->calculator->highIsBetter(108, 60, $bound->getAverage('maintenabilityIndex')), 2);
+        return round($this->calculator->highIsBetter(108, 60, $bound->getAverage('maintainabilityIndex')), 2);
     }
 
     /**

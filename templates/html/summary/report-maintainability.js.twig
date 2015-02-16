@@ -1,11 +1,11 @@
 {% autoescape false %}
 <script type="text/javascript">
 
-    function updateMaintenablityChart() {
-        chartMaintenability();
+    function updateMaintainabilityChart() {
+        chartMaintainability();
     };
 
-    function chartMaintenability() {
+    function chartMaintainability() {
         var maxHeight = document.getElementById('svg-maintainability').offsetHeight,
             maxWidth = document.getElementById('svg-maintainability').offsetWidth,
             format = d3.format(",d"),
@@ -88,7 +88,7 @@
                 .on('mouseover', function(d) {
                     var text = '<strong>' + d.name + '</strong>'
                             + "<br />Cyclomatic Complexity : " + format(d.cyclomaticComplexity)
-                            + "<br />Maintainability Index: " + format(d.maintenabilityIndex);
+                            + "<br />Maintainability Index: " + format(d.maintainabilityIndex);
                     d3.select('.tooltip').html(text);
                     d3.select(".tooltip").style("opacity", 1);
                 })
@@ -103,9 +103,9 @@
                 // for colorblinds
                 .style("fill", function(d) {
                     if(accessibilityEnabled) {
-                        return 'url(#hash-'+ validate('maintenabilityIndex', d.maintenabilityIndex) +')'
+                        return 'url(#hash-'+ validate('maintainabilityIndex', d.maintainabilityIndex) +')'
                     }
-                    switch(validate('maintenabilityIndex', d.maintenabilityIndex)) {
+                    switch(validate('maintainabilityIndex', d.maintainabilityIndex)) {
                         case 'good':
                             return '#78BA00';
                         case 'warning':
@@ -138,7 +138,7 @@
                     "value": parseFloat(e.cyclomaticComplexity) + 1
                     , "name": e.filename
                     , "cyclomaticComplexity": parseFloat(e.cyclomaticComplexity)
-                    , "maintenabilityIndex": parseInt(e.maintenabilityIndex)
+                    , "maintainabilityIndex": parseInt(e.maintainabilityIndex)
                 });
             }
             return {"children":datas};

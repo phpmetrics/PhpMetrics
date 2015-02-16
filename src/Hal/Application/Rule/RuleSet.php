@@ -39,7 +39,7 @@ class RuleSet implements ExportableInterface {
         if(!$rules) {
             $rules = array(
                 'cyclomaticComplexity' => array(10, 6, 2)
-                , 'maintenabilityIndex' => array(0, 69, 85)
+                , 'maintainabilityIndex' => array(0, 69, 85)
                 , 'logicalLoc' => array(800, 400, 200)
                 , 'volume' => array(1300, 1000, 300)
                 , 'bugs' => array(0.35, 0.25, 0.15)

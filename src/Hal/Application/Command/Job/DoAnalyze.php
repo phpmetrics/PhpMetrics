@@ -99,7 +99,7 @@ class DoAnalyze implements JobInterface
             , new Extractor($tokenizer)
             , new \Hal\Metrics\Complexity\Text\Halstead\Halstead($tokenizer, new \Hal\Component\Token\TokenType())
             , new \Hal\Metrics\Complexity\Text\Length\Loc($tokenizer)
-            , new \Hal\Metrics\Design\Component\MaintenabilityIndex\MaintenabilityIndex($tokenizer)
+            , new \Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex($tokenizer)
             , new \Hal\Metrics\Complexity\Component\McCabe\McCabe($tokenizer)
             , new \Hal\Metrics\Complexity\Component\Myer\Myer($tokenizer)
             , $classMap

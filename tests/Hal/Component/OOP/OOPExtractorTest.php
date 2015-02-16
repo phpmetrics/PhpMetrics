@@ -1,8 +1,8 @@
 <?php
 namespace Test\Hal\Component\OOP;
 
-use Hal\Metrics\Design\Component\MaintenabilityIndex\MaintenabilityIndex;
-use Hal\Metrics\Design\Component\MaintenabilityIndex\Result;
+use Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex;
+use Hal\Metrics\Design\Component\MaintainabilityIndex\Result;
 use Hal\Component\OOP\Extractor\Extractor;
 
 /**

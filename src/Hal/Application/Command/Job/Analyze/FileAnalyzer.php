@@ -14,7 +14,7 @@ use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 use Hal\Metrics\Complexity\Component\Myer\Myer;
 use Hal\Metrics\Complexity\Text\Halstead\Halstead;
 use Hal\Metrics\Complexity\Text\Length\Loc;
-use Hal\Metrics\Design\Component\MaintenabilityIndex\MaintenabilityIndex;
+use Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
@@ -46,9 +46,9 @@ class FileAnalyzer
     private $halstead;
 
     /**
-     * @var MaintenabilityIndex
+     * @var MaintainabilityIndex
      */
-    private $maintenabilityIndex;
+    private $maintainabilityIndex;
 
     /**
      * @var Loc
@@ -83,7 +83,7 @@ class FileAnalyzer
      * @param Extractor $extractor
      * @param Halstead $halstead
      * @param Loc $loc
-     * @param MaintenabilityIndex $maintenabilityIndex
+     * @param MaintainabilityIndex $maintainabilityIndex
      * @param McCabe $mcCabe
      * @param Myer $myer
      * @param ClassMap $classMap
@@ -94,7 +94,7 @@ class FileAnalyzer
         , Extractor $extractor
         , Halstead $halstead
         , Loc $loc
-        , MaintenabilityIndex $maintenabilityIndex
+        , MaintainabilityIndex $maintainabilityIndex
         , McCabe $mcCabe
         , Myer $myer
         , ClassMap $classMap
@@ -103,7 +103,7 @@ class FileAnalyzer
         $this->extractor = $extractor;
         $this->halstead = $halstead;
         $this->loc = $loc;
-        $this->maintenabilityIndex = $maintenabilityIndex;
+        $this->maintainabilityIndex = $maintainabilityIndex;
         $this->mcCabe = $mcCabe;
         $this->myer = $myer;
         $this->output = $output;
@@ -124,7 +124,7 @@ class FileAnalyzer
         $rLoc = $this->loc->calculate($filename);
         $rMcCabe = $this->mcCabe->calculate($filename);
         $rMyer = $this->myer->calculate($filename);
-        $rMaintenability = $this->maintenabilityIndex->calculate($rHalstead, $rLoc, $rMcCabe);
+        $rMaintainability = $this->maintainabilityIndex->calculate($rHalstead, $rLoc, $rMcCabe);
 
         $resultSet = new \Hal\Component\Result\ResultSet($filename);
         $resultSet
@@ -132,7 +132,7 @@ class FileAnalyzer
             ->setMcCabe($rMcCabe)
             ->setMyer($rMyer)
             ->setHalstead($rHalstead)
-            ->setMaintenabilityIndex($rMaintenability);
+            ->setMaintainabilityIndex($rMaintainability);
 
         if($this->withOOP) {
             $rOOP = $this->extractor->extract($filename);

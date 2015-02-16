@@ -18,13 +18,13 @@ class ComplexityFactorTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider provider
      */
-    public function testCalculateComplexity($expected, $maintenability) {
+    public function testCalculateComplexity($expected, $maintainability) {
 
         $groupedResults = $this->getMockBuilder('\Hal\Component\Result\ResultCollection')->disableOriginalConstructor()->getMock();
         $collection = $this->getMockBuilder('\Hal\Component\Result\ResultCollection')->disableOriginalConstructor()->getMock();
 
         $bound = $this->getMockBuilder('\Hal\Component\Bounds\Result\ResultInterface')->disableOriginalConstructor()->getMock();
-        $bound->expects($this->any())->method('getAverage')->will($this->returnValue($maintenability));
+        $bound->expects($this->any())->method('getAverage')->will($this->returnValue($maintainability));
 
         $score = $this->object->calculate($collection, $groupedResults, $bound);
         $this->assertEquals($expected, $score);

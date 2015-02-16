@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Hal\Metrics\Design\Component\MaintenabilityIndex;
+namespace Hal\Metrics\Design\Component\MaintainabilityIndex;
 use Hal\Component\Result\ExportableInterface;
 
 
@@ -24,7 +24,7 @@ class Result implements ExportableInterface {
      *
      * @var float
      */
-    private $maintenabilityIndexWithoutComment;
+    private $maintainabilityIndexWithoutComment;
 
 
     /**
@@ -41,8 +41,8 @@ class Result implements ExportableInterface {
      */
     public function asArray() {
         return array(
-            'maintenabilityIndexWithoutComment' => (string) $this->getMaintenabilityIndexWithoutComment()
-            , 'maintenabilityIndex' => (string) $this->getMaintenabilityIndex()
+            'maintainabilityIndexWithoutComment' => (string) $this->getMaintainabilityIndexWithoutComment()
+            , 'maintainabilityIndex' => (string) $this->getMaintainabilityIndex()
             , 'commentWeight' => (float) $this->getCommentWeight()
         );
     }
@@ -50,28 +50,28 @@ class Result implements ExportableInterface {
     /**
      * @return float
      */
-    public function getMaintenabilityIndex()
+    public function getMaintainabilityIndex()
     {
-        return $this->maintenabilityIndexWithoutComment + $this->commentWeight;
+        return $this->maintainabilityIndexWithoutComment + $this->commentWeight;
     }
 
     /**
-     * @param float $maintenabilityIndexWithoutComment
+     * @param float $maintainabilityIndexWithoutComment
      */
-    public function setMaintenabilityIndexWithoutComment($maintenabilityIndexWithoutComment)
+    public function setMaintainabilityIndexWithoutComment($maintainabilityIndexWithoutComment)
     {
-        if(is_infinite($maintenabilityIndexWithoutComment)) {
-            $maintenabilityIndexWithoutComment = 171;
+        if(is_infinite($maintainabilityIndexWithoutComment)) {
+            $maintainabilityIndexWithoutComment = 171;
         }
-        $this->maintenabilityIndexWithoutComment = round($maintenabilityIndexWithoutComment,2);
+        $this->maintainabilityIndexWithoutComment = round($maintainabilityIndexWithoutComment,2);
 
     }
     /**
      * @return float
      */
-    public function getMaintenabilityIndexWithoutComment()
+    public function getMaintainabilityIndexWithoutComment()
     {
-        return $this->maintenabilityIndexWithoutComment;
+        return $this->maintainabilityIndexWithoutComment;
     }
 
     /**

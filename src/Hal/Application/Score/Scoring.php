@@ -12,7 +12,7 @@ namespace Hal\Application\Score;
 use Hal\Application\Score\Factor\ReadabilityFactor;
 use Hal\Application\Score\Factor\BugPreventingFactor;
 use Hal\Application\Score\Factor\ComplexityFactor;
-use Hal\Application\Score\Factor\MaintenabilityFactor;
+use Hal\Application\Score\Factor\MaintainabilityFactor;
 use Hal\Application\Score\Factor\VolumeFactor;
 use Hal\Component\Bounds\BoundsInterface;
 use Hal\Component\Result\ResultCollection;
@@ -57,7 +57,7 @@ class Scoring implements ScoringInterface{
 
         // list of factors of quality
         $factors = array(
-            new MaintenabilityFactor($calculator)
+            new MaintainabilityFactor($calculator)
             , new ReadabilityFactor($calculator)
             , new ComplexityFactor($calculator)
             , new VolumeFactor($calculator)

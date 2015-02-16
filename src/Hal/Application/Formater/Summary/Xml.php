@@ -86,7 +86,7 @@ class Xml implements FormaterInterface {
         $node->setAttribute('loc', $bound->getSum('loc'));
         $node->setAttribute('lloc', $bound->getSum('logicalLoc'));
         $node->setAttribute('cyclomaticComplexity', $bound->getAverage('cyclomaticComplexity'));
-        $node->setAttribute('maintenabilityIndex', $bound->getAverage('maintenabilityIndex'));
+        $node->setAttribute('maintainabilityIndex', $bound->getAverage('maintainabilityIndex'));
         $node->setAttribute('volume', $bound->getAverage('volume'));
         $node->setAttribute('vocabulary', $bound->getAverage('vocabulary'));
         $node->setAttribute('difficulty', $bound->getAverage('difficulty'));
