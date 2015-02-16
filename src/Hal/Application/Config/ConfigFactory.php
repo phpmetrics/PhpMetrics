@@ -33,16 +33,17 @@ class ConfigFactory
         $treeBuilder = new TreeBuilder();
         $hydrator = new Hydrator(new Validator($treeBuilder->getTree()));
 
-        $configFile = $input->getOption('config');
-        if (null === $configFile) {
-            $configFile = getcwd().DIRECTORY_SEPARATOR.'.phpmetrics.yml';
-            if (file_exists($configFile)) {
-                $loader = new Loader($hydrator);
-                $config = $loader->load($configFile);
-            }
+        // first, load config file
+        $locator = new ConfigLocator();
+        $filename = $locator->locate($input->getOption('config'));
+
+        if(null !== $filename) {
+            $loader = new Loader($hydrator);
+            $config = $loader->load($filename);
         } else {
             $config = $hydrator->hydrates($config, array());
         }
+
         
         // then, overwrite configuration by arguments provided in run
         strlen($input->getArgument('path')) > 0         && $config->getPath()->setBasePath($input->getArgument('path'));
