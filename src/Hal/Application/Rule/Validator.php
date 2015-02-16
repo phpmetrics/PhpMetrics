@@ -62,7 +62,7 @@ class Validator {
     public function validate($key, $value) {
         $rule = $this->ruleSet->getRule($key);
 
-        if(is_null($rule)) {
+        if(!is_array($rule) || !is_int($value)) {
             return self::UNKNOWN;
         }
 
