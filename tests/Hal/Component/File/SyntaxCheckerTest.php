@@ -22,6 +22,7 @@ class SyntaxCheckerTest extends \PHPUnit_Framework_TestCase {
         return array(
             array(__DIR__.'/../../../resources/syntax/f1.php', true)
             , array(__DIR__.'/../../../resources/syntax/f2.php', false)
+            , array(__DIR__.'/../../../resources/syntax/f3.php', false)
         );
     }
 
