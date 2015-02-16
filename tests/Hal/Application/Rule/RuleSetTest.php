@@ -15,4 +15,12 @@ class RuleSetTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(array(1,2,3), $ruleset->getRule('rule1'));
         $this->assertEquals(null, $ruleset->getRule('noDeclared'));
     }
+    public function testISetDefaultRules() {
+        $ruleset = new RuleSet(array());
+        $this->assertEquals(array(10, 6, 2), $ruleset->getRule('cyclomaticComplexity'));
+    }
+    public function testICanReturnArrayOfRules() {
+        $ruleset = new RuleSet(array('rule1' => array (1, 2,3)));
+        $this->assertEquals(array('rule1' => array (1, 2,3)), $ruleset->asArray());
+    }
 }
