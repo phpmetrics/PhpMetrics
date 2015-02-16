@@ -48,7 +48,7 @@ class MethodExtractor implements ExtractorInterface {
     {
         $declaration = $this->searcher->getUnder(array(')'), $n, $tokens);
         if(!preg_match('!function\s+(.*)\(\s*(.*)!is', $declaration, $matches)) {
-            throw new \Exception('Closure detected instead of method');
+            throw new \Exception(sprintf("Closure detected instead of method\nDetails:\n%s", $declaration));
         }
         list(, $name, $args) = $matches;
         $method = new ReflectedMethod($name);
