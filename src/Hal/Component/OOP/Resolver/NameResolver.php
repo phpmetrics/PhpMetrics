@@ -43,7 +43,7 @@ class NameResolver
         }
 
         // use xxx;
-        foreach ($this->aliases as $alias => $nothing) {
+        foreach (array_keys($this->aliases) as $alias) {
             $parts = preg_split('![^\w]!', $alias);
             $last = $parts[sizeof($parts, COUNT_NORMAL) - 1];
             if ($last === $name) {
