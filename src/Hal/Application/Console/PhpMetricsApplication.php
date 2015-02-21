@@ -36,7 +36,7 @@ class PhpMetricsApplication extends Application
     /**
      * Gets the default commands that should always be available.
      *
-     * @return array An array of default Command instances
+     * @return Command[] An array of default Command instances
      */
     protected function getDefaultCommands()
     {
@@ -52,6 +52,8 @@ class PhpMetricsApplication extends Application
     /**
      * Overridden so that the application doesn't expect the command
      * name to be the first argument.
+     * 
+     * @return InputDefinition The InputDefinition instance
      */
     public function getDefinition()
     {

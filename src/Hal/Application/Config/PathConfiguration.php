@@ -38,7 +38,7 @@ class PathConfiguration
 
     /**
      * @param mixed $basePath
-     * @return $this;
+     * @return self
      */
     public function setBasePath($basePath)
     {
@@ -56,7 +56,7 @@ class PathConfiguration
 
     /**
      * @param mixed $excludedDirs
-     * @return $this;
+     * @return self
      */
     public function setExcludedDirs($excludedDirs)
     {
@@ -74,7 +74,7 @@ class PathConfiguration
 
     /**
      * @param mixed $extensions
-     * @return $this;
+     * @return self
      */
     public function setExtensions($extensions)
     {
@@ -100,7 +100,7 @@ class PathConfiguration
 
     /**
      * @param boolean $followSymlinks
-     * @return $this
+     * @return self
      */
     public function setFollowSymlinks($followSymlinks)
     {

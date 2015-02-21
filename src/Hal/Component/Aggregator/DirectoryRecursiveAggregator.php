@@ -37,6 +37,7 @@ class DirectoryRecursiveAggregator implements Aggregator {
 
     /**
      * @inheritdoc
+     * @throws \RuntimeException
      */
     public function aggregates(ResultCollection $results) {
         $array = new ResultCollection();
