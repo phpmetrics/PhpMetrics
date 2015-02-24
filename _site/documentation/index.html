@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="PhpMetrics is a quality tool for PHP. It provide beautiful reports about Maintenability, Complexity, Difficulty... of your code.">
+    <meta name="author" content="Jean-François Lépine">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Metrics of PhpMetrics</title>
+
+    <link href="/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700" rel="stylesheet" type="text/css" />
+    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+
+    <!-- IE8 support for HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<body>
+
+    <header>
+        <nav class="mui-appbar" role="navigation">
+    <div class="mui-container">
+        <table id="appbar-inner">
+            <tr class="mui-appbar-height">
+                <td>
+                    <a class="appbar-brand" href="http://localhost:4000">PhpMetrics</a>
+                </td>
+                <td id="appbar-cell-right">
+                    <a href="http://localhost:4000/report/latest/index.html">Demo</a>
+                    <a href="https://github.com/Halleck45/PhpMetrics" class="mui-hidden-xs">Download</a>
+                    <a href="http://localhost:4000/documentation/index.html">Documentation</a>
+                    <a href="http://localhost:4000/about.html">About</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</nav>
+
+    </header>
+    <div class="mui-row" style="position: relative; height:100%;">
+        <div class="mui-col-md-2" style="height:100%">
+            <nav id="sidenav">
+    <div>
+        <h2 class="mui-appbar-line-height"><a href="http://localhost:4000">PhpMetrics</a></h2>
+    </div>
+    <div class="mui-divider"></div>
+    <ul>
+
+        <li>
+            <strong class="">Getting Started</strong>
+            <ul>
+                <li><a class="" href="http://localhost:4000/documentation/index.html">Metrics</a></li>
+                <li><a class="" href="http://localhost:4000/documentation/how-to-read-report.html">How to read report</a></li>
+                <li><a class="" href="http://localhost:4000/documentation/how-to-understand-metrics.html">How to understand metrics</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">Continous integration</strong>
+            <ul>
+                <li><a class="" href="http://localhost:4000/documentation/jenkins.html">Jenkins and Sonar</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">External resources</strong>
+            <ul>
+                <li><a class="" href="http://www.sitepoint.com/visualize-codes-quality-phpmetrics/">PhpMetrics on SitePoint</a></li>
+                <li><a class="" href="https://peteraba.com/blog/phpmetrics-of-popular-projects/">PhpMetrics of popular php projects</a></li>
+                <li><a class="" href="https://gist.github.com/Halleck45/c205ddff88643f3ba51d">Parsing PhpMetrics with PhantomJS</a></li>
+                <li><a class="" href="http://blog.lepine.pro/industrialisation/bornes-pour-les-indicateurs-et-metriques/">How are calculated boundaries</a> (french)</li>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics-jetbrains">PhpStom integration</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">Contribute</strong>
+            <ul>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics">PhpMetrics on github</a></li>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics/issues">Issues</a></li>
+
+            </ul>
+        </li>
+
+    </ul>
+
+</nav>
+        </div>
+        <div class="mui-cold-md-10">
+            <div class="mui-container">
+            <div class="mui-panel">
+    <h1>Metrics</h1>
+    <table class="mui-table mui-table-bordered">
+        <thead>
+        <tr>
+            <th class="th-metric">Metric</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>ca</td>
+                <td>Afferent coupling : Number of classes affected by this class</td>
+            </tr>
+            <tr>
+                <td>bugs</td>
+                <td>Number of estimated bugs by file (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>commw</td>
+                <td>Comment weight measure the ratio between logical code and comments</td>
+            </tr>
+            <tr>
+                <td>cc</td>
+                <td><a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity">Cyclomatic complexity number</a> measures the number of linearly independent paths through a program's source cod</td>
+            </tr>
+            <tr>
+                <td>dc</td>
+                <td>Data Complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>diff</td>
+                <td>Difficulty of the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>ce</td>
+                <td>Efferent coupling : Number of classes that the class depend</td>
+            </tr>
+            <tr>
+                <td>effort</td>
+                <td>Effort to understand the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>instability</td>
+                <td>Ratio between ce and ca (I = ce / (ce + ca). Indicates the class's resilience to change</td>
+            </tr>
+            <tr>
+                <td>IC</td>
+                <td>Intelligent content</td>
+            </tr>
+            <tr>
+                <td>lcom</td>
+                <td>Lack of cohesion of methods measures the cohesiveness of a class</td>
+            </tr>
+            <tr>
+                <td>length</td>
+                <td>Length (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>loc</td>
+                <td>Number of lines of code</td>
+            </tr>
+            <tr>
+                <td>lloc</td>
+                <td>Number of logical lines of code</td>
+            </tr>
+            <tr>
+                <td>MI</td>
+                <td><a href="http://en.wikipedia.org/wiki/Maintainability">Maintenability index</a> is based on Halstead's metrics, LOC and Cyclomatic complexity number</td>
+            </tr>
+            <tr>
+                <td>MIwC</td>
+                <td>Maintenability Index without comments</td>
+            </tr>
+            <tr>
+                <td>distance</td>
+                <td>Myer's distance is derivated from Cyclomatic complexity</td>
+            </tr>
+            <tr>
+                <td>interval</td>
+                <td>Myer's interval indicates the distance between cyclomatic complexity number and the number of operators</td>
+            </tr>
+            <tr>
+                <td>noc</td>
+                <td>Number of classes</td>
+            </tr>
+            <tr>
+                <td>noca</td>
+                <td>Number of abstract classes</td>
+            </tr>
+            <tr>
+                <td>nocc</td>
+                <td>Number of concrete classes</td>
+            </tr>
+            <tr>
+                <td>operators</td>
+                <td>Number of operators</td>
+            </tr>
+            <tr>
+                <td>rdc</td>
+                <td>Relative data complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>rdc</td>
+                <td>Relative structural complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>rsysc</td>
+                <td>Relative System complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>sc</td>
+                <td>System complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>sysc</td>
+                <td>Total System complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>time</td>
+                <td>Time to read and understand the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>vocabulary</td>
+                <td>Vocabulary used in code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>volume</td>
+                <td>Volume (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+        </tbody>
+    </table>
+                    
+</div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <footer>
+
+    <nav role="navigation">
+        <div class="mui-container">
+            <div id="g-footer" class="mui-text-center">
+                <ul class="mui-list-unstyled mui-list-inline">
+                    <li><a href="https://github.com/Halleck45/PhpMetrics/issues">Support</a></li>
+                    <li><a href="http://localhost:4000/feedback">Feedback</a></li><li>
+                    <li><a href="https://twitter.com/Halleck45">Twitter</a></li>
+                    <li><a href="https://www.linkedin.com/profile/view?id=90131737&authType=NAME_SEARCH&authToken=OkW0&locale=fr_FR&srchid=901317371400003230246&srchindex=1&srchtotal=1&trk=vsrp_people_res_name&trkInfo=VSRPsearchId%3A901317371400003230246%2CVSRPtargetId%3A90131737%2CVSRPcmpt%3Aprimary">Linkedin</a></li>
+                </ul>
+                <ul id="g-footer-bottomlinks" class="mui-list-inline mui-text-center">
+                    <li>&copy 2015 Jean-François Lépine</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</footer>
+
+
+</body>
+
+<script src="//cdn.muicss.com/mui-0.0.1/js/mui.min.js"></script>
+
+</body>
+
+</html>

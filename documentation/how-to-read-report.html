@@ -3,24 +3,8 @@ layout: default
 title: How to read the PhpMetrics' report
 ---
 
-    <header>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>How to read the PhpMetrics' report</h2>
-                    <hr class="star-light">
-
-                    <ul class="centered">
-                        <li><a href="#overview">Overview</a></li>
-                        <li><a href="#report-table">1. Table area</a></li>
-                        <li><a href="#report-bubbles">2. Bubbles area</a></li>
-                        <li><a href="#report-custom-chart">3. Custom chart area</a></li>
-                        <li><a href="#report-abstractness">4. Abstractness / Instability area</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
+<div class="mui-panel">
+    <h1>How to read reports</h1>
 
     <section id="overview">
         <div class="container">
@@ -70,109 +54,110 @@ vendor/bin/phpmetrics --report-html=/tmp/report.html
             </div>
 
         </div>
-    </section>            t
+    </section>
 
 
-<section id="report-table">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2>1. The tabular area</h2>
-                <hr class="star-primary">
+    <section id="report-table">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>2. The tabular area</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    <p>
+                        This area display main metrics for each package. Do not hesitate to click on the <b>+</b> button (on the left)
+                        in order to explore packages and to search specifc class.
+                    </p>
+
+                    <p>
+                        You can hover titles of columns to get more description of the metric. Abbrevations are
+                        explained <a href="{{site.url}}/documentation/index.html">in the documentation</a>.
+                    </p>
+
+                    <img src="{{site.url}}/images/documentation/read-report/phpmetrics-area-tabular-report.png" alt="Screenshot of the tabular area in HTML report - PhpMetrics" />
+
+                </div>
             </div>
-            <div class="col-lg-12">
 
-                <p>
-                    This area display main metrics for each package. Do not hesitate to click on the <b>+</b> button (on the left)
-                    in order to explore packages and to search specifc class.
-                </p>
-
-                <p>
-                    You can hover titles of columns to get more description of the metric. Abbrevations are
-                    explained <a href="{{site.url}}/documentation/index.html">in the documentation</a>.
-                </p>
-
-                <img src="{{site.url}}/images/documentation/read-report/phpmetrics-area-tabular-report.png" alt="Screenshot of the tabular area in HTML report - PhpMetrics" />
-
-            </div>
         </div>
-
-    </div>
-</section>
+    </section>
 
 
 
-<section id="report-bubbles">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2>2. The Bubbles area</h2>
-                <hr class="star-primary">
+    <section id="report-bubbles">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>3. The Bubbles area</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    <p>
+                        The bubbles area is the most "visual" part of the report.
+                    </p>
+
+                    <ul>
+                        <li>Each file is symbolized by a circle</li>
+                        <li>Size of the circle represents the Cyclomatic complexity</li>
+                        <li>Color of the circle represents te Maintenability Index</li>
+                        <li>Move your cursor on a circle to have details</li>
+                    </ul>
+                    <p>
+                        Large red circles will be probably hard to maintain.
+                    </p>
+
+                    <img src="{{site.url}}/images/documentation/read-report/phpmetrics-area-bubbles.png" alt="Screenshot of the bubbles area in HTML report - PhpMetrics" />
+
+                </div>
             </div>
-            <div class="col-lg-12">
 
-                <p>
-                    The bubbles area is the most "visual" part of the report.
-                </p>
-
-                <ul>
-                    <li>Each file is symbolized by a circle</li>
-                    <li>Size of the circle represents the Cyclomatic complexity</li>
-                    <li>Color of the circle represents te Maintenability Index</li>
-                    <li>Move your cursor on a circle to have details</li>
-                </ul>
-                <p>
-                    Large red circles will be probably hard to maintain.
-                </p>
-
-                <img src="{{site.url}}/images/documentation/read-report/phpmetrics-area-bubbles.png" alt="Screenshot of the bubbles area in HTML report - PhpMetrics" />
-
-            </div>
         </div>
-
-    </div>
-</section>
+    </section>
 
 
-<section id="report-custom-chart">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2>3. The Custom chart area</h2>
-                <hr class="star-primary">
+    <section id="report-custom-chart">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>4. The Custom chart area</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    <p>
+                        This area can display all charts you want. You just need to select, at the bottom, the datas you want to
+                        be displayed.
+                    </p>
+
+                    <img src="{{site.url}}/images/documentation/read-report/phpmetrics-area-custom-chart.png" alt="Screenshot of the tabular area in HTML report - PhpMetrics" />
+
+                </div>
             </div>
-            <div class="col-lg-12">
 
-                <p>
-                    This area can display all charts you want. You just need to select, at the bottom, the datas you want to
-                    be displayed.
-                </p>
-
-                <img src="{{site.url}}/images/documentation/read-report/phpmetrics-area-custom-chart.png" alt="Screenshot of the tabular area in HTML report - PhpMetrics" />
-
-            </div>
         </div>
-
-    </div>
-</section>
+    </section>
 
 
 
-<section id="report-abstractness">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2>4. The Abstractness / instability area</h2>
-                <hr class="star-primary">
+    <section id="report-abstractness">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>5. The Abstractness / instability area</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    Do not hesitate to read this excellent <a href="http://pdepend.org/documentation/handbook/reports/abstraction-instability-chart.html">documentation on the PDepend website</a>.
+
+                    <img src="{{site.url}}/images/documentation/read-report/phpmetrics-area-abstractness-instability.png" alt="Screenshot of the Abstractness / instability area in HTML report - PhpMetrics" />
+
+                </div>
             </div>
-            <div class="col-lg-12">
 
-                Do not hesitate to read this excellent <a href="http://pdepend.org/documentation/handbook/reports/abstraction-instability-chart.html">documentation on the PDepend website</a>.
-
-                <img src="{{site.url}}/images/documentation/read-report/phpmetrics-area-abstractness-instability.png" alt="Screenshot of the Abstractness / instability area in HTML report - PhpMetrics" />
-
-            </div>
         </div>
-
-    </div>
-</section>
+    </section>
+</div>

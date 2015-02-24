@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="PhpMetrics is a quality tool for PHP. It provide beautiful reports about Maintenability, Complexity, Difficulty... of your code.">
+    <meta name="author" content="Jean-François Lépine">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>How to understand the PhpMetrics' metrics</title>
+
+    <link href="/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700" rel="stylesheet" type="text/css" />
+    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+
+    <!-- IE8 support for HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<body>
+
+    <header>
+        <nav class="mui-appbar" role="navigation">
+    <div class="mui-container">
+        <table id="appbar-inner">
+            <tr class="mui-appbar-height">
+                <td>
+                    <a class="appbar-brand" href="http://localhost:4000">PhpMetrics</a>
+                </td>
+                <td id="appbar-cell-right">
+                    <a href="http://localhost:4000/report/latest/index.html">Demo</a>
+                    <a href="https://github.com/Halleck45/PhpMetrics" class="mui-hidden-xs">Download</a>
+                    <a href="http://localhost:4000/documentation/index.html">Documentation</a>
+                    <a href="http://localhost:4000/about.html">About</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</nav>
+
+    </header>
+    <div class="mui-row" style="position: relative; height:100%;">
+        <div class="mui-col-md-2" style="height:100%">
+            <nav id="sidenav">
+    <div>
+        <h2 class="mui-appbar-line-height"><a href="http://localhost:4000">PhpMetrics</a></h2>
+    </div>
+    <div class="mui-divider"></div>
+    <ul>
+
+        <li>
+            <strong class="">Getting Started</strong>
+            <ul>
+                <li><a class="" href="http://localhost:4000/documentation/index.html">Metrics</a></li>
+                <li><a class="" href="http://localhost:4000/documentation/how-to-read-report.html">How to read report</a></li>
+                <li><a class="" href="http://localhost:4000/documentation/how-to-understand-metrics.html">How to understand metrics</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">Continous integration</strong>
+            <ul>
+                <li><a class="" href="http://localhost:4000/documentation/jenkins.html">Jenkins and Sonar</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">External resources</strong>
+            <ul>
+                <li><a class="" href="http://www.sitepoint.com/visualize-codes-quality-phpmetrics/">PhpMetrics on SitePoint</a></li>
+                <li><a class="" href="https://peteraba.com/blog/phpmetrics-of-popular-projects/">PhpMetrics of popular php projects</a></li>
+                <li><a class="" href="https://gist.github.com/Halleck45/c205ddff88643f3ba51d">Parsing PhpMetrics with PhantomJS</a></li>
+                <li><a class="" href="http://blog.lepine.pro/industrialisation/bornes-pour-les-indicateurs-et-metriques/">How are calculated boundaries</a> (french)</li>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics-jetbrains">PhpStom integration</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">Contribute</strong>
+            <ul>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics">PhpMetrics on github</a></li>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics/issues">Issues</a></li>
+
+            </ul>
+        </li>
+
+    </ul>
+
+</nav>
+        </div>
+        <div class="mui-cold-md-10">
+            <div class="mui-container">
+            <div class="mui-panel">
+    <h1>How to understand the PhpMetrics' metrics</h1>
+
+
+    <p>
+        According to me, you should understand at least the following metrics at beginning:
+    </p>
+    <ul>
+        <li><a href="#lcom">Lack of cohesion of methods</a></li>
+        <li><a href="#mi">Maintenability Index</a></li>
+        <li><a href="#halstead-diff">Halstead's difficulty</a></li>
+    </ul>
+
+
+
+    <section id="lcom">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Lack of cohesion of methods</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    <p>
+                        Lack of cohesion of methods (LCOM) is a measure of the number of responsabilities of class.
+                    </p>
+                    <p>
+                        Thus, if you consider the <a href="http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)">SOLID principles</a>, the ideal LCOM is <code>LCOM=1</code>.
+                    </p>
+                    <p>
+                        We can take an example:
+                    </p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">Example</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$a</span><span class="p">;</span>
+    <span class="k">private</span> <span class="nv">$b</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">f1</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">f2</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">f3</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">f3</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">f4</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">b</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">f5</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">b</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span></code></pre></div>
+
+                    <p>
+                        If we examine this class, we get two flows:
+                    </p>
+                    <ul>
+                        <li><code>f1()</code> share attribute <code>a</code> with <code>f3()</code>, and <code>f2()</code> calls <code>f3()</code></li>
+                        <li><code>f4()</code> share attribute <code>b</code> with <code>f5()</code></li>
+                    </ul>
+                    <p>
+                        Therefore, the LCOM value for <code>Example</code> is <code>2</code>. Indeed, <code>Example</code> has two responsabilities.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+    <section id="mi">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Maintenability Index</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+                    <p>
+                        Maintenability index evaluates ... the maintenability of any project. It provides a score between 0 to 118.
+                    </p>
+                    <p>
+                        This score is standard, and works for any language : <code>PHP</code>, <code>.Net</code>, <code>Java</code>...
+                    </p>
+                    <p>
+                        Generally, we consider the following scores:
+                    </p>
+                    <ul>
+                        <li><score>&lt;64</score>: low maintenability. The project has probably technical debt.</li>
+                        <li><score>65-84</score>: medium maintenability. The project has problems, but nothing really serious.</li>
+                        <li><score>&gt;85</score>: high maintenability. The project is probably good.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="halstead-diff">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Halstead' difficulty</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+                    <p>Soon</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <footer>
+
+    <nav role="navigation">
+        <div class="mui-container">
+            <div id="g-footer" class="mui-text-center">
+                <ul class="mui-list-unstyled mui-list-inline">
+                    <li><a href="https://github.com/Halleck45/PhpMetrics/issues">Support</a></li>
+                    <li><a href="http://localhost:4000/feedback">Feedback</a></li><li>
+                    <li><a href="https://twitter.com/Halleck45">Twitter</a></li>
+                    <li><a href="https://www.linkedin.com/profile/view?id=90131737&authType=NAME_SEARCH&authToken=OkW0&locale=fr_FR&srchid=901317371400003230246&srchindex=1&srchtotal=1&trk=vsrp_people_res_name&trkInfo=VSRPsearchId%3A901317371400003230246%2CVSRPtargetId%3A90131737%2CVSRPcmpt%3Aprimary">Linkedin</a></li>
+                </ul>
+                <ul id="g-footer-bottomlinks" class="mui-list-inline mui-text-center">
+                    <li>&copy 2015 Jean-François Lépine</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</footer>
+
+
+</body>
+
+<script src="//cdn.muicss.com/mui-0.0.1/js/mui.min.js"></script>
+
+</body>
+
+</html>

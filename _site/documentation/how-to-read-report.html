@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="PhpMetrics is a quality tool for PHP. It provide beautiful reports about Maintenability, Complexity, Difficulty... of your code.">
+    <meta name="author" content="Jean-François Lépine">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>How to read the PhpMetrics' report</title>
+
+    <link href="/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700" rel="stylesheet" type="text/css" />
+    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+
+    <!-- IE8 support for HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<body>
+
+    <header>
+        <nav class="mui-appbar" role="navigation">
+    <div class="mui-container">
+        <table id="appbar-inner">
+            <tr class="mui-appbar-height">
+                <td>
+                    <a class="appbar-brand" href="http://localhost:4000">PhpMetrics</a>
+                </td>
+                <td id="appbar-cell-right">
+                    <a href="http://localhost:4000/report/latest/index.html">Demo</a>
+                    <a href="https://github.com/Halleck45/PhpMetrics" class="mui-hidden-xs">Download</a>
+                    <a href="http://localhost:4000/documentation/index.html">Documentation</a>
+                    <a href="http://localhost:4000/about.html">About</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</nav>
+
+    </header>
+    <div class="mui-row" style="position: relative; height:100%;">
+        <div class="mui-col-md-2" style="height:100%">
+            <nav id="sidenav">
+    <div>
+        <h2 class="mui-appbar-line-height"><a href="http://localhost:4000">PhpMetrics</a></h2>
+    </div>
+    <div class="mui-divider"></div>
+    <ul>
+
+        <li>
+            <strong class="">Getting Started</strong>
+            <ul>
+                <li><a class="" href="http://localhost:4000/documentation/index.html">Metrics</a></li>
+                <li><a class="" href="http://localhost:4000/documentation/how-to-read-report.html">How to read report</a></li>
+                <li><a class="" href="http://localhost:4000/documentation/how-to-understand-metrics.html">How to understand metrics</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">Continous integration</strong>
+            <ul>
+                <li><a class="" href="http://localhost:4000/documentation/jenkins.html">Jenkins and Sonar</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">External resources</strong>
+            <ul>
+                <li><a class="" href="http://www.sitepoint.com/visualize-codes-quality-phpmetrics/">PhpMetrics on SitePoint</a></li>
+                <li><a class="" href="https://peteraba.com/blog/phpmetrics-of-popular-projects/">PhpMetrics of popular php projects</a></li>
+                <li><a class="" href="https://gist.github.com/Halleck45/c205ddff88643f3ba51d">Parsing PhpMetrics with PhantomJS</a></li>
+                <li><a class="" href="http://blog.lepine.pro/industrialisation/bornes-pour-les-indicateurs-et-metriques/">How are calculated boundaries</a> (french)</li>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics-jetbrains">PhpStom integration</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">Contribute</strong>
+            <ul>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics">PhpMetrics on github</a></li>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics/issues">Issues</a></li>
+
+            </ul>
+        </li>
+
+    </ul>
+
+</nav>
+        </div>
+        <div class="mui-cold-md-10">
+            <div class="mui-container">
+            <div class="mui-panel">
+    <h1>How to read reports</h1>
+
+    <section id="overview">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>1. Overview</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+
+                    <p>
+                        Generate the HTML report is easy. Simply run:
+                    </p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">vendor/bin/phpmetrics --report-html<span class="o">=</span>/tmp/report.html</code></pre></div>
+
+                    <p>
+                        The HTML report is generated in the <b>/tmp/report.html</b> file.
+                    </p>
+
+                    <p>
+                        The report is composed from different parts :
+                    </p>
+
+                    <ol>
+                        <li><a href="#report-table">The tabular area</a></li>
+                        <li><a href="#report-bubbles">The Bubbles area</a></li>
+                        <li><a href="#report-custom-chart">The Custom chart area</a></li>
+                        <li><a href="#report-abstractness">The Abstractness / Instability area</a></li>
+                    </ol>
+
+                    <img src="http://localhost:4000/images/documentation/read-report/phpmetrics-areas.png" alt="Preview of different areas in PhpMetrics report" />
+
+
+
+                    <p>
+                        When any information has color, PhpMetrics try to get your attention about significant information:
+                    </p>
+                    <ul>
+                        <li>Green: all looks correct</li>
+                        <li>Yellow: correct, but be careful</li>
+                        <li>Red: anomaly detected</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <section id="report-table">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>2. The tabular area</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    <p>
+                        This area display main metrics for each package. Do not hesitate to click on the <b>+</b> button (on the left)
+                        in order to explore packages and to search specifc class.
+                    </p>
+
+                    <p>
+                        You can hover titles of columns to get more description of the metric. Abbrevations are
+                        explained <a href="http://localhost:4000/documentation/index.html">in the documentation</a>.
+                    </p>
+
+                    <img src="http://localhost:4000/images/documentation/read-report/phpmetrics-area-tabular-report.png" alt="Screenshot of the tabular area in HTML report - PhpMetrics" />
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+
+    <section id="report-bubbles">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>3. The Bubbles area</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    <p>
+                        The bubbles area is the most "visual" part of the report.
+                    </p>
+
+                    <ul>
+                        <li>Each file is symbolized by a circle</li>
+                        <li>Size of the circle represents the Cyclomatic complexity</li>
+                        <li>Color of the circle represents te Maintenability Index</li>
+                        <li>Move your cursor on a circle to have details</li>
+                    </ul>
+                    <p>
+                        Large red circles will be probably hard to maintain.
+                    </p>
+
+                    <img src="http://localhost:4000/images/documentation/read-report/phpmetrics-area-bubbles.png" alt="Screenshot of the bubbles area in HTML report - PhpMetrics" />
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <section id="report-custom-chart">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>4. The Custom chart area</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    <p>
+                        This area can display all charts you want. You just need to select, at the bottom, the datas you want to
+                        be displayed.
+                    </p>
+
+                    <img src="http://localhost:4000/images/documentation/read-report/phpmetrics-area-custom-chart.png" alt="Screenshot of the tabular area in HTML report - PhpMetrics" />
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+
+    <section id="report-abstractness">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>5. The Abstractness / instability area</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    Do not hesitate to read this excellent <a href="http://pdepend.org/documentation/handbook/reports/abstraction-instability-chart.html">documentation on the PDepend website</a>.
+
+                    <img src="http://localhost:4000/images/documentation/read-report/phpmetrics-area-abstractness-instability.png" alt="Screenshot of the Abstractness / instability area in HTML report - PhpMetrics" />
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <footer>
+
+    <nav role="navigation">
+        <div class="mui-container">
+            <div id="g-footer" class="mui-text-center">
+                <ul class="mui-list-unstyled mui-list-inline">
+                    <li><a href="https://github.com/Halleck45/PhpMetrics/issues">Support</a></li>
+                    <li><a href="http://localhost:4000/feedback">Feedback</a></li><li>
+                    <li><a href="https://twitter.com/Halleck45">Twitter</a></li>
+                    <li><a href="https://www.linkedin.com/profile/view?id=90131737&authType=NAME_SEARCH&authToken=OkW0&locale=fr_FR&srchid=901317371400003230246&srchindex=1&srchtotal=1&trk=vsrp_people_res_name&trkInfo=VSRPsearchId%3A901317371400003230246%2CVSRPtargetId%3A90131737%2CVSRPcmpt%3Aprimary">Linkedin</a></li>
+                </ul>
+                <ul id="g-footer-bottomlinks" class="mui-list-inline mui-text-center">
+                    <li>&copy 2015 Jean-François Lépine</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</footer>
+
+
+</body>
+
+<script src="//cdn.muicss.com/mui-0.0.1/js/mui.min.js"></script>
+
+</body>
+
+</html>

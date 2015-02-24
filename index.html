@@ -1,127 +1,95 @@
 ---
 layout: default
-title: PhpMetrics by Halleck45
+title: PhpMetrics, by Jean-François Lépine
 ---
 
 
-<header>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <img class="img-responsive" src="images/phpmetrics-maintenability.png" alt="">
-                <div class="intro-text">
-                    <span class="name">PhpMetrics</span>
-                    <hr class="star-light">
-                    <span class="skills">Static analysis tool for PHP</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
 
-<section id="usage">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 text-center">
-                <h2>Easy to use</h2>
-                <hr class="star-primary">
 
-                <div>
-                    <pre>wget https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar
-chmod +x phpmetrics.phar
-mv phpmetrics.phar /usr/local/bin/phpmetrics</pre>
-                </div>
-                <div>
-                    <p>
-                        Usage:
-                    </p>
-                    <pre>phpmetrics --report-html=/path/of/report.html &lt;folder or filename&gt;</pre>
-                </div>
-
-            </div>
-            <div class="col-lg-6 text-center">
-                <div id="demo">
-                    <a href="#demo-large" class="portfolio-link" data-toggle="modal"><img src="images/demo/animated-demo-of-phpmetrics-small.gif" alt="demo of PhpMetrics" /></a>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<section class="success" id="contribute">
-    <div class="container">
-        <div class="row">
-
-            <div class="col-lg-6 text-center">
-                <h2>Various metrics</h2>
-                <hr class="star-light">
-                <ul class="centered">
-                    <li>Maintenability Index</li>
-                    <li>Cyclomatic complexity</li>
-                    <li>Halstead's metrics</li>
-                    <li>Lack of cohesion of methods</li>
-                    <li>Abstraction/Instability</li>
-                    <li>…</li>
-                    <li><a href="{{site.url}}/documentation/index.html#metrics">and more!</a></li>
-                </ul>
-            </div>
-
-            <div class="col-lg-6 text-center">
-                <h2>Open Source</h2>
-                <hr class="star-light">
-
-                <ul class="centered">
-
-                    <li>MIT License</li>
-                    <li><a href="https://github.com/Halleck45/PhpMetrics"><i class="icon icon-github"></i>View on Github</a></li>
-                </ul>
-
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="about">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2>About</h2>
-                <hr class="star-primary">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <p class="text-center">
-                    PhpMetrics is an Open Source project created by <a href="http://www.lepine.pro">Jean-François Lépine</a> (<a href="https://twitter.com/Halleck45">Halleck45</a>).
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Portfolio Modals -->
-<div class="portfolio-modal modal fade" id="demo-large" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-content">
-        <div class="close-modal" data-dismiss="modal">
-            <div class="lr">
-                <div class="rl">
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div >
-                    <div class="modal-body text-center">
-                        <h2>Demo</h2>
-                        <hr class="star-primary">
-                        <img src="images/demo/animated-demo-of-phpmetrics.gif" alt="demo of PhpMetrics" />
-                        <br />
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-
-                    </div>
-                </div>
-            </div>
+<div id="hero-panel" class="mui-panel">
+    <div id="f-welcome" class="mui-text-center">
+        <img class="img-responsive" src="images/phpmetrics-maintenability.png" alt="" width="100" height="100">
+        <div class="mui-text-title">PhpMetrics is a static analysis tout for PHP<p></p></div>
+        <div id="f-buttons">
+            <a class="mui-btn mui-btn-primary mui-btn-lg" href="https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar"><i class="icon-file-download"></i> DOWNLOAD (phar)</a>
+            <a class="mui-btn mui-btn-default mui-btn-flat mui-btn-lg" href="https://github.com/Halleck45/PhpMetrics"><i class="icon-github"></i> View on GitHub</a>
         </div>
     </div>
 </div>
+
+
+<div class="mui-panel">
+    <h2>Quickstart</h2>
+    <p>
+        PhpMetrics provides various metrics about PHP projects.
+    </p>
+
+    <h3>Installation</h3>
+
+    With Composer (or <a href="https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar">download the phar</a>):
+    <div class="highlight">
+    <pre>composer global require <span style="color:#0000e6; ">'halleck45/phpmetrics'</span>
+phpmetrics --report-html=myreport.html <span style="color:#40015a; ">/path/of/your/sources</span>
+</pre>
+    </div>
+
+
+
+    <h3>Metrics</h3>
+    <ul>
+        <li>
+            <strong>Complexity</strong>: Cyclomatic complexity, Myer's interval, Relative system complexity
+        </li>
+        <li>
+            <strong>Volume</strong>: Vocabulary, Data complexity, Lines of code, Readability...
+        </li>
+        <li>
+            <strong>Object Oriented</strong>: Lack of cohesion of methods, Coupling, Abstraction...
+        </li>
+        <li>
+            <strong>Maintenability</strong>: Maintenability index, Halstead's metrics, Effort...
+        </li>
+        <li>
+            <a href="{{site.url}}//documentation/index.html">And more !</a
+        </li>
+    </ul>
+
+    <h3>Readability &amp; Accessibility</h3>
+    <p>
+        PhpMetrics is designed to be understable and easy to use. Thanks to d3js, it will scores your project with beautiful graphs. PhpMetrics has a
+        "colorblind mode".
+        <br />Do not hesitate to <a href="{{site.url}}/report/latest/index.html">visit the demo</a>.
+    </p>
+    <div>
+        <a href="{{site.url}}/report/latest/index.html"><img src="images/phpmetrics-report.png" alt="Example of HTML report" style="width: 50%; margin: 0 auto;"/></a>
+    </div>
+
+
+    <h3>Continous Integration</h3>
+    <p>
+        PhpMetrics interacts with <a href="http://jenkins-ci.org/">Jenkins</a> or <a href="www.sonarqube.org">Sonar</a>. It provides reports in many
+        formats (XML, violations, HTML, CSV...). Read <a href="{{site.url}}/documentation/jenkins.html">Documentation</a>.
+    </p>
+
+
+</div>
+
+<div class="mui-panel">
+    <h2>Open source and free</h2>
+    <div>
+        <iframe src="https://ghbtns.com/github-btn.html?user=Halleck45&repo=PhpMetrics&type=star&count=true" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+        <iframe src="https://ghbtns.com/github-btn.html?user=Halleck45&repo=PhpMetrics&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+    </div>
+    <p>
+        <img src="https://poser.pugx.org/halleck45/php-metrics/v/stable.svg" />
+    </p>
+    <p>
+        PhpMetrics is an Open Source project created by <a href="http://www.lepine.pro">Jean-François Lépine</a> (<a href="https://twitter.com/Halleck45">Halleck45</a>).
+    </p>
+    <p>
+        License: <a href="https://github.com/Halleck45/PhpMetrics/blob/master/LICENSE">MIT</a>, sources hosted on <a href="https://github.com/Halleck45/PhpMetrics"><i class="icon icon-github"></i> Github</a>.
+    </p>
+
+
+</div>
+

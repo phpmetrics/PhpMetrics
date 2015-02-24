@@ -1,170 +1,141 @@
 ---
 layout: default
-title: Documentation of PhpMetrics
+title: Metrics of PhpMetrics
 ---
 
 
-    <header>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Documentation</h2>
-                    <hr class="star-light">
 
-                    <ul class="centered">
-                        <li><a href="#metrics">List of metrics</a></li>
-                        <li><a href="{{site.url}}/documentation/jenkins.html">Jenkins integration</a></li>
-                        <li><a href="{{site.url}}/documentation/how-to-read-report.html">How to read the report</a></li>
-                        <li><a href="{{site.url}}/documentation/how-to-understand-metrics.html">How to understand metrics</a></li>
-                        <li><a href="{{site.url}}/documentation/configuration.html">Configuration</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <section id="metrics">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2>Metrics</h2>
-                    <hr class="star-primary">
-                </div>
-                <div class="col-lg-12 text-center">
-
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                        <tr>
-                            <th class="th-metric">Metric</th>
-                            <th>Description</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>ca</td>
-                                <td>Afferent coupling : Number of classes affected by this class</td>
-                            </tr>
-                            <tr>
-                                <td>bugs</td>
-                                <td>Number of estimated bugs by file (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
-                            </tr>
-                            <tr>
-                                <td>commw</td>
-                                <td>Comment weight measure the ratio between logical code and comments</td>
-                            </tr>
-                            <tr>
-                                <td>cc</td>
-                                <td><a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity">Cyclomatic complexity number</a> measures the number of linearly independent paths through a program's source cod</td>
-                            </tr>
-                            <tr>
-                                <td>dc</td>
-                                <td>Data Complexity (Card and Agresti metric)</td>
-                            </tr>
-                            <tr>
-                                <td>diff</td>
-                                <td>Difficulty of the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
-                            </tr>
-                            <tr>
-                                <td>ce</td>
-                                <td>Efferent coupling : Number of classes that the class depend</td>
-                            </tr>
-                            <tr>
-                                <td>effort</td>
-                                <td>Effort to understand the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
-                            </tr>
-                            <tr>
-                                <td>instability</td>
-                                <td>Ratio between ce and ca (I = ce / (ce + ca). Indicates the class's resilience to change</td>
-                            </tr>
-                            <tr>
-                                <td>IC</td>
-                                <td>Intelligent content</td>
-                            </tr>
-                            <tr>
-                                <td>lcom</td>
-                                <td>Lack of cohesion of methods measures the cohesiveness of a class</td>
-                            </tr>
-                            <tr>
-                                <td>length</td>
-                                <td>Length (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
-                            </tr>
-                            <tr>
-                                <td>loc</td>
-                                <td>Number of lines of code</td>
-                            </tr>
-                            <tr>
-                                <td>lloc</td>
-                                <td>Number of logical lines of code</td>
-                            </tr>
-                            <tr>
-                                <td>MI</td>
-                                <td><a href="http://en.wikipedia.org/wiki/Maintainability">Maintenability index</a> is based on Halstead's metrics, LOC and Cyclomatic complexity number</td>
-                            </tr>
-                            <tr>
-                                <td>MIwC</td>
-                                <td>Maintenability Index without comments</td>
-                            </tr>
-                            <tr>
-                                <td>distance</td>
-                                <td>Myer's distance is derivated from Cyclomatic complexity</td>
-                            </tr>
-                            <tr>
-                                <td>interval</td>
-                                <td>Myer's interval indicates the distance between cyclomatic complexity number and the number of operators</td>
-                            </tr>
-                            <tr>
-                                <td>noc</td>
-                                <td>Number of classes</td>
-                            </tr>
-                            <tr>
-                                <td>noca</td>
-                                <td>Number of abstract classes</td>
-                            </tr>
-                            <tr>
-                                <td>nocc</td>
-                                <td>Number of concrete classes</td>
-                            </tr>
-                            <tr>
-                                <td>operators</td>
-                                <td>Number of operators</td>
-                            </tr>
-                            <tr>
-                                <td>rdc</td>
-                                <td>Relative data complexity (Card and Agresti metric)</td>
-                            </tr>
-                            <tr>
-                                <td>rdc</td>
-                                <td>Relative structural complexity (Card and Agresti metric)</td>
-                            </tr>
-                            <tr>
-                                <td>rsysc</td>
-                                <td>Relative System complexity (Card and Agresti metric)</td>
-                            </tr>
-                            <tr>
-                                <td>sc</td>
-                                <td>System complexity (Card and Agresti metric)</td>
-                            </tr>
-                            <tr>
-                                <td>sysc</td>
-                                <td>Total System complexity (Card and Agresti metric)</td>
-                            </tr>
-                            <tr>
-                                <td>time</td>
-                                <td>Time to read and understand the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
-                            </tr>
-                            <tr>
-                                <td>vocabulary</td>
-                                <td>Vocabulary used in code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
-                            </tr>
-                            <tr>
-                                <td>volume</td>
-                                <td>Volume (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
-                            </tr>
-                        </tbody>
-                    </table>
+<div class="mui-panel">
+    <h1>Metrics</h1>
+    <table class="mui-table mui-table-bordered">
+        <thead>
+        <tr>
+            <th class="th-metric">Metric</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>ca</td>
+                <td>Afferent coupling : Number of classes affected by this class</td>
+            </tr>
+            <tr>
+                <td>bugs</td>
+                <td>Number of estimated bugs by file (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>commw</td>
+                <td>Comment weight measure the ratio between logical code and comments</td>
+            </tr>
+            <tr>
+                <td>cc</td>
+                <td><a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity">Cyclomatic complexity number</a> measures the number of linearly independent paths through a program's source cod</td>
+            </tr>
+            <tr>
+                <td>dc</td>
+                <td>Data Complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>diff</td>
+                <td>Difficulty of the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>ce</td>
+                <td>Efferent coupling : Number of classes that the class depend</td>
+            </tr>
+            <tr>
+                <td>effort</td>
+                <td>Effort to understand the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>instability</td>
+                <td>Ratio between ce and ca (I = ce / (ce + ca). Indicates the class's resilience to change</td>
+            </tr>
+            <tr>
+                <td>IC</td>
+                <td>Intelligent content</td>
+            </tr>
+            <tr>
+                <td>lcom</td>
+                <td>Lack of cohesion of methods measures the cohesiveness of a class</td>
+            </tr>
+            <tr>
+                <td>length</td>
+                <td>Length (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>loc</td>
+                <td>Number of lines of code</td>
+            </tr>
+            <tr>
+                <td>lloc</td>
+                <td>Number of logical lines of code</td>
+            </tr>
+            <tr>
+                <td>MI</td>
+                <td><a href="http://en.wikipedia.org/wiki/Maintainability">Maintenability index</a> is based on Halstead's metrics, LOC and Cyclomatic complexity number</td>
+            </tr>
+            <tr>
+                <td>MIwC</td>
+                <td>Maintenability Index without comments</td>
+            </tr>
+            <tr>
+                <td>distance</td>
+                <td>Myer's distance is derivated from Cyclomatic complexity</td>
+            </tr>
+            <tr>
+                <td>interval</td>
+                <td>Myer's interval indicates the distance between cyclomatic complexity number and the number of operators</td>
+            </tr>
+            <tr>
+                <td>noc</td>
+                <td>Number of classes</td>
+            </tr>
+            <tr>
+                <td>noca</td>
+                <td>Number of abstract classes</td>
+            </tr>
+            <tr>
+                <td>nocc</td>
+                <td>Number of concrete classes</td>
+            </tr>
+            <tr>
+                <td>operators</td>
+                <td>Number of operators</td>
+            </tr>
+            <tr>
+                <td>rdc</td>
+                <td>Relative data complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>rdc</td>
+                <td>Relative structural complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>rsysc</td>
+                <td>Relative System complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>sc</td>
+                <td>System complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>sysc</td>
+                <td>Total System complexity (Card and Agresti metric)</td>
+            </tr>
+            <tr>
+                <td>time</td>
+                <td>Time to read and understand the code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>vocabulary</td>
+                <td>Vocabulary used in code (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+            <tr>
+                <td>volume</td>
+                <td>Volume (<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metric</a>)</td>
+            </tr>
+        </tbody>
+    </table>
                     
-                </div>
-            </div>
-
-        </div>
-    </section>
+</div>

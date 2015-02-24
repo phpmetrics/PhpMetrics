@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="PhpMetrics is a quality tool for PHP. It provide beautiful reports about Maintenability, Complexity, Difficulty... of your code.">
+    <meta name="author" content="Jean-François Lépine">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Configuration</title>
+
+    <link href="/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700" rel="stylesheet" type="text/css" />
+    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+
+    <!-- IE8 support for HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<body>
+
+    <header>
+        <nav class="mui-appbar" role="navigation">
+    <div class="mui-container">
+        <table id="appbar-inner">
+            <tr class="mui-appbar-height">
+                <td>
+                    <a class="appbar-brand" href="http://localhost:4000">PhpMetrics</a>
+                </td>
+                <td id="appbar-cell-right">
+                    <a href="http://localhost:4000/report/latest/index.html">Demo</a>
+                    <a href="https://github.com/Halleck45/PhpMetrics" class="mui-hidden-xs">Download</a>
+                    <a href="http://localhost:4000/documentation/index.html">Documentation</a>
+                    <a href="http://localhost:4000/about.html">About</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</nav>
+
+    </header>
+    <div class="mui-row" style="position: relative; height:100%;">
+        <div class="mui-col-md-2" style="height:100%">
+            <nav id="sidenav">
+    <div>
+        <h2 class="mui-appbar-line-height"><a href="http://localhost:4000">PhpMetrics</a></h2>
+    </div>
+    <div class="mui-divider"></div>
+    <ul>
+
+        <li>
+            <strong class="">Getting Started</strong>
+            <ul>
+                <li><a class="" href="http://localhost:4000/documentation/index.html">Metrics</a></li>
+                <li><a class="" href="http://localhost:4000/documentation/how-to-read-report.html">How to read report</a></li>
+                <li><a class="" href="http://localhost:4000/documentation/how-to-understand-metrics.html">How to understand metrics</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">Continous integration</strong>
+            <ul>
+                <li><a class="" href="http://localhost:4000/documentation/jenkins.html">Jenkins and Sonar</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">External resources</strong>
+            <ul>
+                <li><a class="" href="http://www.sitepoint.com/visualize-codes-quality-phpmetrics/">PhpMetrics on SitePoint</a></li>
+                <li><a class="" href="https://peteraba.com/blog/phpmetrics-of-popular-projects/">PhpMetrics of popular php projects</a></li>
+                <li><a class="" href="https://gist.github.com/Halleck45/c205ddff88643f3ba51d">Parsing PhpMetrics with PhantomJS</a></li>
+                <li><a class="" href="http://blog.lepine.pro/industrialisation/bornes-pour-les-indicateurs-et-metriques/">How are calculated boundaries</a> (french)</li>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics-jetbrains">PhpStom integration</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">Contribute</strong>
+            <ul>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics">PhpMetrics on github</a></li>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics/issues">Issues</a></li>
+
+            </ul>
+        </li>
+
+    </ul>
+
+</nav>
+        </div>
+        <div class="mui-cold-md-10">
+            <div class="mui-container">
+                <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Configuration</h2>
+                    <hr class="star-light">
+
+                    <ul class="centered">
+                        <li><a href="#parameters">Using parameters</a></li>
+                        <li><a href="#config-file">Using configuration file</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="parameters">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Using parameters</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    <p>
+                        You can easily configure PhpMetrics according to your needs.
+                    </p>
+
+                    <dl>
+                        <dt><code>--config=&lt;file.yml&gt;</code></dt>
+                        <dd>Config file to use (YAML)</dd>
+
+                        <dt><code>--failure-condition=&lt;expression&gt;</code></dt>
+                        <dd>Optional failure condition, in english. For example: average.maintenabilityIndex < 50 or sum.loc > 10000</dd>
+
+                        <dt><code>--extensions=&lt;php|inc&gt;</code></dt>
+                        <dd>Regex of extensions to include</dd>
+
+                        <dt><code>--excludedDirs=&lt;tests|Tests|Features&gt;</code></dt>
+                        <dd>Regex of subdirectories to exclude</dd>
+
+                        <dt><code>--report-html=&lt;file.html&gt;</code></dt>
+                        <dd>Path to save report in HTML format</dd>
+
+                        <dt><code>--report-xml=&lt;file.xml&gt;</code></dt>
+                        <dd>Path to save report in XML format</dd>
+
+                        <dt><code>--report-csv=&lt;file.csv&gt;</code></dt>
+                        <dd>Path to save report in CSV format</dd>
+
+                        <dt><code>--violations-xm=&lt;file.xml&gt;</code></dt>
+                        <dd>Path to save violations in XML format. Same format as PHPMessDetector</dd>
+
+                        <dt><code>--level=&lt;0&gt;</code></dt>
+                        <dd>Subdirectories to explore. 0=infinite (default)</dd>
+
+                        <dt><code>--without-oop</code></dt>
+                        <dd>Disable all OOP metrics. May be unstable</dd>
+                    </dl>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <section id="config-file">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Using configuration file</h2>
+                    <hr class="star-primary">
+                </div>
+                <div class="col-lg-12">
+
+                    <p>
+                        You should use the <code>--config=&lt;file.yml&gt;</code> option.
+                    </p>
+                    <p>
+                        Here is an example of configuration file.
+                    </p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">default</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">rules</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">cyclomaticComplexity</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span> <span class="nv">10</span><span class="p-Indicator">,</span> <span class="nv">6</span><span class="p-Indicator">,</span> <span class="nv">2</span> <span class="p-Indicator">]</span>
+
+    <span class="l-Scalar-Plain">failure</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">average.maintenabilityIndex &lt; 50 or sum.loc &gt; 10000</span>
+
+    <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">directory</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">src</span>
+        <span class="l-Scalar-Plain">extensions</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">php</span>
+        <span class="l-Scalar-Plain">exclude</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Features|Tests</span>
+
+    <span class="l-Scalar-Plain">logging</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">report</span><span class="p-Indicator">:</span>
+            <span class="l-Scalar-Plain">xml</span><span class="p-Indicator">:</span>    <span class="l-Scalar-Plain">./log/phpmetrics.xml</span>
+            <span class="l-Scalar-Plain">html</span><span class="p-Indicator">:</span>   <span class="l-Scalar-Plain">./log/phpmetrics.html</span>
+            <span class="l-Scalar-Plain">csv</span><span class="p-Indicator">:</span>    <span class="l-Scalar-Plain">./log/phpmetrics.csv</span>
+        <span class="l-Scalar-Plain">violations</span><span class="p-Indicator">:</span>
+            <span class="l-Scalar-Plain">xml</span><span class="p-Indicator">:</span>    <span class="l-Scalar-Plain">./log/violations.xml</span></code></pre></div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <footer>
+
+    <nav role="navigation">
+        <div class="mui-container">
+            <div id="g-footer" class="mui-text-center">
+                <ul class="mui-list-unstyled mui-list-inline">
+                    <li><a href="https://github.com/Halleck45/PhpMetrics/issues">Support</a></li>
+                    <li><a href="http://localhost:4000/feedback">Feedback</a></li><li>
+                    <li><a href="https://twitter.com/Halleck45">Twitter</a></li>
+                    <li><a href="https://www.linkedin.com/profile/view?id=90131737&authType=NAME_SEARCH&authToken=OkW0&locale=fr_FR&srchid=901317371400003230246&srchindex=1&srchtotal=1&trk=vsrp_people_res_name&trkInfo=VSRPsearchId%3A901317371400003230246%2CVSRPtargetId%3A90131737%2CVSRPcmpt%3Aprimary">Linkedin</a></li>
+                </ul>
+                <ul id="g-footer-bottomlinks" class="mui-list-inline mui-text-center">
+                    <li>&copy 2015 Jean-François Lépine</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</footer>
+
+
+</body>
+
+<script src="//cdn.muicss.com/mui-0.0.1/js/mui.min.js"></script>
+
+</body>
+
+</html>

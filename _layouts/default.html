@@ -2,7 +2,7 @@
 layout: default
 ---
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
 
@@ -10,67 +10,48 @@ layout: default
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="PhpMetrics is a quality tool for PHP. It provide beautiful reports about Maintenability, Complexity, Difficulty... of your code.">
     <meta name="author" content="Jean-François Lépine">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{{ page.title }}</title>
 
-    <!-- Bootstrap Core CSS -->
-    <link href="{{site.url}}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="{{site.url}}/css/freelancer.css" rel="stylesheet" type="text/css">
-    <link href="{{site.url}}/css/pygments.css" rel="stylesheet" type="text/css">
-
-    <!-- Fonts -->
-    <link href="{{site.url}}/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href="/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700" rel="stylesheet" type="text/css" />
+    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
 
     <!-- IE8 support for HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
+
+
 </head>
 
 
-<body id="page-top" class="index">
+<body>
 
-<!-- Navigation -->
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{site.url}}/index.html#page-top">PhpMetrics</a>
+    <header>
+        {% include menu_top.html %}
+    </header>
+    <div class="mui-row" style="position: relative; height:100%;">
+        <div class="mui-col-md-2" style="height:100%">
+            {% include menu_side.html %}
         </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="hidden">
-                    <a href="#page-top"></a>
-                </li>
-                {% include menu_top.html %}
-            </ul>
+        <div class="mui-cold-md-10">
+            <div class="mui-container">
+            {{ content }}
+            </div>
         </div>
-        <!-- /.navbar-collapse -->
     </div>
-    <!-- /.container-fluid -->
-</nav>
-
-{{ content }}
-
-{% include footer.html %}
 
 
-<script src="js/jquery-1.10.2.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-<script src="js/classie.js"></script>
-<script src="js/cbpAnimatedHeader.js"></script>
-<script src="js/freelancer.js"></script>
+
+
+    {% include footer.html %}
+
+</body>
+
+<script src="//cdn.muicss.com/mui-0.0.1/js/mui.min.js"></script>
 {% include analytics.html %}
 </body>
 

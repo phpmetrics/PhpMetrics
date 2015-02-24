@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="PhpMetrics is a quality tool for PHP. It provide beautiful reports about Maintenability, Complexity, Difficulty... of your code.">
+    <meta name="author" content="Jean-François Lépine">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PhpMetrics, by Jean-François Lépine</title>
+
+    <link href="/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700" rel="stylesheet" type="text/css" />
+    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+
+    <!-- IE8 support for HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<body>
+
+    <header>
+        <nav class="mui-appbar" role="navigation">
+    <div class="mui-container">
+        <table id="appbar-inner">
+            <tr class="mui-appbar-height">
+                <td>
+                    <a class="appbar-brand" href="http://localhost:4000">PhpMetrics</a>
+                </td>
+                <td id="appbar-cell-right">
+                    <a href="http://localhost:4000/report/latest/index.html">Demo</a>
+                    <a href="https://github.com/Halleck45/PhpMetrics" class="mui-hidden-xs">Download</a>
+                    <a href="http://localhost:4000/documentation/index.html">Documentation</a>
+                    <a href="http://localhost:4000/about.html">About</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</nav>
+
+    </header>
+    <div class="mui-row" style="position: relative; height:100%;">
+        <div class="mui-col-md-2" style="height:100%">
+            <nav id="sidenav">
+    <div>
+        <h2 class="mui-appbar-line-height"><a href="http://localhost:4000">PhpMetrics</a></h2>
+    </div>
+    <div class="mui-divider"></div>
+    <ul>
+
+        <li>
+            <strong class="">Getting Started</strong>
+            <ul>
+                <li><a class="" href="http://localhost:4000/documentation/index.html">Metrics</a></li>
+                <li><a class="" href="http://localhost:4000/documentation/how-to-read-report.html">How to read report</a></li>
+                <li><a class="" href="http://localhost:4000/documentation/how-to-understand-metrics.html">How to understand metrics</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">Continous integration</strong>
+            <ul>
+                <li><a class="" href="http://localhost:4000/documentation/jenkins.html">Jenkins and Sonar</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">External resources</strong>
+            <ul>
+                <li><a class="" href="http://www.sitepoint.com/visualize-codes-quality-phpmetrics/">PhpMetrics on SitePoint</a></li>
+                <li><a class="" href="https://peteraba.com/blog/phpmetrics-of-popular-projects/">PhpMetrics of popular php projects</a></li>
+                <li><a class="" href="https://gist.github.com/Halleck45/c205ddff88643f3ba51d">Parsing PhpMetrics with PhantomJS</a></li>
+                <li><a class="" href="http://blog.lepine.pro/industrialisation/bornes-pour-les-indicateurs-et-metriques/">How are calculated boundaries</a> (french)</li>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics-jetbrains">PhpStom integration</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <strong class="">Contribute</strong>
+            <ul>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics">PhpMetrics on github</a></li>
+                <li><a class="" href="https://github.com/Halleck45/PhpMetrics/issues">Issues</a></li>
+
+            </ul>
+        </li>
+
+    </ul>
+
+</nav>
+        </div>
+        <div class="mui-cold-md-10">
+            <div class="mui-container">
+            <div id="hero-panel" class="mui-panel">
+    <div id="f-welcome" class="mui-text-center">
+        <img class="img-responsive" src="images/phpmetrics-maintenability.png" alt="" width="100" height="100">
+        <div class="mui-text-title">PhpMetrics is a static analysis tout for PHP<p></p></div>
+        <div id="f-buttons">
+            <a class="mui-btn mui-btn-primary mui-btn-lg" href="https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar"><i class="icon-file-download"></i> DOWNLOAD (phar)</a>
+            <a class="mui-btn mui-btn-default mui-btn-flat mui-btn-lg" href="https://github.com/Halleck45/PhpMetrics"><i class="icon-github"></i> View on GitHub</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="mui-panel">
+    <h2>Quickstart</h2>
+    <p>
+        PhpMetrics provides various metrics about PHP projects.
+    </p>
+
+    <h3>Installation</h3>
+
+    With Composer (or <a href="https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar">download the phar</a>):
+    <div class="highlight">
+    <pre>composer global require <span style="color:#0000e6; ">'halleck45/phpmetrics'</span>
+phpmetrics --report-html=myreport.html <span style="color:#40015a; ">/path/of/your/sources</span>
+</pre>
+    </div>
+
+
+
+    <h3>Metrics</h3>
+    <ul>
+        <li>
+            <strong>Complexity</strong>: Cyclomatic complexity, Myer's interval, Relative system complexity
+        </li>
+        <li>
+            <strong>Volume</strong>: Vocabulary, Data complexity, Lines of code, Readability...
+        </li>
+        <li>
+            <strong>Object Oriented</strong>: Lack of cohesion of methods, Coupling, Abstraction...
+        </li>
+        <li>
+            <strong>Maintenability</strong>: Maintenability index, Halstead's metrics, Effort...
+        </li>
+        <li>
+            <a href="http://localhost:4000//documentation/index.html">And more !</a
+        </li>
+    </ul>
+
+    <h3>Readability &amp; Accessibility</h3>
+    <p>
+        PhpMetrics is designed to be understable and easy to use. Thanks to d3js, it will scores your project with beautiful graphs. PhpMetrics has a
+        "colorblind mode".
+        <br />Do not hesitate to <a href="http://localhost:4000/report/latest/index.html">visit the demo</a>.
+    </p>
+    <div>
+        <a href="http://localhost:4000/report/latest/index.html"><img src="images/phpmetrics-report.png" alt="Example of HTML report" style="width: 50%; margin: 0 auto;"/></a>
+    </div>
+
+
+    <h3>Continous Integration</h3>
+    <p>
+        PhpMetrics interacts with <a href="http://jenkins-ci.org/">Jenkins</a> or <a href="www.sonarqube.org">Sonar</a>. It provides reports in many
+        formats (XML, violations, HTML, CSV...). Read <a href="http://localhost:4000/documentation/jenkins.html">Documentation</a>.
+    </p>
+
+
+</div>
+
+<div class="mui-panel">
+    <h2>Open source and free</h2>
+    <div>
+        <iframe src="https://ghbtns.com/github-btn.html?user=Halleck45&repo=PhpMetrics&type=star&count=true" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+        <iframe src="https://ghbtns.com/github-btn.html?user=Halleck45&repo=PhpMetrics&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+    </div>
+    <p>
+        <img src="https://poser.pugx.org/halleck45/php-metrics/v/stable.svg" />
+    </p>
+    <p>
+        PhpMetrics is an Open Source project created by <a href="http://www.lepine.pro">Jean-François Lépine</a> (<a href="https://twitter.com/Halleck45">Halleck45</a>).
+    </p>
+    <p>
+        License: <a href="https://github.com/Halleck45/PhpMetrics/blob/master/LICENSE">MIT</a>, sources hosted on <a href="https://github.com/Halleck45/PhpMetrics"><i class="icon icon-github"></i> Github</a>.
+    </p>
+
+
+</div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <footer>
+
+    <nav role="navigation">
+        <div class="mui-container">
+            <div id="g-footer" class="mui-text-center">
+                <ul class="mui-list-unstyled mui-list-inline">
+                    <li><a href="https://github.com/Halleck45/PhpMetrics/issues">Support</a></li>
+                    <li><a href="http://localhost:4000/feedback">Feedback</a></li><li>
+                    <li><a href="https://twitter.com/Halleck45">Twitter</a></li>
+                    <li><a href="https://www.linkedin.com/profile/view?id=90131737&authType=NAME_SEARCH&authToken=OkW0&locale=fr_FR&srchid=901317371400003230246&srchindex=1&srchtotal=1&trk=vsrp_people_res_name&trkInfo=VSRPsearchId%3A901317371400003230246%2CVSRPtargetId%3A90131737%2CVSRPcmpt%3Aprimary">Linkedin</a></li>
+                </ul>
+                <ul id="g-footer-bottomlinks" class="mui-list-inline mui-text-center">
+                    <li>&copy 2015 Jean-François Lépine</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</footer>
+
+
+</body>
+
+<script src="//cdn.muicss.com/mui-0.0.1/js/mui.min.js"></script>
+
+</body>
+
+</html>
