@@ -34,7 +34,7 @@ With Composer (Make sure you have `~/.composer/vendor/bin/` in your path):
 
 # Usage
 
-> Do not hesitate to visit the [official documentation](http://www.phpmetrics.org/documentation/index.html).
+> Do not hesitate to visit the [official documentation](http://www.phpmetrics.org).
 
 The command command `phpmetrics <folder or filename>` will output:
 
@@ -44,7 +44,7 @@ If you want to get the summary HTML report (with charts):
 
     phpmetrics --report-html=/path/of/your/choice.html <folder or filename>
 
-No panic : you can read the [How to read the HTML report page](http://halleck45.github.io/PhpMetrics/documentation/how-to-read-report.html)
+No panic : you can read the [How to read the HTML report page](http://www.phpmetrics.org/documentation/how-to-read-report.html)
 
 > If you need a pure string representation of the reports in StdOut, just use `phpmetrics -q --report-xml=php://stdout <folder or filename>`
 
@@ -66,7 +66,7 @@ Remember that in PhpMetrics packages are file oriented (and not object oriented)
 Conditions are evaluated with the [Hoa Ruler](https://github.com/hoaproject/Ruler) component. Available operators are
 `and`, `or`, `xor`, `not`, `=` (`is` as an alias), `!=`, `>`, `>=`, `<`, `<=`, `in` and `sum`
 
-List of availables metrics is documented [here](http://halleck45.github.io/PhpMetrics/documentation/index.html).
+List of availables metrics is documented [here](http://www.phpmetrics.org/documentation/index.html).
 
 
 ## IDE integration
@@ -75,7 +75,7 @@ List of availables metrics is documented [here](http://halleck45.github.io/PhpMe
 
 ## Jenkins and CI
 
-You'll find a complete tutorial in the [documentation](http://halleck45.github.io/PhpMetrics/documentation/jenkins.html)
+You'll find a complete tutorial in the [documentation](http://www.phpmetrics.org/documentation/jenkins.html)
 
 You can easily export results to XML with the `--report-xml` option:
 
@@ -110,12 +110,12 @@ The file should be a valid yaml file. For example:
                 bubbles: ./log/bubbles.svg
 
         # condition of failure
-        failure: average.maintenabilityIndex < 50 or sum.loc > 10000
+        failure: average.maintainabilityIndex < 50 or sum.loc > 10000
 
         # rules used for color
         rules:
           cyclomaticComplexity: [ 10, 6, 2 ]
-          maintenabilityIndex: [ 0, 69, 85 ]
+          maintainabilityIndex: [ 0, 69, 85 ]
           [...]
 
 Each rule is composed from three values.
