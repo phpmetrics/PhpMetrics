@@ -37,4 +37,9 @@ class NameResolverTest extends TestCase
         $this->assertSame('\\foo\\bar', $this->resolver->resolve('bar', '\\foo\\'));
         $this->assertSame('\\baz', $this->resolver->resolve('baz'));
     }
+
+    public function testTheNameResolverShouldNotResolveTheNamespaceOfNotUsedClassesWhenNoNamespaceIsKnown()
+    {
+        $this->assertSame('baz', $this->resolver->resolve('baz', null));
+    }
 }
