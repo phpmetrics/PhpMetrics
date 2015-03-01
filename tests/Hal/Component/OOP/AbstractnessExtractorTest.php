@@ -35,6 +35,7 @@ class AbstractnessExtractorTest extends \PHPUnit_Framework_TestCase {
             array(__DIR__.'/../../../resources/oop/abstract1.php', array())
             , array(__DIR__.'/../../../resources/oop/abstract2.php', array('\Titi'))
             , array(__DIR__.'/../../../resources/oop/abstract3.php', array())
+            , array(__DIR__.'/../../../resources/oop/abstract4.php', array('\Foo\Bar'))
         );
     }
 
