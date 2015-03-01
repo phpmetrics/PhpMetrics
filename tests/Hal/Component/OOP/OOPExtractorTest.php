@@ -74,4 +74,15 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    public function testClassesThatDoesNotExtendOtherClassesShouldNotHaveAParentClass()
+    {
+        $file = __DIR__.'/../../../resources/oop/f1.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($file);
+        $this->assertCount(1, $result->getClasses());
+
+        $class = current($result->getClasses());
+        $this->assertNull($class->getParent());
+    }
+
 }
