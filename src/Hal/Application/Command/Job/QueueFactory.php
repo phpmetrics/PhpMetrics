@@ -78,9 +78,9 @@ class QueueFactory
             ->push(new ReportRenderer(true, $this->output, new Summary\Cli($validator, $bounds)))
             ->push(new ReportRenderer($this->config->getLogging()->getReport('cli'), $this->output, new Details\Cli($validator, $bounds)))
             ->push(new ReportWriter($this->config->getLogging()->getReport('html'), $this->output, new Summary\Html($validator, $bounds)))
-            ->push(new ReportWriter($this->config->getLogging()->getReport('json'), $this->output, new Details\Json($validator, $bounds)))
+            ->push(new ReportWriter($this->config->getLogging()->getReport('json'), $this->output, new Details\Json(true)))
             ->push(new ReportWriter($this->config->getLogging()->getReport('xml'), $this->output, new Summary\Xml($validator, $bounds)))
-            ->push(new ReportWriter($this->config->getLogging()->getReport('csv'), $this->output, new Details\Csv($validator, $bounds)))
+            ->push(new ReportWriter($this->config->getLogging()->getReport('csv'), $this->output, new Details\Csv()))
             ->push(new ReportWriter($this->config->getLogging()->getViolation('xml'), $this->output, new Violations\Xml($validator, $bounds)))
             ->push(new ReportWriter($this->config->getLogging()->getChart('bubbles'), $this->output, new Chart\Bubbles($validator, $bounds)));
 
