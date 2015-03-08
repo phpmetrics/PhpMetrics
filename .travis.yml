@@ -1,5 +1,11 @@
 language: php
 
+sudo: false
+
+addons:
+  apt_packages:
+    - graphviz
+
 php:
     - 5.4
     - 5.5
@@ -8,9 +14,6 @@ php:
     - hhvm
 
 before_script:
-  - sudo apt-get -qq update > /dev/null
-  - sudo apt-get -qq install graphviz > /dev/null
-  - phpenv rehash > /dev/null
   - composer selfupdate --quiet
   - composer install --prefer-dist --no-interaction --no-progress
   - ./vendor/bin/phpunit
