@@ -90,9 +90,12 @@ class Xml implements FormaterInterface {
         $node->setAttribute('volume', $bound->getAverage('volume'));
         $node->setAttribute('vocabulary', $bound->getAverage('vocabulary'));
         $node->setAttribute('difficulty', $bound->getAverage('difficulty'));
+        $node->setAttribute('effort', $bound->getAverage('effort'));
         $node->setAttribute('bugs', $bound->getAverage('bugs'));
         $node->setAttribute('time', $bound->getAverage('time'));
         $node->setAttribute('intelligentContent', $bound->getAverage('intelligentContent'));
+        $node->setAttribute('commentWeight', $bound->getAverage('commentWeight'));
+        $node->setAttribute('length', $bound->getAverage('length'));
 
         $hasOOP = null !== $bound->getSum('instability');
         if($hasOOP) {
@@ -100,6 +103,17 @@ class Xml implements FormaterInterface {
             $node->setAttribute('instability', $bound->getAverage('instability'));
             $node->setAttribute('efferentCoupling', $bound->getAverage('efferentCoupling'));
             $node->setAttribute('afferentCoupling', $bound->getAverage('afferentCoupling'));
+            $node->setAttribute('sysc', $bound->getAverage('sysc'));
+            $node->setAttribute('rsysc', $bound->getAverage('rsysc'));
+            $node->setAttribute('dc', $bound->getAverage('dc'));
+            $node->setAttribute('rdc', $bound->getAverage('rdc'));
+            $node->setAttribute('sc', $bound->getAverage('sc'));
+            $node->setAttribute('rsc', $bound->getAverage('rsc'));
+            $node->setAttribute('noc', $bound->getSum('noc'));
+            $node->setAttribute('noca', $bound->getSum('noca'));
+            $node->setAttribute('nocc', $bound->getSum('nocc'));
+            $node->setAttribute('noi', $bound->getSum('noi'));
+            $node->setAttribute('nom', $bound->getSum('nom'));
         }
     }
 
