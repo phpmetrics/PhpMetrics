@@ -1,6 +1,7 @@
 .idea
 /vendor/
 composer.lock
+composer.phar
 /report/bubbles/results.json
 Vagrantfile
 provision.sh
