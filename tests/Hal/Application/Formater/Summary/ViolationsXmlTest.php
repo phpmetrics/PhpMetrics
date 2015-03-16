@@ -3,7 +3,7 @@ namespace Test\Hal\Application\Formater\Summary;
 
 use Hal\Component\Aggregator\DirectoryAggregator;
 use Hal\Component\Bounds\Bounds;
-use Hal\Application\Formater\Summary\Xml;
+use Hal\Application\Formater\Violations\Xml;
 use Hal\Component\Result\ResultAggregate;
 use Hal\Component\Result\ResultCollection;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -18,18 +18,18 @@ class ViolationsXmlTest extends \PHPUnit_Framework_TestCase {
 
         // all results
         $rs1 = $this->getMockBuilder('\Hal\Component\Result\ResultSet')->disableOriginalConstructor()->getMock();
-        $rs1->expects($this->any())->method('asArray')->will($this->returnValue(array('volume' => 5)));
+        $rs1->expects($this->any())->method('asArray')->will($this->returnValue(array('loc' => 5)));
         $rs1->expects($this->any())->method('getFilename')->will($this->returnValue('path2/file1.php'));
         $rs2 = $this->getMockBuilder('\Hal\Component\Result\ResultSet')->disableOriginalConstructor()->getMock();
-        $rs2->expects($this->any())->method('asArray')->will($this->returnValue(array('volume' => 15)));
+        $rs2->expects($this->any())->method('asArray')->will($this->returnValue(array('loc' => 15)));
         $rs2->expects($this->any())->method('getFilename')->will($this->returnValue('path1/file1.php'));
 
         $collection = $this->getMockBuilder('\Hal\Component\Result\ResultCollection') ->disableOriginalConstructor() ->getMock();
         $collection->expects($this->any()) ->method('getIterator') ->will($this->returnValue(new \ArrayIterator(array($rs1, $rs2))));
         $collection->expects($this->any()) ->method('getFilename') ->will($this->returnValue('abc'));
         $collection->expects($this->any()) ->method('asArray') ->will($this->returnValue(array(
-            array('volume' => 5)
-            , array('volume' => 15)
+            array('loc' => 5)
+            , array('loc' => 15)
         )));
         $bounds = new Bounds();
 
@@ -46,14 +46,22 @@ class ViolationsXmlTest extends \PHPUnit_Framework_TestCase {
 
 
         // formater
+        $ruleSet = $this->getMock('\Hal\Application\Rule\RuleSet');
+        $ruleSet->expects($this->any())->method('getRule')->will($this->returnValue(array(3, 2, 1.5)));
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
+        $validator->expects($this->any())->method('getRuleSet')->willReturn($ruleSet);
+        
         $formater = new Xml($validator, $bounds);
         $output = $formater->terminate($collection, $groupedResults);
 
 
         $xml = new \SimpleXMLElement($output);
-        $p = $xml->xpath('//pmd');
-
+        $p = $xml->xpath('//pmd/file/violation');
+        $this->assertCount(2, $p);
+        $this->assertEquals('loc', $p[0]['rule']);
+        $this->assertEquals('5', $p[0]['endline']);
+        $this->assertEquals('loc', $p[1]['rule']);
+        $this->assertEquals('15', $p[1]['endline']);
     }
 
     public function testFormaterHasName() {
