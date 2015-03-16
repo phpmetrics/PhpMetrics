@@ -62,7 +62,7 @@ class Html implements FormaterInterface {
             'keys' => array_keys(current($collection->asArray()))
             , 'results' => $collection->asArray()
             , 'groupedResults' => $groupedResults
-            , 'root' => current(current($groupedResults))
+            , 'root' => $groupedResults->getIterator()->current()
             , 'relations' => $this->prepareDataRelations($collection)
             , 'scores' => $collection->getScore()->all()
             , 'ruleSet' => $this->validator->getRuleSet()
