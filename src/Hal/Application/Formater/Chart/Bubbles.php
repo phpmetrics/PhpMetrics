@@ -62,7 +62,7 @@ class Bubbles implements FormaterInterface {
         foreach($collection as $item) {
 
             // color
-            $valid = $this->validator->validate('maintenabilityIndex', $item->getMaintenabilityIndex()->getMaintenabilityIndex());
+            $valid = $this->validator->validate('maintainabilityIndex', $item->getMaintainabilityIndex()->getMaintainabilityIndex());
             switch($valid) {
                 case Validator::CRITICAL:   $color = 'red'; break;
                 case Validator::GOOD:       $color = 'chartreuse4'; break;

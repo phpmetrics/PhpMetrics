@@ -110,12 +110,12 @@ The file should be a valid yaml file. For example:
                 bubbles: ./log/bubbles.svg
 
         # condition of failure
-        failure: average.maintenabilityIndex < 50 or sum.loc > 10000
+        failure: average.maintainabilityIndex < 50 or sum.loc > 10000
 
         # rules used for color
         rules:
           cyclomaticComplexity: [ 10, 6, 2 ]
-          maintenabilityIndex: [ 0, 69, 85 ]
+          maintainabilityIndex: [ 0, 69, 85 ]
           [...]
 
 Each rule is composed from three values.

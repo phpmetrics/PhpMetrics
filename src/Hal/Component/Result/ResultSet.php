@@ -55,9 +55,9 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
     /**
      * Maintainability Result
      *
-     * @var \Hal\Metrics\Design\Component\MaintenabilityIndex\Result
+     * @var \Hal\Metrics\Design\Component\MaintainabilityIndex\Result
      */
-    private $maintenabilityIndex;
+    private $maintainabilityIndex;
 
     /**
      * Coupling
@@ -114,7 +114,7 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
             )
             , $this->getLoc() ? $this->getLoc()->asArray() : array()
             , $this->getHalstead() ? $this->getHalstead()->asArray() : array()
-            , $this->getMaintenabilityIndex() ? $this->getMaintenabilityIndex()->asArray() : array()
+            , $this->getMaintainabilityIndex() ? $this->getMaintainabilityIndex()->asArray() : array()
             , $this->getCoupling() ? $this->getCoupling()->asArray() : array()
             , $this->getOop() ? $this->getOop()->asArray() : array()
             , $this->getMcCabe() ? $this->getMcCabe()->asArray() : array()
@@ -198,21 +198,21 @@ class ResultSet implements ExportableInterface, ResultSetInterface {
     }
 
     /**
-     * @param \Hal\Metrics\Design\Component\MaintenabilityIndex\Result $maintenabilityIndex
+     * @param \Hal\Metrics\Design\Component\MaintainabilityIndex\Result $maintainabilityIndex
      * @return $this
      */
-    public function setMaintenabilityIndex(\Hal\Metrics\Design\Component\MaintenabilityIndex\Result $maintenabilityIndex)
+    public function setMaintainabilityIndex(\Hal\Metrics\Design\Component\MaintainabilityIndex\Result $maintainabilityIndex)
     {
-        $this->maintenabilityIndex = $maintenabilityIndex;
+        $this->maintainabilityIndex = $maintainabilityIndex;
         return $this;
     }
 
     /**
-     * @return \Hal\Metrics\Design\Component\MaintenabilityIndex\Result
+     * @return \Hal\Metrics\Design\Component\MaintainabilityIndex\Result
      */
-    public function getMaintenabilityIndex()
+    public function getMaintainabilityIndex()
     {
-        return $this->maintenabilityIndex;
+        return $this->maintainabilityIndex;
     }
 
     /**

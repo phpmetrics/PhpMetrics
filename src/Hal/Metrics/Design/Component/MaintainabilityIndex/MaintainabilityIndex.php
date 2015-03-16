@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Hal\Metrics\Design\Component\MaintenabilityIndex;
+namespace Hal\Metrics\Design\Component\MaintainabilityIndex;
 
 /**
  * Calculates Maintainability Index
@@ -26,7 +26,7 @@ namespace Hal\Metrics\Design\Component\MaintenabilityIndex;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class MaintenabilityIndex {
+class MaintainabilityIndex {
 
     /**
      * Calculates Maintainability Index
@@ -39,7 +39,7 @@ class MaintenabilityIndex {
     public function calculate(\Hal\Metrics\Complexity\Text\Halstead\Result $rHalstead, \Hal\Metrics\Complexity\Text\Length\Result $rLoc, \Hal\Metrics\Complexity\Component\McCabe\Result $rMcCabe)
     {
         $result = new Result;
-        $result->setMaintenabilityIndexWithoutComment(max(
+        $result->setMaintainabilityIndexWithoutComment(max(
              (171
              - (5.2 * \log($rHalstead->getVolume()))
              - (0.23 * $rMcCabe->getCyclomaticComplexityNumber())

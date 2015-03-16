@@ -1,30 +1,30 @@
 <?php
 namespace Test\Hal\Application\Score\Factor;
 use Hal\Application\Score\Calculator;
-use Hal\Application\Score\Factor\MaintenabilityFactor;
+use Hal\Application\Score\Factor\MaintainabilityFactor;
 
 
 /**
  * @group score
  */
-class MaintenabilityFactorTest extends \PHPUnit_Framework_TestCase {
+class MaintainabilityFactorTest extends \PHPUnit_Framework_TestCase {
 
     private $object;
 
     public function setUp() {
-        $this->object = new MaintenabilityFactor(new Calculator());
+        $this->object = new MaintainabilityFactor(new Calculator());
     }
 
     /**
      * @dataProvider provider
      */
-    public function testCalculateMaintenability($expected, $maintenability) {
+    public function testCalculateMaintainability($expected, $maintainability) {
 
         $groupedResults = $this->getMockBuilder('\Hal\Component\Result\ResultCollection')->disableOriginalConstructor()->getMock();
         $collection = $this->getMockBuilder('\Hal\Component\Result\ResultCollection')->disableOriginalConstructor()->getMock();
 
         $bound = $this->getMockBuilder('\Hal\Component\Bounds\Result\ResultInterface')->disableOriginalConstructor()->getMock();
-        $bound->expects($this->any())->method('getAverage')->will($this->returnValue($maintenability));
+        $bound->expects($this->any())->method('getAverage')->will($this->returnValue($maintainability));
 
         $score = $this->object->calculate($collection, $groupedResults, $bound);
         $this->assertEquals($expected, $score);

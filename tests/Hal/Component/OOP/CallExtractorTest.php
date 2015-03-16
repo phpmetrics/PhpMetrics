@@ -3,8 +3,8 @@ namespace Test\Hal\Component\OOP;
 
 use Hal\Component\OOP\Extractor\CallExtractor;
 use Hal\Component\Token\TokenCollection;
-use Hal\Metrics\Design\Component\MaintenabilityIndex\MaintenabilityIndex;
-use Hal\Metrics\Design\Component\MaintenabilityIndex\Result;
+use Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex;
+use Hal\Metrics\Design\Component\MaintainabilityIndex\Result;
 use Hal\Component\OOP\Extractor\Extractor;
 use Hal\Component\OOP\Extractor\MethodExtractor;
 use Hal\Component\OOP\Extractor\Searcher;

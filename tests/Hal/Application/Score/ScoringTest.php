@@ -15,7 +15,7 @@ class ScoringTest extends \PHPUnit_Framework_TestCase {
 
         $bound = $this->getMockBuilder('\Hal\Component\Bounds\Result\ResultInterface')->disableOriginalConstructor()->getMock();
         $map = array(
-            array('maintenabilityIndex', 65),
+            array('maintainabilityIndex', 65),
             array('effort', 12)
         );
         $bound->method('getAverage') ->will($this->returnValueMap($map));
