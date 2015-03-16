@@ -30,7 +30,7 @@
     },
     "require": {
         "twig/twig": "~1.15",
-        "symfony/console": "~2.4",
+        "symfony/console": "~2.5",
         "hoa/ruler": "~1.0",
         "symfony/config": "~2.4",
         "symfony/yaml": "~2.4",
