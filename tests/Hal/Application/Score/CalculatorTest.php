@@ -38,7 +38,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase {
             , array(30, 10, 25, 75)
             , array(30, 10, 20, 50)
             , array(30, 10, 15, 25)
-            , array(3, 10, 10, 0)
+            , array(30, 10, 10, 0)
             , array(30, 10, 9, 0)
         );
     }
@@ -46,7 +46,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase {
     public function lowProvider() {
         return array(
            array(10,    30, 9   , 100)
-           , array(10,  20, 10  , 100)
+           , array(10,  30, 10  , 100)
            , array(10,  30, 15  , 75)
            , array(10,  30, 20  , 50)
            , array(10,  30, 25  , 25)
