@@ -62,7 +62,7 @@ class Validator {
     public function validate($key, $value) {
         $rule = $this->ruleSet->getRule($key);
 
-        if(!is_array($rule) || !is_int($value)) {
+        if(!is_array($rule) || !is_numeric($value)) {
             return self::UNKNOWN;
         }
 
@@ -77,16 +77,15 @@ class Validator {
                 default:
                     return self::GOOD;
             }
-        } else {
-            // critical > warn > good
-            switch(true) {
-                case $value > $rule[1]:
-                    return self::CRITICAL;
-                case $value < $rule[2]:
-                    return self::GOOD;
-                default:
-                    return self::WARNING;
-            }
+        }
+        // critical > warn > good
+        switch(true) {
+            case $value > $rule[1]:
+                return self::CRITICAL;
+            case $value < $rule[2]:
+                return self::GOOD;
+            default:
+                return self::WARNING;
         }
     }
 

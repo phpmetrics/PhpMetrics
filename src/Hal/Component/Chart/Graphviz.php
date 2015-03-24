@@ -45,7 +45,6 @@ class Graphviz
         // dot file
         $dotContent = str_replace('\\', '/', $dotContent);
         file_put_contents($dotFile, $dotContent);
-        file_put_contents('/tmp/tmp.gv', $dotContent);
 
         // image
         shell_exec(sprintf('circo -Lg -Tsvg -o%2$s %1$s  2>&1', $dotFile, $imageFile));
