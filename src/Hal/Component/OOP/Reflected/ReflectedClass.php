@@ -175,9 +175,12 @@ class ReflectedClass {
     /**
      * Get the parent name
      *
-     * @return string
+     * @return string|null null when no parent class exists
      */
     public function getParent() {
+        if ($this->parent === null) {
+            return null;
+        }
         return $this->nameResolver->resolve($this->parent, $this->getNamespace());
     }
 };
