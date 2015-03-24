@@ -89,8 +89,8 @@ class Html implements FormaterInterface {
             }
 
             foreach($item->getOOP()->getClasses() as $class) {
-                $array[$class->getName()] = (object) array(
-                    'name' => $class->getName()
+                $array[$class->getFullname()] = (object) array(
+                    'name' => $class->getFullname()
                     , 'size' => 3000
                     , 'relations' => array_merge(
                         !is_null($class->getParent()) ? array($class->getParent()) : array()
