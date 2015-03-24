@@ -93,6 +93,7 @@ class Extractor {
                 case T_NAMESPACE:
                     $namespace = '\\'.$this->searcher->getFollowingName($n, $tokens);
                     $this->extractors->class->setNamespace($namespace);
+                    $this->extractors->interface->setNamespace($namespace);
                     break;
 
                 case T_INTERFACE:
