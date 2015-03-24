@@ -67,7 +67,7 @@ class Bubbles implements FormaterInterface {
                 case Validator::CRITICAL:   $color = 'red'; break;
                 case Validator::GOOD:       $color = 'chartreuse4'; break;
                 case Validator::WARNING:    $color = 'gold1'; break;
-                case Validator::UNKNOWN:    $color = 'grey'; break;
+                default:                    $color = 'grey'; break;
             }
 
             // size
