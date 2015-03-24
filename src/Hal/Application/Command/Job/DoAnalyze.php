@@ -66,7 +66,7 @@ class DoAnalyze implements JobInterface
      * @param string $path
      * @param bool $withOOP
      */
-    function __construct(OutputInterface $output, Finder $finder, $path, $withOOP)
+    public function __construct(OutputInterface $output, Finder $finder, $path, $withOOP)
     {
         $this->output = $output;
         $this->finder = $finder;

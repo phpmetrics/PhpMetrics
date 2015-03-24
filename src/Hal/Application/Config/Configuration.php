@@ -56,7 +56,7 @@ class Configuration implements ConfigurationInterface
 
     /**
      * @param \Hal\Application\Rule\RuleSet $ruleset
-     * @return $this;
+     * @return self
      */
     public function setRuleSet(RuleSet $ruleset)
     {
@@ -74,7 +74,7 @@ class Configuration implements ConfigurationInterface
 
     /**
      * @param string $failureCondition
-     * @return $this
+     * @return self
      */
     public function setFailureCondition($failureCondition)
     {
@@ -92,7 +92,7 @@ class Configuration implements ConfigurationInterface
 
     /**
      * @param LoggingConfiguration $logging
-     * @return $this
+     * @return self
      */
     public function setLogging(LoggingConfiguration $logging)
     {
@@ -109,9 +109,8 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * @param PathConfiguration
      * @param PathConfiguration $path
-     * @return $this;
+     * @return self
      */
     public function setPath($path)
     {

@@ -25,7 +25,7 @@ class Token {
     /**
      * Value of token
      *
-     * @var integer
+     * @var string
      */
     private $value;
 
@@ -33,7 +33,7 @@ class Token {
      * Constructor
      * @param string|array $data
      */
-    public function __construct( $data)
+    public function __construct($data)
     {
         if(!is_array($data)) {
             $this->type = T_STRING;
@@ -57,7 +57,7 @@ class Token {
     /**
      * Get value of token
      *
-     * @return integer
+     * @return string
      */
     public function getValue()
     {

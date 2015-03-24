@@ -121,7 +121,7 @@ class ReflectedMethod {
 
     /**
      * @param \Hal\Component\Token\TokenCollection $tokens
-     * @return $this
+     * @return self
      */
     public function setTokens($tokens)
     {
@@ -152,7 +152,7 @@ class ReflectedMethod {
      *      It make no sense for the moment to store any information abour return value / type. Maybe in PHP 6 ? :)
      *
      * @param string $mixed
-     * @return $this
+     * @return self
      */
     public function pushReturn($mixed) {
         array_push($this->returns, $mixed);
@@ -188,7 +188,7 @@ class ReflectedMethod {
      * Attach new call
      *
      * @param $varname
-     * @return $this
+     * @return self
      */
     public function pushCall($varname) {
         if(preg_match('!^$this!', $varname)) {
@@ -205,7 +205,7 @@ class ReflectedMethod {
      * Push dependency
      *
      * @param $name
-     * @return $this
+     * @return self
      */
     public function pushDependency($name) {
         array_push($this->dependencies, $name);
@@ -227,7 +227,7 @@ class ReflectedMethod {
 
     /**
      * @param NameResolver $resolver
-     * @return $this
+     * @return self
      */
     public function setNameResolver(NameResolver $resolver)
     {

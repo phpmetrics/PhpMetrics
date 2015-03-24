@@ -31,7 +31,7 @@ class ReflectedClass {
     /**
      * Methods
      *
-     * @var \SplObjectStorage
+     * @var \SplObjectStorage[]
      */
     private $methods;
 
@@ -59,8 +59,8 @@ class ReflectedClass {
     /**
      * Constructor
      *
-     * @param string $name
      * @param string $namespace
+     * @param string $name
      */
     public function __construct($namespace, $name)
     {
@@ -96,7 +96,7 @@ class ReflectedClass {
     }
 
     /**
-     * @return \SplObjectStorage
+     * @return \SplObjectStorage[]
      */
     public function getMethods()
     {
