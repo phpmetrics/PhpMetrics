@@ -37,7 +37,7 @@ title: Configuration
                         <dd>Config file to use (YAML)</dd>
 
                         <dt><code>--failure-condition=&lt;expression&gt;</code></dt>
-                        <dd>Optional failure condition, in english. For example: average.maintenabilityIndex < 50 or sum.loc > 10000</dd>
+                        <dd>Optional failure condition, in english. For example: average.maintainabilityIndex < 50 or sum.loc > 10000</dd>
 
                         <dt><code>--extensions=&lt;php|inc&gt;</code></dt>
                         <dd>Regex of extensions to include</dd>
@@ -92,7 +92,7 @@ default:
     rules:
         cyclomaticComplexity: [ 10, 6, 2 ]
 
-    failure: average.maintenabilityIndex < 50 or sum.loc > 10000
+    failure: average.maintainabilityIndex < 50 or sum.loc > 10000
 
     path:
         directory: src
