@@ -51,6 +51,9 @@ class NameResolver
             }
         }
 
+        if ($currentNamespace === null) {
+            return $name;
+        }
         return rtrim($currentNamespace, '\\').'\\'.$name;
 
     }

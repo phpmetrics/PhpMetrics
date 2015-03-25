@@ -55,7 +55,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
     public function providesForDependenciesWithoutAlias() {
         return array(
             array(__DIR__.'/../../../resources/oop/f7.php', array('Symfony\Component\Config\Definition\Processor'))
-            , array(__DIR__.'/../../../resources/oop/f4.php', array('\Full\AliasedClass', '\Toto'))
+            , array(__DIR__.'/../../../resources/oop/f4.php', array('\Full\AliasedClass', '\My\Example\Toto'))
         );
     }
 
@@ -68,7 +68,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
         $class = $classes[0];
         $dependencies = $class->getDependencies();
 
-        $expected = array('\Example\IAmCalled', '\IAmCalled');
+        $expected = array('\Example\IAmCalled', '\My\Example\IAmCalled');
 
         $this->assertEquals($expected, $dependencies, 'Direct dependencies (calls) are found');
 
