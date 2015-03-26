@@ -11,7 +11,7 @@ build: test
 	@sed -i "s/<VERSION>/`semver tag`/g" /tmp/phpmetrics-build/build.php
 	
 	@echo Installing dependencies
-	@cd /tmp/phpmetrics-build && composer.phar install --no-dev --optimize-autoloader --prefer-dist
+	@cd /tmp/phpmetrics-build && composer install --no-dev --optimize-autoloader --prefer-dist
 
 	@echo Building phar
 	@cd /tmp/phpmetrics-build && php build.php
