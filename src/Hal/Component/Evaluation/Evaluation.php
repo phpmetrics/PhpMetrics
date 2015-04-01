@@ -20,14 +20,6 @@ class Evaluation
     private $valid = true;
 
     /**
-     * @return int
-     */
-    public function getCode()
-    {
-        return $this->valid === true ? 0 : 1;
-    }
-
-    /**
      * @param boolean $valid
      * @return $this
      */

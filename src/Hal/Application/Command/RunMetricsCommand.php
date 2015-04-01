@@ -124,7 +124,8 @@ class RunMetricsCommand extends Command
         // evaluation of success
         $evaluator = new Evaluator($collection, $aggregatedResults, $bounds);
         $result = $evaluator->evaluate($config->getFailureCondition());
-        return $result->getCode();
+        // fail if failure-condition is realized
+        return $result->isValid() ? 1 : 0;
     }
 
 }

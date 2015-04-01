@@ -53,6 +53,7 @@ class ConfigFactory
         strlen($input->getOption('report-csv')) > 0     && $config->getLogging()->setReport('csv', $input->getOption('report-csv'));
         strlen($input->getOption('violations-xml')) > 0 && $config->getLogging()->setViolation('xml', $input->getOption('violations-xml'));
         strlen($input->getOption('chart-bubbles')) > 0  && $config->getLogging()->setChart('bubbles', $input->getOption('chart-bubbles'));
+        strlen($input->getOption('failure-condition')) > 0  && $config->setFailureCondition($input->getOption('failure-condition'));
 
         return $config;
 
