@@ -13,6 +13,7 @@
 
 
         var chart;
+        document.getElementById('svg-custom').innerHTML = '<svg />';
         nv.addGraph(function() {
             chart = nv.models.scatterChart()
                     .showDistX(true)
