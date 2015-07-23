@@ -78,7 +78,6 @@ class QueueFactory
             ->push(new ReportRenderer(true, $this->output, new Summary\Cli($validator, $bounds)))
             ->push(new ReportRenderer($this->config->getLogging()->getReport('cli'), $this->output, new Details\Cli($validator, $bounds)))
             ->push(new ReportWriter($this->config->getLogging()->getReport('html'), $this->output, new Summary\Html($validator, $bounds, $this->config->getTemplate())))
-            ->push(new ReportWriter($this->config->getLogging()->getReport('html'), $this->output, new Summary\Html($validator, $bounds)))
             ->push(new ReportWriter($this->config->getLogging()->getReport('json'), $this->output, new Details\Json($validator, $bounds)))
             ->push(new ReportWriter($this->config->getLogging()->getReport('xml'), $this->output, new Summary\Xml($validator, $bounds)))
             ->push(new ReportWriter($this->config->getLogging()->getReport('csv'), $this->output, new Details\Csv($validator, $bounds)))
