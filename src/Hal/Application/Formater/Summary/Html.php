@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Application\Formater\Summary;
+use Hal\Application\Config\TemplateConfiguration;
 use Hal\Application\Formater\FormaterInterface;
 use Hal\Application\Formater\Twig\FormatingExtension;
 use Hal\Application\Rule\Validator;
@@ -37,15 +38,24 @@ class Html implements FormaterInterface {
     private $validator;
 
     /**
+     * Template configuration
+     *
+     * @var TemplateConfiguration
+     */
+    private $template;
+
+    /**
      * Constructor
      *
-     * @param Validator $validator
-     * @param BoundsInterface $bound
+     * @param Validator             $validator
+     * @param BoundsInterface       $bound
+     * @param TemplateConfiguration $template
      */
-    public function __construct(Validator $validator, BoundsInterface $bound)
+    public function __construct(Validator $validator, BoundsInterface $bound, TemplateConfiguration $template)
     {
         $this->bound = $bound;
         $this->validator = $validator;
+        $this->template = $template;
     }
 
     /**
@@ -68,6 +78,7 @@ class Html implements FormaterInterface {
             , 'ruleSet' => $this->validator->getRuleSet()
             , 'bounds' => $bound
             , 'withOOP' => null !== $bound->getSum('instability')
+            , 'title' => $this->template->getTitle()
         ));
     }
 

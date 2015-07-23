@@ -1,6 +1,7 @@
 <?php
 namespace Test\Hal\Application\Formater\Summary;
 
+use Hal\Application\Config\TemplateConfiguration;
 use Hal\Component\Bounds\Bounds;
 use Hal\Application\Formater\Summary\Html;
 use Hal\Component\Result\ResultCollection;
@@ -32,7 +33,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase {
 
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $bounds = new Bounds();
-        $formater = new Html($validator, $bounds);
+        $formater = new Html($validator, $bounds, new TemplateConfiguration());
 
         $groupedResults = new ResultCollection();
         $output = $formater->terminate($collection, $groupedResults);
@@ -42,7 +43,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase {
     public function testFormaterHasName() {
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $bounds = new Bounds();
-        $formater = new Html($validator, $bounds);
+        $formater = new Html($validator, $bounds, new TemplateConfiguration());
         $this->assertNotNull($formater->getName());
     }
 }

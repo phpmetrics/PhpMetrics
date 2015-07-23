@@ -79,6 +79,9 @@ class RunMetricsCommand extends Command
                 ->addOption(
                     'config', null, InputOption::VALUE_REQUIRED, 'Config file (YAML)', null
                 )
+                ->addOption(
+                    'template-title', null, InputOption::VALUE_REQUIRED, 'Title for the HTML summary report', null
+                )
         ;
     }
 

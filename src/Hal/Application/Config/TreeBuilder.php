@@ -74,6 +74,12 @@ class TreeBuilder implements \Hal\Component\Config\TreeBuilderInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('template')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('title')->defaultValue('PhpMetrics report')
+                    ->end()
+                ->end()
             ->end()
         ;
 

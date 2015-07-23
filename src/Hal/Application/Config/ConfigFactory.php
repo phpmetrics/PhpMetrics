@@ -54,6 +54,7 @@ class ConfigFactory
         strlen($input->getOption('violations-xml')) > 0 && $config->getLogging()->setViolation('xml', $input->getOption('violations-xml'));
         strlen($input->getOption('chart-bubbles')) > 0  && $config->getLogging()->setChart('bubbles', $input->getOption('chart-bubbles'));
         strlen($input->getOption('failure-condition')) > 0  && $config->setFailureCondition($input->getOption('failure-condition'));
+        strlen($input->getOption('template-title')) > 0 && $config->getTemplate()->setTitle($input->getOption('template-title'));
 
         return $config;
 
