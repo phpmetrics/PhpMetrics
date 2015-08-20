@@ -11,6 +11,7 @@ namespace Hal\Component\Config;
 use Hal\Application\Config\Configuration;
 use Hal\Application\Config\LoggingConfiguration;
 use Hal\Application\Config\PathConfiguration;
+use Hal\Application\Config\TemplateConfiguration;
 use Hal\Application\Rule\RuleSet;
 
 /**
@@ -56,6 +57,7 @@ class Hydrator
             ->setFailureCondition($array['failure'])
             ->setPath($path)
             ->setLogging(new LoggingConfiguration($array['logging']))
+            ->setTemplate(new TemplateConfiguration($array['template']))
         ;
         return $config;
     }

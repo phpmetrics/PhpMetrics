@@ -45,6 +45,11 @@ class Configuration implements ConfigurationInterface
     private $logging = array();
 
     /**
+     * @var TemplateConfiguration
+     */
+    private $template;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -52,6 +57,7 @@ class Configuration implements ConfigurationInterface
         $this->failureCondition = null;
         $this->path = new PathConfiguration();
         $this->logging = new LoggingConfiguration();
+        $this->template = new TemplateConfiguration();
     }
 
     /**
@@ -126,6 +132,23 @@ class Configuration implements ConfigurationInterface
         return $this->path;
     }
 
+    /**
+     * @param TemplateConfiguration $template
+     * @return self
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+        return $this;
+    }
+
+    /**
+     * @return TemplateConfiguration
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
 
 
 
