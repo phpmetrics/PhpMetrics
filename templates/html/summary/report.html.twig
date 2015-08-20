@@ -206,36 +206,53 @@
                         </tr>
                         <tr>
                             <td>Lines of code</td>
-                            <td>{{ bounds.getSum('loc') }}</td>
-                        </tr>
-                        <tr>
-                            <td>Classes</td>
-                            <td>{{ root.bounds.getSum('noc') }}</td>
-                        </tr>
-                        <tr>
-                            <td>Interfaces</td>
                             <td>
-                                {{ root.bounds.getSum('noi') }}
+                                {{ bounds.getSum('loc') }}
                                 {% if root.bounds.getSum('noc') > 0 %}
-                                    <span class="help">( {{ (root.bounds.getSum('noi') / root.bounds.getSum('noc') * 100) |round(0) }} %)</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Concrete classes</td>
-                            <td>
-                                {{ root.bounds.getSum('nocc') }}
-                                {% if root.bounds.getSum('noc') > 0 %}
-                                    <span class="help">( {{ (root.bounds.getSum('nocc') / root.bounds.getSum('noc') * 100) |round(0) }} %)</span>
+                                    <span class="more">({{ (bounds.getSum('loc') / bounds.getSum('noc')) |round }} by class,
+                                        {{ (bounds.getSum('loc') / bounds.getSum('nom')) |round }} by method)</span>
                                 {%  endif %}
                             </td>
                         </tr>
+                        <tr>
+                            <td>Logical lines of code</td>
+                            <td>
+                                {{ bounds.getSum('logicalLoc') }}
+                                {% if root.bounds.getSum('noc') > 0 %}
+                                    <span class="more">({{ (bounds.getSum('logicalLoc') / bounds.getSum('noc')) |round }} by class,
+                                        {{ (bounds.getSum('logicalLoc') / bounds.getSum('nom')) |round }} by method)</span>
+                                {%  endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Classes</td>
+                            <td>{{ root.bounds.getSum('noc') }}
+                                {% if root.bounds.getSum('noc') > 0 %}
+                                    <div>
+                                        <span class="more">
+                                            {{ root.bounds.getSum('noi')|default(0) }} interfaces ({{ (root.bounds.getSum('noi') / root.bounds.getSum('noc') * 100) |round(0) }} %)
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span class="more">
+                                            {{ root.bounds.getSum('nocc')|default(0) }} concrete classes ({{ (root.bounds.getSum('nocc') / root.bounds.getSum('noc') * 100) |round(0) }} %)
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span class="more">
+                                            {{ root.bounds.getSum('noac')|default(0) }} abstract classes ({{ (root.bounds.getSum('noac') / root.bounds.getSum('noc') * 100) |round(0) }} %)
+                                        </span>
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+
                         <tr>
                             <td>Methods</td>
                             <td>
                                 {{ bounds.getSum('nom') }}
                                 {% if root.bounds.getSum('noc') > 0 %}
-                                    <span class="help">( {{ (bounds.getSum('nom') / bounds.getSum('noc')) |round(1) }} methods by class )</span>
+                                    <span class="more">({{ (bounds.getSum('nom') / bounds.getSum('noc')) |round(1) }} by class )</span>
                                 {%  endif %}
                             </td>
                         </tr>
