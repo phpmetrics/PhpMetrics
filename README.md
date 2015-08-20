@@ -112,7 +112,7 @@ The file should be a valid yaml file. For example:
         # condition of failure
         failure: average.maintainabilityIndex < 50 or sum.loc > 10000
 
-        # rules used for color
+        # rules used for color ([ critical, warning, good ])
         rules:
           cyclomaticComplexity: [ 10, 6, 2 ]
           maintainabilityIndex: [ 0, 69, 85 ]
@@ -122,6 +122,8 @@ Each rule is composed from three values.
 
 + If `A < B < C` : `A`: min, `B`: yellow limit, `C`: max
 + If `A > B > C` : `A`: max, `B`: yellow limit, `C`: min
+
+You can save the configuration in a .phpmetrics.yml file in the root directory of your project. PhpMetrics will look for it and use it.
 
 # Contribute
 
