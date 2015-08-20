@@ -40,6 +40,10 @@ class LackOfCohesionOfMethods {
                 continue;
             }
 
+            if($method->isSetter() ||$method->isGetter()) {
+                continue;
+            }
+
             $linked = $this->getLinkedMethods($class, $method, $toSkip);
             $toSkip = array_merge($toSkip, $linked);
             $lcom++;

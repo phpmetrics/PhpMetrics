@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Component\OOP\Extractor;
+use Hal\Component\OOP\Reflected\MethodUsage;
 use Hal\Component\OOP\Reflected\ReflectedArgument;
 use Hal\Component\OOP\Reflected\ReflectedMethod;
 use Hal\Component\Token\TokenCollection;
@@ -96,6 +97,9 @@ class MethodExtractor implements ExtractorInterface {
         // returns
         $this->extractReturns($method, $method->getContent());
 
+        // usage
+        $this->extractUsage($method);
+
         return $method;
     }
 
@@ -166,6 +170,39 @@ class MethodExtractor implements ExtractorInterface {
             foreach($matches[1] as $m) {
                 $method->pushReturn($m);
             }
+        }
+        return $this;
+    }
+
+    /**
+     * Extracts usage of method
+     *
+     * @param ReflectedMethod $method
+     * @return $this
+     */
+    private function extractUsage(ReflectedMethod $method) {
+        $tokens = $method->getTokens();
+        $codes = $values = array();
+        foreach($tokens as $token) {
+            if(in_array($token->getType(), array(T_WHITESPACE, T_BOOL_CAST, T_INT_CAST, T_STRING_CAST, T_DOUBLE_CAST, T_OBJECT_CAST))) {
+                continue;
+            }
+            array_push($codes, $token->getType());
+            array_push($values, $token->getValue());
+        }
+        switch(true) {
+            case preg_match('!^(get)|(is)|(has).*!',$method->getName()) && $codes == array(T_RETURN, T_VARIABLE, T_OBJECT_OPERATOR, T_STRING, T_STRING):
+                $method->setUsage(MethodUsage::USAGE_GETTER);
+                break;
+            // basic setter
+            case preg_match('!^set.*!',$method->getName()) && $codes == array(T_VARIABLE, T_OBJECT_OPERATOR,T_STRING,T_STRING, T_VARIABLE, T_STRING) && $values[3] == '=':
+            // fluent setter
+            case preg_match('!^set.*!',$method->getName()) && $codes == array(T_VARIABLE, T_OBJECT_OPERATOR,T_STRING,T_STRING, T_VARIABLE, T_STRING, T_RETURN, T_VARIABLE, T_STRING)
+                && $values[3] == '=' && $values[7] == '$this':
+                $method->setUsage(MethodUsage::USAGE_SETTER);
+                break;
+            default:
+                $method->setUsage(MethodUsage::USAGE_UNKNWON);
         }
         return $this;
     }

@@ -18,6 +18,8 @@ use Hal\Component\OOP\Resolver\NameResolver;
  */
 class ReflectedMethod {
 
+
+
     /**
      * @var string
      */
@@ -66,6 +68,13 @@ class ReflectedMethod {
     private $content;
 
     /**
+     * Usage of method (getter, setter...)
+     *
+     * @var string
+     */
+    private $usage;
+
+    /**
      * @param string $name
      */
     public function __construct($name)
@@ -102,6 +111,14 @@ class ReflectedMethod {
     }
 
     /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
      * @param string $content
      * @return $this
      */
@@ -112,11 +129,11 @@ class ReflectedMethod {
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getContent()
+    public function getTokens()
     {
-        return $this->content;
+        return $this->tokens;
     }
 
     /**
@@ -127,14 +144,6 @@ class ReflectedMethod {
     {
         $this->tokens = $tokens;
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTokens()
-    {
-        return $this->tokens;
     }
 
     /**
@@ -234,4 +243,36 @@ class ReflectedMethod {
         $this->nameResolver = $resolver;
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isSetter() {
+        return MethodUsage::USAGE_SETTER == $this->getUsage();
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsage()
+    {
+        return $this->usage;
+    }
+
+    /**
+     * @param string $usage
+     */
+    public function setUsage($usage)
+    {
+        $this->usage = $usage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGetter() {
+        return MethodUsage::USAGE_GETTER == $this->getUsage();
+    }
+
+
 };

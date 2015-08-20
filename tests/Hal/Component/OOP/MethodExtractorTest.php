@@ -153,4 +153,33 @@ EOT;
             , array(array(), '<?php public function bar($d = false) {  }')
         );
     }
+
+    /**
+     * @group wip
+     */
+    public function testGetterAreFound() {
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract(__DIR__.'/../../../resources/oop/f8.php');
+        $classes = $result->getClasses();
+        $class = $classes[0];
+        $methods = $class->getMethods();
+        $this->assertTrue($methods['getA']->isGetter());
+        $this->assertTrue($methods['isGood']->isGetter());
+        $this->assertTrue($methods['isTypedGood']->isGetter());
+        $this->assertTrue($methods['hasA']->isGetter());
+        $this->assertFalse($methods['foo']->isGetter());
+        $this->assertFalse($methods['setA']->isGetter());
+    }
+
+    public function testSetterAreFound() {
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract(__DIR__.'/../../../resources/oop/f8.php');
+        $classes = $result->getClasses();
+        $class = $classes[0];
+        $methods = $class->getMethods();
+        $this->assertFalse($methods['getA']->isSetter());
+        $this->assertFalse($methods['foo']->isSetter());
+        $this->assertTrue($methods['setA']->isSetter());
+        $this->assertTrue($methods['setB']->isSetter());
+    }
 }

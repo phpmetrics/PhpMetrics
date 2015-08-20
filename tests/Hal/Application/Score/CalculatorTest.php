@@ -17,7 +17,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @dataProvider highProvider
-     * @group wip
      */
     public function testHighIsBetter($good, $bad, $note, $expected) {
         $this->assertEquals($expected, $this->object->highIsBetter($good, $bad, $note));
