@@ -1,9 +1,9 @@
 default:
     rules:
         cyclomaticComplexity: [ 10, 6, 2 ]
-        maintenabilityIndex: [ 0, 75, 95 ]
+        maintainabilityIndex: [ 0, 75, 95 ]
 
-    failure: average.maintenabilityIndex < 50 or sum.loc > 10000
+    failure: average.maintainabilityIndex < 50 or sum.loc > 10000
 
     path:
         directory: src
