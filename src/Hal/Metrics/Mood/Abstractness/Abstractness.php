@@ -30,8 +30,10 @@ class Abstractness {
 
         foreach($results as $result) {
             $rOOP = $result->getOOP();
-            $cc += sizeof($rOOP->getConcreteClasses(), COUNT_NORMAL);
-            $ac += sizeof($rOOP->getAbstractClasses(), COUNT_NORMAL);
+            if(is_object($rOOP)) {
+                $cc += sizeof($rOOP->getConcreteClasses(), COUNT_NORMAL);
+                $ac += sizeof($rOOP->getAbstractClasses(), COUNT_NORMAL);
+            }
         }
 
         $result = new Result;
