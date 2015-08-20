@@ -47,8 +47,15 @@ class CallExtractor implements ExtractorInterface {
             case T_PAAMAYIM_NEKUDOTAYIM:
                 $prev = $n - 1;
                 $value = $this->searcher->getUnder(array('::'), $prev, $tokens);
-                if ($value === 'parent' || $value === 'self') {
-                    return null;
+                if ($value === 'parent') {
+                    $extendPosition = $this->searcher->getExtendPostition($tokens);
+                    $parentName = $this->searcher->getFollowingName($extendPosition, $tokens);
+                    return $parentName;
+                }
+                if ($value === 'self') {
+                    $extendPosition = $this->searcher->getClassNamePosition($tokens);
+                    $className = $this->searcher->getFollowingName($extendPosition, $tokens);
+                    return $className;
                 }
                 return $value;
             case T_NEW:
