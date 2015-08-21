@@ -29,6 +29,7 @@
         }
     },
     "require": {
+        "php": ">=5.4",
         "twig/twig": "~1.15",
         "symfony/console": "~2.5",
         "hoa/ruler": "~1.0",
