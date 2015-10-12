@@ -12,7 +12,7 @@ Gives metrics about PHP project and classes.
 + [Conditions of failure](#conditions-of-failure)
 + [IDE integration](#ide-integration)
 + [Jenkins and CI](#jenkins-and-ci)
-+ [Configuration file](#configuration-file)
++ [Configuration](#configuration)
 
 
 
@@ -85,7 +85,33 @@ You can also export results as violations (MessDetector report), in XML format w
 
     phpmetrics --violations-xml=/path/of/your/choice.xml <folder or filename>
 
-## Configuration file
+## Configuration
+
+### Configuration options
+
+* `--report-html` - Path to save report in HTML format. Example: --report-html=/tmp/report.html
+* `--report-xml` - Path to save summary report in XML format. Example: --report-xml=/tmp/report.xml
+* `--report-cli` - Enable report in terminal.
+* `--violations-xml` - Path to save violations in XML format. Example: --violations-xml=/tmp/report.xml
+* `--report-csv` - Path to save summary report in CSV format. Example: --report-csv=/tmp/report.csv
+* `--report-json` - Path to save detailed report in JSON format. Example: --report-json=/tmp/report.json
+* `--chart-bubbles` - Path to save Bubbles chart, in SVG format. Example: --chart-bubbles=/tmp/chart.svg. Graphviz **IS** required
+* `--level` - Depth of summary report.
+* `--extensions` - Regex of extensions to include.
+* `--excluded-dirs` - Regex of subdirectories to exclude.
+* `--symlinks` - Enable following symlinks.
+* `--without-oop` - If provided, tool will not extract any information about OOP model (faster).
+* `--failure-condition` - Optional failure condition, in english. Example: --failure-condition="average.maintainabilityIndex < 50 or sum.loc > 10000"
+* `--config` - Config file (YAML). Example: --config=myconfig.yml
+* `--template-title` - Title for the HTML summary report.
+
+A complete example command line:
+
+`phpmetrics --report-html=report.html --report-xml=report.xml --report-cli=true --violations-xml=violations.xml 
+--report-csv=report.csv --report-json=report.json --chart-bubbles=chart.svg --level=3 --extensions=php|inc --excluded-dirs="cache|logs"
+--symlinks=true --without-oop=true --failure-condition="average.maintainabilityIndex < 50 or sum.loc > 10000" --template-title="My Report" /path/to/source`
+
+### Configuration file
 
 You can customize configuration with the `--config=<file>` option.
 
