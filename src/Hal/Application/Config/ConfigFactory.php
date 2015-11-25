@@ -34,13 +34,17 @@ class ConfigFactory
         $hydrator = new Hydrator(new Validator($treeBuilder->getTree()));
 
         // first, load config file
-        if(strlen($input->getOption('config')) > 0) {
+        $locator = new ConfigLocator();
+        $filename = $locator->locate($input->getOption('config'));
+
+        if(null !== $filename) {
             $loader = new Loader($hydrator);
-            $config = $loader->load($input->getOption('config'));
+            $config = $loader->load($filename);
         } else {
             $config = $hydrator->hydrates($config, array());
         }
 
+        
         // then, overwrite configuration by arguments provided in run
         strlen($input->getArgument('path')) > 0         && $config->getPath()->setBasePath($input->getArgument('path'));
         strlen($input->getOption('extensions')) > 0     && $config->getPath()->setExtensions($input->getOption('extensions'));
