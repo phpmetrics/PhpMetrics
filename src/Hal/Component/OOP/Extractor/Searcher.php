@@ -102,4 +102,27 @@ class Searcher {
         }
         return null;
     }
+
+    public function getExtendPostition(TokenCollection $tokens)
+    {
+        $len = sizeof($tokens);
+        for($i = 0; $i < $len; $i++) {
+            $token = $tokens[$i];
+            if ($token->getValue() === 'extends') {
+                return $i;
+            }
+        }
+        return null;
+    }
+    public function getClassNamePosition(TokenCollection $tokens)
+    {
+        $len = sizeof($tokens);
+        for($i = 0; $i < $len; $i++) {
+            $token = $tokens[$i];
+            if ($token->getValue() === 'class') {
+                return $i;
+            }
+        }
+        return null;
+    }
 };

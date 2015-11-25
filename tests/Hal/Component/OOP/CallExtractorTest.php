@@ -29,6 +29,9 @@ class CallExtractorTest extends \PHPUnit_Framework_TestCase {
         return array(
             array('Foo', 2, '<?php Foo::bar(); ')
             , array('Foo', 1, '<?php new Foo; ')
+            , array('CurrentClass', 12, '<?php class CurrentClass extends ExtendClass { self::bar(); }')
+            , array('ExtendClass', 12, '<?php class CurrentClass extends ExtendClass { parent::bar(); }')
+            , array('\ExtendClass', 13, '<?php class CurrentClass extends \ExtendClass { parent::bar(); }')
         );
     }
 }
