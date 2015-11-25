@@ -154,9 +154,6 @@ EOT;
         );
     }
 
-    /**
-     * @group wip
-     */
     public function testGetterAreFound() {
         $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
         $result = $extractor->extract(__DIR__.'/../../../resources/oop/f8.php');
