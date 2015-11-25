@@ -50,6 +50,7 @@ class ConfigLocator
                     return $filenameToCheck;
                 }
             }
+            return null;
         }
 
         if(false === $this->isFileAccessible($filename)) {
