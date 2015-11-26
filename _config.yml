@@ -16,7 +16,7 @@ destination: build
 theme:
   google_analytics_key: UA-5363554-12
 
-
+phpmetrics_repo: "https://github.com/Halleck45/PhpMetrics"
 
 sitemap:
     file: "/sitemap.xml"
