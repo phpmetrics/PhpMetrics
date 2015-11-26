@@ -34,7 +34,7 @@ class SyntaxChecker
            $php = PHP_BINARY;
         }
 
-        $output = shell_exec(sprintf('%s -l %s 2>&1', $php, escapeshellarg($filename)));
+        $output = shell_exec(sprintf('"%s" -l %s 2>&1', $php, escapeshellarg($filename)));
         
         return preg_match('!No syntax errors detected!', $output);
     }

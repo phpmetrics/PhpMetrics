@@ -42,6 +42,11 @@ class Token {
             $this->type = $data[0];
             $this->value = isset($data[1]) ? $data[1] : null;
         }
+
+        // reduce multiple spaces to one
+        if(T_WHITESPACE  === $this->type && preg_match('/^\s*$/', $this->value)) {
+            $this->value = ' ';
+        }
     }
 
     /**

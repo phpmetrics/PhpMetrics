@@ -13,6 +13,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @dataProvider providesForClassnames
+     * @group wip
      */
     public function testClassnameIsFound($filename, $expected) {
 
@@ -31,6 +32,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
             array(__DIR__.'/../../../resources/oop/f1.php', array('\Titi'))
             , array(__DIR__.'/../../../resources/oop/f2.php', array('\My\Example\Titi'))
             , array(__DIR__.'/../../../resources/oop/f3.php', array('\My\Example\Titi1', '\My\Example\Titi2'))
+            , array(__DIR__.'/../../../resources/oop/f9.php', array('\classA', '\classC'))
         );
     }
 
