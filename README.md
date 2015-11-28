@@ -1,5 +1,9 @@
 # PhpMetrics documentation
 
+*DEPRECATED*
+
+This documentation is new hosted on [phpmetrics/website](https://github.com/phpmetrics/website)
+
 ## Requirements
 
 + lessc
