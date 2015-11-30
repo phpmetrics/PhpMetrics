@@ -36,13 +36,26 @@ class Tokenizer {
                 // string is arbitrary splitted, so content can be incorrect
                 // for example: "Unterminated comment starting..."
                 $content .= '/* */';
-                $tokens = array_merge($tokens, token_get_all($content));
+                $tokens = array_merge($tokens, token_get_all($this->cleanup($content)));
                 unset($content);
             }
             return new TokenCollection($tokens);
         }
 
-        return new TokenCollection(token_get_all(file_get_contents($filename)));
+        return new TokenCollection(token_get_all($this->cleanup(file_get_contents($filename))));
+    }
+
+    /**
+     * Clean php source
+     *
+     * @param $content
+     * @return string
+     */
+    private function cleanup($content) {
+        // replacing short open tags by <?php
+        // if file contains short open tags but short_open_tags='Off' in php.ini bug can occur
+        // @see https://github.com/Halleck45/PhpMetrics/issues/154
+        return preg_replace('!(<\?\s)!', '<?php ', $content);
     }
 
 }
