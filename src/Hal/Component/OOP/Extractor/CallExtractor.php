@@ -52,7 +52,7 @@ class CallExtractor implements ExtractorInterface {
                     $parentName = $this->searcher->getFollowingName($extendPosition, $tokens);
                     return $parentName;
                 }
-                if ($value === 'self') {
+                if ($value === 'self' || $value === 'static') {
                     $extendPosition = $this->searcher->getClassNamePosition($tokens);
                     $className = $this->searcher->getFollowingName($extendPosition, $tokens);
                     return $className;
