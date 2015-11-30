@@ -12,11 +12,13 @@ use Hal\Application\Command\Job\Analyze\CardAndAgrestiAnalyzer;
 use Hal\Application\Command\Job\Analyze\CouplingAnalyzer;
 use Hal\Application\Command\Job\Analyze\FileAnalyzer;
 use Hal\Application\Command\Job\Analyze\LcomAnalyzer;
+use Hal\Component\Cache\CacheMemory;
 use Hal\Component\File\Finder;
 use Hal\Component\File\SyntaxChecker;
 use Hal\Component\OOP\Extractor\ClassMap;
 use Hal\Component\OOP\Extractor\Extractor;
 use Hal\Component\Result\ResultCollection;
+use Hal\Component\Token\NoTokenizableException;
 use Hal\Component\Token\Tokenizer;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -90,7 +92,7 @@ class DoAnalyze implements JobInterface
 
         // tools
         $classMap = new ClassMap();
-        $tokenizer = new Tokenizer();
+        $tokenizer = new Tokenizer(new CacheMemory());
         $syntaxChecker = new SyntaxChecker();
 
         $fileAnalyzer = new FileAnalyzer(
@@ -119,7 +121,11 @@ class DoAnalyze implements JobInterface
             // Analyze
             try {
                 $resultSet = $fileAnalyzer->execute($filename);
-            } catch(\Exception $e) {
+            } catch(NoTokenizableException $e) {
+                $this->output->writeln(sprintf("<error>file %s has been skipped: \n%s</error>", $filename, $e->getMessage()));
+                unset($files[$k]);
+                continue;
+            } catch (\Exception $e) {
                 throw new \Exception(
                     (
                         sprintf("a '%s' exception occured analyzing file %s\nMessage: %s", get_class($e), $filename, $e->getMessage())
