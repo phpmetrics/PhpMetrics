@@ -36,5 +36,9 @@ tag:
 
 
 # Tag git with last release
-git_tag:
-	git tag -a $(semver tag) -m "tagging $(semver tag)"
+release: build
+	git add .semver build/phpmetrics.phar
+	git commit -m "releasing `semver tag`"
+	git tag `semver tag`
+	git push -u origin master
+	git push origin `semver tag`
