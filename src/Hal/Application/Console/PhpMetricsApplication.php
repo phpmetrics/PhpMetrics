@@ -10,6 +10,7 @@
 namespace Hal\Application\Console;
 
 use Hal\Application\Command\RunMetricsCommand;
+use Hal\Application\Command\SelfUpdateCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -30,7 +31,16 @@ class PhpMetricsApplication extends Application
      */
     protected function getCommandName(InputInterface $input)
     {
-        return 'metrics';
+        $available = ['metrics', 'self-update'];
+        $arg = $input->getFirstArgument();
+        if(!in_array($arg, $available) ||'metrics' === $arg) {
+            // default argument : we don't want to provide the name of the command by default
+            $inputDefinition = $this->getDefinition();
+            $inputDefinition->setArguments();
+            $this->setDefinition($inputDefinition);
+            return 'metrics';
+        }
+        return $arg;
     }
 
     /**
@@ -45,20 +55,8 @@ class PhpMetricsApplication extends Application
         $defaultCommands = parent::getDefaultCommands();
 
         $defaultCommands[] = new RunMetricsCommand();
+        $defaultCommands[] = new SelfUpdateCommand();
 
         return $defaultCommands;
-    }
-
-    /**
-     * Overridden so that the application doesn't expect the command
-     * name to be the first argument.
-     * 
-     * @return InputDefinition The InputDefinition instance
-     */
-    public function getDefinition()
-    {
-        $inputDefinition = parent::getDefinition();
-        $inputDefinition->setArguments();
-        return $inputDefinition;
     }
 }
