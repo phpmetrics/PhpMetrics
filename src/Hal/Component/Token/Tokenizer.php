@@ -72,7 +72,7 @@ class Tokenizer {
 \$c = preg_replace("!(<\?\s)!", "<?php ", \$c);
 echo serialize(token_get_all(\$c));
 EOT;
-        $output = shell_exec('php -r \'%s\'', $code);
+        $output = shell_exec('php -r \''.$code.'\'');
         $tokens = unserialize($output);
         if(false === $tokens) {
             throw new NoTokenizableException(sprintf('Cannot tokenize "%s". This file is probably too big. Please try to increase memory_limit', $filename));
