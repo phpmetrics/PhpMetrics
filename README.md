@@ -28,7 +28,11 @@ chmod +x phpmetrics.phar
 mv phpmetrics.phar /usr/local/bin/phpmetrics
 ```
 
-With Composer (Make sure you have `~/.composer/vendor/bin/` in your path):
+Then, if you need to update:
+
+    phpmetrics self-update
+    
+Or with Composer (Make sure you have `~/.composer/vendor/bin/` in your path):
 
     php composer.phar global require 'halleck45/phpmetrics'
 
@@ -165,7 +169,7 @@ Then, in order to run the test suite:
 
 Finally, build the phar:
 
-    make
+    make build
 
 # Author
 
