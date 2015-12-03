@@ -110,6 +110,14 @@ class Extractor {
                     $class->setParent(trim($parent));
                     break;
 
+                case T_IMPLEMENTS:
+                    $i = $n + 1;
+                    $contracts = $this->searcher->getUnder(array('{'), $i, $tokens);
+                    $contracts = explode(',', $contracts);
+                    $contracts = array_map('trim', $contracts);
+                    $class->setInterfaces($contracts);
+                    break;
+
                 case T_CLASS:
                     $class = $this->extractors->class->extract($n, $tokens);
                     $class->setNameResolver($nameResolver);

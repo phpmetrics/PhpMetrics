@@ -13,7 +13,6 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @dataProvider providesForClassnames
-     * @group wip
      */
     public function testClassnameIsFound($filename, $expected) {
 
@@ -86,5 +85,32 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
         $class = current($result->getClasses());
         $this->assertNull($class->getParent());
     }
+
+    /**
+     * @group php7
+     * @group wip
+     */
+    public function testInterfacesAreFound() {
+
+        // only one contract
+        $filename = __DIR__.'/../../../resources/oop/interface1.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $this->assertCount(2, $classes);
+        $class = $classes[1];
+        $this->assertEquals(array('\\Contract1'), $class->getInterfaces(), 'interface of class is found');
+
+        // multiple contracts
+        $filename = __DIR__.'/../../../resources/oop/interface2.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $this->assertCount(3, $classes);
+        $class = $classes[2];
+        $this->assertEquals(array('\My\Contract1', '\My\Contract2'), $class->getInterfaces(), 'multiple interfaces of class are found');
+
+    }
+
 
 }

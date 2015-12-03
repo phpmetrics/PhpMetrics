@@ -21,40 +21,45 @@ class ReflectedClass {
     /**
      * @var string
      */
-    private $namespace;
+    protected $namespace;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * Methods
      *
      * @var \SplObjectStorage[]
      */
-    private $methods;
+    protected $methods;
 
     /**
      * Resolver for names
      *
      * @var NameResolver
      */
-    private $nameResolver;
+    protected $nameResolver;
 
     /**
      * Does the class is abstract ?
      *
      * @var bool
      */
-    private $isAbstract = false;
+    protected $isAbstract = false;
+
+    /**
+     * @var array
+     */
+    protected $interfaces = array();
 
     /**
      * Parent's name
      *
      * @var string
      */
-    private $parent;
+    protected $parent;
 
     /**
      * Constructor
@@ -65,7 +70,7 @@ class ReflectedClass {
     public function __construct($namespace, $name)
     {
         $this->name = (string) $name;
-        $this->namespace = (string) $namespace;
+        $this->setNamespace($namespace);
         $this->methods = array();
         $this->nameResolver = new NameResolver();
     }
@@ -93,6 +98,16 @@ class ReflectedClass {
     public function getNamespace()
     {
         return rtrim($this->namespace, '\\');
+    }
+
+    /**
+     * @param string $namespace
+     * @return ReflectedClass
+     */
+    protected function setNamespace($namespace)
+    {
+        $this->namespace = (string) $namespace;
+        return $this;
     }
 
     /**
@@ -125,7 +140,6 @@ class ReflectedClass {
             $dependencies = array_merge($dependencies, $method->getDependencies());
         }
         foreach($dependencies as &$name) {
-//            $name = preg_replace('!^(\\\\)!', '', $name);
             $name = $this->nameResolver->resolve($name, $this->getNamespace());
         }
         return array_unique($dependencies);
@@ -181,6 +195,30 @@ class ReflectedClass {
         if ($this->parent === null) {
             return null;
         }
-        return $this->nameResolver->resolve($this->parent, $this->getNamespace());
+        return $this->nameResolver->resolve($this->parent, $this->namespace);
     }
+
+    /**
+     * @return array
+     */
+    public function getInterfaces()
+    {
+        $resolvedInterfaces = array();
+        foreach($this->interfaces as $interface) {
+            array_push($resolvedInterfaces, $this->nameResolver->resolve($interface, $this->namespace));
+        }
+        return $resolvedInterfaces;
+    }
+
+    /**
+     * @param array $interfaces
+     * @return $this
+     */
+    public function setInterfaces($interfaces)
+    {
+        $this->interfaces = $interfaces;
+        return $this;
+    }
+
+
 };
