@@ -19,6 +19,11 @@ use Hal\Component\OOP\Resolver\NameResolver;
  */
 class ReflectedMethod {
 
+    CONST VISIBILITY_PUBLIC = 1;
+    CONST VISIBILITY_PRIVATE = 2;
+    CONST VISIBILITY_PROTECTED = 3;
+    CONST STATE_LOCAL = 1;
+    CONST STATE_STATIC = 2;
 
 
     /**
@@ -74,6 +79,16 @@ class ReflectedMethod {
      * @var string
      */
     private $usage;
+
+    /**
+     * @var int
+     */
+    private $visibility = self::VISIBILITY_PUBLIC;
+
+    /**
+     * @var int
+     */
+    private $state = self::STATE_LOCAL;
 
     /**
      * Anonymous class contained in this method
@@ -282,6 +297,41 @@ class ReflectedMethod {
         return MethodUsage::USAGE_GETTER == $this->getUsage();
     }
 
+    /**
+     * @return int
+     */
+    public function getVisibility()
+    {
+        return $this->visibility;
+    }
+
+    /**
+     * @param int $visibility
+     * @return $this
+     */
+    public function setVisibility($visibility)
+    {
+        $this->visibility = $visibility;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param int $state
+     * @return ReflectedMethod
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+        return $this;
+    }
     /**
      * @param ReflectedAnonymousClass $class
      * @return $this

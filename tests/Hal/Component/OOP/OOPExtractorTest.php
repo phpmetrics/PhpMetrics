@@ -88,7 +88,6 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @group php7
-     * @group wip
      */
     public function testInterfacesAreFound() {
 

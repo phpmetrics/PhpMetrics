@@ -47,12 +47,20 @@ class MethodExtractor implements ExtractorInterface {
      */
     public function extract(&$n, TokenCollection $tokens)
     {
+        $start = $n;
+
         $declaration = $this->searcher->getUnder(array(')'), $n, $tokens);
         if(!preg_match('!function\s+(.*)\(\s*(.*)!is', $declaration, $matches)) {
             throw new \Exception(sprintf("Closure detected instead of method\nDetails:\n%s", $declaration));
         }
         list(, $name, $args) = $matches;
         $method = new ReflectedMethod($name);
+
+        // visibility
+        $this->extractVisibility($method, $p = $start, $tokens); // please keep "p = start"
+
+        // state
+        $this->extractState($method, $p = $start, $tokens); // please keep "p = start"
 
         $arguments = preg_split('!\s*,\s*!m', $args);
         foreach($arguments as $argDecl) {
@@ -80,6 +88,8 @@ class MethodExtractor implements ExtractorInterface {
             $method->pushArgument($argument);
         }
 
+
+
         //
         // Body
         $this->extractContent($method, $n, $tokens);
@@ -100,7 +110,49 @@ class MethodExtractor implements ExtractorInterface {
         // usage
         $this->extractUsage($method);
 
+
+
         return $method;
+    }
+
+    /**
+     * Extracts visibility
+     *
+     * @param ReflectedMethod $method
+     * @param $n
+     * @param TokenCollection $tokens
+     * @return $this
+     */
+    public function extractVisibility(ReflectedMethod $method, $n, TokenCollection $tokens) {
+        switch(true) {
+            case $this->searcher->isPrecededBy(T_PRIVATE, $n, $tokens, 4):
+                $visibility = ReflectedMethod::VISIBILITY_PRIVATE;
+                break;
+            case $this->searcher->isPrecededBy(T_PROTECTED, $n, $tokens, 4):
+                $visibility = ReflectedMethod::VISIBILITY_PROTECTED;
+                break;
+        case $this->searcher->isPrecededBy(T_PUBLIC, $n, $tokens, 4):
+                default:
+                $visibility = ReflectedMethod::VISIBILITY_PUBLIC;
+                break;
+        }
+        $method->setVisibility($visibility);
+        return $this;
+    }
+
+    /**
+     * Extracts state
+     *
+     * @param ReflectedMethod $method
+     * @param $n
+     * @param TokenCollection $tokens
+     * @return $this
+     */
+    public function extractState(ReflectedMethod $method, $n, TokenCollection $tokens) {
+        if($this->searcher->isPrecededBy(T_STATIC, $n, $tokens, 4)) {
+            $method->setState(ReflectedMethod::STATE_STATIC);
+        }
+        return $this;
     }
 
     /**

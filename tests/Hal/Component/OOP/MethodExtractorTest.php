@@ -1,6 +1,7 @@
 <?php
 namespace Test\Hal\Component\OOP;
 
+use Hal\Component\OOP\Reflected\ReflectedMethod;
 use Hal\Component\Token\TokenCollection;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\Result;
@@ -176,5 +177,50 @@ EOT;
         $this->assertFalse($methods['foo']->isSetter());
         $this->assertTrue($methods['setA']->isSetter());
         $this->assertTrue($methods['setB']->isSetter());
+    }
+
+    /**
+     * @dataProvider provideCodeForVisibility
+     */
+    public function testVisibilityIsFound($filename, $expected) {
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $class = $classes[0];
+        $methods = $class->getMethods();
+        $method = $methods['foo'];
+        $this->assertEquals($expected, $method->getVisibility());
+    }
+
+    public function provideCodeForVisibility() {
+        return array(
+            array(__DIR__.'/../../../resources/oop/visibility1.php', ReflectedMethod::VISIBILITY_PUBLIC,'undeclared visibility is public'),
+            array(__DIR__.'/../../../resources/oop/visibility2.php', ReflectedMethod::VISIBILITY_PUBLIC, 'public is found'),
+            array(__DIR__.'/../../../resources/oop/visibility3.php', ReflectedMethod::VISIBILITY_PRIVATE, 'private is found'),
+            array(__DIR__.'/../../../resources/oop/visibility4.php', ReflectedMethod::VISIBILITY_PROTECTED, 'protected is found'),
+        );
+    }
+
+    /**
+     * @dataProvider provideCodeForState
+     */
+    public function testStateIsFound($filename, $expected) {
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $class = $classes[0];
+        $methods = $class->getMethods();
+        $method = $methods['foo'];
+        $this->assertEquals($expected, $method->getState());
+    }
+
+    public function provideCodeForState() {
+        return array(
+            array(__DIR__.'/../../../resources/oop/state1.php', ReflectedMethod::STATE_LOCAL),
+            array(__DIR__.'/../../../resources/oop/state2.php', ReflectedMethod::STATE_STATIC),
+            array(__DIR__.'/../../../resources/oop/state3.php', ReflectedMethod::STATE_STATIC),
+            array(__DIR__.'/../../../resources/oop/state4.php', ReflectedMethod::STATE_STATIC),
+            array(__DIR__.'/../../../resources/oop/state5.php', ReflectedMethod::STATE_LOCAL),
+        );
     }
 }
