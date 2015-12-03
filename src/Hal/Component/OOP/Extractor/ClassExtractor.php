@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Component\OOP\Extractor;
+use Hal\Component\OOP\Reflected\ReflectedClass\ReflectedAnonymousClass;
 use Hal\Component\OOP\Reflected\ReflectedClass;
 use Hal\Component\Token\TokenCollection;
 
@@ -46,6 +47,14 @@ class ClassExtractor implements ExtractorInterface {
      */
     public function extract(&$n, TokenCollection $tokens)
     {
+        // is PHP7 ?
+        $previous = $tokens->get($n - 2);
+        if($previous && T_NEW === $previous->getType()) {
+            // anonymous class
+            $class = new ReflectedAnonymousClass($this->namespace, trim('class@anonymous'));
+            return $class;
+        }
+
         // is abstract ?
         $prev = $this->searcher->getPrevious($n, $tokens);
         $isAbstract = $prev && T_ABSTRACT === $prev->getType();
