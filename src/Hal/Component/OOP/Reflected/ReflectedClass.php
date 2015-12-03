@@ -59,7 +59,7 @@ class ReflectedClass {
      *
      * @var string
      */
-    protected $parent;
+    private $parent;
 
     /**
      * Constructor
@@ -70,7 +70,7 @@ class ReflectedClass {
     public function __construct($namespace, $name)
     {
         $this->name = (string) $name;
-        $this->setNamespace($namespace);
+        $this->namespace = (string) $namespace;
         $this->methods = array();
         $this->nameResolver = new NameResolver();
     }
@@ -140,6 +140,7 @@ class ReflectedClass {
             $dependencies = array_merge($dependencies, $method->getDependencies());
         }
         foreach($dependencies as &$name) {
+//            $name = preg_replace('!^(\\\\)!', '', $name);
             $name = $this->nameResolver->resolve($name, $this->getNamespace());
         }
         return array_unique($dependencies);
@@ -195,7 +196,7 @@ class ReflectedClass {
         if ($this->parent === null) {
             return null;
         }
-        return $this->nameResolver->resolve($this->parent, $this->namespace);
+        return $this->nameResolver->resolve($this->parent, $this->getNamespace());
     }
 
     /**
