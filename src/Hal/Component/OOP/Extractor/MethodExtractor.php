@@ -195,6 +195,9 @@ class MethodExtractor implements ExtractorInterface {
                 case T_PAAMAYIM_NEKUDOTAYIM:
                 case T_NEW:
                     $call = $extractor->extract($i, $tokens);
+                    if($call == 'class') {
+                        $call = 'class@anonymous';
+                    }
                     $method->pushDependency($call);
                     break;
             }
@@ -227,6 +230,9 @@ class MethodExtractor implements ExtractorInterface {
         $following = $this->searcher->getUnder(array('{'), $n, $tokens);
         if(preg_match('!:(.*)!', $following, $matches)) {
             $type = trim($matches[1]);
+            if(empty($type)) {
+                return $this;
+            }
             $return = new ReflectedReturn($type, ReflectedReturn::VALUE_UNKNOW, ReflectedReturn::STRICT_TYPE_HINT);
             $method->pushReturn($return);
             return $this;

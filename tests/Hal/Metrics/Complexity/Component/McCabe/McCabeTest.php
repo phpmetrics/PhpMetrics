@@ -66,6 +66,7 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
 
     /**
      * @group php7
+     * @group wip
      */
     public function testSpaceshipOperatorIsWellConsidered() {
         $filename = __DIR__.'/../../../../../resources/mccaybe/php7-spaceship-operator.php';

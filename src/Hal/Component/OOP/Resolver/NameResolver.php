@@ -42,6 +42,11 @@ class NameResolver
             return $name;
         }
 
+        // anonymous class
+        if('class@anonymous' == $name ) {
+            return $name;
+        }
+
         // use xxx as yyy
         if (isset($this->aliases[$name])) {
             return $this->aliases[$name];

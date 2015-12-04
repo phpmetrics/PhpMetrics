@@ -282,7 +282,6 @@ class ReflectedMethod {
                 array_push($dependencies, $this->nameResolver->resolve($name, null));
             }
         }
-
         return array_unique($dependencies);
     }
 

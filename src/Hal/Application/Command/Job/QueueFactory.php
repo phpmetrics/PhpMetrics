@@ -71,7 +71,7 @@ class QueueFactory
         // jobs queue planning
         $queue = new Queue;
         $queue
-            ->push(new DoAnalyze($this->output, $finder, $this->config->getPath()->getBasePath(), !$this->input->getOption('without-oop')))
+            ->push(new DoAnalyze($this->output, $finder, $this->config->getPath()->getBasePath(), !$this->input->getOption('without-oop'), $this->config->getIgnoreErrors()))
             ->push(new SearchBounds($this->output, $bounds))
             ->push(new DoAggregatedAnalyze($this->output, new DirectoryAggregatorFlat($this->input->getOption('level'))))
             ->push(new CalculateScore(new Scoring($bounds)))

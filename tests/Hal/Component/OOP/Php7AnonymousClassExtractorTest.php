@@ -84,4 +84,31 @@ class Php7AnonymousClassExtractorTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(3, sizeof($anonymousClasses));
     }
 
+    /**
+     * @group wip
+     */
+    public function testAnonymousClassIsFoundEvenWhenItIsDirectlyInstancied()
+    {
+        $filename = __DIR__ . '/../../../resources/oop/php7-5.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+
+        $classes = $result->getClasses();
+        $this->assertEquals(2, sizeof($classes));
+        $main = $classes[0];
+        $anonymous = $classes[1];
+        $this->assertEquals('\\My\\MainClass', $main->getFullname());
+
+        $anonymousClasses = $main->getAnonymousClasses();
+        $this->assertEquals(1, sizeof($anonymousClasses));
+
+        // deps
+//        var_dump($main->getDependencies());
+//        var_dump($anonymous->getDependencies());
+//        foreach ($main->getMethods() as $m) {
+//            var_dump($m->getCalls());
+//        }
+    }
+
+
 }

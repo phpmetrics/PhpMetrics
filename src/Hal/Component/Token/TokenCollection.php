@@ -19,7 +19,7 @@ class TokenCollection implements \ArrayAccess, \IteratorAggregate, \Countable {
     /**
      * @var array
      */
-    private $tokens = array();
+    protected $tokens = array();
 
     /**
      * Constructor
@@ -28,12 +28,14 @@ class TokenCollection implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     public function __construct(array $tokens)
     {
-        foreach($tokens as &$token) {
+        foreach($tokens as $index => &$token) {
             if(!$token instanceof Token) {
                 $token = new Token($token);
             }
         }
-        $this->tokens = $tokens;
+//        $this->tokens = $tokens;return;
+        $compability = new TokenCollectionCompatibility();
+        $this->tokens = $compability->decorate($tokens);
     }
 
     /**

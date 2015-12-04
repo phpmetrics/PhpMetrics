@@ -133,14 +133,19 @@ class ReflectedClass {
     /**
      * @return array
      */
-    public function getDependencies()
+    public function getDependencies($withAnonymousClasses = false)
     {
         $dependencies = array();
         foreach($this->getMethods() as $method) {
             $dependencies = array_merge($dependencies, $method->getDependencies());
         }
         foreach($dependencies as &$name) {
-            $name = $this->nameResolver->resolve($name, $this->namespace);
+                $name = $this->nameResolver->resolve($name, $this->namespace);
+        }
+        if(!$withAnonymousClasses) {
+            $dependencies = array_filter($dependencies, function($v) {
+                return $v !== 'class@anonymous';
+            });
         }
         return array_unique($dependencies);
     }
