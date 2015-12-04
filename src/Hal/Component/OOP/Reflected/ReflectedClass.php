@@ -220,5 +220,17 @@ class ReflectedClass {
         return $this;
     }
 
+    /**
+     * Get anonymous classes contained in this class
+     *
+     * @return mixed
+     */
+    public function getAnonymousClasses() {
+        $result = array();
+        foreach($this->methods as $method) {
+            $result = array_merge($result, $method->getAnonymousClasses());
+        }
+        return $result;
+    }
 
 };

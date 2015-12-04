@@ -53,4 +53,35 @@ class Php7ExtractorTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(array('\\My\\Contract1', '\\My\\Contract2'), $anonymous->getInterfaces(), 'interfaces of anonymous class are found');
     }
 
+    public function testAnonymousClassDoesNotBreakMainClassExtractor() {
+        $filename = __DIR__.'/../../../resources/oop/php7-3.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+
+        $classes = $result->getClasses();
+        $this->assertEquals(2, sizeof($classes));
+        $main = $classes[0];
+        $anonymous = $classes[1];
+        $this->assertEquals('\\My\\MainClass', $main->getFullname());
+        $this->assertEquals('class@anonymous', $anonymous->getName());
+
+        $methods = $main->getMethods();
+        $this->assertEquals(array('foo', 'bar'), array_keys($main->getMethods()), 'Methods of class containing anonymous class are found');
+        $this->assertEquals(array('sub'), array_keys($anonymous->getMethods()), 'Methods of anonymous class contained in class are found');
+    }
+
+    public function testInnerClassAreAttachedToMainClassExtractor() {
+        $filename = __DIR__.'/../../../resources/oop/php7-4.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+
+        $classes = $result->getClasses();
+        $this->assertEquals(4, sizeof($classes));
+        $main = $classes[0];
+        $this->assertEquals('\\My\\MainClass', $main->getFullname());
+
+        $anonymousClasses = $main->getAnonymousClasses();
+        $this->assertEquals(3, sizeof($anonymousClasses));
+    }
+
 }

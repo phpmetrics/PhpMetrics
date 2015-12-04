@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Component\OOP\Reflected;
+use Hal\Component\OOP\Reflected\ReflectedClass\ReflectedAnonymousClass;
 use Hal\Component\OOP\Resolver\NameResolver;
 
 
@@ -73,6 +74,13 @@ class ReflectedMethod {
      * @var string
      */
     private $usage;
+
+    /**
+     * Anonymous class contained in this method
+     *
+     * @var array
+     */
+    private $anonymousClasses = array();
 
     /**
      * @param string $name
@@ -274,5 +282,21 @@ class ReflectedMethod {
         return MethodUsage::USAGE_GETTER == $this->getUsage();
     }
 
+    /**
+     * @param ReflectedAnonymousClass $class
+     * @return $this
+     */
+    public function pushAnonymousClass(ReflectedAnonymousClass $class) {
+        $this->anonymousClasses[] = $class;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAnonymousClasses()
+    {
+        return $this->anonymousClasses;
+    }
 
 };

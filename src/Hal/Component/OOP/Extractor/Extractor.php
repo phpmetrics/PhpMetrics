@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Component\OOP\Extractor;
+use Hal\Component\OOP\Reflected\ReflectedClass\ReflectedAnonymousClass;
 use Hal\Component\OOP\Resolver\NameResolver;
 use Hal\Component\Token\Tokenizer;
 
@@ -77,7 +78,16 @@ class Extractor {
 //        $mapOfAliases = array();
 
         $len = sizeof($tokens, COUNT_NORMAL);
+        $endAnonymous = 0;
+        $mainContextClass = null; // class containing a anonymous class
+
         for($n = 0; $n < $len; $n++) {
+
+            if($mainContextClass && $n > $endAnonymous) {
+                // anonymous class is finished. We back to parent class
+                // methods will be added to the main class now
+                $class = $mainContextClass;
+            }
 
             $token = $tokens[$n];
 
@@ -119,11 +129,24 @@ class Extractor {
                     break;
 
                 case T_CLASS:
-                    $class = $this->extractors->class->extract($n, $tokens);
-                    $class->setNameResolver($nameResolver);
+                    $c = $this->extractors->class->extract($n, $tokens);
+                    $c->setNameResolver($nameResolver);
                     // push class AND in global AND in local class map
-                    $this->result->pushClass($class);
-                    $result->pushClass($class);
+                    $this->result->pushClass($c);
+                    $result->pushClass($c);
+
+                    // PHP 7 and inner classes
+                    if($c instanceof ReflectedAnonymousClass) {
+                        // avoid to consider anonymous class as main class
+                        $endAnonymous = $this->searcher->getPositionOfClosingBrace($p = $n, $tokens);
+                        $mainContextClass = $class;
+
+                        // add anonymous class in method
+                        if($method) {
+                            $method->pushAnonymousClass($c);
+                        }
+                    }
+                    $class = $c;
                     break;
 
                 case T_FUNCTION:
