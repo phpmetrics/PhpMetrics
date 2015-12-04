@@ -55,7 +55,7 @@ class McCabe {
         $info = new Result;
         $tokens = $this->tokenizer->tokenize($filename);
 
-        $ccn = 0;
+        $ccn = 1; // default path
         foreach($tokens as $token) {
 
             switch($token->getType()) {
