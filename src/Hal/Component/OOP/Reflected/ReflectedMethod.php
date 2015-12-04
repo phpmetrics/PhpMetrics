@@ -192,7 +192,7 @@ class ReflectedMethod {
             }
 
             $return->setType($type);
-            $result[$type] = $return;
+            $result[] = $return;
         }
         return array_values($result);
     }

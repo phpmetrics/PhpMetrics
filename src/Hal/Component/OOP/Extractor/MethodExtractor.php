@@ -233,10 +233,10 @@ class MethodExtractor implements ExtractorInterface {
         }
 
         // array of available values based on code
-        if(preg_match_all('![\s;]return\s|^return\s(.*)!', $method->getContent(), $matches)) {
-            foreach($matches[1] as $m) {
+        if(preg_match_all('!([\s;]return\s|^return\s+)(.*?);!', $method->getContent(), $matches)) {
+            foreach($matches[2] as $m) {
                 $value = trim($m, ";\t\n\r\0\x0B");
-                $return = new ReflectedReturn($resolver->resolve($m),  $value, ReflectedReturn::ESTIMATED_TYPE_HINT);
+                $return = new ReflectedReturn($resolver->resolve($m), $value, ReflectedReturn::ESTIMATED_TYPE_HINT);
                 $method->pushReturn($return);
             }
         }

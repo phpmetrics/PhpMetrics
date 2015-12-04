@@ -110,6 +110,7 @@ EOT;
 
     /**
      * @dataProvider provideCodeForReturns
+     * @group wip
      */
     public function testReturnsAreFound($expected, $code) {
         $searcher = new Searcher();
@@ -118,21 +119,22 @@ EOT;
         $tokens = new TokenCollection(token_get_all($code));
         $n = 1;
         $method = $methodExtractor->extract($n, $tokens);
+        $this->assertEquals(sizeof($expected), sizeof($method->getReturns()));
         $this->assertEquals($expected, $method->getReturns());
     }
 
     public function provideCodeForReturns() {
         return array(
-            array(array(new ReflectedReturn('integer', '1', ReflectedReturn::ESTIMATED_TYPE_HINT)), '<?php public function foo() { return 1; }')
-            /*, array(array(), '<?php public function foo() { }')
-            , array(
+            /*array(array(new ReflectedReturn('integer', '1', ReflectedReturn::ESTIMATED_TYPE_HINT)), '<?php public function foo() { return 1; }')
+            , array(array(), '<?php public function foo() { }')
+            ,*/ array(
                 array(
                     new ReflectedReturn('integer', '1', ReflectedReturn::ESTIMATED_TYPE_HINT),
                     new ReflectedReturn('integer', '2', ReflectedReturn::ESTIMATED_TYPE_HINT)
                 ),
                 '<?php public function foo() { if(true) { return 1; } return 2; }'
             )
-            , array(array(), '<?php public function bar() { $x->a();  }')*/
+            /*, array(array(), '<?php public function bar() { $x->a();  }')*/
         );
     }
 

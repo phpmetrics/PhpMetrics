@@ -12,7 +12,6 @@ use Hal\Component\OOP\Extractor\Searcher;
  * @group oop
  * @group extractor
  * @group php7
- * @group wip
  */
 class Php7AnonymousClassExtractorTest extends \PHPUnit_Framework_TestCase {
 
