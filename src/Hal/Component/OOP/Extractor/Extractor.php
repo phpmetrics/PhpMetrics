@@ -74,8 +74,7 @@ class Extractor {
         $nameResolver = new NameResolver();
 
         // default current values
-        $class = $interface = $function = $method = null;
-//        $mapOfAliases = array();
+        $class = $interface = $function = $namespace = $method = null;
 
         $len = sizeof($tokens, COUNT_NORMAL);
         $endAnonymous = 0;
@@ -157,7 +156,7 @@ class Extractor {
                             continue;
                         }
                         $method = $this->extractors->method->extract($n, $tokens);
-                        $method->setNameResolver($nameResolver);
+                        $method->setNamespace($namespace);
                         $class->pushMethod($method);
                     }
                     break;

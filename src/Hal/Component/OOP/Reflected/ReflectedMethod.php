@@ -10,6 +10,7 @@
 namespace Hal\Component\OOP\Reflected;
 use Hal\Component\OOP\Reflected\ReflectedClass\ReflectedAnonymousClass;
 use Hal\Component\OOP\Resolver\NameResolver;
+use Hal\Component\OOP\Resolver\TypeResolver;
 
 
 /**
@@ -98,6 +99,11 @@ class ReflectedMethod {
     private $anonymousClasses = array();
 
     /**
+     * @var string
+     */
+    private $namespace;
+
+    /**
      * @param string $name
      */
     public function __construct($name)
@@ -170,12 +176,25 @@ class ReflectedMethod {
     }
 
     /**
-     * Get the list of returned values
+     * Get returned value
      *
      * @return array
      */
     public function getReturns() {
-        return $this->returns;
+        // on read : compare with aliases. We cannot make it in pushDependency() => aliases aren't yet known
+        $result = array();
+        $resolver = new TypeResolver();
+        foreach($this->returns as $return) {
+            $type = $this->nameResolver->resolve($return->getType(), null);
+
+            if("\\" !== $type[0] &&!$resolver->isNative($type)) {
+                $type = $this->namespace.'\\'.$type;
+            }
+
+            $return->setType($type);
+            $result[$type] = $return;
+        }
+        return array_values($result);
     }
 
     /**
@@ -347,6 +366,16 @@ class ReflectedMethod {
     public function getAnonymousClasses()
     {
         return $this->anonymousClasses;
+    }
+
+    /**
+     * @param string $namespace
+     * @return ReflectedMethod
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
+        return $this;
     }
 
 };

@@ -140,8 +140,7 @@ class ReflectedClass {
             $dependencies = array_merge($dependencies, $method->getDependencies());
         }
         foreach($dependencies as &$name) {
-//            $name = preg_replace('!^(\\\\)!', '', $name);
-            $name = $this->nameResolver->resolve($name, $this->getNamespace());
+            $name = $this->nameResolver->resolve($name, $this->namespace);
         }
         return array_unique($dependencies);
     }
@@ -196,7 +195,7 @@ class ReflectedClass {
         if ($this->parent === null) {
             return null;
         }
-        return $this->nameResolver->resolve($this->parent, $this->getNamespace());
+        return $this->nameResolver->resolve($this->parent, $this->namespace);
     }
 
     /**

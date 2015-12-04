@@ -2,6 +2,7 @@
 namespace Test\Hal\Component\OOP;
 
 use Hal\Component\OOP\Reflected\ReflectedMethod;
+use Hal\Component\OOP\Reflected\ReflectedReturn;
 use Hal\Component\Token\TokenCollection;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\Result;
@@ -117,15 +118,21 @@ EOT;
         $tokens = new TokenCollection(token_get_all($code));
         $n = 1;
         $method = $methodExtractor->extract($n, $tokens);
-        $this->assertEquals($expected, sizeof($method->getReturns(), COUNT_NORMAL));
+        $this->assertEquals($expected, $method->getReturns());
     }
 
     public function provideCodeForReturns() {
         return array(
-            array(1, '<?php public function foo() { return 1; }')
-            , array(0, '<?php public function foo() { }')
-            , array(2, '<?php public function foo() { if(true) { return 1; } return 2; }')
-            , array(0, '<?php public function bar() { $x->a();  }')
+            array(array(new ReflectedReturn('integer', '1', ReflectedReturn::ESTIMATED_TYPE_HINT)), '<?php public function foo() { return 1; }')
+            /*, array(array(), '<?php public function foo() { }')
+            , array(
+                array(
+                    new ReflectedReturn('integer', '1', ReflectedReturn::ESTIMATED_TYPE_HINT),
+                    new ReflectedReturn('integer', '2', ReflectedReturn::ESTIMATED_TYPE_HINT)
+                ),
+                '<?php public function foo() { if(true) { return 1; } return 2; }'
+            )
+            , array(array(), '<?php public function bar() { $x->a();  }')*/
         );
     }
 

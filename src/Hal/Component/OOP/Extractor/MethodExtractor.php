@@ -11,6 +11,8 @@ namespace Hal\Component\OOP\Extractor;
 use Hal\Component\OOP\Reflected\MethodUsage;
 use Hal\Component\OOP\Reflected\ReflectedArgument;
 use Hal\Component\OOP\Reflected\ReflectedMethod;
+use Hal\Component\OOP\Reflected\ReflectedReturn;
+use Hal\Component\OOP\Resolver\TypeResolver;
 use Hal\Component\Token\TokenCollection;
 
 
@@ -105,7 +107,7 @@ class MethodExtractor implements ExtractorInterface {
         $this->extractDependencies($method, $n, $tokens);
 
         // returns
-        $this->extractReturns($method, $method->getContent());
+        $this->extractReturns($method, $p = $start, $tokens);
 
         // usage
         $this->extractUsage($method);
@@ -214,13 +216,28 @@ class MethodExtractor implements ExtractorInterface {
      * Extract the list of returned values
      *
      * @param ReflectedMethod $method
-     * @param string $content
      * @return $this
      */
-    private function extractReturns(ReflectedMethod $method, $content) {
-        if(preg_match_all('!([\s;]return\s|^return\s)!', $content, $matches)) {
+    private function extractReturns(ReflectedMethod $method, $n, TokenCollection $tokens) {
+
+        $resolver = new TypeResolver();
+
+        // PHP 7
+        // we cannot use specific token. The ":" delimiter is a T_STRING token
+        $following = $this->searcher->getUnder(array('{'), $n, $tokens);
+        if(preg_match('!:(.*)!', $following, $matches)) {
+            $type = trim($matches[1]);
+            $return = new ReflectedReturn($type, ReflectedReturn::VALUE_UNKNOW, ReflectedReturn::STRICT_TYPE_HINT);
+            $method->pushReturn($return);
+            return $this;
+        }
+
+        // array of available values based on code
+        if(preg_match_all('![\s;]return\s|^return\s(.*)!', $method->getContent(), $matches)) {
             foreach($matches[1] as $m) {
-                $method->pushReturn($m);
+                $value = trim($m, ";\t\n\r\0\x0B");
+                $return = new ReflectedReturn($resolver->resolve($m),  $value, ReflectedReturn::ESTIMATED_TYPE_HINT);
+                $method->pushReturn($return);
             }
         }
         return $this;
