@@ -75,6 +75,14 @@ class McCabe {
                 case T_CONTINUE:
                     $ccn++;
                     break;
+                case T_STRING:
+                    if('?' == $token->getValue()) {
+                        $ccn = $ccn + 2;
+                    }
+                    break;
+                case T_COALESCE:
+                    $ccn = $ccn + 2;
+                    break;
             }
 
         }

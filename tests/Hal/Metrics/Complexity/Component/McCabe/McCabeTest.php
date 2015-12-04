@@ -25,6 +25,7 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
             array(__DIR__.'/../../../../../resources/mccaybe/f1.php', 2)
             ,array(__DIR__.'/../../../../../resources/mccaybe/f2.php', 3)
             ,array(__DIR__.'/../../../../../resources/mccaybe/f3.php', 3)
+            ,array(__DIR__.'/../../../../../resources/mccaybe/f4.php', 2)
         );
     }
 
@@ -51,5 +52,16 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
         return array(
             array(__DIR__.'/../../../../../resources/mccaybe/php7-1.php', 4)
         );
+    }
+
+    /**
+     * @group php7
+     * @group wip
+     */
+    public function testNullCoalesceOperatorIsWellConsidered() {
+        $filename = __DIR__.'/../../../../../resources/mccaybe/php7-null-coalesce-operator.php';
+        $loc = new McCabe(new \Hal\Component\Token\Tokenizer());
+        $r = $loc->calculate($filename);
+        $this->assertEquals(2, $r->getCyclomaticComplexityNumber());
     }
 }
