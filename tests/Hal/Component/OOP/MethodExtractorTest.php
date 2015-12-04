@@ -110,7 +110,6 @@ EOT;
 
     /**
      * @dataProvider provideCodeForReturns
-     * @group wip
      */
     public function testReturnsAreFound($expected, $code) {
         $searcher = new Searcher();

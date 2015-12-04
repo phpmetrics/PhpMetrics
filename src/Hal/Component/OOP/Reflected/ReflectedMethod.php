@@ -273,6 +273,16 @@ class ReflectedMethod {
         foreach($this->dependencies as $name) {
             array_push($dependencies, $this->nameResolver->resolve($name, null));
         }
+
+        // returned values
+        $resolver = new TypeResolver();
+        foreach($this->returns as $return) {
+            $name = $return->getType();
+            if(!$resolver->isNative($name)) {
+                array_push($dependencies, $this->nameResolver->resolve($name, null));
+            }
+        }
+
         return array_unique($dependencies);
     }
 

@@ -35,4 +35,21 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
 
         $this->assertArrayHasKey('cyclomaticComplexity', $array);
     }
+
+    /**
+     * @dataProvider provideCCNPHP7
+     * @group php7
+     */
+    public function testICanCountComplexityOfAnonymousClass($filename, $expectedCCN) {
+
+        $loc = new McCabe(new \Hal\Component\Token\Tokenizer());
+        $r = $loc->calculate($filename);
+        $this->assertEquals($expectedCCN, $r->getCyclomaticComplexityNumber());
+    }
+
+    public function provideCCNPHP7() {
+        return array(
+            array(__DIR__.'/../../../../../resources/mccaybe/php7-1.php', 4)
+        );
+    }
 }
