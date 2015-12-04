@@ -69,6 +69,7 @@ class McCabe {
                 case T_LOGICAL_AND:
                 case T_BOOLEAN_OR:
                 case T_LOGICAL_OR:
+                case T_SPACESHIP:
                 case T_CASE:
                 case T_DEFAULT:
                 case T_CATCH:

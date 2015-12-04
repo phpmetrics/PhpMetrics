@@ -64,4 +64,13 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(3, $r->getCyclomaticComplexityNumber());
     }
 
+    /**
+     * @group php7
+     */
+    public function testSpaceshipOperatorIsWellConsidered() {
+        $filename = __DIR__.'/../../../../../resources/mccaybe/php7-spaceship-operator.php';
+        $loc = new McCabe(new \Hal\Component\Token\Tokenizer());
+        $r = $loc->calculate($filename);
+        $this->assertEquals(2, $r->getCyclomaticComplexityNumber());
+    }
 }
