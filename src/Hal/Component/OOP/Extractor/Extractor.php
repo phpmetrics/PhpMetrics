@@ -86,6 +86,7 @@ class Extractor {
                 // anonymous class is finished. We back to parent class
                 // methods will be added to the main class now
                 $class = $mainContextClass;
+                $mainContextClass = null;
             }
 
             $token = $tokens[$n];

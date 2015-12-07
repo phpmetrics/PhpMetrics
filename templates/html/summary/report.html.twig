@@ -243,6 +243,11 @@
                                             {{ root.bounds.getSum('noca')|default(0) }} abstract classes ({{ (root.bounds.getSum('noca') / root.bounds.getSum('noc') * 100) |round(0) }} %)
                                         </span>
                                     </div>
+                                    <div>
+                                        <span class="more">
+                                            {{ root.bounds.getSum('noc-anon')|default(0) }} anonymous classes ({{ (root.bounds.getSum('noc-anon') / root.bounds.getSum('noc') * 100) |round(0) }} %)
+                                        </span>
+                                    </div>
                                 {% endif %}
                             </td>
                         </tr>

@@ -10,6 +10,7 @@
 namespace Hal\Component\OOP\Extractor;
 use Hal\Component\OOP\Reflected\MethodUsage;
 use Hal\Component\OOP\Reflected\ReflectedArgument;
+use Hal\Component\OOP\Reflected\ReflectedClass\ReflectedAnonymousClass;
 use Hal\Component\OOP\Reflected\ReflectedMethod;
 use Hal\Component\OOP\Reflected\ReflectedReturn;
 use Hal\Component\OOP\Resolver\TypeResolver;
@@ -195,10 +196,11 @@ class MethodExtractor implements ExtractorInterface {
                 case T_PAAMAYIM_NEKUDOTAYIM:
                 case T_NEW:
                     $call = $extractor->extract($i, $tokens);
-                    if($call == 'class') {
-                        $call = 'class@anonymous';
+                    if($call == 'class') { // anonymous class
+//                        $method->pushAnonymousClass(new ReflectedAnonymousClass($method->getNamespace(), 'anonymous@class'));
+                    } else {
+                        $method->pushDependency($call);
                     }
-                    $method->pushDependency($call);
                     break;
             }
         }

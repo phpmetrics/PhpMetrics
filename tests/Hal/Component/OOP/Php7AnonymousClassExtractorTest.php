@@ -84,12 +84,8 @@ class Php7AnonymousClassExtractorTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(3, sizeof($anonymousClasses));
     }
 
-    /**
-     * @group wip
-     */
-    public function testAnonymousClassIsFoundEvenWhenItIsDirectlyInstancied()
-    {
-        $filename = __DIR__ . '/../../../resources/oop/php7-5.php';
+    public function testMethodsOfAnonymousClassesAreFound() {
+        $filename = __DIR__.'/../../../resources/oop/php7-7.php';
         $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
         $result = $extractor->extract($filename);
 
@@ -97,17 +93,44 @@ class Php7AnonymousClassExtractorTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(2, sizeof($classes));
         $main = $classes[0];
         $anonymous = $classes[1];
-        $this->assertEquals('\\My\\MainClass', $main->getFullname());
 
-        $anonymousClasses = $main->getAnonymousClasses();
-        $this->assertEquals(1, sizeof($anonymousClasses));
+        $this->assertEquals(3, sizeof($anonymous->getMethods()));
+    }
 
-        // deps
-//        var_dump($main->getDependencies());
-//        var_dump($anonymous->getDependencies());
-//        foreach ($main->getMethods() as $m) {
-//            var_dump($m->getCalls());
-//        }
+    public function testDependenciesOfMethodsIncludeDependenciesOfAnonymousClasses()
+    {
+        $filename = __DIR__ . '/../../../resources/oop/php7-5.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+
+        $classes = $result->getClasses();
+        $this->assertEquals(7, sizeof($classes));
+        $class1 = $classes[2];
+        $class2 = $classes[4];
+        $this->assertEquals('\\My\\B', $class1->getFullname());
+        $this->assertEquals('\\My\\C', $class2->getFullname());
+
+
+        $this->assertEquals(array('\\My\\D', '\\My\\A', '\\My\\Mother'), $class1->getDependencies());
+    }
+
+
+    public function testMultipleClassesWithSameMethodName()
+    {
+        $filename = __DIR__ . '/../../../resources/oop/php7-6.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+
+        $classes = $result->getClasses();
+        $this->assertEquals(7, sizeof($classes));
+        $mother = $classes[0];
+        $class1 = $classes[2];
+        $class2 = $classes[4];
+        $this->assertEquals('\\My\\B', $class1->getFullname());
+        $this->assertEquals('\\My\\C', $class2->getFullname());
+
+
+        $this->assertEquals(array('\\My\\D', '\\My\\A', '\\My\\Mother'), $class1->getDependencies());
     }
 
 

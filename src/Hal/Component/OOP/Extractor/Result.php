@@ -39,6 +39,7 @@ class Result implements ExportableInterface {
             'noc' => sizeof($this->classes, COUNT_NORMAL)
             , 'noca' => sizeof($this->getAbstractClasses(), COUNT_NORMAL)
             , 'nocc' => sizeof($this->getConcreteClasses(), COUNT_NORMAL)
+            , 'noc-anon' => sizeof($this->getAnonymousClasses(), COUNT_NORMAL)
             , 'noi' => sizeof($this->getInterfaces(), COUNT_NORMAL)
             , 'nom' => $nom
         );
@@ -79,6 +80,21 @@ class Result implements ExportableInterface {
     }
 
     /**
+     * Get anonymous classes
+     *
+     * @return array
+     */
+    public function getAnonymousClasses() {
+        $result = array();
+        foreach($this->getClasses() as $class) {
+            if($class instanceof ReflectedClass\ReflectedAnonymousClass) {
+                array_push($result, $class);
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Get abstract classes
      *
      * @return array
@@ -101,7 +117,7 @@ class Result implements ExportableInterface {
     public function getConcreteClasses() {
         $result = array();
         foreach($this->getClasses() as $class) {
-            if(!$class->isAbstract() &&!$class instanceof ReflectedInterface) {
+            if(!$class->isAbstract() &&!$class instanceof ReflectedInterface  && !$class instanceof ReflectedClass\ReflectedAnonymousClass) {
                 array_push($result, $class);
             }
         }

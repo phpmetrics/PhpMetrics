@@ -202,11 +202,11 @@ class ReflectedMethod {
      *
      *      It make no sense for the moment to store any information abour return value / type. Maybe in PHP 6 ? :)
      *
-     * @param string $mixed
-     * @return self
+     * @param ReflectedReturn $return
+     * @return $this
      */
-    public function pushReturn($mixed) {
-        array_push($this->returns, $mixed);
+    public function pushReturn(ReflectedReturn $return) {
+        array_push($this->returns, $return);
         return $this;
     }
 
@@ -281,6 +281,12 @@ class ReflectedMethod {
             if(!$resolver->isNative($name)) {
                 array_push($dependencies, $this->nameResolver->resolve($name, null));
             }
+        }
+
+        // anonymous classes in method (inner class)
+        foreach($this->anonymousClasses as $c) {
+            array_push($dependencies, $c->getParent());
+            $dependencies = array_merge($dependencies, $c->getDependencies());
         }
         return array_unique($dependencies);
     }
@@ -385,6 +391,14 @@ class ReflectedMethod {
     {
         $this->namespace = $namespace;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 
 };

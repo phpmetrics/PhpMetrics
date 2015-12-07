@@ -13,17 +13,17 @@ class B {
     public function foo():A
     {
         $c = new class extends Mother {
-        public function any()
-        {
-            $d = new D;
+            public function any()
+            {
+                $d = new D;
+            }
         }
-    }
     }
 }
 
 
 class C {
-    public function boo()
+    public function foo()
     {
         $c = new class extends Mother {}
     }
