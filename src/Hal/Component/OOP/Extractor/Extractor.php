@@ -138,7 +138,8 @@ class Extractor {
                     // PHP 7 and inner classes
                     if($c instanceof ReflectedAnonymousClass) {
                         // avoid to consider anonymous class as main class
-                        $endAnonymous = $this->searcher->getPositionOfClosingBrace($p = $n, $tokens);
+                        $p = $n;
+                        $endAnonymous = $this->searcher->getPositionOfClosingBrace($p, $tokens);
                         $mainContextClass = $class;
 
                         // add anonymous class in method
