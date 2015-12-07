@@ -51,7 +51,7 @@ class ClassExtractor implements ExtractorInterface {
         $previous = $tokens->get($n - 2);
         if($previous && T_NEW === $previous->getType()) {
             // anonymous class
-            $class = new ReflectedAnonymousClass($this->namespace, trim('class@anonymous'));
+            $class = new ReflectedAnonymousClass($this->namespace, 'class@anonymous');
             return $class;
         }
 

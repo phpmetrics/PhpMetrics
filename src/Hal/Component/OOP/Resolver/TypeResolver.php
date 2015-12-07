@@ -26,6 +26,7 @@ class TypeResolver
     const TYPE_NULL = 'null';
     const TYPE_UNKNWON = 'unknown';
     const TYPE_FLUENT_INTERFACE = 'fluent';
+    const TYPE_ANONYMOUS_CLASS = 'anonymous@class';
 
     /**
      * Resolves type of given string
@@ -58,12 +59,12 @@ class TypeResolver
             return self::TYPE_ARRAY;
         }
 
-        if(preg_match('!(^\[|^array\()!', $string)) {
-            return self::TYPE_ARRAY;
+        if(preg_match('!^new\s+class\s+!', $string, $matches)) {
+            return self::TYPE_ANONYMOUS_CLASS;
         }
 
-        if(preg_match('!^new\s*(.*)!', $string, $matches)) {
-            return trim(preg_replace('!^(new\s+)!', '', $cased));
+        if(preg_match('!^(new\s+)(.*?)([\(;].*|$)!', $cased, $matches)) {
+            return $matches[2];
         }
 
         if(preg_match('!^\$this$!', $string, $matches)) {

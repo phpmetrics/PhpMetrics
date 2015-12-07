@@ -32,6 +32,8 @@ class TypeResolverTest extends TestCase
             array('', TypeResolver::TYPE_VOID),
             array('$this->foo();', TypeResolver::TYPE_UNKNWON),
             array('new \StdClass', '\StdClass'),
+            array('new \StdClass($a, $b)', '\StdClass'),
+            array('new class implements Countable, Iterator {}', 'anonymous@class')
         );
     }
 }
