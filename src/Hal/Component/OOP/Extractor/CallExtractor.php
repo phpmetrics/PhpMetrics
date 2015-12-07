@@ -43,6 +43,7 @@ class CallExtractor implements ExtractorInterface {
     {
 
         $token = $tokens[$n];
+        $call = null;
         switch($token->getType()) {
             case T_PAAMAYIM_NEKUDOTAYIM:
                 $prev = $n - 1;
@@ -50,17 +51,22 @@ class CallExtractor implements ExtractorInterface {
                 if ($value === 'parent') {
                     $extendPosition = $this->searcher->getExtendPostition($tokens);
                     $parentName = $this->searcher->getFollowingName($extendPosition, $tokens);
-                    return $parentName;
-                }
-                if ($value === 'self' || $value === 'static') {
+                    $call = $parentName;
+                } else if ($value === 'self' || $value === 'static') {
                     $extendPosition = $this->searcher->getClassNamePosition($tokens);
                     $className = $this->searcher->getFollowingName($extendPosition, $tokens);
-                    return $className;
+                    $call = $className;
+                } else {
+                    $call = $value;
                 }
-                return $value;
+                break;
             case T_NEW:
-                return $this->searcher->getFollowingName($n, $tokens);
+                $call = $this->searcher->getFollowingName($n, $tokens);
         }
-        throw new \LogicException('Classname of call not found');
+
+        if(null === $call) {
+            throw new \LogicException('Classname of call not found');
+        }
+        return trim($call, '()'); // fixes PHP 5.4:    (new MyClass)->foo()
     }
 };

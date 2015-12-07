@@ -196,9 +196,7 @@ class MethodExtractor implements ExtractorInterface {
                 case T_PAAMAYIM_NEKUDOTAYIM:
                 case T_NEW:
                     $call = $extractor->extract($i, $tokens);
-                    if($call == 'class') { // anonymous class
-//                        $method->pushAnonymousClass(new ReflectedAnonymousClass($method->getNamespace(), 'anonymous@class'));
-                    } else {
+                    if($call !== 'class') { // anonymous class
                         $method->pushDependency($call);
                     }
                     break;
