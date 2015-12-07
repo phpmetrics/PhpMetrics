@@ -62,11 +62,14 @@ class CallExtractor implements ExtractorInterface {
                 break;
             case T_NEW:
                 $call = $this->searcher->getFollowingName($n, $tokens);
+                if(preg_match('!^(\w+)!', $call, $matches)) { // fixes PHP 5.4:    (new MyClass)->foo()
+                    $call = $matches[1];
+                }
+                break;
         }
-
         if(null === $call) {
             throw new \LogicException('Classname of call not found');
         }
-        return trim($call, '()'); // fixes PHP 5.4:    (new MyClass)->foo()
+        return $call;
     }
 };

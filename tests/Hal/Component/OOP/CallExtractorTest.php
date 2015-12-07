@@ -35,27 +35,17 @@ class CallExtractorTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    /**
-     * @group wip
-     */
     public function testClassMamberDirectAccessOnInstanciationIsParsed() {
         $code = '<?php
 class A {
     function foo() {
-        (new B) ->doAny();
+        (new B)->doAny();
     }
 }';
         $searcher = new Searcher();
         $callExtractor = new CallExtractor($searcher);
         $tokens = new TokenCollection(token_get_all($code));
         $n = 16;
-//
-//
-//        foreach($tokens as $index => $t) {
-//            $y = token_name($t->getType());
-//            var_dump("[$index] $y       {$t->getvalue()}");
-//        }
-//        exit;
         $name = $callExtractor->extract($n, $tokens);
         $this->assertEquals('B', $name);
     }

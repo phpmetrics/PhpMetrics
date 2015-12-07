@@ -231,4 +231,29 @@ EOT;
             array(__DIR__.'/../../../resources/oop/state5.php', ReflectedMethod::STATE_LOCAL),
         );
     }
+
+
+    /**
+     * @dataProvider provideCodeForCalls
+     * @group wip
+     */
+    public function testCallsAReFound($filename, $expectedExternalCalls, $expectedInternalCalls) {
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $this->assertEquals(1, sizeof($classes));
+        $class = $classes[0];
+        $methods = $class->getMethods();
+        $method = $methods['foo'];
+        $this->assertEquals($expectedExternalCalls, sizeof($method->getExternalCalls()));
+        $this->assertEquals($expectedInternalCalls, sizeof($method->getInternalCalls()));
+
+    }
+
+    public function provideCodeForCalls() {
+        return array(
+            array(__DIR__.'/../../../resources/oop/call1.php', 2, 0),
+            array(__DIR__.'/../../../resources/oop/call2.php', 0, 2),
+        );
+    }
 }

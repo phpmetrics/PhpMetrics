@@ -93,27 +93,36 @@ class MethodExtractor implements ExtractorInterface {
 
 
 
-        //
-        // Body
-        $this->extractContent($method, $n, $tokens);
+        // does method has body ? (example: interface ; abstract classes)
+        $p = $n  + 1;
+        $underComma = trim($this->searcher->getUnder(array(';'), $p, $tokens));
+        if(strlen($underComma) > 0) {
+            //
+            // Body
+            $this->extractContent($method, $n, $tokens);
 
-        // Tokens
-        $end = $this->searcher->getPositionOfClosingBrace($n, $tokens);
-        if($end > 0) {
-            $method->setTokens($tokens->extract($n, $end));
+            // Calls
+            $this->extractCalls($method, $n, $tokens);
+
+            // Tokens
+            $end = $this->searcher->getPositionOfClosingBrace($n, $tokens);
+            if($end > 0) {
+                $method->setTokens($tokens->extract($n, $end));
+            }
+        } else {
+            $method->setTokens($tokens->extract(0, $n));
         }
 
         //
         // Dependencies
-        $this->extractDependencies($method, $n, $tokens);
+        $this->extractDependencies($method, 0, $method->getTokens());
 
         // returns
-        $this->extractReturns($method, $p = $start, $tokens);
+        $p = $start;
+        $this->extractReturns($method, $p, $tokens);
 
         // usage
         $this->extractUsage($method);
-
-
 
         return $method;
     }
@@ -198,6 +207,7 @@ class MethodExtractor implements ExtractorInterface {
                     $call = $extractor->extract($i, $tokens);
                     if($call !== 'class') { // anonymous class
                         $method->pushDependency($call);
+                        $method->pushInstanciedClass($call);
                     }
                     break;
             }
@@ -213,6 +223,35 @@ class MethodExtractor implements ExtractorInterface {
         }
 
         return $this;
+    }
+
+    /**
+     * Extracts calls of method
+     *
+     * @param ReflectedMethod $method
+     * @param integer $n
+     * @param TokenCollection $tokens
+     * @return $this
+     */
+    private function extractCalls(ReflectedMethod $method, $n, TokenCollection $tokens) {
+
+        // $this->foo(), $c->foo()
+        if(preg_match_all('!(\$[\w]*)\-\>(\w*?)\(!', $method->getContent(), $matches, PREG_SET_ORDER)) {
+            foreach($matches as $m) {
+                $function = $m[2];
+                if('$this' == $m[1]) {
+                    $method->pushInternalCall($function);
+                } else {
+                    $method->pushExternalCall($m[1], $function);
+                }
+            }
+        }
+        // (new X)->foo()
+        if(preg_match_all('!\(new (\w+?).*?\)\->(\w+)\(!', $method->getContent(), $matches, PREG_SET_ORDER)) {
+            foreach($matches as $m) {
+                $method->pushExternalCall($m[1], $m[2]);
+            }
+        }
     }
 
     /**

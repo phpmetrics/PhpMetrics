@@ -45,16 +45,6 @@ class ReflectedMethod {
     /**
      * @var array
      */
-    private $internalCalls = array();
-
-    /**
-     * @var array
-     */
-    private $externalCalls = array();
-
-    /**
-     * @var array
-     */
     private $dependencies = array();
 
     /**
@@ -99,9 +89,24 @@ class ReflectedMethod {
     private $anonymousClasses = array();
 
     /**
+     * @var array
+     */
+    private $instanciedClasses = array();
+
+    /**
      * @var string
      */
     private $namespace;
+
+    /**
+     * @var array
+     */
+    private $internalCalls = array();
+
+    /**
+     * @var array
+     */
+    private $externalCalls = array();
 
     /**
      * @param string $name
@@ -209,48 +214,6 @@ class ReflectedMethod {
         array_push($this->returns, $return);
         return $this;
     }
-
-    /**
-     * Get the list of calls
-     *
-     * @return array
-     */
-    public function getCalls() {
-        return array_merge($this->internalCalls, $this->externalCalls);
-    }
-
-    /**
-     * @return array
-     */
-    public function getExternalCalls()
-    {
-        return $this->externalCalls;
-    }
-
-    /**
-     * @return array
-     */
-    public function getInternalCalls()
-    {
-        return $this->internalCalls;
-    }
-
-    /**
-     * Attach new call
-     *
-     * @param $varname
-     * @return self
-     */
-    public function pushCall($varname) {
-        if(preg_match('!^$this!', $varname)) {
-            array_push($this->internalCalls, $varname);
-        } else {
-            array_push($this->externalCalls, $varname);
-        }
-
-        return $this;
-    }
-
 
     /**
      * Push dependency
@@ -400,5 +363,64 @@ class ReflectedMethod {
     {
         return $this->namespace;
     }
+
+    /**
+     * @param $class
+     * @return $this
+     */
+    public function pushInstanciedClass($class) {
+        $this->instanciedClasses[] = $class;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInstanciedClasses()
+    {
+        $classes = array();
+        foreach($this->instanciedClasses as $name) {
+            array_push($classes, $this->nameResolver->resolve($name, null));
+        }
+        return $classes;
+    }
+
+    /**
+     * @param $call
+     * @return $this
+     */
+    public function pushInternalCall($call)
+    {
+        $this->internalCalls[] = $call;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInternalCalls()
+    {
+        return $this->internalCalls;
+    }
+
+    /**
+     * @param $call
+     * @return $this
+     */
+    public function pushExternalCall($call)
+    {
+        $this->externalCalls[] = $call;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExternalCalls()
+    {
+        return $this->externalCalls;
+    }
+
+
 
 };

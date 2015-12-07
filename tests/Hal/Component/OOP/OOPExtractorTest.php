@@ -57,6 +57,7 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
         return array(
             array(__DIR__.'/../../../resources/oop/f7.php', array('Symfony\Component\Config\Definition\Processor'))
             , array(__DIR__.'/../../../resources/oop/f4.php', array('\Full\AliasedClass', '\My\Example\Toto'))
+            , array(__DIR__.'/../../../resources/oop/f10.php', array('\Full\AliasedClass', '\My\Example\Toto', '\\StdClass'))
         );
     }
 
