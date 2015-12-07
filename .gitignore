@@ -9,3 +9,4 @@ Makefile
 /nbproject
 phpmetrics.yml.dist
 log
+Dockerfile
