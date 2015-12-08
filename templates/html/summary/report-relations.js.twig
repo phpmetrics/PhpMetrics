@@ -93,6 +93,7 @@
             var map = {};
 
             function find(name, data) {
+                name = (data ? name + ' ' : name);
                 var node = map[name], i;
                 if (!node) {
                     node = map[name] = data || {name: name, children: []};
