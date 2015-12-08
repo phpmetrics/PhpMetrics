@@ -34,7 +34,8 @@ class TypeResolverTest extends TestCase
             array('new \StdClass', '\StdClass'),
             array('new \StdClass($a, $b)', '\StdClass'),
             array('new \StdClass ($a, $b)', '\StdClass'),
-            array('new class implements Countable, Iterator {}', 'anonymous@class')
+            array('new class implements Countable, Iterator {}', 'anonymous@class'),
+            array('function($x, $d) {}', TypeResolver::TYPE_CALLABLE)
         );
     }
 }

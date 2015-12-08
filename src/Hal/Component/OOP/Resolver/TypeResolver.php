@@ -20,9 +20,11 @@ class TypeResolver
 
     const TYPE_VOID = 'void';
     const TYPE_STRING = 'string';
-    const TYPE_INTEGER = 'integer';
+    const TYPE_INTEGER = 'int';
     const TYPE_FLOAT = 'float';
+    const TYPE_BOOL = 'bool';
     const TYPE_ARRAY = 'array';
+    const TYPE_CALLABLE = 'callable';
     const TYPE_NULL = 'null';
     const TYPE_UNKNWON = 'unknown';
     const TYPE_FLUENT_INTERFACE = 'fluent';
@@ -71,6 +73,14 @@ class TypeResolver
             return self::TYPE_FLUENT_INTERFACE;
         }
 
+        if(preg_match('!^(true|false)!', $string, $matches)) {
+            return self::TYPE_BOOL;
+        }
+
+        if(preg_match('!^function!', $string, $matches)) {
+            return self::TYPE_CALLABLE;
+        }
+
         if(preg_match('!^["\']!', $string, $matches)) {
             return self::TYPE_STRING;
         }
@@ -91,6 +101,8 @@ class TypeResolver
             self::TYPE_INTEGER,
             self::TYPE_FLOAT,
             self::TYPE_ARRAY,
+            self::TYPE_CALLABLE,
+            self::TYPE_BOOL,
             self::TYPE_NULL,
             self::TYPE_UNKNWON,
             self::TYPE_FLUENT_INTERFACE,
