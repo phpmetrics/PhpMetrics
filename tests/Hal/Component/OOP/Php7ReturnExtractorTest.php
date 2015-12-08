@@ -58,9 +58,6 @@ class Php7ReturnExtractorTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(array($expected), $method->getReturns());
     }
 
-    /**
-     * @group wip
-     */
     public function testReturnedTypeIsFoundEvenOnAbstractMethod() {
 
         $filename = __DIR__.'/../../../resources/oop/php7-return3.php';

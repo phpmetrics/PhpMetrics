@@ -215,9 +215,10 @@ class MethodExtractor implements ExtractorInterface {
 
         //
         // Parameters in Method API
+        $resolver = new TypeResolver();
         foreach($method->getArguments() as $argument) {
             $name = $argument->getType();
-            if(!in_array($argument->getType(), array(null, 'array'))) {
+            if(strlen($name) > 0 && !$resolver->isNative($name)) {
                 $method->pushDependency($name);
             }
         }

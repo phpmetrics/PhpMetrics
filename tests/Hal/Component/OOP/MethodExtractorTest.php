@@ -3,6 +3,7 @@ namespace Test\Hal\Component\OOP;
 
 use Hal\Component\OOP\Reflected\ReflectedMethod;
 use Hal\Component\OOP\Reflected\ReflectedReturn;
+use Hal\Component\OOP\Resolver\TypeResolver;
 use Hal\Component\Token\TokenCollection;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\Result;
@@ -128,8 +129,8 @@ EOT;
             , array(array(), '<?php public function foo() { }')
             ,*/ array(
                 array(
-                    new ReflectedReturn('integer', '1', ReflectedReturn::ESTIMATED_TYPE_HINT),
-                    new ReflectedReturn('integer', '2', ReflectedReturn::ESTIMATED_TYPE_HINT)
+                    new ReflectedReturn(TypeResolver::TYPE_INTEGER, '1', ReflectedReturn::ESTIMATED_TYPE_HINT),
+                    new ReflectedReturn(TypeResolver::TYPE_INTEGER, '2', ReflectedReturn::ESTIMATED_TYPE_HINT)
                 ),
                 '<?php public function foo() { if(true) { return 1; } return 2; }'
             )
@@ -139,8 +140,9 @@ EOT;
 
     /**
      * @dataProvider provideCodeForNew
+     * @group wip
      */
-    public function testConstructorAreFound($expected, $code) {
+    public function testInstanciationsAreFound($expected, $code) {
         $searcher = new Searcher();
         $methodExtractor = new MethodExtractor($searcher);
 
@@ -153,11 +155,11 @@ EOT;
 
     public function provideCodeForNew() {
         return array(
-            array(array(), '<?php public function foo() { return 1; }')
+            /*array(array(), '<?php public function foo() { return 1; }')
             , array(array('A'), '<?php public function bar() { new A();  }')
             , array(array('A'), '<?php public function bar() { new A(1,2,3);  }')
-            , array(array(), '<?php public function bar($d = false) {  }')
-            , array(array(), '<?php public function bar($d = false) {  }')
+            , */array(array(), '<?php public function bar($d = false) {  }')
+//            , array(array(), '<?php public function bar($d = false) {  }')
         );
     }
 
@@ -235,7 +237,6 @@ EOT;
 
     /**
      * @dataProvider provideCodeForCalls
-     * @group wip
      */
     public function testCallsAReFound($filename, $expectedExternalCalls, $expectedInternalCalls) {
         $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
