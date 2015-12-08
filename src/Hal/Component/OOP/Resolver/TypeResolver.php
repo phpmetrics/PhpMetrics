@@ -63,7 +63,7 @@ class TypeResolver
             return self::TYPE_ANONYMOUS_CLASS;
         }
 
-        if(preg_match('!^(new\s+)(.*?)([\(;].*|$)!', $cased, $matches)) {
+        if(preg_match('!^(new\s+)(.*?)(\s*[\(;].*|$)!', $cased, $matches)) {
             return $matches[2];
         }
 
