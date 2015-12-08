@@ -10,6 +10,7 @@
 namespace Hal\Component\OOP\Extractor;
 use Hal\Component\OOP\Reflected\MethodUsage;
 use Hal\Component\OOP\Reflected\ReflectedArgument;
+use Hal\Component\OOP\Reflected\ReflectedClass;
 use Hal\Component\OOP\Reflected\ReflectedClass\ReflectedAnonymousClass;
 use Hal\Component\OOP\Reflected\ReflectedMethod;
 use Hal\Component\OOP\Reflected\ReflectedReturn;
@@ -46,9 +47,10 @@ class MethodExtractor implements ExtractorInterface {
      * @param int $n
      * @param TokenCollection$tokens
      * @return ReflectedMethod
+     * @param ReflectedClass
      * @throws \Exception
      */
-    public function extract(&$n, TokenCollection $tokens)
+    public function extract(&$n, TokenCollection $tokens, $currentClass = null)
     {
         $start = $n;
 
@@ -115,7 +117,7 @@ class MethodExtractor implements ExtractorInterface {
 
         //
         // Dependencies
-        $this->extractDependencies($method, 0, $method->getTokens());
+        $this->extractDependencies($method, 0, $method->getTokens(), $currentClass);
 
         // returns
         $p = $start;
@@ -190,13 +192,14 @@ class MethodExtractor implements ExtractorInterface {
      * @param ReflectedMethod $method
      * @param integer $n
      * @param TokenCollection $tokens
+     * @param ReflectedClass $currentClass
      * @return $this
      */
-    private function extractDependencies(ReflectedMethod $method, $n, TokenCollection $tokens) {
+    private function extractDependencies(ReflectedMethod $method, $n, TokenCollection $tokens, ReflectedClass $currentClass = null) {
 
         //
         // Object creation
-        $extractor = new CallExtractor($this->searcher);
+        $extractor = new CallExtractor($this->searcher, $currentClass);
         $start = $n;
         $len = sizeof($tokens, COUNT_NORMAL);
         for($i = $start; $i < $len; $i++) {
@@ -204,7 +207,7 @@ class MethodExtractor implements ExtractorInterface {
             switch($token->getType()) {
                 case T_PAAMAYIM_NEKUDOTAYIM:
                 case T_NEW:
-                    $call = $extractor->extract($i, $tokens);
+                    $call = $extractor->extract($i, $tokens, $currentClass);
                     if($call !== 'class') { // anonymous class
                         $method->pushDependency($call);
                         $method->pushInstanciedClass($call);

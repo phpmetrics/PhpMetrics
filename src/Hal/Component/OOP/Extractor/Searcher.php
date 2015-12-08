@@ -66,7 +66,7 @@ class Searcher {
      */
     public function getFollowingName(&$n, TokenCollection $tokens) {
         $n = $n + 2;
-        return $this->getUnder(array('{', ' ', ';', '('), $n, $tokens);
+        return $this->getUnder(array('{', ' ', ';', '(', '::'), $n, $tokens);
     }
 
     /**
@@ -103,10 +103,9 @@ class Searcher {
         return null;
     }
 
-    public function getExtendPostition(TokenCollection $tokens)
+    public function getExtendPosition(TokenCollection $tokens, $start)
     {
-        $len = sizeof($tokens);
-        for($i = 0; $i < $len; $i++) {
+        for($i = $start; $i > 0; $i--) {
             $token = $tokens[$i];
             if ($token->getValue() === 'extends') {
                 return $i;

@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Component\OOP\Extractor;
+use Hal\Component\OOP\Reflected\ReflectedClass;
 use Hal\Component\Token\TokenCollection;
 
 
@@ -22,13 +23,20 @@ class CallExtractor implements ExtractorInterface {
     private $searcher;
 
     /**
+     * @var ReflectedClass
+     */
+    private $currentClass;
+
+    /**
      * Constructor
      *
      * @param Searcher $searcher
+     * @param ReflectedClass $currentClass
      */
-    public function __construct(Searcher $searcher)
+    public function __construct(Searcher $searcher, ReflectedClass $currentClass = null)
     {
         $this->searcher = $searcher;
+        $this->currentClass = $currentClass;
     }
 
     /**
@@ -48,18 +56,27 @@ class CallExtractor implements ExtractorInterface {
             case T_PAAMAYIM_NEKUDOTAYIM:
                 $prev = $n - 1;
                 $value = $this->searcher->getUnder(array('::'), $prev, $tokens);
-                if ($value === 'parent') {
-                    $extendPosition = $this->searcher->getExtendPostition($tokens);
-                    $parentName = $this->searcher->getFollowingName($extendPosition, $tokens);
-                    $call = $parentName;
-                } else if ($value === 'self' || $value === 'static') {
-                    $extendPosition = $this->searcher->getClassNamePosition($tokens);
-                    $className = $this->searcher->getFollowingName($extendPosition, $tokens);
-                    $call = $className;
-                } else {
-                    $call = $value;
+
+                switch(true) {
+                    case $value == 'parent' && $this->currentClass:
+                        return $this->currentClass->getParent();
+
+                    case $value == 'parent':
+                        // we try to get the name of the parent class
+                        $extendPosition = $this->searcher->getExtendPosition($tokens, $n);
+                        return $this->searcher->getFollowingName($extendPosition, $tokens);
+
+                    case ($value == 'static' ||$value === 'self')&& $this->currentClass:
+                        return $this->currentClass->getFullname();
+
+                    case ($value == 'static' ||$value === 'self'):
+                        $extendPosition = $this->searcher->getClassNamePosition($tokens);
+                        return $this->searcher->getFollowingName($extendPosition, $tokens);
+
+                    default:
+                        return $value;
                 }
-                break;
+
             case T_NEW:
                 $call = $this->searcher->getFollowingName($n, $tokens);
                 if(preg_match('!^(\w+)!', $call, $matches)) { // fixes PHP 5.4:    (new MyClass)->foo()

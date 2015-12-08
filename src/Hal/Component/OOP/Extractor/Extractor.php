@@ -157,7 +157,7 @@ class Extractor {
                         if(T_WHITESPACE != $next->getType()) {
                             continue;
                         }
-                        $method = $this->extractors->method->extract($n, $tokens);
+                        $method = $this->extractors->method->extract($n, $tokens, $class);
                         $method->setNamespace($namespace);
                         $class->pushMethod($method);
                     }

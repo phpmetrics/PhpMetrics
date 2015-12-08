@@ -125,22 +125,21 @@ EOT;
 
     public function provideCodeForReturns() {
         return array(
-            /*array(array(new ReflectedReturn('integer', '1', ReflectedReturn::ESTIMATED_TYPE_HINT)), '<?php public function foo() { return 1; }')
+            array(array(new ReflectedReturn(TypeResolver::TYPE_INTEGER, '1', ReflectedReturn::ESTIMATED_TYPE_HINT)), '<?php public function foo() { return 1; }')
             , array(array(), '<?php public function foo() { }')
-            ,*/ array(
+            , array(
                 array(
                     new ReflectedReturn(TypeResolver::TYPE_INTEGER, '1', ReflectedReturn::ESTIMATED_TYPE_HINT),
                     new ReflectedReturn(TypeResolver::TYPE_INTEGER, '2', ReflectedReturn::ESTIMATED_TYPE_HINT)
                 ),
                 '<?php public function foo() { if(true) { return 1; } return 2; }'
             )
-            /*, array(array(), '<?php public function bar() { $x->a();  }')*/
+            , array(array(), '<?php public function bar() { $x->a();  }')
         );
     }
 
     /**
      * @dataProvider provideCodeForNew
-     * @group wip
      */
     public function testInstanciationsAreFound($expected, $code) {
         $searcher = new Searcher();
@@ -256,5 +255,49 @@ EOT;
             array(__DIR__.'/../../../resources/oop/call1.php', 2, 0),
             array(__DIR__.'/../../../resources/oop/call2.php', 0, 2),
         );
+    }
+
+
+    public function testMagicMethodsAreWellConsidered() {
+        $filename = __DIR__.'/../../../resources/oop/magicmethods1.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $class = $classes[0];
+        $methods = $class->getMethods();
+        $this->assertEquals(3, sizeof($methods));
+
+        $this->assertArrayHasKey('foo', $methods);
+        $this->assertArrayHasKey('__clone', $methods);
+        $this->assertArrayHasKey('__construct', $methods);
+    }
+
+    public function testInstanciationAndCallsOfMagicMethodsAreWellConsideredAsDependency() {
+        $filename = __DIR__.'/../../../resources/oop/magicmethods2.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $this->assertEquals(2 , sizeof($classes));
+        $class = $classes[1];
+        $methods = $class->getMethods();
+        $this->assertEquals(3, sizeof($methods));
+
+        $method = $methods['__clone'];
+        $this->assertEquals(array('\ModelOne'), $method->getDependencies());
+
+        $method = $methods['__construct'];
+        $this->assertEquals(array('\ModelOne', 'Context', 'UnionType'), $method->getDependencies());
+
+    }
+
+    public function testReturningNewStaticIsWellParsed() {
+        $filename = __DIR__.'/../../../resources/oop/php7-static-as-dep1.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $this->assertEquals(1 , sizeof($classes));
+        $class = $classes[0];
+        $this->assertEquals(array('\\My\\MyClass'), $class->getDependencies());
+
     }
 }

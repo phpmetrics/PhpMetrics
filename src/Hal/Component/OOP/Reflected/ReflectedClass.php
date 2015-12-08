@@ -140,7 +140,10 @@ class ReflectedClass {
             $dependencies = array_merge($dependencies, $method->getDependencies());
         }
         foreach($dependencies as &$name) {
-                $name = $this->nameResolver->resolve($name, $this->namespace);
+            if(in_array($name, array('self', 'static'))) {
+                $name = $this->getFullname();
+            }
+            $name = $this->nameResolver->resolve($name, $this->namespace);
         }
         return array_unique($dependencies);
     }
