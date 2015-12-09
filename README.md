@@ -52,6 +52,15 @@ No panic : you can read the [How to read the HTML report page](http://www.phpmet
 
 > If you need a pure string representation of the reports in StdOut, just use `phpmetrics -q --report-xml=php://stdout <folder or filename>`
 
+## Compatibility
+
+PhpMetrics can parse PHP code from **PHP 5.3 to PHP 7.x**.
+
+> I want to parse PHP7 code but I use PHP 5.x
+
+You can parse PHP7 code, but your interpreter will detect syntax errors in your code. To prevent this, please 
+use the `--ignore-errors` option.
+
 ## Conditions of failure
 
 Customizing the conditions of failure is very easy with the`--failure-condition` option. For example:
