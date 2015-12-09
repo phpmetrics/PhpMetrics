@@ -1,6 +1,9 @@
 <?php
 namespace Test\Hal\Component\OOP;
 
+use Hal\Component\OOP\Reflected\ReflectedMethod;
+use Hal\Component\OOP\Reflected\ReflectedReturn;
+use Hal\Component\OOP\Resolver\TypeResolver;
 use Hal\Component\Token\TokenCollection;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\Result;
@@ -116,22 +119,29 @@ EOT;
         $tokens = new TokenCollection(token_get_all($code));
         $n = 1;
         $method = $methodExtractor->extract($n, $tokens);
-        $this->assertEquals($expected, sizeof($method->getReturns(), COUNT_NORMAL));
+        $this->assertEquals(sizeof($expected), sizeof($method->getReturns()));
+        $this->assertEquals($expected, $method->getReturns());
     }
 
     public function provideCodeForReturns() {
         return array(
-            array(1, '<?php public function foo() { return 1; }')
-            , array(0, '<?php public function foo() { }')
-            , array(2, '<?php public function foo() { if(true) { return 1; } return 2; }')
-            , array(0, '<?php public function bar() { $x->a();  }')
+            array(array(new ReflectedReturn(TypeResolver::TYPE_INTEGER, '1', ReflectedReturn::ESTIMATED_TYPE_HINT)), '<?php public function foo() { return 1; }')
+            , array(array(), '<?php public function foo() { }')
+            , array(
+                array(
+                    new ReflectedReturn(TypeResolver::TYPE_INTEGER, '1', ReflectedReturn::ESTIMATED_TYPE_HINT),
+                    new ReflectedReturn(TypeResolver::TYPE_INTEGER, '2', ReflectedReturn::ESTIMATED_TYPE_HINT)
+                ),
+                '<?php public function foo() { if(true) { return 1; } return 2; }'
+            )
+            , array(array(), '<?php public function bar() { $x->a();  }')
         );
     }
 
     /**
      * @dataProvider provideCodeForNew
      */
-    public function testConstructorAreFound($expected, $code) {
+    public function testInstanciationsAreFound($expected, $code) {
         $searcher = new Searcher();
         $methodExtractor = new MethodExtractor($searcher);
 
@@ -144,11 +154,11 @@ EOT;
 
     public function provideCodeForNew() {
         return array(
-            array(array(), '<?php public function foo() { return 1; }')
+            /*array(array(), '<?php public function foo() { return 1; }')
             , array(array('A'), '<?php public function bar() { new A();  }')
             , array(array('A'), '<?php public function bar() { new A(1,2,3);  }')
-            , array(array(), '<?php public function bar($d = false) {  }')
-            , array(array(), '<?php public function bar($d = false) {  }')
+            , */array(array(), '<?php public function bar($d = false) {  }')
+//            , array(array(), '<?php public function bar($d = false) {  }')
         );
     }
 
@@ -176,5 +186,118 @@ EOT;
         $this->assertFalse($methods['foo']->isSetter());
         $this->assertTrue($methods['setA']->isSetter());
         $this->assertTrue($methods['setB']->isSetter());
+    }
+
+    /**
+     * @dataProvider provideCodeForVisibility
+     */
+    public function testVisibilityIsFound($filename, $expected) {
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $class = $classes[0];
+        $methods = $class->getMethods();
+        $method = $methods['foo'];
+        $this->assertEquals($expected, $method->getVisibility());
+    }
+
+    public function provideCodeForVisibility() {
+        return array(
+            array(__DIR__.'/../../../resources/oop/visibility1.php', ReflectedMethod::VISIBILITY_PUBLIC,'undeclared visibility is public'),
+            array(__DIR__.'/../../../resources/oop/visibility2.php', ReflectedMethod::VISIBILITY_PUBLIC, 'public is found'),
+            array(__DIR__.'/../../../resources/oop/visibility3.php', ReflectedMethod::VISIBILITY_PRIVATE, 'private is found'),
+            array(__DIR__.'/../../../resources/oop/visibility4.php', ReflectedMethod::VISIBILITY_PROTECTED, 'protected is found'),
+        );
+    }
+
+    /**
+     * @dataProvider provideCodeForState
+     */
+    public function testStateIsFound($filename, $expected) {
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $class = $classes[0];
+        $methods = $class->getMethods();
+        $method = $methods['foo'];
+        $this->assertEquals($expected, $method->getState());
+    }
+
+    public function provideCodeForState() {
+        return array(
+            array(__DIR__.'/../../../resources/oop/state1.php', ReflectedMethod::STATE_LOCAL),
+            array(__DIR__.'/../../../resources/oop/state2.php', ReflectedMethod::STATE_STATIC),
+            array(__DIR__.'/../../../resources/oop/state3.php', ReflectedMethod::STATE_STATIC),
+            array(__DIR__.'/../../../resources/oop/state4.php', ReflectedMethod::STATE_STATIC),
+            array(__DIR__.'/../../../resources/oop/state5.php', ReflectedMethod::STATE_LOCAL),
+        );
+    }
+
+
+    /**
+     * @dataProvider provideCodeForCalls
+     */
+    public function testCallsAReFound($filename, $expectedExternalCalls, $expectedInternalCalls) {
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $this->assertEquals(1, sizeof($classes));
+        $class = $classes[0];
+        $methods = $class->getMethods();
+        $method = $methods['foo'];
+        $this->assertEquals($expectedExternalCalls, sizeof($method->getExternalCalls()));
+        $this->assertEquals($expectedInternalCalls, sizeof($method->getInternalCalls()));
+
+    }
+
+    public function provideCodeForCalls() {
+        return array(
+            array(__DIR__.'/../../../resources/oop/call1.php', 2, 0),
+            array(__DIR__.'/../../../resources/oop/call2.php', 0, 2),
+        );
+    }
+
+
+    public function testMagicMethodsAreWellConsidered() {
+        $filename = __DIR__.'/../../../resources/oop/magicmethods1.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $class = $classes[0];
+        $methods = $class->getMethods();
+        $this->assertEquals(3, sizeof($methods));
+
+        $this->assertArrayHasKey('foo', $methods);
+        $this->assertArrayHasKey('__clone', $methods);
+        $this->assertArrayHasKey('__construct', $methods);
+    }
+
+    public function testInstanciationAndCallsOfMagicMethodsAreWellConsideredAsDependency() {
+        $filename = __DIR__.'/../../../resources/oop/magicmethods2.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $this->assertEquals(2 , sizeof($classes));
+        $class = $classes[1];
+        $methods = $class->getMethods();
+        $this->assertEquals(3, sizeof($methods));
+
+        $method = $methods['__clone'];
+        $this->assertEquals(array('\ModelOne'), $method->getDependencies());
+
+        $method = $methods['__construct'];
+        $this->assertEquals(array('\ModelOne', 'Context', 'UnionType'), $method->getDependencies());
+
+    }
+
+    public function testReturningNewStaticIsWellParsed() {
+        $filename = __DIR__.'/../../../resources/oop/php7-static-as-dep1.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $this->assertEquals(1 , sizeof($classes));
+        $class = $classes[0];
+        $this->assertEquals(array('\\My\\MyClass'), $class->getDependencies());
+
     }
 }

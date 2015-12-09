@@ -10,7 +10,11 @@
 namespace Hal\Component\OOP\Extractor;
 use Hal\Component\OOP\Reflected\MethodUsage;
 use Hal\Component\OOP\Reflected\ReflectedArgument;
+use Hal\Component\OOP\Reflected\ReflectedClass;
+use Hal\Component\OOP\Reflected\ReflectedClass\ReflectedAnonymousClass;
 use Hal\Component\OOP\Reflected\ReflectedMethod;
+use Hal\Component\OOP\Reflected\ReflectedReturn;
+use Hal\Component\OOP\Resolver\TypeResolver;
 use Hal\Component\Token\TokenCollection;
 
 
@@ -43,16 +47,25 @@ class MethodExtractor implements ExtractorInterface {
      * @param int $n
      * @param TokenCollection$tokens
      * @return ReflectedMethod
+     * @param ReflectedClass
      * @throws \Exception
      */
-    public function extract(&$n, TokenCollection $tokens)
+    public function extract(&$n, TokenCollection $tokens, $currentClass = null)
     {
+        $start = $n;
+
         $declaration = $this->searcher->getUnder(array(')'), $n, $tokens);
         if(!preg_match('!function\s+(.*)\(\s*(.*)!is', $declaration, $matches)) {
             throw new \Exception(sprintf("Closure detected instead of method\nDetails:\n%s", $declaration));
         }
         list(, $name, $args) = $matches;
         $method = new ReflectedMethod($name);
+
+        // visibility
+        $this->extractVisibility($method, $p = $start, $tokens); // please keep "p = start"
+
+        // state
+        $this->extractState($method, $p = $start, $tokens); // please keep "p = start"
 
         $arguments = preg_split('!\s*,\s*!m', $args);
         foreach($arguments as $argDecl) {
@@ -80,27 +93,80 @@ class MethodExtractor implements ExtractorInterface {
             $method->pushArgument($argument);
         }
 
-        //
-        // Body
-        $this->extractContent($method, $n, $tokens);
 
-        // Tokens
-        $end = $this->searcher->getPositionOfClosingBrace($n, $tokens);
-        if($end > 0) {
-            $method->setTokens($tokens->extract($n, $end));
+
+        // does method has body ? (example: interface ; abstract classes)
+        $p = $n  + 1;
+        $underComma = trim($this->searcher->getUnder(array(';'), $p, $tokens));
+        if(strlen($underComma) > 0) {
+            //
+            // Body
+            $this->extractContent($method, $n, $tokens);
+
+            // Calls
+            $this->extractCalls($method, $n, $tokens);
+
+            // Tokens
+            $end = $this->searcher->getPositionOfClosingBrace($n, $tokens);
+            if($end > 0) {
+                $method->setTokens($tokens->extract($n, $end));
+            }
+        } else {
+            $method->setTokens($tokens->extract(0, $n));
         }
 
         //
         // Dependencies
-        $this->extractDependencies($method, $n, $tokens);
+        $this->extractDependencies($method, 0, $method->getTokens(), $currentClass);
 
         // returns
-        $this->extractReturns($method, $method->getContent());
+        $p = $start;
+        $this->extractReturns($method, $p, $tokens);
 
         // usage
         $this->extractUsage($method);
 
         return $method;
+    }
+
+    /**
+     * Extracts visibility
+     *
+     * @param ReflectedMethod $method
+     * @param $n
+     * @param TokenCollection $tokens
+     * @return $this
+     */
+    public function extractVisibility(ReflectedMethod $method, $n, TokenCollection $tokens) {
+        switch(true) {
+            case $this->searcher->isPrecededBy(T_PRIVATE, $n, $tokens, 4):
+                $visibility = ReflectedMethod::VISIBILITY_PRIVATE;
+                break;
+            case $this->searcher->isPrecededBy(T_PROTECTED, $n, $tokens, 4):
+                $visibility = ReflectedMethod::VISIBILITY_PROTECTED;
+                break;
+        case $this->searcher->isPrecededBy(T_PUBLIC, $n, $tokens, 4):
+                default:
+                $visibility = ReflectedMethod::VISIBILITY_PUBLIC;
+                break;
+        }
+        $method->setVisibility($visibility);
+        return $this;
+    }
+
+    /**
+     * Extracts state
+     *
+     * @param ReflectedMethod $method
+     * @param $n
+     * @param TokenCollection $tokens
+     * @return $this
+     */
+    public function extractState(ReflectedMethod $method, $n, TokenCollection $tokens) {
+        if($this->searcher->isPrecededBy(T_STATIC, $n, $tokens, 4)) {
+            $method->setState(ReflectedMethod::STATE_STATIC);
+        }
+        return $this;
     }
 
     /**
@@ -126,13 +192,14 @@ class MethodExtractor implements ExtractorInterface {
      * @param ReflectedMethod $method
      * @param integer $n
      * @param TokenCollection $tokens
+     * @param ReflectedClass $currentClass
      * @return $this
      */
-    private function extractDependencies(ReflectedMethod $method, $n, TokenCollection $tokens) {
+    private function extractDependencies(ReflectedMethod $method, $n, TokenCollection $tokens, ReflectedClass $currentClass = null) {
 
         //
         // Object creation
-        $extractor = new CallExtractor($this->searcher);
+        $extractor = new CallExtractor($this->searcher, $currentClass);
         $start = $n;
         $len = sizeof($tokens, COUNT_NORMAL);
         for($i = $start; $i < $len; $i++) {
@@ -140,17 +207,21 @@ class MethodExtractor implements ExtractorInterface {
             switch($token->getType()) {
                 case T_PAAMAYIM_NEKUDOTAYIM:
                 case T_NEW:
-                    $call = $extractor->extract($i, $tokens);
-                    $method->pushDependency($call);
+                    $call = $extractor->extract($i, $tokens, $currentClass);
+                    if($call !== 'class') { // anonymous class
+                        $method->pushDependency($call);
+                        $method->pushInstanciedClass($call);
+                    }
                     break;
             }
         }
 
         //
         // Parameters in Method API
+        $resolver = new TypeResolver();
         foreach($method->getArguments() as $argument) {
             $name = $argument->getType();
-            if(!in_array($argument->getType(), array(null, 'array'))) {
+            if(strlen($name) > 0 && !$resolver->isNative($name)) {
                 $method->pushDependency($name);
             }
         }
@@ -159,16 +230,63 @@ class MethodExtractor implements ExtractorInterface {
     }
 
     /**
+     * Extracts calls of method
+     *
+     * @param ReflectedMethod $method
+     * @param integer $n
+     * @param TokenCollection $tokens
+     * @return $this
+     */
+    private function extractCalls(ReflectedMethod $method, $n, TokenCollection $tokens) {
+
+        // $this->foo(), $c->foo()
+        if(preg_match_all('!(\$[\w]*)\-\>(\w*?)\(!', $method->getContent(), $matches, PREG_SET_ORDER)) {
+            foreach($matches as $m) {
+                $function = $m[2];
+                if('$this' == $m[1]) {
+                    $method->pushInternalCall($function);
+                } else {
+                    $method->pushExternalCall($m[1], $function);
+                }
+            }
+        }
+        // (new X)->foo()
+        if(preg_match_all('!\(new (\w+?).*?\)\->(\w+)\(!', $method->getContent(), $matches, PREG_SET_ORDER)) {
+            foreach($matches as $m) {
+                $method->pushExternalCall($m[1], $m[2]);
+            }
+        }
+    }
+
+    /**
      * Extract the list of returned values
      *
      * @param ReflectedMethod $method
-     * @param string $content
      * @return $this
      */
-    private function extractReturns(ReflectedMethod $method, $content) {
-        if(preg_match_all('!([\s;]return\s|^return\s)!', $content, $matches)) {
-            foreach($matches[1] as $m) {
-                $method->pushReturn($m);
+    private function extractReturns(ReflectedMethod $method, $n, TokenCollection $tokens) {
+
+        $resolver = new TypeResolver();
+
+        // PHP 7
+        // we cannot use specific token. The ":" delimiter is a T_STRING token
+        $following = $this->searcher->getUnder(array('{', ';'), $n, $tokens);
+        if(preg_match('!:(.*)!', $following, $matches)) {
+            $type = trim($matches[1]);
+            if(empty($type)) {
+                return $this;
+            }
+            $return = new ReflectedReturn($type, ReflectedReturn::VALUE_UNKNOW, ReflectedReturn::STRICT_TYPE_HINT);
+            $method->pushReturn($return);
+            return $this;
+        }
+
+        // array of available values based on code
+        if(preg_match_all('!([\s;]return\s|^return\s+)(.*?);!', $method->getContent(), $matches)) {
+            foreach($matches[2] as $m) {
+                $value = trim($m, ";\t\n\r\0\x0B");
+                $return = new ReflectedReturn($resolver->resolve($m), $value, ReflectedReturn::ESTIMATED_TYPE_HINT);
+                $method->pushReturn($return);
             }
         }
         return $this;

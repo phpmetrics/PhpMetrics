@@ -26,7 +26,8 @@
     "autoload": {
         "psr-0": {
             "Hal\\": "./src/"
-        }
+        },
+        "files": ["./compatibility.php"]
     },
     "require": {
         "php": ">=5.4",

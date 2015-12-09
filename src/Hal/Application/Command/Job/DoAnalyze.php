@@ -12,6 +12,7 @@ use Hal\Application\Command\Job\Analyze\CardAndAgrestiAnalyzer;
 use Hal\Application\Command\Job\Analyze\CouplingAnalyzer;
 use Hal\Application\Command\Job\Analyze\FileAnalyzer;
 use Hal\Application\Command\Job\Analyze\LcomAnalyzer;
+use Hal\Component\Compatibility\PhpCompatibility;
 use Hal\Component\Cache\CacheMemory;
 use Hal\Component\File\Finder;
 use Hal\Component\File\SyntaxChecker;
@@ -61,19 +62,27 @@ class DoAnalyze implements JobInterface
     private $withOOP;
 
     /**
+     * Ignore errors ?
+     * @var bool
+     */
+    private $ignoreErrors;
+
+    /**
      * Constructor
      *
      * @param OutputInterface $output
      * @param Finder $finder
      * @param string $path
      * @param bool $withOOP
+     * @param bool $ignoreErrors
      */
-    public function __construct(OutputInterface $output, Finder $finder, $path, $withOOP)
+    public function __construct(OutputInterface $output, Finder $finder, $path, $withOOP, $ignoreErrors = false)
     {
         $this->output = $output;
         $this->finder = $finder;
         $this->path = $path;
         $this->withOOP = $withOOP;
+        $this->ignoreErrors = $ignoreErrors;
     }
 
     /**
@@ -112,7 +121,7 @@ class DoAnalyze implements JobInterface
             $progress->advance();
 
             // Integrity
-            if(!$syntaxChecker->isCorrect($filename)) {
+            if(!$this->ignoreErrors && !$syntaxChecker->isCorrect($filename)) {
                 $this->output->writeln(sprintf('<error>file %s is not valid and has been skipped</error>', $filename));
                 unset($files[$k]);
                 continue;

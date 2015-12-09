@@ -55,7 +55,7 @@ class McCabe {
         $info = new Result;
         $tokens = $this->tokenizer->tokenize($filename);
 
-        $ccn = 0;
+        $ccn = 1; // default path
         foreach($tokens as $token) {
 
             switch($token->getType()) {
@@ -69,11 +69,20 @@ class McCabe {
                 case T_LOGICAL_AND:
                 case T_BOOLEAN_OR:
                 case T_LOGICAL_OR:
+                case T_SPACESHIP:
                 case T_CASE:
                 case T_DEFAULT:
                 case T_CATCH:
                 case T_CONTINUE:
                     $ccn++;
+                    break;
+                case T_STRING:
+                    if('?' == $token->getValue()) {
+                        $ccn = $ccn + 2;
+                    }
+                    break;
+                case T_COALESCE:
+                    $ccn = $ccn + 2;
                     break;
             }
 

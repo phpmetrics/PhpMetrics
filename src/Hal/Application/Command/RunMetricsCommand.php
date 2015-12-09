@@ -74,6 +74,9 @@ class RunMetricsCommand extends Command
                     'without-oop', null, InputOption::VALUE_NONE, 'If provided, tool will not extract any information about OOP model (faster)'
                 )
                 ->addOption(
+                    'ignore-errors', null, InputOption::VALUE_NONE, 'If provided, files will be analyzed even with syntax errors'
+                )
+                ->addOption(
                     'failure-condition', null, InputOption::VALUE_REQUIRED, 'Optional failure condition, in english. For example: average.maintainabilityIndex < 50 or sum.loc > 10000', null
                 )
                 ->addOption(

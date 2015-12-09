@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Component\OOP\Extractor;
+use Hal\Component\OOP\Reflected\ReflectedClass\ReflectedAnonymousClass;
 use Hal\Component\OOP\Resolver\NameResolver;
 use Hal\Component\Token\Tokenizer;
 
@@ -73,11 +74,20 @@ class Extractor {
         $nameResolver = new NameResolver();
 
         // default current values
-        $class = $interface = $function = $method = null;
-//        $mapOfAliases = array();
+        $class = $interface = $function = $namespace = $method = null;
 
         $len = sizeof($tokens, COUNT_NORMAL);
+        $endAnonymous = 0;
+        $mainContextClass = null; // class containing a anonymous class
+
         for($n = 0; $n < $len; $n++) {
+
+            if($mainContextClass && $n > $endAnonymous) {
+                // anonymous class is finished. We back to parent class
+                // methods will be added to the main class now
+                $class = $mainContextClass;
+                $mainContextClass = null;
+            }
 
             $token = $tokens[$n];
 
@@ -110,12 +120,34 @@ class Extractor {
                     $class->setParent(trim($parent));
                     break;
 
+                case T_IMPLEMENTS:
+                    $i = $n + 1;
+                    $contracts = $this->searcher->getUnder(array('{'), $i, $tokens);
+                    $contracts = explode(',', $contracts);
+                    $contracts = array_map('trim', $contracts);
+                    $class->setInterfaces($contracts);
+                    break;
+
                 case T_CLASS:
-                    $class = $this->extractors->class->extract($n, $tokens);
-                    $class->setNameResolver($nameResolver);
+                    $c = $this->extractors->class->extract($n, $tokens);
+                    $c->setNameResolver($nameResolver);
                     // push class AND in global AND in local class map
-                    $this->result->pushClass($class);
-                    $result->pushClass($class);
+                    $this->result->pushClass($c);
+                    $result->pushClass($c);
+
+                    // PHP 7 and inner classes
+                    if($c instanceof ReflectedAnonymousClass) {
+                        // avoid to consider anonymous class as main class
+                        $p = $n;
+                        $endAnonymous = $this->searcher->getPositionOfClosingBrace($p, $tokens);
+                        $mainContextClass = $class;
+
+                        // add anonymous class in method
+                        if($method) {
+                            $method->pushAnonymousClass($c);
+                        }
+                    }
+                    $class = $c;
                     break;
 
                 case T_FUNCTION:
@@ -125,8 +157,8 @@ class Extractor {
                         if(T_WHITESPACE != $next->getType()) {
                             continue;
                         }
-                        $method = $this->extractors->method->extract($n, $tokens);
-                        $method->setNameResolver($nameResolver);
+                        $method = $this->extractors->method->extract($n, $tokens, $class);
+                        $method->setNamespace($namespace);
                         $class->pushMethod($method);
                     }
                     break;

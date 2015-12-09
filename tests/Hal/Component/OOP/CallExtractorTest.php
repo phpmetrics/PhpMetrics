@@ -32,6 +32,26 @@ class CallExtractorTest extends \PHPUnit_Framework_TestCase {
             , array('CurrentClass', 12, '<?php class CurrentClass extends ExtendClass { self::bar(); }')
             , array('ExtendClass', 12, '<?php class CurrentClass extends ExtendClass { parent::bar(); }')
             , array('\ExtendClass', 13, '<?php class CurrentClass extends \ExtendClass { parent::bar(); }')
+            , array('CurrentClass', 13, '<?php class CurrentClass extends \ExtendClass { static::bar(); }')
+            , array('\ExtendClass', 13, '<?php class CurrentClass extends \ExtendClass { parent::__clone(); }')
+            , array('CurrentClass', 13, '<?php class CurrentClass extends \ExtendClass { self::__clone(); }')
+            , array('CurrentClass', 13, '<?php class CurrentClass extends \ExtendClass { static::__clone(); }')
         );
     }
+
+    public function testClassMemberDirectAccessOnInstanciationIsParsed() {
+        $code = '<?php
+class A {
+    function foo() {
+        (new B)->doAny();
+    }
+}';
+        $searcher = new Searcher();
+        $callExtractor = new CallExtractor($searcher);
+        $tokens = new TokenCollection(token_get_all($code));
+        $n = 16;
+        $name = $callExtractor->extract($n, $tokens);
+        $this->assertEquals('B', $name);
+    }
 }
+

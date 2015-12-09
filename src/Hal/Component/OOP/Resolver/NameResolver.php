@@ -24,6 +24,11 @@ class NameResolver
     private $aliases = array();
 
     /**
+     * @var string
+     */
+    private $namespace = '\\';
+
+    /**
      * Resolve name of class
      *
      * @param string $name
@@ -34,6 +39,11 @@ class NameResolver
     {
         // already namespaced
         if ('\\' == $name[0]) {
+            return $name;
+        }
+
+        // anonymous class
+        if('class@anonymous' == $name ) {
             return $name;
         }
 
@@ -68,4 +78,23 @@ class NameResolver
         $this->aliases[$alias->alias] = $alias->name;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @param string $namespace
+     * @return NameResolver
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
+        return $this;
+    }
+
 }

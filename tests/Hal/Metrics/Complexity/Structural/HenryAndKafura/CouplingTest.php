@@ -1,5 +1,8 @@
 <?php
 namespace Test\Hal\Metrics\Complexity\Structural\HenryAndKafura;
+use Hal\Component\OOP\Extractor\ClassMap;
+use Hal\Component\OOP\Extractor\Extractor;
+use Hal\Component\Token\Tokenizer;
 use Hal\Metrics\Complexity\Structural\HenryAndKafura\Coupling;
 
 /**
@@ -56,5 +59,19 @@ class CouplingTest extends \PHPUnit_Framework_TestCase {
             , 'efferentCoupling' => 2
         );
         $this->assertEquals($expected, $this->result->get('\Ns1\Class1')->asArray());
+    }
+
+    public function testCouplingTakesCareOfReturnedValues() {
+        $filename = __DIR__.'/../../../../../resources/coupling/f1.php';
+        $extractor = new Extractor(new Tokenizer());
+        $classmap = new ClassMap();
+        $classmap->push($filename, $extractor->extract($filename));
+        $coupling = new Coupling();
+        $this->result = $coupling->calculate($classmap);
+
+        $this->assertEquals(0, $this->result->get('\\ClassWhoUseAnother')->getAfferentCoupling());
+        $this->assertEquals(1, $this->result->get('\\ClassWhoUseAnother')->getEfferentCoupling());
+        $this->assertEquals(1, $this->result->get('\\ClassWhoIsUsed')->getAfferentCoupling());
+        $this->assertEquals(0, $this->result->get('\\ClassWhoIsUsed')->getEfferentCoupling());
     }
 }

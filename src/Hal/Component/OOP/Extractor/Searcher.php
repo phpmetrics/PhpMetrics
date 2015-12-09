@@ -66,7 +66,7 @@ class Searcher {
      */
     public function getFollowingName(&$n, TokenCollection $tokens) {
         $n = $n + 2;
-        return $this->getUnder(array('{', ' ', ';', '('), $n, $tokens);
+        return $this->getUnder(array('{', ' ', ';', '(', '::'), $n, $tokens);
     }
 
     /**
@@ -103,10 +103,9 @@ class Searcher {
         return null;
     }
 
-    public function getExtendPostition(TokenCollection $tokens)
+    public function getExtendPosition(TokenCollection $tokens, $start)
     {
-        $len = sizeof($tokens);
-        for($i = 0; $i < $len; $i++) {
+        for($i = $start; $i > 0; $i--) {
             $token = $tokens[$i];
             if ($token->getValue() === 'extends') {
                 return $i;
@@ -124,5 +123,34 @@ class Searcher {
             }
         }
         return null;
+    }
+
+    public function getPositionOfPrevious($tokenType, $n, TokenCollection $tokens) {
+        for($i = $n; $i > 0; $i--) {
+            if($tokenType == $tokens->get($i)->getType()) {
+                return $i;
+            }
+        }
+        return null;
+    }
+
+    public function getPositionOfNext($tokenType, $n, TokenCollection $tokens) {
+        $len = sizeof($tokens);
+        for($i = $n; $i < $len; $i++) {
+            if($tokenType == $tokens->get($i)->getType()) {
+                return $i;
+            }
+        }
+        return null;
+    }
+
+    public function isPrecededBy($tokenType, $n, TokenCollection $tokens, $limit = 2) {
+        $position = $this->getPositionOfPrevious($tokenType, $n, $tokens);
+        return ($n - $position <= $limit);
+    }
+
+    public function isFollowedBy($tokenType, $n, TokenCollection $tokens, $limit = 2) {
+        $position = $this->getPositionOfNext($tokenType, $n, $tokens);
+        return ($position - $n >= $limit);
     }
 };

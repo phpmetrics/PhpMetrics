@@ -50,6 +50,7 @@ class TreeBuilder implements \Hal\Component\Config\TreeBuilderInterface
                         ->booleanNode('symlinks')->defaultValue(false)->end()
                     ->end()
                 ->end()
+                ->booleanNode('ignore-errors')->defaultValue(false)->end()
                 ->arrayNode('logging')
                     ->addDefaultsIfNotSet()
                     ->children()

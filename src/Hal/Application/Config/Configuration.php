@@ -50,6 +50,11 @@ class Configuration implements ConfigurationInterface
     private $template;
 
     /**
+     * @var bool
+     */
+    private $ignoreErrors = false;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -150,8 +155,23 @@ class Configuration implements ConfigurationInterface
         return $this->template;
     }
 
+    /**
+     * @return boolean
+     */
+    public function getIgnoreErrors()
+    {
+        return $this->ignoreErrors;
+    }
 
-
+    /**
+     * @param boolean $ignoreErrors
+     * @return $this
+     */
+    public function setIgnoreErrors($ignoreErrors)
+    {
+        $this->ignoreErrors = $ignoreErrors;
+        return $this;
+    }
 
 
 }

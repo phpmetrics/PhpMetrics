@@ -8,7 +8,9 @@
  */
 
 namespace Hal\Component\OOP\Reflected;
+use Hal\Component\OOP\Reflected\ReflectedClass\ReflectedAnonymousClass;
 use Hal\Component\OOP\Resolver\NameResolver;
+use Hal\Component\OOP\Resolver\TypeResolver;
 
 
 /**
@@ -18,6 +20,11 @@ use Hal\Component\OOP\Resolver\NameResolver;
  */
 class ReflectedMethod {
 
+    CONST VISIBILITY_PUBLIC = 1;
+    CONST VISIBILITY_PRIVATE = 2;
+    CONST VISIBILITY_PROTECTED = 3;
+    CONST STATE_LOCAL = 1;
+    CONST STATE_STATIC = 2;
 
 
     /**
@@ -34,16 +41,6 @@ class ReflectedMethod {
      * @var array
      */
     private $returns = array();
-
-    /**
-     * @var array
-     */
-    private $internalCalls = array();
-
-    /**
-     * @var array
-     */
-    private $externalCalls = array();
 
     /**
      * @var array
@@ -73,6 +70,43 @@ class ReflectedMethod {
      * @var string
      */
     private $usage;
+
+    /**
+     * @var int
+     */
+    private $visibility = self::VISIBILITY_PUBLIC;
+
+    /**
+     * @var int
+     */
+    private $state = self::STATE_LOCAL;
+
+    /**
+     * Anonymous class contained in this method
+     *
+     * @var array
+     */
+    private $anonymousClasses = array();
+
+    /**
+     * @var array
+     */
+    private $instanciedClasses = array();
+
+    /**
+     * @var string
+     */
+    private $namespace;
+
+    /**
+     * @var array
+     */
+    private $internalCalls = array();
+
+    /**
+     * @var array
+     */
+    private $externalCalls = array();
 
     /**
      * @param string $name
@@ -147,12 +181,25 @@ class ReflectedMethod {
     }
 
     /**
-     * Get the list of returned values
+     * Get returned value
      *
      * @return array
      */
     public function getReturns() {
-        return $this->returns;
+        // on read : compare with aliases. We cannot make it in pushDependency() => aliases aren't yet known
+        $result = array();
+        $resolver = new TypeResolver();
+        foreach($this->returns as $return) {
+            $type = $this->nameResolver->resolve($return->getType(), null);
+
+            if("\\" !== $type[0] &&!$resolver->isNative($type)) {
+                $type = $this->namespace.'\\'.$type;
+            }
+
+            $return->setType($type);
+            $result[] = $return;
+        }
+        return array_values($result);
     }
 
     /**
@@ -160,55 +207,13 @@ class ReflectedMethod {
      *
      *      It make no sense for the moment to store any information abour return value / type. Maybe in PHP 6 ? :)
      *
-     * @param string $mixed
-     * @return self
+     * @param ReflectedReturn $return
+     * @return $this
      */
-    public function pushReturn($mixed) {
-        array_push($this->returns, $mixed);
+    public function pushReturn(ReflectedReturn $return) {
+        array_push($this->returns, $return);
         return $this;
     }
-
-    /**
-     * Get the list of calls
-     *
-     * @return array
-     */
-    public function getCalls() {
-        return array_merge($this->internalCalls, $this->externalCalls);
-    }
-
-    /**
-     * @return array
-     */
-    public function getExternalCalls()
-    {
-        return $this->externalCalls;
-    }
-
-    /**
-     * @return array
-     */
-    public function getInternalCalls()
-    {
-        return $this->internalCalls;
-    }
-
-    /**
-     * Attach new call
-     *
-     * @param $varname
-     * @return self
-     */
-    public function pushCall($varname) {
-        if(preg_match('!^$this!', $varname)) {
-            array_push($this->internalCalls, $varname);
-        } else {
-            array_push($this->externalCalls, $varname);
-        }
-
-        return $this;
-    }
-
 
     /**
      * Push dependency
@@ -230,6 +235,21 @@ class ReflectedMethod {
         $dependencies = array();
         foreach($this->dependencies as $name) {
             array_push($dependencies, $this->nameResolver->resolve($name, null));
+        }
+
+        // returned values
+        $resolver = new TypeResolver();
+        foreach($this->returns as $return) {
+            $name = $return->getType();
+            if(!$resolver->isNative($name)) {
+                array_push($dependencies, $this->nameResolver->resolve($name, null));
+            }
+        }
+
+        // anonymous classes in method (inner class)
+        foreach($this->anonymousClasses as $c) {
+            array_push($dependencies, $c->getParent());
+            $dependencies = array_merge($dependencies, $c->getDependencies());
         }
         return array_unique($dependencies);
     }
@@ -273,6 +293,134 @@ class ReflectedMethod {
     public function isGetter() {
         return MethodUsage::USAGE_GETTER == $this->getUsage();
     }
+
+    /**
+     * @return int
+     */
+    public function getVisibility()
+    {
+        return $this->visibility;
+    }
+
+    /**
+     * @param int $visibility
+     * @return $this
+     */
+    public function setVisibility($visibility)
+    {
+        $this->visibility = $visibility;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param int $state
+     * @return ReflectedMethod
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+        return $this;
+    }
+    /**
+     * @param ReflectedAnonymousClass $class
+     * @return $this
+     */
+    public function pushAnonymousClass(ReflectedAnonymousClass $class) {
+        $this->anonymousClasses[] = $class;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAnonymousClasses()
+    {
+        return $this->anonymousClasses;
+    }
+
+    /**
+     * @param string $namespace
+     * @return ReflectedMethod
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @param $class
+     * @return $this
+     */
+    public function pushInstanciedClass($class) {
+        $this->instanciedClasses[] = $class;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInstanciedClasses()
+    {
+        $classes = array();
+        foreach($this->instanciedClasses as $name) {
+            array_push($classes, $this->nameResolver->resolve($name, null));
+        }
+        return $classes;
+    }
+
+    /**
+     * @param $call
+     * @return $this
+     */
+    public function pushInternalCall($call)
+    {
+        $this->internalCalls[] = $call;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInternalCalls()
+    {
+        return $this->internalCalls;
+    }
+
+    /**
+     * @param $call
+     * @return $this
+     */
+    public function pushExternalCall($call)
+    {
+        $this->externalCalls[] = $call;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExternalCalls()
+    {
+        return $this->externalCalls;
+    }
+
 
 
 };
