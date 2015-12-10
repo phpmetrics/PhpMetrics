@@ -77,7 +77,8 @@ class Xml implements FormaterInterface {
                     $violation->setAttribute('rule', $key);
                     $violation->setAttribute('ruleset', $key);
                     $violation->setAttribute('externalInfoUrl', 'http://halleck45.github.io/PhpMetrics/documentation/index.html');
-                    $violation->setAttribute('priority', $result == Validator::WARNING ? 0 : 1);
+
+                    $violation->setAttribute('priority', $result == Validator::WARNING ? 3 : 1);
 
                     $violation->nodeValue = sprintf('the "%1$s" value (%2$s) of "%3$s" is incorrect. The configured %1$s threshold is %4$s'
                     , $key
