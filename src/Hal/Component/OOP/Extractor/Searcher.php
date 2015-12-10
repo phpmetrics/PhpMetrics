@@ -113,7 +113,7 @@ class Searcher {
 
     /**
      * 
-     * @param TokenCollection[] $tokens
+     * @param TokenCollection $tokens
      * @param int $startingToken
      * @return null|int 
      */
@@ -130,7 +130,7 @@ class Searcher {
     }
     /**
      * 
-     * @param TokenCollection[] $tokens
+     * @param TokenCollection $tokens
      * @return int|null
      */
     public function getClassNamePosition(TokenCollection $tokens)
@@ -150,7 +150,7 @@ class Searcher {
      * 
      * @param int $tokenType
      * @param int $startingToken
-     * @param TokenCollection[] $tokens
+     * @param TokenCollection $tokens
      * @return null|int
      */
     public function getPositionOfPrevious($tokenType, $startingToken, TokenCollection $tokens)
@@ -168,7 +168,7 @@ class Searcher {
      * 
      * @param int $tokenType
      * @param int $startingToken
-     * @param TokenCollection[] $tokens
+     * @param TokenCollection $tokens
      * @return null|int
      */
     public function getPositionOfNext($tokenType, $startingToken, TokenCollection $tokens) 
@@ -187,7 +187,7 @@ class Searcher {
      * 
      * @param int $tokenType
      * @param int $startingToken
-     * @param TokenCollection[] $tokens
+     * @param TokenCollection $tokens
      * @param int $limit
      * @return bool
      */
@@ -202,7 +202,7 @@ class Searcher {
      * 
      * @param int $tokenType
      * @param int $startingToken
-     * @param TokenCollection[] $tokens
+     * @param TokenCollection $tokens
      * @param int $limit
      * @return bool
      */
