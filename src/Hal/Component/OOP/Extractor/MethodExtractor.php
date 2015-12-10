@@ -191,7 +191,7 @@ class MethodExtractor implements ExtractorInterface {
      *
      * @param ReflectedMethod $method
      * @param integer $n
-     * @param TokenCollection[] $tokens
+     * @param TokenCollection $tokens
      * @param ReflectedClass $currentClass
      * @return $this
      */

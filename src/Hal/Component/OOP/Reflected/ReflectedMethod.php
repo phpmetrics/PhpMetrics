@@ -163,7 +163,7 @@ class ReflectedMethod {
     }
 
     /**
-     * @return TokenCollection[]
+     * @return TokenCollection
      */
     public function getTokens()
     {
