@@ -212,4 +212,4 @@ class Searcher {
         
         return ($position - $startingToken >= $limit);
     }
-};
+}
