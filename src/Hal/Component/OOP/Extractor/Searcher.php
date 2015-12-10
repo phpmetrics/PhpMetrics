@@ -153,4 +153,4 @@ class Searcher {
         $position = $this->getPositionOfNext($tokenType, $n, $tokens);
         return ($position - $n >= $limit);
     }
-};
+}
