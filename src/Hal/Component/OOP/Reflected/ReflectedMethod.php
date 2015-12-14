@@ -20,9 +20,9 @@ use Hal\Component\OOP\Resolver\TypeResolver;
  */
 class ReflectedMethod {
 
-    CONST VISIBILITY_PUBLIC = 1;
-    CONST VISIBILITY_PRIVATE = 2;
-    CONST VISIBILITY_PROTECTED = 3;
+    CONST VISIBILITY_PUBLIC = 'public';
+    CONST VISIBILITY_PRIVATE = 'private';
+    CONST VISIBILITY_PROTECTED = 'protected';
     CONST STATE_LOCAL = 1;
     CONST STATE_STATIC = 2;
 
