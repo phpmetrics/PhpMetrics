@@ -2,6 +2,7 @@
 namespace Test\Hal\Component\OOP;
 
 use Hal\Component\OOP\Reflected\ReflectedReturn;
+use Hal\Component\OOP\Resolver\TypeResolver;
 use Hal\Component\Token\TokenCollection;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\Result;
@@ -74,6 +75,28 @@ class Php7ReturnExtractorTest extends \PHPUnit_Framework_TestCase {
         $expected
             ->setMode(ReflectedReturn::STRICT_TYPE_HINT)
             ->setType('\\Schema')
+        ;
+
+        $this->assertEquals(array($expected), $method->getReturns());
+    }
+
+    public function testUsageOfConstantInParameterDoesNotBreakEngine() {
+
+        $filename = __DIR__.'/../../../resources/oop/php7-return-bugfix1.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+
+        $classes = $result->getClasses();
+        $this->assertEquals(1, sizeof($classes));
+        $methods = $classes[0]->getMethods();
+        $this->assertEquals(1, sizeof($methods));
+        $method = $methods['register'];
+
+        $expected = new ReflectedReturn();
+        $expected
+            ->setMode(ReflectedReturn::ESTIMATED_TYPE_HINT)
+            ->setType(TypeResolver::TYPE_UNKNWON)
+            ->setValue('stream_filter_register($name, $class)')
         ;
 
         $this->assertEquals(array($expected), $method->getReturns());

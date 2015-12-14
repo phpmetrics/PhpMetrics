@@ -270,8 +270,9 @@ class MethodExtractor implements ExtractorInterface {
 
         // PHP 7
         // we cannot use specific token. The ":" delimiter is a T_STRING token
+        // in regex we match ":" followed by any character except another ":"
         $following = $this->searcher->getUnder(array('{', ';'), $n, $tokens);
-        if(preg_match('!:(.*)!', $following, $matches)) {
+        if(preg_match('@(?<!:):\s*(\w+)@', $following, $matches)) {
             $type = trim($matches[1]);
             if(empty($type)) {
                 return $this;
