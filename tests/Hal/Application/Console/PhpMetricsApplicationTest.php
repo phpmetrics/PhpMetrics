@@ -30,7 +30,7 @@ class PhpMetricsApplicationTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testApplicationCanBeRunnedWithoutName() {
-        $command = sprintf('php '.__DIR__.'/../../../../bin/phpmetrics '.$this->toExplore);
+        $command = sprintf('php '.__DIR__.'/../../../../bin/phpmetrics '.$this->toExplore. ' 2>&1');
         $output = shell_exec($command);
         $this->assertRegExp('/Maintainability/', $output);
     }

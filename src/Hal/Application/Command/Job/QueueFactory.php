@@ -75,7 +75,7 @@ class QueueFactory
             ->push(new SearchBounds($this->output, $bounds))
             ->push(new DoAggregatedAnalyze($this->output, new DirectoryAggregatorFlat($this->input->getOption('level'))))
             ->push(new CalculateScore(new Scoring($bounds)))
-            ->push(new ReportRenderer(true, $this->output, new Summary\Cli($validator, $bounds)))
+            ->push(new ReportRenderer(true, $this->output, new Summary\Cli($validator, $bounds, $this->output)))
             ->push(new ReportRenderer($this->config->getLogging()->getReport('cli'), $this->output, new Details\Cli($validator, $bounds)))
             ->push(new ReportWriter($this->config->getLogging()->getReport('html'), $this->output, new Summary\Html($validator, $bounds, $this->config->getTemplate())))
             ->push(new ReportWriter($this->config->getLogging()->getReport('json'), $this->output, new Details\Json($validator, $bounds)))

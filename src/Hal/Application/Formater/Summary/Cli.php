@@ -39,15 +39,22 @@ class Cli implements FormaterInterface {
     private $bound;
 
     /**
+     * @var OutputInterface
+     */
+    private $output;
+
+    /**
      * Constructor
      *
      * @param Validator $validator
      * @param BoundsInterface $bound
+     * @param OutputInterface $output
      */
-    public function __construct(Validator $validator, BoundsInterface $bound)
+    public function __construct(Validator $validator, BoundsInterface $bound, OutputInterface $output)
     {
         $this->bound = $bound;
         $this->validator = $validator;
+        $this->output = $output;
     }
 
     /**
@@ -55,17 +62,16 @@ class Cli implements FormaterInterface {
      */
     public function terminate(ResultCollection $collection, ResultCollection $groupedResults){
 
-        $output = new ConsoleOutput(OutputInterface::VERBOSITY_NORMAL, true);
-        $output->write(str_pad("\x0D", 80, "\x20"));
-        $output->writeln('');
+        $this->output->write(str_pad("\x0D", 80, "\x20"));
+        $this->output->writeln('');
 
         // score
         $score = $collection->getScore();
 //        if($score) {
             foreach ($score->all() as $name => $value) {
-                $output->writeln(sprintf('%s %s', str_pad($name, 35, '.'),  str_pad($value, 5, ' ', STR_PAD_LEFT). ' / ' . Scoring::MAX));
+                $this->output->writeln(sprintf('%s %s', str_pad($name, 35, '.'),  str_pad($value, 5, ' ', STR_PAD_LEFT). ' / ' . Scoring::MAX));
             }
-            $output->writeln('');
+        $this->output->writeln('');
 //        }
 
     }
