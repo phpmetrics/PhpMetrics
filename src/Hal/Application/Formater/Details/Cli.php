@@ -177,9 +177,9 @@ class Cli implements FormaterInterface {
      */
     private function formatTime($v) {
         return sprintf('%s hour(s), %s minute(s) and %s second(s)'
-            , gmdate('H', $v)
-            , gmdate('m', $v)
-            , gmdate('s', $v)
+            , floor($v / 3600)
+            , ($v / 60) % 60
+            , $v % 60
         );
     }
 
