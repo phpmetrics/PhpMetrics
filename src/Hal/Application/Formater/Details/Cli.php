@@ -172,14 +172,14 @@ class Cli implements FormaterInterface {
     /**
      * Format time in text
      *
-     * @param null|double $v
+     * @param null|double $duration Duration in seconds
      * @return string
      */
-    private function formatTime($v) {
+    private function formatTime($duration) {
         return sprintf('%s hour(s), %s minute(s) and %s second(s)'
-            , floor($v / 3600)
-            , ($v / 60) % 60
-            , $v % 60
+            , floor($duration / 3600)
+            , ($duration / 60) % 60
+            , $duration % 60
         );
     }
 
