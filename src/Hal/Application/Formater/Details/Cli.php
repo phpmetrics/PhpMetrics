@@ -176,6 +176,7 @@ class Cli implements FormaterInterface {
      * @return string
      */
     private function formatTime($duration) {
+        $duration = abs((int) $duration);
         return sprintf('%s hour(s), %s minute(s) and %s second(s)'
             , floor($duration / 3600)
             , ($duration / 60) % 60
