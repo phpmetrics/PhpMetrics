@@ -9,7 +9,7 @@ build: test
 	
 	@echo Releasing phar
 	@sed -i "s/<VERSION>/`semver tag`/g" /tmp/phpmetrics-build/build.php
-	
+
 	@echo Installing dependencies
 	@cd /tmp/phpmetrics-build && composer install --no-dev --optimize-autoloader --prefer-dist
 
@@ -20,6 +20,9 @@ build: test
 	
 	@echo Testing phar
 	./vendor/bin/phpunit -c phpunit.xml.dist --group=binary &&	echo "Done"
+
+	@echo Releasing sources
+	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" bin/phpmetrics
 
 
 # Run unit tests
