@@ -1,9 +1,10 @@
 {
-    "name": "halleck45/phpmetrics",
+    "name": "phpmetrics/phpmetrics",
     "replace": {
+        "halleck45/phpmetrics": "*",
         "halleck45/php-metrics": "*"
     },
-    "description": "Static analyzis tool for PHP : Coupling, Cyclomatic complexity, Maintainability Index, Halstead's metrics... and more !",
+    "description": "Static analyzer tool for PHP : Coupling, Cyclomatic complexity, Maintainability Index, Halstead's metrics... and more !",
     "license": "MIT",
     "keywords": [
         "quality",
@@ -21,7 +22,7 @@
     ],
     "homepage": "http://www.phpmetrics.org",
     "support": {
-        "issues": "https://github.com/Halleck45/PhpMetrics/issues"
+        "issues": "https://github.com/PhpMetrics/PhpMetrics/issues"
     },
     "autoload": {
         "psr-0": {

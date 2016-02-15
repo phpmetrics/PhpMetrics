@@ -24,7 +24,7 @@ class Updater {
     /**
      * @var string
      */
-    private $url = 'https://github.com/Halleck45/PhpMetrics/raw/%s/build/phpmetrics.phar';
+    private $url = 'https://github.com/PhpMetrics/PhpMetrics/raw/%s/build/phpmetrics.phar';
 
     /**
      * @var OutputInterface

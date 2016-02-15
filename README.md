@@ -2,9 +2,9 @@
 
 Gives metrics about PHP project and classes.
 
-[![License](https://poser.pugx.org/halleck45/php-metrics/license.svg)](https://packagist.org/packages/halleck45/php-metrics)
-[![Build Status](https://secure.travis-ci.org/Halleck45/PhpMetrics.svg)](http://travis-ci.org/Halleck45/PhpMetrics)  [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Halleck45/PhpMetrics/?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/halleck45/php-metrics/v/stable.svg)](https://packagist.org/packages/halleck45/php-metrics)
+[![License](https://poser.pugx.org/phpmetrics/phpmetrics/license.svg)](https://packagist.org/packages/phpmetrics/phpmetrics)
+[![Build Status](https://secure.travis-ci.org/phpmetrics/PhpMetrics.svg)](http://travis-ci.org/phpmetrics/PhpMetrics)  [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phpmetrics/PhpMetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/phpmetrics/PhpMetrics/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/phpmetrics/php-metrics/v/stable.svg)](https://packagist.org/packages/phpmetrics/php-metrics)
 [![Dependency Status](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815/badge.svg)](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815)
 
 + [Installation](#installation)
@@ -23,7 +23,7 @@ Gives metrics about PHP project and classes.
 As phar archive:
 
 ```bash
-wget https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar
+wget https://github.com/phpmetrics/PhpMetrics/raw/master/build/phpmetrics.phar
 chmod +x phpmetrics.phar
 mv phpmetrics.phar /usr/local/bin/phpmetrics
 ```
@@ -34,7 +34,7 @@ Then, if you need to update:
     
 Or with Composer (Make sure you have `~/.composer/vendor/bin/` in your path):
 
-    php composer.phar global require 'halleck45/phpmetrics'
+    php composer.phar global require 'phpmetrics/phpmetrics'
 
 # Usage
 
@@ -42,7 +42,7 @@ Or with Composer (Make sure you have `~/.composer/vendor/bin/` in your path):
 
 The command command `phpmetrics <folder or filename>` will output:
 
-![Standard report](http://halleck45.github.io/PhpMetrics/images/report-standard.png)
+![Standard report](http://phpmetrics.github.io/PhpMetrics/images/report-standard.png)
 
 If you want to get the summary HTML report (with charts):
 

@@ -139,7 +139,7 @@ class DoAnalyze implements JobInterface
                     (
                         sprintf("a '%s' exception occured analyzing file %s\nMessage: %s", get_class($e), $filename, $e->getMessage())
                         . sprintf("\n------------\nStack:\n%s", $e->getTraceAsString())
-                        . sprintf("\n------------\nDo not hesitate to report a bug: https://github.com/Halleck45/PhpMetrics/issues")
+                        . sprintf("\n------------\nDo not hesitate to report a bug: https://github.com/PhpMetrics/PhpMetrics/issues")
                     )
                 , 0, $e->getPrevious());
             }
