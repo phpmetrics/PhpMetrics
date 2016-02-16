@@ -4,7 +4,7 @@ Gives metrics about PHP project and classes.
 
 [![License](https://poser.pugx.org/phpmetrics/phpmetrics/license.svg)](https://packagist.org/packages/phpmetrics/phpmetrics)
 [![Build Status](https://secure.travis-ci.org/phpmetrics/PhpMetrics.svg)](http://travis-ci.org/phpmetrics/PhpMetrics)  [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phpmetrics/PhpMetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/phpmetrics/PhpMetrics/?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/phpmetrics/php-metrics/v/stable.svg)](https://packagist.org/packages/phpmetrics/php-metrics)
+[![Latest Stable Version](https://poser.pugx.org/phpmetrics/phpmetrics/v/stable.svg)](https://packagist.org/packages/phpmetrics/phpmetrics)
 [![Dependency Status](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815/badge.svg)](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815)
 
 + [Installation](#installation)
