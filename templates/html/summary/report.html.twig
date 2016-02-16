@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>PhpMetrics report - by Jean-François Lépine</title>
+    <title>PhpMetrics report {% include 'version.html.twig' %} - by Jean-François Lépine</title>
     <meta charset="utf-8">
     {% include "assets/favicon.html.twig" %}
     <style type="text/css">
@@ -30,7 +30,7 @@
                 <li id="link-overview" class="active"><a >Overview</a></li>
                 <li id="link-score"><a >Evaluation</a></li>
                 <li id="link-relations"><a  >Relations map</a></li>
-                <li id="link-repartition"><a  >Repartition</a></li>
+                <li id="link-repartition"><a  >Repartition</a></li>{% include 'version.html.twig' %}
                 <li id="link-explore"><a >Explore</a></li>
                 <li id="link-help"><a  >Help</a></li>
             </ul>
@@ -312,6 +312,7 @@
             <div class="col-sm-12">
                 <h3>Help</h3>
                 <ul>
+                    <li>You're using PhpMetrics {% include 'version.html.twig' %}</li>
                     <li>Online help is available on the <a href="http://www.phpmetrics.org/documentation/index.html">PhpMetrics website</a>.</li>
                     <li>Sources of PhpMetrics are available on <a href="https://github.com/PhpMetrics/PhpMetrics">Github</a>.</li>
                     <li>PhpMetrics is created by <a href="http://lepine.pro">Jean-François Lépine</a>.</li>
@@ -324,7 +325,7 @@
 
 
     <div class="row">
-        Powered by <a href="http://www.phpmetrics.org">PhpMetrics</a> - Copyright Jean-François Lépine
+        Powered by <a href="http://www.phpmetrics.org">PhpMetrics</a> {% include 'version.html.twig' %} - Copyright Jean-François Lépine
         <br/> Generated on {{"now"|date('jS \\o\\f F Y \\a\\t h:i:s A')}}
     </div>
 
