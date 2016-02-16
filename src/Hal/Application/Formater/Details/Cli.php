@@ -170,16 +170,18 @@ class Cli implements FormaterInterface {
     }
 
     /**
-     * Format time in text
+     * Format duration in seconds into text representation
      *
-     * @param null|double $v
+     * @param null|double $duration Duration in seconds
      * @return string
      */
-    private function formatTime($v) {
-        return sprintf('%s hour(s), %s minute(s) and %s second(s)'
-            , gmdate('H', $v)
-            , gmdate('m', $v)
-            , gmdate('s', $v)
+    private function formatTime($duration) {
+        $duration = abs((int) $duration);
+        return sprintf(
+            '%s hour(s), %s minute(s) and %s second(s)'
+            , floor($duration / 3600)
+            , ($duration / 60) % 60
+            , $duration % 60
         );
     }
 
