@@ -6,7 +6,11 @@ build: test
 	@mkdir -p /tmp/phpmetrics-build
 	@cp * -R /tmp/phpmetrics-build
 	@rm -Rf /tmp/phpmetrics-build/vendor /tmp/phpmetrics-build/composer.lock
-	
+
+	@echo Releasing sources
+	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" bin/phpmetrics
+	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" templates/html/version.html.twig
+
 	@echo Releasing phar
 	@sed -i "s/<VERSION>/`semver tag`/g" /tmp/phpmetrics-build/build.php
 
@@ -17,13 +21,9 @@ build: test
 	@cd /tmp/phpmetrics-build && php build.php
 	@cp /tmp/phpmetrics-build/build/phpmetrics.phar build/phpmetrics.phar
 	@rm -Rf /tmp/phpmetrics-build
-	
+
 	@echo Testing phar
 	./vendor/bin/phpunit -c phpunit.xml.dist --group=binary &&	echo "Done"
-
-	@echo Releasing sources
-	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" bin/phpmetrics
-
 
 # Run unit tests
 test:
