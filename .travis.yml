@@ -5,6 +5,7 @@ sudo: false
 addons:
   apt_packages:
     - graphviz
+    - ruby2.1
 
 php:
     - 5.4
@@ -17,7 +18,24 @@ before_script:
   - composer selfupdate --quiet
   - composer install --prefer-dist --no-interaction --no-progress
   - ./vendor/bin/phpunit
-  - composer update --prefer-dist --no-interaction --no-progress
 
 script:
-  - ./vendor/bin/phpunit
+  - make test
+
+after_script:
+  - gem install semver
+  - make build
+
+
+deploy:
+  provider: bintray
+  file: "artifacts/bintray.json"
+  user: ${BINTRAY_USER}
+  key: ${BINTRAY_KEY}
+  on:
+    branch: artifact
+
+env:
+  global:
+  - secure: cGI2zwz9C9kwUmYmoVAcS/0xNqNCbuQbtVD0AFBKWeWUdX+1ZtfHOrl1YXLbowBc8+ha8PsMrkif/OV/0tTzSvyyJOBDtbfvbwmNAbVBRQtyJsVWTn+Dnv0RVRR51GjdUkfzMGtmZk1Gsq7Ofcunm3wUVLlpocv/VTZXmPUeDBitcg8Q2WfUNcGMWMKfoN5uzwFUyPFVHwsy+Qa47V31rYCKvmyL+vg9S72tMI4XagmygOZuKI8/VdQoxdd7BhoY9F8qJ0gp4hMAW8uZmGennXGmisO4hULUW7tlyc1D8sV3hP6ywFlu6aN5QsXnEhrcCOZQgh4pASQaGOailvYzLZ+HSV5AdonrZamw3yAoztZkO53iQDIP7OepZQDZ7zoMz9G19asNs37oYxUuoszoTf+G6Ph45aDVo8boCV+Z7uCpGNJUSaDXBc3GRKDbE6YNNpJXDhL25975ZxmB1mtGqLRyV7KU501BGM4gs+LF7OQK7MK22vifvm/rvAOdbD0BbPRQbgyp6oSUM+6IpHbU0q6/yTegfqnrM9H/Rw0mg32DFNy23dlQagsOQyfq+Gq0TyskzsG4OvIY0UCHugIxTgxm2J0t7zfnlw6tVbwb4a5C4T+xxr9ts/TivGgxPd41fAIwjCZnaTgHU28cTU2Q2NlOJJsPXOb4NJjfVMwjzlc=
+  - secure: q5TO9rAr6GonU8AlPBa0STtRZYYibb9Df+BQdzXwGC6lRxjZfnjDODzA2vh0E92aoFlNJeQCVg3Px/ASFjzVDuaCO6t0jUs+zcCsMSq3IweU2/h7Dy0mJmPvWIkGXP2XMF0/sCuMvoo+mscMN9jCRnqdBCdEDQVy5kA2+tUxB3M/u77pARADVoxrfDMZJqo3H2e6ZrPAuh7BFBGrLfJLb4l6NVF+QgCB5dyG5pG/BF2m3oN7Ymve3jRD0UEK3XF30tk27vl/8GQbbVMhCBY1RFuq8w40TVEo40VsG7bf0MWu76lfpd87HcPSiGVFgo1ZtvPPRZgnaGl87c+upkF4WQwMERQ/37zNh4SwjYWDsrD1BIQqk/iOUg9UiKM9jIUph3psGDSk16PhqjRO5XUNTycwDtEPj71qvtiuj+ixc0hpa3TFNiLC5zlhCOAEJLq0GMIa3NEY+lpLtvxFtLxdyaeWgnRAGMGIH2MbQH5Xr/b4gbTkEctakZOPQLp8GN1oXLmnSZYS1RWAyBSsBs93eoBWwXRSXQnRoQj/QQsl6fTKImEWTwWtVV7BvwJW94j44vDz5wmCwGtuCMXp0AEni9UlXUMfo7A/pk4kvWHX17z5X5TkgVvS7hkO6JKNtWMwS+3JWUqeR91ugsh0Ammm/U7qW2kmAin7DbOKRdQCtIg=
