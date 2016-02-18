@@ -1,34 +1,8 @@
-REPLACE=`semver tag`
-
-# Build phar
-build: test
-	@echo Copying sources
-	@mkdir -p /tmp/phpmetrics-build
-	@cp * -R /tmp/phpmetrics-build
-	@rm -Rf /tmp/phpmetrics-build/vendor /tmp/phpmetrics-build/composer.lock
-
-	@echo Releasing sources
-	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" bin/phpmetrics
-	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" templates/html/version.html.twig
-
-	@echo Releasing phar
-	@sed -i "s/<VERSION>/`semver tag`/g" /tmp/phpmetrics-build/build.php
-
-	@echo Installing dependencies
-	@cd /tmp/phpmetrics-build && composer install --no-dev --optimize-autoloader --prefer-dist
-
-	@echo Building phar
-	@cd /tmp/phpmetrics-build && php build.php
-	@cp /tmp/phpmetrics-build/build/phpmetrics.phar build/phpmetrics.phar
-	@rm -Rf /tmp/phpmetrics-build
-
-	@echo Testing phar
-	./vendor/bin/phpunit -c phpunit.xml.dist --group=binary &&	echo "Done"
+include artifacts/Makefile
 
 # Run unit tests
 test:
 	./vendor/bin/phpunit -c phpunit.xml.dist
-
 
 # Publish new release. Usage:
 #   make tag VERSION=(major|minor|patch)
@@ -36,6 +10,11 @@ test:
 tag:
 	@semver inc $(VERSION)
 	@echo "New release: `semver tag`"
+	@echo Releasing sources
+	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" bin/phpmetrics
+	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" templates/html/version.html.twig
+	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" artifacts/bintray.json
+	@sed -i -r "s/([0-9]{4}\-[0-9]{2}\-[0-9]{2})/`date +%Y-%m-%d`/g" artifacts/bintray.json
 
 
 # Tag git with last release
