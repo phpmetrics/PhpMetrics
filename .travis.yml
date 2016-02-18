@@ -33,7 +33,7 @@ deploy:
   user: ${BINTRAY_USER}
   key: ${BINTRAY_KEY}
   on:
-    branch: artifact
+    branch: master
 
 env:
   global:
