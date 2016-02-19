@@ -20,7 +20,9 @@ Gives metrics about PHP project and classes.
 
 # Installation
 
-As phar archive:
+#### As a phar archive:
+
+You can install the [.phar](https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar) package by command line running the following commands:
 
 ```bash
 wget https://github.com/phpmetrics/PhpMetrics/raw/master/build/phpmetrics.phar
@@ -31,16 +33,17 @@ mv phpmetrics.phar /usr/local/bin/phpmetrics
 Then, if you need to update:
 
     phpmetrics self-update
-    
-Or with Composer (Make sure you have `~/.composer/vendor/bin/` in your path):
 
-    php composer.phar global require 'phpmetrics/phpmetrics'
+
+#### As a composer dependency:
+
+    composer global require 'phpmetrics/phpmetrics'
 
 # Usage
 
 > Do not hesitate to visit the [official documentation](http://www.phpmetrics.org).
 
-The command command `phpmetrics <folder or filename>` will output:
+The command command `phpmetrics --report-cli <folder or filename> ` will output:
 
 ![Standard report](http://phpmetrics.github.io/PhpMetrics/images/report-standard.png)
 
@@ -114,6 +117,7 @@ You can also export results as violations (MessDetector report), in XML format w
 * `--excluded-dirs` - Regex of subdirectories to exclude.
 * `--symlinks` - Enable following symlinks.
 * `--without-oop` - If provided, tool will not extract any information about OOP model (faster).
+* `--ignore-errors` - If provided, files will be analyzed even with syntax errors
 * `--failure-condition` - Optional failure condition, in english. Example: --failure-condition="average.maintainabilityIndex < 50 or sum.loc > 10000"
 * `--config` - Config file (YAML). Example: --config=myconfig.yml
 * `--template-title` - Title for the HTML summary report.
@@ -170,7 +174,6 @@ In order to run unit tests, please install the dev dependencies:
 
     curl -sS https://getcomposer.org/installer | php
     php composer.phar install
-    gem install semver
 
 Then, in order to run the test suite:
 
