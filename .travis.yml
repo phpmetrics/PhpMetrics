@@ -5,7 +5,6 @@ sudo: false
 addons:
   apt_packages:
     - graphviz
-    - ruby2.1
 
 php:
     - 5.4
@@ -22,8 +21,10 @@ script:
   - make test
 
 after_script:
-  - gem install semver
   - make build
+
+before_deploy:
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && apt-get install -qq -y ruby2.1 && gem install semver'
 
 deploy:
   provider: bintray
