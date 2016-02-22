@@ -17,7 +17,6 @@ php:
 before_script:
   - composer selfupdate --quiet
   - composer install --prefer-dist --no-interaction --no-progress
-  - ./vendor/bin/phpunit
 
 script:
   - make test
@@ -26,7 +25,6 @@ after_script:
   - gem install semver
   - make build
 
-
 deploy:
   provider: bintray
   file: "artifacts/bintray.json"
@@ -34,6 +32,7 @@ deploy:
   key: ${BINTRAY_KEY}
   on:
     branch: master
+    php: '5.6'
 
 env:
   global:
