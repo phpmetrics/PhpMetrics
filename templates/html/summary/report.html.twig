@@ -4,10 +4,18 @@
     <meta charset="utf-8">
     {% include "assets/favicon.html.twig" %}
     <style type="text/css">
-        {% include "assets/nv.d3.css.twig" %}
-        {% include "assets/d3js-radar.css.twig" %}
+        {# including assets. Deal with offline mode #}
+        {% if offline %}
+            {% include "assets/nv.d3.css.twig" %}
+            {% include "assets/d3js-radar.css.twig" %}
+        {% endif %}
         {% include "assets/styles.css.twig" %}
     </style>
+    {# including assets. Deal with offline mode #}
+    {% if not offline %}
+        <link rel="stylesheet" type="text/css" href="http://nvd3.org/assets/css/nv.d3.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/alangrafu/radar-chart-d3/master/src/radar-chart.min.css">
+    {% endif %}
 </head>
 
 <body>
@@ -339,10 +347,16 @@
 
 
 {% include "assets/functions.js.twig" %}
-{% include "assets/d3js.js.twig" %}
-{% include "assets/nv.d3.min.js.twig" %}
-{% include "assets/d3js-radar.js.twig" %}
-
+{# including assets. Deal with offline mode #}
+{% if offline %}
+    {% include "assets/d3js.js.twig" %}
+    {% include "assets/nv.d3.min.js.twig" %}
+    {% include "assets/d3js-radar.js.twig" %}
+{% else %}
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://nvd3.org/assets/js/nv.d3.js" charset="utf-8"></script>
+    <script src="https://cdn.rawgit.com/alangrafu/radar-chart-d3/master/src/radar-chart.min.js" charset="utf-8"></script>
+{% endif %}
 {% include "summary/report-score.js.twig" %}
 {% include "summary/report-tabular.js.twig" %}
 {% include "summary/report-maintainability.js.twig" %}

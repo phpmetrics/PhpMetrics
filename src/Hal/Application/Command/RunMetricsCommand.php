@@ -85,6 +85,9 @@ class RunMetricsCommand extends Command
                 ->addOption(
                     'template-title', null, InputOption::VALUE_REQUIRED, 'Title for the HTML summary report', null
                 )
+                ->addOption(
+                    'offline', null, InputOption::VALUE_NONE, 'Include all JavaScript and CSS files in HTML. Generated report will be bigger'
+                )
         ;
     }
 
