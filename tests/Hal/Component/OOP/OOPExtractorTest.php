@@ -1,6 +1,7 @@
 <?php
 namespace Test\Hal\Component\OOP;
 
+use Hal\Component\Token\Tokenizer;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex;
 use Hal\Metrics\Design\Component\MaintainabilityIndex\Result;
 use Hal\Component\OOP\Extractor\Extractor;
@@ -110,6 +111,17 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
         $class = $classes[2];
         $this->assertEquals(array('\My\Contract1', '\My\Contract2'), $class->getInterfaces(), 'multiple interfaces of class are found');
 
+    }
+    
+    public function testReservedWordClassDoesNotCount()
+    {
+        $filename = __DIR__.'/../../../resources/oop/reserved-word-class.php';
+        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
+        $result = $extractor->extract($filename);
+        $classes = $result->getClasses();
+        $this->assertEquals(1, sizeof($classes));
+        $class = $classes[0];
+        $this->assertEquals('\My\Test', $class->getFullname());
     }
 
 

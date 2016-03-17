@@ -129,6 +129,12 @@ class Extractor {
                     break;
 
                 case T_CLASS:
+                    $i = $n;
+                    // avoid MyClass::class syntax
+                    if($this->searcher->isPrecededBy(T_DOUBLE_COLON, $i, $tokens, 1)) {
+                        continue;
+                    }
+
                     $c = $this->extractors->class->extract($n, $tokens);
                     $c->setNameResolver($nameResolver);
                     // push class AND in global AND in local class map
