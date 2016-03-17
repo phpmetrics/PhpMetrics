@@ -194,8 +194,8 @@ class Searcher {
     public function isPrecededBy($tokenType, $startingToken, TokenCollection $tokens, $limit = 2)
     {
         $position = $this->getPositionOfPrevious($tokenType, $startingToken, $tokens);
-        
-        return ($startingToken - $position <= $limit);
+
+        return $position !== null && ($startingToken - $position <= $limit);
     }
     
     /**
