@@ -13,7 +13,6 @@ use Hal\Application\Rule\Validator;
 use Hal\Component\Bounds\BoundsInterface;
 use Hal\Component\Bounds\Result\ResultInterface;
 use Hal\Component\Result\ResultCollection;
-use Symfony\Component\Console\Helper\TableHelper;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -76,7 +75,7 @@ class Cli implements FormaterInterface {
 
         $hasOOP = null !== $total->getSum('instability');
 
-        $table = new TableHelper();
+        $table = new \Symfony\Component\Console\Helper\Table($output);
         $table
             ->setHeaders(array_merge(
                 array(
@@ -99,9 +98,7 @@ class Cli implements FormaterInterface {
                     , 'ce'
                     , 'ca'
                     ) : array())
-
-            ))
-            ->setLayout(TableHelper::LAYOUT_DEFAULT);
+            ));
 
         foreach($groupedResults as $result) {
             $table->addRow(array_merge(
@@ -128,7 +125,7 @@ class Cli implements FormaterInterface {
                 )
             );
         }
-        $table->render($output);
+        $table->render();
 
         return $output->fetch();
     }
