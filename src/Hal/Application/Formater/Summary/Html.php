@@ -79,6 +79,7 @@ class Html implements FormaterInterface {
             , 'bounds' => $bound
             , 'withOOP' => null !== $bound->getSum('instability')
             , 'title' => $this->template->getTitle()
+            , 'offline' => $this->template->isOffline()
         ));
     }
 

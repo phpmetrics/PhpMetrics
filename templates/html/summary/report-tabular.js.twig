@@ -126,6 +126,13 @@
                     .datum(tabularize(JSON.parse(JSON.stringify(groupedData))))
                     .call(chart);
 
+            // fix bug with nvd3js and html in labels
+            d3.select('#chart-tableview').selectAll('th').each(function() {
+                this.innerHTML = this.innerText;
+            });
+
+
+
             return chart;
         });
 

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * (c) Jean-François Lépine <https://twitter.com/Halleck45>
+ * (c) Jean-Franï¿½ois Lï¿½pine <https://twitter.com/Halleck45>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,8 +16,15 @@ namespace Hal\Application\Config;
  */
 class TemplateConfiguration
 {
-    /** @var string Template title name */
+    /**
+     * @var string Template title name
+     */
     private $title;
+
+    /**
+     * @var bool
+     */
+    private $offline;
 
     /**
      * @param array $defaults Default settings
@@ -25,6 +32,7 @@ class TemplateConfiguration
     public function __construct(array $defaults = array())
     {
         $this->title = empty($defaults['title']) ? 'PhpMetrics report' : $defaults['title'];
+        $this->offline = isset($defaults['offline']) ? (bool) $defaults['offline'] : false;
     }
 
     /**
@@ -44,4 +52,23 @@ class TemplateConfiguration
     {
         return $this->title;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isOffline()
+    {
+        return $this->offline;
+    }
+
+    /**
+     * @param boolean $offline
+     * @return self
+     */
+    public function setOffline($offline)
+    {
+        $this->offline = (bool) $offline;
+        return $this;
+    }
+
 }
