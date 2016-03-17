@@ -50,6 +50,7 @@ class Hydrator
             ->setBasePath($array['path']['directory'])
             ->setExtensions($array['path']['extensions'])
             ->setExcludedDirs($array['path']['exclude'])
+            ->setFollowSymlinks($array['path']['symlinks'])
         ;
 
         $config
