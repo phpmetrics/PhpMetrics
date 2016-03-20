@@ -1,5 +1,5 @@
 <?php
-chdir(__DIR__);
+chdir(__DIR__.'/../../');
 
 if (!file_exists('vendor/autoload.php')) {
   echo '[ERROR] It\'s required to run "composer install" before building PhpMetrics!' . PHP_EOL;
