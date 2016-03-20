@@ -51,7 +51,7 @@ class ViolationsXmlTest extends \PHPUnit_Framework_TestCase {
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $validator->expects($this->any())->method('getRuleSet')->willReturn($ruleSet);
         
-        $formater = new Xml($validator, $bounds);
+        $formater = new Xml($validator, $bounds, $this->getMockBuilder('\Hal\Application\Extension\ExtensionService')->disableOriginalConstructor()->getMock());
         $output = $formater->terminate($collection, $groupedResults);
 
 
@@ -67,7 +67,7 @@ class ViolationsXmlTest extends \PHPUnit_Framework_TestCase {
     public function testFormaterHasName() {
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $bounds = new Bounds();
-        $formater = new Xml($validator, $bounds);
+        $formater = new Xml($validator, $bounds, $this->getMockBuilder('\Hal\Application\Extension\ExtensionService')->disableOriginalConstructor()->getMock());
         $this->assertNotNull($formater->getName());
     }
 }
