@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Application\Command\Job;
+use Hal\Application\Extension\ExtensionService;
 use Hal\Application\Formater\Chart;
 use Hal\Application\Formater\Details;
 use Hal\Application\Formater\Summary;
@@ -25,7 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class QueueFactory
+class QueueAnalyzeFactory
 {
 
     /**
@@ -44,17 +45,24 @@ class QueueFactory
     private $input;
 
     /**
+     * @var ExtensionService
+     */
+    private $extensionsService;
+
+    /**
      * Constructor
      *
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param ConfigurationInterface $config
+     * @param ExtensionService $extensionService
      */
-    public function __construct(InputInterface $input, OutputInterface $output, ConfigurationInterface $config)
+    public function __construct(InputInterface $input, OutputInterface $output, ConfigurationInterface $config, ExtensionService $extensionService)
     {
         $this->config = $config;
         $this->input = $input;
         $this->output = $output;
+        $this->extensionsService = $extensionService;
     }
 
     /**
@@ -75,14 +83,7 @@ class QueueFactory
             ->push(new SearchBounds($this->output, $bounds))
             ->push(new DoAggregatedAnalyze($this->output, new DirectoryAggregatorFlat($this->input->getOption('level'))))
             ->push(new CalculateScore(new Scoring($bounds)))
-            ->push(new ReportRenderer(true, $this->output, new Summary\Cli($validator, $bounds, $this->output)))
-            ->push(new ReportRenderer($this->config->getLogging()->getReport('cli'), $this->output, new Details\Cli($validator, $bounds)))
-            ->push(new ReportWriter($this->config->getLogging()->getReport('html'), $this->output, new Summary\Html($validator, $bounds, $this->config->getTemplate())))
-            ->push(new ReportWriter($this->config->getLogging()->getReport('json'), $this->output, new Details\Json($validator, $bounds)))
-            ->push(new ReportWriter($this->config->getLogging()->getReport('xml'), $this->output, new Summary\Xml($validator, $bounds)))
-            ->push(new ReportWriter($this->config->getLogging()->getReport('csv'), $this->output, new Details\Csv()))
-            ->push(new ReportWriter($this->config->getLogging()->getViolation('xml'), $this->output, new Violations\Xml($validator, $bounds)))
-            ->push(new ReportWriter($this->config->getLogging()->getChart('bubbles'), $this->output, new Chart\Bubbles($validator, $bounds)));
+        ;
 
         return $queue;
     }

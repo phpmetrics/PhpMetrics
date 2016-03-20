@@ -40,6 +40,7 @@
                 <li id="link-relations"><a  >Relations map</a></li>
                 <li id="link-repartition"><a  >Repartition</a></li>
                 <li id="link-explore"><a >Explore</a></li>
+                {{ extensions_menu(extensions) }}
                 <li id="link-help"><a  >Help</a></li>
             </ul>
         </div>
@@ -329,6 +330,10 @@
         </div>
         <!-- end: Help -->
 
+        <!-- Extensions blocks -->
+        {{ extensions_content(extensions) }}
+        <!-- end: Extensions -->
+
     </div>
 
 
@@ -365,7 +370,6 @@
 {% include "summary/report-relations.js.twig" %}
 
 
-
 <script type="text/javascript">
 
     document.onreadystatechange = function() {
@@ -383,6 +387,8 @@
             document.getElementById('xAxis').value = xAxis;
             document.getElementById('yAxis').value = yAxis;
             document.getElementById('rAxis').value = rAxis;
+
+            {{ extensions_js(extensions) }}
         }
     }
 

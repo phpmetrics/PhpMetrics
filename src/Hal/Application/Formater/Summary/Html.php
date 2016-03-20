@@ -9,6 +9,7 @@
 
 namespace Hal\Application\Formater\Summary;
 use Hal\Application\Config\TemplateConfiguration;
+use Hal\Application\Extension\ExtensionService;
 use Hal\Application\Formater\FormaterInterface;
 use Hal\Application\Formater\Twig\FormatingExtension;
 use Hal\Application\Rule\Validator;
@@ -45,17 +46,24 @@ class Html implements FormaterInterface {
     private $template;
 
     /**
+     * @var ExtensionService
+     */
+    private $extensionsService;
+
+    /**
      * Constructor
      *
-     * @param Validator             $validator
-     * @param BoundsInterface       $bound
+     * @param Validator $validator
+     * @param BoundsInterface $bound
      * @param TemplateConfiguration $template
+     * @param ExtensionService $extensionService
      */
-    public function __construct(Validator $validator, BoundsInterface $bound, TemplateConfiguration $template)
+    public function __construct(Validator $validator, BoundsInterface $bound, TemplateConfiguration $template, ExtensionService $extensionService)
     {
         $this->bound = $bound;
         $this->validator = $validator;
         $this->template = $template;
+        $this->extensionsService = $extensionService;
     }
 
     /**
@@ -80,6 +88,7 @@ class Html implements FormaterInterface {
             , 'withOOP' => null !== $bound->getSum('instability')
             , 'title' => $this->template->getTitle()
             , 'offline' => $this->template->isOffline()
+            , 'extensions' => $this->extensionsService
         ));
     }
 

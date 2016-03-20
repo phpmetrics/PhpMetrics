@@ -55,6 +55,11 @@ class Configuration implements ConfigurationInterface
     private $ignoreErrors = false;
 
     /**
+     * @var array
+     */
+    private $extensions = array();
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -63,6 +68,7 @@ class Configuration implements ConfigurationInterface
         $this->path = new PathConfiguration();
         $this->logging = new LoggingConfiguration();
         $this->template = new TemplateConfiguration();
+        $this->extensions = new ExtensionsConfiguration();
     }
 
     /**
@@ -173,5 +179,22 @@ class Configuration implements ConfigurationInterface
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getExtensions()
+    {
+        return $this->extensions;
+    }
+
+    /**
+     * @param array $extensions
+     * @return Configuration
+     */
+    public function setExtensions($extensions)
+    {
+        $this->extensions = $extensions;
+        return $this;
+    }
 
 }

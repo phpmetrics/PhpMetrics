@@ -9,6 +9,7 @@
 
 namespace Hal\Application\Formater\Details;
 
+use Hal\Application\Extension\ExtensionService;
 use Hal\Application\Formater\FormaterInterface;
 use Hal\Component\Result\ResultCollection;
 
@@ -26,13 +27,20 @@ class Json implements FormaterInterface {
     private $prettyPrint;
 
     /**
+     * @var ExtensionService
+     */
+    private $extensionsService;
+
+    /**
      * Constructor
      *
      * @param boolean $prettyPrint optional pretty printing for result json
+     * @param ExtensionService $extensionService
      */
-    public function __construct($prettyPrint = false)
+    public function __construct($prettyPrint = false, ExtensionService $extensionService)
     {
         $this->prettyPrint = $prettyPrint;
+        $this->extensionsService = $extensionService;
     }
 
     /**

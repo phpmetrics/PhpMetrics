@@ -1,6 +1,7 @@
 <?php
 namespace Hal\Application\Formater\Twig;
 
+use Hal\Application\Extension\ExtensionService;
 use Hal\Application\Rule\Validator;
 
 class FormatingExtension extends \Twig_Extension
@@ -21,13 +22,25 @@ class FormatingExtension extends \Twig_Extension
     }
 
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function getFilters()
     {
         return array(
             new \Twig_SimpleFilter('textify', array($this, 'textify'))
             , new \Twig_SimpleFilter('rule', array($this, 'rule'))
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFunctions()
+    {
+        return array(
+            new \Twig_SimpleFunction('extensions_menu', array($this, 'extensionsMenu'), array('is_safe' => array('html')))
+            , new \Twig_SimpleFunction('extensions_js', array($this, 'extensionsJs'), array('is_safe' => array('html')))
+            , new \Twig_SimpleFunction('extensions_content', array($this, 'extensionsContent'), array('is_safe' => array('html')))
         );
     }
 
@@ -52,6 +65,59 @@ class FormatingExtension extends \Twig_Extension
     public function rule($v, $key)
     {
         return $this->validator->validate($key, $v);
+    }
+
+    /**
+     * @param ExtensionService $extensions
+     * @return string
+     */
+    public function extensionsMenu(ExtensionService $extensions)
+    {
+        $html = '';
+        foreach($extensions->getRepository()->all() as $extension) {
+            $helper = $extension->getReporterHtmlSummary();
+            if(!$helper) {
+                continue;
+            }
+            foreach($helper->getMenus() as $name => $label) {
+                $html .= sprintf('<li id="link-%s"><a>%s</a></li>', $name, $label);
+            }
+        }
+        return $html;
+    }
+
+    /**
+     * @param ExtensionService $extensions
+     * @return string
+     */
+    public function extensionsJs(ExtensionService $extensions)
+    {
+        $html = '';
+        foreach($extensions->getRepository()->all() as $extension) {
+            $helper = $extension->getReporterHtmlSummary();
+            if(!$helper) {
+                continue;
+            }
+            $html .= $helper->renderJs();
+        }
+        return $html;
+    }
+
+    /**
+     * @param ExtensionService $extensions
+     * @return string
+     */
+    public function extensionsContent(ExtensionService $extensions)
+    {
+        $html = '';
+        foreach($extensions->getRepository()->all() as $extension) {
+            $helper = $extension->getReporterHtmlSummary();
+            if(!$helper) {
+                continue;
+            }
+            $html .= $helper->renderHtml();
+        }
+        return $html;
     }
 
     /**
