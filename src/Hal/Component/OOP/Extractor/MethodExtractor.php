@@ -104,7 +104,7 @@ class MethodExtractor implements ExtractorInterface {
             $this->extractContent($method, $n, $tokens);
 
             // Calls
-            $this->extractCalls($method, $n, $tokens);
+            $this->extractCalls($method);
 
             // Tokens
             $end = $this->searcher->getPositionOfClosingBrace($n, $tokens);
@@ -207,7 +207,7 @@ class MethodExtractor implements ExtractorInterface {
             switch($token->getType()) {
                 case T_PAAMAYIM_NEKUDOTAYIM:
                 case T_NEW:
-                    $call = $extractor->extract($i, $tokens, $currentClass);
+                    $call = $extractor->extract($i, $tokens);
                     if($call !== 'class') { // anonymous class
                         $method->pushDependency($call);
                         $method->pushInstanciedClass($call);
@@ -237,7 +237,7 @@ class MethodExtractor implements ExtractorInterface {
      * @param TokenCollection $tokens
      * @return $this
      */
-    private function extractCalls(ReflectedMethod $method, $n, TokenCollection $tokens) {
+    private function extractCalls(ReflectedMethod $method) {
 
         // $this->foo(), $c->foo()
         if(preg_match_all('!(\$[\w]*)\-\>(\w*?)\(!', $method->getContent(), $matches, PREG_SET_ORDER)) {
@@ -246,14 +246,14 @@ class MethodExtractor implements ExtractorInterface {
                 if('$this' == $m[1]) {
                     $method->pushInternalCall($function);
                 } else {
-                    $method->pushExternalCall($m[1], $function);
+                    $method->pushExternalCall($m[1]);
                 }
             }
         }
         // (new X)->foo()
         if(preg_match_all('!\(new (\w+?).*?\)\->(\w+)\(!', $method->getContent(), $matches, PREG_SET_ORDER)) {
             foreach($matches as $m) {
-                $method->pushExternalCall($m[1], $m[2]);
+                $method->pushExternalCall($m[1]);
             }
         }
     }

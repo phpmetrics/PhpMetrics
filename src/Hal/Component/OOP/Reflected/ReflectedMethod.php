@@ -163,7 +163,7 @@ class ReflectedMethod {
     }
 
     /**
-     * @return array
+     * @return TokenCollection
      */
     public function getTokens()
     {
@@ -172,7 +172,7 @@ class ReflectedMethod {
 
     /**
      * @param \Hal\Component\Token\TokenCollection $tokens
-     * @return self
+     * @return $this
      */
     public function setTokens($tokens)
     {
