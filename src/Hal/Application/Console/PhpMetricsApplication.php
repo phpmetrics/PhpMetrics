@@ -9,6 +9,7 @@
 
 namespace Hal\Application\Console;
 
+use Hal\Application\Command\InitConfigCommand;
 use Hal\Application\Command\RunMetricsCommand;
 use Hal\Application\Command\SelfUpdateCommand;
 use Symfony\Component\Console\Application;
@@ -31,7 +32,7 @@ class PhpMetricsApplication extends Application
      */
     protected function getCommandName(InputInterface $input)
     {
-        $available = ['metrics', 'self-update'];
+        $available = ['metrics', 'self-update', 'init'];
         $arg = $input->getFirstArgument();
         if(!in_array($arg, $available) ||'metrics' === $arg) {
             // default argument : we don't want to provide the name of the command by default
@@ -56,6 +57,7 @@ class PhpMetricsApplication extends Application
 
         $defaultCommands[] = new RunMetricsCommand();
         $defaultCommands[] = new SelfUpdateCommand();
+        $defaultCommands[] = new InitConfigCommand();
 
         return $defaultCommands;
     }
