@@ -13,8 +13,9 @@ class LocTest extends \PHPUnit_Framework_TestCase {
     public function testICanCountLoc() {
 
         $filename = __DIR__.'/../../../../../resources/loc/f1.php';
-        $loc = new Loc(new \Hal\Component\Token\Tokenizer());
-        $r = $loc->calculate($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $loc = new Loc();
+        $r = $loc->calculate($filename, $tokens);
         $this->assertEquals(14, $r->getCommentLoc());
         $this->assertEquals(33, $r->getLoc());
         $this->assertEquals(2, $r->getLogicalLoc());

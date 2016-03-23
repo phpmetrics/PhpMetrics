@@ -20,8 +20,9 @@ class Php7ReturnExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testAnonymousClassIsFound() {
 
         $filename = __DIR__.'/../../../resources/oop/php7-return1.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(1, sizeof($classes));
@@ -41,8 +42,9 @@ class Php7ReturnExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testAnonymousClassIsFoundAndNamespaced() {
 
         $filename = __DIR__.'/../../../resources/oop/php7-return2.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(2, sizeof($classes));
@@ -62,8 +64,9 @@ class Php7ReturnExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testReturnedTypeIsFoundEvenOnAbstractMethod() {
 
         $filename = __DIR__.'/../../../resources/oop/php7-return3.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(1, sizeof($classes));
@@ -83,8 +86,9 @@ class Php7ReturnExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testUsageOfConstantInParameterDoesNotBreakEngine() {
 
         $filename = __DIR__.'/../../../resources/oop/php7-return-bugfix1.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(1, sizeof($classes));

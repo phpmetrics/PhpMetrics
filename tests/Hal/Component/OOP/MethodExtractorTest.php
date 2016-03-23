@@ -22,8 +22,9 @@ class MethodExtractorTest extends \PHPUnit_Framework_TestCase {
      */
     public function testMethodsAreFound($filename, $expectedMethods) {
 
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         foreach($result->getClasses() as $index => $class) {
 
@@ -63,8 +64,10 @@ class MethodExtractorTest extends \PHPUnit_Framework_TestCase {
 
 
     public function testContentOfMethodIsFound() {
+        $filename = __DIR__.'/../../../resources/oop/f6.php';
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
         $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract(__DIR__.'/../../../resources/oop/f6.php');
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $class = $classes[0];
         $methods = $class->getMethods();
@@ -163,8 +166,10 @@ EOT;
     }
 
     public function testGetterAreFound() {
+        $filename = __DIR__.'/../../../resources/oop/f8.php';
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
         $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract(__DIR__.'/../../../resources/oop/f8.php');
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $class = $classes[0];
         $methods = $class->getMethods();
@@ -177,8 +182,10 @@ EOT;
     }
 
     public function testSetterAreFound() {
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract(__DIR__.'/../../../resources/oop/f8.php');
+        $filename = __DIR__.'/../../../resources/oop/f8.php';
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $class = $classes[0];
         $methods = $class->getMethods();
@@ -192,8 +199,9 @@ EOT;
      * @dataProvider provideCodeForVisibility
      */
     public function testVisibilityIsFound($filename, $expected) {
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $class = $classes[0];
         $methods = $class->getMethods();
@@ -214,8 +222,9 @@ EOT;
      * @dataProvider provideCodeForState
      */
     public function testStateIsFound($filename, $expected) {
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $class = $classes[0];
         $methods = $class->getMethods();
@@ -238,8 +247,9 @@ EOT;
      * @dataProvider provideCodeForCalls
      */
     public function testCallsAReFound($filename, $expectedExternalCalls, $expectedInternalCalls) {
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $this->assertEquals(1, sizeof($classes));
         $class = $classes[0];
@@ -260,8 +270,9 @@ EOT;
 
     public function testMagicMethodsAreWellConsidered() {
         $filename = __DIR__.'/../../../resources/oop/magicmethods1.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $class = $classes[0];
         $methods = $class->getMethods();
@@ -274,8 +285,9 @@ EOT;
 
     public function testInstanciationAndCallsOfMagicMethodsAreWellConsideredAsDependency() {
         $filename = __DIR__.'/../../../resources/oop/magicmethods2.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $this->assertEquals(2 , sizeof($classes));
         $class = $classes[1];
@@ -292,8 +304,9 @@ EOT;
 
     public function testReturningNewStaticIsWellParsed() {
         $filename = __DIR__.'/../../../resources/oop/php7-static-as-dep1.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $this->assertEquals(1 , sizeof($classes));
         $class = $classes[0];

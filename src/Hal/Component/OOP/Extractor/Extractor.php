@@ -10,7 +10,7 @@
 namespace Hal\Component\OOP\Extractor;
 use Hal\Component\OOP\Reflected\ReflectedClass\ReflectedAnonymousClass;
 use Hal\Component\OOP\Resolver\NameResolver;
-use Hal\Component\Token\Tokenizer;
+use Hal\Component\Token\TokenCollection;
 
 
 /**
@@ -37,16 +37,10 @@ class Extractor {
     private $extractors;
 
     /**
-     * @var \Hal\Component\Token\Tokenizer
-     */
-    private $tokenizer;
-
-    /**
      * Constructor
      */
-    public function __construct(Tokenizer $tokenizer) {
+    public function __construct() {
 
-        $this->tokenizer = $tokenizer;
         $this->searcher = new Searcher();
         $this->result= new Result;
 
@@ -62,15 +56,14 @@ class Extractor {
     /**
      * Extract infos from file
      *
-     * @param $filename
+     * @param TokenCollection $tokens
      * @return Result
      */
-    public function extract($filename)
+    public function extract($tokens)
     {
 
         $result = new Result;
 
-        $tokens = $this->tokenizer->tokenize($filename);
         $nameResolver = new NameResolver();
 
         // default current values

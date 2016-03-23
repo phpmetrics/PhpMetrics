@@ -8,7 +8,7 @@
  */
 
 namespace Hal\Metrics\Complexity\Text\Length;
-use Hal\Component\Token\Tokenizer;
+use Hal\Component\Token\TokenCollection;
 
 /**
  * Calculates McCaybe measure
@@ -18,34 +18,16 @@ use Hal\Component\Token\Tokenizer;
 class Loc {
 
     /**
-     * Tokenizer
-     *
-     * @var \Hal\Component\Token\Tokenizer
-     */
-    private $tokenizer;
-
-    /**
-     * Constructor
-     *
-     * @param Tokenizer $tokenizer
-     */
-    public function __construct(Tokenizer $tokenizer) {
-        $this->tokenizer = $tokenizer;
-    }
-
-    /**
      * Calculates Lines of code
      *
      * @param string $filename
+     * @param TokenCollection $tokens
      * @return Result
      */
-    public function calculate($filename)
+    public function calculate($filename, $tokens)
     {
 
         $info = new Result;
-
-        $tokens = $this->tokenizer->tokenize($filename);
-        $content = file_get_contents($filename);
 
         $cloc = $lloc = 0;
         foreach($tokens as $token) {
@@ -65,6 +47,7 @@ class Loc {
             }
         }
 
+        $content = file_get_contents($filename);
         $info
             ->setLoc(count(preg_split('/\r\n|\r|\n/', $content)) - 1)
             ->setCommentLoc($cloc)

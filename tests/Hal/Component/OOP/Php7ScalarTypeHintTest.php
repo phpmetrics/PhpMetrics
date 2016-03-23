@@ -19,8 +19,9 @@ class Php7ScalarTypeHintTest extends \PHPUnit_Framework_TestCase {
     public function testAnonymousClassIsFound() {
 
         $filename = __DIR__.'/../../../resources/oop/php7-scalarhint1.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(1, sizeof($classes));

@@ -14,10 +14,11 @@ class LackOfCohesionTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider providesFilesForLcom
      */
-    public function testICanCalculateLackOfCohesionOfClass($file, $expected) {
+    public function testICanCalculateLackOfCohesionOfClass($filename, $expected) {
 
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($file);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $class = $classes[0];
 

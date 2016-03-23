@@ -13,7 +13,6 @@ use Hal\Application\Command\Job\Analyze\CouplingAnalyzer;
 use Hal\Application\Command\Job\Analyze\FileAnalyzer;
 use Hal\Application\Command\Job\Analyze\LcomAnalyzer;
 use Hal\Component\Compatibility\PhpCompatibility;
-use Hal\Component\Cache\CacheMemory;
 use Hal\Component\File\Finder;
 use Hal\Component\File\SyntaxChecker;
 use Hal\Component\OOP\Extractor\ClassMap;
@@ -101,18 +100,18 @@ class DoAnalyze implements JobInterface
 
         // tools
         $classMap = new ClassMap();
-        $tokenizer = new Tokenizer(new CacheMemory());
+        $tokenizer = new Tokenizer();
         $syntaxChecker = new SyntaxChecker();
 
         $fileAnalyzer = new FileAnalyzer(
             $this->output
             , $this->withOOP
-            , new Extractor($tokenizer)
-            , new \Hal\Metrics\Complexity\Text\Halstead\Halstead($tokenizer, new \Hal\Component\Token\TokenType())
-            , new \Hal\Metrics\Complexity\Text\Length\Loc($tokenizer)
+            , new Extractor()
+            , new \Hal\Metrics\Complexity\Text\Halstead\Halstead(new \Hal\Component\Token\TokenType())
+            , new \Hal\Metrics\Complexity\Text\Length\Loc()
             , new \Hal\Metrics\Design\Component\MaintainabilityIndex\MaintainabilityIndex()
-            , new \Hal\Metrics\Complexity\Component\McCabe\McCabe($tokenizer)
-            , new \Hal\Metrics\Complexity\Component\Myer\Myer($tokenizer)
+            , new \Hal\Metrics\Complexity\Component\McCabe\McCabe()
+            , new \Hal\Metrics\Complexity\Component\Myer\Myer()
             , $classMap
         );
 
@@ -129,7 +128,8 @@ class DoAnalyze implements JobInterface
 
             // Analyze
             try {
-                $resultSet = $fileAnalyzer->execute($filename);
+                $tokens = $tokenizer->tokenize($filename);
+                $resultSet = $fileAnalyzer->execute($filename, $tokens);
             } catch(NoTokenizableException $e) {
                 $this->output->writeln(sprintf("<error>file %s has been skipped: \n%s</error>", $filename, $e->getMessage()));
                 unset($files[$k]);

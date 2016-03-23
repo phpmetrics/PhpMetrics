@@ -15,8 +15,9 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
      */
     public function testICanCountComplexity($filename, $expectedCCN) {
 
-        $loc = new McCabe(new \Hal\Component\Token\Tokenizer());
-        $r = $loc->calculate($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $loc = new McCabe();
+        $r = $loc->calculate($tokens);
         $this->assertEquals($expectedCCN, $r->getCyclomaticComplexityNumber());
     }
 
@@ -43,8 +44,9 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
      */
     public function testICanCountComplexityOfAnonymousClass($filename, $expectedCCN) {
 
-        $loc = new McCabe(new \Hal\Component\Token\Tokenizer());
-        $r = $loc->calculate($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $loc = new McCabe();
+        $r = $loc->calculate($tokens);
         $this->assertEquals($expectedCCN, $r->getCyclomaticComplexityNumber());
     }
 
@@ -59,8 +61,9 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
      */
     public function testNullCoalesceOperatorIsWellConsidered() {
         $filename = __DIR__.'/../../../../../resources/mccaybe/php7-null-coalesce-operator.php';
-        $loc = new McCabe(new \Hal\Component\Token\Tokenizer());
-        $r = $loc->calculate($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $loc = new McCabe();
+        $r = $loc->calculate($tokens);
         $this->assertEquals(3, $r->getCyclomaticComplexityNumber());
     }
 
@@ -69,8 +72,9 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
      */
     public function testSpaceshipOperatorIsWellConsidered() {
         $filename = __DIR__.'/../../../../../resources/mccaybe/php7-spaceship-operator.php';
-        $loc = new McCabe(new \Hal\Component\Token\Tokenizer());
-        $r = $loc->calculate($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $loc = new McCabe();
+        $r = $loc->calculate($tokens);
         $this->assertEquals(2, $r->getCyclomaticComplexityNumber());
     }
 }

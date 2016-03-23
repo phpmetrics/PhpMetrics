@@ -18,8 +18,9 @@ class Php7AnonymousClassExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testAnonymousClassIsFound() {
 
         $filename = __DIR__.'/../../../resources/oop/php7-1.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(2, sizeof($classes));
@@ -35,8 +36,9 @@ class Php7AnonymousClassExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testInterfacesOfAnonymousClassAreFound() {
 
         $filename = __DIR__.'/../../../resources/oop/php7-2.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(4, sizeof($classes));
@@ -55,8 +57,9 @@ class Php7AnonymousClassExtractorTest extends \PHPUnit_Framework_TestCase {
 
     public function testAnonymousClassDoesNotBreakMainClassExtractor() {
         $filename = __DIR__.'/../../../resources/oop/php7-3.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(2, sizeof($classes));
@@ -72,8 +75,9 @@ class Php7AnonymousClassExtractorTest extends \PHPUnit_Framework_TestCase {
 
     public function testInnerClassAreAttachedToMainClassExtractor() {
         $filename = __DIR__.'/../../../resources/oop/php7-4.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(4, sizeof($classes));
@@ -86,8 +90,9 @@ class Php7AnonymousClassExtractorTest extends \PHPUnit_Framework_TestCase {
 
     public function testMethodsOfAnonymousClassesAreFound() {
         $filename = __DIR__.'/../../../resources/oop/php7-7.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(2, sizeof($classes));
@@ -100,8 +105,9 @@ class Php7AnonymousClassExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testDependenciesOfMethodsIncludeDependenciesOfAnonymousClasses()
     {
         $filename = __DIR__ . '/../../../resources/oop/php7-5.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(7, sizeof($classes));
@@ -118,8 +124,9 @@ class Php7AnonymousClassExtractorTest extends \PHPUnit_Framework_TestCase {
     public function testMultipleClassesWithSameMethodName()
     {
         $filename = __DIR__ . '/../../../resources/oop/php7-6.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertEquals(7, sizeof($classes));

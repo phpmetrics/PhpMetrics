@@ -8,8 +8,6 @@
  */
 
 namespace Hal\Component\Token;
-use Hal\Component\Cache\Cache;
-use Hal\Component\Cache\CacheNull;
 
 /**
  * Tokenize file
@@ -17,21 +15,6 @@ use Hal\Component\Cache\CacheNull;
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
 class Tokenizer {
-
-    private $cache;
-
-    /**
-     * Tokenizer constructor.
-     * @param $cache
-     */
-    public function __construct(Cache $cache = null)
-    {
-        if(null == $cache) {
-            $cache = new CacheNull();
-        }
-        $this->cache = $cache;
-    }
-
 
     /**
      * Tokenize file
@@ -41,10 +24,6 @@ class Tokenizer {
      */
     public function tokenize($filename) {
 
-        if($this->cache->has($filename)) {
-            return new TokenCollection($this->cache->get($filename));
-        }
-
         $size = filesize($filename);
         $limit = 102400; // around 100 Ko
         if($size > $limit) {
@@ -53,7 +32,6 @@ class Tokenizer {
             $tokens = token_get_all($this->cleanup(file_get_contents($filename)));
         }
 
-        $this->cache->set($filename, $tokens);
         return new TokenCollection($tokens);
     }
 
