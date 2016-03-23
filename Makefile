@@ -19,7 +19,7 @@ tag:
 
 # Tag git with last release
 release: 
-	git add .semver build/phpmetrics.phar bin/phpmetrics templates/html/version.html.twig artifacts/bintray.json
+	git add .semver build/phpmetrics.phar bin/phpmetrics templates/html/version.html.twig artifacts/bintray.json .github/ISSUE_TEMPLATE.md
 	git commit -m "releasing `semver tag`"
 	git tag `semver tag`
 	git push -u origin master
