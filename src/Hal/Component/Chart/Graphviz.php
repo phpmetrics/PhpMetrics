@@ -20,13 +20,11 @@ class Graphviz
     /**
      * Checks installation of graphviz
      *
-     * @throws \RuntimeException
+     * @return boolean
      */
-    public function checkInstallation() {
+    public function isAvailable() {
         $result = shell_exec('circo -V 2>&1');
-        if(!preg_match('!graphviz version!', $result)) {
-            throw new \RuntimeException('Graphviz not installed');
-        }
+        return preg_match('!graphviz version!', $result);
     }
 
     /**
@@ -37,7 +35,9 @@ class Graphviz
      */
     public function getImage($dotContent) {
 
-        $this->checkInstallation();
+        if(!$this->isAvailable()) {
+            throw new \RuntimeException('Graphviz not installed');
+        }
 
         $dotFile = tempnam(sys_get_temp_dir(), 'phpmetrics-graphviz');
         $imageFile = tempnam(sys_get_temp_dir(), 'phpmetrics-graphviz');
