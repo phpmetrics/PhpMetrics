@@ -62,6 +62,10 @@ class ConfigFactory
         strlen($input->getOption('offline')) > 0 && $config->getTemplate()->setOffline($input->getOption('offline'));
         strlen($input->getOption('ignore-errors')) > 0 && $config->setIgnoreErrors(true);
 
+        // check for conflicts or missing requirements
+        $validator = new ConfigValidator();
+        $validator->validates($config);
+
         return $config;
 
     }
