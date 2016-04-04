@@ -17,6 +17,7 @@ use Hal\Application\Extension\Repository;
 use Hal\Component\Bounds\Bounds;
 use Hal\Component\Evaluation\Evaluator;
 use Hal\Component\File\Finder;
+use Hal\Component\Result\ResultCollection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -137,8 +138,8 @@ class RunMetricsCommand extends Command
 
         // prepare structures
         $bounds = new Bounds();
-        $collection = new \Hal\Component\Result\ResultCollection();
-        $aggregatedResults = new \Hal\Component\Result\ResultCollection();
+        $collection = new ResultCollection();
+        $aggregatedResults = new ResultCollection();
 
         // execute analyze
         $queueFactory = new QueueAnalyzeFactory($input, $output, $config, $extensionService);

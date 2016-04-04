@@ -37,7 +37,7 @@ class Json implements FormaterInterface {
      * @param boolean $prettyPrint optional pretty printing for result json
      * @param ExtensionService $extensionService
      */
-    public function __construct($prettyPrint = false, ExtensionService $extensionService)
+    public function __construct($prettyPrint = false, ExtensionService $extensionService = null)
     {
         $this->prettyPrint = $prettyPrint;
         $this->extensionsService = $extensionService;

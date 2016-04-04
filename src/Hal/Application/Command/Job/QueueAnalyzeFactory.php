@@ -13,6 +13,7 @@ use Hal\Application\Formater\Chart;
 use Hal\Application\Formater\Details;
 use Hal\Application\Formater\Summary;
 use Hal\Application\Formater\Violations;
+use Hal\Application\Rule\Validator;
 use Hal\Application\Score\Scoring;
 use Hal\Component\Aggregator\DirectoryAggregatorFlat;
 use Hal\Component\Bounds\BoundsInterface;
@@ -74,7 +75,7 @@ class QueueAnalyzeFactory
      */
     public function factory(Finder $finder, BoundsInterface $bounds) {
         $rules = $this->config->getRuleSet();
-        $validator = new \Hal\Application\Rule\Validator($rules);
+        $validator = new Validator($rules);
 
         // jobs queue planning
         $queue = new Queue;

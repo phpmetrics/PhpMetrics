@@ -55,9 +55,9 @@ class Configuration implements ConfigurationInterface
     private $ignoreErrors = false;
 
     /**
-     * @var array
+     * @var ExtensionsConfiguration
      */
-    private $extensions = array();
+    private $extensions;
 
     /**
      * Constructor
@@ -188,10 +188,10 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * @param array $extensions
+     * @param ExtensionsConfiguration $extensions
      * @return Configuration
      */
-    public function setExtensions($extensions)
+    public function setExtensions(ExtensionsConfiguration $extensions)
     {
         $this->extensions = $extensions;
         return $this;
