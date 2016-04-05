@@ -17,8 +17,9 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
      */
     public function testClassnameIsFound($filename, $expected) {
 
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $this->assertCount(sizeof($expected), $result->getClasses());
         foreach($result->getClasses() as $index => $class) {
@@ -39,11 +40,12 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider providesForDependenciesWithoutAlias
      */
-    public function testDependenciesAreGivenWithoutAlias($file, $expected) {
+    public function testDependenciesAreGivenWithoutAlias($filename, $expected) {
 
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
         $result = new \Hal\Component\OOP\Extractor\Result();
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($file);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $classes = $result->getClasses();
         $this->assertCount(1, $classes, 'all classes are found');
@@ -63,9 +65,10 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testCallsAreFoundAsDependencies() {
-        $file = __DIR__.'/../../../resources/oop/f5.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($file);
+        $filename = __DIR__.'/../../../resources/oop/f5.php';
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $this->assertCount(1, $classes, 'all classes are found');
         $class = $classes[0];
@@ -79,9 +82,10 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
     public function testClassesThatDoesNotExtendOtherClassesShouldNotHaveAParentClass()
     {
-        $file = __DIR__.'/../../../resources/oop/f1.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($file);
+        $filename = __DIR__.'/../../../resources/oop/f1.php';
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $this->assertCount(1, $result->getClasses());
 
         $class = current($result->getClasses());
@@ -95,8 +99,9 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
         // only one contract
         $filename = __DIR__.'/../../../resources/oop/interface1.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $this->assertCount(2, $classes);
         $class = $classes[1];
@@ -104,20 +109,22 @@ class OOPExtractorTest extends \PHPUnit_Framework_TestCase {
 
         // multiple contracts
         $filename = __DIR__.'/../../../resources/oop/interface2.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $this->assertCount(3, $classes);
         $class = $classes[2];
         $this->assertEquals(array('\My\Contract1', '\My\Contract2'), $class->getInterfaces(), 'multiple interfaces of class are found');
 
     }
-    
+
     public function testReservedWordClassDoesNotCount()
     {
         $filename = __DIR__.'/../../../resources/oop/reserved-word-class.php';
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
         $classes = $result->getClasses();
         $this->assertEquals(1, sizeof($classes));
         $class = $classes[0];

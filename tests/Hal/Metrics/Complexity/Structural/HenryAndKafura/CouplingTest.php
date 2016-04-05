@@ -36,8 +36,8 @@ class CouplingTest extends \PHPUnit_Framework_TestCase {
         $coupling = new Coupling();
         $this->result = $coupling->calculate($classMap);
     }
-    
-    
+
+
    public function testICanGetInfoAboutCoupling() {
        $this->assertEquals(2, $this->result->get('\Ns1\Class1')->getEfferentCoupling());
        $this->assertEquals(0, $this->result->get('\Ns1\Class1')->getAfferentCoupling());
@@ -63,9 +63,10 @@ class CouplingTest extends \PHPUnit_Framework_TestCase {
 
     public function testCouplingTakesCareOfReturnedValues() {
         $filename = __DIR__.'/../../../../../resources/coupling/f1.php';
-        $extractor = new Extractor(new Tokenizer());
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
         $classmap = new ClassMap();
-        $classmap->push($filename, $extractor->extract($filename));
+        $classmap->push($filename, $extractor->extract($tokens));
         $coupling = new Coupling();
         $this->result = $coupling->calculate($classmap);
 

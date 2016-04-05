@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Component\Cache;
-use Hal\Component\Result\ResultCollection;
 
 /**
  * Cache

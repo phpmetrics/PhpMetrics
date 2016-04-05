@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Metrics\Complexity\Text\Halstead;
+use Hal\Component\Token\TokenCollection;
 use Hal\Component\Token\TokenType;
 
 
@@ -47,35 +48,24 @@ class Halstead {
     private $tokenType;
 
     /**
-     * Tokenizer
-     *
-     * @var \Hal\Component\Token\Tokenizer
-     */
-    private $tokenizer;
-
-    /**
      * Constructor
      *
-     * @param \Hal\Component\Token\Tokenizer $tokenizer
      * @param \Hal\Component\Token\TokenType $tokenType
      */
-    public function __construct(\Hal\Component\Token\Tokenizer $tokenizer, \Hal\Component\Token\TokenType $tokenType)
+    public function __construct(\Hal\Component\Token\TokenType $tokenType)
     {
-        $this->tokenizer = $tokenizer;
         $this->tokenType = $tokenType;
     }
 
     /**
      * Inventories tokens
      *
-     * @param string $filename
+     * @param TokenCollection $tokens
      * @return $this
      */
-    private function inventory($filename)
+    private function inventory($tokens)
     {
         $this->operators = $this->operands = array();
-
-        $tokens = $this->tokenizer->tokenize($filename);
 
         foreach($tokens as $token) {
             if($this->tokenType->isOperator($token)) {
@@ -91,12 +81,12 @@ class Halstead {
     /**
      * Calculate Halstead metrics
      *
-     * @param $filename
+     * @param TokenCollection $tokens
      * @return Result
      */
-    public function calculate($filename)
+    public function calculate($tokens)
     {
-        $this->inventory($filename);
+        $this->inventory($tokens);
         $result = new Result;
 
         $uniqueOperators = array_map( 'unserialize', array_unique( array_map( 'serialize', $this->operators ) ) );

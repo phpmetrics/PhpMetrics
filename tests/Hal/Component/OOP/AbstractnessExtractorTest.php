@@ -17,8 +17,9 @@ class AbstractnessExtractorTest extends \PHPUnit_Framework_TestCase {
      */
     public function testInterfacesAreFound($filename, $interfaces) {
 
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $found = 0;
         foreach($result->getClasses() as $class) {
@@ -46,8 +47,9 @@ class AbstractnessExtractorTest extends \PHPUnit_Framework_TestCase {
      */
     public function testAbstractClassesAreFound($filename, $expected) {
 
-        $extractor = new Extractor(new \Hal\Component\Token\Tokenizer());
-        $result = $extractor->extract($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $result = $extractor->extract($tokens);
 
         $found = 0;
         foreach($result->getClasses() as $class) {

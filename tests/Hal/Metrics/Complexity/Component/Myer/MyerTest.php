@@ -14,8 +14,9 @@ class MyerTest extends \PHPUnit_Framework_TestCase {
      */
     public function testICanGetMyerInterval($filename, $interval, $distance) {
 
-        $object = new Myer(new \Hal\Component\Token\Tokenizer());
-        $result = $object->calculate($filename);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $object = new Myer();
+        $result = $object->calculate($tokens);
         $this->assertEquals($interval, $result->getInterval());
         $this->assertEquals($distance, $result->getDistance());
     }

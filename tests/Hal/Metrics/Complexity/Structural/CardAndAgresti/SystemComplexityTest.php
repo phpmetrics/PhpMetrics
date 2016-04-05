@@ -20,8 +20,9 @@ class SystemComplexityTest extends \PHPUnit_Framework_TestCase {
         $filename = tempnam(sys_get_temp_dir(), 'unit-phpmetrics-syc');
         file_put_contents($filename, $code);
 
-        $extractor = new Extractor(new Tokenizer());
-        $classes = $extractor->extract($filename)->getClasses();
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $extractor = new Extractor();
+        $classes = $extractor->extract($tokens)->getClasses();
         $class = $classes[0];
         $metric = new SystemComplexity();
         $result = $metric->calculate($class);

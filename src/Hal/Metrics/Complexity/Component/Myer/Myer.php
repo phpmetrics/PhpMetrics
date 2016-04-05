@@ -9,7 +9,7 @@
 
 namespace Hal\Metrics\Complexity\Component\Myer;
 
-use Hal\Component\Token\Tokenizer;
+use Hal\Component\Token\TokenCollection;
 use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 
 /**
@@ -20,40 +20,21 @@ use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 class Myer {
 
     /**
-     * Tokenizer
-     *
-     * @var \Hal\Component\Token\Tokenizer
-     */
-    private $tokenizer;
-
-    /**
-     * Constructor
-     *
-     * @param Tokenizer $tokenizer
-     */
-    public function __construct(Tokenizer $tokenizer) {
-        $this->tokenizer = $tokenizer;
-
-    }
-
-    /**
      * Calculates Myer's interval
      *
      *      Cyclomatic complexity : Cyclomatic complexity + L
      *      where L is the number of logical operators
      *
-     * @param string $filename
+     * @param TokenCollection $tokens
      * @return Result
      */
-    public function calculate($filename)
+    public function calculate($tokens)
     {
-        $mcCabe = new McCabe($this->tokenizer);
+        $mcCabe = new McCabe();
         $result = new Result;
 
-        $tokens = $this->tokenizer->tokenize($filename);
-
         // Cyclomatic complexity
-        $cc = $mcCabe->calculate($filename);
+        $cc = $mcCabe->calculate($tokens);
 
         // Number of operator
         $L = 0;

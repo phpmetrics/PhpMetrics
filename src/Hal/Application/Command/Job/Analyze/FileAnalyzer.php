@@ -10,6 +10,7 @@
 namespace Hal\Application\Command\Job\Analyze;
 use Hal\Component\OOP\Extractor\ClassMap;
 use Hal\Component\OOP\Extractor\Extractor;
+use Hal\Component\Token\TokenCollection;
 use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 use Hal\Metrics\Complexity\Component\Myer\Myer;
 use Hal\Metrics\Complexity\Text\Halstead\Halstead;
@@ -111,19 +112,19 @@ class FileAnalyzer
         $this->classMap = $classMap;
     }
 
-
     /**
      * Run analyze
      *
-     * @param $filename
+     * @param string $filename
+     * @param TokenCollection $tokens
      * @return \Hal\Component\Result\ResultSet
      */
-    public function execute($filename) {
+    public function execute($filename, $tokens) {
 
-        $rHalstead = $this->halstead->calculate($filename);
-        $rLoc = $this->loc->calculate($filename);
-        $rMcCabe = $this->mcCabe->calculate($filename);
-        $rMyer = $this->myer->calculate($filename);
+        $rHalstead = $this->halstead->calculate($tokens);
+        $rLoc = $this->loc->calculate($filename, $tokens);
+        $rMcCabe = $this->mcCabe->calculate($tokens);
+        $rMyer = $this->myer->calculate($tokens);
         $rMaintainability = $this->maintainabilityIndex->calculate($rHalstead, $rLoc, $rMcCabe);
 
         $resultSet = new \Hal\Component\Result\ResultSet($filename);
@@ -135,7 +136,7 @@ class FileAnalyzer
             ->setMaintainabilityIndex($rMaintainability);
 
         if($this->withOOP) {
-            $rOOP = $this->extractor->extract($filename);
+            $rOOP = $this->extractor->extract($tokens);
             $this->classMap->push($filename, $rOOP);
             $resultSet->setOOP($rOOP);
         }

@@ -18,10 +18,10 @@ class HalsteadTest extends \PHPUnit_Framework_TestCase {
         $tokenType->expects($this->any())
             ->method('isOperand')
             ->will($this->returnValue(true));
-        $tokenizer = new Tokenizer();
-        $object = new Halstead($tokenizer, $tokenType);
         $filename = tempnam(sys_get_temp_dir(), 'tmp-unit');
-        $this->assertInstanceOf("\Hal\Metrics\Complexity\Text\Halstead\Result", $object->calculate($filename));
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $object = new Halstead($tokenType);
+        $this->assertInstanceOf("\Hal\Metrics\Complexity\Text\Halstead\Result", $object->calculate($tokens));
         unlink($filename);
     }
 
@@ -43,11 +43,11 @@ class HalsteadTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider provideFilesAndCounts
      */
-    public function testHalsteadGiveValidValues($file, $N1, $N2, $n1, $n2, $N, $V, $L, $D, $E, $T, $I) {
+    public function testHalsteadGiveValidValues($filename, $N1, $N2, $n1, $n2, $N, $V, $L, $D, $E, $T, $I) {
         $tokenType = new TokenType(); // please don't mock this: it make no sense else
-        $tokenizer = new Tokenizer();
-        $halstead = new Halstead($tokenizer, $tokenType);
-        $r = $halstead->calculate($file);
+        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $halstead = new Halstead($tokenType);
+        $r = $halstead->calculate($tokens);
 
         $this->assertEquals($N1, $r->getNumberOfOperators());
         $this->assertEquals($n1, $r->getNumberOfUniqueOperators());

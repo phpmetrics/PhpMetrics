@@ -8,7 +8,7 @@
  */
 
 namespace Hal\Metrics\Complexity\Component\McCabe;
-use Hal\Component\Token\Tokenizer;
+use Hal\Component\Token\TokenCollection;
 
 /**
  * Calculates cyclomatic complexity
@@ -16,22 +16,6 @@ use Hal\Component\Token\Tokenizer;
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
 class McCabe {
-
-    /**
-     * Tokenizer
-     *
-     * @var \Hal\Component\Token\Tokenizer
-     */
-    private $tokenizer;
-
-    /**
-     * Constructor
-     *
-     * @param Tokenizer $tokenizer
-     */
-    public function __construct(Tokenizer $tokenizer) {
-        $this->tokenizer = $tokenizer;
-    }
 
     /**
      * Calculate cyclomatic complexity number
@@ -46,14 +30,12 @@ class McCabe {
      *
      * 2. CC = Number of each decision point
      *
-     * @param string $filename
+     * @param TokenCollection $tokens
      * @return Result
      */
-    public function calculate($filename)
+    public function calculate($tokens)
     {
-
         $info = new Result;
-        $tokens = $this->tokenizer->tokenize($filename);
 
         $ccn = 1; // default path
         foreach($tokens as $token) {

@@ -8,8 +8,6 @@
  */
 
 namespace Hal\Component\Token;
-use Hal\Component\Cache\Cache;
-use Hal\Component\Cache\CacheNull;
 
 /**
  * Tokenize file
@@ -17,21 +15,6 @@ use Hal\Component\Cache\CacheNull;
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
 class Tokenizer {
-
-    private $cache;
-
-    /**
-     * Tokenizer constructor.
-     * @param $cache
-     */
-    public function __construct(Cache $cache = null)
-    {
-        if(null == $cache) {
-            $cache = new CacheNull();
-        }
-        $this->cache = $cache;
-    }
-
 
     /**
      * Tokenize file
@@ -41,19 +24,14 @@ class Tokenizer {
      */
     public function tokenize($filename) {
 
-        if($this->cache->has($filename)) {
-            return new TokenCollection($this->cache->get($filename));
-        }
-
         $size = filesize($filename);
         $limit = 102400; // around 100 Ko
-        if($size > $limit) {
+        if ($size > $limit) {
             $tokens = $this->tokenizeLargeFile($filename);
         } else {
             $tokens = token_get_all($this->cleanup(file_get_contents($filename)));
         }
 
-        $this->cache->set($filename, $tokens);
         return new TokenCollection($tokens);
     }
 
@@ -74,7 +52,7 @@ echo serialize(token_get_all(\$c));
 EOT;
         $output = shell_exec('php -r \''.$code.'\'');
         $tokens = unserialize($output);
-        if(false === $tokens) {
+        if (false === $tokens) {
             throw new NoTokenizableException(sprintf('Cannot tokenize "%s". This file is probably too big. Please try to increase memory_limit', $filename));
         }
         return $tokens;
