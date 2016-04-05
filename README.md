@@ -180,7 +180,7 @@ Each rule is composed from three values.
 + If `A < B < C` : `A`: min, `B`: yellow limit, `C`: max
 + If `A > B > C` : `A`: max, `B`: yellow limit, `C`: min
 
-You can save the configuration in a .phpmetrics.yml file in the root directory of your project. PhpMetrics will look for it and use it.
+You can save the configuration in a `.phpmetrics.yml` file in the root directory of your project. PhpMetrics will look for it and use it.
 
 # Contribute
 
