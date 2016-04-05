@@ -4,7 +4,7 @@ Thank you for taking the time to report this bug :+1:
 
 Run `phpmetrics --version` to get the version of PhpMetrics. 
 
-**The latest version of PhpMetrics is v1.9.2.**. Please try to update PhpMetrics and check if the bug persist before submitting new issue.
+**The latest version of PhpMetrics is v1.10.0.**. Please try to update PhpMetrics and check if the bug persist before submitting new issue.
  
 Here is a template for your issue. Please replace the words between braces with the right informations. 
 

@@ -10,10 +10,10 @@
     "licenses": ["MIT"]
   },
   "version": {
-    "name": "v1.9.2",
+    "name": "v1.10.0",
     "desc": "Latest version of PhpMetrics",
-    "released": "2016-03-20",
-    "vcs_tag": "v1.9.2",
+    "released": "2016-04-05",
+    "vcs_tag": "v1.10.0",
     "attributes": [],
     "gpgSign": false
   },
