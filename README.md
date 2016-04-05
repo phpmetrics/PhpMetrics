@@ -76,7 +76,8 @@ PhpMetrics supports plugins. Use the `--plugins=<path-of-plugin1>` option, or up
 
 Official plugins:
 
-+ [Symfony2](https://github.com/phpmetrics/PhpMetricsSymfony2Extension)
++ [Symfony2](https://github.com/phpmetrics/SymfonyExtension)
++ [Composer](https://github.com/phpmetrics/ComposerExtension)
 
 ## Conditions of failure
 
