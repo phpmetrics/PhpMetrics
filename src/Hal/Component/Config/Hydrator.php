@@ -9,6 +9,7 @@
 
 namespace Hal\Component\Config;
 use Hal\Application\Config\Configuration;
+use Hal\Application\Config\ExtensionsConfiguration;
 use Hal\Application\Config\LoggingConfiguration;
 use Hal\Application\Config\PathConfiguration;
 use Hal\Application\Config\TemplateConfiguration;
@@ -59,6 +60,7 @@ class Hydrator
             ->setPath($path)
             ->setLogging(new LoggingConfiguration($array['logging']))
             ->setTemplate(new TemplateConfiguration($array['template']))
+            ->setExtensions(new ExtensionsConfiguration($array['plugins']))
         ;
         return $config;
     }

@@ -36,7 +36,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $groupedResults = new ResultCollection();
 
         // formatter
-        $formatter = new Json();
+        $formatter = new Json(false, $this->getMockBuilder('\Hal\Application\Extension\ExtensionService')->disableOriginalConstructor()->getMock());
         $output = $formatter->terminate($collection, $groupedResults);
 
 
@@ -51,7 +51,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     public function testFormatterHasName() {
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $bounds = new Bounds();
-        $formatter = new Json($validator, $bounds);
+        $formatter = new Json(false, $this->getMockBuilder('\Hal\Application\Extension\ExtensionService')->disableOriginalConstructor()->getMock());
         $this->assertNotNull($formatter->getName());
     }
 }

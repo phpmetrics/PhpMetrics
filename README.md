@@ -64,6 +64,20 @@ PhpMetrics can parse PHP code from **PHP 5.3 to PHP 7.x**.
 You can parse PHP7 code, but your interpreter will detect syntax errors in your code. To prevent this, please 
 use the `--ignore-errors` option.
 
+## Extensions / Plugins
+
+PhpMetrics supports plugins. Use the `--plugins=<path-of-plugin1>` option, or update your config file as following:
+
+```
+  plugins:
+    - <path-of-plugin1.php`
+
+```
+
+Official plugins:
+
++ [Symfony2](https://github.com/phpmetrics/PhpMetricsSymfony2Extension)
+
 ## Conditions of failure
 
 Customizing the conditions of failure is very easy with the`--failure-condition` option. For example:

@@ -60,6 +60,7 @@ class ConfigFactory
         strlen($input->getOption('failure-condition')) > 0  && $config->setFailureCondition($input->getOption('failure-condition'));
         strlen($input->getOption('template-title')) > 0 && $config->getTemplate()->setTitle($input->getOption('template-title'));
         strlen($input->getOption('offline')) > 0 && $config->getTemplate()->setOffline($input->getOption('offline'));
+        strlen($input->getOption('plugins')) > 0 && $config->getExtensions()->setExtensions(explode(',',  $input->getOption('plugins')));
         strlen($input->getOption('ignore-errors')) > 0 && $config->setIgnoreErrors(true);
 
         // check for conflicts or missing requirements

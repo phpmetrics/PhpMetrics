@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Application\Formater\Violations;
+use Hal\Application\Extension\ExtensionService;
 use Hal\Application\Formater\FormaterInterface;
 use Hal\Application\Rule\Validator;
 use Hal\Component\Bounds\BoundsInterface;
@@ -36,15 +37,22 @@ class Xml implements FormaterInterface {
     private $validator;
 
     /**
+     * @var ExtensionService
+     */
+    private $extensionsService;
+
+    /**
      * Constructor
      *
      * @param Validator $validator
      * @param BoundsInterface $bound
+     * @param ExtensionService $extensionService
      */
-    public function __construct(Validator $validator, BoundsInterface $bound)
+    public function __construct(Validator $validator, BoundsInterface $bound, ExtensionService $extensionService)
     {
         $this->bound = $bound;
         $this->validator = $validator;
+        $this->extensionsService = $extensionService;
     }
 
     /**

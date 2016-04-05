@@ -45,7 +45,7 @@ class TreeBuilder implements \Hal\Component\Config\TreeBuilderInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('directory')->defaultValue(null)->end()
-                        ->scalarNode('exclude')->defaultValue('Tests|tests|Features|features|\.svn|\.git|vendor')->end()
+                        ->scalarNode('exclude')->defaultValue('Tests|tests|Features|features|\.svn|\.git|vendor|node_modules|cache')->end()
                         ->scalarNode('extensions')->defaultValue('php|inc')->end()
                         ->booleanNode('symlinks')->defaultValue(false)->end()
                     ->end()
@@ -81,6 +81,9 @@ class TreeBuilder implements \Hal\Component\Config\TreeBuilderInterface
                         ->scalarNode('title')->defaultValue('PhpMetrics report')->end()
                         ->booleanNode('offline')->defaultValue(false)->end()
                     ->end()
+                ->end()
+                ->arrayNode('plugins')
+                    ->prototype('scalar')
                 ->end()
             ->end()
         ;

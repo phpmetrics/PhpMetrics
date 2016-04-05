@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Application\Formater\Details;
+use Hal\Application\Extension\ExtensionService;
 use Hal\Application\Formater\FormaterInterface;
 use Hal\Application\Rule\Validator;
 use Hal\Component\Bounds\BoundsInterface;
@@ -40,15 +41,23 @@ class Cli implements FormaterInterface {
     private $bound;
 
     /**
+     * @var ExtensionService
+     */
+    private $extensionsService;
+
+    /**
      * Constructor
      *
      * @param Validator $validator
      * @param BoundsInterface $bound
+     * @param ExtensionService $extensionService
      */
-    public function __construct(Validator $validator, BoundsInterface $bound)
+    public function __construct(Validator $validator, BoundsInterface $bound, ExtensionService $extensionService)
     {
         $this->bound = $bound;
         $this->validator = $validator;
+        $this->extensionsService = $extensionService;
+
     }
 
     /**

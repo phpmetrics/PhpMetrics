@@ -31,7 +31,7 @@ class CliTest extends \PHPUnit_Framework_TestCase {
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
 
         $bounds = new Bounds();
-        $formater = new Cli($validator, $bounds);
+        $formater = new Cli($validator, $bounds, $this->getMockBuilder('\Hal\Application\Extension\ExtensionService')->disableOriginalConstructor()->getMock());
         $groupedResults = new ResultCollection();
         $output = $formater->terminate($collection, $groupedResults);
         $this->assertRegExp('/Maintainability/', $output);
@@ -40,7 +40,7 @@ class CliTest extends \PHPUnit_Framework_TestCase {
     public function testFormaterHasName() {
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $bounds = new Bounds();
-        $formater = new Cli($validator, $bounds);
+        $formater = new Cli($validator, $bounds, $this->getMockBuilder('\Hal\Application\Extension\ExtensionService')->disableOriginalConstructor()->getMock());
         $this->assertNotNull($formater->getName());
     }
 
@@ -63,7 +63,7 @@ class CliTest extends \PHPUnit_Framework_TestCase {
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
 
         $bounds = new Bounds();
-        $formater = new Cli($validator, $bounds);
+        $formater = new Cli($validator, $bounds, $this->getMockBuilder('\Hal\Application\Extension\ExtensionService')->disableOriginalConstructor()->getMock());
         $groupedResults = new ResultCollection();
         $output = $formater->terminate($collection, $groupedResults);
         $this->assertContains($expectedString, $output);

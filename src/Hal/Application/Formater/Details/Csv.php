@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Application\Formater\Details;
+use Hal\Application\Extension\ExtensionService;
 use Hal\Application\Formater\FormaterInterface;
 use Hal\Component\Result\ResultCollection;
 
@@ -20,10 +21,17 @@ use Hal\Component\Result\ResultCollection;
 class Csv implements FormaterInterface {
 
     /**
-     * Constructor
+     * @var ExtensionService
      */
-    public function __construct()
+    private $extensionsService;
+
+    /**
+     * Constructor
+     * @param ExtensionService $extensionService
+     */
+    public function __construct(ExtensionService $extensionService)
     {
+        $this->extensionsService = $extensionService;
     }
 
     /**

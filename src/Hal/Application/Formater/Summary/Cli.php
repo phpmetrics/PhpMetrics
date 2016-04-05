@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Application\Formater\Summary;
+use Hal\Application\Extension\ExtensionService;
 use Hal\Application\Formater\FormaterInterface;
 use Hal\Application\Rule\Validator;
 use Hal\Component\Bounds\BoundsInterface;
@@ -44,17 +45,24 @@ class Cli implements FormaterInterface {
     private $output;
 
     /**
+     * @var ExtensionService
+     */
+    private $extensionsService;
+
+    /**
      * Constructor
      *
      * @param Validator $validator
      * @param BoundsInterface $bound
      * @param OutputInterface $output
+     * @param ExtensionService $extensionService
      */
-    public function __construct(Validator $validator, BoundsInterface $bound, OutputInterface $output)
+    public function __construct(Validator $validator, BoundsInterface $bound, OutputInterface $output, ExtensionService $extensionService)
     {
         $this->bound = $bound;
         $this->validator = $validator;
         $this->output = $output;
+        $this->extensionsService = $extensionService;
     }
 
     /**
@@ -67,13 +75,19 @@ class Cli implements FormaterInterface {
 
         // score
         $score = $collection->getScore();
-//        if($score) {
-            foreach ($score->all() as $name => $value) {
-                $this->output->writeln(sprintf('%s %s', str_pad($name, 35, '.'),  str_pad($value, 5, ' ', STR_PAD_LEFT). ' / ' . Scoring::MAX));
-            }
+        foreach ($score->all() as $name => $value) {
+            $this->output->writeln(sprintf('%s %s', str_pad($name, 35, '.'),  str_pad($value, 5, ' ', STR_PAD_LEFT). ' / ' . Scoring::MAX));
+        }
         $this->output->writeln('');
-//        }
 
+        // extensions
+        foreach($this->extensionsService->getRepository()->all() as $plugin) {
+            $helper = $plugin->getReporterCliSummary();
+            if(!$helper) {
+                continue;
+            }
+            $this->output->write($helper->render());
+        }
     }
 
     /**

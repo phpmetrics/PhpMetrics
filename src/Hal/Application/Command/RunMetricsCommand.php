@@ -8,11 +8,16 @@
  */
 
 namespace Hal\Application\Command;
+use Hal\Application\Command\Job\QueueAnalyzeFactory;
 use Hal\Application\Command\Job\QueueFactory;
+use Hal\Application\Command\Job\QueueReportFactory;
 use Hal\Application\Config\ConfigFactory;
+use Hal\Application\Extension\ExtensionService;
+use Hal\Application\Extension\Repository;
 use Hal\Component\Bounds\Bounds;
 use Hal\Component\Evaluation\Evaluator;
 use Hal\Component\File\Finder;
+use Hal\Component\Result\ResultCollection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -88,6 +93,9 @@ class RunMetricsCommand extends Command
                 ->addOption(
                     'offline', null, InputOption::VALUE_NONE, 'Include all JavaScript and CSS files in HTML. Generated report will be bigger'
                 )
+                ->addOption(
+                    'plugins', null, InputOption::VALUE_REQUIRED, 'Path of extensions to load, separated by comma (,)'
+                )
         ;
     }
 
@@ -116,19 +124,45 @@ class RunMetricsCommand extends Command
             , $config->getPath()->isFollowSymlinks() ? Finder::FOLLOW_SYMLINKS : null
         );
 
+        // prepare plugins
+        $repository = new Repository();
+        foreach($config->getExtensions()->getExtensions() as $filename) {
+            if(!file_exists($filename) ||!is_readable($filename)) {
+                $output->writeln(sprintf('<error>Plugin %s skipped: not found</error>', $filename));
+                continue;
+            }
+            $plugin = require_once($filename);
+            $repository->attach($plugin);
+        }
+        $extensionService = new ExtensionService($repository);
+
         // prepare structures
         $bounds = new Bounds();
-        $collection = new \Hal\Component\Result\ResultCollection();
-        $aggregatedResults = new \Hal\Component\Result\ResultCollection();
+        $collection = new ResultCollection();
+        $aggregatedResults = new ResultCollection();
 
         // execute analyze
-        $queueFactory = new QueueFactory($input, $output, $config);
+        $queueFactory = new QueueAnalyzeFactory($input, $output, $config, $extensionService);
         $queue = $queueFactory->factory($finder, $bounds);
         gc_disable();
         $queue->execute($collection, $aggregatedResults);
         gc_enable();
 
-        $output->writeln('<info>done</info>');
+        $output->writeln('');
+
+        // provide data to extensions
+        if(($n = sizeof($repository->all())) > 0) {
+            $output->writeln(sprintf('%d %s. Executing analyzis', $n, ($n > 1 ? 'plugins are enabled' : 'plugin is enabled') ));
+            $extensionService->receive($config, $collection, $aggregatedResults, $bounds);
+        }
+
+        // generating reports
+        $output->writeln("Generating reports...");
+        $queueFactory = new QueueReportFactory($input, $output, $config, $extensionService);
+        $queue = $queueFactory->factory($finder, $bounds);
+        $queue->execute($collection, $aggregatedResults);
+
+        $output->writeln('<info>Done</info>');
 
         // evaluation of success
         $rule = $config->getFailureCondition();
