@@ -38,18 +38,12 @@ class Myer {
         $cc = $mcCabe->calculate($tokens);
 
         // Number of operator
-        $L = 0;
-        $logicalOperators = array(
-            Token::T_BOOLEAN_AND => Token::T_BOOLEAN_AND
-            , Token::T_LOGICAL_AND => Token::T_LOGICAL_AND
-            , Token::T_BOOLEAN_OR => Token::T_BOOLEAN_OR
-            , Token::T_LOGICAL_OR => Token::T_LOGICAL_OR
-        );
-        foreach($tokens as $token) {
-            if(isset($logicalOperators[$token])) {
-                $L++;
-            }
-        }
+        $L = array_reduce($tokens, function($result, $item) {
+            return
+                (in_array($item, array(Token::T_BOOLEAN_AND, Token::T_BOOLEAN_OR, Token::T_LOGICAL_AND, Token::T_LOGICAL_OR)))
+                ? $result + 1
+                : $result;
+        });
 
         $result
             ->setNumberOfOperators($L)
