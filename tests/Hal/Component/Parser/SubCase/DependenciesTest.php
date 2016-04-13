@@ -132,6 +132,8 @@ class Class1 {
         } else {
             return new Class2;
         }
+
+        return 1;
     }
 }
 EOT;
@@ -152,9 +154,10 @@ EOT;
         // Returns
         // -------------
         $returns = $methods[0]->getReturns();
-        $this->assertEquals(2, sizeof($returns));
+        $this->assertEquals(3, sizeof($returns));
         $this->assertEquals('\\B', $returns[0]->getType());
         $this->assertEquals('\\My\\Class2', $returns[1]->getType());
+        $this->assertEquals(Token::T_VALUE_INTEGER, $returns[2]->getType());
     }
 
 

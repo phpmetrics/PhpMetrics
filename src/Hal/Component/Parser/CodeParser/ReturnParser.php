@@ -2,6 +2,7 @@
 namespace Hal\Component\Parser\CodeParser;
 
 use Hal\Component\Parser\Exception\IncorrectSyntaxException;
+use Hal\Component\Parser\Helper\TypeResolver;
 use Hal\Component\Reflected\Argument;
 use Hal\Component\Reflected\ReturnedValue;
 use Hal\Component\Parser\Resolver\NamespaceResolver;
@@ -52,6 +53,7 @@ class ReturnParser
         }
 
         // returns in code
+        $typeResolver = new TypeResolver();
         for ($i = 0; $i < $len; $i++) {
             $token = $tokens[$i];
             $len = sizeof($tokens);
@@ -75,7 +77,12 @@ class ReturnParser
                         }
                         $classname = $tokens[$i + 2];
                         array_push($returns, new ReturnedValue($this->namespaceResolver->resolve($classname)));
+                        continue;
                     }
+
+                    // mixed value
+
+                    array_push($returns, new ReturnedValue($typeResolver->resolve($tokens[$i + 1])));
 
                 }
             }

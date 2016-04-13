@@ -9,6 +9,7 @@ interface Token
     const T_VALUE_INTEGER = 'value_integer';
     const T_VALUE_BOOLEAN = 'value_boolean';
     const T_VALUE_ARRAY = 'value_array';
+    const T_VALUE_OBJECT = 'value_object';
 
     const T_CLASS = 'class';
     const T_INTERFACE = 'interface';

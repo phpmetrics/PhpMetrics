@@ -2,6 +2,7 @@
 namespace Hal\Component\Reflected;
 
 
+use Hal\Component\Parser\Helper\TypeResolver;
 use Hal\Component\Parser\Token;
 
 class Method
@@ -47,9 +48,13 @@ class Method
      */
     public function getDependencies($unique = true)
     {
+        $typeResolver = new TypeResolver();
+
         $dependencies = array();
         foreach($this->returns as $return) {
-            array_push($dependencies, $return->getType());
+            if($typeResolver->isObject($return->getType())) {
+                array_push($dependencies, $return->getType());
+            }
         }
         foreach($this->arguments as $argument) {
             array_push($dependencies, $argument->getType());
