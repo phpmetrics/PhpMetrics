@@ -1,6 +1,7 @@
 <?php
 namespace Test\Hal\Metrics\Complexity\Text\Halstead;
 
+use Hal\Component\Parser\Tokenizer;
 use Hal\Metrics\Complexity\Component\Myer\Myer;
 
 /**
@@ -14,7 +15,8 @@ class MyerTest extends \PHPUnit_Framework_TestCase {
      */
     public function testICanGetMyerInterval($filename, $interval, $distance) {
 
-        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize(file_get_contents($filename));
         $object = new Myer();
         $result = $object->calculate($tokens);
         $this->assertEquals($interval, $result->getInterval());

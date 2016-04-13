@@ -9,6 +9,7 @@
 
 namespace Hal\Metrics\Complexity\Component\Myer;
 
+use Hal\Component\Parser\Token;
 use Hal\Component\Token\TokenCollection;
 use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 
@@ -25,7 +26,7 @@ class Myer {
      *      Cyclomatic complexity : Cyclomatic complexity + L
      *      where L is the number of logical operators
      *
-     * @param TokenCollection $tokens
+     * @param array $tokens
      * @return Result
      */
     public function calculate($tokens)
@@ -39,13 +40,13 @@ class Myer {
         // Number of operator
         $L = 0;
         $logicalOperators = array(
-            T_BOOLEAN_AND => T_BOOLEAN_AND
-            , T_LOGICAL_AND => T_LOGICAL_AND
-            , T_BOOLEAN_OR => T_BOOLEAN_OR
-        , T_LOGICAL_OR => T_LOGICAL_OR
+            Token::T_BOOLEAN_AND => Token::T_BOOLEAN_AND
+            , Token::T_LOGICAL_AND => Token::T_LOGICAL_AND
+            , Token::T_BOOLEAN_OR => Token::T_BOOLEAN_OR
+            , Token::T_LOGICAL_OR => Token::T_LOGICAL_OR
         );
         foreach($tokens as $token) {
-            if(isset($logicalOperators[$token->getType()])) {
+            if(isset($logicalOperators[$token])) {
                 $L++;
             }
         }
