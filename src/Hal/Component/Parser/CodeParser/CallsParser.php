@@ -74,7 +74,7 @@ class CallsParser
                 // (new Foo)->bar()
                 $next = $tokens[$i + 1];
                 $nextAfter = $i + 2 <= $len ? $tokens[$i + 2] : null;
-                $nextAfterAfter = $i + 3 <= $len ? $tokens[$i + 3] : null;
+                $nextAfterAfter = $i + 3 <= $len - 1 ? $tokens[$i + 3] : null;
                 if (Token::T_PARENTHESIS_CLOSE === $nextAfter && preg_match('!^\-\>(.*)!', $nextAfterAfter, $matches)) {
                     $className = $next;
                     $methodName = $matches[1];

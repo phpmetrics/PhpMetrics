@@ -58,7 +58,7 @@ class ArgumentsParser
             $type = null;
 
             // default value
-            if ($i < $len) {
+            if ($i < $len - 1) {
                 $next = $tokens[$i + 1];
                 if (Token::T_EQUAL === $next) {
                     $i = $i + 2;

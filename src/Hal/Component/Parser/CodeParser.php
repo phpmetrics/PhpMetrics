@@ -58,7 +58,7 @@ class CodeParser
                 $classEnd = $this->searcher->getPositionOfClosingBrace($tokens, $i);
                 // we need to start tokens from previous token because of php7 anonymous classes
                 // example: "new class{"
-                $tokensOfClass = array_slice($tokens, $classStart - 1, ($classEnd - $classStart) + 1);
+                $tokensOfClass = array_slice($tokens, max(0, $classStart - 1), ($classEnd - $classStart) + 1);
 
                 $parser = new ClassParser($this->searcher, $this->namespaceResolver);
                 $class = $parser->parse($tokensOfClass);
