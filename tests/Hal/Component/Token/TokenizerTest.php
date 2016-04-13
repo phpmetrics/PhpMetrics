@@ -1,11 +1,11 @@
 <?php
 
 namespace Test;
-use Hal\Component\Parser\Token;
-use Hal\Component\Parser\Tokenizer;
+use Hal\Component\Token\Token;
+use Hal\Component\Token\Tokenizer;
 
 /**
- * @group parser
+ * @group token
  */
 class TokenizerTest extends \PHPUnit_Framework_TestCase {
 

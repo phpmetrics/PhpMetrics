@@ -8,14 +8,14 @@
  */
 
 namespace Hal\Metrics\Complexity\Text\Halstead;
-use Hal\Component\Result\ExportableInterface;
+use Hal\Metrics\Metric;
 
 /**
  * Representation of Halstead complexity
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result implements ExportableInterface {
+class Result implements Metric {
     /**
      * Length of a program
      *

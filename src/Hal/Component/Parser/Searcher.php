@@ -1,6 +1,8 @@
 <?php
 namespace Hal\Component\Parser;
 
+use Hal\Component\Token\Token;
+
 class Searcher
 {
 

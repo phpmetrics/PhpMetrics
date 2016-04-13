@@ -3,7 +3,7 @@
 namespace Test;
 
 use Hal\Component\Parser\Helper\TypeResolver;
-use Hal\Component\Parser\Token;
+use Hal\Component\Token\Token;
 
 /**
  * @group parser

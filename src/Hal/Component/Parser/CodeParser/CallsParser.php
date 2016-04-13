@@ -6,7 +6,7 @@ use Hal\Component\Reflected\Call;
 use Hal\Component\Reflected\Klass;
 use Hal\Component\Parser\Resolver\NamespaceResolver;
 use Hal\Component\Parser\Searcher;
-use Hal\Component\Parser\Token;
+use Hal\Component\Token\Token;
 
 class CallsParser
 {

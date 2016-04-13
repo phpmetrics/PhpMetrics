@@ -9,7 +9,7 @@
 
 namespace Hal\Metrics\Complexity\Component\Myer;
 
-use Hal\Component\Parser\Token;
+use Hal\Component\Token\Token;
 use Hal\Component\Token\TokenCollection;
 use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 

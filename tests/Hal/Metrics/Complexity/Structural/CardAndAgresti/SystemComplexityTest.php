@@ -4,7 +4,7 @@ namespace Test\Hal\Metrics\Complexity\CardAndAgresti\SystemComplexity;
 use Hal\Component\Parser\CodeParser;
 use Hal\Component\Parser\Resolver\NamespaceResolver;
 use Hal\Component\Parser\Searcher;
-use Hal\Component\Parser\Tokenizer;
+use Hal\Component\Token\Tokenizer;
 use Hal\Metrics\Complexity\Structural\CardAndAgresti\SystemComplexity;
 use Hal\Metrics\Complexity\Structural\CardAndAgresti\Result;
 

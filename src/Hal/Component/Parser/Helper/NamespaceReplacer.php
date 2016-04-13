@@ -3,7 +3,7 @@ namespace Hal\Component\Parser\Helper;
 
 
 use Hal\Component\Parser\Resolver\NamespaceResolver;
-use Hal\Component\Parser\Token;
+use Hal\Component\Token\Token;
 
 class NamespaceReplacer
 {

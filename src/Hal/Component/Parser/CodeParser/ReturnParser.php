@@ -7,7 +7,7 @@ use Hal\Component\Reflected\Argument;
 use Hal\Component\Reflected\ReturnedValue;
 use Hal\Component\Parser\Resolver\NamespaceResolver;
 use Hal\Component\Parser\Searcher;
-use Hal\Component\Parser\Token;
+use Hal\Component\Token\Token;
 
 
 class ReturnParser

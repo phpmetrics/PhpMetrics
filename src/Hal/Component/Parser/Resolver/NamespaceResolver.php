@@ -2,7 +2,7 @@
 namespace Hal\Component\Parser\Resolver;
 
 use Hal\Component\Parser\Exception\IncorrectSyntaxException;
-use Hal\Component\Parser\Token;
+use Hal\Component\Token\Token;
 
 class NamespaceResolver
 {

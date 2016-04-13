@@ -2,7 +2,7 @@
 namespace Hal\Component\Reflected;
 
 
-use Hal\Component\Parser\Token;
+use Hal\Component\Token\Token;
 
 class Attribute
 {

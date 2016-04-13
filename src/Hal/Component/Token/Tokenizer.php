@@ -1,5 +1,5 @@
 <?php
-namespace Hal\Component\Parser;
+namespace Hal\Component\Token;
 
 class Tokenizer
 {

@@ -2,7 +2,7 @@
 
 namespace Test;
 use Hal\Component\Parser\Resolver\NamespaceResolver;
-use Hal\Component\Parser\Tokenizer;
+use Hal\Component\Token\Tokenizer;
 
 /**
  * @group parser

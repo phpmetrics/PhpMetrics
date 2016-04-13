@@ -1,7 +1,7 @@
 <?php
 namespace Test\Hal\Metrics\Complexity\Text\Halstead;
 
-use Hal\Component\Parser\Tokenizer;
+use Hal\Component\Token\Tokenizer;
 use Hal\Metrics\Complexity\Component\Myer\Myer;
 
 /**

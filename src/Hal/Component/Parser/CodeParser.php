@@ -4,6 +4,7 @@ namespace Hal\Component\Parser;
 use Hal\Component\Parser\CodeParser\ClassParser;
 use Hal\Component\Parser\CodeParser\MethodParser;
 use Hal\Component\Parser\Resolver\NamespaceResolver;
+use Hal\Component\Token\Token;
 
 class CodeParser
 {

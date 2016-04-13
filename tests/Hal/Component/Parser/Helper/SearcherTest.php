@@ -3,8 +3,8 @@
 namespace Test;
 use Hal\Component\Parser\Helper\NamespaceReplacer;
 use Hal\Component\Parser\Searcher;
-use Hal\Component\Parser\Token;
-use Hal\Component\Parser\Tokenizer;
+use Hal\Component\Token\Token;
+use Hal\Component\Token\Tokenizer;
 
 /**
  * @group parser
