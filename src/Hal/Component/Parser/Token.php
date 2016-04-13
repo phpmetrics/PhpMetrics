@@ -50,4 +50,24 @@ interface Token
     const T_COMP_LOWER_THAN = '<';
     const T_COMP_LOWER_OR_EQUALS_THAN = '<=';
 
+    const T_IF = 'if';
+    const T_ELSE = 'else';
+    const T_ELSEIF = 'elseif';
+    const T_FOREACH = 'foreach';
+    const T_TERNARY = '?';
+    const T_FOR = 'for';
+    const T_WHILE = 'while';
+    const T_DO = 'do'
+    ;
+    const T_BOOLEAN_AND = '&';
+    const T_LOGICAL_AND = '&&';
+    const T_BOOLEAN_OR = '|';
+    const T_LOGICAL_OR = '||';
+    const T_SPACESHIP = '<=>';
+    const T_COALESCE = '??';
+    const T_CASE = 'case';
+    const T_DEFAULT = 'default:';
+    const T_CATCH = 'catch';
+    const T_CONTINUE = 'continue';
+
 }

@@ -8,6 +8,7 @@
  */
 
 namespace Hal\Metrics\Complexity\Component\McCabe;
+use Hal\Component\Parser\Token;
 use Hal\Component\Token\TokenCollection;
 
 /**
@@ -30,7 +31,7 @@ class McCabe {
      *
      * 2. CC = Number of each decision point
      *
-     * @param TokenCollection $tokens
+     * @param array $tokens
      * @return Result
      */
     public function calculate($tokens)
@@ -40,30 +41,28 @@ class McCabe {
         $ccn = 1; // default path
         foreach($tokens as $token) {
 
-            switch($token->getType()) {
-                case T_IF:
-                case T_ELSEIF:
-                case T_FOREACH:
-                case T_FOR:
-                case T_WHILE:
-                case T_DO:
-                case T_BOOLEAN_AND:
-                case T_LOGICAL_AND:
-                case T_BOOLEAN_OR:
-                case T_LOGICAL_OR:
-                case T_SPACESHIP:
-                case T_CASE:
-                case T_DEFAULT:
-                case T_CATCH:
-                case T_CONTINUE:
+            switch($token) {
+                case Token::T_IF:
+                case Token::T_ELSEIF:
+                case Token::T_FOREACH:
+                case Token::T_FOR:
+                case Token::T_WHILE:
+                case Token::T_DO:
+                case Token::T_BOOLEAN_AND:
+                case Token::T_LOGICAL_AND:
+                case Token::T_BOOLEAN_OR:
+                case Token::T_LOGICAL_OR:
+                case Token::T_SPACESHIP:
+                case Token::T_CASE:
+                case Token::T_DEFAULT:
+                case Token::T_CATCH:
+                case Token::T_CONTINUE:
                     $ccn++;
                     break;
-                case T_STRING:
-                    if('?' == $token->getValue()) {
-                        $ccn = $ccn + 2;
-                    }
+                case Token::T_TERNARY:
+                    $ccn = $ccn + 2;
                     break;
-                case T_COALESCE:
+                case Token::T_COALESCE:
                     $ccn = $ccn + 2;
                     break;
             }
