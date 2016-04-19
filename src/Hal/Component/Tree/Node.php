@@ -14,9 +14,9 @@ class Node {
     private $key;
 
     /**
-     * @var array
+     * @var Edge[]
      */
-    private $adjacents = array();
+    private $edges = array();
 
     /**
      * @var bool
@@ -46,16 +46,33 @@ class Node {
      */
     public function getAdjacents()
     {
-        return $this->adjacents;
+        $adjacents = [];
+        foreach($this->edges as $edge) {
+            if($edge->getFrom()->getKey() != $this->getKey()) {
+                $adjacents[$edge->getFrom()->getKey()] =  $edge->getFrom();
+            }
+            if($edge->getTo()->getKey() != $this->getKey()) {
+                $adjacents[$edge->getTo()->getKey()] =  $edge->getTo();
+            }
+        }
+        return $adjacents;
     }
 
     /**
-     * @param Node $adjacent
+     * @return Edge[]
+     */
+    public function getEdges()
+    {
+        return $this->edges;
+    }
+
+    /**
+     * @param Edge $edge
      * @return $this
      */
-    public function addAdjacent(Node $adjacent)
+    public function addEdge(Edge $edge)
     {
-        array_push($this->adjacents, $adjacent);
+        array_push($this->edges, $edge);
         return $this;
     }
 

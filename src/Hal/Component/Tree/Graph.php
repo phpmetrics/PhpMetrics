@@ -9,12 +9,38 @@ class Graph implements \Countable {
     private $datas = array();
 
     /**
+     * @var Edge[]
+     */
+    private $edges = array();
+
+    /**
      * @param Node $node
      * @return $this
      */
     public function insert(Node $node)
     {
         $this->datas[$node->getKey()] = $node;
+        return $this;
+    }
+
+    /**
+     * @param Node $from
+     * @param Node $to
+     * @return $this
+     */
+    public function addEdge(Node $from, Node $to)
+    {
+        if(!$this->has($from->getKey())) {
+            throw new GraphException('from is not is nthe graph');
+        }
+        if(!$this->has($to->getKey())) {
+            throw new GraphException('to is not is nthe graph');
+        }
+
+        $edge = new Edge($from, $to);
+        $from->addEdge($edge);
+        $to->addEdge($edge);
+        array_push($this->edges, $edge);
         return $this;
     }
 

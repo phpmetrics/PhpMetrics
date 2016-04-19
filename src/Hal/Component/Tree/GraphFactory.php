@@ -14,23 +14,24 @@ class GraphFactory
     {
         $graph = new Graph();
 
-        // traverse hash to get dependencies and represents graph
+        // insert all required nodes in graph
         foreach($hash as $node) {
             foreach($node->getData()->getDependencies() as $dependencyName) {
-
-                if($hash->has($dependencyName)) {
-                    // dependencies is registered in hash
-                    $adjacent = $hash->get($dependencyName);
-                } else {
+                if(!$hash->has($dependencyName)) {
                     // dependency is not registered (example: external dependency from vendors)
                     $adjacent = new Node($dependencyName, new Klass($dependencyName));
                     $graph->insert($adjacent);
                 }
-
-                $node->addAdjacent($adjacent);
             }
-
             $graph->insert($node);
+        }
+
+        // relations
+        foreach($hash as $from) {
+            foreach($from->getData()->getDependencies() as $dependencyName) {
+                $to = $graph->get($dependencyName);
+                $graph->addEdge($from, $to);
+            }
         }
 
         return $graph;
