@@ -42,7 +42,7 @@ EOT;
 
         // Calls
         // -------------
-        $calls = $methods[0]->getCalls();
+        $calls = $methods['foo']->getCalls();
         $this->assertEquals(3, sizeof($calls));
         $this->assertEquals('\Demo\B', $calls[0]->getType());
         $this->assertEquals('bar', $calls[0]->getMethodName());
@@ -87,7 +87,7 @@ EOT;
 
         // Dependencies
         // -------------
-        $dependencies = $methods[0]->getCalls();
+        $dependencies = $methods['foo']->getCalls();
         $this->assertEquals(2, sizeof($dependencies));
         $this->assertEquals('\Demo\B', $dependencies[0]->getType());
         $this->assertEquals('\Demo\C', $dependencies[1]->getType());
@@ -117,7 +117,7 @@ EOT;
 
         // Returns
         // -------------
-        $returns = $methods[0]->getReturns();
+        $returns = $methods['foo']->getReturns();
         $this->assertEquals(1, sizeof($returns));
         $this->assertEquals('\\My\\Class2', $returns[0]->getType());
     }
@@ -153,7 +153,7 @@ EOT;
 
         // Returns
         // -------------
-        $returns = $methods[0]->getReturns();
+        $returns = $methods['foo']->getReturns();
         $this->assertEquals(3, sizeof($returns));
         $this->assertEquals('\\B', $returns[0]->getType());
         $this->assertEquals('\\My\\Class2', $returns[1]->getType());

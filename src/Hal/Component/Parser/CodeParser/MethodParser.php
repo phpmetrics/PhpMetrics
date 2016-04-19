@@ -52,6 +52,10 @@ class MethodParser
         $returnParser = new ReturnParser($this->searcher, $this->namespaceResolver);
         $method->setReturns($returnParser->parse(array_splice($tokens, 0, sizeof($tokens))));
 
+        // role of method
+        $roleParser = new MethodUsageParser($this->searcher, $this->namespaceResolver);
+        $method->setUsage($roleParser->parse($method));
+
         return $method;
     }
 }

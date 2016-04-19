@@ -85,7 +85,7 @@ class ClassParser
                 $isStatic = false;
                 $visibility = Token::T_VISIBILITY_PUBLIC;
 
-                array_push($functions, $method);
+                $functions[$method->getName()] = $method;
                 $i = $functionEnd;
             }
 
@@ -110,6 +110,7 @@ class ClassParser
         }
 
         $class
+            ->setTokens($tokens)
             ->setMethods($functions)
             ->setAttributes($attributes)
             ->setNamespace($this->namespaceResolver->getCurrentNamespace());

@@ -35,6 +35,11 @@ class Klass
     private $isAbstract = false;
 
     /**
+     * @var \SplFixedArray
+     */
+    private $tokens;
+
+    /**
      * Klass constructor.
      * @param string $name
      * @param string $namespace
@@ -43,6 +48,7 @@ class Klass
     {
         $this->name = $name;
         $this->namespace = $namespace;
+        $this->tokens = new \SplFixedArray(0);
     }
 
 
@@ -192,4 +198,24 @@ class Klass
         $this->parents = $parents;
         return $this;
     }
+
+    /**
+     * @return \SplFixedArray
+     */
+    public function getTokens()
+    {
+        return $this->tokens;
+    }
+
+    /**
+     * @param array $tokens
+     * @return Klass
+     */
+    public function setTokens(array $tokens)
+    {
+        $this->tokens = new \SplFixedArray(sizeof($tokens));
+        $this->tokens->fromArray($tokens);
+        return $this;
+    }
+
 }

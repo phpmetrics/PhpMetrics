@@ -43,6 +43,11 @@ class Method
     private $returns = array();
 
     /**
+     * @var int
+     */
+    private $usage = MethodUsage::USAGE_UNKNWON;
+
+    /**
      * @param bool|true $unique
      * @return array
      */
@@ -117,6 +122,34 @@ class Method
     public function isStatic()
     {
         return $this->isStatic;
+    }/**
+     * @return bool
+     */
+    public function isSetter() {
+        return MethodUsage::USAGE_SETTER == $this->getUsage();
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsage()
+    {
+        return $this->usage;
+    }
+
+    /**
+     * @param string $usage
+     */
+    public function setUsage($usage)
+    {
+        $this->usage = (int) $usage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGetter() {
+        return MethodUsage::USAGE_GETTER == $this->getUsage();
     }
 
     /**

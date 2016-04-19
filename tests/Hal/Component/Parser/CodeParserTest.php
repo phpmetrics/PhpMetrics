@@ -54,7 +54,7 @@ EOT;
         $this->assertEquals(2, sizeof($methods));
 
         // methods are found
-        $method1 = $methods[0];
+        $method1 = $methods['foo'];
         $this->assertEquals('foo', $method1->getName());
         $this->assertEquals(false, $method1->isPublic(), 'visibility of method is found');
         $this->assertEquals(Token::T_VISIBILITY_PROTECTED, $method1->getVisibility(), 'visibility of method is found');
