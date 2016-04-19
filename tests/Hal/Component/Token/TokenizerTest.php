@@ -99,4 +99,22 @@ EOT;
         $this->assertEquals($expected, $tokens);
     }
 
+    public function testTypeCastIsDetected() {
+        $code = <<<EOT
+<?php
+echo (string) 'ok';
+;
+EOT;
+
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize($code);
+
+        $expected = array (
+            Token::T_ECHO,
+            Token::T_CAST,
+            Token::T_VALUE_STRING,
+        );
+        $this->assertEquals($expected, $tokens);
+    }
+
 }

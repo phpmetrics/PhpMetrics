@@ -18,12 +18,6 @@ class Tokenizer
         $code = preg_replace('/"[^"\\\\]*(?:\\\\.[^"\\\\]*)*"/s', Token::T_VALUE_STRING, $code);
         $code = preg_replace("/'[^'\\\\]*(?:\\\\.[^'\\\\]*)*'/s", Token::T_VALUE_STRING, $code);
 
-        // replace floats
-        // $code = preg_replace('/\d+\.\d+/', Token::T_VALUE_FLOAT, $code);
-
-        // replace integers
-        // $code = preg_replace('/\d+/', Token::T_VALUE_INTEGER, $code);
-
         // replace booleans
         $code = preg_replace('/(true|false)/i', Token::T_VALUE_BOOLEAN, $code);
 
@@ -35,6 +29,9 @@ class Tokenizer
         // remove multiline comments
         $code = preg_replace('!/\*+!', Token::T_COMMENT_OPEN, $code);
         $code = preg_replace('!\*/!', Token::T_COMMENT_CLOSE, $code);
+
+        // type cast
+        $code = preg_replace('!(\((string|bool|float|object|array)\))!', Token::T_CAST, $code);
 
         // split tokens
         return preg_split('!\s|;|,|(\{|\}|\(|\))!', $code, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);

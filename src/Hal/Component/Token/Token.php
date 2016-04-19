@@ -11,6 +11,8 @@ interface Token
     const T_VALUE_ARRAY = 'value_array';
     const T_VALUE_OBJECT = 'value_object';
 
+    const T_CAST = 'cast';
+
     const T_CLASS = 'class';
     const T_INTERFACE = 'interface';
     const T_FUNCTION = 'function';
