@@ -35,10 +35,10 @@ class LackOfCohesionTest extends \PHPUnit_Framework_TestCase {
     public function providesFilesForLcom() {
         return array(
             array(__DIR__.'/../../../../../resources/lcom/f1.php', 2)
-            //, array(__DIR__.'/../../../../../resources/lcom/f2.php', 1)
-            //, array(__DIR__.'/../../../../../resources/lcom/f3.php', 3)
-            //, array(__DIR__.'/../../../../../resources/lcom/f4.php', 2)
-            //, array(__DIR__.'/../../../../../resources/lcom/f5.php', 2)
+            , array(__DIR__.'/../../../../../resources/lcom/f2.php', 1)
+            , array(__DIR__.'/../../../../../resources/lcom/f3.php', 3)
+            , array(__DIR__.'/../../../../../resources/lcom/f4.php', 2)
+            , array(__DIR__.'/../../../../../resources/lcom/f5.php', 2)
         );
     }
 }
