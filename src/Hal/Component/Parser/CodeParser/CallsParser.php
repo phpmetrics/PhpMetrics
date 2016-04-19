@@ -89,6 +89,20 @@ class CallsParser
                 $call = new Call($this->namespaceResolver->resolve($className), $methodName);
                 array_push($calls, $call);
             }
+
+            // $this->foo();
+            if(preg_match('!^\$this\->(.+)!', $token, $matches)) {
+                list(, $methodName) = $matches;
+                // next token should be "("
+                if(!isset($tokens[$i + 1])) {
+                    continue;
+                }
+                if(Token::T_PARENTHESIS_OPEN === $tokens[$i + 1]) {
+                    $call = new Call(null, $methodName);
+                    $call->setIsItself(true);
+                    array_push($calls, $call);
+                }
+            }
         }
         return $calls;
     }

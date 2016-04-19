@@ -194,4 +194,40 @@ EOT;
         $this->assertEquals($expected, $classA->getDependencies());
 
     }
+
+    /**
+     * @group wip
+     */
+    public function testMCallsOnItselfAreFound()
+    {
+        $code = <<<EOT
+namespace Demo;
+class A {
+    public function foo() {
+         return \$this->bar();
+    }
+
+    public function bar() {}
+}
+EOT;
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize($code);
+
+        $parser = new CodeParser(new Searcher(), new NamespaceResolver($tokens));
+        $result = $parser->parse($tokens);
+
+
+        $classes = $result->getClasses();
+        $this->assertEquals(1, sizeof($classes));
+        $classA = $classes[0];
+        $methods =$classA->getMethods();
+        $this->assertEquals(2, sizeof($methods));
+        $method = $methods['foo'];
+
+        $this->assertEquals(1, sizeof($method->getCalls()));
+        $call = $method->getCalls()[0];
+        $this->assertTrue($call->isItself());
+        $this->assertEquals('bar', $call->getMethodName());
+
+    }
 }
