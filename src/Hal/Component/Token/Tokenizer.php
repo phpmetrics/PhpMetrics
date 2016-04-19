@@ -34,6 +34,14 @@ class Tokenizer
         $code = preg_replace('!(\((string|bool|float|object|array)\))!', Token::T_CAST, $code);
 
         // split tokens
-        return preg_split('!\s|;|,|(\{|\}|\(|\))!', $code, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        $tokens = preg_split('!\s|;|,|(\{|\}|\(|\))!', $code, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+
+        $code = implode(PHP_EOL, $tokens);
+        // replace floats
+        $code = preg_replace('/\d+\.\d+/', Token::T_VALUE_FLOAT, $code);
+
+        // replace integers
+        $code = preg_replace('/\d+/', Token::T_VALUE_INTEGER, $code);
+        return explode(PHP_EOL, $code);
     }
 }
