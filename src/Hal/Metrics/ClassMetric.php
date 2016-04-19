@@ -8,16 +8,17 @@
  */
 
 namespace Hal\Metrics;
+use Hal\Component\Reflected\Klass;
 
 /**
- * Represents a metric
- *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-interface Metric {
+interface ClassMetric {
 
     /**
-     * @return array
+     * @param Klass $class
+     *
+     * @return MetricResult
      */
-    public function asArray();
+    public function calculate(Klass $class);
 }

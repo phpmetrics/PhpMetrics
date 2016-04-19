@@ -8,25 +8,26 @@
  */
 
 namespace Hal\Metrics\Complexity\Structural\LCOM;
-use Hal\Component\OOP\Reflected\ReflectedClass;
-use Hal\Component\OOP\Reflected\ReflectedMethod;
+use Hal\Component\Reflected\Klass;
+use Hal\Component\Reflected\Method;
+use Hal\Metrics\ClassMetric;
 
 /**
  * Calculates lack of cohesion method
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class LackOfCohesionOfMethods {
+class LackOfCohesionOfMethods implements ClassMetric {
 
     /**
      * Calculate Lack of cohesion of methods (LCOM)
      *
      *      We have choose the LCOM4 extension (Hitz and Montazeri version)
      *
-     * @param ReflectedClass $class
+     * @param Klass $class
      * @return Result
      */
-    public function calculate(ReflectedClass $class)
+    public function calculate(Klass $class)
     {
 
         $result = new Result;
@@ -57,12 +58,12 @@ class LackOfCohesionOfMethods {
     /**
      * Search direct and indirect linked methods
      *
-     * @param ReflectedClass $class
-     * @param ReflectedMethod $method
+     * @param Klass $class
+     * @param Method $method
      * @param array $toSkip (avoid infinite loops)
      * @return array
      */
-    private function getLinkedMethods(ReflectedClass $class, ReflectedMethod $method, array &$toSkip = array()) {
+    private function getLinkedMethods(Klass $class, Method $method, array &$toSkip = array()) {
 
         $linked = array_merge(
             // search directly called methods
@@ -91,11 +92,11 @@ class LackOfCohesionOfMethods {
     /**
      * Search methods whose are called or call this method
      *
-     * @param ReflectedClass $class
-     * @param ReflectedMethod $method
+     * @param Klass $class
+     * @param Method $method
      * @return array
      */
-    private function searchDirectLinkedMethodsByCall(ReflectedClass $class, ReflectedMethod $method) {
+    private function searchDirectLinkedMethodsByCall(Klass $class, Method $method) {
         $linked = array();
 
         // A calls B
@@ -120,11 +121,11 @@ class LackOfCohesionOfMethods {
     /**
      * Search methods whose share attribute
      *
-     * @param ReflectedClass $class
-     * @param ReflectedMethod $method
+     * @param Klass $class
+     * @param Method $method
      * @return array
      */
-    private function searchDirectLinkedMethodsByMember(ReflectedClass $class, ReflectedMethod $method) {
+    private function searchDirectLinkedMethodsByMember(Klass $class, Method $method) {
 
         $linked = array();
         $members = array();

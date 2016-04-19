@@ -8,15 +8,17 @@
  */
 
 namespace Hal\Metrics\Complexity\Component\McCabe;
+use Hal\Component\Reflected\Klass;
 use Hal\Component\Token\Token;
 use Hal\Component\Token\TokenCollection;
+use Hal\Metrics\ClassMetric;
 
 /**
  * Calculates cyclomatic complexity
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class McCabe {
+class McCabe implements ClassMetric {
 
     /**
      * Calculate cyclomatic complexity number
@@ -31,15 +33,15 @@ class McCabe {
      *
      * 2. CC = Number of each decision point
      *
-     * @param array $tokens
+     * @param Klass $class
      * @return Result
      */
-    public function calculate($tokens)
+    public function calculate(Klass $class)
     {
         $info = new Result;
 
         $ccn = 1; // default path
-        foreach($tokens as $token) {
+        foreach($class->getTokens() as $token) {
 
             switch($token) {
                 case Token::T_IF:

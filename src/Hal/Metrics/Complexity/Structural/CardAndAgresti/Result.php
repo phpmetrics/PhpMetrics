@@ -9,14 +9,14 @@
 
 namespace Hal\Metrics\Complexity\Structural\CardAndAgresti;
 
-use Hal\Metrics\Metric;
+use Hal\Metrics\MetricResult;
 
 /**
  * Representation of McCaybe measure
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result implements Metric {
+class Result implements MetricResult {
 
 
 

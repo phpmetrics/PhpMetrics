@@ -18,7 +18,9 @@ class MyerTest extends \PHPUnit_Framework_TestCase {
         $tokenizer = new Tokenizer();
         $tokens = $tokenizer->tokenize(file_get_contents($filename));
         $object = new Myer();
-        $result = $object->calculate($tokens);
+        $class = $this->getMock('\Hal\Component\Reflected\Klass');
+        $class->method('getTokens')->will($this->returnValue($tokens));
+        $result = $object->calculate($class);
         $this->assertEquals($interval, $result->getInterval());
         $this->assertEquals($distance, $result->getDistance());
     }

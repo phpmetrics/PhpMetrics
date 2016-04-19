@@ -8,14 +8,14 @@
  */
 
 namespace Hal\Metrics\Complexity\Component\McCabe;
-use Hal\Metrics\Metric;
+use Hal\Metrics\MetricResult;
 
 /**
  * Representation of McCaybe measure
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result implements Metric {
+class Result implements MetricResult {
 
     /**
      * @var int

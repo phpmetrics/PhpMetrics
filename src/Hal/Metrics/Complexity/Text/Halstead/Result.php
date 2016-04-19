@@ -8,14 +8,14 @@
  */
 
 namespace Hal\Metrics\Complexity\Text\Halstead;
-use Hal\Metrics\Metric;
+use Hal\Metrics\MetricResult;
 
 /**
  * Representation of Halstead complexity
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result implements Metric {
+class Result implements MetricResult {
     /**
      * Length of a program
      *
