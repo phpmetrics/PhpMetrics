@@ -4,6 +4,7 @@ namespace Hal\Component\Token;
 interface Token
 {
 
+    const T_VAR = 'variable';
     const T_VALUE_STRING = 'value_string';
     const T_VALUE_FLOAT = 'value_float';
     const T_VALUE_INTEGER = 'value_integer';

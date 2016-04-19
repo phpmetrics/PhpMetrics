@@ -25,6 +25,7 @@ sdfdsf
         echo 1.2;
         echo true;
         echo false;
+        echo \$a;
     }
 }
 ?>
@@ -57,6 +58,7 @@ EOT;
             //Token::T_ECHO, '1.2',
             Token::T_ECHO, Token::T_VALUE_BOOLEAN,
             Token::T_ECHO, Token::T_VALUE_BOOLEAN,
+            Token::T_ECHO, Token::T_VAR,
             Token::T_BRACE_CLOSE,
             Token::T_BRACE_CLOSE,
             Token::T_ECHO,
