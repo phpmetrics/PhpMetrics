@@ -8,14 +8,14 @@
  */
 
 namespace Hal\Metrics\Complexity\Structural\LCOM;
-use Hal\Component\Result\ExportableInterface;
+use Hal\Metrics\MetricResult;
 
 /**
  * Representation of LCOM result
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result implements ExportableInterface {
+class Result implements MetricResult {
 
     /**
      * lack of cohesion of methods

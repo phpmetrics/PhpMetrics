@@ -204,7 +204,7 @@ class Method
     }
 
     /**
-     * @return array
+     * @return Call[]
      */
     public function getCalls()
     {

@@ -1,4 +1,8 @@
 <?php
+
+// A -> B -> x
+// C -> y <- D -> E
+
 class Foo {
 
     private $x;

@@ -10,6 +10,8 @@
 namespace Hal\Metrics\Complexity\Structural\LCOM;
 use Hal\Component\Reflected\Klass;
 use Hal\Component\Reflected\Method;
+use Hal\Component\Tree\Graph;
+use Hal\Component\Tree\Node;
 use Hal\Metrics\ClassMetric;
 
 /**
@@ -19,144 +21,89 @@ use Hal\Metrics\ClassMetric;
  */
 class LackOfCohesionOfMethods implements ClassMetric {
 
+
     /**
-     * Calculate Lack of cohesion of methods (LCOM)
-     *
-     *      We have choose the LCOM4 extension (Hitz and Montazeri version)
-     *
      * @param Klass $class
      * @return Result
      */
-    public function calculate(Klass $class)
-    {
+    public function calculate(Klass $class) {
 
-        $result = new Result;
-        $lcom = 0;
-        $methodsToInspect = $class->getMethods();
+        $graph = new Graph();
 
-        $toSkip = array();
-        foreach($methodsToInspect as $method) {
+        // attributes in graph are prefixed with '_attr_' string
+        foreach($class->getMethods() as $method) {
 
-            if(in_array($method->getName(), $toSkip)) {
+            // avoid getters and setters
+            if($method->isGetter() ||$method->isSetter()) {
                 continue;
             }
 
-            if($method->isSetter() ||$method->isGetter()) {
-                continue;
+            if(null === ($from = $graph->get($method->getName()))) {
+                $from = new Node($method->getName());
+                $graph->insert($from);
             }
 
-            $linked = $this->getLinkedMethods($class, $method, $toSkip);
-            $toSkip = array_merge($toSkip, $linked);
-            $lcom++;
+            // calls
+            foreach($method->getCalls() as $call) {
 
-        }
+                if(!$call->isItself()) {
+                    continue;
 
-        $result->setLcom($lcom);
-        return $result;
-    }
+                }
 
-    /**
-     * Search direct and indirect linked methods
-     *
-     * @param Klass $class
-     * @param Method $method
-     * @param array $toSkip (avoid infinite loops)
-     * @return array
-     */
-    private function getLinkedMethods(Klass $class, Method $method, array &$toSkip = array()) {
-
-        $linked = array_merge(
-            // search directly called methods
-            $this->searchDirectLinkedMethodsByCall($class, $method)
-            // search directly linked by member method
-            , $this->searchDirectLinkedMethodsByMember($class, $method)
-        );
-
-        // avoid infinite loop
-        $linked = array_diff($linked, $toSkip);
-        $toSkip = array_merge($toSkip, $linked, array($method->getName()));
-
-
-        // foreach directly linked methods, recurs
-        $methods = $class->getMethods();
-        foreach($linked as $link) {
-            if(!isset( $methods[$link])) {
-                continue;
-            }
-            $linked = array_merge($linked, $this->getLinkedMethods($class, $methods[$link], $toSkip));
-        }
-
-        return $linked;
-    }
-
-    /**
-     * Search methods whose are called or call this method
-     *
-     * @param Klass $class
-     * @param Method $method
-     * @return array
-     */
-    private function searchDirectLinkedMethodsByCall(Klass $class, Method $method) {
-        $linked = array();
-
-        // A calls B
-        if(preg_match_all('!\\$this\\->(\w*?)\\(!im', $method->getContent(), $matches)) {
-            list(, $linked) = $matches;
-        }
-
-        // B calls A
-        foreach($class->getMethods() as $otherMethod) {
-            $otherCalls = array();
-            if(preg_match_all('!\\$this\\->(\w*?)\\(!im', $otherMethod->getContent(), $matches)) {
-                list(, $otherCalls) = $matches;
+                if(null === ($to = $graph->get($call->getMethodName()))) {
+                    $to = new Node($call->getMethodName());
+                    $graph->insert($to);
+                }
+                $graph->addEdge($from, $to);
             }
 
-            if(in_array($method->getName(), $otherCalls)) {
-                array_push($linked, $otherMethod->getName());
-            }
-        }
-        return $linked;
-    }
+            // attributes
+            foreach($method->getTokens() as $token) {
+                if(preg_match('!\$this\->(\w+)$!', $token, $matches)) {
+                    list(, $attribute) = $matches;
 
-    /**
-     * Search methods whose share attribute
-     *
-     * @param Klass $class
-     * @param Method $method
-     * @return array
-     */
-    private function searchDirectLinkedMethodsByMember(Klass $class, Method $method) {
-
-        $linked = array();
-        $members = array();
-        if(preg_match_all('!\\$this\\->([\w\\(]+)!im', $method->getContent(), $matches)) {
-            list(, $members) = $matches;
-        }
-
-
-        // search in other methods if they share attribute
-        foreach($class->getMethods() as $otherMethod) {
-            $otherMembers = array();
-            if(preg_match_all('!\\$this\\->([\w\\(]+)!im', $otherMethod->getContent(), $matches)) {
-                list(, $otherMembers) = $matches;
-            }
-
-            $intersect = array_intersect($members, $otherMembers);
-
-            // remove calls (members and calls are mixed : regex is too complex to be read)
-            foreach($intersect as $k => $name) {
-                if(preg_match('!\($!', $name)) {
-                    unset($intersect[$k]);
+                    if(null === ($to = $graph->get('_attr_' . $attribute))) {
+                        $to = new Node('_attr_' . $attribute);
+                        $graph->insert($to);
+                    }
+                    $graph->addEdge($from, $to);
                 }
             }
 
-
-            if(sizeof($intersect, COUNT_NORMAL) > 0) {
-
-                array_push($linked, $otherMethod->getName());
-            }
         }
-        return $linked;
+
+        // iterate over nodes, and count paths
+        $paths = 0;
+        foreach($graph->all() as $node) {
+            $paths += $this->traverse($node);
+        }
+
+        $result = new Result;
+        $result->setLcom($paths);
+        return $result;
+
+    }
+
+
+    /**
+     * Traverse node, and return 1 if node has not been visited yet
+     *
+     * @param Node $node
+     * @return int
+     */
+    private function traverse(Node $node)
+    {
+        if($node->visited) {
+            return 0;
+        }
+        $node->visited = true;
+
+        foreach($node->getAdjacents() as $adjacent) {
+            $this->traverse($adjacent);
+        }
+
+        return 1;
     }
 }
 

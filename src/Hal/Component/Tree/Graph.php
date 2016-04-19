@@ -19,6 +19,9 @@ class Graph implements \Countable {
      */
     public function insert(Node $node)
     {
+        if($this->has($node->getKey())) {
+            throw new GraphException(sprintf('node %s is already present', $node->getKey()));
+        }
         $this->datas[$node->getKey()] = $node;
         return $this;
     }
@@ -68,5 +71,13 @@ class Graph implements \Countable {
     public function count()
     {
         return sizeof($this->datas);
+    }
+
+    /**
+     * @return Node[]
+     */
+    public function all()
+    {
+        return $this->datas;
     }
 }
