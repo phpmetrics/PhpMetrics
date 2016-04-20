@@ -1,6 +1,9 @@
 <?php
 namespace Test\Hal\Metrics\Mood\Instability;
 use Hal\Component\Result\ResultCollection;
+use Hal\Component\Tree\Edge;
+use Hal\Component\Tree\Graph;
+use Hal\Component\Tree\Node;
 use Hal\Metrics\Mood\Instability\Instability;
 use Hal\Metrics\Mood\Instability\Result;
 
@@ -14,19 +17,23 @@ class InstabilityTest extends \PHPUnit_Framework_TestCase {
 
     public function testICanKnowTheInstabilityOfPackage() {
 
-        $results = new ResultCollection();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $nodeC = new Node('C');
+        $nodeD = new Node('D');
+        $nodeE = new Node('E');
+        $nodeA->addEdge(new Edge($nodeA, $nodeA)); // A -> B
+        $nodeA->addEdge(new Edge($nodeA, $nodeC)); // A -> C
+        $nodeA->addEdge(new Edge($nodeA, $nodeD)); // A -> D
+        $nodeA->addEdge(new Edge($nodeE, $nodeA)); // E -> A
 
-        $coupling = $this->getMockBuilder('\Hal\Metrics\Complexity\Structural\HenryAndKafura\Result')->disableOriginalConstructor()->getMock();
-        $coupling->expects($this->any())->method('getAfferentCoupling')->will($this->returnValue(1.5));
-        $coupling->expects($this->any())->method('getEfferentCoupling')->will($this->returnValue(0.8));
-        $resultSet = $this->getMockBuilder('\Hal\Component\Result\ResultSet')->disableOriginalConstructor()->getMock();
-        $resultSet->expects($this->any())->method('getCoupling')->will($this->returnValue($coupling));
-        $results->push($resultSet);
+        $graph = new Graph();
+        $graph->insert($nodeA)->insert($nodeB)->insert($nodeC)->insert($nodeD)->insert($nodeE);
 
         $instability = new Instability();
-        $r = $instability->calculate($results);
+        $result = $instability->calculate($graph);
 
-        $this->assertEquals(0.35, $r->getInstability());
+        $this->assertEquals(.4, $result->getInstability());
     }
 
     public function testInstabilityResultCanBeConvertedToArray() {
