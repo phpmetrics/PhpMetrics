@@ -8,7 +8,8 @@
  */
 
 namespace Hal\Metrics\Mood\Abstractness;
-use Hal\Component\Result\ResultCollection;
+use Hal\Component\Tree\Graph;
+use Hal\Metrics\GraphMetric;
 
 
 /**
@@ -16,23 +17,24 @@ use Hal\Component\Result\ResultCollection;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Abstractness {
+class Abstractness implements GraphMetric {
 
     /**
      * Calculate abstractness
      *
-     * @param ResultCollection $results Array of ResultSet
+     * @param Graph $graph
      * @return Result
      */
-    public function calculate(ResultCollection $results) {
+    public function calculate(Graph $graph) {
 
         $ac = $cc = $abstractness = 0;
 
-        foreach($results as $result) {
-            $rOOP = $result->getOOP();
-            if(is_object($rOOP)) {
-                $cc += sizeof($rOOP->getConcreteClasses(), COUNT_NORMAL);
-                $ac += sizeof($rOOP->getAbstractClasses(), COUNT_NORMAL);
+        foreach($graph->all() as $node) {
+            $class = $node->getData();
+            if (($class->isAbstract() ||$class->isInterface())) {
+                $ac++;
+            } else {
+                $cc++;
             }
         }
 

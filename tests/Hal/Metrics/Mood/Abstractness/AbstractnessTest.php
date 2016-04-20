@@ -1,6 +1,8 @@
 <?php
 namespace Test\Hal\Metrics\Mood\Instability;
 use Hal\Component\Result\ResultCollection;
+use Hal\Component\Tree\Graph;
+use Hal\Component\Tree\Node;
 use Hal\Metrics\Mood\Abstractness\Abstractness;
 use Hal\Metrics\Mood\Abstractness\Result;
 
@@ -11,33 +13,31 @@ use Hal\Metrics\Mood\Abstractness\Result;
  */
 class AbstractnessTest extends \PHPUnit_Framework_TestCase {
 
+    public function testICanKnowTheAbstractnessOfPackage() {
 
-    /**
-     * @dataProvider provideAbstractness
-     */
-    public function testICanKnowTheAbstractnessOfPackage($expected, $abstractClasses, $concreteClasses) {
+        $class = $this->getMock('\\Hal\\Component\\Reflected\\Klass');
+        $class->method('isInterface')->will($this->returnValue(false));
 
-        $instability = new Abstractness();
-        $results = new ResultCollection();
+        $interface = $this->getMock('\\Hal\\Component\\Reflected\\Klass');
+        $interface->method('isInterface')->will($this->returnValue(true));
 
-        $oop = $this->getMockBuilder('\Hal\Component\OOP\Extractor\Result')->disableOriginalConstructor()->getMock();
-        $oop->expects($this->any())->method('getConcreteClasses')->will($this->returnValue(array_pad(array(), $concreteClasses, null)));
-        $oop->expects($this->any())->method('getAbstractClasses')->will($this->returnValue(array_pad(array(), $abstractClasses, null)));
-        $resultSet = $this->getMockBuilder('\Hal\Component\Result\ResultSet')->disableOriginalConstructor()->getMock();
-        $resultSet->expects($this->any())->method('getOOP')->will($this->returnValue($oop));
-        $results->push($resultSet);
+        $abstract = $this->getMock('\\Hal\\Component\\Reflected\\Klass');
+        $abstract->method('isAbstract')->will($this->returnValue(true));
 
-        $r = $instability->calculate($results);
 
-        $this->assertEquals($expected, $r->getAbstractness());
-    }
 
-    public function provideAbstractness() {
-        return array(
-            array(1, 4, 0)
-            , array(.5, 2, 2)
-            , array(0, 0, 2)
-        );
+        $graph = new Graph();
+        $graph
+            ->insert(new Node('c1', $class))
+            ->insert(new Node('c2', $class))
+            ->insert(new Node('c3', $class))
+            ->insert(new Node('i1', $interface))
+            ->insert(new Node('a1', $abstract))
+        ;
+
+        $abstractness = new Abstractness();
+        $result = $abstractness->calculate($graph);
+        $this->assertEquals(.4, $result->getAbstractness());
     }
 
     public function testAbstractnessResultCanBeConvertedToArray() {
