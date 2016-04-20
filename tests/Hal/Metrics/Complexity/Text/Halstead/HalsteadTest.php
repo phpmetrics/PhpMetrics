@@ -14,15 +14,11 @@ class HalsteadTest extends \PHPUnit_Framework_TestCase {
 
     public function testHalsteadServiceReturnsResult() {
 
-        $tokenType = $this->getMock('\Hal\Component\Token\TokenType');
-        $tokenType->expects($this->any())
-            ->method('isOperand')
-            ->will($this->returnValue(true));
-        $filename = tempnam(sys_get_temp_dir(), 'tmp-unit');
-        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
-        $object = new Halstead($tokenType);
-        $this->assertInstanceOf("\Hal\Metrics\Complexity\Text\Halstead\Result", $object->calculate($tokens));
-        unlink($filename);
+        $class = $this->getMock('\Hal\Component\Reflected\Klass');
+        $class->method('getTokens')->will($this->returnValue(array()));
+
+        $object = new Halstead($this->getMock('\Hal\Component\Token\TokenType'));
+        $this->assertInstanceOf("\\Hal\\Metrics\\Complexity\\Text\\Halstead\\Result", $object->calculate($class));
     }
 
     public function testHalsteadResultCanBeConvertedToArray() {
@@ -39,20 +35,24 @@ class HalsteadTest extends \PHPUnit_Framework_TestCase {
         $this->assertArrayHasKey('bugs', $array);
     }
 
-
     /**
      * @dataProvider provideFilesAndCounts
      */
     public function testHalsteadGiveValidValues($filename, $N1, $N2, $n1, $n2, $N, $V, $L, $D, $E, $T, $I) {
         $tokenType = new TokenType(); // please don't mock this: it make no sense else
-        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
-        $halstead = new Halstead($tokenType);
-        $r = $halstead->calculate($tokens);
 
-        $this->assertEquals($N1, $r->getNumberOfOperators());
-        $this->assertEquals($n1, $r->getNumberOfUniqueOperators());
-        $this->assertEquals($N2, $r->getNumberOfOperands());
-        $this->assertEquals($n2, $r->getNumberOfUniqueOperands());
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize(file_get_contents($filename));
+        $class = $this->getMock('\Hal\Component\Reflected\Klass');
+        $class->method('getTokens')->will($this->returnValue($tokens));
+
+        $halstead = new Halstead($tokenType);
+        $r = $halstead->calculate($class);
+
+        $this->assertEquals($N1, $r->getNumberOfOperators(), 'number of operators');
+        $this->assertEquals($n1, $r->getNumberOfUniqueOperators(), 'number of unique operators');
+        $this->assertEquals($N2, $r->getNumberOfOperands(), 'number of operands');
+        $this->assertEquals($n2, $r->getNumberOfUniqueOperands(), 'number of unique operands');
 
         $this->assertEquals($N, $r->getLength(), 'length');
         $this->assertEquals($V, $r->getVolume(), 'volume');
@@ -67,11 +67,10 @@ class HalsteadTest extends \PHPUnit_Framework_TestCase {
 
     public function provideFilesAndCounts() {
         return array(
-            //                                                          N       V           L       D       E           T       I
-            array(__DIR__.'/../../../../../resources/halstead/f1.php', 3 , 4, 3, 3        , 7     , 18.09     , 0.5   , 2     , 36.19     , 2    , 9.05 ) // twice
-            , array(__DIR__.'/../../../../../resources/halstead/f2.php', 6, 7, 4, 3       , 13    , 36.5      , 0.21  , 4.67  , 170.31    , 9    , 7.82) // max
-            , array(__DIR__.'/../../../../../resources/halstead/f4.php', 14, 14, 9, 6     , 28    , 109.39    , 0.1   , 10.5  , 1148.63   , 64   , 10.42) // f_while
-            , array(__DIR__.'/../../../../../resources/halstead/f3.php', 19, 10, 8, 6     , 29    , 110.41    , 0.15  , 6.67  , 736.09    , 41   , 16.56) // f_switch
+            array(__DIR__.'/../../../../../resources/halstead/f1.php', 4 , 3, 4, 2        , 7     , 18.09     , 0.33   , 3     , 54.28     , 3    , 6.03 ) // twice
+            , array(__DIR__.'/../../../../../resources/halstead/f2.php', 8, 6, 5, 2       , 14    , 39.3      , 0.13  , 7.5  , 294.77    , 16    , 5.24) // max
+            , array(__DIR__.'/../../../../../resources/halstead/f4.php', 14, 13, 9, 5     , 27    , 102.8    , 0.09   , 11.7  , 1202.74   , 67   , 8.79) // f_while
+            , array(__DIR__.'/../../../../../resources/halstead/f3.php', 15, 8, 5, 4     , 23    , 72.91, 0.2  , 5 , 364.54    , 20, 14.58) // f_switch
         );
     }
 }

@@ -11,6 +11,9 @@ interface Token
     const T_VALUE_BOOLEAN = 'value_boolean';
     const T_VALUE_ARRAY = 'value_array';
     const T_VALUE_OBJECT = 'value_object';
+    const T_VALUE_VOID = 'value_void';
+    const T_VALUE_UNKNWON = 'value_unknown';
+    const T_VALUE_NULL = 'value_null';
 
     const T_CAST = 'cast';
 
@@ -61,15 +64,16 @@ interface Token
     const T_TERNARY = '?';
     const T_FOR = 'for';
     const T_WHILE = 'while';
-    const T_DO = 'do'
-    ;
+    const T_DO = 'do';
+    const T_SWITCH = 'switch';
+    const T_CASE = 'case';
+
     const T_BOOLEAN_AND = '&';
     const T_LOGICAL_AND = '&&';
     const T_BOOLEAN_OR = '|';
     const T_LOGICAL_OR = '||';
     const T_SPACESHIP = '<=>';
     const T_COALESCE = '??';
-    const T_CASE = 'case';
     const T_DEFAULT = 'default:';
     const T_CATCH = 'catch';
     const T_CONTINUE = 'continue';

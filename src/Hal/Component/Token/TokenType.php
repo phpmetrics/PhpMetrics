@@ -18,6 +18,7 @@ class TokenType {
         '<', '<<', '<<=', '<=', '=', '==', '>', '>=', '>>',
         '>>=', '?', '^^=', '|', '|=', '~', ';', '=&', '“',
         '“', '‘', '‘', '#', '##',
+        Token::T_WHILE, Token::T_IF, Token::T_SWITCH, Token::T_CATCH, Token::T_RETURN, Token::T_FOR
     );
 
     /**
@@ -35,8 +36,12 @@ class TokenType {
      */
     public function isOperand($token)
     {
-        return preg_match('!^\$\w+$!', $token)||in_array($token, [
+        return preg_match('!^\$\w+$!', $token) // var
+        ||preg_match('!^(\d+)$!', $token) // int
+        ||preg_match('!(\.\d+)$!', $token) // float
+        ||in_array($token, [
             Token::T_CAST,
+            Token::T_VAR,
             Token::T_VALUE_ARRAY,
             Token::T_VALUE_BOOLEAN,
             Token::T_VALUE_FLOAT,

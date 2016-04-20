@@ -8,8 +8,9 @@
  */
 
 namespace Hal\Metrics\Complexity\Text\Halstead;
-use Hal\Component\Token\TokenCollection;
+use Hal\Component\Reflected\Klass;
 use Hal\Component\Token\TokenType;
+use Hal\Metrics\ClassMetric;
 
 
 /**
@@ -23,7 +24,7 @@ use Hal\Component\Token\TokenType;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Halstead {
+class Halstead implements ClassMetric {
 
     /**
      * Operators
@@ -48,11 +49,9 @@ class Halstead {
     private $tokenType;
 
     /**
-     * Constructor
-     *
-     * @param \Hal\Component\Token\TokenType $tokenType
+     * @param TokenType $tokenType
      */
-    public function __construct(\Hal\Component\Token\TokenType $tokenType)
+    public function __construct(TokenType $tokenType)
     {
         $this->tokenType = $tokenType;
     }
@@ -75,18 +74,23 @@ class Halstead {
                 $this->operands[] = $token;
             }
         }
+
         return $this;
     }
 
     /**
      * Calculate Halstead metrics
      *
-     * @param TokenCollection $tokens
-     * @return Result
+     *      Please note that v2 does not consider ";" as operator
+     *      Please note that v2 does not consider the name of the function as operand
+     *      Please note that v2 does not consider calls  as operand
+     *
+     * @param Klass $class
+     * @return Result|\Hal\Metrics\MetricResult
      */
-    public function calculate($tokens)
+    public function calculate(Klass $class)
     {
-        $this->inventory($tokens);
+        $this->inventory($class->getTokens());
         $result = new Result;
 
         $uniqueOperators = array_map( 'unserialize', array_unique( array_map( 'serialize', $this->operators ) ) );
@@ -97,7 +101,7 @@ class Halstead {
         $N1 = sizeof($this->operators, COUNT_NORMAL);
         $N2 = sizeof($this->operands, COUNT_NORMAL);
 
-        if(($n2 == 0)||($N2 == 0)||($n2 == 2)) {
+        if(($n2 == 0)||($N2 == 0)) {
             // files without operators
             $V = $n1 = $n2 = $N1 = $N2 = $E = $D = $B = $T = $I = $L = 0;
         } else {
@@ -128,7 +132,6 @@ class Halstead {
             ->setNumberOfUniqueOperators($n1)
             ->setNumberOfUniqueOperands($n2)
         ;
-
         return $result;
     }
 };
