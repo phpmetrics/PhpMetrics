@@ -2,12 +2,11 @@
 namespace Hal\Component\Parser\CodeParser;
 
 use Hal\Component\Parser\Exception\IncorrectSyntaxException;
-use Hal\Component\Parser\Helper\TypeResolver;
-use Hal\Component\Reflected\Argument;
 use Hal\Component\Reflected\ReturnedValue;
 use Hal\Component\Parser\Resolver\NamespaceResolver;
 use Hal\Component\Parser\Searcher;
 use Hal\Component\Token\Token;
+use Hal\Component\Parser\Helper\TypeResolver;
 
 
 class ReturnParser

@@ -6,6 +6,7 @@ use Hal\Component\Parser\Resolver\NamespaceResolver;
 use Hal\Component\Parser\Searcher;
 use Hal\Component\Token\Tokenizer;
 use Hal\Metrics\Complexity\Structural\LCOM\LackOfCohesionOfMethods;
+use Hal\Metrics\Complexity\Structural\LCOM\Result;
 
 /**
  * @group metrics
@@ -40,5 +41,13 @@ class LackOfCohesionTest extends \PHPUnit_Framework_TestCase {
             , array(__DIR__.'/../../../../../resources/lcom/f4.php', 2)
             , array(__DIR__.'/../../../../../resources/lcom/f5.php', 2)
         );
+    }
+
+    public function testLcomResultCanBeConvertedToArray() {
+
+        $result = new Result();
+        $array = $result->asArray();
+
+        $this->assertArrayHasKey('lcom', $array);
     }
 }

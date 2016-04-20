@@ -9,51 +9,51 @@
 
 namespace Hal\Metrics\Complexity\Text\Length;
 use Hal\Component\Token\TokenCollection;
+use Hal\Metrics\CodeMetric;
 
 /**
  * Calculates McCaybe measure
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Loc {
+class Loc implements CodeMetric
+{
 
     /**
      * Calculates Lines of code
      *
-     * @param string $filename
-     * @param TokenCollection $tokens
+     * @param $code
      * @return Result
      */
-    public function calculate($filename, $tokens)
+    public function calculate($code)
     {
+        // count all lines
+        $loc = sizeof(preg_split('/\r\n|\r|\n/', $code)) - 1;
 
-        $info = new Result;
-
-        $cloc = $lloc = 0;
-        foreach($tokens as $token) {
-
-            switch($token->getType()) {
-                case T_STRING:
-                    if(';' == $token->getValue()) {
-                        $lloc++;
-                    }
-                    break;
-                case T_COMMENT:
-                    $cloc++;
-                    break;
-                case T_DOC_COMMENT:
-                    $cloc += count(preg_split('/\r\n|\r|\n/', $token->getValue()));
-                    break;
+        // count and remove multi lines comments
+        $cloc = 0;
+        if(preg_match_all('!/\*.*?\*/!s', $code, $matches)) {
+            foreach($matches[0] as $match) {
+                $cloc +=  max(1, sizeof(preg_split('/\r\n|\r|\n/', $match)));
             }
         }
+        $code = preg_replace('!/\*.*?\*/!s', '', $code);
 
-        $content = file_get_contents($filename);
-        $info
-            ->setLoc(count(preg_split('/\r\n|\r|\n/', $content)) - 1)
+        // count and remove single line comments
+        $code = preg_replace('!(\n//.+\n)!', '', $code, -1, $nbCommentsSingleLine);
+        $cloc += $nbCommentsSingleLine;
+
+        // count and remove empty lines
+        $code = trim(preg_replace('!(^\s*[\r\n])!sm', '', $code));
+        $lloc = sizeof(preg_split('/\r\n|\r|\n/', $code)) ;
+
+        $result = new Result;
+        $result
+            ->setLoc($loc)
             ->setCommentLoc($cloc)
             ->setLogicalLoc($lloc)
         ;
 
-        return $info;
+        return $result;
     }
 }
