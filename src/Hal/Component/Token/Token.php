@@ -27,6 +27,7 @@ interface Token
     const T_IMPLEMENTS = 'implements';
     const T_FUNCTION_RETURN = ':';
     const T_RETURN = 'return';
+    const T_RETURN_VOID = 'return_void';
 
     const T_VISIBILITY_PUBLIC = 'public';
     const T_VISIBILITY_PRIVATE = 'private';

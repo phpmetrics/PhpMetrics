@@ -9,7 +9,6 @@
 
 namespace Hal\Metrics\Complexity\Structural\LCOM;
 use Hal\Component\Reflected\Klass;
-use Hal\Component\Reflected\Method;
 use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\Node;
 use Hal\Metrics\ClassMetric;

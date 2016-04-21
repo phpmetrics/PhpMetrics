@@ -166,7 +166,7 @@ EOT;
         $code = <<<EOT
 namespace Demo;
 class A {
-    public function foo(): \ReturnedValue {
+    public function foo(\C \$c): \ReturnedValue {
          \$v = new B;
         (new C)->baz();
         \D::foo();
@@ -187,6 +187,7 @@ EOT;
 
         $expected = array(
             '\\ReturnedValue',
+            '\\C',
             '\\Demo\B',
             '\\Demo\C',
             '\\D',
@@ -195,9 +196,6 @@ EOT;
 
     }
 
-    /**
-     * @group wip
-     */
     public function testMCallsOnItselfAreFound()
     {
         $code = <<<EOT
@@ -228,6 +226,28 @@ EOT;
         $call = $method->getCalls()[0];
         $this->assertTrue($call->isItself());
         $this->assertEquals('bar', $call->getMethodName());
+
+    }
+
+
+    /**
+     * @expectedException \Hal\Component\Parser\Exception\IncorrectSyntaxException
+     */
+    public function testIncorrectSyntaxCallsThrowException()
+    {
+        $code = <<<EOT
+namespace Demo;
+class A {
+    public function foo() {
+         return new;
+    }
+}
+EOT;
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize($code);
+
+        $parser = new CodeParser(new Searcher(), new NamespaceResolver($tokens));
+        $result = $parser->parse($tokens);
 
     }
 }

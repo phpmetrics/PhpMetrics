@@ -43,16 +43,6 @@ class Argument
     }
 
     /**
-     * @param string $name
-     * @return Argument
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
      * @return mixed
      */
     public function getDefaultValue()

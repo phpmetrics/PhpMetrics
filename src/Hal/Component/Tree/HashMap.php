@@ -21,7 +21,7 @@ class HashMap implements \Countable, \IteratorAggregate
 
     /**
      * @param $key
-     * @return null
+     * @return Node
      */
     public function get($key)
     {

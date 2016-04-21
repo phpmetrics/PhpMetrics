@@ -25,6 +25,7 @@ class Node {
 
     /**
      * Node constructor.
+     * @param $key
      * @param mixed $data
      */
     public function __construct($key, $data = null)

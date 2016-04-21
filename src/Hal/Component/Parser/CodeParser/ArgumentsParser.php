@@ -63,7 +63,7 @@ class ArgumentsParser
                 if (Token::T_EQUAL === $next) {
                     $i = $i + 2;
                     // look for default value
-                    if ($i == $len) {
+                    if (!isset($tokens[$i]) || Token::T_PARENTHESIS_CLOSE == $tokens[$i]) {
                         throw new IncorrectSyntaxException('not default value found for parameter ' . $token);
                     }
                     $value = $tokens[$i];

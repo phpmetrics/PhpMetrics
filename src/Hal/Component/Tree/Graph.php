@@ -34,10 +34,10 @@ class Graph implements \Countable {
     public function addEdge(Node $from, Node $to)
     {
         if(!$this->has($from->getKey())) {
-            throw new GraphException('from is not is nthe graph');
+            throw new GraphException('from is not is in the graph');
         }
         if(!$this->has($to->getKey())) {
-            throw new GraphException('to is not is nthe graph');
+            throw new GraphException('to is not is in the graph');
         }
 
         $edge = new Edge($from, $to);

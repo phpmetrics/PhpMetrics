@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Metrics;
-use Hal\Component\Reflected\Klass;
 
 /**
  * @author Jean-François Lépine <https://twitter.com/Halleck45>

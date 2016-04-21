@@ -35,7 +35,7 @@ class ClassParser
 
     /**
      * @param $tokens
-     * @return Klass[]
+     * @return Klass
      */
     public function parse($tokens)
     {

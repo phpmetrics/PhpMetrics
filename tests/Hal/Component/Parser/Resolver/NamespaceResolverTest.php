@@ -43,6 +43,34 @@ EOT;
         $this->assertEquals('\\Ns\\Demo', $resolver->getCurrentNamespace());
     }
 
+    /**
+     * @expectedException \Hal\Component\Parser\Exception\IncorrectSyntaxException
+     */
+    public function testICantResolveNamespaceWhenNamespaceSyntaxIsIncorrect() {
+        $code = <<<EOT
+<?php
+namespace
+EOT;
+
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize($code);
+        $resolver = new NamespaceResolver($tokens);
+    }
+
+    /**
+     * @expectedException \Hal\Component\Parser\Exception\IncorrectSyntaxException
+     */
+    public function testICantResolveNamespaceWhenUseSyntaxIsIncorrect() {
+        $code = <<<EOT
+<?php
+namespace A;
+use;
+EOT;
+
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize($code);
+        $resolver = new NamespaceResolver($tokens);
+    }
 
 
     /**

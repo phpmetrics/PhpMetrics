@@ -52,6 +52,10 @@ EOT;
         $this->assertEquals('\\Demo\\A', $classA->getFullName(), 'namespace is provided');
         $methods = $classA->getMethods();
         $this->assertEquals(2, sizeof($methods));
+        $this->assertFalse($classA->isAbstract());
+        $this->assertFalse($classA->isInterface());
+        $this->assertFalse($classA->isAnonymous());
+        $this->assertEquals(37, sizeof($classA->getTokens()));
 
         // methods are found
         $method1 = $methods['foo'];

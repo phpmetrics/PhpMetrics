@@ -4,8 +4,6 @@ namespace Hal\Component\Reflected;
 
 class ReturnedValue
 {
-    const VOID = 'void';
-
     /**
      * @var string
      */

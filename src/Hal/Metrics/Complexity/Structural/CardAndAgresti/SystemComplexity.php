@@ -9,7 +9,6 @@
 
 namespace Hal\Metrics\Complexity\Structural\CardAndAgresti;
 
-use Hal\Component\OOP\Reflected\ReflectedClass;
 use Hal\Component\Reflected\Klass;
 
 /**

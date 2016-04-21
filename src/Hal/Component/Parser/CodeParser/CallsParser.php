@@ -66,7 +66,7 @@ class CallsParser
 
             // $instance->foo();
             if (Token::T_NEW == $token) {
-                if ($i == $len) {
+                if(!isset($tokens[$i + 1]) || Token::T_BRACE_CLOSE === $tokens[$i + 1]) {
                     throw new IncorrectSyntaxException('"new" is not followed by classname');
                 }
 
@@ -94,10 +94,7 @@ class CallsParser
             if(preg_match('!^\$this\->(.+)!', $token, $matches)) {
                 list(, $methodName) = $matches;
                 // next token should be "("
-                if(!isset($tokens[$i + 1])) {
-                    continue;
-                }
-                if(Token::T_PARENTHESIS_OPEN === $tokens[$i + 1]) {
+                if(isset($tokens[$i + 1]) &&Token::T_PARENTHESIS_OPEN === $tokens[$i + 1]) {
                     $call = new Call(null, $methodName);
                     $call->setIsItself(true);
                     array_push($calls, $call);

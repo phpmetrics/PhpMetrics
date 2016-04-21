@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Metrics;
-use Hal\Component\Reflected\Klass;
 use Hal\Component\Tree\Node;
 
 /**

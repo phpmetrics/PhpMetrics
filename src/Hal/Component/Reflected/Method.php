@@ -180,11 +180,6 @@ class Method
         return $this;
     }
 
-    public function getBody()
-    {
-        return implode(' ', $this->tokens);
-    }
-
     /**
      * @return array
      */

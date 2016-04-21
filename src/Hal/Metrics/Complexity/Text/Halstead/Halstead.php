@@ -59,7 +59,7 @@ class Halstead implements ClassMetric {
     /**
      * Inventories tokens
      *
-     * @param TokenCollection $tokens
+     * @param array $tokens
      * @return $this
      */
     private function inventory($tokens)

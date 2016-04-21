@@ -8,7 +8,6 @@
  */
 
 namespace Hal\Metrics\Complexity\Text\Length;
-use Hal\Component\Result\ExportableInterface;
 use Hal\Metrics\MetricResult;
 
 /**

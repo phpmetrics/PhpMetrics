@@ -11,7 +11,6 @@ namespace Hal\Metrics\Complexity\Component\Myer;
 
 use Hal\Component\Reflected\Klass;
 use Hal\Component\Token\Token;
-use Hal\Component\Token\TokenCollection;
 use Hal\Metrics\ClassMetric;
 use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 

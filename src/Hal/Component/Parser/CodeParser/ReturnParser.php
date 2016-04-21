@@ -40,7 +40,6 @@ class ReturnParser
     public function parse($tokens)
     {
         $returns = array();
-        $len = sizeof($tokens);
 
         // PHP 7 return
         $closingParenthesis = $this->searcher->getNext($tokens, 0, Token::T_PARENTHESIS_CLOSE);
@@ -53,37 +52,32 @@ class ReturnParser
 
         // returns in code
         $typeResolver = new TypeResolver();
-        for ($i = 0; $i < $len; $i++) {
+        $len = sizeof($tokens);
+        for($i = 0; $i < $len; $i++) {
+
             $token = $tokens[$i];
-            $len = sizeof($tokens);
-            for($i = 0; $i < $len; $i++) {
 
-                $token = $tokens[$i];
+            if(Token::T_RETURN_VOID === $token) {
+                array_push($returns, new ReturnedValue(Token::T_VALUE_VOID));
+                continue;
+            }
 
-                if(Token::T_RETURN === $token) {
-
-                    // void ("return;)
-                    if($i >= $len) {
-                        array_push($returns, new ReturnedValue(ReturnedValue::VOID));
-                        continue;
+            if(Token::T_RETURN === $token) {
+                // return with value
+                $next = $tokens[$i + 1];
+                if(Token::T_NEW === $next) {
+                    if(!isset($tokens[$i + 2])) {
+                        throw new IncorrectSyntaxException('"return new" without classname');
                     }
-
-                    // return with value
-                    $next = $tokens[$i + 1];
-                    if(Token::T_NEW === $next) {
-                        if($next + 1 > sizeof($tokens)) {
-                            throw new IncorrectSyntaxException('"return new" without classname');
-                        }
-                        $classname = $tokens[$i + 2];
-                        array_push($returns, new ReturnedValue($this->namespaceResolver->resolve($classname)));
-                        continue;
-                    }
-
-                    // mixed value
-
-                    array_push($returns, new ReturnedValue($typeResolver->resolve($tokens[$i + 1])));
-
+                    $classname = $tokens[$i + 2];
+                    array_push($returns, new ReturnedValue($this->namespaceResolver->resolve($classname)));
+                    continue;
                 }
+
+                // mixed value
+
+                array_push($returns, new ReturnedValue($typeResolver->resolve($tokens[$i + 1])));
+
             }
         }
         return $returns;
