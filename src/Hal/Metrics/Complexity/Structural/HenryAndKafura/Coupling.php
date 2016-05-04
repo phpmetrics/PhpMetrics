@@ -8,68 +8,47 @@
  */
 
 namespace Hal\Metrics\Complexity\Structural\HenryAndKafura;
-use Hal\Component\OOP\Extractor\ClassMap;
 
+use Hal\Component\Tree\Node;
+use Hal\Metrics\NodeMetric;
 
 /**
  * Estimates coupling (based on work of Henry And Kafura)
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Coupling {
+class Coupling implements NodeMetric {
 
     /**
      * Calculates coupling
      *
-     * @param ClassMap $result
-     * @return ResultMap
+     * @param Node $node
+     * @return Result
      */
-    public function calculate(ClassMap $result)
+    public function calculate(Node $node)
     {
-        $map = $this->extractCoupling($result);
+        $efferent = $afferent = 0;
+        foreach($node->getEdges() as $edge) {
 
-        // instability
-        foreach($map as &$class) {
-            if($class->getAfferentCoupling() + $class->getEfferentCoupling() > 0) {
-                $class->setInstability($class->getEfferentCoupling() / ($class->getAfferentCoupling() + $class->getEfferentCoupling()));
+            if($edge->getFrom()->getKey() == $node->getKey()) {
+                // affects
+                $afferent++;
+            }
+
+            if($edge->getTo()->getKey() == $node->getKey()) {
+                // receive effects
+                $efferent++;
             }
         }
 
-        return new ResultMap($map);
+        $result = new Result;
+        $result
+            ->setAfferentCoupling($afferent)
+            ->setEfferentCoupling($efferent);
+
+        if($efferent + $afferent > 0) {
+            $result->setInstability($efferent / ($afferent + $efferent));
+        }
+        return $result;
     }
-
-
-    /**
-     * Extracts afferent and efferent coupling
-     *
-     * @param ClassMap $result
-     * @return array
-     */
-    private function extractCoupling(ClassMap $result) {
-        $results = $result->all();
-
-        $classes = array();
-        foreach($results as $result) {
-            $classes = array_merge($classes, $result->getClasses());
-        }
-
-        $map = array();
-        foreach($classes as $class) {
-
-            if(!isset($map[$class->getFullname()])) {
-                $map[$class->getFullname()] = new Result($class->getFullname());
-            }
-
-            $dependencies = $class->getDependencies();
-            $map[$class->getFullname()]->setEfferentCoupling(sizeof($dependencies, COUNT_NORMAL));
-
-            foreach($dependencies as $dependency) {
-                if(!isset($map[$dependency])) {
-                    $map[$dependency] = new Result($dependency);
-                }
-                $map[$dependency]->setAfferentCoupling($map[$dependency]->getAfferentCoupling() + 1);
-            }
-        }
-        return $map;
-    }
-};
+}

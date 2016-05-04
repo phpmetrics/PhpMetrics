@@ -1,6 +1,7 @@
 <?php
 namespace Test\Hal\Metrics\Complexity\Text\Halstead;
 
+use Hal\Component\Token\Tokenizer;
 use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 use Hal\Metrics\Complexity\Component\McCabe\Result;
 
@@ -15,9 +16,12 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
      */
     public function testICanCountComplexity($filename, $expectedCCN) {
 
-        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize(file_get_contents($filename));
+        $class = $this->getMock('\Hal\Component\Reflected\Klass');
+        $class->method('getTokens')->will($this->returnValue($tokens));
         $loc = new McCabe();
-        $r = $loc->calculate($tokens);
+        $r = $loc->calculate($class);
         $this->assertEquals($expectedCCN, $r->getCyclomaticComplexityNumber());
     }
 
@@ -44,9 +48,12 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
      */
     public function testICanCountComplexityOfAnonymousClass($filename, $expectedCCN) {
 
-        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize(file_get_contents($filename));
+        $class = $this->getMock('\Hal\Component\Reflected\Klass');
+        $class->method('getTokens')->will($this->returnValue($tokens));
         $loc = new McCabe();
-        $r = $loc->calculate($tokens);
+        $r = $loc->calculate($class);
         $this->assertEquals($expectedCCN, $r->getCyclomaticComplexityNumber());
     }
 
@@ -61,9 +68,12 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
      */
     public function testNullCoalesceOperatorIsWellConsidered() {
         $filename = __DIR__.'/../../../../../resources/mccaybe/php7-null-coalesce-operator.php';
-        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize(file_get_contents($filename));
+        $class = $this->getMock('\Hal\Component\Reflected\Klass');
+        $class->method('getTokens')->will($this->returnValue($tokens));
         $loc = new McCabe();
-        $r = $loc->calculate($tokens);
+        $r = $loc->calculate($class);
         $this->assertEquals(3, $r->getCyclomaticComplexityNumber());
     }
 
@@ -72,9 +82,12 @@ class MacCaybe extends \PHPUnit_Framework_TestCase {
      */
     public function testSpaceshipOperatorIsWellConsidered() {
         $filename = __DIR__.'/../../../../../resources/mccaybe/php7-spaceship-operator.php';
-        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize(file_get_contents($filename));
+        $class = $this->getMock('\Hal\Component\Reflected\Klass');
+        $class->method('getTokens')->will($this->returnValue($tokens));
         $loc = new McCabe();
-        $r = $loc->calculate($tokens);
+        $r = $loc->calculate($class);
         $this->assertEquals(2, $r->getCyclomaticComplexityNumber());
     }
 }

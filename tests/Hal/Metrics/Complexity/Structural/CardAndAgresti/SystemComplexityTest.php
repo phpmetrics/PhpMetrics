@@ -1,6 +1,9 @@
 <?php
 namespace Test\Hal\Metrics\Complexity\CardAndAgresti\SystemComplexity;
-use Hal\Component\OOP\Extractor\Extractor;
+
+use Hal\Component\Parser\CodeParser;
+use Hal\Component\Parser\Resolver\NamespaceResolver;
+use Hal\Component\Parser\Searcher;
 use Hal\Component\Token\Tokenizer;
 use Hal\Metrics\Complexity\Structural\CardAndAgresti\SystemComplexity;
 use Hal\Metrics\Complexity\Structural\CardAndAgresti\Result;
@@ -20,9 +23,11 @@ class SystemComplexityTest extends \PHPUnit_Framework_TestCase {
         $filename = tempnam(sys_get_temp_dir(), 'unit-phpmetrics-syc');
         file_put_contents($filename, $code);
 
-        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
-        $extractor = new Extractor();
-        $classes = $extractor->extract($tokens)->getClasses();
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenize(file_get_contents($filename));
+
+        $parser = new CodeParser(new Searcher(), new NamespaceResolver($tokens));
+        $classes = $parser->parse($tokens)->getClasses();
         $class = $classes[0];
         $metric = new SystemComplexity();
         $result = $metric->calculate($class);
@@ -40,7 +45,7 @@ class SystemComplexityTest extends \PHPUnit_Framework_TestCase {
         return array(
             array(0, 1 ,1, '<?php class Foo { public function bar() { new A;  }    }')
             , array(.5, 2, 2.5, '<?php class Foo { public function bar() { new A;  }           public function baz() { new A;  return 1; }           }')
-            , array(.33, 4, 4.33, '<?php class Foo { public function bar(Baz $baz) { new A;  }    }')
+            , array(.5, 1, 1.5, '<?php class Foo { public function bar(Baz $baz) { new A;  }    }')
             , array(.5, 1, 1.5, '<?php class Foo { public function bar($baz) { new A;  }    }')
             , array(1, 1, 2, '<?php class Foo { public function bar($baz) { new A;  return 1; }    }')
             , array(.67, 4, 4.67, '<?php class Foo { public function bar($baz) { new A;  new B; return 1; }    }')

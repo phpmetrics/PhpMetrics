@@ -8,7 +8,9 @@
  */
 
 namespace Hal\Metrics\Mood\Instability;
-use Hal\Component\Result\ResultCollection;
+use Hal\Component\Tree\Graph;
+use Hal\Metrics\Complexity\Structural\HenryAndKafura\Coupling;
+use Hal\Metrics\GraphMetric;
 
 
 /**
@@ -16,24 +18,24 @@ use Hal\Component\Result\ResultCollection;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Instability {
+class Instability implements GraphMetric {
 
     /**
      * Calculate instability
      *
-     * @param ResultCollection $results Array of ResultSet
+     * @param Graph $graph
      * @return Result
      */
-    public function calculate(ResultCollection $results) {
+    public function calculate(Graph $graph) {
 
         $ca = $ce = $i = 0;
 
-        foreach($results as $result) {
-            $r = $result->getCoupling();
-            if(is_object($r)) {
-                $ce += $r->getEfferentCoupling();
-                $ca += $r->getAfferentCoupling();
-            }
+        $coupling = new Coupling();
+        foreach($graph->all() as $node) {
+
+            $r = $coupling->calculate($node);
+            $ce += $r->getEfferentCoupling();
+            $ca += $r->getAfferentCoupling();
         }
 
         $result = new Result;
@@ -44,4 +46,4 @@ class Instability {
         return $result;
     }
 
-};
+}

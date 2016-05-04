@@ -6,6 +6,7 @@ use Hal\Metrics\Design\Component\MaintainabilityIndex\Result;
 
 /**
  * @group maintainability
+ * @group mi
  * @group metric
  */
 class MaintainabilityIndexTest extends \PHPUnit_Framework_TestCase {
@@ -21,7 +22,7 @@ class MaintainabilityIndexTest extends \PHPUnit_Framework_TestCase {
         $object = new MaintainabilityIndex();
         $result = $object->calculate($rHalstead, $rLoc, $rMcCabe);
 
-        $this->assertInstanceOf("\Hal\Metrics\Design\Component\MaintainabilityIndex\Result", $result);
+        $this->assertInstanceOf("\\Hal\\Metrics\\Design\\Component\\MaintainabilityIndex\\Result", $result);
     }
 
     public function testMaintainabilityIndexResultCanBeConvertedToArray() {

@@ -9,7 +9,9 @@
 
 namespace Hal\Metrics\Complexity\Component\Myer;
 
-use Hal\Component\Token\TokenCollection;
+use Hal\Component\Reflected\Klass;
+use Hal\Component\Token\Token;
+use Hal\Metrics\ClassMetric;
 use Hal\Metrics\Complexity\Component\McCabe\McCabe;
 
 /**
@@ -17,7 +19,7 @@ use Hal\Metrics\Complexity\Component\McCabe\McCabe;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Myer {
+class Myer implements ClassMetric {
 
     /**
      * Calculates Myer's interval
@@ -25,30 +27,25 @@ class Myer {
      *      Cyclomatic complexity : Cyclomatic complexity + L
      *      where L is the number of logical operators
      *
-     * @param TokenCollection $tokens
+     * @param Klass $class
      * @return Result
+     * @internal param array $tokens
      */
-    public function calculate($tokens)
+    public function calculate(Klass $class)
     {
         $mcCabe = new McCabe();
         $result = new Result;
 
         // Cyclomatic complexity
-        $cc = $mcCabe->calculate($tokens);
+        $cc = $mcCabe->calculate($class);
 
         // Number of operator
-        $L = 0;
-        $logicalOperators = array(
-            T_BOOLEAN_AND => T_BOOLEAN_AND
-            , T_LOGICAL_AND => T_LOGICAL_AND
-            , T_BOOLEAN_OR => T_BOOLEAN_OR
-        , T_LOGICAL_OR => T_LOGICAL_OR
-        );
-        foreach($tokens as $token) {
-            if(isset($logicalOperators[$token->getType()])) {
-                $L++;
-            }
-        }
+        $L = array_reduce($class->getTokens(), function($result, $item) {
+            return
+                (in_array($item, array(Token::T_BOOLEAN_AND, Token::T_BOOLEAN_OR, Token::T_LOGICAL_AND, Token::T_LOGICAL_OR)))
+                ? $result + 1
+                : $result;
+        });
 
         $result
             ->setNumberOfOperators($L)

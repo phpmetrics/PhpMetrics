@@ -8,14 +8,16 @@
  */
 
 namespace Hal\Metrics\Complexity\Component\McCabe;
-use Hal\Component\Token\TokenCollection;
+use Hal\Component\Reflected\Klass;
+use Hal\Component\Token\Token;
+use Hal\Metrics\ClassMetric;
 
 /**
  * Calculates cyclomatic complexity
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class McCabe {
+class McCabe implements ClassMetric {
 
     /**
      * Calculate cyclomatic complexity number
@@ -30,40 +32,38 @@ class McCabe {
      *
      * 2. CC = Number of each decision point
      *
-     * @param TokenCollection $tokens
+     * @param Klass $class
      * @return Result
      */
-    public function calculate($tokens)
+    public function calculate(Klass $class)
     {
         $info = new Result;
 
         $ccn = 1; // default path
-        foreach($tokens as $token) {
+        foreach($class->getTokens() as $token) {
 
-            switch($token->getType()) {
-                case T_IF:
-                case T_ELSEIF:
-                case T_FOREACH:
-                case T_FOR:
-                case T_WHILE:
-                case T_DO:
-                case T_BOOLEAN_AND:
-                case T_LOGICAL_AND:
-                case T_BOOLEAN_OR:
-                case T_LOGICAL_OR:
-                case T_SPACESHIP:
-                case T_CASE:
-                case T_DEFAULT:
-                case T_CATCH:
-                case T_CONTINUE:
+            switch($token) {
+                case Token::T_IF:
+                case Token::T_ELSEIF:
+                case Token::T_FOREACH:
+                case Token::T_FOR:
+                case Token::T_WHILE:
+                case Token::T_DO:
+                case Token::T_BOOLEAN_AND:
+                case Token::T_LOGICAL_AND:
+                case Token::T_BOOLEAN_OR:
+                case Token::T_LOGICAL_OR:
+                case Token::T_SPACESHIP:
+                case Token::T_CASE:
+                case Token::T_DEFAULT:
+                case Token::T_CATCH:
+                case Token::T_CONTINUE:
                     $ccn++;
                     break;
-                case T_STRING:
-                    if('?' == $token->getValue()) {
-                        $ccn = $ccn + 2;
-                    }
+                case Token::T_TERNARY:
+                    $ccn = $ccn + 2;
                     break;
-                case T_COALESCE:
+                case Token::T_COALESCE:
                     $ccn = $ccn + 2;
                     break;
             }

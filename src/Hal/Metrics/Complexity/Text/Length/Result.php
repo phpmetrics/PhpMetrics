@@ -8,14 +8,14 @@
  */
 
 namespace Hal\Metrics\Complexity\Text\Length;
-use Hal\Component\Result\ExportableInterface;
+use Hal\Metrics\MetricResult;
 
 /**
  * Representation of LOC
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result implements ExportableInterface {
+class Result implements MetricResult {
 
     /**
      * Lines of code
@@ -39,38 +39,14 @@ class Result implements ExportableInterface {
     private $logicalLoc;
 
     /**
-     * Complexity cyclomatic
-     *
-     * @var integer
-     */
-    private $complexityCyclomatic;
-
-    /**
      * @inheritdoc
      */
     public function asArray() {
         return array (
             'loc' => $this->getLoc()
             ,'logicalLoc' => $this->getLogicalLoc()
+            ,'commentLoc' => $this->getCommentLoc()
         );
-    }
-
-    /**
-     * @param int $complexityCyclomatic
-     * @return $this
-     */
-    public function setComplexityCyclomatic($complexityCyclomatic)
-    {
-        $this->complexityCyclomatic = $complexityCyclomatic;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getComplexityCyclomatic()
-    {
-        return $this->complexityCyclomatic;
     }
 
     /**

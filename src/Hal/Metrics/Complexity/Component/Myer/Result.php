@@ -8,14 +8,14 @@
  */
 
 namespace Hal\Metrics\Complexity\Component\Myer;
-use Hal\Component\Result\ExportableInterface;
+use Hal\Metrics\MetricResult;
 
 /**
  * Representation of McCaybe measure
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result implements ExportableInterface {
+class Result implements MetricResult {
 
     /**
      * Cyclomatic result

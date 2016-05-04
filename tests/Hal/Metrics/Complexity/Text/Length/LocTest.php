@@ -12,13 +12,29 @@ class LocTest extends \PHPUnit_Framework_TestCase {
 
     public function testICanCountLoc() {
 
-        $filename = __DIR__.'/../../../../../resources/loc/f1.php';
-        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
+        $code = <<<EOT
+
+/*
+sfdsg
+fdg
+fdsg
+*/
+
+
+
+
+// another
+echo 'ok'; // no
+/* ici */
+
+
+EOT;
+
         $loc = new Loc();
-        $r = $loc->calculate($filename, $tokens);
-        $this->assertEquals(14, $r->getCommentLoc());
-        $this->assertEquals(33, $r->getLoc());
-        $this->assertEquals(2, $r->getLogicalLoc());
+        $r = $loc->calculate($code);
+        $this->assertEquals(14, $r->getLoc());
+        $this->assertEquals(7, $r->getCommentLoc());
+        $this->assertEquals(1, $r->getLogicalLoc());
 
     }
 

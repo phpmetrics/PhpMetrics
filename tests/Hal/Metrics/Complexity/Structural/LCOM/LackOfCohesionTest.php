@@ -1,8 +1,12 @@
 <?php
 namespace Test\Hal\Metrics\Complexity\Structural\LCOM;
 use Hal\Component\OOP\Extractor\Extractor;
+use Hal\Component\Parser\CodeParser;
+use Hal\Component\Parser\Resolver\NamespaceResolver;
+use Hal\Component\Parser\Searcher;
 use Hal\Component\Token\Tokenizer;
 use Hal\Metrics\Complexity\Structural\LCOM\LackOfCohesionOfMethods;
+use Hal\Metrics\Complexity\Structural\LCOM\Result;
 
 /**
  * @group metrics
@@ -16,9 +20,9 @@ class LackOfCohesionTest extends \PHPUnit_Framework_TestCase {
      */
     public function testICanCalculateLackOfCohesionOfClass($filename, $expected) {
 
-        $tokens = (new \Hal\Component\Token\Tokenizer())->tokenize($filename);
-        $extractor = new Extractor();
-        $result = $extractor->extract($tokens);
+        $tokens = (new Tokenizer())->tokenize(file_get_contents($filename));
+        $extractor = new CodeParser(new Searcher(), new NamespaceResolver($tokens));
+        $result = $extractor->parse($tokens);
         $classes = $result->getClasses();
         $class = $classes[0];
 
@@ -37,5 +41,13 @@ class LackOfCohesionTest extends \PHPUnit_Framework_TestCase {
             , array(__DIR__.'/../../../../../resources/lcom/f4.php', 2)
             , array(__DIR__.'/../../../../../resources/lcom/f5.php', 2)
         );
+    }
+
+    public function testLcomResultCanBeConvertedToArray() {
+
+        $result = new Result();
+        $array = $result->asArray();
+
+        $this->assertArrayHasKey('lcom', $array);
     }
 }

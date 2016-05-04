@@ -9,3 +9,4 @@ provision.sh
 phpmetrics.yml.dist
 log
 Dockerfile
+docker

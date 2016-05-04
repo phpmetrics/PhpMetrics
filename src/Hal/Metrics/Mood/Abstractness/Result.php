@@ -8,7 +8,7 @@
  */
 
 namespace Hal\Metrics\Mood\Abstractness;
-use Hal\Component\Result\ExportableInterface;
+use Hal\Metrics\MetricResult;
 
 
 /**
@@ -16,7 +16,7 @@ use Hal\Component\Result\ExportableInterface;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result implements ExportableInterface {
+class Result implements MetricResult {
 
     /**
      * @var int

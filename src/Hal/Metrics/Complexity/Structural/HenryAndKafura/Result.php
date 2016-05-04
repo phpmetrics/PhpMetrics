@@ -8,7 +8,7 @@
  */
 
 namespace Hal\Metrics\Complexity\Structural\HenryAndKafura;
-use Hal\Component\Result\ExportableInterface;
+use Hal\Metrics\MetricResult;
 
 
 /**
@@ -16,12 +16,7 @@ use Hal\Component\Result\ExportableInterface;
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class Result implements ExportableInterface {
-
-    /**
-     * @var string
-     */
-    private $name;
+class Result implements MetricResult {
 
     /**
      * @var int
@@ -39,16 +34,6 @@ class Result implements ExportableInterface {
     private $instability = 0;
 
     /**
-     * Constructor
-     *
-     * @param $name
-     */
-    public function __construct($name)
-    {
-        $this->name = (string) $name;
-    }
-
-    /**
      * @inheritdoc
      */
     public function asArray()
@@ -59,7 +44,6 @@ class Result implements ExportableInterface {
             , 'efferentCoupling' => $this->getEfferentCoupling()
         );
     }
-
 
     /**
      * @param int $afferentCoupling
@@ -113,13 +97,5 @@ class Result implements ExportableInterface {
     public function getInstability()
     {
         return $this->instability;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 }

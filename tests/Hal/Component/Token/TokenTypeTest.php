@@ -1,6 +1,7 @@
 <?php
 namespace Test\Hal\Component\Token;
 
+use Hal\Component\Token\Token;
 use Hal\Component\Token\TokenType;
 
 /**
@@ -17,42 +18,35 @@ class TokenTypeTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider providesTokenTypes
      */
-    public function testTokenTypeDistinguishsTokens($isOperator, $isOperand, $type, $value) {
-
-        $token = $this->getMockBuilder('\Hal\Component\Token\Token')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $token->expects($this->any())
-            ->method('getType')
-            ->will($this->returnValue($type));
-        $token->expects($this->any())
-            ->method('getValue')
-            ->will($this->returnValue($value));
-
+    public function testTokenTypeDistinguishsTokens($isOperator, $isOperand, $token) {
         $this->assertEquals($isOperator, $this->object->isOperator($token));
         $this->assertEquals($isOperand, $this->object->isOperand($token));
     }
 
     public function providesTokenTypes() {
         return array(
-            array(true, false, T_BOOLEAN_AND, '&&')
-            , array(true, false, T_BOOLEAN_AND, '&&')
-            , array(false, true, T_VARIABLE, '$a')
+            array(true, false, '&&')
+            , array(true, false, '&&')
+            , array(false, true, '$a')
+            , array(false, true, Token::T_VALUE_STRING)
+            , array(false, true, Token::T_VALUE_BOOLEAN)
+            , array(false, true, Token::T_VALUE_FLOAT)
+            , array(false, true, Token::T_VALUE_INTEGER)
 
             // operators
-            , array(true, false, T_STRING, ';')
-            , array(true, false, T_STRING, '*')
-            , array(true, false, T_STRING, '#')
-            , array(true, false, T_STRING, '[')
-            , array(true, false, T_STRING, '>>')
-            , array(true, false, T_STRING, '!')
-            , array(true, false, T_STRING, '+')
-            , array(true, false, T_STRING, '?')
-            , array(true, false, T_STRING, '!=')
-            , array(true, false, T_STRING, '%')
-            , array(true, false, T_STRING, '&')
-            , array(true, false, T_STRING, '&&')
-            , array(true, false, T_STRING, '/')
+            , array(true, false, ';')
+            , array(true, false, '*')
+            , array(true, false, '#')
+            , array(true, false, '[')
+            , array(true, false, '>>')
+            , array(true, false, '!')
+            , array(true, false, '+')
+            , array(true, false, '?')
+            , array(true, false, '!=')
+            , array(true, false, '%')
+            , array(true, false, '&')
+            , array(true, false, '&&')
+            , array(true, false, '/')
         );
     }
 }

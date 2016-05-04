@@ -9,7 +9,7 @@
 
 namespace Hal\Metrics\Complexity\Structural\CardAndAgresti;
 
-use Hal\Component\OOP\Reflected\ReflectedClass;
+use Hal\Component\Reflected\Klass;
 
 /**
  * Calculates Card And Agresti metric
@@ -27,17 +27,17 @@ class SystemComplexity {
      *      (SC) Structural complexity = fan-out^2
      *      (DC) Data complexity = v / (fan-out + 1)
      *
-     * @param ReflectedClass $class
+     * @param Klass $class
      * @return Result
      */
-    public function calculate(ReflectedClass $class)
+    public function calculate(Klass $class)
     {
         $result = new Result;
 
 
         $sy = $dc = $sc = array(); // in system
         foreach($class->getMethods() as $method) {
-            $fanout = sizeof($method->getDependencies(), COUNT_NORMAL);
+            $fanout = sizeof($method->getCalls(), COUNT_NORMAL);
             $v = sizeof($method->getArguments(), COUNT_NORMAL) + sizeof($method->getReturns(), COUNT_NORMAL);
 
             $ldc = $v / ($fanout + 1);
