@@ -13,8 +13,8 @@
     </style>
     {# including assets. Deal with offline mode #}
     {% if not offline %}
-        <link rel="stylesheet" type="text/css" href="http://nvd3.org/assets/css/nv.d3.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/alangrafu/radar-chart-d3/master/src/radar-chart.min.css">
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.3/nv.d3.min.css">
+        <link rel="stylesheet" type="text/css" href="//cdn.rawgit.com/alangrafu/radar-chart-d3/master/src/radar-chart.min.css">
     {% endif %}
 </head>
 
@@ -359,9 +359,9 @@
     {% include "assets/nv.d3.min.js.twig" %}
     {% include "assets/d3js-radar.js.twig" %}
 {% else %}
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="http://nvd3.org/assets/js/nv.d3.js" charset="utf-8"></script>
-    <script src="https://cdn.rawgit.com/alangrafu/radar-chart-d3/master/src/radar-chart.min.js" charset="utf-8"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" charset="utf-8"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.3/nv.d3.min.js" charset="utf-8"></script>
+    <script src="//cdn.rawgit.com/alangrafu/radar-chart-d3/master/src/radar-chart.min.js" charset="utf-8"></script>
 {% endif %}
 {% include "summary/report-score.js.twig" %}
 {% include "summary/report-tabular.js.twig" %}
