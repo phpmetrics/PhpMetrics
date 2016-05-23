@@ -52,6 +52,7 @@ class Loc {
             ->setLoc(count(preg_split('/\r\n|\r|\n/', $content)) - 1)
             ->setCommentLoc($cloc)
             ->setLogicalLoc($lloc)
+            ->setCoc(strlen($content))
         ;
 
         return $info;

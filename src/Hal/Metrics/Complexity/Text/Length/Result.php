@@ -25,6 +25,13 @@ class Result implements ExportableInterface {
     private $loc;
 
     /**
+     * Characters of code
+     *
+     * @var integer
+     */
+    private $coc;
+
+    /**
      * Lines of comments
      *
      * @var integer
@@ -52,6 +59,7 @@ class Result implements ExportableInterface {
         return array (
             'loc' => $this->getLoc()
             ,'logicalLoc' => $this->getLogicalLoc()
+            ,'coc' => $this->getCoc()
         );
     }
 
@@ -89,6 +97,24 @@ class Result implements ExportableInterface {
     public function getLoc()
     {
         return $this->loc;
+    }
+
+    /**
+     * @param int $coc
+     * @return $this
+     */
+    public function setCoc($coc)
+    {
+        $this->coc = $coc;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCoc()
+    {
+        return $this->coc;
     }
 
     /**
