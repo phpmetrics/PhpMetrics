@@ -39,7 +39,7 @@ class PhpMetricsApplicationTest extends \PHPUnit_Framework_TestCase {
         $app = new PhpMetricsApplication();
         $app->setAutoExit(false);
 
-        $input = $this->getMock('\Symfony\Component\Console\Input\InputInterface');
+        $input = $this->createMock('\Symfony\Component\Console\Input\InputInterface');
         $input->expects($this->any())->method('hasParameterOption')->will($this->returnValue(true));
         $code = $app->run($input);
 

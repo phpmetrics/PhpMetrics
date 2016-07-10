@@ -26,7 +26,7 @@ class CouplingTest extends \PHPUnit_Framework_TestCase {
             array_push($classes, $class);
         }
 
-        $result = $this->getMock('\Hal\Component\OOP\Extractor\Result');
+        $result = $this->createMock('\Hal\Component\OOP\Extractor\Result');
         $result->expects($this->any())->method('getClasses')->will($this->returnValue($classes));
         $results = array($result);
 

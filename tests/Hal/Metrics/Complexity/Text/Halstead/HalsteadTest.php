@@ -14,7 +14,7 @@ class HalsteadTest extends \PHPUnit_Framework_TestCase {
 
     public function testHalsteadServiceReturnsResult() {
 
-        $tokenType = $this->getMock('\Hal\Component\Token\TokenType');
+        $tokenType = $this->createMock('\Hal\Component\Token\TokenType');
         $tokenType->expects($this->any())
             ->method('isOperand')
             ->will($this->returnValue(true));

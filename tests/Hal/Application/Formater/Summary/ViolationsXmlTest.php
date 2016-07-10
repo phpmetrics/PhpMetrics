@@ -46,7 +46,7 @@ class ViolationsXmlTest extends \PHPUnit_Framework_TestCase {
 
 
         // formater
-        $ruleSet = $this->getMock('\Hal\Application\Rule\RuleSet');
+        $ruleSet = $this->createMock('\Hal\Application\Rule\RuleSet');
         $ruleSet->expects($this->any())->method('getRule')->will($this->returnValue(array(3, 2, 1.5)));
         $validator = $this->getMockBuilder('\Hal\Application\Rule\Validator')->disableOriginalConstructor()->getMock();
         $validator->expects($this->any())->method('getRuleSet')->willReturn($ruleSet);
