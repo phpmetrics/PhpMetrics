@@ -62,6 +62,7 @@ class ConfigFactory
         strlen($input->getOption('offline')) > 0 && $config->getTemplate()->setOffline($input->getOption('offline'));
         strlen($input->getOption('plugins')) > 0 && $config->getExtensions()->setExtensions(explode(',',  $input->getOption('plugins')));
         strlen($input->getOption('ignore-errors')) > 0 && $config->setIgnoreErrors(true);
+        strlen($input->getOption('no-progress')) > 0 && $config->setDisplayProgressBar(false);
 
         // check for conflicts or missing requirements
         $validator = new ConfigValidator();

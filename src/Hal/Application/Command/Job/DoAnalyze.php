@@ -67,6 +67,12 @@ class DoAnalyze implements JobInterface
     private $ignoreErrors;
 
     /**
+     * display progress bar ?
+     * @var bool
+     */
+    private $displayProgressBar;
+
+    /**
      * Constructor
      *
      * @param OutputInterface $output
@@ -74,14 +80,16 @@ class DoAnalyze implements JobInterface
      * @param string $path
      * @param bool $withOOP
      * @param bool $ignoreErrors
+     * @param bool $displayProgressBar
      */
-    public function __construct(OutputInterface $output, Finder $finder, $path, $withOOP, $ignoreErrors = false)
+    public function __construct(OutputInterface $output, Finder $finder, $path, $withOOP, $ignoreErrors = false, $displayProgressBar = true)
     {
         $this->output = $output;
         $this->finder = $finder;
         $this->path = $path;
         $this->withOOP = $withOOP;
         $this->ignoreErrors = $ignoreErrors;
+        $this->displayProgressBar = $displayProgressBar;
     }
 
     /**
@@ -90,13 +98,16 @@ class DoAnalyze implements JobInterface
     public function execute(ResultCollection $collection, ResultCollection $aggregatedResults) {
 
         $files = $this->finder->find($this->path);
+        $progress = null;
 
         if(0 == sizeof($files, COUNT_NORMAL)) {
             throw new \LogicException('No file found');
         }
 
-        $progress = new ProgressBar($this->output);
-        $progress->start(sizeof($files, COUNT_NORMAL));
+        if ($this->displayProgressBar === true) {
+            $progress = new ProgressBar($this->output);
+            $progress->start(sizeof($files, COUNT_NORMAL));
+        }
 
         // tools
         $classMap = new ClassMap();
@@ -116,8 +127,9 @@ class DoAnalyze implements JobInterface
         );
 
         foreach($files as $k => $filename) {
-
-            $progress->advance();
+            if ($progress !== null) {
+                $progress->advance();
+            }
 
             // Integrity
             if(!$this->ignoreErrors && !$syntaxChecker->isCorrect($filename)) {
@@ -147,8 +159,10 @@ class DoAnalyze implements JobInterface
             $collection->push($resultSet);
         }
 
-        $progress->clear();
-        $progress->finish();
+        if ($progress !== null) {
+            $progress->clear();
+            $progress->finish();
+        }
 
 
         if($this->withOOP) {
