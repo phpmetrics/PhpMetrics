@@ -120,6 +120,8 @@
             });
             var chart = nv.models.indentedTree()
                     .tableClass('table table-striped') //for bootstrap styling
+                    .iconOpen('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wBBBQgHxiJ6ugAAADXSURBVDjL1ZKhDsJADIb/Ed6BZ0ABAoVBIpFIECRI3J5hbh7DI2BxGBQKhT0HCYJ/rqgijttu3Bg4QpNL2qRf/7ZX4O8tcs75etPt/mgDKRL4Eg96LfQ77SiotN7sNDdRpXtUNVQ1F6ox1O5oqj7XCCrdgcz54jrIAAEMGaQXBSSEh5NZDhNABV/uIFAudVG9xGZpWb7y08aLpd1RmtYX8NU26xQQCzuQAlBYP4K/MD+V8v4Oyr/gw2LbroMrRzCkhcSp87tLPBxPOo+Tj6e7SuLqS/yZPQAbdn01WTa53QAAAABJRU5ErkJggg==')
+                    .iconClose('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wBBBQeNPXwCNUAAAC0SURBVDjLY2AY8oARxnj++v3/nUcvQjg/EAo+oPGtDcUZTPU1GTFMWrDhwH84+PH//wcY/vD//4MP//8/ePHh/4MHH/4beCT8R9bHhGHSTwaGjzD2D5gLPiLYaABhwA8iNP/AZwAD6ZoZGBgYWFACC6rQISIRM4wmTGD48AOPAcg2b1gwAcPmDzhcgOIFXM7GpRkzFghp/kHQAPyaP+BLiacvXv+fWt5JMOnO7izHnhIHDAAALe92s7vgY+oAAAAASUVORK5CYII=')
                     .columns(columns);
 
             d3.select('#chart-tableview')
