@@ -28,9 +28,9 @@ mv phpmetrics.phar /usr/local/bin/phpmetrics
 
 > Do not hesitate to visit the [official documentation](http://www.phpmetrics.org).
 
-The command command `phpmetrics --report-html=./log <folder or filename> ` will generate HTML report in the `./log`directory.
+The command command `phpmetrics --report-html=./log <folder or filename> ` will generate HTML report in the `./log` directory.
 
-![Standard report](http://phpmetrics.github.io/PhpMetrics/images/report-standard.png)
+![Standard report](https://github.com/phpmetrics/phpmetrics/doc/overview.png)
 
 ## Compatibility
 
