@@ -1,11 +1,3 @@
-.idea
-/vendor/
 composer.lock
-/report/bubbles/results.json
-Vagrantfile
-provision.sh
-.vagrant
-/nbproject
-phpmetrics.yml.dist
-log
-Dockerfile
+vendor
+.idea

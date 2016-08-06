@@ -1,22 +1,43 @@
 #!/usr/bin/env php
 <?php
-function includeIfExists($file)
-{
-    if (file_exists($file)) {
-        return include $file;
-    }
+namespace Poc;
+
+use Hal\Application\Analyze;
+use Hal\Application\Config\ConfigException;
+use Hal\Application\Config\Parser;
+use Hal\Application\Config\Validator;
+use Hal\Component\File\Finder;
+use Hal\Report\Html\Reporter;
+use Symfony\Component\Console\Formatter\OutputFormatter;
+use Symfony\Component\Console\Output\ConsoleOutput;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+
+// formatter
+$output = new ConsoleOutput(ConsoleOutput::VERBOSITY_NORMAL, null, new OutputFormatter());
+
+// config
+$config = (new Parser())->parse($argv);
+$config->set('output-html', './log');
+try {
+    (new Validator())->validate($config);
+} catch (ConfigException $e) {
+    $output->writeln(sprintf("\n<error>%s</error>\n", $e->getMessage()));
+    $output->writeln((new Validator())->help());
+    exit(1);
 }
 
-if (
-    (!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php'))
-    && (!$loader = includeIfExists(__DIR__.'/../../../autoload.php'))
-) {
-    die(
-        'You must set up the project dependencies, run the following commands:'.PHP_EOL.
-        'curl -s http://getcomposer.org/installer | php'.PHP_EOL.
-        'php composer.phar install'.PHP_EOL
-    );
-}
+// find files
+$finder = new Finder();
+$files = $finder->fetch($config->get('files'));
 
-$app = new Hal\Application\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', 'v1.10.0');
-$app->run();
+// analyze
+$metrics = (new Analyze($output))->run($files);
+
+// report
+(new Reporter($config, $output))->generate($metrics);
+
+// end
+$output->writeln('');
+$output->writeln('<info>Done</info>');

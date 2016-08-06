@@ -1,0 +1,155 @@
+<?php require __DIR__ . '/_header.php'; ?>
+
+
+<?php
+// calculate percentiles
+function procentile($arr, $percentile = 0.95)
+{
+    sort($arr);
+    return $arr[round($percentile * count($arr) - 1.0 - $percentile)];
+}
+
+// 1. build an associative array
+$array = [];
+foreach ($classes as $class) {
+    if (isset($class['lloc'])) {
+        array_push($array, $class['lloc']);
+    }
+}
+
+// 2. percentil map
+$json = [];
+$range = range(0.5, 1, .05);
+foreach ($range as $percentil) {
+    $json[] = (object)[
+        'lloc' => procentile($array, $percentil),
+        'percentile' => $percentil * 100,
+    ];
+}
+
+?>
+
+
+<div class="row">
+    <div class="column">
+        <div class="bloc">
+            <h4>Demographical repartitions of logical lines of code by class</h4>
+            <div id="lloc-repartition"></div>
+            <div class="help" style="text-align: center">Percentile</div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column">
+        <div class="bloc">
+            <h4>Explore</h4>
+            <table class="js-sort-table" id="table-length">
+                <thead>
+                <tr>
+                    <th>Class</th>
+                    <th class="js-sort-number">LLOC</th>
+                    <th class="js-sort-number">CLOC</th>
+                    <th class="js-sort-number">Volume</th>
+                    <th class="js-sort-number">Intelligent content</th>
+                    <th class="js-sort-number">Comment Weight</th>
+                </tr>
+                </thead>
+                <?php
+                foreach ($classes as $class) { ?>
+                    <tr>
+                        <td><?php echo $class['name']; ?></td>
+                        <td><?php echo isset($class['lloc']) ? $class['lloc'] : ''; ?></td>
+                        <td><?php echo isset($class['cloc']) ? $class['cloc'] : ''; ?></td>
+                        <td><?php echo isset($class['volume']) ? $class['volume'] : ''; ?></td>
+                        <td><?php echo isset($class['intelligentContent']) ? $class['intelligentContent'] : ''; ?></td>
+                        <td><?php echo isset($class['commentWeight']) ? $class['commentWeight'] : ''; ?></td>
+                    </tr>
+                <?php } ?>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<?php require __DIR__ . '/_footer.php'; ?>
+
+
+<script>
+
+    // table
+    sortTable(document.getElementById('table-length'), 1, -1);
+
+
+    var margin = {top: 20, right: 20, bottom: 30, left: 40},
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+    var x = d3.scale.ordinal()
+        .rangeRoundBands([0, width], .1);
+
+    var y = d3.scale.linear()
+        .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+        ;
+
+    var svg = d3.select("#lloc-repartition").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    data = <?php echo json_encode($json, JSON_PRETTY_PRINT); ?>;
+
+    x.domain(data.map(function (d) {
+        return d.percentile;
+    }));
+    y.domain([0, d3.max(data, function (d) {
+        return d.lloc;
+    })]);
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .append("text")
+        .style("text-anchor", "end")
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Logical lines of code");
+
+    svg.selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function (d) {
+            return x(d.percentile);
+        })
+        .attr("width", x.rangeBand())
+        .attr("y", function (d) {
+            return y(d.lloc);
+        })
+        .attr("height", function (d) {
+            return height - y(d.lloc);
+        });
+
+    function type(d) {
+        d.lloc = +d.lloc;
+        return d;
+    }
+
+</script>

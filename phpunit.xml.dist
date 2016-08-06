@@ -9,7 +9,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="vendor/autoload.php"
+         bootstrap="./vendor/autoload.php"
         >
 
     <testsuites>
@@ -17,12 +17,6 @@
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
-
-    <groups>
-        <exclude>
-            <group>binary</group>
-        </exclude>
-    </groups>
 
     <filter>
         <whitelist>

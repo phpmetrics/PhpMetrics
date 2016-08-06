@@ -28,19 +28,17 @@
         "psr-0": {
             "Hal\\": "./src/"
         },
-        "files": ["./compatibility.php"]
+        "files": ["./src/functions.php"]
     },
     "require": {
         "php": ">=5.4",
-        "twig/twig": "~1.15",
-        "symfony/console": "~2.5|~3.0",
-        "hoa/ruler": "~1.0",
-        "symfony/config": "~2.4|~3.0",
-        "symfony/yaml": "~2.4|~3.0",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "ext-tokenizer": "*",
+        "symfony/console": "~2.5|3.*",
+        "nikic/php-parser": "2.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.1"
+        "phpunit/phpunit": "~5.4"
     },
     "bin": [
         "bin/phpmetrics"

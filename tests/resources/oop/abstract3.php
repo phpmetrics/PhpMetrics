@@ -1,4 +1,0 @@
-<?php
-abstract class Titi {
-
-}

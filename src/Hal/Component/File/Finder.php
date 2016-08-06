@@ -27,18 +27,18 @@ class Finder
     const FOLLOW_SYMLINKS = RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
 
     /**
-     * Extensions to match (regex)
+     * Extensions to match
      *
-     * @var string
+     * @var array
      */
-    private $extensions;
+    private $extensions = [];
 
     /**
-     * Subdirectories to exclude (regex)
+     * Subdirectories to exclude
      *
-     * @var string
+     * @var array
      */
-    private $excludedDirs;
+    private $excludedDirs = [];
 
     /**
      * Flags for RecursiveDirectoryIterator
@@ -48,48 +48,51 @@ class Finder
     private $flags;
 
     /**
-     * @param string $extensions   regex of file extensions to include
+     * @param string $extensions regex of file extensions to include
      * @param string $excludedDirs regex of directories to exclude
      * @param integer $flags
      */
-    public function __construct($extensions = 'php', $excludedDirs = '', $flags = null)
+    public function __construct(array $extensions = ['php'], array $excludedDirs = [], $flags = null)
     {
-        $this->extensions = (string) $extensions;
-        $this->excludedDirs = (string) $excludedDirs;
+        $this->extensions = $extensions;
+        $this->excludedDirs = $excludedDirs;
         $this->flags = $flags;
     }
 
     /**
      * Find files in path
      *
-     * @param string $path
+     * @param array $paths
      * @return array
+     * @internal param string $path
      */
-    public function find($path)
+    public function fetch(array $paths)
     {
         $files = array();
-        if(is_dir($path)) {
-            $path = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-            $directory = new RecursiveDirectoryIterator($path, $this->flags);
-            $iterator = new RecursiveIteratorIterator($directory);
+        foreach ($paths as $path) {
+            if (is_dir($path)) {
+                $path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                $directory = new RecursiveDirectoryIterator($path, $this->flags);
+                $iterator = new RecursiveIteratorIterator($directory);
 
-            $filterRegex = sprintf(
-                '`^%s%s$`',
-                !empty($this->excludedDirs) ? '((?!'.$this->excludedDirs.').)+' : '.+',
-                '\.(' . $this->extensions . ')'
-            );
+                $filterRegex = sprintf(
+                    '`^%s%s$`',
+                    !empty($this->excludedDirs) ? '((?!' . implode('|', $this->excludedDirs) . ').)+' : '.+',
+                    '\.(' . implode('|', $this->extensions) . ')'
+                );
 
-            $filteredIterator = new RegexIterator(
-                $iterator,
-                $filterRegex,
-                \RecursiveRegexIterator::GET_MATCH
-            );
+                $filteredIterator = new RegexIterator(
+                    $iterator,
+                    $filterRegex,
+                    \RecursiveRegexIterator::GET_MATCH
+                );
 
-            foreach($filteredIterator as $file) {
-                $files[] = $file[0];
+                foreach ($filteredIterator as $file) {
+                    $files[] = $file[0];
+                }
+            } elseif (is_file($path)) {
+                $files = array($path);
             }
-        } elseif(is_file($path)) {
-            $files = array($path);
         }
         return $files;
     }
