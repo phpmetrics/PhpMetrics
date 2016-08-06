@@ -1,9 +1,9 @@
 <?php
-chdir(__DIR__.'/../../');
+chdir(__DIR__ . '/../../');
 
 if (!file_exists('vendor/autoload.php')) {
-  echo '[ERROR] It\'s required to run "composer install" before building PhpMetrics!' . PHP_EOL;
-  exit(1);
+    echo '[ERROR] It\'s required to run "composer install" before building PhpMetrics!' . PHP_EOL;
+    exit(1);
 }
 
 $filename = 'build/phpmetrics.phar';
@@ -15,12 +15,13 @@ $phar = new \Phar($filename, 0, 'phpmetrics.phar');
 $phar->setSignatureAlgorithm(\Phar::SHA1);
 $phar->startBuffering();
 
-
-$files = array_merge(rglob('*.php'), rglob('*.twig'), rglob('*.json'), rglob('*.pp'));
+$files = array_merge(rglob('*.php'), rglob('*.js'), rglob('*.html'), rglob('*.css'), rglob('*.png'));
 $exclude = '!(.git)|(.svn)|(bin)|(tests)|(Tests)|(phpmetrics)!';
-foreach($files as $file) {
-    if(preg_match($exclude, $file)) continue;
-    $path = str_replace(__DIR__.'/', '', $file);
+foreach ($files as $file) {
+    if (preg_match($exclude, $file)) {
+        continue;
+    }
+    $path = str_replace(__DIR__ . '/', '', $file);
     $phar->addFromString($path, file_get_contents($file));
 }
 
@@ -40,8 +41,7 @@ $phar->setStub(<<<STUB
 Phar::mapPhar('phpmetrics.phar');
 
 require_once 'phar://phpmetrics.phar/vendor/autoload.php';
-\$app = new Hal\Application\Console\PhpMetricsApplication('PhpMetrics, by Jean-François Lépine (https://twitter.com/Halleck45)', '<VERSION>'); // version will be inserted by build.
-\$app->run();
+(new \Hal\Application\Application())->run(\$argv);
 
 __HALT_COMPILER();
 STUB
@@ -50,10 +50,12 @@ $phar->stopBuffering();
 
 chmod($filename, 0755);
 
-function rglob($pattern='*', $flags = 0, $path='')
+function rglob($pattern = '*', $flags = 0, $path = '')
 {
-    $paths=glob($path.'*', GLOB_MARK|GLOB_ONLYDIR|GLOB_NOSORT);
-    $files=glob($path.$pattern, $flags);
-    foreach ($paths as $path) { $files=array_merge($files,rglob($pattern, $flags, $path)); }
+    $paths = glob($path . '*', GLOB_MARK | GLOB_ONLYDIR | GLOB_NOSORT);
+    $files = glob($path . $pattern, $flags);
+    foreach ($paths as $path) {
+        $files = array_merge($files, rglob($pattern, $flags, $path));
+    }
     return $files;
 }

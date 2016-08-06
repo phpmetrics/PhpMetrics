@@ -1,5 +1,6 @@
 # Build phar
 build-phar: test
+	@mkdir -p build
 	@echo Copying sources
 	@mkdir -p /tmp/phpmetrics-build
 	@cp * -R /tmp/phpmetrics-build
