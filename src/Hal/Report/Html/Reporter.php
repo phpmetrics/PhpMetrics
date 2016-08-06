@@ -121,7 +121,7 @@ class Reporter
             'var classes = ' . json_encode($classes, JSON_PRETTY_PRINT)
         );
 
-        $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir));
+        $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir), OutputInterface::OUTPUT_NORMAL);
 
     }
 

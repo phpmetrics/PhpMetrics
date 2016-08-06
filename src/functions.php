@@ -104,3 +104,10 @@ function recurse_copy($src,$dst) {
     }
     closedir($dir);
 }
+
+/**
+ * @return string
+ */
+function getVersion() {
+    return 'v0.0.0';
+}

@@ -80,14 +80,14 @@ class Analyze
                 $this->output->writeln(sprintf('<error>Cannot parse %s</error>', $file));
             }
         }
-        $progress->finish();
-        $progress->clear();
 
         //
         // System analyses
-        $this->output->writeln('Executing post analyses...');
         (new PageRank())->calculate($metrics);
         (new Coupling())->calculate($metrics);
+
+        $progress->finish();
+        $progress->clear();
 
         return $metrics;
     }

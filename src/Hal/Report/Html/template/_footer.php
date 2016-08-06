@@ -116,7 +116,7 @@
 
 
 <footer>
-    <a href="http://phpmetrics.org">PhpMetrics <?php require __DIR__.'/version.php';?></a>, by <a href="http://blog.lepine.pro">Jean-François Lépine</a>.
+    <a href="http://phpmetrics.org">PhpMetrics <?php echo getVersion(); ?></a>, by <a href="http://blog.lepine.pro">Jean-François Lépine</a>.
     <br/><?php echo date('F jS, Y H:i:s'); ?>
 </footer>
 

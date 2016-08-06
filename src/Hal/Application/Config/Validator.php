@@ -34,7 +34,7 @@ class Validator
         return <<<EOT
 Usage:
 
-    phpmetrics [--report-html=<directory>] [--exclude=<directory>] <directory>
+    phpmetrics [--report-html=<directory>] [--exclude=<directory>] [--quiet] <directory>
 
 Required:
 
@@ -44,6 +44,8 @@ Optional:
 
     --exclude=<directory>               List of directories to exclude, separated by a comma (,)
     --report-html=<directory>           Folder where report HTML will be generated
+    --quiet                             Quiet mode
+    --version                           Display current and version
 
 EOT;
     }

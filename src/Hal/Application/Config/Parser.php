@@ -25,6 +25,15 @@ class Parser
             }
         }
 
+        // arguments without options
+        foreach ($argv as $k => $arg) {
+            if (preg_match('!\-\-([\w\-]+)$!', $arg, $matches)) {
+                list(, $parameter) = $matches;
+                $config->set($parameter, true);
+                unset($argv[$k]);
+            }
+        }
+
         // last argument
         $files = array_pop($argv);
         if ($files) {
