@@ -2,6 +2,8 @@
 
 Gives metrics about PHP project and classes.
 
+![Standard report](https://github.com/phpmetrics/PhpMetrics/raw/version2_ast/doc/overview.png)
+
 [![License](https://poser.pugx.org/phpmetrics/phpmetrics/license.svg)](https://packagist.org/packages/phpmetrics/phpmetrics)
 [![Build Status](https://secure.travis-ci.org/phpmetrics/PhpMetrics.svg)](http://travis-ci.org/phpmetrics/PhpMetrics)
 [![Latest Stable Version](https://poser.pugx.org/phpmetrics/phpmetrics/v/stable.svg)](https://packagist.org/packages/phpmetrics/phpmetrics)
@@ -29,8 +31,6 @@ mv phpmetrics.phar /usr/local/bin/phpmetrics
 > Do not hesitate to visit the [official documentation](http://www.phpmetrics.org).
 
 The command command `phpmetrics --report-html=./log <folder or filename> ` will generate HTML report in the `./log` directory.
-
-![Standard report](https://github.com/phpmetrics/phpmetrics/doc/overview.png)
 
 ## Compatibility
 
