@@ -16,6 +16,8 @@ use Hal\Component\Bounds\Result\ResultInterface;
 use Hal\Component\Result\ResultCollection;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\TableCell;
+use Symfony\Component\Console\Helper\TableSeparator;
 
 
 /**
@@ -84,36 +86,63 @@ class Cli implements FormaterInterface {
 
         $hasOOP = null !== $total->getSum('instability');
 
+        $output->writeln('1 - Complexity');
+        $output->writeln('2 - Myer Distance: derivated from Cyclomatic complexity');
+        $output->writeln('3 - Maintainability');
+        $output->writeln('4 - LLOC: Number of logical lines of code');
+        $output->writeln('5 - Comment weight: measure the ratio between logical code and comments');
+        $output->writeln('6 - Vocabulary used in code');
+        $output->writeln('7 - Volume');
+        $output->writeln('8 - Bugs: Number of estimated bugs by file');
+        $output->writeln('9 - Difficulty of the code');
+        $output->writeln('A - LCOM: Lack of cohesion of methods measures the cohesiveness of a class');
+        $output->writeln('B - System complexity');
+        $output->writeln('C - Instability: Indicates the class is resilience to change');
+        $output->writeln('D - Abstractness: Number of abstract classes');
+        $output->writeln('E - Efferent coupling (CE): Number of classes that the class depend');
+        $output->writeln('F - Afferent coupling (CA): Number of classes affected by this class');
+
+        $output->writeln('');
+
+        $output->writeln('More details about metrics: http://www.phpmetrics.org/documentation/index.html');
+
         $table = new \Symfony\Component\Console\Helper\Table($output);
         $table
             ->setHeaders(array_merge(
                 array(
-                    'Name'
-                    , 'Complexity'
-                    , 'Myer Distance'
-                    , 'Maintainability'
-                    , 'LLOC'
-                    , 'Comment weight'
-                    , 'Vocabulary'
-                    , 'Volume'
-                    , 'Bugs'
-                    , 'Difficulty'
+                     '1'
+                    , '2'
+                    , '3'
+                    , '4'
+                    , '5'
+                    , '6'
+                    , '7'
+                    , '8'
+                    , '9'
                 )
                 , ($hasOOP ? array(
-                    'lcom'
-                    , 'SysComplexity'
-                    , 'Instability'
-                    , 'Abstractness'
-                    , 'ce'
-                    , 'ca'
+                    'A'
+                    , 'B'
+                    , 'C'
+                    , 'D'
+                    , 'E'
+                    , 'F'
                     ) : array())
             ));
 
-        foreach($groupedResults as $result) {
+        foreach($groupedResults as $key => $result) {
+            if($result->getDepth()>1){
+                $table->addRow(new TableSeparator());
+            }
+
+            $table->addRow(array(
+                    new TableCell($result->getName(), array('colspan' => 15))
+                )
+            );
+            $table->addRow(new TableSeparator());
+
             $table->addRow(array_merge(
-                array(
-                    str_repeat('  ', $result->getDepth()).$result->getName()
-                    , $this->getRow($result->getBounds(), 'cyclomaticComplexity', 'average', 0)
+                array($this->getRow($result->getBounds(), 'cyclomaticComplexity', 'average', 0)
                     , $this->getRow($result->getBounds(), 'myerDistance', 'average', 0)
                     , $this->getRow($result->getBounds(), 'maintainabilityIndex', 'average', 0)
                     , $this->getRow($result->getBounds(), 'logicalLoc', 'sum', 0)

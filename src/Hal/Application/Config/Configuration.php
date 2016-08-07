@@ -210,7 +210,6 @@ class Configuration implements ConfigurationInterface
         return $this->displayProgressBar;
     }
 
-
     /**
      * @param boolean $displayProgressBar
      * @return Configuration
