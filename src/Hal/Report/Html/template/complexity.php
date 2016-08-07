@@ -7,7 +7,7 @@ require __DIR__ . '/_header.php'; ?>
                 <div class="number">
                     <?php echo $avg->ccn; ?>
                 </div>
-                <div class="label">Average cyclomatic complexity by class <?php echo $this->getTrend('avg', 'ccn'); ?></div>
+                <div class="label">Average cyclomatic complexity by class <?php echo $this->getTrend('avg', 'ccn', true); ?></div>
             </div>
         </div>
         <div class="column">
