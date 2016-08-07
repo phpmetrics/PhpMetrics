@@ -7,7 +7,7 @@ require __DIR__ . '/_header.php'; ?>
                 <div class="number">
                     <?php echo $avg->ccn; ?>
                 </div>
-                <div class="label">Average cyclomatic complexity by class</div>
+                <div class="label">Average cyclomatic complexity by class <?php echo $this->getTrend('avg', 'ccn'); ?></div>
             </div>
         </div>
         <div class="column">
@@ -15,7 +15,7 @@ require __DIR__ . '/_header.php'; ?>
                 <div class="number">
                     <?php echo $avg->relativeSystemComplexity; ?>
                 </div>
-                <div class="label">Average relative System complexity</div>
+                <div class="label">Average relative System complexity <?php echo $this->getTrend('avg', 'relativeSystemComplexity', true); ?></div>
             </div>
         </div>
         <div class="column">
@@ -24,7 +24,7 @@ require __DIR__ . '/_header.php'; ?>
                     <?php echo $avg->bugs; ?>
                 </div>
                 <div class="label">Average bugs by class
-                    <small>(Halstead)</small>
+                    <small>(Halstead)</small> <?php echo $this->getTrend('avg', 'bugs', true); ?>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@ require __DIR__ . '/_header.php'; ?>
                     <?php echo $avg->kanDefect; ?>
                 </div>
                 <div class="label">average defects by class
-                    <small>(Kan)</small>
+                    <small>(Kan)</small> <?php echo $this->getTrend('avg', 'kanDefect', true); ?>
                 </div>
             </div>
         </div>

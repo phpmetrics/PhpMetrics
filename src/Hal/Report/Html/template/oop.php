@@ -23,7 +23,7 @@ if (sizeof($lcom) > 0) {
                     <?php echo $sum->nbClasses; ?>
                     <small> (<?php echo round($sum->nbClasses / sizeof($classes) * 100); ?> %)</small>
                 </div>
-                <div class="label">classes</div>
+                <div class="label">classes <?php echo $this->getTrend('sum', 'nbClasses'); ?></div>
             </div>
         </div>
         <div class="column">
@@ -31,14 +31,14 @@ if (sizeof($lcom) > 0) {
                 <div class="number"><?php echo $sum->nbInterfaces; ?>
                     <small> (<?php echo round($sum->nbInterfaces / sizeof($classes) * 100); ?> %)</small>
                 </div>
-                <div class="label">interfaces</div>
+                <div class="label">interfaces <?php echo $this->getTrend('sum', 'nbInterfaces'); ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
                 <div
                     class="number"><?php echo $lcom ?></div>
-                <div class="label">average LCOM</div>
+                <div class="label">average LCOM <?php echo $this->getTrend('avg', 'lcom', true); ?></div>
             </div>
         </div>
         <div class="column">

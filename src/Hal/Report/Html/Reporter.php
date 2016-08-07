@@ -2,9 +2,8 @@
 namespace Hal\Report\Html;
 
 use Hal\Application\Config\Config;
-use Hal\Metric\ClassMetric;
-use Hal\Metric\FunctionMetric;
-use Hal\Metric\InterfaceMetric;
+use Hal\Metric\Consolidated;
+use Hal\Metric\Consolided;
 use Hal\Metric\Metrics;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -41,56 +40,20 @@ class Reporter
             return;
         }
 
-        // grouping results
-        $classes = [];
-        $functions = [];
-        $nbInterfaces = 0;
-        foreach ($metrics->all() as $key => $item) {
-            if ($item instanceof ClassMetric) {
-                $classes[] = $item->all();;
-            }
-            if ($item instanceof InterfaceMetric) {
-                $nbInterfaces++;
-            }
-            if ($item instanceof FunctionMetric) {
-                $functions[$key] = $item->all();;
-            }
-        }
+        // consolidate
+        $consolidated = new Consolidated($metrics);
 
-        // sums
-        $sum = (object)[
-            'loc' => 0,
-            'cloc' => 0,
-            'lloc' => 0,
-            'nbMethods' => 0,
+        // history of builds
+        $today = (object)[
+            'avg' => $consolidated->getAvg(),
+            'sum' => $consolidated->getSum()
         ];
-        $avg = (object) [
-            'ccn' => [],
-            'bugs' => [],
-            'kanDefect' => [],
-            'relativeSystemComplexity' => [],
-            'relativeDataComplexity' => [],
-            'relativeStructuralComplexity' => [],
-        ];
-        foreach ($metrics->all() as $key => $item) {
-            $sum->loc += $item->get('loc');
-            $sum->lloc += $item->get('lloc');
-            $sum->cloc += $item->get('cloc');
-            $sum->nbMethods += $item->get('nbMethods');
-
-            foreach($avg as $k=> &$a) {
-                array_push($avg->$k, $item->get($k));
-            }
-        }
-        $sum->nbClasses = sizeof($classes) - $nbInterfaces;
-        $sum->nbInterfaces = $nbInterfaces;
-
-        foreach($avg as &$a) {
-            if(sizeof($a) > 0) {
-                $a = round(array_sum($a) / sizeof($a), 2);
-            } else {
-                $a = 0;
-            }
+        $files = glob($logDir . '/js/history-*.json');
+        $next = sizeof($files) + 1;
+        $history = [];
+        natsort($files);
+        foreach ($files as $filename) {
+            array_push($history, json_decode(file_get_contents($filename)));
         }
 
         // copy sources
@@ -106,22 +69,31 @@ class Reporter
         recurse_copy(__DIR__ . '/template/images', $logDir . '/images');
 
         // render dynamic pages
-        $this->renderPage(__DIR__ . '/template/index.php', $logDir . '/index.html', $classes, $sum, $avg);
-        $this->renderPage(__DIR__ . '/template/loc.php', $logDir . '/loc.html', $classes, $sum, $avg);
-        $this->renderPage(__DIR__ . '/template/relations.php', $logDir . '/relations.html', $classes, $sum, $avg);
-        $this->renderPage(__DIR__ . '/template/coupling.php', $logDir . '/coupling.html', $classes, $sum, $avg);
-        $this->renderPage(__DIR__ . '/template/all.php', $logDir . '/all.html', $classes, $sum, $avg);
-        $this->renderPage(__DIR__ . '/template/oop.php', $logDir . '/oop.html', $classes, $sum, $avg);
-        $this->renderPage(__DIR__ . '/template/complexity.php', $logDir . '/complexity.html', $classes, $sum, $avg);
+        $this->renderPage(__DIR__ . '/template/index.php', $logDir . '/index.html', $consolidated, $history);
+        $this->renderPage(__DIR__ . '/template/loc.php', $logDir . '/loc.html', $consolidated, $history);
+        $this->renderPage(__DIR__ . '/template/relations.php', $logDir . '/relations.html', $consolidated,
+            $history);
+        $this->renderPage(__DIR__ . '/template/coupling.php', $logDir . '/coupling.html', $consolidated,
+            $history);
+        $this->renderPage(__DIR__ . '/template/all.php', $logDir . '/all.html', $consolidated, $history);
+        $this->renderPage(__DIR__ . '/template/oop.php', $logDir . '/oop.html', $consolidated, $history);
+        $this->renderPage(__DIR__ . '/template/complexity.php', $logDir . '/complexity.html', $consolidated,
+            $history);
+
+        file_put_contents(
+            sprintf('%s/js/history-%d.json', $logDir, $next),
+            json_encode($today, JSON_PRETTY_PRINT)
+        );
 
 
         // json data
         file_put_contents(
             $logDir . '/json/classes.js',
-            'var classes = ' . json_encode($classes, JSON_PRETTY_PRINT)
+            'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
         );
 
-        $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir), OutputInterface::OUTPUT_NORMAL);
+        $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir),
+            OutputInterface::OUTPUT_NORMAL);
 
     }
 
@@ -130,12 +102,79 @@ class Reporter
      * @param $destination
      * @return $this
      */
-    public function renderPage($source, $destination, $classes, $sum, $avg)
+    public function renderPage($source, $destination, $consolidated, $history)
     {
+        $this->sum = $sum = $consolidated->getSum();
+        $this->avg = $avg = $consolidated->getAvg();
+        $this->classes = $classes = $consolidated->getClasses();
+        $this->history = $history;
+
         ob_start();
         require $source;
         $content = ob_get_clean();
         file_put_contents($destination, $content);
         return $this;
+    }
+
+    /**
+     * @param $type
+     * @param $key
+     * @return string
+     */
+    protected function getTrend($type, $key, $lowIsBetter = false, $highIsBetter = false)
+    {
+
+        $svg = [];
+        $svg['gt'] = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+</svg>';
+        $svg['eq'] = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22 12l-4-4v3H3v2h15v3z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+</svg>';
+        $svg['lt'] = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 18l2.29-2.29-4.88-4.88-4 4L2 7.41 3.41 6l6 6 4-4 6.3 6.29L22 12v6z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+</svg>';
+
+        $last = end($this->history);
+        if (!isset($last->$type->$key)) {
+            return '';
+        }
+
+        $oldValue = $last->$type->$key;
+        $newValue = isset($this->$type->$key) ? $this->$type->$key : 0;
+        if ($newValue > $oldValue) {
+            $r = 'gt';
+        } elseif ($newValue < $oldValue) {
+            $r = 'lt';
+        } else {
+            $r = 'eq';
+        }
+
+        $diff = $newValue - $oldValue;
+        if($diff > 0) {
+            $diff = '+' . $diff;
+        }
+
+        $goodOrBad = 'neutral';
+        if($lowIsBetter) {
+            if ($newValue > $oldValue) {
+                $goodOrBad = 'bad';
+            } else if ($newValue < $oldValue) {
+                $goodOrBad = 'good';
+            }
+        }
+        if($highIsBetter) {
+            if ($newValue > $oldValue) {
+                $goodOrBad = 'good';
+            } else if ($newValue < $oldValue) {
+                $goodOrBad = 'bad';
+            }
+        }
+
+        return sprintf('<span title="Last value: %s" class="progress progress-%s progress-%s">%s %s</span>', $oldValue, $goodOrBad, $r, $diff,
+            $svg[$r]);
     }
 }
