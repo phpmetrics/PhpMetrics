@@ -1,0 +1,25 @@
+RELEASE_VERSION=$(shell echo ${CURRENT_TAG}|sed -r s/v//)
+
+# Build deb
+#build-deb: build-phar
+build-deb:
+	@echo Copying phar
+	@mkdir -p artifacts/debian/usr/bin
+	@cp build/phpmetrics.phar artifacts/debian/usr/bin/phpmetrics
+
+	@echo Building .deb
+	cd artifacts && dpkg-buildpackage -us -uc
+	@echo moving deb
+	mv phpmetrics*.deb build/phpmetrics.deb
+	mv phpmetrics*.dsc build/phpmetrics.dsc
+	mv phpmetrics*.tar.gz build/phpmetrics.tar.gz
+	mv phpmetrics*.changes build/phpmetrics.changes
+
+changelog-deb:
+	@echo "phpmetrics ($(RELEASE_VERSION)) unstable; urgency=low" >> artifacts/debian/changelog
+	@echo >> artifacts/debian/changelog
+	@git log $(CURRENT_TAG)...HEAD --pretty=format:'   * %s ' --reverse >> artifacts/debian/changelog
+	@echo >> artifacts/debian/changelog
+	@echo >> artifacts/debian/changelog
+	@echo  "  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  $(shell date --rfc-2822)" >> artifacts/debian/changelog
+	@echo >> artifacts/debian/changelog

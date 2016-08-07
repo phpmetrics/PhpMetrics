@@ -1,0 +1,26 @@
+phpmetrics (1.8.2) unstable; urgency=low
+
+   * resolves problems with output during unit tests
+   * releasing v1.8.3
+   * fix calculation of duration
+   * rename variable
+   * force $duration to postive integer
+   * add test with data provider to check for correct calculated duration on CLI detail output
+   * travis and packagist migrated to new organization
+   * Merge pull request #182 from Halleck45/master
+   * better explanation
+   * way to have correct version in bin/phpmetrics. Fixes #177
+   * typo in 'latest stable version' badge
+   * Merge pull request #183 from Halleck45/master
+   * Merge pull request #180 from skors/patch-1
+   * provide current version of PhpMetrics in HTML report. Fixes #161
+   * fixed typos with version
+   * Merge pull request #184 from Halleck45/master
+   * phar is now pushed to bintray
+   * configured travis (local)
+   * phar is pushed to bintray when build is on master
+   * [bintray] minor improvements
+   * Ruby is installed by build only when deployment is required
+   * wip debian
+
+ -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100

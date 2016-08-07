@@ -21,7 +21,7 @@ script:
   - make test
 
 before_deploy:
-  - apt-get install -qq -y ruby2.1 && gem install semver'
+  - apt-get install -qq -y ruby2.1 && gem install semver
   - make build
 
 deploy:
@@ -30,7 +30,7 @@ deploy:
   user: ${BINTRAY_USER}
   key: ${BINTRAY_KEY}
   on:
-    branch: master
+    branch: version2_ast
     php: '5.6'
   skip_cleanup: true
 
