@@ -98,15 +98,17 @@ class DoAnalyze implements JobInterface
     public function execute(ResultCollection $collection, ResultCollection $aggregatedResults) {
 
         $files = $this->finder->find($this->path);
-        $progress = null;
 
         if(0 == sizeof($files, COUNT_NORMAL)) {
             throw new \LogicException('No file found');
         }
 
-        if ($this->displayProgressBar === true) {
-            $progress = new ProgressBar($this->output);
-            $progress->start(sizeof($files, COUNT_NORMAL));
+        $progress = new ProgressBar($this->output);
+        $progress->start(sizeof($files, COUNT_NORMAL));
+
+        if (false === $this->displayProgressBar) {
+            ProgressBar::setFormatDefinition('no_display', '');
+            $progress->setFormat('no_display');
         }
 
         // tools
@@ -127,9 +129,7 @@ class DoAnalyze implements JobInterface
         );
 
         foreach($files as $k => $filename) {
-            if ($progress !== null) {
-                $progress->advance();
-            }
+            $progress->advance();
 
             // Integrity
             if(!$this->ignoreErrors && !$syntaxChecker->isCorrect($filename)) {
@@ -159,10 +159,8 @@ class DoAnalyze implements JobInterface
             $collection->push($resultSet);
         }
 
-        if ($progress !== null) {
-            $progress->clear();
-            $progress->finish();
-        }
+        $progress->clear();
+        $progress->finish();
 
 
         if($this->withOOP) {
