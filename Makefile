@@ -16,6 +16,7 @@ tag:
 	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" artifacts/debian/control
 	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" artifacts/bintray.json
 	@sed -i -r "s/([0-9]{4}\-[0-9]{2}\-[0-9]{2})/`date +%Y-%m-%d`/g" artifacts/bintray.json
+	@make changelog-deb
 
 
 # Tag git with last release

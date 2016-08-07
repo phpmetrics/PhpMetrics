@@ -1,3 +1,6 @@
 composer.lock
 vendor
 .idea
+md5sums
+control
+files

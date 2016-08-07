@@ -7,7 +7,7 @@ build-phar: test
 	@rm -Rf /tmp/phpmetrics-build/vendor /tmp/phpmetrics-build/composer.lock
 
 	@echo Releasing phar
-	@sed -i "s/<VERSION>/`semver tag`/g" /tmp/phpmetrics-build/artifacts/phar/build.php
+	@sed -i "s/<VERSION>/$CURRENT_TAG/g" /tmp/phpmetrics-build/artifacts/phar/build.php
 
 	@echo Installing dependencies
 	@cd /tmp/phpmetrics-build && composer install --no-dev --optimize-autoloader --prefer-dist

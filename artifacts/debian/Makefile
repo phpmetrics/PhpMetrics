@@ -7,7 +7,7 @@ build-deb:
 	@mkdir -p artifacts/debian/usr/bin
 	@cp build/phpmetrics.phar artifacts/debian/usr/bin/phpmetrics
 
-	@echo Building .deb
+	@echo "Building .deb (${RELEASE_VERSION})"
 	cd artifacts && dpkg-buildpackage -us -uc
 	@echo moving deb
 	mv phpmetrics*.deb build/phpmetrics.deb
@@ -16,10 +16,13 @@ build-deb:
 	mv phpmetrics*.changes build/phpmetrics.changes
 
 changelog-deb:
-	@echo "phpmetrics ($(RELEASE_VERSION)) unstable; urgency=low" >> artifacts/debian/changelog
+	@echo "phpmetrics ($(RELEASE_VERSION)) unstable; urgency=low" >/tmp/changelog
 	@echo >> artifacts/debian/changelog
-	@git log $(CURRENT_TAG)...HEAD --pretty=format:'   * %s ' --reverse >> artifacts/debian/changelog
-	@echo >> artifacts/debian/changelog
-	@echo >> artifacts/debian/changelog
-	@echo  "  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  $(shell date --rfc-2822)" >> artifacts/debian/changelog
+	@git log $(CURRENT_TAG)...HEAD --pretty=format:'   * %s ' --reverse >> /tmp/changelog
+	@echo >> /tmp/changelog
+	@echo >> /tmp/changelog
+	@echo  "  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  $(shell date --rfc-2822)" >> /tmp/changelog
+	@echo >> /tmp/changelog
+	@# prepend to changelog
+	@cat /tmp/changelog|cat - artifacts/debian/changelog > /tmp/out && mv /tmp/out artifacts/debian/changelog
 	@echo >> artifacts/debian/changelog
