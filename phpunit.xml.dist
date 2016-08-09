@@ -18,6 +18,12 @@
         </testsuite>
     </testsuites>
 
+    <groups>
+        <exclude>
+            <group>binary</group>
+        </exclude>
+    </groups>
+
     <filter>
         <whitelist>
             <directory>./src</directory>
