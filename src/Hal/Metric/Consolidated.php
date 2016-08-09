@@ -72,8 +72,17 @@ class Consolidated
             'relativeSystemComplexity' => [],
             'relativeDataComplexity' => [],
             'relativeStructuralComplexity' => [],
+            'volume' => [],
+            'commentWeight' => [],
+            'intelligentContent' => [],
+            'lcom' => [],
+            'instability' => [],
+            'afferentCoupling' => [],
+            'efferentCoupling' => [],
+            'difficulty' => [],
             'lcom' => [],
         ];
+
         foreach ($metrics->all() as $key => $item) {
             $sum->loc += $item->get('loc');
             $sum->lloc += $item->get('lloc');

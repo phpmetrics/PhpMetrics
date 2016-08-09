@@ -3,6 +3,7 @@ namespace Hal\Report\Cli;
 
 use Hal\Application\Config\Config;
 use Hal\Metric\ClassMetric;
+use Hal\Metric\Consolidated;
 use Hal\Metric\FunctionMetric;
 use Hal\Metric\InterfaceMetric;
 use Hal\Metric\Metrics;
@@ -40,64 +41,10 @@ class Reporter
         }
 
         // grouping results
-        $classes = [];
-        $functions = [];
-        $nbInterfaces = 0;
-        foreach ($metrics->all() as $key => $item) {
-            if ($item instanceof ClassMetric) {
-                $classes[] = $item->all();;
-            }
-            if ($item instanceof InterfaceMetric) {
-                $nbInterfaces++;
-            }
-            if ($item instanceof FunctionMetric) {
-                $functions[$key] = $item->all();;
-            }
-        }
+        $consolidated = new Consolidated($metrics);
+        $sum = $consolidated->getSum();
+        $avg = $consolidated->getAvg();
 
-        // sums
-        $sum = (object)[
-            'loc' => 0,
-            'cloc' => 0,
-            'lloc' => 0,
-            'nbMethods' => 0,
-        ];
-        $avg = (object)[
-            'ccn' => [],
-            'bugs' => [],
-            'kanDefect' => [],
-            'relativeSystemComplexity' => [],
-            'relativeDataComplexity' => [],
-            'relativeStructuralComplexity' => [],
-            'volume' => [],
-            'commentWeight' => [],
-            'intelligentContent' => [],
-            'lcom' => [],
-            'instability' => [],
-            'afferentCoupling' => [],
-            'efferentCoupling' => [],
-            'difficulty' => [],
-        ];
-        foreach ($metrics->all() as $key => $item) {
-            $sum->loc += $item->get('loc');
-            $sum->lloc += $item->get('lloc');
-            $sum->cloc += $item->get('cloc');
-            $sum->nbMethods += $item->get('nbMethods');
-
-            foreach ($avg as $k => &$a) {
-                array_push($avg->$k, $item->get($k));
-            }
-        }
-        $sum->nbClasses = sizeof($classes) - $nbInterfaces;
-        $sum->nbInterfaces = $nbInterfaces;
-
-        foreach ($avg as &$a) {
-            if (sizeof($a) > 0) {
-                $a = round(array_sum($a) / sizeof($a), 2);
-            } else {
-                $a = 0;
-            }
-        }
 
         $methodsByClass = $locByClass = $locByMethod = 0;
         if ($sum->nbClasses > 0) {
@@ -109,7 +56,6 @@ class Reporter
         }
 
         $out = <<<EOT
-
 LOC
     Lines of code                               {$sum->loc}
     Logical lines of code                       {$sum->lloc}
@@ -140,10 +86,27 @@ Bugs
     Average defects by class (Kan)              {$avg->kanDefect}
 
 
-
 EOT;
 
+        // git
+        if($this->config->has('git')) {
+            $commits = [];
+            foreach($consolidated->getFiles() as $name => $file) {
+                $commits[$name] = $file['gitChanges'];
+            }
+            arsort($commits);
+            $commits = array_slice($commits, 0, 10);
 
+            $out .= "\nTop 10 commited files";
+            foreach($commits as $file => $nb) {
+                $out .= sprintf("\n    %d    %s", $nb, $file);
+            }
+            if(0 === sizeof($commits)) {
+                $out .= "\n    NA";
+            }
+        }
+
+        $out .= "\n\n";
         $this->output->write($out);
 
     }
