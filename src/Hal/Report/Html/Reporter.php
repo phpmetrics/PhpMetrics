@@ -57,13 +57,9 @@ class Reporter
         }
 
         // copy sources
-        if (!file_exists($logDir . '/js')) {
-            mkdir($logDir, 0755, true);
-            mkdir($logDir . '/js', 0755, true);
-            mkdir($logDir . '/json', 0755, true);
-            mkdir($logDir . '/css', 0755, true);
-            mkdir($logDir . '/images', 0755, true);
-        }
+        file_exists($logDir . '/js') || mkdir($logDir, 0755, true);
+        file_exists($logDir . '/css') || mkdir($logDir, 0755, true);
+        file_exists($logDir . '/images') || mkdir($logDir, 0755, true);
         recurse_copy(__DIR__ . '/template/js', $logDir . '/js');
         recurse_copy(__DIR__ . '/template/css', $logDir . '/css');
         recurse_copy(__DIR__ . '/template/images', $logDir . '/images');
