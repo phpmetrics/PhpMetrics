@@ -34,7 +34,7 @@ class Validator
         return <<<EOT
 Usage:
 
-    phpmetrics [--report-html=<directory>] [--exclude=<directory>] [--quiet] <directory>
+    phpmetrics [--report-html=<directory>] [--exclude=<directory>] [--git=</path/to/git_binary>] [--quiet] <directory>
 
 Required:
 
@@ -44,6 +44,7 @@ Optional:
 
     --exclude=<directory>               List of directories to exclude, separated by a comma (,)
     --report-html=<directory>           Folder where report HTML will be generated
+    --git[=</path/to/git_binary>]       Perform analyses based on Git History (default binary path: "git")
     --quiet                             Quiet mode
     --version                           Display current and version
 

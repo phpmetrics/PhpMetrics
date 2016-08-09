@@ -12,6 +12,8 @@ foreach ($classes as $c) {
 }
 if (sizeof($lcom) > 0) {
     $lcom = round(array_sum($lcom) / sizeof($lcom), 2);
+} else {
+    $lcom = 0;
 }
 ?>
 
@@ -21,7 +23,7 @@ if (sizeof($lcom) > 0) {
             <div class="bloc bloc-number">
                 <div class="number">
                     <?php echo $sum->nbClasses; ?>
-                    <small> (<?php echo round($sum->nbClasses / sizeof($classes) * 100); ?> %)</small>
+                    <small> (<?php echo (sizeof($classes) ? round($sum->nbClasses / sizeof($classes) * 100) : '0'); ?> %)</small>
                 </div>
                 <div class="label">classes <?php echo $this->getTrend('sum', 'nbClasses'); ?></div>
             </div>
@@ -29,7 +31,7 @@ if (sizeof($lcom) > 0) {
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="number"><?php echo $sum->nbInterfaces; ?>
-                    <small> (<?php echo round($sum->nbInterfaces / sizeof($classes) * 100); ?> %)</small>
+                    <small> (<?php echo (sizeof($classes) ? round($sum->nbInterfaces / sizeof($classes) * 100) : '0'); ?> %)</small>
                 </div>
                 <div class="label">interfaces <?php echo $this->getTrend('sum', 'nbInterfaces'); ?></div>
             </div>

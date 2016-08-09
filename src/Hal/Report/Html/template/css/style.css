@@ -155,6 +155,7 @@ a {
     width: 300px;
     height: 100%;
     color: #FFF;
+    text-align: left;
 }
 
 #sidebar .content {
@@ -184,7 +185,7 @@ a {
     padding: 10px;
 }
 
-#sidebar .links svg {
+#sidebar .links svg, #sidebar .links img {
     vertical-align: top;
     margin-right: .5em;
 }
@@ -290,6 +291,14 @@ a {
 .x.axis path {
     display: none;
 }
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+
 
 /* -------- Table ------------ */
 #table-length tbody {
@@ -302,6 +311,9 @@ a {
 
 #table-relations tbody {
     font-size: 0.8em;
+}
+.table-small {
+    font-size:0.8em;
 }
 
 #pagination a {

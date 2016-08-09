@@ -71,20 +71,20 @@ class Reporter
         // render dynamic pages
         $this->renderPage(__DIR__ . '/template/index.php', $logDir . '/index.html', $consolidated, $history);
         $this->renderPage(__DIR__ . '/template/loc.php', $logDir . '/loc.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/relations.php', $logDir . '/relations.html', $consolidated,
-            $history);
-        $this->renderPage(__DIR__ . '/template/coupling.php', $logDir . '/coupling.html', $consolidated,
-            $history);
+        $this->renderPage(__DIR__ . '/template/relations.php', $logDir . '/relations.html', $consolidated, $history);
+        $this->renderPage(__DIR__ . '/template/coupling.php', $logDir . '/coupling.html', $consolidated, $history);
         $this->renderPage(__DIR__ . '/template/all.php', $logDir . '/all.html', $consolidated, $history);
         $this->renderPage(__DIR__ . '/template/oop.php', $logDir . '/oop.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/complexity.php', $logDir . '/complexity.html', $consolidated,
-            $history);
+        $this->renderPage(__DIR__ . '/template/complexity.php', $logDir . '/complexity.html', $consolidated, $history);
+        if ($this->config->has('git')) {
+            $this->renderPage(__DIR__ . '/template/git.php', $logDir . '/git.html', $consolidated, $history);
+        }
 
+        // js data
         file_put_contents(
             sprintf('%s/js/history-%d.json', $logDir, $next),
             json_encode($today, JSON_PRETTY_PRINT)
         );
-
 
         // json data
         file_put_contents(
@@ -102,11 +102,14 @@ class Reporter
      * @param $destination
      * @return $this
      */
-    public function renderPage($source, $destination, $consolidated, $history)
+    public function renderPage($source, $destination, Consolidated $consolidated, $history)
     {
         $this->sum = $sum = $consolidated->getSum();
         $this->avg = $avg = $consolidated->getAvg();
         $this->classes = $classes = $consolidated->getClasses();
+        $this->files = $files = $consolidated->getFiles();
+        $this->project = $project = $consolidated->getProject();
+        $config = $this->config;
         $this->history = $history;
 
         ob_start();
@@ -154,27 +157,32 @@ class Reporter
         }
 
         $diff = $newValue - $oldValue;
-        if($diff > 0) {
+        if ($diff > 0) {
             $diff = '+' . $diff;
         }
 
         $goodOrBad = 'neutral';
-        if($lowIsBetter) {
+        if ($lowIsBetter) {
             if ($newValue > $oldValue) {
                 $goodOrBad = 'bad';
-            } else if ($newValue < $oldValue) {
-                $goodOrBad = 'good';
+            } else {
+                if ($newValue < $oldValue) {
+                    $goodOrBad = 'good';
+                }
             }
         }
-        if($highIsBetter) {
+        if ($highIsBetter) {
             if ($newValue > $oldValue) {
                 $goodOrBad = 'good';
-            } else if ($newValue < $oldValue) {
-                $goodOrBad = 'bad';
+            } else {
+                if ($newValue < $oldValue) {
+                    $goodOrBad = 'bad';
+                }
             }
         }
 
-        return sprintf('<span title="Last value: %s" class="progress progress-%s progress-%s">%s %s</span>', $oldValue, $goodOrBad, $r, $diff,
+        return sprintf('<span title="Last value: %s" class="progress progress-%s progress-%s">%s %s</span>', $oldValue,
+            $goodOrBad, $r, $diff,
             $svg[$r]);
     }
 }

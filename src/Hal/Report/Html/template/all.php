@@ -20,7 +20,7 @@ foreach ($classes as $c) {
                 <table class="js-sort-table" id="table-length">
                     <thead>
                     <tr>
-                        <?php foreach (current($classesC) as $k => $v) { ?>
+                        <?php foreach ((array) current($classesC) as $k => $v) { ?>
                             <th class="js-sort-number"><?php echo $k; ?></th>
                         <?php } ?>
                     </tr>

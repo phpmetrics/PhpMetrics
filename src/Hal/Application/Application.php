@@ -51,7 +51,12 @@ class Application
         $files = $finder->fetch($config->get('files'));
 
         // analyze
-        $metrics = (new Analyze($output))->run($files);
+        try {
+            $metrics = (new Analyze($config, $output))->run($files);
+        }catch(ConfigException $e) {
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            exit(1);
+        }
 
         // report
         (new Report\Cli\Reporter($config, $output))->generate($metrics);

@@ -19,6 +19,16 @@ class Consolidated
     private $classes = [];
 
     /**
+     * @var array
+     */
+    private $files = [];
+
+    /**
+     * @var array
+     */
+    private $project = [];
+
+    /**
      * Consolided constructor.
      * @param Metrics $metrics
      */
@@ -27,6 +37,8 @@ class Consolidated
         // grouping results
         $classes = [];
         $functions = [];
+        $files = [];
+        $project = [];
         $nbInterfaces = 0;
         foreach ($metrics->all() as $key => $item) {
             if ($item instanceof ClassMetric) {
@@ -37,6 +49,12 @@ class Consolidated
             }
             if ($item instanceof FunctionMetric) {
                 $functions[$key] = $item->all();;
+            }
+            if ($item instanceof FileMetric) {
+                $files[$key] = $item->all();;
+            }
+            if ($item instanceof ProjectMetric) {
+                $project[$key] = $item->all();;
             }
         }
 
@@ -80,6 +98,8 @@ class Consolidated
         $this->avg = $avg;
         $this->sum = $sum;
         $this->classes = $classes;
+        $this->files = $files;
+        $this->project = $project;
     }
 
     /**
@@ -104,5 +124,21 @@ class Consolidated
     public function getClasses()
     {
         return $this->classes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProject()
+    {
+        return $this->project;
     }
 }

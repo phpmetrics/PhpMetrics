@@ -1,6 +1,7 @@
 <?php
 namespace Hal\Application;
 
+use Hal\Application\Config\Config;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
 use Hal\Metric\Class_\Complexity\KanDefectVisitor;
@@ -11,6 +12,7 @@ use Hal\Metric\Class_\Structural\SystemComplexityVisitor;
 use Hal\Metric\Class_\Text\HalsteadVisitor;
 use Hal\Metric\Class_\Text\LengthVisitor;
 use Hal\Metric\Metrics;
+use Hal\Metric\System\Changes\GitChanges;
 use Hal\Metric\System\Coupling\Coupling;
 use Hal\Metric\System\Coupling\PageRank;
 use PhpParser\Error;
@@ -32,12 +34,18 @@ class Analyze
     private $output;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * Analyze constructor.
      * @param OutputInterface $output
      */
-    public function __construct(OutputInterface $output)
+    public function __construct(Config $config, OutputInterface $output)
     {
         $this->output = $output;
+        $this->config = $config;
     }
 
     /**
@@ -85,6 +93,10 @@ class Analyze
         // System analyses
         (new PageRank())->calculate($metrics);
         (new Coupling())->calculate($metrics);
+
+        //
+        // File analyses
+        (new GitChanges($this->config, $files))->calculate($metrics);
 
         $progress->finish();
         $progress->clear();

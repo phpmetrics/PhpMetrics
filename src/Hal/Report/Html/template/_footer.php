@@ -87,6 +87,14 @@
                         Coupling
                     </a>
                 </li>
+                <?php if($config->has('git')) { ?>
+                <li>
+                    <a href="git.html">
+                        <img src="images/logo-git.png" alt="">
+                        Git
+                    </a>
+                </li>
+                <?php } ?>
                 <li>
                     <a href="all.html">
                         <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"

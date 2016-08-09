@@ -1,7 +1,7 @@
 <?php
 namespace Hal\Metric;
 
-class FunctionMetric
+class FileMetric
 {
     use BagTrait;
 }
