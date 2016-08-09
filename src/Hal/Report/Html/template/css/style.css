@@ -11,10 +11,10 @@ a {
     color: #4CAF50;
 }
 
-.fullwidth {
+/*.fullwidth {
     max-width: initial;
     width: initial;
-}
+}*/
 
 /* ------------- menu -------- */
 .navigation {
@@ -146,6 +146,9 @@ a {
 #content {
     margin-left: 300px;
 }
+.fullwidth #content {
+    margin-left: 0;
+}
 
 #sidebar {
     position: fixed;
@@ -183,6 +186,11 @@ a {
     color: #FFF;
     line-height: 24px;
     padding: 10px;
+}
+#sidebar .links .sep {
+    margin-top:1em;
+    padding-top: 1em;
+    border-top:1px solid #81C784;
 }
 
 #sidebar .links svg, #sidebar .links img {
@@ -254,7 +262,7 @@ a {
 }
 
 .bloc-number {
-    height: 140px;
+    min-height: 140px;
 }
 
 /* -------- charts ---------------- */

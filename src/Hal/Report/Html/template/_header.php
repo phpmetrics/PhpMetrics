@@ -13,7 +13,7 @@
 <body>
 
 
-<div id="wrapper">
+<div id="wrapper" class="<?php if(isset($fullwidth) && $fullwidth === true) {?>fullwidth<?php } ?>">
     <div id="contentliquid">
         <div id="content">
 

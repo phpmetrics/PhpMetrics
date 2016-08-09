@@ -2,6 +2,7 @@
 
 
 <!-- Sidebar -->
+<?php if(!isset($fullwidth) || $fullwidth === false) {?>
 <div id="sidebar">
     <div class="content">
         <div class="logo">
@@ -116,10 +117,20 @@
                 <!--                        Third party-->
                 <!--                    </a>-->
                 <!--                </li>-->
+                <li class="sep">
+                    <a href="panel.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/>
+                        </svg>
+                        TV Panel
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
 </div>
+<?php } ?>
 </div>
 
 
@@ -133,6 +144,7 @@
 <script type="text/javascript" src="http://d3js.org/d3.hexbin.v0.js"></script>
 <script type="text/javascript" src="js/tabled.min.js"></script>
 <script type="text/javascript" src="js/sort-table.min.js"></script>
+<script type="text/javascript" src="js/graph-maintainability.js"></script>
 
 
 <script type="text/javascript" src="json/classes.js"></script>
