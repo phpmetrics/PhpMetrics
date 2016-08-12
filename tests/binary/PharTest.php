@@ -7,8 +7,7 @@ namespace Test\Binary;
 class PharTest extends \PHPUnit_Framework_TestCase
 {
 
-    //private $phar = __DIR__ . '/../binary/../../build/phpmetrics.phar';
-    private $phar = __DIR__ . '/../../bin/phpmetrics';
+    private $phar = __DIR__ . '/../../build/phpmetrics.phar';
 
     public function testICanRunPhar()
     {
