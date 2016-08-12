@@ -1,7 +1,7 @@
 <?php
 namespace Hal\Metric;
 
-class ClassMetric
+class ClassMetric implements Metric
 {
     use BagTrait;
 }

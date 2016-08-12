@@ -1,7 +1,7 @@
 <?php
 namespace Hal\Metric;
 
-class ProjectMetric
+class ProjectMetric implements Metric
 {
     use BagTrait;
 }
