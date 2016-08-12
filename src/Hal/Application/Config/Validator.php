@@ -35,7 +35,7 @@ class Validator
         if(!$config->has('exclude')) {
             $config->set('exclude', 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules');
         }
-        $config->set('exclude', explode(',', $config->get('exclude')));
+        $config->set('exclude', array_filter(explode(',', $config->get('exclude'))));
     }
 
     /**

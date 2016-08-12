@@ -7,7 +7,8 @@ namespace Test\Binary;
 class PharTest extends \PHPUnit_Framework_TestCase
 {
 
-    private $phar = __DIR__ . '/../binary/../../build/phpmetrics.phar';
+    //private $phar = __DIR__ . '/../binary/../../build/phpmetrics.phar';
+    private $phar = __DIR__ . '/../../bin/phpmetrics';
 
     public function testICanRunPhar()
     {
@@ -18,7 +19,7 @@ class PharTest extends \PHPUnit_Framework_TestCase
 
     public function testICanProvideOneDirectoryToParse()
     {
-        $command = sprintf('%s %s 2>&1', $this->phar, __DIR__.'/examples/1');
+        $command = sprintf('%s --exclude="" %s 2>&1', $this->phar, __DIR__.'/examples/1');
         $r = shell_exec($command);
         $this->assertContains('Object oriented programming', $r);
         $this->assertContains('LOC', $r);
@@ -27,7 +28,7 @@ class PharTest extends \PHPUnit_Framework_TestCase
 
     public function testICanProvideMultipleDirectoriesToParse()
     {
-        $command = sprintf('%s  %s,%s  2>&1', $this->phar, __DIR__.'/examples/1', __DIR__.'/examples/2');
+        $command = sprintf('%s --exclude="" %s,%s  2>&1', $this->phar, __DIR__.'/examples/1', __DIR__.'/examples/2');
         $r = shell_exec($command);
         $this->assertContains('Object oriented programming', $r);
         $this->assertContains('LOC', $r);
