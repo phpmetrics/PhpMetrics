@@ -45,7 +45,7 @@ class RoleOfMethodDetectorTest extends \PHPUnit_Framework_TestCase
             ['setter', '<?php class A { function setName($string){ $this->name = $name; } } ?>'],
             ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; } } ?>'],
             ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; return $this; } } ?>'],
-            /*[null, '<?php class A { function foo($string){ $this->name = (string) $name * 3; } } ?>'],*/
+            [null, '<?php class A { function foo($string){ $this->name = (string) $name * 3; } } ?>'],
 
         ];
     }
