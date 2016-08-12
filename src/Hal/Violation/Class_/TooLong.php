@@ -6,7 +6,7 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
 
-class TooComplexCode implements Violation
+class TooLong implements Violation
 {
 
     /**
@@ -14,7 +14,7 @@ class TooComplexCode implements Violation
      */
     public function getName()
     {
-        return 'Too complex code';
+        return 'Too long';
     }
 
     /**
@@ -28,11 +28,9 @@ class TooComplexCode implements Violation
 
         $this->metric = $metric;
 
-        if ($metric->get('ccn') >= 25) {
+        if ($metric->get('lloc') >= 200) {
             $metric->get('violations')->add($this);
-            return;
         }
-
     }
 
     /**
@@ -40,7 +38,7 @@ class TooComplexCode implements Violation
      */
     public function getLevel()
     {
-        return Violation::ERROR;
+        return Violation::INFO;
     }
 
     /**
@@ -49,12 +47,12 @@ class TooComplexCode implements Violation
     public function getDescription()
     {
         return <<<EOT
-This class looks really complex.
+This class looks really long.
 
-* Algorithm are complex (Cyclomatic complexity is {$this->metric->get('ccn')})
-* Component uses {$this->metric->get('number_operators')} operators
+* Class has {$this->metric->get('lloc')} logical lines of code
+* Class has {$this->metric->get('loc')} lines of code
 
-Maybe you should delegate some code to another objects.
+Maybe your class should not exceed 200 lines of logical code
 EOT;
 
     }

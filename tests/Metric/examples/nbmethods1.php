@@ -16,7 +16,8 @@ class A
         $this->a = null;
     }
 
-    private function baz() {
+    private function baz()
+    {
         $this->b = $this->b * 3;
     }
 

@@ -1,40 +1,50 @@
 <?php
-namespace Test\Hal\Metric\Class_\Coupling;
+namespace Test\Hal\Metric\Class_;
 
 use Hal\Metric\Class_\ClassEnumVisitor;
-use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
-use Hal\Metric\Class_\Complexity\McCabeVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
 
-class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
+/**
+ * @group class
+ */
+class ClassEnumVisitorTest extends \PHPUnit_Framework_TestCase
+{
 
 
     /**
      * @dataProvider provideExamples
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $classname, $expected)
-    {
+    public function testMethodsAreFoundAndCountedAccordingTheirRole(
+        $example,
+        $classname,
+        $nbMethods,
+        $nbMethodsPrivate,
+        $nbMethodsPublic,
+        $nbMethodsIncludingGettersSetters
+    ) {
         $metrics = new Metrics();
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
         $traverser = new \PhpParser\NodeTraverser();
         $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
         $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
 
         $code = file_get_contents($example);
         $stmts = $parser->parse($code);
         $traverser->traverse($stmts);
 
-        $this->assertSame($expected, $metrics->get($classname)->get('ccn'));
+        $this->assertSame($nbMethods, $metrics->get($classname)->get('nbMethods'));
+        $this->assertSame($nbMethodsPrivate, $metrics->get($classname)->get('nbMethodsPrivate'));
+        $this->assertSame($nbMethodsPublic, $metrics->get($classname)->get('nbMethodsPublic'));
+        $this->assertSame($nbMethodsIncludingGettersSetters,
+            $metrics->get($classname)->get('nbMethodsIncludingGettersSetters'));
     }
 
     public function provideExamples()
     {
         return [
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 3],
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 3],
+            [__DIR__ . '/../examples/nbmethods1.php', 'A', 3, 1, 2, 7],
         ];
     }
 

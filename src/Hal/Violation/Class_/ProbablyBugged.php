@@ -6,7 +6,7 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
 
-class TooComplexCode implements Violation
+class ProbablyBugged implements Violation
 {
 
     /**
@@ -14,7 +14,7 @@ class TooComplexCode implements Violation
      */
     public function getName()
     {
-        return 'Too complex code';
+        return 'Probably bugged';
     }
 
     /**
@@ -28,11 +28,11 @@ class TooComplexCode implements Violation
 
         $this->metric = $metric;
 
-        if ($metric->get('ccn') >= 25) {
+        $suspect = 0;
+        if ($metric->get('bugs') >= .35) {
             $metric->get('violations')->add($this);
             return;
         }
-
     }
 
     /**
@@ -40,7 +40,7 @@ class TooComplexCode implements Violation
      */
     public function getLevel()
     {
-        return Violation::ERROR;
+        return Violation::WARNING;
     }
 
     /**
@@ -49,12 +49,12 @@ class TooComplexCode implements Violation
     public function getDescription()
     {
         return <<<EOT
-This class looks really complex.
+This component contains in theory {$this->metric->get('bugs')} bugs.
 
-* Algorithm are complex (Cyclomatic complexity is {$this->metric->get('ccn')})
-* Component uses {$this->metric->get('number_operators')} operators
+* Calculation is based on number of operators, operands, cyclomatic complexity
+* See more details at https://en.wikipedia.org/wiki/Halstead_complexity_measures
 
-Maybe you should delegate some code to another objects.
+Maybe you should check yor unit tests for this class
 EOT;
 
     }

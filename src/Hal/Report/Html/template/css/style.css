@@ -9,6 +9,7 @@ body {
 
 a {
     color: #4CAF50;
+    cursor: pointer;
 }
 
 /*.fullwidth {
@@ -40,7 +41,6 @@ a {
     height: 5.2rem;
     width: 100%;
 }
-
 .navigation-list {
     list-style: none;
     margin-bottom: 0;
@@ -146,9 +146,6 @@ a {
 #content {
     margin-left: 300px;
 }
-.fullwidth #content {
-    margin-left: 0;
-}
 
 #sidebar {
     position: fixed;
@@ -201,6 +198,19 @@ a {
 #sidebar .links a:hover {
     background-color: #81C784;
 }
+
+/* ------------- fullwidth -------- */
+.fullwidth #content {
+    margin-left: 0;
+}
+.fullwidth #content, .fullwidth .container, .fullwidth .row, .fullwidth .column {
+    width: auto;
+    max-width:none;
+    flex:auto;
+    float:none;
+
+}
+
 
 /* ------------- text -------- */
 .badge {
@@ -402,4 +412,34 @@ footer {
     padding: 5px 0;
     text-align: center;
     font-size: .8em;
+}
+
+
+/* ---------- violations ---------- */
+.violation-list {
+    display: none;
+}
+.violation {
+    padding-left:50px;
+    margin-top: .5em;
+}
+.violation .name {
+    font-weight: bold;
+    margin-top:1em;
+}
+.progress-good {
+    background-color: #4CAF50;
+    color: #FFF;
+}
+.level-critical{
+    background-color: #F44336;
+    color: #FFF;
+}
+.level-error{
+    background-color: #F44336;
+    color: #FFF;
+}
+.level-warning{
+    background-color: darkorange;
+    color: #FFF;
 }

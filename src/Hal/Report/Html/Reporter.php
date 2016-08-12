@@ -73,6 +73,7 @@ class Reporter
         $this->renderPage(__DIR__ . '/template/oop.php', $logDir . '/oop.html', $consolidated, $history);
         $this->renderPage(__DIR__ . '/template/complexity.php', $logDir . '/complexity.html', $consolidated, $history);
         $this->renderPage(__DIR__ . '/template/panel.php', $logDir . '/panel.html', $consolidated, $history);
+        $this->renderPage(__DIR__ . '/template/violations.php', $logDir . '/violations.html', $consolidated, $history);
         if ($this->config->has('git')) {
             $this->renderPage(__DIR__ . '/template/git.php', $logDir . '/git.html', $consolidated, $history);
         }

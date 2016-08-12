@@ -3,6 +3,8 @@ namespace Hal\Metric\Class_;
 
 use Hal\Component\Reflected\Method;
 use Hal\Metric\ClassMetric;
+use Hal\Metric\FunctionMetric;
+use Hal\Metric\Helper\RoleOfMethodDetector;
 use Hal\Metric\InterfaceMetric;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
@@ -41,14 +43,51 @@ class ClassEnumVisitor extends NodeVisitorAbstract
                 $class->set('interface', false);
             }
             $class->set('name', $node->namespacedName->toString());
+            $methods = [];
 
-            $methods = 0;
+            $methodsPublic = $methodsPrivate = $nbGetters = $nbSetters = 0;
+            $roleDetector = new RoleOfMethodDetector();
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
-                    $methods++;
+
+                    $function = new FunctionMetric($stmt->name);
+
+                    $role = $roleDetector->detects($stmt);
+                    $function->set('role', $role);
+                    switch ($role) {
+                        case 'getter':
+                            $nbGetters++;
+                            break;
+                        case 'setter':
+                            $nbSetters++;
+                            break;
+                    }
+
+                    if (null === $role) {
+                        if ($stmt->isPublic()) {
+                            $methodsPublic++;
+                            $function->set('public', true);
+                            $function->set('private', false);
+                        }
+
+                        if ($stmt->isPrivate() || $stmt->isProtected()) {
+                            $methodsPrivate++;
+                            $function->set('public', false);
+                            $function->set('private', true);
+                        }
+                    }
+
+                    array_push($methods, $function);
                 }
             }
-            $class->set('nbMethods', $methods);
+
+            $class->set('methods', $methods);
+            $class->set('nbMethodsIncludingGettersSetters', sizeof($methods) );
+            $class->set('nbMethods', sizeof($methods) - ($nbGetters + $nbSetters));
+            $class->set('nbMethodsPrivate', $methodsPrivate);
+            $class->set('nbMethodsPublic', $methodsPublic);
+            $class->set('nbMethodsGetter', $nbGetters);
+            $class->set('nbMethodsSetters', $nbSetters);
 
             $this->metrics->attach($class);
         }

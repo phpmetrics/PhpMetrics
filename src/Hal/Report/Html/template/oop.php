@@ -1,5 +1,4 @@
 <?php
-$fullwidth = true;
 require __DIR__ . '/_header.php'; ?>
 
 <?php

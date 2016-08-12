@@ -6,6 +6,7 @@ use Hal\Application\Config\Parser;
 use Hal\Application\Config\Validator;
 use Hal\Component\File\Finder;
 use Hal\Report;
+use Hal\Violation\ViolationParser;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -47,7 +48,7 @@ class Application
         }
 
         // find files
-        $finder = new Finder();
+        $finder = new Finder($config->get('extensions'), $config->get('exclude'));
         $files = $finder->fetch($config->get('files'));
 
         // analyze
@@ -57,6 +58,9 @@ class Application
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             exit(1);
         }
+
+        // violations
+        (new ViolationParser($config, $output))->apply($metrics);
 
         // report
         (new Report\Cli\Reporter($config, $output))->generate($metrics);

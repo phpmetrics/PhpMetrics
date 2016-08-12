@@ -36,7 +36,7 @@ if(sizeof($array) > 1) {
     <div class="column">
         <div class="bloc">
             <h4>Demographical repartitions of logical lines of code by class</h4>
-            <div id="lloc-repartition"></div>
+            <div id="lloc-repartition" style="height: 200px"></div>
             <div class="help" style="text-align: center">Percentile</div>
         </div>
     </div>
@@ -84,8 +84,8 @@ if(sizeof($array) > 1) {
 
 
     var margin = {top: 20, right: 20, bottom: 30, left: 40},
-        width = 960 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+        width = document.getElementById('lloc-repartition').offsetWidth - margin.left - margin.right,
+        height = document.getElementById('lloc-repartition').offsetHeight - margin.top - margin.bottom;
 
     var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);

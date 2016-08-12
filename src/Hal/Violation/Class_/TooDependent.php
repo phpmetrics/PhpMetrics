@@ -6,7 +6,7 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
 
-class TooComplexCode implements Violation
+class TooDependent implements Violation
 {
 
     /**
@@ -14,7 +14,7 @@ class TooComplexCode implements Violation
      */
     public function getName()
     {
-        return 'Too complex code';
+        return 'Too dependent';
     }
 
     /**
@@ -28,7 +28,7 @@ class TooComplexCode implements Violation
 
         $this->metric = $metric;
 
-        if ($metric->get('ccn') >= 25) {
+        if ($metric->get('efferentCoupling') >= 20) {
             $metric->get('violations')->add($this);
             return;
         }
@@ -40,7 +40,7 @@ class TooComplexCode implements Violation
      */
     public function getLevel()
     {
-        return Violation::ERROR;
+        return Violation::INFO;
     }
 
     /**
@@ -49,12 +49,11 @@ class TooComplexCode implements Violation
     public function getDescription()
     {
         return <<<EOT
-This class looks really complex.
+This class looks use really high number of components.
 
-* Algorithm are complex (Cyclomatic complexity is {$this->metric->get('ccn')})
-* Component uses {$this->metric->get('number_operators')} operators
+* Efferent coupling is {$this->metric->get('efferentCoupling')}, so this class uses {$this->metric->get('efferentCoupling')} differents external components.
 
-Maybe you should delegate some code to another objects.
+Maybe you should check why this class has lot of dependencies.
 EOT;
 
     }
