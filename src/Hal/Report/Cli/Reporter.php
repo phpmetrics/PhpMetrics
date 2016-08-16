@@ -85,6 +85,11 @@ Bugs
     Average bugs by class                       {$avg->bugs}
     Average defects by class (Kan)              {$avg->kanDefect}
 
+Violations
+    Critical                                    {$sum->violations->critical}
+    Error                                       {$sum->violations->error}
+    Warning                                     {$sum->violations->warning}
+    Information                                 {$sum->violations->information}
 
 EOT;
 

@@ -1,65 +1,48 @@
 <?php require __DIR__ . '/_header.php'; ?>
 
 <?php
-$violations = [
-    'total' => 0,
-    'information' => 0,
-    'warning' => 0,
-    'error' => 0,
-    'critical' => 0,
-];
 $map = [
     \Hal\Violation\Violation::INFO => 'information',
     \Hal\Violation\Violation::WARNING => 'warning',
     \Hal\Violation\Violation::ERROR => 'error',
     \Hal\Violation\Violation::CRITICAL => 'critical',
 ];
-foreach ($classes as $class) {
-    foreach ($class['violations'] as $violation) {
-
-        $violations['total']++;
-
-        $name = $map[$violation->getLevel()];
-        $violations[$name]++;
-    }
-}
-$violations = (object)$violations;
 ?>
 
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $violations->total; ?></div>
+                <div class="number"><?php echo $sum->violations->total; ?></div>
                 <div class="label">Violations</div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $violations->information; ?></div>
+                <div class="number"><?php echo $sum->violations->information; ?></div>
                 <div class="label">Information</div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $violations->warning; ?></div>
+                <div class="number"><?php echo $sum->violations->warning; ?></div>
                 <div class="label">Warnings</div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $violations->error; ?></div>
+                <div class="number"><?php echo $sum->violations->error; ?></div>
                 <div class="label">Errors</div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $violations->critical; ?></div>
+                <div class="number"><?php echo $sum->violations->critical; ?></div>
                 <div class="label">Criticals</div>
             </div>
         </div>
     </div>
 
-<?php if ($violations->total > 0) { ?>
+<?php if ($sum->violations->total > 0) { ?>
     <div class="row">
         <div class="column">
             <div class="bloc">

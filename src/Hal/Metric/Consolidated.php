@@ -1,6 +1,8 @@
 <?php
 namespace Hal\Metric;
 
+use Hal\Violation\Violation;
+
 class Consolidated
 {
     /**
@@ -103,6 +105,30 @@ class Consolidated
                 $a = 0;
             }
         }
+
+        // sums of violations
+        $violations = [
+            'total' => 0,
+            'information' => 0,
+            'warning' => 0,
+            'error' => 0,
+            'critical' => 0,
+        ];
+        $map = [
+            Violation::INFO => 'information',
+            Violation::WARNING => 'warning',
+            Violation::ERROR => 'error',
+            Violation::CRITICAL => 'critical',
+        ];
+        foreach ($classes as $class) {
+            foreach ($class['violations'] as $violation) {
+                $violations['total']++;
+                $name = $map[$violation->getLevel()];
+                $violations[$name]++;
+            }
+        }
+        $sum->violations = (object)$violations;
+
 
         $this->avg = $avg;
         $this->sum = $sum;
