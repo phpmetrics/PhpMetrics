@@ -49,4 +49,33 @@ class ExternalsVisitorTest extends \PHPUnit_Framework_TestCase {
         ];
     }
 
+
+    /**
+     * @dataProvider provideExamplesAnnotation
+     * @group wip
+     */
+    public function testDependenciesAreFoundEvenInAnnotation($example, $classname, $expected)
+    {
+        $metrics = new Metrics();
+
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $traverser = new \PhpParser\NodeTraverser();
+        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
+        $traverser->addVisitor(new ClassEnumVisitor($metrics));
+        $traverser->addVisitor(new ExternalsVisitor($metrics));
+
+        $code = file_get_contents($example);
+        $stmts = $parser->parse($code);
+        $traverser->traverse($stmts);
+
+        $this->assertSame($expected, $metrics->get($classname)->get('externals'));
+    }
+
+    public function provideExamplesAnnotation()
+    {
+        return [
+            [ __DIR__.'/../../examples/annotations1.php', 'C\\A', ['A\\Route', 'B\\Json']],
+        ];
+    }
+
 }

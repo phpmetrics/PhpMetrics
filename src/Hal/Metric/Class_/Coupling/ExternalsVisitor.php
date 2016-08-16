@@ -21,6 +21,11 @@ class ExternalsVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
+     * @var Stmt\Use_[]
+     */
+    private $uses = [];
+
+    /**
      * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
@@ -34,11 +39,21 @@ class ExternalsVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
+
+        if ($node instanceof Stmt\Namespace_) {
+            $this->uses = [];
+        }
+
+        if ($node instanceof Stmt\Use_) {
+            $this->uses = array_merge($this->uses, $node->uses);
+        }
+
         if ($node instanceof Stmt\Class_
             || $node instanceof Stmt\Interface_
         ) {
 
             $class = $this->metrics->get($node->namespacedName->toString());
+            $nodeClass = $node;
 
             $dependencies = [];
 
@@ -80,6 +95,7 @@ class ExternalsVisitor extends NodeVisitorAbstract
                         }
                     }
 
+                    // instanciations, static calls
                     \iterate_over_node($stmt, function ($node) use (&$dependencies) {
                         switch (true) {
                             case $node instanceof Node\Expr\New_:
@@ -93,6 +109,17 @@ class ExternalsVisitor extends NodeVisitorAbstract
                         }
                     });
 
+                    // annotations
+                    $comments = $stmt->getDocComment();
+                    if ($comments && false !== preg_match_all('!\s+\*\s+@(\w+)!', $comments->getText(), $matches)) {
+                        foreach ($matches[1] as $check) {
+                            foreach ($this->uses as $use) {
+                                if ($use->alias === $check) {
+                                    array_push($dependencies, (string)($use->name));
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -100,3 +127,4 @@ class ExternalsVisitor extends NodeVisitorAbstract
         }
     }
 }
+
