@@ -57,9 +57,9 @@ class Reporter
         }
 
         // copy sources
-        file_exists($logDir . '/js') || mkdir($logDir, 0755, true);
-        file_exists($logDir . '/css') || mkdir($logDir, 0755, true);
-        file_exists($logDir . '/images') || mkdir($logDir, 0755, true);
+        file_exists($logDir . '/js') || mkdir($logDir.'/js', 0755, true);
+        file_exists($logDir . '/css') || mkdir($logDir.'/css', 0755, true);
+        file_exists($logDir . '/images') || mkdir($logDir.'/images', 0755, true);
         recurse_copy(__DIR__ . '/template/js', $logDir . '/js');
         recurse_copy(__DIR__ . '/template/css', $logDir . '/css');
         recurse_copy(__DIR__ . '/template/images', $logDir . '/images');
@@ -86,7 +86,7 @@ class Reporter
 
         // json data
         file_put_contents(
-            $logDir . '/json/classes.js',
+            $logDir . '/js/classes.js',
             'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
         );
 

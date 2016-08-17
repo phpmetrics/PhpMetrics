@@ -31,7 +31,7 @@ class Validator
         }
         $config->set('extensions', explode(',', $config->get('extensions')));
 
-        // extensions
+        // excluded directories
         if(!$config->has('exclude')) {
             $config->set('exclude', 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache');
         }
@@ -46,20 +46,33 @@ class Validator
         return <<<EOT
 Usage:
 
-    phpmetrics [--report-html=<directory>] [--exclude=<directory>] [--git=</path/to/git_binary>] [--quiet] <directory>
+    phpmetrics [...options...] <directories>
 
 Required:
 
-    <directory>                         List of directories to parse, separated by a comma (,)
+    <directories>                       List of directories to parse, separated by a comma (,)
 
 Optional:
 
     --exclude=<directory>               List of directories to exclude, separated by a comma (,)
     --extensions=<php,inc>              List of extensions to parse, separated by a comma (,)
     --report-html=<directory>           Folder where report HTML will be generated
+    --report-violations=<file>          File where XML violations report will be generated
     --git[=</path/to/git_binary>]       Perform analyses based on Git History (default binary path: "git")
     --quiet                             Quiet mode
-    --version                           Display current and version
+    --version                           Display current version
+
+Examples:
+
+    phpmetrics --report-html="./report" ./src
+
+        Analyze the "./src" directory and generate a HTML report on the "./report" folder
+
+
+    phpmetrics --report-violations="./build/violations.xml" ./src,./lib
+
+        Analyze the "./src" and "./lib" directories, and generate the "./build/violations.xml" file. This file could 
+        be read by any Continuous Integration Platform, and follows the "PMD Violation" standards.
 
 EOT;
     }

@@ -156,7 +156,7 @@
 <script type="text/javascript" src="js/graph-maintainability.js"></script>
 
 
-<script type="text/javascript" src="json/classes.js"></script>
+<script type="text/javascript" src="js/classes.js"></script>
 
 <script type="text/javascript">
     var accessibilityEnabled = false;
