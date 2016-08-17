@@ -26,16 +26,24 @@ class Validator
         }
 
         // extensions
-        if(!$config->has('extensions')) {
+        if (!$config->has('extensions')) {
             $config->set('extensions', 'php,inc');
         }
         $config->set('extensions', explode(',', $config->get('extensions')));
 
         // excluded directories
-        if(!$config->has('exclude')) {
+        if (!$config->has('exclude')) {
             $config->set('exclude', 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache');
         }
         $config->set('exclude', array_filter(explode(',', $config->get('exclude'))));
+
+        // parameters with values
+        $keys = ['report-html', 'report-violation', 'exclude', 'extensions'];
+        foreach ($keys as $key) {
+            if ($config->has($key) && empty($config->get($key)) || true === $config->get($key)) {
+                throw new ConfigException(sprintf('%s option requires a value', $key));
+            }
+        }
     }
 
     /**

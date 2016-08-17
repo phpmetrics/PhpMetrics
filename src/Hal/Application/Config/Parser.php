@@ -18,7 +18,7 @@ class Parser
 
         // arguments with options
         foreach ($argv as $k => $arg) {
-            if (preg_match('!\-\-([\w\-]+)=(.*)!', $arg, $matches)) {
+            if (preg_match('!\-\-([\w\-]+)=(.+)!', $arg, $matches)) {
                 list(, $parameter, $value) = $matches;
                 $config->set($parameter, $value);
                 unset($argv[$k]);
@@ -36,7 +36,7 @@ class Parser
 
         // last argument
         $files = array_pop($argv);
-        if ($files) {
+        if ($files && !preg_match('!^\-\-!', $files)) {
             $config->set('files', explode(',', $files));
         }
 
