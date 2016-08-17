@@ -1,14 +1,18 @@
 language: php
 sudo: false
-addons:
-  apt_packages:
-  - graphviz
 php:
 - 5.4
 - 5.5
 - 5.6
 - 7.0
+- nightly
 - hhvm
+- hhvm-nightly
+matrix:
+  allow_failures:
+  - php: nightly
+  - php: hhvm
+  - php: hhvm-nightly
 before_script:
 - composer selfupdate --quiet
 - composer install --prefer-dist --no-interaction --no-progress
@@ -16,13 +20,26 @@ script:
 - make test
 before_deploy:
 - make build
+- git add build/phpmetrics.deb build/phpmetrics.phar
 deploy:
-  provider: bintray
-  file: artifacts/bintray.json
-  user: "halleck45"
-  key:
-    secure: Pa7uB1ePY9bYKGHovrdC/F2HlrjXGapKTp6McAFcnIksvuwu06Xug0BszqQeUSzKX/y1kivC7ksIp6kI3icHv0cm6K0MvAi+PLxplqtwLsKJPtwoxX5L6r0VOQ8uNaNU2K7+9Gb/5WNov7SfESXpyxOmUUj/QwwnRkj2RqlL9rg=
-  on:
-    branch: version2_ast
-    php: '5.6'
-  skip_cleanup: true
+  - provider: releases
+    api_key:
+      secure: DfUbGENVB2IK6bggZeI89zJizOCSUbYqMEpXYVjhlbP73c7a+s4P6MrmTk8BiLACBeoyaoQDHW06DTHuc3MzgadXcTsPxzdxmZmSHaNsmGuUUJPlBR44Ypw/6ZccILrMVowzMbgRSAvk63XEIaV18DwcDMQaMhYU9uPf2WNpHL4=
+    file:
+      - "build/phpmetrics.phar"
+      - "build/phpmetrics.deb"
+    on:
+      repo: phpmetrics/PhpMetrics
+      tags: true
+      php: '5.6'
+    skip_cleanup: true
+  - provider: bintray
+    file: artifacts/bintray.json
+    user: "halleck45"
+    key:
+      secure: Pa7uB1ePY9bYKGHovrdC/F2HlrjXGapKTp6McAFcnIksvuwu06Xug0BszqQeUSzKX/y1kivC7ksIp6kI3icHv0cm6K0MvAi+PLxplqtwLsKJPtwoxX5L6r0VOQ8uNaNU2K7+9Gb/5WNov7SfESXpyxOmUUj/QwwnRkj2RqlL9rg=
+    on:
+      repo: phpmetrics/PhpMetrics
+      tags: true
+      php: '5.6'
+    skip_cleanup: true
