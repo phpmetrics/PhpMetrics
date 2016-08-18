@@ -91,7 +91,7 @@ class Consolidated
             $sum->cloc += $item->get('cloc');
             $sum->nbMethods += $item->get('nbMethods');
 
-            foreach ($avg as $k => &$a) {
+            foreach ($avg as $k => $a) {
                 array_push($avg->$k, $item->get($k));
             }
         }
