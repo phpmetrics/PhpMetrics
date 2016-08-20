@@ -40,7 +40,8 @@ class Validator
         // parameters with values
         $keys = ['report-html', 'report-violation', 'extensions'];
         foreach ($keys as $key) {
-            if ($config->has($key) && empty($config->get($key)) || true === $config->get($key)) {
+            $value = $config->get($key);
+            if ($config->has($key) && empty($value) || true === $value) {
                 throw new ConfigException(sprintf('%s option requires a value', $key));
             }
         }
