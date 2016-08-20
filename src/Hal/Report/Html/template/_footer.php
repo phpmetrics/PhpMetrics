@@ -150,7 +150,7 @@
 
 <script type="text/javascript" src="js/functions.js"></script>
 <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
-<script type="text/javascript" src="http://d3js.org/d3.hexbin.v0.js"></script>
+<script type="text/javascript" src="https://d3js.org/d3.hexbin.v0.js"></script>
 <script type="text/javascript" src="js/tabled.min.js"></script>
 <script type="text/javascript" src="js/sort-table.min.js"></script>
 <script type="text/javascript" src="js/graph-maintainability.js"></script>
