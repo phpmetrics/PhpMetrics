@@ -20,7 +20,7 @@ script:
 - make test
 before_deploy:
 - make build
-- git add build/phpmetrics.deb build/phpmetrics.phar
+- git add -f build/phpmetrics.deb build/phpmetrics.phar
 deploy:
   - provider: releases
     api_key:
