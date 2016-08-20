@@ -4,8 +4,8 @@ RELEASE_VERSION=$(shell echo ${CURRENT_TAG}|sed -r s/v//)
 #build-deb: build-phar
 build-deb:
 	@echo Copying phar
-	@mkdir -p artifacts/debian/usr/bin
-	@cp build/phpmetrics.phar artifacts/debian/usr/bin/phpmetrics
+	@mkdir -p artifacts/debian/bin
+	@cp build/phpmetrics.phar artifacts/debian/bin/phpmetrics
 
 	@echo "Building .deb (${RELEASE_VERSION})"
 	cd artifacts && dpkg-buildpackage -us -uc
@@ -14,6 +14,7 @@ build-deb:
 	mv phpmetrics*.dsc build/phpmetrics.dsc
 	mv phpmetrics*.tar.gz build/phpmetrics.tar.gz
 	mv phpmetrics*.changes build/phpmetrics.changes
+	rm -Rf artifacts/debian/phpmetrics artifacts/debian/tmp artifacts/debian/bin artifacts/debian/*.log
 
 changelog-deb:
 	@echo "phpmetrics ($(RELEASE_VERSION)) unstable; urgency=low" >/tmp/changelog

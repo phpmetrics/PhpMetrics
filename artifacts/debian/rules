@@ -21,3 +21,5 @@ override_dh_auto_build:
 	@echo "** no need to build"
 override_dh_auto_install:
 	@echo "** no need to install"
+	mkdir -p debian/tmp && cp debian/bin/phpmetrics debian/tmp/phpmetrics
+override_dh_usrlocal:
