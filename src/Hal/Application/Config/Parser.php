@@ -18,9 +18,9 @@ class Parser
 
         // arguments with options
         foreach ($argv as $k => $arg) {
-            if (preg_match('!\-\-([\w\-]+)=(.+)!', $arg, $matches)) {
+            if (preg_match('!\-\-([\w\-]+)=(.*)!', $arg, $matches)) {
                 list(, $parameter, $value) = $matches;
-                $config->set($parameter, $value);
+                $config->set($parameter, trim($value, ' "\''));
                 unset($argv[$k]);
             }
         }

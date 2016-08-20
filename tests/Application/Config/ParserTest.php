@@ -46,6 +46,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             [
                 ['--argument', 'myFolder'],
                 ['argument' => true, 'files' => ['myFolder']]
+            ],
+            [
+                ['--exclude=""', 'myFolder'],
+                ['exclude' => "", 'files' => ['myFolder']]
             ]
         ];
     }

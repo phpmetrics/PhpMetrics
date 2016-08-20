@@ -38,7 +38,7 @@ class Validator
         $config->set('exclude', array_filter(explode(',', $config->get('exclude'))));
 
         // parameters with values
-        $keys = ['report-html', 'report-violation', 'exclude', 'extensions'];
+        $keys = ['report-html', 'report-violation', 'extensions'];
         foreach ($keys as $key) {
             if ($config->has($key) && empty($config->get($key)) || true === $config->get($key)) {
                 throw new ConfigException(sprintf('%s option requires a value', $key));
