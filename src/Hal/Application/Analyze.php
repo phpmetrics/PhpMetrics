@@ -2,6 +2,7 @@
 namespace Hal\Application;
 
 use Hal\Application\Config\Config;
+use Hal\Component\Issue\Issuer;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
 use Hal\Metric\Class_\Complexity\KanDefectVisitor;
@@ -39,13 +40,19 @@ class Analyze
     private $config;
 
     /**
+     * @var Issuer
+     */
+    private $issuer;
+
+    /**
      * Analyze constructor.
      * @param OutputInterface $output
      */
-    public function __construct(Config $config, OutputInterface $output)
+    public function __construct(Config $config, OutputInterface $output, Issuer $issuer)
     {
         $this->output = $output;
         $this->config = $config;
+        $this->issuer = $issuer;
     }
 
     /**
@@ -81,8 +88,10 @@ class Analyze
         foreach ($files as $file) {
             $progress->advance();
             $code = file_get_contents($file);
+            $this->issuer->set('filename', $file);
             try {
                 $stmts = $parser->parse($code);
+                $this->issuer->set('statements', $stmts);
                 $traverser->traverse($stmts);
             } catch (Error $e) {
                 $this->output->writeln(sprintf('<error>Cannot parse %s</error>', $file));

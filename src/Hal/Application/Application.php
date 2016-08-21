@@ -5,6 +5,7 @@ use Hal\Application\Config\ConfigException;
 use Hal\Application\Config\Parser;
 use Hal\Application\Config\Validator;
 use Hal\Component\File\Finder;
+use Hal\Component\Issue\Issuer;
 use Hal\Report;
 use Hal\Violation\ViolationParser;
 use Symfony\Component\Console\Formatter\OutputFormatter;
@@ -21,6 +22,9 @@ class Application
     {
         // formatter
         $output = new ConsoleOutput(ConsoleOutput::VERBOSITY_NORMAL, null, new OutputFormatter());
+
+        // issues and debug
+        $issuer = (new Issuer($output))->enable();
 
         // config
         $config = (new Parser())->parse($argv);
@@ -53,7 +57,7 @@ class Application
 
         // analyze
         try {
-            $metrics = (new Analyze($config, $output))->run($files);
+            $metrics = (new Analyze($config, $output, $issuer))->run($files);
         }catch(ConfigException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             exit(1);
