@@ -2,8 +2,15 @@
 namespace Hal\Metric\Class_\Component;
 
 use Hal\Metric\FunctionMetric;
+use Hal\Metric\Information\CommentLinesOfCode;
+use Hal\Metric\Information\CommentWeight;
+use Hal\Metric\Information\CyclomaticComplexity;
+use Hal\Metric\Information\LinesOfCode;
+use Hal\Metric\Information\LogicalLinesOfCode;
+use Hal\Metric\Information\MaintainabilityIndex;
+use Hal\Metric\Information\MaintainabilityIndexWithoutComments;
 use Hal\Metric\Metrics;
-use Hoa\Ruler\Model\Bag\Scalar;
+//use Hoa\Ruler\Model\Bag\Scalar;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
@@ -55,16 +62,16 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
                 $classOrFunction = new FunctionMetric($node->name);
                 $this->metrics->attach($classOrFunction);
             }
-            if (null === $lloc = $classOrFunction->get('lloc')) {
+            if (null === $lloc = $classOrFunction->get(LogicalLinesOfCode::ID)) {
                 throw new \LogicException('please enable length (lloc) visitor first');
             }
-            if (null === $cloc = $classOrFunction->get('cloc')) {
+            if (null === $cloc = $classOrFunction->get(CommentLinesOfCode::ID)) {
                 throw new \LogicException('please enable length (cloc) visitor first');
             }
-            if (null === $loc = $classOrFunction->get('loc')) {
+            if (null === $loc = $classOrFunction->get(LinesOfCode::ID)) {
                 throw new \LogicException('please enable length (loc) visitor first');
             }
-            if (null === $ccn = $classOrFunction->get('ccn')) {
+            if (null === $ccn = $classOrFunction->get(CyclomaticComplexity::ID)) {
                 throw new \LogicException('please enable McCabe visitor first');
             }
             if (null === $volume = $classOrFunction->get('volume')) {
@@ -87,6 +94,8 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
             if ($loc > 0) {
                 $CM = $cloc / $loc;
                 $commentWeight = 50 * sin(sqrt(2.4 * $CM));
+            } else {
+                $commentWeight = 0;
             }
 
             // maintainability index
@@ -94,9 +103,9 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
 
             // save result
             $classOrFunction
-                ->set('mi', round($mi, 2))
-                ->set('mIwoC', round($MIwoC, 2))
-                ->set('commentWeight', round($commentWeight, 2));
+                ->set(MaintainabilityIndex::ID, round($mi, 2))
+                ->set(MaintainabilityIndexWithoutComments::ID, round($MIwoC, 2))
+                ->set(CommentWeight::ID, round($commentWeight, 2));
             $this->metrics->attach($classOrFunction);
         }
     }
