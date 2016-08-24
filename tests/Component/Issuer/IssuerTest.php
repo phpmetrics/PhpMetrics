@@ -24,12 +24,12 @@ class IssuerTest extends \PHPUnit_Framework_TestCase
 
         }
 
-        $this->assertContains('Object of class stdClass could not be converted to string', $output->output);
-        $this->assertContains('Operating System', $output->output);
-        $this->assertContains('Backtrace', $output->output);
+        $this->assertContains('Object of class stdClass could not be converted to string', $issuer->log);
+        $this->assertContains('Operating System', $issuer->log);
+        $this->assertContains('Backtrace', $issuer->log);
         $this->assertContains('https://github.com/phpmetrics/PhpMetrics/issues/new', $output->output);
-        $this->assertContains('Firstname: Jean-François', $output->output);
-        $this->assertContains('IssuerTest.php (line 22)', $output->output);
+        $this->assertContains('Firstname: Jean-François', $issuer->log);
+        $this->assertContains('IssuerTest.php (line 22)', $issuer->log);
     }
 
     public function testIssuerDisplayStatements()
@@ -57,15 +57,22 @@ EOT;
         }
 
 
-        $this->assertContains('class A', $output->output);
+        $this->assertContains('class A', $issuer->log);
     }
 }
 
 class TestIssuer extends Issuer
 {
+    public $log;
+
     protected function terminate($status)
     {
         throw new \RuntimeException('Terminated: ' . $status);
+    }
+
+    protected function log($logfile, $log)
+    {
+        $this->log = $log;
     }
 }
 

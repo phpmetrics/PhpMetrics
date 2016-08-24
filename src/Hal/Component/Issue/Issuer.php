@@ -71,12 +71,20 @@ class Issuer
             $debug .= sprintf("%s: %s\n", $key, $value);
         }
 
+        $logfile = './phpmetrics-error.log';
+
         $message = <<<EOT
 
-<error>An unexpected error occured. Can you open a new issue following this link please ?</error>
+<error>We're sorry : an unexpected error occured.</error>
+ 
+<question>Can you help us ?</question> Please open a new issue at https://github.com/phpmetrics/PhpMetrics/issues/new, and copy-paste the content 
+of this file: $logfile ?
 
-## Link: https://github.com/phpmetrics/PhpMetrics/issues/new
+Thanks for your help :)
 
+EOT;
+
+        $log = <<<EOT
 ## Title: $errstr
 
 ## Message:
@@ -106,6 +114,8 @@ $debug
 EOT;
 
         $this->output->write($message);
+
+        $this->log($logfile, $log);
         $this->terminate(1);
     }
 
@@ -121,8 +131,22 @@ EOT;
     /**
      * @param $status
      */
-    protected function terminate($status) {
+    protected function terminate($status)
+    {
         exit($status);
+    }
+
+    /**
+     * @param $log
+     * @return $this
+     */
+    protected function log($logfile, $log) {
+        if (is_writable(getcwd())) {
+            file_put_contents($logfile, $log);
+        } else {
+            $this->output->write($log);
+        }
+        return $this;
     }
 
     /**
