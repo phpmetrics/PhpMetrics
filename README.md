@@ -40,6 +40,87 @@ PhpMetrics can parse PHP code from **PHP 5.3 to PHP 7.x**.
 
 + [PhpMetrics plugin for PhpStorm](http://plugins.jetbrains.com/plugin/7500)
 
+## Jenkins and CI
+
+You'll find a complete tutorial in the [documentation](http://www.phpmetrics.org/documentation/jenkins.html)
+
+You can easily export results to XML with the `--report-xml` option:
+
+    phpmetrics --report-xml=/path/of/your/choice.xml <folder or filename>
+
+You can also export results as violations (MessDetector report), in XML format with the `--violations-xml` option:
+
+    phpmetrics --violations-xml=/path/of/your/choice.xml <folder or filename>
+
+## Configuration
+
+### Configuration options
+
+* `--report-html` - Path to save report in HTML format. Example: --report-html=/tmp/report.html
+* `--report-xml` - Path to save summary report in XML format. Example: --report-xml=/tmp/report.xml
+* `--report-cli` - Enable report in terminal.
+* `--violations-xml` - Path to save violations in XML format. Example: --violations-xml=/tmp/report.xml
+* `--report-csv` - Path to save summary report in CSV format. Example: --report-csv=/tmp/report.csv
+* `--report-json` - Path to save detailed report in JSON format. Example: --report-json=/tmp/report.json
+* `--chart-bubbles` - Path to save Bubbles chart, in SVG format. Example: --chart-bubbles=/tmp/chart.svg. Graphviz **IS** required
+* `--level` - Depth of summary report.
+* `--extensions` - Regex of extensions to include.
+* `--excluded-dirs` - Regex of subdirectories to exclude.
+* `--symlinks` - Enable following symlinks.
+* `--without-oop` - If provided, tool will not extract any information about OOP model (faster).
+* `--ignore-errors` - If provided, files will be analyzed even with syntax errors
+* `--failure-condition` - Optional failure condition, in english. Example: --failure-condition="average.maintainabilityIndex < 50 or sum.loc > 10000"
+* `--config` - Config file (YAML). Example: --config=myconfig.yml
+* `--template-title` - Title for the HTML summary report.
+* `--offline` - Includes all CDN assets inline within the HTML.
+
+A complete example command line:
+
+`phpmetrics --report-html=report.html --report-xml=report.xml --report-cli=true --violations-xml=violations.xml
+--report-csv=report.csv --report-json=report.json --chart-bubbles=chart.svg --level=3 --extensions=php|inc --excluded-dirs="cache|logs"
+--symlinks=true --without-oop=true --failure-condition="average.maintainabilityIndex < 50 or sum.loc > 10000" --template-title="My Report" /path/to/source`
+
+### Configuration file
+
+You can customize configuration with the `--config=<file>` option.
+
+The file should be a valid yaml file. For example:
+
+    # file <my-config.yml>
+    myconfig:
+        # paths to explore
+        path:
+            extensions: php|inc
+            exclude: Features|Tests|tests
+
+        # report and violations files
+        logging:
+            report:
+                xml:    ./log/phpmetrics.xml
+                html:   ./log/phpmetrics.html
+                csv:    ./log/phpmetrics.csv
+            violations:
+                xml:    ./log/violations.xml
+            chart:
+                bubbles: ./log/bubbles.svg
+
+        # condition of failure
+        failure: average.maintainabilityIndex < 50 or sum.loc > 10000
+
+        # rules used for color ([ critical, warning, good ])
+        rules:
+          cyclomaticComplexity: [ 10, 6, 2 ]
+          maintainabilityIndex: [ 0, 69, 85 ]
+          [...]
+
+Each rule is composed from three values.
+
++ If `A < B < C` : `A`: min, `B`: yellow limit, `C`: max
++ If `A > B > C` : `A`: max, `B`: yellow limit, `C`: min
+
+You can save the configuration in a `.phpmetrics.yml` file in the root directory of your project. PhpMetrics will look for it and use it.
+
+>>>>>>> Add details of the --offline switch
 # Contribute
 
 In order to run unit tests, please install the dev dependencies:
