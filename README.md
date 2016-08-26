@@ -136,6 +136,7 @@ You can also export results as violations (MessDetector report), in XML format w
 * `--failure-condition` - Optional failure condition, in english. Example: --failure-condition="average.maintainabilityIndex < 50 or sum.loc > 10000"
 * `--config` - Config file (YAML). Example: --config=myconfig.yml
 * `--template-title` - Title for the HTML summary report.
+* `--offline` - Includes all CDN assets inline within the HTML.
 
 A complete example command line:
 
