@@ -25,11 +25,11 @@ class Result implements ExportableInterface {
     private $loc;
 
     /**
-     * Characters of code
+     * Size of the file
      *
      * @var integer
      */
-    private $coc;
+    private $filesize;
 
     /**
      * Lines of comments
@@ -59,7 +59,7 @@ class Result implements ExportableInterface {
         return array (
             'loc' => $this->getLoc()
             ,'logicalLoc' => $this->getLogicalLoc()
-            ,'coc' => $this->getCoc()
+            ,'filesize' => $this->getFilesize()
         );
     }
 
@@ -100,21 +100,21 @@ class Result implements ExportableInterface {
     }
 
     /**
-     * @param int $coc
+     * @param int $filesize
      * @return $this
      */
-    public function setCoc($coc)
+    public function setFilesize($filesize)
     {
-        $this->coc = $coc;
+        $this->filesize = $filesize;
         return $this;
     }
 
     /**
      * @return int
      */
-    public function getCoc()
+    public function getfilesize()
     {
-        return $this->coc;
+        return $this->filesize;
     }
 
     /**
