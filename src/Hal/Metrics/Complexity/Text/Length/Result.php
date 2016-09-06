@@ -29,7 +29,7 @@ class Result implements ExportableInterface {
      *
      * @var integer
      */
-    private $filesize;
+    private $fileSize;
 
     /**
      * Lines of comments
@@ -59,7 +59,7 @@ class Result implements ExportableInterface {
         return array (
             'loc' => $this->getLoc()
             ,'logicalLoc' => $this->getLogicalLoc()
-            ,'filesize' => $this->getFilesize()
+            ,'fileSize' => $this->getFileSize()
         );
     }
 
@@ -100,21 +100,21 @@ class Result implements ExportableInterface {
     }
 
     /**
-     * @param int $filesize
+     * @param int $fileSize
      * @return $this
      */
-    public function setFilesize($filesize)
+    public function setFileSize($fileSize)
     {
-        $this->filesize = $filesize;
+        $this->fileSize = $fileSize;
         return $this;
     }
 
     /**
      * @return int
      */
-    public function getfilesize()
+    public function getfileSize()
     {
-        return $this->filesize;
+        return $this->fileSize;
     }
 
     /**

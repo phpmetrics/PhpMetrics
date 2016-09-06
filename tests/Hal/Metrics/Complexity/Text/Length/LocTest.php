@@ -19,7 +19,7 @@ class LocTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(14, $r->getCommentLoc());
         $this->assertEquals(33, $r->getLoc());
         $this->assertEquals(2, $r->getLogicalLoc());
-        $this->assertEquals(319, $r->getFilesize());
+        $this->assertEquals(319, $r->getFileSize());
 
     }
 
