@@ -48,6 +48,9 @@ class Issuer
      */
     public function onError($errno, $errstr, $errfile, $errline)
     {
+        if (error_reporting() == 0) {
+            return;
+        }
         $php = PHP_VERSION;
         $os = php_uname();
         $phpmetrics = getVersion();
