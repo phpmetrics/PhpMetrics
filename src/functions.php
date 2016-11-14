@@ -81,6 +81,10 @@ function getNameOfNode($node) {
         return get_class($node->name);
     }
 
+    if($node->name instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        return get_class($node->name);
+    }
+
     return (string) $node->name;
 }
 
