@@ -100,17 +100,18 @@ $errstr
 + PHP: $php
 + PhpMetrics: $phpmetrics
 + Operating System: $os
-
-**Backtrace**
-
 + File: $errfile (line $errline)
+
+<details>
+  <summary>Details</summary>
+  ```
 $trace
 
-**Debug**
 
-```
 $debug
 ```
+</details>
+
 EOT;
 
         $this->output->write($message);
@@ -140,7 +141,8 @@ EOT;
      * @param $log
      * @return $this
      */
-    protected function log($logfile, $log) {
+    protected function log($logfile, $log)
+    {
         if (is_writable(getcwd())) {
             file_put_contents($logfile, $log);
         } else {
@@ -157,6 +159,16 @@ EOT;
     public function set($debugKey, $value)
     {
         $this->debug[$debugKey] = $value;
+        return $this;
+    }
+
+    /**
+     * @param $debugKey
+     * @return $this
+     */
+    public function clear($debugKey)
+    {
+        unset($this->debug[$debugKey]);
         return $this;
     }
 }

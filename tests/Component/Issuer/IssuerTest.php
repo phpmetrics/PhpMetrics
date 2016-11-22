@@ -26,7 +26,7 @@ class IssuerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertContains('Object of class stdClass could not be converted to string', $issuer->log);
         $this->assertContains('Operating System', $issuer->log);
-        $this->assertContains('Backtrace', $issuer->log);
+        $this->assertContains('Details', $issuer->log);
         $this->assertContains('https://github.com/phpmetrics/PhpMetrics/issues/new', $output->output);
         $this->assertContains('Firstname: Jean-François', $issuer->log);
         $this->assertContains('IssuerTest.php (line 22)', $issuer->log);

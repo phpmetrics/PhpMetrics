@@ -33,7 +33,7 @@ class Validator
 
         // excluded directories
         if (!$config->has('exclude')) {
-            $config->set('exclude', 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache');
+            $config->set('exclude', 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec');
         }
         $config->set('exclude', array_filter(explode(',', $config->get('exclude'))));
 
