@@ -14,13 +14,13 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase {
    public function testResultSetCanBeExportedToArray() {
 
 
-       $loc = $this->getMock('\Hal\Metrics\Complexity\Text\Length\Result');
+       $loc = $this->createMock('\Hal\Metrics\Complexity\Text\Length\Result');
        $loc->expects($this->once())->method('asArray')->will($this->returnValue(array('loc' => 100)));
 
-       $hs = $this->getMock('\Hal\Metrics\Complexity\Text\Halstead\Result');
+       $hs = $this->createMock('\Hal\Metrics\Complexity\Text\Halstead\Result');
        $hs->expects($this->once())->method('asArray')->will($this->returnValue(array('volume' => 100)));
 
-       $mi = $this->getMock('\Hal\Metrics\Design\Component\MaintainabilityIndex\Result');
+       $mi = $this->createMock('\Hal\Metrics\Design\Component\MaintainabilityIndex\Result');
        $mi->expects($this->once())->method('asArray')->will($this->returnValue(array('maintainabilityIndex' => 100)));
 
        $cg = $this->getMockBuilder('\Hal\Metrics\Complexity\Structural\HenryAndKafura\Result')->disableOriginalConstructor()->getMock();

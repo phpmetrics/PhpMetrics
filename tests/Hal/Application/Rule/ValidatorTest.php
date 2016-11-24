@@ -15,7 +15,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase {
      */
     public function testICanValidateByRule($rule, $value, $expected) {
 
-        $ruleSet = $this->getMock('\Hal\Application\Rule\RuleSet');
+        $ruleSet = $this->createMock('\Hal\Application\Rule\RuleSet');
         $ruleSet->expects($this->once())->method('getRule')->will($this->returnValue($rule));
 
         $validator = new Validator($ruleSet);

@@ -11,10 +11,10 @@ class ResultAggregateTest extends \PHPUnit_Framework_TestCase {
    public function testResultAggregateCanBeExportedToArray() {
 
 
-       $abstractness = $this->getMock('\Hal\Metrics\Mood\Abstractness\Result');
+       $abstractness = $this->createMock('\Hal\Metrics\Mood\Abstractness\Result');
        $abstractness->expects($this->once())->method('asArray')->will($this->returnValue(array('abstractness' => 1)));
 
-       $instability = $this->getMock('\Hal\Metrics\Mood\Instability\Result');
+       $instability = $this->createMock('\Hal\Metrics\Mood\Instability\Result');
        $instability->expects($this->once())->method('asArray')->will($this->returnValue(array('instability' => .3)));
 
        $resultAggregate = new ResultAggregate('my');
