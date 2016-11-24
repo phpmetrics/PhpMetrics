@@ -32,6 +32,17 @@ mv phpmetrics.phar /usr/local/bin/phpmetrics
 
 The command command `phpmetrics --report-html=./log <folder or filename> ` will generate HTML report in the `./log` directory.
 
+![Standard report](http://www.phpmetrics.org/images/report-standard.png)
+
+If you want to get the summary HTML report (with charts):
+
+    phpmetrics --report-html=/path/of/your/choice.html <folder or filename>
+
+No panic : you can read the [How to read the HTML report page](http://www.phpmetrics.org/documentation/how-to-read-report.html)
+
+> If you need a pure string representation of the reports in StdOut, just use `phpmetrics -q --report-xml=php://stdout <folder or filename>`
+>>>>>>> Fix brocked images.
+
 ## Compatibility
 
 PhpMetrics can parse PHP code from **PHP 5.3 to PHP 7.x**.
