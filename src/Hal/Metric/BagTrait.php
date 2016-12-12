@@ -76,4 +76,12 @@ trait BagTrait
         }
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     */
+    function jsonSerialize()
+    {
+        return array_merge($this->all(), ['_type' => get_class($this)]);
+    }
 }

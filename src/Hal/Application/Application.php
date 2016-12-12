@@ -24,7 +24,7 @@ class Application
         $output = new ConsoleOutput(ConsoleOutput::VERBOSITY_NORMAL, null, new OutputFormatter());
 
         // issues and debug
-        $issuer = (new Issuer($output))->enable();
+        $issuer = (new Issuer($output));//->enable();
 
         // config
         $config = (new Parser())->parse($argv);

@@ -2,6 +2,7 @@
 namespace Hal\Application;
 
 use Hal\Application\Config\Config;
+use Hal\Component\Ast\NodeTraverser;
 use Hal\Component\Issue\Issuer;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
@@ -67,7 +68,7 @@ class Analyze
 
         // prepare parser
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $traverser = new \PhpParser\NodeTraverser();
+        $traverser = new NodeTraverser();
         $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
         $traverser->addVisitor(new ClassEnumVisitor($metrics));
         $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
@@ -96,6 +97,8 @@ class Analyze
             } catch (Error $e) {
                 $this->output->writeln(sprintf('<error>Cannot parse %s</error>', $file));
             }
+            $this->issuer->clear('filename');
+            $this->issuer->clear('statements');
         }
 
         //

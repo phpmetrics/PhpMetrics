@@ -5,7 +5,7 @@ namespace Hal\Metric;
  * Class Metrics
  * @package Hal\Metric
  */
-class Metrics
+class Metrics implements \JsonSerializable
 {
 
     /**
@@ -47,5 +47,13 @@ class Metrics
     public function all()
     {
         return $this->data;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    function jsonSerialize()
+    {
+        return $this->all();
     }
 }
