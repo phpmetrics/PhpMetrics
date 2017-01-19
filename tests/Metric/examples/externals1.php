@@ -1,32 +1,49 @@
 <?php
-class A {
-    public function foo($foo, C $c) : H
-    {
-         $x = new B;
-        D::foo();
+namespace {
+    class A {
+        public function foo($foo, C $c) : H
+        {
+             $x = new B;
+            D::foo();
+        }
+    }
+    class B {
+        public function baz(array $array)
+        {
+
+        }
+    }
+    class C {
+
+    }
+    class D {
+
+    }
+    class E extends D implements F, G {
+
+    }
+    interface F extends G, H {
+
+    }
+    interface G {
+
+    }
+    interface H {
+
     }
 }
-class B {
-    public function baz(array $array)
-    {
 
+namespace NS1 {
+    use NS2\B;
+    class A {
+        public function foo()
+        {
+            $a = new B;
+        }
     }
 }
-class C {
+namespace NS2 {
+    class B {
 
-}
-class D {
-
-}
-class E extends D implements F, G {
-
-}
-interface F extends G, H {
-
-}
-interface G {
-
-}
-interface H {
-
+    }
 }

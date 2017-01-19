@@ -46,6 +46,7 @@ class ExternalsVisitorTest extends \PHPUnit_Framework_TestCase {
             [ __DIR__.'/../../examples/externals1.php', 'F', ['G', 'H']],
             [ __DIR__.'/../../examples/externals1.php', 'G', []],
             [ __DIR__.'/../../examples/externals1.php', 'H', []],
+            [ __DIR__.'/../../examples/externals1.php', 'NS1\\A', ['NS2\\B']],
         ];
     }
 
