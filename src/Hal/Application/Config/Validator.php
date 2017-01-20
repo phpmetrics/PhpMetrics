@@ -68,6 +68,7 @@ Optional:
     --report-html=<directory>           Folder where report HTML will be generated
     --report-violations=<file>          File where XML violations report will be generated
     --git[=</path/to/git_binary>]       Perform analyses based on Git History (default binary path: "git")
+    --junit[=</path/to/junit.xml>]      Evaluates metrics according to JUnit logs
     --quiet                             Quiet mode
     --version                           Display current version
 

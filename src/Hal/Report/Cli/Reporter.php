@@ -2,10 +2,7 @@
 namespace Hal\Report\Cli;
 
 use Hal\Application\Config\Config;
-use Hal\Metric\ClassMetric;
 use Hal\Metric\Consolidated;
-use Hal\Metric\FunctionMetric;
-use Hal\Metric\InterfaceMetric;
 use Hal\Metric\Metrics;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -94,21 +91,32 @@ Violations
 EOT;
 
         // git
-        if($this->config->has('git')) {
+        if ($this->config->has('git')) {
             $commits = [];
-            foreach($consolidated->getFiles() as $name => $file) {
+            foreach ($consolidated->getFiles() as $name => $file) {
                 $commits[$name] = $file['gitChanges'];
             }
             arsort($commits);
             $commits = array_slice($commits, 0, 10);
 
             $out .= "\nTop 10 commited files";
-            foreach($commits as $file => $nb) {
+            foreach ($commits as $file => $nb) {
                 $out .= sprintf("\n    %d    %s", $nb, $file);
             }
-            if(0 === sizeof($commits)) {
+            if (0 === sizeof($commits)) {
                 $out .= "\n    NA";
             }
+        }
+
+        // Junit
+        if ($this->config->has('junit')) {
+            $out .= <<<EOT
+            
+Unit testing
+    Number of unit tests                        {$metrics->get('unitTesting')->get('nbTests')}
+    Classes called by tests                     {$metrics->get('unitTesting')->get('nbCoveredClasses')}
+    Classes called by tests (percent)           {$metrics->get('unitTesting')->get('percentCoveredClasses')} %
+EOT;
         }
 
         $out .= "\n\n";

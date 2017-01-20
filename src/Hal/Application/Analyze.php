@@ -17,6 +17,7 @@ use Hal\Metric\Metrics;
 use Hal\Metric\System\Changes\GitChanges;
 use Hal\Metric\System\Coupling\Coupling;
 use Hal\Metric\System\Coupling\PageRank;
+use Hal\Metric\System\UnitTesting\UnitTesting;
 use PhpParser\Error;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -70,7 +71,7 @@ class Analyze
         $whenToStop = function() {
             return true;
         };
-        
+
         // prepare parser
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser(false, $whenToStop);
@@ -114,6 +115,10 @@ class Analyze
         //
         // File analyses
         (new GitChanges($this->config, $files))->calculate($metrics);
+
+        //
+        // Unit test
+        (new UnitTesting($this->config, $files))->calculate($metrics);
 
         $progress->finish();
         $progress->clear();
