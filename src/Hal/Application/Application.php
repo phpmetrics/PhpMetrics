@@ -34,12 +34,12 @@ class Application
 
             if ($config->has('help')) {
                 $output->writeln((new Validator())->help());
-                exit(1);
+                exit(0);
             }
 
             if ($config->has('version')) {
                 $output->writeln(sprintf("PhpMetrics %s <http://phpmetrics.org>\nby Jean-François Lépine <https://twitter.com/Halleck45>", getVersion()));
-                exit(1);
+                exit(0);
             }
 
             $output->writeln(sprintf("\n<error>%s</error>\n", $e->getMessage()));
