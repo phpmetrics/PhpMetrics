@@ -97,6 +97,14 @@
                         Violations (<?php echo $sum->violations->total;?>)
                     </a>
                 </li>
+                <?php if($config->has('junit')) { ?>
+                    <li>
+                        <a href="junit.html">
+                            <img src="images/logo-git.png" alt="">
+                            Unit testing
+                        </a>
+                    </li>
+                <?php } ?>
                 <?php if($config->has('git')) { ?>
                 <li>
                     <a href="git.html">

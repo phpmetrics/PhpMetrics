@@ -53,8 +53,9 @@ This component contains in theory {$this->metric->get('bugs')} bugs.
 
 * Calculation is based on number of operators, operands, cyclomatic complexity
 * See more details at https://en.wikipedia.org/wiki/Halstead_complexity_measures
+* {$this->metric->get('numberOfUnitTests')} testsuites has dependency to this class.
 
-Maybe you should check yor unit tests for this class
+Maybe you should check yor unit tests for this class.
 EOT;
 
     }

@@ -83,6 +83,9 @@ class Reporter
         if ($this->config->has('git')) {
             $this->renderPage(__DIR__ . '/template/git.php', $logDir . '/git.html', $consolidated, $history);
         }
+        if ($this->config->has('junit')) {
+            $this->renderPage(__DIR__ . '/template/junit.php', $logDir . '/junit.html', $consolidated, $history);
+        }
 
         // js data
         file_put_contents(

@@ -94,8 +94,9 @@ class UnitTesting
             // global stats for each test
             $infoAboutTests[$classname] = (object)[
                 'nbExternals' => sizeof(array_unique($externals)),
-                'externals' => $externals,
-                'filename' => $fileOfUnitTest
+                'externals' => array_unique($externals),
+                'filename' => $fileOfUnitTest,
+                'classname' => $classname
             ];
 
             foreach ($externals as $external) {
@@ -130,6 +131,8 @@ class UnitTesting
         $projectMetric->set('nbTests', sizeof($unitsTests));
         $projectMetric->set('nbCoveredClasses', $nb);
         $projectMetric->set('percentCoveredClasses', round($nb / $sum * 100, 2));
+        $projectMetric->set('nbUncoveredClasses', $sum - $nb);
+        $projectMetric->set('percentUncoveredClasses', round(($sum - $nb) / $sum * 100, 2));
 
         $metrics->attach($projectMetric);
     }

@@ -49,7 +49,9 @@ require __DIR__ . '/_header.php'; ?>
                     <tr>
                         <th>Class</th>
                         <th class="js-sort-number">Cyclomatic</th>
-                        <th class="js-sort-number">Relative system complexity</th>
+                        <?php if ($config->has('junit')) { ?>
+                            <th class="js-sort-number">Unit testsuites calling it</th>
+                        <?php } ?><th class="js-sort-number">Relative system complexity</th>
                         <th class="js-sort-number">Relative data complexity</th>
                         <th class="js-sort-number">Relative structural complexity</th>
                         <th class="js-sort-number">Bugs</th>
@@ -61,6 +63,9 @@ require __DIR__ . '/_header.php'; ?>
                         <tr>
                             <td><?php echo $class['name']; ?></td>
                             <td><?php echo isset($class['ccn']) ? $class['ccn'] : ''; ?></td>
+                            <?php if ($config->has('junit')) { ?>
+                                <td><?php echo isset($class['numberOfUnitTests']) ? $class['numberOfUnitTests'] : ''; ?></td>
+                            <?php } ?>
                             <td><?php echo isset($class['relativeSystemComplexity']) ? $class['relativeSystemComplexity'] : ''; ?></td>
                             <td><?php echo isset($class['relativeDataComplexity']) ? $class['relativeDataComplexity'] : ''; ?></td>
                             <td><?php echo isset($class['relativeStructuralComplexity']) ? $class['relativeStructuralComplexity'] : ''; ?></td>
