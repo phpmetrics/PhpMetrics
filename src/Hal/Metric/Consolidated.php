@@ -83,6 +83,7 @@ class Consolidated
             'efferentCoupling' => [],
             'difficulty' => [],
             'lcom' => [],
+            'mi' => [],
         ];
 
         foreach ($metrics->all() as $key => $item) {

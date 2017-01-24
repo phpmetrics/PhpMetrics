@@ -92,6 +92,10 @@ class Reporter
             sprintf('%s/js/history-%d.json', $logDir, $next),
             json_encode($today, JSON_PRETTY_PRINT)
         );
+	file_put_contents(
+            sprintf('%s/js/latest.json', $logDir, $next),
+            json_encode($today, JSON_PRETTY_PRINT)
+        );
 
         // json data
         file_put_contents(
