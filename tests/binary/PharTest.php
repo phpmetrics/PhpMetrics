@@ -11,7 +11,7 @@ class PharTest extends \PHPUnit_Framework_TestCase
 
     public function __construct()
     {
-        $this->phar = __DIR__ . '/../../build/phpmetrics.phar';
+        $this->phar = __DIR__ . '/../../releases/phpmetrics.phar';
     }
 
     public function testICanRunPhar()

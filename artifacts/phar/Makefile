@@ -1,6 +1,6 @@
 # Build phar
 build-phar: test
-	@mkdir -p build
+	@mkdir -p ${BUILD_DIR}
 	@echo Copying sources
 	@mkdir -p /tmp/phpmetrics-build
 	@cp * -R /tmp/phpmetrics-build
@@ -14,7 +14,7 @@ build-phar: test
 
 	@echo Building phar
 	@cd /tmp/phpmetrics-build && php artifacts/phar/build.php
-	@cp /tmp/phpmetrics-build/build/phpmetrics.phar build/phpmetrics.phar
+	@cp /tmp/phpmetrics-build/build/phpmetrics.phar ${BUILD_DIR}/phpmetrics.phar
 	@rm -Rf /tmp/phpmetrics-build
 
 	@echo Testing phar

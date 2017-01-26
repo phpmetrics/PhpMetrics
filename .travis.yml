@@ -26,8 +26,8 @@ deploy:
     api_key:
       secure: DfUbGENVB2IK6bggZeI89zJizOCSUbYqMEpXYVjhlbP73c7a+s4P6MrmTk8BiLACBeoyaoQDHW06DTHuc3MzgadXcTsPxzdxmZmSHaNsmGuUUJPlBR44Ypw/6ZccILrMVowzMbgRSAvk63XEIaV18DwcDMQaMhYU9uPf2WNpHL4=
     file:
-      - "build/phpmetrics.phar"
-      - "build/phpmetrics.deb"
+      - "releases/phpmetrics.phar"
+      - "releases/phpmetrics.deb"
     on:
       repo: phpmetrics/PhpMetrics
       tags: true
