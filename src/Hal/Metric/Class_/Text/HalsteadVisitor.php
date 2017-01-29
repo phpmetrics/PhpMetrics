@@ -3,7 +3,7 @@ namespace Hal\Metric\Class_\Text;
 
 use Hal\Metric\FunctionMetric;
 use Hal\Metric\Metrics;
-use Hoa\Ruler\Model\Bag\Scalar;
+//use Hoa\Ruler\Model\Bag\Scalar;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;

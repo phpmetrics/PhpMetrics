@@ -2,6 +2,7 @@
 namespace Hal\Metric\Class_\Complexity;
 
 use Hal\Component\Reflected\Method;
+use Hal\Metric\Information\CyclomaticComplexity;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -92,7 +93,7 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
                 }
             }
 
-            $class->set('ccn', $ccn);
+            $class->set(CyclomaticComplexity::ID, $ccn);
         }
     }
 }

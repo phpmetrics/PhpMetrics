@@ -2,6 +2,7 @@
 namespace Hal\Metric\Class_\Complexity;
 
 use Hal\Component\Reflected\Method;
+use Hal\Metric\Information\KanDefect;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -59,7 +60,7 @@ class KanDefectVisitor extends NodeVisitorAbstract
             });
 
             $defect = 0.15 + 0.23 *  $while + 0.22 *  $select + 0.07 * $if;
-            $class->set('kanDefect', round($defect, 2));
+            $class->set(KanDefect::ID, round($defect, 2));
         }
     }
 }

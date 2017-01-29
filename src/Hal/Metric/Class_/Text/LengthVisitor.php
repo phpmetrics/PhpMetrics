@@ -2,6 +2,9 @@
 namespace Hal\Metric\Class_\Text;
 
 use Hal\Metric\FunctionMetric;
+use Hal\Metric\Information\CommentLinesOfCode;
+use Hal\Metric\Information\LinesOfCode;
+use Hal\Metric\Information\LogicalLinesOfCode;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -69,9 +72,9 @@ class LengthVisitor extends NodeVisitorAbstract
 
             // save result
             $classOrFunction
-                ->set('cloc', $cloc)
-                ->set('loc', $loc)
-                ->set('lloc', $lloc);
+                ->set(CommentLinesOfCode::ID, $cloc)
+                ->set(LinesOfCode::ID, $loc)
+                ->set(LogicalLinesOfCode::ID, $lloc);
             $this->metrics->attach($classOrFunction);
         }
     }

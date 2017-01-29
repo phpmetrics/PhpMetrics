@@ -3,6 +3,7 @@ namespace Hal\Metric\Class_\Structural;
 
 use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\Node as TreeNode;
+use Hal\Metric\Information\LackOfCohesionOfMethods;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -88,7 +89,7 @@ class LcomVisitor extends NodeVisitorAbstract
                 $paths += $this->traverse($node);
             }
 
-            $class->set('lcom', $paths);
+            $class->set(LackOfCohesionOfMethods::ID, $paths);
         }
     }
 
