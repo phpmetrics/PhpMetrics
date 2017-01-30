@@ -25,6 +25,13 @@ class Result implements ExportableInterface {
     private $loc;
 
     /**
+     * Size of the file
+     *
+     * @var integer
+     */
+    private $fileSize;
+
+    /**
      * Lines of comments
      *
      * @var integer
@@ -52,6 +59,7 @@ class Result implements ExportableInterface {
         return array (
             'loc' => $this->getLoc()
             ,'logicalLoc' => $this->getLogicalLoc()
+            ,'fileSize' => $this->getFileSize()
         );
     }
 
@@ -89,6 +97,24 @@ class Result implements ExportableInterface {
     public function getLoc()
     {
         return $this->loc;
+    }
+
+    /**
+     * @param int $fileSize
+     * @return $this
+     */
+    public function setFileSize($fileSize)
+    {
+        $this->fileSize = $fileSize;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getfileSize()
+    {
+        return $this->fileSize;
     }
 
     /**
