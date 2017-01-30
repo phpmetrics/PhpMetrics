@@ -1,3 +1,181 @@
+phpmetrics (1.9.2) unstable; urgency=low
+   * Removed unneeded code 
+   * Removed unneeded code 
+   * plugin engine: added a way to executing analayzes from plugin and to customize reports 
+   * updated tests of formaters in order to take care of extensions service 
+   * updated documentation about plugins 
+   * Merge pull request #166 from fonsecas72/fix_unused_params 
+   * releasing v1.9.2 
+   * added bintray.json in process of releasing 
+   * minor change in HTML report: footer is fixed 
+   * fixed an error in travis with bintray deploy 
+   * releasing v1.9.2 
+   * added bintray.json in process of releasing 
+   * minor change in HTML report: footer is fixed 
+   * added new default ruleset object 
+   * new command: way to generate default config file 
+   * added tests for InitConfigCommand 
+   * added template for new issues on github 
+   * pass TokenCollection instead of Tokenizer to Metrics 
+   * added compatibility with Symfony3 
+   * installation of graphviz is checked before running analyze 
+   * Merge pull request #211 from phpmetrics/features/210-check-for-graphviz-when-bubbles-chart-is-generated 
+   * restored Cache classes (ref #208) 
+   * Typo 
+   * fixed typos with new plugin feature 
+   * Merge pull request #208 from pavarnos/master 
+   * Merge pull request #207 from phpmetrics/features/default-ruleset 
+   * Merge pull request #202 from phpmetrics/plugins 
+   * Merge pull request #197 from phpmetrics/features/192-compatibility-with-sf3 
+   * resolving conflicts 
+   * Merge branch 'patch-1' of https://github.com/theofidry/PhpMetrics into theofidry-patch-1 
+   * Merge branch 'theofidry-patch-1' 
+   * releasing v1.10.0 
+   * added information about composer plugin in README 
+   * imported new v2 stack, with nikic parser 
+   * updated CI 
+   * cleaned documentation 
+   * added CLI report 
+   * added screenshot 
+   * moved screenshot 
+   * removed unused files 
+   * downgraded PHPUnit version 
+   * way to have Debian package 
+   * Artifacts are pushed to bintray 
+   * way yo have trends of build 
+   * trend for ccn 
+   * fixed bad require 
+   * way to have Git statistics 
+   * added infos about git in CLI report 
+   * added some functional tests for Phar artifact 
+   * added a TV panel 
+   * fixed warnings when log directory already exists 
+   * tool to detect role of method (getter, setter) 
+   * added Metric interface 
+   * way to detect role of method 
+   * new violation engine and report 
+   * fixed issue when parameter contains double quotes 
+   * fixed error in test of phar 
+   * fixed tests on PHP <5.6 
+   * annotations are listed in externals 
+   * Violations in CLI report 
+   * added 'cache' in the default exclusion list 
+   * new XML violations report 
+   * releases are also stored in Github 
+   * fixes #236 : incorrect parsing of options with values 
+   * fixes #237 - warning in consolidation under php7 
+   * updated autoload 
+   * updated deb genetation 
+   * externals resources are loaded HTTPS 
+   * fixed warning with PHP 5.4 
+   * git add use --force to add .deb to release 
+   * way to get infos about unexpected bugs 
+   * Don't trigger the issuer on suppressed errors 
+   * Merge pull request #246 from UFOMelkor/hotfix/240 
+   * issuer logs are stored in file instead of stdout 
+   * analyze does not break in case of error 
+   * added tests about namespace resolution in externals 
+   * major issue with traverser 
+   * Way to get metric about Unit tests of project 
+   * added JUnit HTML report file 
+   * added icon for junit report 
+   * changed status code for --help and --version option 
+   * added a way to get latest results directly in json 
+   * released new phar 
+   * moved directory of releases in order to prevserve v1 compatibility 
+   * forced version of phar 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Mon, 30 Jan 2017 06:17:27 +0100
+
+phpmetrics (1.9.2) unstable; urgency=low
+   * Removed unneeded code 
+   * Removed unneeded code 
+   * plugin engine: added a way to executing analayzes from plugin and to customize reports 
+   * updated tests of formaters in order to take care of extensions service 
+   * updated documentation about plugins 
+   * Merge pull request #166 from fonsecas72/fix_unused_params 
+   * releasing v1.9.2 
+   * added bintray.json in process of releasing 
+   * minor change in HTML report: footer is fixed 
+   * fixed an error in travis with bintray deploy 
+   * releasing v1.9.2 
+   * added bintray.json in process of releasing 
+   * minor change in HTML report: footer is fixed 
+   * added new default ruleset object 
+   * new command: way to generate default config file 
+   * added tests for InitConfigCommand 
+   * added template for new issues on github 
+   * pass TokenCollection instead of Tokenizer to Metrics 
+   * added compatibility with Symfony3 
+   * installation of graphviz is checked before running analyze 
+   * Merge pull request #211 from phpmetrics/features/210-check-for-graphviz-when-bubbles-chart-is-generated 
+   * restored Cache classes (ref #208) 
+   * Typo 
+   * fixed typos with new plugin feature 
+   * Merge pull request #208 from pavarnos/master 
+   * Merge pull request #207 from phpmetrics/features/default-ruleset 
+   * Merge pull request #202 from phpmetrics/plugins 
+   * Merge pull request #197 from phpmetrics/features/192-compatibility-with-sf3 
+   * resolving conflicts 
+   * Merge branch 'patch-1' of https://github.com/theofidry/PhpMetrics into theofidry-patch-1 
+   * Merge branch 'theofidry-patch-1' 
+   * releasing v1.10.0 
+   * added information about composer plugin in README 
+   * imported new v2 stack, with nikic parser 
+   * updated CI 
+   * cleaned documentation 
+   * added CLI report 
+   * added screenshot 
+   * moved screenshot 
+   * removed unused files 
+   * downgraded PHPUnit version 
+   * way to have Debian package 
+   * Artifacts are pushed to bintray 
+   * way yo have trends of build 
+   * trend for ccn 
+   * fixed bad require 
+   * way to have Git statistics 
+   * added infos about git in CLI report 
+   * added some functional tests for Phar artifact 
+   * added a TV panel 
+   * fixed warnings when log directory already exists 
+   * tool to detect role of method (getter, setter) 
+   * added Metric interface 
+   * way to detect role of method 
+   * new violation engine and report 
+   * fixed issue when parameter contains double quotes 
+   * fixed error in test of phar 
+   * fixed tests on PHP <5.6 
+   * annotations are listed in externals 
+   * Violations in CLI report 
+   * added 'cache' in the default exclusion list 
+   * new XML violations report 
+   * releases are also stored in Github 
+   * fixes #236 : incorrect parsing of options with values 
+   * fixes #237 - warning in consolidation under php7 
+   * updated autoload 
+   * updated deb genetation 
+   * externals resources are loaded HTTPS 
+   * fixed warning with PHP 5.4 
+   * git add use --force to add .deb to release 
+   * way to get infos about unexpected bugs 
+   * Don't trigger the issuer on suppressed errors 
+   * Merge pull request #246 from UFOMelkor/hotfix/240 
+   * issuer logs are stored in file instead of stdout 
+   * analyze does not break in case of error 
+   * added tests about namespace resolution in externals 
+   * major issue with traverser 
+   * Way to get metric about Unit tests of project 
+   * added JUnit HTML report file 
+   * added icon for junit report 
+   * changed status code for --help and --version option 
+   * added a way to get latest results directly in json 
+   * released new phar 
+   * moved directory of releases in order to prevserve v1 compatibility 
+   * forced version of phar 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Mon, 30 Jan 2017 06:17:05 +0100
+
 phpmetrics (1.8.2) unstable; urgency=low
 
    * resolves problems with output during unit tests
@@ -24,3 +202,7 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
+
+
