@@ -60,6 +60,11 @@ class Configuration implements ConfigurationInterface
     private $extensions;
 
     /**
+     * @var bool
+     */
+    private $displayProgressBar = true;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -197,4 +202,22 @@ class Configuration implements ConfigurationInterface
         return $this;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isDisplayProgressBar()
+    {
+        return $this->displayProgressBar;
+    }
+
+    /**
+     * @param boolean $displayProgressBar
+     * @return Configuration
+     */
+    public function setDisplayProgressBar($displayProgressBar)
+    {
+        $this->displayProgressBar = $displayProgressBar;
+
+        return $this;
+    }
 }

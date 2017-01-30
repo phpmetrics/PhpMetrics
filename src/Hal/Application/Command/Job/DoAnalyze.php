@@ -67,6 +67,12 @@ class DoAnalyze implements JobInterface
     private $ignoreErrors;
 
     /**
+     * display progress bar ?
+     * @var bool
+     */
+    private $displayProgressBar;
+
+    /**
      * Constructor
      *
      * @param OutputInterface $output
@@ -74,14 +80,16 @@ class DoAnalyze implements JobInterface
      * @param string $path
      * @param bool $withOOP
      * @param bool $ignoreErrors
+     * @param bool $displayProgressBar
      */
-    public function __construct(OutputInterface $output, Finder $finder, $path, $withOOP, $ignoreErrors = false)
+    public function __construct(OutputInterface $output, Finder $finder, $path, $withOOP, $ignoreErrors = false, $displayProgressBar = true)
     {
         $this->output = $output;
         $this->finder = $finder;
         $this->path = $path;
         $this->withOOP = $withOOP;
         $this->ignoreErrors = $ignoreErrors;
+        $this->displayProgressBar = $displayProgressBar;
     }
 
     /**
@@ -97,6 +105,11 @@ class DoAnalyze implements JobInterface
 
         $progress = new ProgressBar($this->output);
         $progress->start(sizeof($files, COUNT_NORMAL));
+
+        if (false === $this->displayProgressBar) {
+            ProgressBar::setFormatDefinition('no_display', '');
+            $progress->setFormat('no_display');
+        }
 
         // tools
         $classMap = new ClassMap();
@@ -116,7 +129,6 @@ class DoAnalyze implements JobInterface
         );
 
         foreach($files as $k => $filename) {
-
             $progress->advance();
 
             // Integrity

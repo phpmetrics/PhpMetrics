@@ -96,6 +96,9 @@ class RunMetricsCommand extends Command
                 ->addOption(
                     'plugins', null, InputOption::VALUE_REQUIRED, 'Path of extensions to load, separated by comma (,)'
                 )
+                ->addOption(
+                    'no-progress', null, InputOption::VALUE_NONE, 'Do not show progress bar'
+                )
         ;
     }
 
