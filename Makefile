@@ -21,7 +21,7 @@ tag:
 
 # Tag git with last release
 release: 
-	git add .semver build/* bin/phpmetrics src/functions.php artifacts/bintray.json .github/ISSUE_TEMPLATE.md
+	git add .semver releases/* bin/phpmetrics src/functions.php artifacts/bintray.json .github/ISSUE_TEMPLATE.md
 	git commit -m "releasing `semver tag`"
 	git tag `semver tag`
 	git push -u origin master
