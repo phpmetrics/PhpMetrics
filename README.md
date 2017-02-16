@@ -26,6 +26,10 @@ mv phpmetrics.phar /usr/local/bin/phpmetrics
 
     composer global require 'phpmetrics/phpmetrics'
 
+To run PhpMetrics from anywhere, run the following command (may require root):
+
+    ln -s ~/.composer/vendor/phpmetrics/phpmetrics/bin/phpmetrics /usr/local/bin/phpmetrics
+
 # Usage
 
 > Do not hesitate to visit the [official documentation](http://www.phpmetrics.org).
