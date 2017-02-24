@@ -42,7 +42,7 @@ class Metrics implements \JsonSerializable
     }
 
     /**
-     * @return array
+     * @return Metric[]
      */
     public function all()
     {

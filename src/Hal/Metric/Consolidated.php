@@ -43,20 +43,17 @@ class Consolidated
         $project = [];
         $nbInterfaces = 0;
         foreach ($metrics->all() as $key => $item) {
-            if ($item instanceof ClassMetric) {
-                $classes[] = $item->all();;
-            }
-            if ($item instanceof InterfaceMetric) {
+            $classItem = get_class($item);
+            if (ClassMetric::class === $classItem) {
+                $classes[] = $item->all();
+            } elseif (InterfaceMetric::class === $classItem) {
                 $nbInterfaces++;
-            }
-            if ($item instanceof FunctionMetric) {
-                $functions[$key] = $item->all();;
-            }
-            if ($item instanceof FileMetric) {
-                $files[$key] = $item->all();;
-            }
-            if ($item instanceof ProjectMetric) {
-                $project[$key] = $item->all();;
+            } elseif (FunctionMetric::class === $classItem) {
+                $functions[$key] = $item->all();
+            } elseif (FileMetric::class === $classItem) {
+                $files[$key] = $item->all();
+            } elseif (ProjectMetric::class === $classItem) {
+                $project[$key] = $item->all();
             }
         }
 
@@ -82,7 +79,6 @@ class Consolidated
             'afferentCoupling' => [],
             'efferentCoupling' => [],
             'difficulty' => [],
-            'lcom' => [],
             'mi' => [],
         ];
 
@@ -96,7 +92,7 @@ class Consolidated
                 array_push($avg->$k, $item->get($k));
             }
         }
-        $sum->nbClasses = sizeof($classes) - $nbInterfaces;
+        $sum->nbClasses = count($classes);
         $sum->nbInterfaces = $nbInterfaces;
 
         foreach ($avg as &$a) {
