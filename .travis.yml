@@ -7,12 +7,10 @@ php:
 - 7.0
 - nightly
 - hhvm
-- hhvm-nightly
 matrix:
   allow_failures:
   - php: nightly
   - php: hhvm
-  - php: hhvm-nightly
 before_script:
 - composer selfupdate --quiet
 - composer install --prefer-dist --no-interaction --no-progress
