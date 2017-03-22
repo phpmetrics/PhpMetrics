@@ -77,8 +77,6 @@ class ExternalsVisitor extends NodeVisitorAbstract
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
-
-
                     // return
                     if (isset($stmt->returnType)) {
                         if ($stmt->returnType instanceof Node\Name\FullyQualified) {
@@ -95,7 +93,7 @@ class ExternalsVisitor extends NodeVisitorAbstract
                         }
                     }
 
-                    // instanciations, static calls
+                    // instantiations, static calls
                     \iterate_over_node($stmt, function ($node) use (&$dependencies) {
                         switch (true) {
                             case $node instanceof Node\Expr\New_:

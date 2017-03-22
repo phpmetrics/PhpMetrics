@@ -19,7 +19,6 @@ use PhpParser\PrettyPrinter\Standard;
  */
 class Issuer
 {
-
     /**
      * @var array
      */
@@ -181,4 +180,3 @@ EOT;
         return $this;
     }
 }
-

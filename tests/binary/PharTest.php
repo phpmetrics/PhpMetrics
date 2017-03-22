@@ -6,7 +6,6 @@ namespace Test\Binary;
  */
 class PharTest extends \PHPUnit_Framework_TestCase
 {
-
     private $phar;
 
     public function __construct()

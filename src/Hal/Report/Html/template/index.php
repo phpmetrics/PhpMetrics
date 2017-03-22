@@ -78,7 +78,7 @@
 
         <div class="column column-50 bloc">
             <div class="label">ClassRank
-                <small>(Google's page rank applyed to relations between classes)</small>
+                <small>(Google's page rank applied to relations between classes)</small>
             </div>
             <div class="clusterize small">
                 <div id="clusterizeClassRank" class="clusterize-scroll">

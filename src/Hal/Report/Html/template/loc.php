@@ -17,14 +17,14 @@ foreach ($classes as $class) {
     }
 }
 
-// 2. percentil map
+// 2. percentile map
 $json = [];
 if(sizeof($array) > 1) {
     $range = range(0.5, 1, .05);
-    foreach ($range as $percentil) {
+    foreach ($range as $percentile) {
         $json[] = (object)[
-            'lloc' => procentile($array, $percentil),
-            'percentile' => $percentil * 100,
+            'lloc' => procentile($array, $percentile),
+            'percentile' => $percentile * 100,
         ];
     }
 }
