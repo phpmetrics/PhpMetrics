@@ -50,7 +50,7 @@
 
         <div class="column column-75">
             <div class="bloc">
-                <h4>Top 10 ClassRank <br /><small>(Google's page rank applyed to relations between classes)</small></h4>
+                <h4>Top 10 ClassRank <br /><small>(Google's page rank applied to relations between classes)</small></h4>
                 <table id="table-pagerank">
                     <thead>
                     <tr>

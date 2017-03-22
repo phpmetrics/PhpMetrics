@@ -46,7 +46,7 @@ if (isset($project['git'], $project['git']['authors'])) {
 <div class="row">
     <div class="column column-60">
         <div class="bloc">
-            <h4>Most commited PHP files</h4>
+            <h4>Most committed PHP files</h4>
             <table class="js-sort-table table-small" id="table-commits">
                 <thead>
                 <tr>

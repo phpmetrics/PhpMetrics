@@ -9,7 +9,6 @@ use Hal\Application\Config\Parser;
  */
 class ParserTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @dataProvider providesExample
      */

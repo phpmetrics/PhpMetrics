@@ -10,11 +10,10 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Calculate Kan's defects
  *
- * défauts = 0.15 + 0.23 *  number of do…while() + 0.22 *  number of select() + 0.07 * number of if()
+ * defects = 0.15 + 0.23 *  number of do…while() + 0.22 *  number of select() + 0.07 * number of if()
  */
 class KanDefectVisitor extends NodeVisitorAbstract
 {
-
     /**
      * @var Metrics
      */

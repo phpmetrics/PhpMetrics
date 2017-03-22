@@ -19,7 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Issuer
 {
-
     /**
      * @var array
      */
@@ -172,4 +171,3 @@ EOT;
         return $this;
     }
 }
-

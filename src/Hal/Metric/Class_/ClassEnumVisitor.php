@@ -13,7 +13,6 @@ use PhpParser\NodeVisitorAbstract;
 
 class ClassEnumVisitor extends NodeVisitorAbstract
 {
-
     /**
      * @var Metrics
      */

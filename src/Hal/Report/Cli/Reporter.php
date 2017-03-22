@@ -99,7 +99,7 @@ EOT;
             arsort($commits);
             $commits = array_slice($commits, 0, 10);
 
-            $out .= "\nTop 10 commited files";
+            $out .= "\nTop 10 committed files";
             foreach ($commits as $file => $nb) {
                 $out .= sprintf("\n    %d    %s", $nb, $file);
             }
