@@ -37,7 +37,7 @@
         "nikic/php-parser": "v3.*"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=4.8.27"
+        "phpunit/phpunit": ">=4.8.27,<=5.7.13"
     },
     "bin": [
         "bin/phpmetrics"
