@@ -3,8 +3,8 @@
 namespace Test\Hal\Component\Issue;
 
 use Hal\Component\Issue\Issuer;
+use Hal\Component\Output\TestOutput;
 use PhpParser\ParserFactory;
-use Symfony\Component\Console\Output\Output;
 
 /**
  * @group issue
@@ -73,21 +73,5 @@ class TestIssuer extends Issuer
     protected function log($logfile, $log)
     {
         $this->log = $log;
-    }
-}
-
-
-class TestOutput extends Output
-{
-    public $output = '';
-
-    public function clear()
-    {
-        $this->output = '';
-    }
-
-    protected function doWrite($message, $newline)
-    {
-        $this->output .= $message . ($newline ? "\n" : '');
     }
 }

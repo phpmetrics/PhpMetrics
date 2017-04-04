@@ -4,6 +4,8 @@ namespace Hal\Application;
 use Hal\Application\Config\Config;
 use Hal\Component\Ast\NodeTraverser;
 use Hal\Component\Issue\Issuer;
+use Hal\Component\Output\Output;
+use Hal\Component\Output\ProgressBar;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
 use Hal\Metric\Class_\Complexity\KanDefectVisitor;
@@ -20,8 +22,6 @@ use Hal\Metric\System\Coupling\PageRank;
 use Hal\Metric\System\UnitTesting\UnitTesting;
 use PhpParser\Error;
 use PhpParser\ParserFactory;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\OutputInterface;
 
 
 /**
@@ -50,7 +50,7 @@ class Analyze
      * Analyze constructor.
      * @param OutputInterface $output
      */
-    public function __construct(Config $config, OutputInterface $output, Issuer $issuer)
+    public function __construct(Config $config, Output $output, Issuer $issuer)
     {
         $this->output = $output;
         $this->config = $config;
@@ -89,7 +89,6 @@ class Analyze
 
         // create a new progress bar (50 units)
         $progress = new ProgressBar($this->output, sizeof($files));
-        $this->output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
         $progress->start();
 
         foreach ($files as $file) {
@@ -120,7 +119,6 @@ class Analyze
         // Unit test
         (new UnitTesting($this->config, $files))->calculate($metrics);
 
-        $progress->finish();
         $progress->clear();
 
         return $metrics;

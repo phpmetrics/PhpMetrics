@@ -5,11 +5,10 @@ use Hal\Application\Config\ConfigException;
 use Hal\Application\Config\Parser;
 use Hal\Application\Config\Validator;
 use Hal\Component\File\Finder;
+use Hal\Component\Output\CliOutput;
 use Hal\Component\Issue\Issuer;
 use Hal\Report;
 use Hal\Violation\ViolationParser;
-use Symfony\Component\Console\Formatter\OutputFormatter;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 
 class Application
@@ -21,7 +20,7 @@ class Application
     public function run($argv)
     {
         // formatter
-        $output = new ConsoleOutput(ConsoleOutput::VERBOSITY_NORMAL, null, new OutputFormatter());
+        $output = new CliOutput();
 
         // issues and debug
         $issuer = (new Issuer($output));//->enable();
@@ -48,7 +47,7 @@ class Application
         }
 
         if ($config->has('quiet')) {
-            $output->setVerbosity(ConsoleOutput::VERBOSITY_QUIET);
+            $output->setQuietMode(true);
         }
 
         // find files
@@ -73,6 +72,8 @@ class Application
 
         // end
         $output->writeln('');
-        $output->writeln('<info>Done</info>');
+        $output->writeln('Done');
+        $output->writeln('');
+
     }
 }

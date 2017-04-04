@@ -2,9 +2,9 @@
 namespace Hal\Report\Cli;
 
 use Hal\Application\Config\Config;
+use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
 use Hal\Metric\Metrics;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class Reporter
 {
@@ -24,7 +24,7 @@ class Reporter
      * @param Config $config
      * @param OutputInterface $output
      */
-    public function __construct(Config $config, OutputInterface $output)
+    public function __construct(Config $config, Output $output)
     {
         $this->config = $config;
         $this->output = $output;

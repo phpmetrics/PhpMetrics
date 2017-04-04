@@ -2,10 +2,10 @@
 namespace Hal\Report\Html;
 
 use Hal\Application\Config\Config;
+use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
 use Hal\Metric\Consolided;
 use Hal\Metric\Metrics;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class Reporter
 {
@@ -16,16 +16,16 @@ class Reporter
     private $config;
 
     /**
-     * @var OutputInterface
+     * @var Output
      */
     private $output;
 
     /**
      * Reporter constructor.
      * @param Config $config
-     * @param OutputInterface $output
+     * @param Output $output
      */
-    public function __construct(Config $config, OutputInterface $output)
+    public function __construct(Config $config, Output $output)
     {
         $this->config = $config;
         $this->output = $output;
@@ -103,8 +103,7 @@ class Reporter
             'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
         );
 
-        $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir),
-            OutputInterface::OUTPUT_NORMAL);
+        $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir));
 
     }
 

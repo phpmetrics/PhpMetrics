@@ -166,6 +166,8 @@
 <script type="text/javascript" src="js/sort-table.min.js"></script>
 <script type="text/javascript" src="js/graph-maintainability.js"></script>
 
+<script src="https://cdn.jsdelivr.net/clusterize.js/0.17.6/clusterize.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/clusterize.js/0.17.6/clusterize.css">
 
 <script type="text/javascript" src="js/classes.js"></script>
 

@@ -34,8 +34,7 @@
         "php": ">=5.4",
         "ext-dom": "*",
         "ext-tokenizer": "*",
-        "symfony/console": "~2.5|3.*",
-        "nikic/php-parser": "2.*"
+        "nikic/php-parser": "v3.*"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4.8.27"

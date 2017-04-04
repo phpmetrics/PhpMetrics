@@ -9,9 +9,9 @@
 
 namespace Hal\Component\Issue;
 
+use Hal\Component\Output\Output;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Issuer
@@ -34,7 +34,7 @@ class Issuer
      * Issuer constructor.
      * @param OutputInterface $output
      */
-    public function __construct(OutputInterface $output)
+    public function __construct(Output $output)
     {
         $this->output = $output;
     }
