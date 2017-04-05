@@ -63,30 +63,51 @@ class UnitTesting
         // parsing of XML file without any dependency to DomDocument or simpleXML
         // we want to be compatible with every platforms. Maybe (probably) that's a really stupid idea, but I want to try it :p
         $testsuites = [];
-        $xml = file_get_contents($filename);
-        if (preg_match_all('!<testsuite[^<]*?file="(.*?)".*?>!si', $xml, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $m) {
-                list($line, $fileOfUnitTest) = $m;
+        $alreadyParsed = [];
 
-                $suite = new \stdClass;
-                $suite->file = $fileOfUnitTest;
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom->load($filename);
+        $xpath = new \DOMXpath($dom);
 
-                $line  = str_ireplace('<testsuite ', '', $line);
-                if (preg_match_all('!(.*?)="(.*?)"!s', $line, $assign, PREG_SET_ORDER)) {
-                    foreach ($assign as $ass) {
-                        $suite->{trim($ass[1])} = trim($ass[2]);
-                    }
-                }
 
-                if (!isset($suite->name, $suite->file, $suite->assertions)) {
-                    // test suite without file
-                    continue;
-                }
-
-                array_push($testsuites, $suite);
-            }
+        // JUNIT format
+        foreach ($xpath->query('//testsuite[@file]') as $suite) {
+            array_push($testsuites, (object)[
+                'file' => $suite->getAttribute('file'),
+                'name' => $suite->getAttribute('name'),
+                'assertions' => $suite->getAttribute('assertions'),
+                'time' => $suite->getAttribute('time'),
+            ]);
         }
 
+        // CODECEPTION format (file is stored in the <testcase> node
+        foreach ($xpath->query('//testcase[@file]') as $index => $case) {
+            $suite = $case->parentNode;
+
+            if ($suite->hasAttribute('file')) {
+                // avoid duplicates
+                continue;
+            }
+
+            if (isset($testsuites[$case->getAttribute('class')])) {
+                // codeception does not consider testcase like junit does
+                continue;
+            }
+
+            if ($suite->hasAttribute('assertions')) {
+                // codeception store assertions in testsuite, not in testcase
+                // (but it stores classname in the testcase node) oO
+                // so we will store "assertions" in the first testcase of the testsuite only
+                $assertions = $case === $suite->firstChild->nextSibling ? $suite->getAttribute('assertions') : 0;
+            }
+
+            $testsuites[$case->getAttribute('class')] = (object)[
+                'file' => $case->getAttribute('file'),
+                'name' => $case->getAttribute('class'),
+                'assertions' => $assertions,
+                'time' => $suite->getAttribute('time'),
+            ];
+        }
 
         // analyze each unit test
         // This code is slow and can be optimized
@@ -97,6 +118,10 @@ class UnitTesting
             $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
             $traverser->addVisitor(new ClassEnumVisitor($metricsOfUnitTest));
             $traverser->addVisitor(new ExternalsVisitor($metricsOfUnitTest));
+
+            if (!file_exists($suite->file) || !is_readable($suite->file)) {
+                throw new \LogicException('Cannot find source file referenced in testsuite: ' . $suite->file);
+            }
 
             $code = file_get_contents($suite->file);
             $stmts = $parser->parse($code);
@@ -114,11 +139,9 @@ class UnitTesting
             $infoAboutTests[$suite->name] = (object)[
                 'nbExternals' => sizeof(array_unique($externals)),
                 'externals' => array_unique($externals),
-                'filename' => $fileOfUnitTest,
+                'filename' => $suite->file,
                 'classname' => $suite->name,
                 'assertions' => $suite->assertions,
-                'errors' => $suite->errors,
-                'failures' => $suite->failures,
                 'time' => $suite->time,
             ];
 

@@ -42,4 +42,16 @@ class UnitTestingTest extends \PHPUnit_Framework_TestCase
         $metrics = new Metrics();
         $unit->calculate($metrics);
     }
+
+    public function testICanParseCodeceptionFile() {
+
+        $config = new Config();
+        $config->set('junit', __DIR__ . '/xml/codeception1.xml');
+        $unit = new UnitTesting($config, []);
+        $metrics = new Metrics();
+        $unit->calculate($metrics);
+
+        $this->assertEquals(3, $metrics->get('unitTesting')->get('nbSuites'));
+        $this->assertEquals(27, $metrics->get('unitTesting')->get('assertions'));
+    }
 }

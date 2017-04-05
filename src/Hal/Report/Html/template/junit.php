@@ -222,7 +222,7 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
                     return d.dy - 1;
                 })
                 .style("fill", function (d) {
-                    return '#64B5F6';
+                    return '#AED6E3';
                 })
             ;
 
