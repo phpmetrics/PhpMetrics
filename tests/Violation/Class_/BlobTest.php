@@ -9,13 +9,11 @@ use Hal\Violation\Violations;
  */
 class BlobTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @dataProvider provideExamples
      */
     public function testGlobIsFound($expected, $nbMethodsPublic, $lcom, $nbExternals)
     {
-
         $prophet = $this->prophesize('Hal\Metric\ClassMetric');
         $prophet->get('nbMethodsPublic')->willReturn($nbMethodsPublic);
         $prophet->get('lcom')->willReturn($lcom);

@@ -7,14 +7,12 @@ namespace Hal\Application\Config;
  */
 class Validator
 {
-
     /**
      * @param Config $config
      * @throws ConfigException
      */
     public function validate(Config $config)
     {
-
         // required
         if (!$config->has('files')) {
             throw new ConfigException('Directory to parse is missing or incorrect');

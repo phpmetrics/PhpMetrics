@@ -49,7 +49,7 @@ foreach ($classesCp as $class) {
     var relations = <?php echo json_encode($relations, JSON_PRETTY_PRINT); ?>;
 
     /**
-     * Thank's to http://bl.ocks.org/mbostock/raw/7607999/
+     * Thanks to http://bl.ocks.org/mbostock/raw/7607999/
      */
     function updateRelationsChart() {
 

@@ -19,7 +19,6 @@ use Hal\Component\Tree\Node;
  */
 class CycleDetector
 {
-
     /**
      * Check if graph contains cycle
      *
@@ -36,10 +35,9 @@ class CycleDetector
             $recursionStack[$node->getKey()] = false;
         }
 
-        // start analyze
+        // start analysis
         $isCyclic = false;
         foreach ($graph->getEdges() as $edge) {
-
             if ($r = $this->detectCycle($edge->getFrom(), $recursionStack)) {
                 $edge->cyclic = true;
                 $isCyclic = true;
@@ -64,7 +62,6 @@ class CycleDetector
 
             // recur for all the vertices adjacent to this vertex
             foreach ($node->getEdges() as $edge) {
-
                 if ($edge->getTo() === $node) {
                     continue;
                 }

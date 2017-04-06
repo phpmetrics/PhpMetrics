@@ -9,7 +9,6 @@
 
 namespace Hal\Component\Tree;
 
-
 class HashMap implements \Countable, \IteratorAggregate
 {
     /**
