@@ -31,7 +31,7 @@
         "files": ["./src/functions.php"]
     },
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.5",
         "ext-dom": "*",
         "ext-tokenizer": "*",
         "nikic/php-parser": "v3.*"
