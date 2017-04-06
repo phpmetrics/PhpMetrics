@@ -222,7 +222,7 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
                     return d.dy - 1;
                 })
                 .style("fill", function (d) {
-                    return '#AED6E3';
+                    return '#DCEDC8';
                 })
             ;
 
@@ -245,7 +245,7 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
                     return d.dx > d.w ? 1 : 0.2;
                 })
                 .attr('fill', function(d) {
-                    return '#FFFFFF'
+                    return '#33691E'
                 });
 
             //d3.select(window).on("click", function () {
