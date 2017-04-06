@@ -2,20 +2,20 @@
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="label"><a href="violations.php">Violations</a> (<?php echo $sum->violations->critical;?> criticals, <?php echo $sum->violations->error;?> errors)</div>
+                <div class="label"><a href="violations.html">Violations</a> (<?php echo $sum->violations->critical;?> criticals, <?php echo $sum->violations->error;?> errors)</div>
                 <div class="number"><?php echo $sum->violations->total; ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="label"><a href="loc.php">Lines of code</a></div>
+                <div class="label"><a href="loc.html">Lines of code</a></div>
                 <?php echo $this->getTrend('sum', 'loc'); ?>
                 <div class="number"><?php echo $sum->loc; ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="label"><a href="oop.php">Classes</a></div>
+                <div class="label"><a href="oop.html">Classes</a></div>
                 <div class="number"><?php echo $sum->nbClasses; ?></div>
                 <?php echo $this->getTrend('sum', 'nbClasses'); ?>
             </div>
@@ -26,7 +26,7 @@
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="label"><a href="complexity.php">Average cyclomatic complexity by class</a></div>
+                <div class="label"><a href="complexity.html">Average cyclomatic complexity by class</a></div>
                 <div class="number"><?php echo $avg->ccn; ?></div>
                 <?php echo $this->getTrend('avg', 'ccn', true); ?>
             </div>
@@ -34,7 +34,7 @@
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">
-                    <a href="junit.php">Assertions in tests</a>
+                    <a href="junit.html">Assertions in tests</a>
                 </div>
                 <div class="number">
                     <?php echo isset($project['unitTesting']) ? $project['unitTesting']['assertions'] : '--'; ?>
@@ -43,7 +43,7 @@
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="label"><a href="complexity.php">Average bugs by class</a></div>
+                <div class="label"><a href="complexity.html">Average bugs by class</a></div>
                 <div class="number">
                     <?php echo $avg->bugs; ?>
                 </div>
