@@ -1,21 +1,51 @@
 /* ------------- layout -------- */
 body {
     background: #EAEAEA;
+    padding-top: 80px;
 }
 
 .row {
     margin-bottom: .5em;
+    align-items: stretch;
 }
 
+.headerbar {
+    background-color: #fff;
+    border-bottom:3px solid #E4E4E4;
+    height:80px;
+    line-height:80px;
+    position: fixed;
+    top:0;
+    width: 100%;
+    z-index: 1;
+}
+.headerbarInner {
+    padding: 0 1em;
+}
+.headerbar img {
+    display:inline-block;;
+    vertical-align: middle;
+    height:60px;
+}
+.headerbar .title {
+    display:inline-block;;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.headerbar .subtitle {
+    display:inline-block;;
+    font-size: 1.2em;
+}
+
+
+
+
+/* ----------- text ---------- */
 a {
     color: #4CAF50;
     cursor: pointer;
 }
 
-/*.fullwidth {
-    max-width: initial;
-    width: initial;
-}*/
 
 /* ------------- menu -------- */
 .navigation {
@@ -44,7 +74,7 @@ a {
 .navigation-list {
     list-style: none;
     margin-bottom: 0;
-    margin-right: 5.0rem;
+    padding-right: 1.5em;
 }
 
 @media (min-width: 80.0rem) {
@@ -67,7 +97,7 @@ a {
 }
 
 .navigation .title,
-.navigation-title {
+.navigation-title a {
     color: #606c76;
     display: inline;
     font-family: 'Gotham Rounded A', 'Gotham Rounded B', 'Helvetica Neue', Arial, sans-serif;
@@ -131,25 +161,32 @@ a {
 }
 
 /* ---------- sidebar ------------- */
-#wrapper {
-    width: 100%;
-    min-width: 1000px;
-    max-width: 2000px;
-    margin: 0 auto;
-}
-
-#contentliquid {
-    float: left;
-    width: 100%;
-}
-
-#content {
+.page {
     margin-left: 300px;
 }
+.page .content {
+    padding: 2em 2em;
+    position:relative;
+}
+.report-details {
+    position: absolute;
+    top:0;
+    right: 3em;
+    color: #666;
+    font-size: 0.8em;
+}
+.report-details a {
+    color: #666;
+    text-decoration: underline;
+}
+
+
+
+
 
 #sidebar {
     position: fixed;
-    top: 0;
+    top: 80px;
     left: 0;
     background: #4CAF50;
     width: 300px;
@@ -250,16 +287,13 @@ a {
 }
 
 
-.help {
-    color: #999;
-    font-size: 0.8em;
-}
 
 /* ------------ Bloc number ------ */
 .bloc {
     text-align: center;
     background: #FFF;
     padding: 15px;
+    border: 1px solid #F7F7F7;
 }
 
 .bloc .number {
@@ -268,13 +302,38 @@ a {
 }
 
 .bloc .label {
-
+    color: #333;
+    text-align: left;
+    margin-bottom:.5em;
+    font-weight: 700;
 }
 
 .bloc-number {
     min-height: 140px;
 }
-
+.column.with-help {
+    padding-right:0;
+    padding-bottom:0;
+}
+.column-help .column-help-inner {
+    background-color: #fff;
+    height:100%;
+}
+.column.help {
+    padding-left:0;
+    color: #999;
+    font-size: 0.8em;
+    align-items: stretch;
+    display: flex;
+}
+.column.help .help-inner {
+    border-left:2px solid #E4E4E4;
+    padding:1em;
+    margin-bottom: 0 !important;
+}
+.column-help {
+    margin-bottom: 0 !important;
+}
 /* -------- charts ---------------- */
 .tooltip {
     position: absolute;
@@ -446,4 +505,10 @@ footer {
 .level-warning{
     background-color: darkorange;
     color: #FFF;
+}
+
+
+/* ------- overrides -------- */
+.clusterize-scroll {
+    max-height:400px !important;
 }

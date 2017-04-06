@@ -11,3 +11,10 @@ function loadJSON(filename, callback) {
     };
     xobj.send(null);
 }
+
+
+function equalsHeightOf(node1, node2) {
+    var w1 = node1.style.height;
+    node2.style.height = w1 + 'px';
+
+}

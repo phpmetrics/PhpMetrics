@@ -1,6 +1,5 @@
 </div>
 
-
 <!-- Sidebar -->
 <?php if(!isset($fullwidth) || $fullwidth === false) {?>
 <div id="sidebar">
@@ -152,12 +151,6 @@
 </div>
 <?php } ?>
 </div>
-
-
-<footer>
-    <a href="http://phpmetrics.org">PhpMetrics <?php echo getVersion(); ?></a>, by <a href="http://blog.lepine.pro">Jean-François Lépine</a>.
-    <br/><?php echo date('F jS, Y H:i:s'); ?>
-</footer>
 
 <script type="text/javascript" src="js/functions.js"></script>
 <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>

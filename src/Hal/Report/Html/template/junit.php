@@ -29,7 +29,7 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
     <div class="column">
         <div class="bloc bloc-number">
             <div class="number">
-                <?php echo $unit['nbCoveredClasses']; ?>
+                <?php echo $unit['assertions']; ?>
             </div>
             <div class="label">
                 Assertions
