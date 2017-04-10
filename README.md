@@ -30,7 +30,7 @@ Please note that the `~/.composer/vendor/bin` directory must be in your `$PATH`.
 
     export PATH=~/.composer/vendor/bin:$PATH
 
-# Usage
+## Usage
 
 > Do not hesitate to visit the [official documentation](http://www.phpmetrics.org).
 
@@ -40,11 +40,11 @@ The command command `phpmetrics --report-html=./log <folder or filename> ` will 
 
 PhpMetrics can parse PHP code from **PHP 5.3 to PHP 7.x**.
 
-## IDE integration
+## IDE integration
 
 + [PhpMetrics plugin for PhpStorm](http://plugins.jetbrains.com/plugin/7500)
 
-# Contribute
+## Contribute
 
 In order to run unit tests, please install the dev dependencies:
 
@@ -59,10 +59,10 @@ Finally, build the phar:
 
     make build
 
-# Author
+## Author
 
 + Jean-François Lépine <[www.lepine.pro](http://www.lepine.pro)>
 
-# License
+## License
 
 See the LICENSE file.
