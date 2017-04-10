@@ -48,4 +48,18 @@ class ClassEnumVisitorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testAnonymousClassIsHandledCorrectly()
+    {
+        $metrics = new Metrics();
+
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $traverser = new \PhpParser\NodeTraverser();
+        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
+        $traverser->addVisitor(new ClassEnumVisitor($metrics));
+
+        $code = '<?php new class {};';
+        $stmts = $parser->parse($code);
+        $traverser->traverse($stmts);
+    }
+
 }
