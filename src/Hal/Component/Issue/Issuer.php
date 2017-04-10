@@ -130,6 +130,15 @@ EOT;
     }
 
     /**
+     * @return $this
+     */
+    public function disable()
+    {
+        restore_error_handler();
+        return $this;
+    }
+
+    /**
      * @param $status
      */
     protected function terminate($status)

@@ -30,6 +30,7 @@ class IssuerTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('https://github.com/phpmetrics/PhpMetrics/issues/new', $output->output);
         $this->assertContains('Firstname: Jean-François', $issuer->log);
         $this->assertContains('IssuerTest.php (line 22)', $issuer->log);
+        $issuer->disable();
     }
 
     public function testIssuerDisplayStatements()
@@ -56,7 +57,7 @@ EOT;
 
         }
 
-
+        $issuer->disable();
         $this->assertContains('class A', $issuer->log);
     }
 }

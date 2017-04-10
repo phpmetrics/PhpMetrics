@@ -128,6 +128,10 @@ function getNameOfNode($node)
         return getNameOfNode($node->name);
     }
 
+    if (isset($node->name) && null === $node->name) {
+        return 'anonymous@' . spl_object_hash($node);
+    }
+
     if (isset($node->name)) {
         return (string)$node->name;
     }
