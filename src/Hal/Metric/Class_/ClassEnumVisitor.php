@@ -39,10 +39,18 @@ class ClassEnumVisitor extends NodeVisitorAbstract
                 $class = new InterfaceMetric($node->namespacedName->toString());
                 $class->set('interface', true);
             } else {
-                $class = new ClassMetric($node->namespacedName->toString());
+
+                if(null === $node->name) {
+                    // anonymous class
+                    $name = 'anonymous@' . spl_object_hash($node);
+                } else {
+                    $name = $node->namespacedName->toString();
+                }
+
+                $class = new ClassMetric($name);
                 $class->set('interface', false);
             }
-            $class->set('name', $node->namespacedName->toString());
+
             $methods = [];
 
             $methodsPublic = $methodsPrivate = $nbGetters = $nbSetters = 0;
