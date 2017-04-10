@@ -69,9 +69,6 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, sizeof($graph->getEdges()));
     }
 
-    /**
-     * @group wip
-     */
     public function testEdgeIsAddedToFromAndToNode() {
         $graph = new Graph();
         $a = new Node('A');

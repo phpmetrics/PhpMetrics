@@ -62,4 +62,56 @@ class ClassEnumVisitorTest extends \PHPUnit_Framework_TestCase
         $traverser->traverse($stmts);
     }
 
+    /**
+     * @link https://github.com/phpmetrics/PhpMetrics/issues/238
+     */
+    public function testDynamicAttributeClassIsHandledCorrectly()
+    {
+        $metrics = new Metrics();
+
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $traverser = new \PhpParser\NodeTraverser();
+        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
+        $traverser->addVisitor(new ClassEnumVisitor($metrics));
+
+        $code = '
+class A {
+    public function foo() {
+        $reflection = new \ReflectionObject($this);
+
+        foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
+            $return[$property->name] = $this->{$property->name};
+        }
+    }
+}
+';
+        $stmts = $parser->parse($code);
+        $traverser->traverse($stmts);
+    }
+
+
+    /**
+     * @link https://github.com/phpmetrics/PhpMetrics/issues/238#issuecomment-292466274
+     */
+    public function testDynamicAttributeClassIsHandledCorrectly2()
+    {
+        $code = '<?php
+namespace Blackprism\CouchbaseODM\Observer;
+/**
+ * Interface NotifyPropertyChangedInterface
+ */
+interface NotifyPropertyChangedInterface
+{
+    /**
+     * Enable tracking on object.
+     */
+    public function track();
+    /**
+     * Check if object is tracked.
+     *
+     * @return bool
+     */
+    public function isTracked(): bool;
+}';
+    }
 }

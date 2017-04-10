@@ -53,7 +53,6 @@ class ExternalsVisitorTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @dataProvider provideExamplesAnnotation
-     * @group wip
      */
     public function testDependenciesAreFoundEvenInAnnotation($example, $classname, $expected)
     {
