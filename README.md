@@ -30,6 +30,10 @@ Please note that the `~/.composer/vendor/bin` directory must be in your `$PATH`.
 
     export PATH=~/.composer/vendor/bin:$PATH
 
+To run PhpMetrics from anywhere, run the following command (may require root):
+
+    ln -s ~/.composer/vendor/phpmetrics/phpmetrics/bin/phpmetrics /usr/local/bin/phpmetrics
+
 # Usage
 
 > Do not hesitate to visit the [official documentation](http://www.phpmetrics.org).
