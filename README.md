@@ -25,6 +25,10 @@ mv phpmetrics.phar /usr/local/bin/phpmetrics
 #### As a composer dependency:
 
     composer global require 'phpmetrics/phpmetrics'
+    
+Please note that the `~/.composer/vendor/bin` directory must be in your `$PATH`. For example in your `~/.bash_profile` (or `~/.bashrc`), add :
+
+    export PATH=~/.composer/vendor/bin:$PATH
 
 # Usage
 
