@@ -1,12 +1,23 @@
 <?php
 class A {
-    public function foo()
+    public function foo1()
     {
         if(true) {
             if(false) {
 
             }
         }
+    }
+
+    public function foo2()
+    {
+        if(true) {
+
+        }
+    }
+
+    public function foo3()
+    {
     }
 }
 
@@ -17,8 +28,10 @@ class B {
 
         }
 
-        if(false) {
-
+        foreach(array() as $foo) {
+            if(false) {
+                continue;
+            }
         }
     }
 }

@@ -50,6 +50,7 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
             $class = $this->metrics->get($node->namespacedName->toString());
 
             $ccn = 1;
+            $ccnByMethod = array();
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
@@ -88,11 +89,19 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
                         return $ccn;
                     };
 
-                    $ccn += $cb($stmt);
+                    $methodCcn = $cb($stmt);
+
+                    $ccn += $methodCcn;
+                    $ccnByMethod[] = $methodCcn + 1; // each method by default is CCN 1 even if it's empty
                 }
             }
 
             $class->set('ccn', $ccn);
+
+            $class->set('ccnMethodMax', 0);
+            if (count($ccnByMethod)) {
+                $class->set('ccnMethodMax', max($ccnByMethod));
+            }
         }
     }
 }

@@ -16,7 +16,8 @@ class ViolationParser
 
         $violations = [
             new Class_\Blob(),
-            new Class_\TooComplexCode(),
+            new Class_\TooComplexClassCode(),
+            new Class_\TooComplexMethodCode(),
             new Class_\ProbablyBugged(),
             new Class_\TooLong(),
             new Class_\TooDependent(),

@@ -65,7 +65,8 @@ if (sizeof($lcom) > 0) {
                         <th>Class</th>
                         <th class="js-sort-number">LCOM</th>
                         <th class="js-sort-number">Volume</th>
-                        <th class="js-sort-number">Cyclomatic</th>
+                        <th class="js-sort-number">Class cycl.</th>
+                        <th class="js-sort-number">Max method cycl.</th>
                         <th class="js-sort-number">Bugs</th>
                         <th class="js-sort-number">Difficulty</th>
                     </tr>
@@ -77,6 +78,7 @@ if (sizeof($lcom) > 0) {
                             <td><?php echo isset($class['lcom']) ? $class['lcom'] : ''; ?></td>
                             <td><?php echo isset($class['volume']) ? $class['volume'] : ''; ?></td>
                             <td><?php echo isset($class['ccn']) ? $class['ccn'] : ''; ?></td>
+                            <td><?php echo isset($class['ccnMethodMax']) ? $class['ccnMethodMax'] : ''; ?></td>
                             <td><?php echo isset($class['bugs']) ? $class['bugs'] : ''; ?></td>
                             <td><?php echo isset($class['difficulty']) ? $class['difficulty'] : ''; ?></td>
                         </tr>
