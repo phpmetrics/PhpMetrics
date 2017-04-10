@@ -1,24 +1,35 @@
-language: php
 sudo: false
-php:
-- 5.5
-- 5.6
-- 7.0
-- nightly
-- hhvm
+dist: trusty
+language: php
+
 matrix:
+  fast_finish: true
+  include:
+  - php: 5.5
+  - php: 5.6
+  - php: 7.0
+  - php: 7.1
+  - php: nightly
+  - php: hhvm
+  - php: hhvm-nightly
   allow_failures:
   - php: nightly
   - php: hhvm
   - php: hhvm-nightly
+
 before_script:
-- composer selfupdate --quiet
-- composer install --prefer-dist --no-interaction --no-progress
+  - composer selfupdate --quiet
+  - composer install --prefer-dist --no-interaction --no-progress
+  # Disable JIT compilation in hhvm, as the JIT is useless for short live scripts like tests.
+  - if [[ $TRAVIS_PHP_VERSION = hhvm* ]]; then echo 'hhvm.jit = 0' >> /etc/hhvm/php.ini; fi
+
 script:
-- make test
+  - make test
+
 before_deploy:
-- make build
-- git add -f releases/phpmetrics.deb releases/phpmetrics.phar
+  - make build
+  - git add -f build/phpmetrics.deb build/phpmetrics.phar
+
 deploy:
   - provider: releases
     api_key:
