@@ -99,14 +99,14 @@ Changes:
  .
    -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Mon, 30 Jan 2017 06:17:27 +0100
 Checksums-Sha1:
- d9dfdb70f194fcbaa38906ddc8020a945df66612 666 phpmetrics_1.9.2.dsc
- 9d9ae284be7b45a511e34225967b746844b03c06 339398 phpmetrics_1.9.2.tar.gz
- 98333c4e7def39127930e22f58f6c0d63e592bc5 278170 phpmetrics_1.9.2_all.deb
+ 03d2ebf025b92486132e2d13bc6ad711dd7f9312 666 phpmetrics_1.9.2.dsc
+ 0b6c3d51f63e925fd413db36d615ccf4fe6bd2e5 253994 phpmetrics_1.9.2.tar.gz
+ 4ea3040f59dcada40fcf56edc07f5cfc3ad9ec2b 216628 phpmetrics_1.9.2_all.deb
 Checksums-Sha256:
- f7073539882f9a6c3ad5662d1a5cc5e22b23e714008b4f4d3a33958d4949a2de 666 phpmetrics_1.9.2.dsc
- b9b90bfa1b0364992a14c8a75f41a569b189c174651dd5ea92e4dbde5320bf6d 339398 phpmetrics_1.9.2.tar.gz
- 73ca17ff6e4172aef10aef0312811fc5c48030bf3fb9a8abba40a07c92eada72 278170 phpmetrics_1.9.2_all.deb
+ 35d55d02fde7ef4864b6f8ee621696d2949398679727af7e7db0d206b4d8534f 666 phpmetrics_1.9.2.dsc
+ b48e9fc9214f9399c50499e5a05c7bbf413b7e52ed219fa6e7b803de5dc65c7e 253994 phpmetrics_1.9.2.tar.gz
+ a8ac29159a93eb2840c5946204f95db2f134845765221395140a083e9fd46aa8 216628 phpmetrics_1.9.2_all.deb
 Files:
- a94f61d931b41b5b8157be46ba2224c9 666 base optional phpmetrics_1.9.2.dsc
- 845030ada141d219ab8b76c829e11eb2 339398 base optional phpmetrics_1.9.2.tar.gz
- e91390fd139a97c5bc79ef6cefbe09c3 278170 base optional phpmetrics_1.9.2_all.deb
+ 3e2326d4739d76fa6fc4f1078d335f62 666 base optional phpmetrics_1.9.2.dsc
+ 6d4c58a1a4f359485ee8aebd1c8ec9e5 253994 base optional phpmetrics_1.9.2.tar.gz
+ dc88cc458bd5dba4a414f98104ec7886 216628 base optional phpmetrics_1.9.2_all.deb
