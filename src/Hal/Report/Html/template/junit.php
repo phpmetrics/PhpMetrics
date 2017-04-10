@@ -2,6 +2,11 @@
 require __DIR__ . '/_header.php'; ?>
 
 <?php
+if (!isset($project['unitTesting'])) {
+    echo '<div class="row"><div class="column">Please use the <code>--junit</code> option to enable this report</div></div>';
+    return;
+}
+
 $unit = $project['unitTesting'];
 $getMetricForClass = function ($classname, $metric) use ($classes) {
     foreach ($classes as $class) {
@@ -20,30 +25,28 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
 <div class="row">
     <div class="column">
         <div class="bloc bloc-number">
+            <div class="label">Test suites</div>
             <div class="number">
                 <?php echo $unit['nbSuites']; ?>
             </div>
-            <div class="label">Test suites</div>
         </div>
     </div>
     <div class="column">
         <div class="bloc bloc-number">
+            <div class="label">Assertions</div>
             <div class="number">
                 <?php echo $unit['assertions']; ?>
             </div>
-            <div class="label">
-                Assertions
-            </div>
         </div>
     </div>
     <div class="column">
         <div class="bloc bloc-number">
-            <div class="number">
-                <?php echo $unit['nbUncoveredClasses']; ?>
-            </div>
             <div class="label">
                 classes never called by tests
                 <small>(<?php echo $unit['percentUncoveredClasses']; ?> %)</small>
+            </div>
+            <div class="number">
+                <?php echo $unit['nbUncoveredClasses']; ?>
             </div>
         </div>
     </div>
@@ -222,7 +225,7 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
                     return d.dy - 1;
                 })
                 .style("fill", function (d) {
-                    return '#DCEDC8';
+                    return '#AED581';
                 })
             ;
 
@@ -244,8 +247,8 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
                     d.w = this.getComputedTextLength();
                     return d.dx > d.w ? 1 : 0.2;
                 })
-                .attr('fill', function(d) {
-                    return '#33691E'
+                .attr('fill', function (d) {
+                    return '#FFFFFF'
                 });
 
             //d3.select(window).on("click", function () {

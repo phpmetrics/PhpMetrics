@@ -4,37 +4,39 @@ require __DIR__ . '/_header.php'; ?>
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
+                <div class="label">Average cyclomatic complexity by class</div>
                 <div class="number">
                     <?php echo $avg->ccn; ?>
                 </div>
-                <div class="label">Average cyclomatic complexity by class <?php echo $this->getTrend('avg', 'ccn', true); ?></div>
+                <?php echo $this->getTrend('avg', 'ccn', true); ?>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
+                <div class="label">Average relative System complexity</div>
                 <div class="number">
                     <?php echo $avg->relativeSystemComplexity; ?>
                 </div>
-                <div class="label">Average relative System complexity <?php echo $this->getTrend('avg', 'relativeSystemComplexity', true); ?></div>
+                <?php echo $this->getTrend('avg', 'relativeSystemComplexity', true); ?>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number">
-                    <?php echo $avg->bugs; ?>
-                </div>
                 <div class="label">Average bugs by class
                     <small>(Halstead)</small> <?php echo $this->getTrend('avg', 'bugs', true); ?>
                 </div>
+                <div class="number">
+                    <?php echo $avg->bugs; ?>
+                </div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number">
-                    <?php echo $avg->kanDefect; ?>
-                </div>
                 <div class="label">average defects by class
                     <small>(Kan)</small> <?php echo $this->getTrend('avg', 'kanDefect', true); ?>
+                </div>
+                <div class="number">
+                    <?php echo $avg->kanDefect; ?>
                 </div>
             </div>
         </div>

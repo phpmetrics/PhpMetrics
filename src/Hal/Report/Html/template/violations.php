@@ -12,32 +12,32 @@ $map = [
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $sum->violations->total; ?></div>
                 <div class="label">Violations</div>
+                <div class="number"><?php echo $sum->violations->total; ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $sum->violations->information; ?></div>
                 <div class="label">Information</div>
+                <div class="number"><?php echo $sum->violations->information; ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $sum->violations->warning; ?></div>
                 <div class="label">Warnings</div>
+                <div class="number"><?php echo $sum->violations->warning; ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $sum->violations->error; ?></div>
                 <div class="label">Errors</div>
+                <div class="number"><?php echo $sum->violations->error; ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $sum->violations->critical; ?></div>
                 <div class="label">Criticals</div>
+                <div class="number"><?php echo $sum->violations->critical; ?></div>
             </div>
         </div>
     </div>

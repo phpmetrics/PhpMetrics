@@ -20,38 +20,37 @@ if (sizeof($lcom) > 0) {
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
+                <div class="label">classes <?php echo $this->getTrend('sum', 'nbClasses'); ?></div>
                 <div class="number">
                     <?php echo $sum->nbClasses; ?>
                     <small> (<?php echo (sizeof($classes) ? round($sum->nbClasses / sizeof($classes) * 100) : '0'); ?> %)</small>
                 </div>
-                <div class="label">classes <?php echo $this->getTrend('sum', 'nbClasses'); ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
+                <div class="label">interfaces <?php echo $this->getTrend('sum', 'nbInterfaces'); ?></div>
                 <div class="number"><?php echo $sum->nbInterfaces; ?>
                     <small> (<?php echo (sizeof($classes) ? round($sum->nbInterfaces / sizeof($classes) * 100) : '0'); ?> %)</small>
                 </div>
-                <div class="label">interfaces <?php echo $this->getTrend('sum', 'nbInterfaces'); ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div
-                    class="number"><?php echo $lcom ?></div>
                 <div class="label">average LCOM <?php echo $this->getTrend('avg', 'lcom', true); ?></div>
+                <div class="number"><?php echo $lcom ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $sum->nbClasses ? round($sum->lloc / $sum->nbClasses) : '-'; ?></div>
                 <div class="label">logical lines of code by class</div>
+                <div class="number"><?php echo $sum->nbClasses ? round($sum->lloc / $sum->nbClasses) : '-'; ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $sum->nbMethods ? round($sum->lloc / $sum->nbMethods) : '-'; ?></div>
                 <div class="label">logical lines of code by method</div>
+                <div class="number"><?php echo $sum->nbMethods ? round($sum->lloc / $sum->nbMethods) : '-'; ?></div>
             </div>
         </div>
     </div>
