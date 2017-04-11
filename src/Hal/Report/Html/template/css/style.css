@@ -40,7 +40,6 @@ body {
 
 
 
-
 /* ----------- text ---------- */
 a {
     color: #4CAF50;
@@ -194,6 +193,14 @@ a {
     height: 100%;
     color: #FFF;
     text-align: left;
+}
+@media (max-width: 600px) {
+    #sidebar {
+        display: none;
+    }
+    .page {
+        margin-left: 0;
+    }
 }
 
 #sidebar .content {
@@ -510,6 +517,8 @@ footer {
 
 
 /* ------- overrides -------- */
-.clusterize-scroll {
-    max-height:400px !important;
+@media (min-width: 600px) {
+    .clusterize-scroll {
+        max-height: 400px !important;
+    }
 }

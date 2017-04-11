@@ -78,7 +78,7 @@
             </div>
         </div>
 
-        <div class="column column-50">
+        <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">ClassRank
                     <small>(Google's page rank applied to relations between classes)</small>
@@ -116,7 +116,7 @@
     </div>
 
     <div class="row">
-        <div class="column column-50">
+        <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">Composer dependencies</div>
                 <div class="clusterize small">
@@ -146,6 +146,9 @@
                             <?php } ?>
                             </tbody>
                         </table>
+                        <?php if(0 === sizeof($packages)) { ?>
+                            <div>No composer.json file found</div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
@@ -154,12 +157,10 @@
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">Licences of Composer dependencies</div>
-                <div>
-                    <div id="svg-licenses"></div>
-                </div>
                 <?php if(0 === sizeof($packages)) { ?>
-                    <div>--</div>
+                    <div>No composer.json file found</div>
                 <?php } ?>
+                <div id="svg-licenses"></div>
             </div>
         </div>
     </div>
