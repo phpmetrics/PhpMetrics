@@ -19,6 +19,7 @@ use Hal\Metric\Metrics;
 use Hal\Metric\System\Changes\GitChanges;
 use Hal\Metric\System\Coupling\Coupling;
 use Hal\Metric\System\Coupling\PageRank;
+use Hal\Metric\System\Packages\Composer\Composer;
 use Hal\Metric\System\UnitTesting\UnitTesting;
 use PhpParser\Error;
 use PhpParser\ParserFactory;
@@ -106,6 +107,10 @@ class Analyze
             $this->issuer->clear('statements');
         }
 
+        $progress->clear();
+
+        $this->output->write('Executing system analyzes...');
+
         //
         // System analyses
         (new PageRank())->calculate($metrics);
@@ -119,7 +124,11 @@ class Analyze
         // Unit test
         (new UnitTesting($this->config, $files))->calculate($metrics);
 
-        $progress->clear();
+        //
+        // Composer
+        (new Composer($this->config, $files))->calculate($metrics);
+
+        $this->output->clearln();
 
         return $metrics;
     }

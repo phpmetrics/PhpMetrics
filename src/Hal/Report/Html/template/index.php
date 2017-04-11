@@ -2,7 +2,9 @@
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="label"><a href="violations.html">Violations</a> (<?php echo $sum->violations->critical;?> criticals, <?php echo $sum->violations->error;?> errors)</div>
+                <div class="label"><a href="violations.html">Violations</a> (<?php echo $sum->violations->critical; ?>
+                    criticals, <?php echo $sum->violations->error; ?> errors)
+                </div>
                 <div class="number"><?php echo $sum->violations->total; ?></div>
             </div>
         </div>
@@ -76,37 +78,88 @@
             </div>
         </div>
 
-        <div class="column column-50 bloc">
-            <div class="label">ClassRank
-                <small>(Google's page rank applied to relations between classes)</small>
-            </div>
-            <div class="clusterize small">
-                <div id="clusterizeClassRank" class="clusterize-scroll">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Class</th>
-                            <th>ClassRank</th>
-                        </tr>
-                        </thead>
-                        <tbody id="contentClassRank" class="clusterize-content">
-                        <?php
-                        $classesS = $classes;
-                        usort($classesS, function ($a, $b) {
-                            return strcmp($b['pageRank'], $a['pageRank']);
-                        });
-                        //$classesS = array_slice($classesS, 0, 10);
-                        foreach ($classesS as $class) { ?>
-                            <tr>
-                                <td><?php echo $class['name']; ?> <span class="badge"
-                                                                        title="Maintainability Index"><?php echo isset($class['mi']) ? $class['mi'] : ''; ?></span>
-                                </td>
-                                <td><?php echo $class['pageRank']; ?></td>
-                            </tr>
-                        <?php } ?>
-                        </tbody>
-                    </table>
+        <div class="column column-50">
+            <div class="bloc bloc-number">
+                <div class="label">ClassRank
+                    <small>(Google's page rank applied to relations between classes)</small>
                 </div>
+                <div class="clusterize small">
+                    <div id="clusterizeClassRank" class="clusterize-scroll">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>ClassRank</th>
+                            </tr>
+                            </thead>
+                            <tbody id="contentClassRank" class="clusterize-content">
+                            <?php
+                            $classesS = $classes;
+                            usort($classesS, function ($a, $b) {
+                                return strcmp($b['pageRank'], $a['pageRank']);
+                            });
+                            //$classesS = array_slice($classesS, 0, 10);
+                            foreach ($classesS as $class) { ?>
+                                <tr>
+                                    <td><?php echo $class['name']; ?> <span class="badge"
+                                                                            title="Maintainability Index"><?php echo isset($class['mi']) ? $class['mi'] : ''; ?></span>
+                                    </td>
+                                    <td><?php echo $class['pageRank']; ?></td>
+                                </tr>
+                            <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column column-50">
+            <div class="bloc bloc-number">
+                <div class="label">Composer dependencies</div>
+                <div class="clusterize small">
+                    <div id="clusterizePackages" class="clusterize-scroll">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Package</th>
+                                <th>Required</th>
+                                <th>Latest</th>
+                                <th>License</th>
+                            </tr>
+                            </thead>
+                            <tbody id="contentPackages" class="clusterize-content">
+                            <?php
+                            $packages = isset($project['composer'], $project['composer']['packages']) ? $project['composer']['packages'] : [];
+                            usort($packages, function ($a, $b) {
+                                return strcmp($a->name, $b->name);
+                            });
+                            foreach ($packages as $package) { ?>
+                                <tr>
+                                    <td><?php echo $package->name; ?></td>
+                                    <td><?php echo $package->required; ?></td>
+                                    <td><?php echo $package->latest; ?></td>
+                                    <td><?php echo implode(', ', $package->license); ?></td>
+                                </tr>
+                            <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="bloc bloc-number">
+                <div class="label">Licences of Composer dependencies</div>
+                <div>
+                    <div id="svg-licenses"></div>
+                </div>
+                <?php if(0 === sizeof($package)) { ?>
+                    <div>--</div>
+                <?php } ?>
             </div>
         </div>
     </div>
@@ -122,6 +175,27 @@
                     contentId: 'contentClassRank'
                 });
 
+                new Clusterize({
+                    scrollId: 'clusterizePackages',
+                    contentId: 'contentPackages'
+                });
+
+                // prepare json for packages pie
+                <?php
+                $json = [];
+                $packages = isset($project['composer'], $project['composer']['packages']) ? $project['composer']['packages'] : [];
+                foreach ($packages as $package) {
+                    foreach ($package->license as $license) {
+                        if (!isset($json[$license])) {
+                            $json[$license] = new stdClass();
+                            $json[$license]->name = $license;
+                            $json[$license]->value = 0;
+                        }
+                        $json[$license]->value++;
+                    }
+                }
+                ?>
+                chartLicenses(<?php echo json_encode(array_values($json));?>);
             }
         };
     </script>
