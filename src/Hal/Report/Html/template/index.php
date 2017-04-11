@@ -157,7 +157,7 @@
                 <div>
                     <div id="svg-licenses"></div>
                 </div>
-                <?php if(0 === sizeof($package)) { ?>
+                <?php if(0 === sizeof($packages)) { ?>
                     <div>--</div>
                 <?php } ?>
             </div>
