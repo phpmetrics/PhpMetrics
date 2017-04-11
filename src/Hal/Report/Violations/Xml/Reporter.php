@@ -84,6 +84,6 @@ class Reporter
         file_exists(dirname($logFile)) || mkdir(dirname($logFile), 0755, true);
         file_put_contents($logFile, $xml->saveXML());
 
-        $this->output->writeln(sprintf('XML report generated in "%s"', $logFile), OutputInterface::OUTPUT_NORMAL);
+        $this->output->writeln(sprintf('XML report generated in "%s"', $logFile));
     }
 }
