@@ -6,6 +6,7 @@ use Hal\Component\Output\Output;
 use Hal\Metric\Consolided;
 use Hal\Metric\Metrics;
 use Hal\Violation\Violation;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Reporter
 {
