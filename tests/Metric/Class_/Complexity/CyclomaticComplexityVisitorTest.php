@@ -11,9 +11,9 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
 
 
     /**
-     * @dataProvider provideExamples
+     * @dataProvider provideExamplesForClasses
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $classname, $expected)
+    public function testCyclomaticComplexityOfClassesIsWellCalculated($example, $classname, $expectedCcn)
     {
         $metrics = new Metrics();
 
@@ -27,14 +27,42 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
         $stmts = $parser->parse($code);
         $traverser->traverse($stmts);
 
-        $this->assertSame($expected, $metrics->get($classname)->get('ccn'));
+        $this->assertSame($expectedCcn, $metrics->get($classname)->get('ccn'));
     }
 
-    public function provideExamples()
+    /**
+     * @dataProvider provideExamplesForMethods
+     */
+    public function testCyclomaticComplexityOfMethodsIsWellCalculated($example, $classname, $expectedCcnMethodMax)
+    {
+        $metrics = new Metrics();
+
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $traverser = new \PhpParser\NodeTraverser();
+        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
+        $traverser->addVisitor(new ClassEnumVisitor($metrics));
+        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
+
+        $code = file_get_contents($example);
+        $stmts = $parser->parse($code);
+        $traverser->traverse($stmts);
+
+        $this->assertSame($expectedCcnMethodMax, $metrics->get($classname)->get('ccnMethodMax'));
+    }
+
+    public function provideExamplesForClasses()
+    {
+        return [
+            [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 4],
+            [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 5],
+        ];
+    }
+
+    public function provideExamplesForMethods()
     {
         return [
             [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 3],
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 3],
+            [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 5],
         ];
     }
 

@@ -6,7 +6,7 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
 
-class TooComplexCode implements Violation
+class TooComplexClassCode implements Violation
 {
 
     /**
@@ -14,7 +14,7 @@ class TooComplexCode implements Violation
      */
     public function getName()
     {
-        return 'Too complex code';
+        return 'Too complex class code';
     }
 
     /**
@@ -51,10 +51,10 @@ class TooComplexCode implements Violation
         return <<<EOT
 This class looks really complex.
 
-* Algorithm are complex (Cyclomatic complexity is {$this->metric->get('ccn')})
+* Algorithms are complex (Total cyclomatic complexity of class is {$this->metric->get('ccn')})
 * Component uses {$this->metric->get('number_operators')} operators
 
-Maybe you should delegate some code to another objects.
+Maybe you should delegate some code to other objects.
 EOT;
 
     }
