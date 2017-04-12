@@ -10,3 +10,17 @@ Then, in order to run the test suite:
     ./vendor/bin/phpunit
 
 Thanks for your help !
+
+## Releasing
+
+Please NEVER tag manually.
+
+First, changes sources according new tag:
+
+    make tag <VERSION>
+    
+version can be `major`, `minor` or `patch`
+
+Then create release and Git tag with
+
+    make release
