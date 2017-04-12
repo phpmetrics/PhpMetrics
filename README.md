@@ -19,14 +19,14 @@ PhpMetrics provides metrics about PHP project and classes, with beautiful and re
 <br/><br/>
 
 
-## Quick start
+## Quick start
 
     composer require phpmetrics/phpmetrics
     php ./vendor/bin/phpmetrics --report-html=myreport .
     
 Then open the generated `./myreport/index.html` file in your browser. 
 
-## More
+## More
 
 If want, you can [install](https://github.com/phpmetrics/PhpMetrics/blob/master/doc/installation.md) PhpMetrics globally with your favorite package manager. You can also visit our [documentation](http://www.phpmetrics.org/documentation/index.html).
 
