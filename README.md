@@ -7,7 +7,7 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815/badge.svg)](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815)
 
 
-![Standard report](https://github.com/phpmetrics/PhpMetrics/raw/version2_ast/doc/overview.png)
+![Standard report](https://github.com/phpmetrics/PhpMetrics/raw/master/doc/overview.png)
 
 
 <img src="http://www.phpmetrics.org/images/phpmetrics-maintenability.png" height="80px" alt="PhpMetrics" align="left" style="margin-right:20px"/>
