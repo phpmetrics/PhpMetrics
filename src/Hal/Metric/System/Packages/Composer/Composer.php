@@ -45,6 +45,7 @@ class Composer
         $files = $finder->fetch($this->config->get('files'));
 
         foreach ($files as $filename) {
+
             if (!preg_match('/composer\.json|composer-dist\.json/', $filename)) {
                 continue;
             }
@@ -55,7 +56,6 @@ class Composer
             }
 
             $rawRequirements = array_merge($rawRequirements, (array)$datas->require);
-            break;
         }
 
         $packagist = new Packagist();
