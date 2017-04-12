@@ -1,8 +1,5 @@
 # PhpMetrics
 
-Gives metrics about PHP project and classes.
-
-![Standard report](https://github.com/phpmetrics/PhpMetrics/raw/version2_ast/doc/overview.png)
 
 [![License](https://poser.pugx.org/phpmetrics/phpmetrics/license.svg)](https://packagist.org/packages/phpmetrics/phpmetrics)
 [![Build Status](https://secure.travis-ci.org/phpmetrics/PhpMetrics.svg)](http://travis-ci.org/phpmetrics/PhpMetrics)
@@ -10,59 +7,37 @@ Gives metrics about PHP project and classes.
 [![Dependency Status](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815/badge.svg)](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815)
 
 
-# Installation
+![Standard report](https://github.com/phpmetrics/PhpMetrics/raw/version2_ast/doc/overview.png)
 
-#### As a phar archive:
 
-You can install the [.phar](https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar) package by command line running the following commands:
+<img src="http://www.phpmetrics.org/images/phpmetrics-maintenability.png" height="80px" alt="PhpMetrics" align="left" style="margin-right:20px"/>
 
-```bash
-wget https://github.com/phpmetrics/PhpMetrics/raw/master/build/phpmetrics.phar
-chmod +x phpmetrics.phar
-mv phpmetrics.phar /usr/local/bin/phpmetrics
-```
+PhpMetrics provides metrics about PHP project and classes, with beautiful and readable HTML report. 
 
-#### As a composer dependency:
+<b>[Demo](http://www.phpmetrics.org/report/latest/index.html)</b> | [Documentation](http://www.phpmetrics.org/documentation/index.html) | [Twitter](https://twitter.com/Halleck45) | [Contributing](https://github.com/phpmetrics/PhpMetrics/blob/master/doc/contributing.md)
 
-    composer global require 'phpmetrics/phpmetrics'
+<br/><br/>
+
+
+## Quick start
+
+    composer require phpmetrics/phpmetrics
+    php ./vendor/bin/phpmetrics --report-html=myreport .
     
-Please note that the `~/.composer/vendor/bin` directory must be in your `$PATH`. For example in your `~/.bash_profile` (or `~/.bashrc`), add :
+Then open the generated `./myreport/index.html` file in your browser. 
 
-    export PATH=~/.composer/vendor/bin:$PATH
+## More
 
-## Usage
-
-> Do not hesitate to visit the [official documentation](http://www.phpmetrics.org).
-
-The command command `phpmetrics --report-html=./log <folder or filename> ` will generate HTML report in the `./log` directory.
-
-## Compatibility
-
-PhpMetrics can parse PHP code from **PHP 5.3 to PHP 7.x**.
-
-## IDE integration
-
-+ [PhpMetrics plugin for PhpStorm](http://plugins.jetbrains.com/plugin/7500)
-
-## Contribute
-
-In order to run unit tests, please install the dev dependencies:
-
-    curl -sS https://getcomposer.org/installer | php
-    php composer.phar install
-
-Then, in order to run the test suite:
-
-    ./vendor/bin/phpunit
-
-Finally, build the phar:
-
-    make build
+If want, you can [install](https://github.com/phpmetrics/PhpMetrics/blob/master/doc/installation.md) PhpMetrics globally with your favorite package manager. You can also visit our [documentation](http://www.phpmetrics.org/documentation/index.html).
 
 ## Author
 
-+ Jean-François Lépine <[www.lepine.pro](http://www.lepine.pro)>
++ Jean-François Lépine <[@Halleck45](https://twitter.com/Halleck45)>
 
 ## License
 
 See the LICENSE file.
+
+## Contributing
+
+See the [CONTRIBUTING](doc/contributing.md) file.
