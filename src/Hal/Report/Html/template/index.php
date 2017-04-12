@@ -141,7 +141,10 @@
                                     <td><?php echo $package->name; ?></td>
                                     <td><?php echo $package->required; ?></td>
                                     <td><?php echo $package->latest; ?></td>
-                                    <td><?php echo implode(', ', $package->license); ?></td>
+                                    <td><?php foreach($package->license as $license) { ?>
+                                            <a target="_blank" href="https://spdx.org/licenses/<?php echo $license;?>.html"><?php echo $license;?></a>
+                                        <?php }; ?>
+                                    </td>
                                 </tr>
                             <?php } ?>
                             </tbody>
