@@ -82,6 +82,12 @@ a {
         margin-right: 0;
     }
 }
+@media (max-width: 600px) {
+    .navigation-list {
+        display:none
+    }
+}
+
 
 .navigation-item {
     float: left;
@@ -179,12 +185,16 @@ a {
     color: #666;
     text-decoration: underline;
 }
+@media (max-width: 600px) {
+    .report-details {
+        display: none;
+    }
+}
 
 
 
 
-
-#sidebar {
+    #sidebar {
     position: fixed;
     top: 80px;
     left: 0;
