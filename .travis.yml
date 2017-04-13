@@ -28,7 +28,7 @@ script:
 
 before_deploy:
   - make build
-  - git add -f build/phpmetrics.deb build/phpmetrics.phar
+  - git add -f build/phpmetrics.phar # build/phpmetrics.deb 
 
 deploy:
   - provider: releases
