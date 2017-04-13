@@ -51,5 +51,5 @@
     <div class="content">
         <div class="report-details">
             Created at <?php echo date('Y-m-d H:i:s'); ?>
-        , with PHPMetrics <?php echo getVersion(); ?> (<a href="https://twitter.com.Halleck45">Jean-François Lépine</a>).
+        , with PHPMetrics <?php echo getVersion(); ?> (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
