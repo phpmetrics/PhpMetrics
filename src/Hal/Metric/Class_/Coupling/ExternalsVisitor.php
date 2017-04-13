@@ -21,7 +21,7 @@ class ExternalsVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * @var Stmt\Use_[]
+     * @var Stmt\UseUse[]
      */
     private $uses = [];
 

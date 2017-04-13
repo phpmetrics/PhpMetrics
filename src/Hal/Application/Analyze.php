@@ -33,7 +33,7 @@ class Analyze
 {
 
     /**
-     * @var OutputInterface
+     * @var Output
      */
     private $output;
 
@@ -49,7 +49,7 @@ class Analyze
 
     /**
      * Analyze constructor.
-     * @param OutputInterface $output
+     * @param Output $output
      */
     public function __construct(Config $config, Output $output, Issuer $issuer)
     {

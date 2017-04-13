@@ -81,7 +81,7 @@ function iterate_over_node($node, $callback)
 
 /**
  * @param $node
- * @return string
+ * @return string|null
  */
 function getNameOfNode($node)
 {
