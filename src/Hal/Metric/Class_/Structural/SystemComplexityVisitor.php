@@ -41,7 +41,8 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof Stmt\Class_) {
 
-            $class = $this->metrics->get($node->namespacedName->toString());
+            $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
+            $class = $this->metrics->get($name);
 
             $sy = $dc = $sc = array();
 
