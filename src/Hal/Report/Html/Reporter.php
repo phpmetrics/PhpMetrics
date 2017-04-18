@@ -84,6 +84,8 @@ class Reporter
         $this->renderPage(__DIR__ . '/template/complexity.php', $logDir . '/complexity.html', $consolidated, $history);
         $this->renderPage(__DIR__ . '/template/panel.php', $logDir . '/panel.html', $consolidated, $history);
         $this->renderPage(__DIR__ . '/template/violations.php', $logDir . '/violations.html', $consolidated, $history);
+        $this->renderPage(__DIR__ . '/template/packages.php', $logDir . '/packages.html', $consolidated, $history);
+        $this->renderPage(__DIR__ . '/template/package_relations.php', $logDir . '/package_relations.html', $consolidated, $history);
         if ($this->config->has('git')) {
             $this->renderPage(__DIR__ . '/template/git.php', $logDir . '/git.html', $consolidated, $history);
         }
@@ -121,6 +123,7 @@ class Reporter
         $this->classes = $classes = $consolidated->getClasses();
         $this->files = $files = $consolidated->getFiles();
         $this->project = $project = $consolidated->getProject();
+        $this->packages = $packages = $consolidated->getPackages();
         $config = $this->config;
         $this->history = $history;
 

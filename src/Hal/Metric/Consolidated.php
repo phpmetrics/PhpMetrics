@@ -30,6 +30,9 @@ class Consolidated
      */
     private $project = [];
 
+    /** @var array */
+    private $packages;
+
     /**
      * Consolided constructor.
      * @param Metrics $metrics
@@ -42,6 +45,7 @@ class Consolidated
         $classes = [];
         $functions = [];
         $files = [];
+        $packages = [];
         $project = [];
         $nbInterfaces = 0;
         foreach ($metrics->all() as $key => $item) {
@@ -57,6 +61,8 @@ class Consolidated
                 $files[$key] = $item->all();
             } elseif (ProjectMetric::class === $classItem) {
                 $project[$key] = $item->all();
+            } elseif (PackageMetric::class === $classItem) {
+                $packages[$key] = $item->all();
             }
         }
 
@@ -135,6 +141,7 @@ class Consolidated
         $this->classes = $classes;
         $this->files = $files;
         $this->project = $project;
+        $this->packages = $packages;
     }
 
     /**
@@ -175,5 +182,13 @@ class Consolidated
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPackages()
+    {
+        return $this->packages;
     }
 }
