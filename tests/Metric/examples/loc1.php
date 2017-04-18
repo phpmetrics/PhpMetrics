@@ -14,6 +14,8 @@ class A {
         $x = 1 + 1;
         $x = 1 + 1;
         $x = 1 + 1;
+        $x = 1 + 1; // a command in a line
+        echo 'http://phpmetrics.org/';
         return $x;
     }
 }

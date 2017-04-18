@@ -60,8 +60,12 @@ class LengthVisitor extends NodeVisitorAbstract
             $code = preg_replace('!/\*.*?\*/!s', '', $code);
 
             // count and remove single line comments
-            $code = preg_replace('!(\s*?//.+\n)!', "\n", $code, -1, $nbCommentsSingleLine);
-            $cloc += $nbCommentsSingleLine;
+            $code = preg_replace_callback('!(\'[^\']*\'|"[^"]*")|((?:#|\/\/).*$)!m', function (array $matches) use (&$cloc) {
+                if (isset($matches[2])) {
+                    $cloc += 1;
+                }
+                return $matches[1];
+            }, $code, -1);
 
             // count and remove empty lines
             $code = trim(preg_replace('!(^\s*[\r\n])!sm', '', $code));
