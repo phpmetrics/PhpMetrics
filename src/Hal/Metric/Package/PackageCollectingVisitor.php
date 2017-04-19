@@ -33,7 +33,7 @@ class PackageCollectingVisitor extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Trait_) {
+        if ($node instanceof Class_ || $node instanceof Interface_) {
             $package = $this->namespace;
 
             $docComment = $node->getDocComment();
