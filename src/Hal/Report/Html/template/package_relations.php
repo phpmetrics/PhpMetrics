@@ -3,18 +3,32 @@
 <?php
 $relations = [];
 $getPackageName = function ($name) {
-    return $name === '\\' ? '\\global' : '\\' . substr($name, 0, -1);
+    return $name === '\\' ? 'global' : substr($name, 0, -1);
 };
 foreach ($packages as $package) {
-    $relations[] = [
-        'name' => $getPackageName($package['name']),
+    $packageName = $getPackageName($package['name']);
+    $outgoingDependencies = array_map(
+        $getPackageName,
+        isset($package['outgoing_package_dependencies']) ? $package['outgoing_package_dependencies'] : []
+    );
+    $relations[$packageName] = [
+        'name' => $packageName,
         'size' => 3000,
-        'relations' => array_map($getPackageName, array_merge(
-            isset($package['outgoing_package_dependencies']) ? $package['outgoing_package_dependencies'] : [],
-            isset($package['incoming_package_dependencies']) ? $package['incoming_package_dependencies'] : []
-        ))
+        'relations' => $outgoingDependencies,
     ];
+    // Adding vendor packages
+    foreach ($outgoingDependencies as $each) {
+        if (isset($relations[$each])) {
+            continue;
+        }
+        $relations[$each] = [
+            'name' => $each,
+            'size' => 3000,
+            'relations' => []
+        ];
+    }
 }
+$relations = array_values($relations);
 ?>
 
 
@@ -43,7 +57,7 @@ foreach ($packages as $package) {
 
         var diameter = document.getElementById('chart-relations').offsetWidth,
             radius = diameter / 2,
-            innerRadius = radius - 120;
+            innerRadius = radius - 320;
 
         var cluster = d3.layout.cluster()
             .size([360, innerRadius])
@@ -154,16 +168,16 @@ foreach ($packages as $package) {
 
             function find(name, data) {
                 name = (data ? name + ' ' : name);
-                var node = map[name], i;
+                var node = map[name];
                 if (!node) {
                     node = map[name] = data || {name: name, children: []};
                     if (name.length) {
-                        node.parent = find(name.substring(0, i = name.lastIndexOf("\\")));
+                        node.parent = find("");
                         if (!node.parent.children) {
                             node.parent.children = []; // fix anomalies
                         }
                         node.parent.children.push(node);
-                        node.key = name;//name.substring(i + 1);
+                        node.key = name.trim();
                     }
                 }
                 return node;

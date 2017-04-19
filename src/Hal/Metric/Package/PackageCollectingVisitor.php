@@ -1,6 +1,6 @@
 <?php
 
-namespace Hal\Metric\Packaging;
+namespace Hal\Metric\Package;
 
 use Hal\Metric\Metrics;
 use Hal\Metric\PackageMetric;
@@ -35,7 +35,6 @@ class PackageCollectingVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Trait_) {
             $package = $this->namespace;
-            $subPackage = '';
 
             $docComment = $node->getDocComment();
             $docBlockText = $docComment ? $docComment->getText() : '';
@@ -43,7 +42,7 @@ class PackageCollectingVisitor extends NodeVisitorAbstract
                 $package = $matches[1];
             }
             if (preg_match('/^\s*\* @subpackage (.*)/m', $docBlockText, $matches)) {
-                $subPackage = $matches[1];
+                $package = $package . '\\' . $matches[1];
             }
 
             $packageName = $package . '\\';

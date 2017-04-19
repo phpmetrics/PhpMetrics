@@ -1,6 +1,6 @@
 <?php
 
-namespace Hal\Metric\Packaging;
+namespace Hal\Metric\Package;
 
 use Hal\Metric\Metrics;
 use Hal\Metric\PackageMetric;

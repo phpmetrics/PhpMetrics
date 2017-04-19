@@ -133,6 +133,13 @@ class Consolidated
                 $violations[$name]++;
             }
         }
+        foreach ($packages as $package) {
+            foreach ($package['violations'] as $violation) {
+                $violations['total']++;
+                $name = $map[$violation->getLevel()];
+                $violations[$name]++;
+            }
+        }
         $sum->violations = (object)$violations;
 
 

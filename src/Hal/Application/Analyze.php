@@ -16,10 +16,11 @@ use Hal\Metric\Class_\Structural\SystemComplexityVisitor;
 use Hal\Metric\Class_\Text\HalsteadVisitor;
 use Hal\Metric\Class_\Text\LengthVisitor;
 use Hal\Metric\Metrics;
-use Hal\Metric\Packaging\PackageCollectingVisitor;
-use Hal\Metric\Packaging\PackageAbstraction;
-use Hal\Metric\Packaging\PackageDependencies;
-use Hal\Metric\Packaging\PackageStability;
+use Hal\Metric\Package\PackageAbstraction;
+use Hal\Metric\Package\PackageCollectingVisitor;
+use Hal\Metric\Package\PackageDependencies;
+use Hal\Metric\Package\PackageDistance;
+use Hal\Metric\Package\PackageInstability;
 use Hal\Metric\System\Changes\GitChanges;
 use Hal\Metric\System\Coupling\Coupling;
 use Hal\Metric\System\Coupling\DepthOfInheritanceTree;
@@ -127,7 +128,8 @@ class Analyze
         // Package analyses
         (new PackageDependencies())->calculate($metrics);
         (new PackageAbstraction())->calculate($metrics);
-        (new PackageStability())->calculate($metrics);
+        (new PackageInstability())->calculate($metrics);
+        (new PackageDistance())->calculate($metrics);
 
         //
         // File analyses
