@@ -18,6 +18,7 @@ use Hal\Metric\Class_\Text\LengthVisitor;
 use Hal\Metric\Metrics;
 use Hal\Metric\System\Changes\GitChanges;
 use Hal\Metric\System\Coupling\Coupling;
+use Hal\Metric\System\Coupling\DepthOfInheritanceTree;
 use Hal\Metric\System\Coupling\PageRank;
 use Hal\Metric\System\Packages\Composer\Composer;
 use Hal\Metric\System\UnitTesting\UnitTesting;
@@ -115,6 +116,7 @@ class Analyze
         // System analyses
         (new PageRank())->calculate($metrics);
         (new Coupling())->calculate($metrics);
+        (new DepthOfInheritanceTree())->calculate($metrics);
 
         //
         // File analyses
