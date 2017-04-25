@@ -45,6 +45,9 @@ class CycleDetector
 
             $recursionStack[$node->getKey()] = false;
         }
+
+        $graph->resetVisits();
+
         return $isCyclic;
     }
 

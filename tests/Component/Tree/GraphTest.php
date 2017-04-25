@@ -86,4 +86,36 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, sizeof($c->getEdges()));
     }
 
+
+    public function testICanListRootNodes() {
+        $graph = new Graph();
+        $a = new Node('A'); // root
+        $b = new Node('B');
+        $c = new Node('C');
+        $d = new Node('D');
+        $e = new Node('E'); // root
+        $graph->insert($a);
+        $graph->insert($b);
+        $graph->insert($c);
+        $graph->insert($d);
+        $graph->insert($e);
+
+        $graph->addEdge($a, $b); // A -> B
+        $graph->addEdge($b, $c); // B -> C
+        $graph->addEdge($a, $d); // A -> D
+
+        $roots = $graph->getRootNodes();
+        $this->assertEquals(2, sizeof($roots));
+
+        $rootsFound = [
+            'A' => false,
+            'E' => false,
+        ];
+        foreach($roots as $node) {
+            $rootsFound[$node->getKey()] = true;
+        }
+
+        $this->assertTrue($rootsFound['A']);
+        $this->assertTrue($rootsFound['E']);
+    }
 }
