@@ -51,7 +51,7 @@ class TooDependent implements Violation
         return <<<EOT
 This class looks use really high number of components.
 
-* Efferent coupling is {$this->metric->get('efferentCoupling')}, so this class uses {$this->metric->get('efferentCoupling')} differents external components.
+* Efferent coupling is {$this->metric->get('efferentCoupling')}, so this class uses {$this->metric->get('efferentCoupling')} different external components.
 
 Maybe you should check why this class has lot of dependencies.
 EOT;
