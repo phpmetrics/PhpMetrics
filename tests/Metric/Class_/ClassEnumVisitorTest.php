@@ -3,6 +3,8 @@ namespace Test\Hal\Metric\Class_;
 
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Metrics;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 
 /**
@@ -10,8 +12,6 @@ use PhpParser\ParserFactory;
  */
 class ClassEnumVisitorTest extends \PHPUnit_Framework_TestCase
 {
-
-
     /**
      * @dataProvider provideExamples
      */
@@ -23,16 +23,8 @@ class ClassEnumVisitorTest extends \PHPUnit_Framework_TestCase
         $nbMethodsPublic,
         $nbMethodsIncludingGettersSetters
     ) {
-        $metrics = new Metrics();
-
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $traverser = new \PhpParser\NodeTraverser();
-        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-
         $code = file_get_contents($example);
-        $stmts = $parser->parse($code);
-        $traverser->traverse($stmts);
+        $metrics = $this->analyzeCode($code);
 
         $this->assertSame($nbMethods, $metrics->get($classname)->get('nbMethods'));
         $this->assertSame($nbMethodsPrivate, $metrics->get($classname)->get('nbMethodsPrivate'));
@@ -41,25 +33,37 @@ class ClassEnumVisitorTest extends \PHPUnit_Framework_TestCase
             $metrics->get($classname)->get('nbMethodsIncludingGettersSetters'));
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         return [
             [__DIR__ . '/../examples/nbmethods1.php', 'A', 3, 1, 2, 7],
         ];
     }
 
-    public function testAnonymousClassIsHandledCorrectly()
+    /**
+     * @param string $code
+     * @return Metrics
+     */
+    private function analyzeCode($code)
     {
         $metrics = new Metrics();
-
         $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $traverser = new \PhpParser\NodeTraverser();
-        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new NameResolver());
         $traverser->addVisitor(new ClassEnumVisitor($metrics));
 
-        $code = '<?php new class {};';
         $stmts = $parser->parse($code);
         $traverser->traverse($stmts);
+
+        return $metrics;
+    }
+
+    public function testAnonymousClassIsHandledCorrectly()
+    {
+        $code = '<?php new class {};';
+        $metrics = $this->analyzeCode($code);
+
+        $this->assertCount(1, $metrics->all());
     }
 
     /**
@@ -67,13 +71,6 @@ class ClassEnumVisitorTest extends \PHPUnit_Framework_TestCase
      */
     public function testDynamicAttributeClassIsHandledCorrectly()
     {
-        $metrics = new Metrics();
-
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $traverser = new \PhpParser\NodeTraverser();
-        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-
         $code = '
 class A {
     public function foo() {
@@ -85,8 +82,7 @@ class A {
     }
 }
 ';
-        $stmts = $parser->parse($code);
-        $traverser->traverse($stmts);
+        $this->analyzeCode($code);
     }
 
 
@@ -113,5 +109,27 @@ interface NotifyPropertyChangedInterface
      */
     public function isTracked(): bool;
 }';
+        $this->analyzeCode($code);
+    }
+
+    public function testItDoesNotMarkClassesAsAbstract()
+    {
+        $code = '<?php class Foo {}';
+        $metrics = $this->analyzeCode($code);
+        $this->assertFalse($metrics->get('Foo')->get('abstract'));
+    }
+
+    public function testItMarksAbstractClassesAsAbstract()
+    {
+        $code = '<?php abstract class Foo {}';
+        $metrics = $this->analyzeCode($code);
+        $this->assertTrue($metrics->get('Foo')->get('abstract'));
+    }
+
+    public function testItMarksInterfacesAsAbstract()
+    {
+        $code = '<?php interface Foo {}';
+        $metrics = $this->analyzeCode($code);
+        $this->assertTrue($metrics->get('Foo')->get('abstract'));
     }
 }

@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeVisitorAbstract;
 
 class PackageCollectingVisitor extends NodeVisitorAbstract
@@ -51,8 +50,9 @@ class PackageCollectingVisitor extends NodeVisitorAbstract
                 $this->metrics->attach($packageMetric);
             }
             /* @var PackageMetric $packageMetric */
-            $elementName = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
-            $packageMetric->addClass($elementName);
+            $elementName = isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node);
+            $elementName = (string) $elementName;
+            $packageMetric->addClass((string) $elementName);
 
             $this->metrics->get($elementName)->set('package', $packageName);
         }

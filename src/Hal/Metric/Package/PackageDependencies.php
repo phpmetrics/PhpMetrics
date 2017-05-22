@@ -21,6 +21,10 @@ class PackageDependencies
         }
     }
 
+    /**
+     * @param ClassMetric|InterfaceMetric|Metric $class
+     * @param Metrics $metrics
+     */
     private function increaseDependencies(Metric $class, Metrics $metrics)
     {
         if (! $class->has('package') || ! $class->has('externals')) {
@@ -39,7 +43,6 @@ class PackageDependencies
             if ($outgoingPackage instanceof PackageMetric) {
                 $outgoingPackage->addIncomingClassDependency($class->getName(), $incomingPackage->getName());
             }
-
         }
     }
 

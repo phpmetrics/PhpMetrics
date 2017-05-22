@@ -10,8 +10,8 @@ class PackageDistance
     public function calculate(Metrics $metrics)
     {
         foreach ($metrics->all() as $each) {
-            if ($each instanceof PackageMetric &&$each->getAbstraction() !== null && $each->getInstability() !== null) {
-                $each->setNormalizedDistance($each->getAbstraction() + $each->getInstability() - 1);
+            if ($each instanceof PackageMetric && $each->getAbstraction() !== null && $each->getInstability() !== null) {
+                $each->setNormalizedDistance(abs($each->getAbstraction() + $each->getInstability() - 1));
             }
         }
     }

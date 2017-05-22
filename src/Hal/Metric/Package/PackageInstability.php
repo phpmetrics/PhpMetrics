@@ -26,7 +26,6 @@ class PackageInstability
                 $instabilitiesByPackage[$eachPackage->getName()] = $eachPackage->getInstability();
             }
         }
-
         // Set depending instabilities
         foreach ($packages as $eachPackage) {
             $dependentInstabilities = array_map(function ($packageName) use ($instabilitiesByPackage) {
@@ -36,9 +35,8 @@ class PackageInstability
                 $eachPackage->getOutgoingPackageDependencies(),
                 $dependentInstabilities
             );
-            $dependentInstabilities = array_filter($dependentInstabilities);
+            $dependentInstabilities = array_filter($dependentInstabilities, 'is_float');
             $eachPackage->setDependentInstabilities($dependentInstabilities);
         }
-
     }
 }
