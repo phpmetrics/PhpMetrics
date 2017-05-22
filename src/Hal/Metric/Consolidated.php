@@ -103,6 +103,7 @@ class Consolidated
         }
         $sum->nbClasses = count($classes);
         $sum->nbInterfaces = $nbInterfaces;
+        $sum->nbPackages = count($packages);
 
         foreach ($avg as &$a) {
             if (sizeof($a) > 0) {
@@ -111,6 +112,29 @@ class Consolidated
                 $a = 0;
             }
         }
+
+        $avg->distance = 0;
+        $avg->incomingCDep = 0;
+        $avg->incomingPDep = 0;
+        $avg->outgoingCDep = 0;
+        $avg->outgoingPDep = 0;
+        $avg->classesPerPackage = 0;
+        foreach (array_keys($packages) as $eachName) {
+            /* @var $eachPackage PackageMetric */
+            $eachPackage = $metrics->get($eachName);
+            $avg->distance += $eachPackage->getDistance();
+            $avg->incomingCDep += count($eachPackage->getIncomingClassDependencies());
+            $avg->incomingPDep += count($eachPackage->getIncomingPackageDependencies());
+            $avg->outgoingCDep += count($eachPackage->getOutgoingClassDependencies());
+            $avg->outgoingPDep += count($eachPackage->getOutgoingPackageDependencies());
+            $avg->classesPerPackage += count($eachPackage->getClasses());
+        }
+        $avg->distance = round($avg->distance / count($packages), 2);
+        $avg->incomingCDep = round($avg->incomingCDep / count($packages), 2);
+        $avg->incomingPDep = round($avg->incomingPDep / count($packages), 2);
+        $avg->outgoingCDep = round($avg->outgoingCDep / count($packages), 2);
+        $avg->outgoingPDep = round($avg->outgoingPDep / count($packages), 2);
+        $avg->classesPerPackage = round($avg->classesPerPackage / count($packages), 2);
 
         // sums of violations
         $violations = [
