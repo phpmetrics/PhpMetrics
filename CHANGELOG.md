@@ -4,8 +4,7 @@ PhpMetrics Change Log
 under development
 -----------------
 
-- Bugfix #288: Fixed wrong PMD priority levels (krukru)
-- Started keeping track of changes
+- Bugfix [#288](https://github.com/phpmetrics/PhpMetrics/issues/288): Fixed wrong PMD priority levels (krukru)
 
 v2.2.0 April 13, 2017
 ---------------------
@@ -15,7 +14,7 @@ v2.2.0 April 13, 2017
 - New report: composer dependencies licenses
 - HTML report is now responsive
 - Simplified README
-- Bugfix #276
+- Bugfix [#276](https://github.com/phpmetrics/PhpMetrics/issues/276)
 
 v2.1.0 April 10, 2017
 ---------------------
