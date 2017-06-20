@@ -1,4 +1,4 @@
-PhpMetics Change Log
+PhpMetrics Change Log
 ====================
 
 under development
