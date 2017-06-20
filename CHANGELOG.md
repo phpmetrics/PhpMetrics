@@ -26,4 +26,10 @@
 ### Fixed
 - Fixed majors bugs with code parsing
 
-## [2.0.0] - 2017-02-01
+## 2.0.0 - 2017-02-01
+### Changed
+- php7 is now the main version for building artifacts
+
+[Unreleased]: https://github.com/phpmetrics/PhpMetrics/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/phpmetrics/PhpMetrics/compare/v2.1.0...v2.2.0
+[2.1.0]: https://github.com/phpmetrics/PhpMetrics/compare/v2.0.0...v2.1.0
