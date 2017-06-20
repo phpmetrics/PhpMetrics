@@ -1,32 +1,29 @@
-PhpMetrics Change Log
-====================
+# PhpMetrics Change Log
 
-under development
------------------
+## [Unreleased]
+### Fixed
+- Wrong PMD priority levels (@krukru) [#288](https://github.com/phpmetrics/PhpMetrics/issues/288)
 
-- Bugfix [#288](https://github.com/phpmetrics/PhpMetrics/issues/288): Fixed wrong PMD priority levels (krukru)
-
-v2.2.0 April 13, 2017
----------------------
-
+## [2.2.0] - 2017-04-13
+### Added
 - New metric: `ccnMethodMax` (maximum cyclomatic complexity of methods for class)
 - New report: composer dependencies versions
 - New report: composer dependencies licenses
 - HTML report is now responsive
+### Changed
 - Simplified README
-- Bugfix [#276](https://github.com/phpmetrics/PhpMetrics/issues/276)
+### Fixed
+- --report-violations Class not found [#276](https://github.com/phpmetrics/PhpMetrics/issues/276)
 
-v2.1.0 April 10, 2017
----------------------
-
+## [2.1.0] - 2017-04-10
+### Added
 - Improved Junit report
 - Improved UI
-- Removed support of PHP 5.4
-- Fixed majors bugs with code parsing
 - Improved CI
+### Removed
+- Removed support of PHP 5.4
 - Removed Symfony/Console
+### Fixed
+- Fixed majors bugs with code parsing
 
-v2.0.0 February 01, 2017
-------------------------
-
-- php7 is now the main version for building artifacts
+## [2.0.0] - 2017-02-01
