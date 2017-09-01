@@ -3,6 +3,7 @@ namespace Hal\Metric\Class_\Structural;
 
 use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\Node as TreeNode;
+use Hal\Metric\Helper\MetricClassNameGenerator;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -40,8 +41,7 @@ class LcomVisitor extends NodeVisitorAbstract
 
             // we build a graph of internal dependencies in class
             $graph = new Graph();
-            $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
-            $class = $this->metrics->get($name);
+            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {

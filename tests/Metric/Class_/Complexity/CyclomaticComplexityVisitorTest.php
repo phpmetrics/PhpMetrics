@@ -55,6 +55,7 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
         return [
             [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 4],
             [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 5],
+            [ __DIR__.'/../../examples/cyclomatic_anon.php', 'Foo\C', 1],
         ];
     }
 

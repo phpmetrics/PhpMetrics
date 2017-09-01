@@ -1,6 +1,7 @@
 <?php
 namespace Hal\Metric\Class_\Structural;
 
+use Hal\Metric\Helper\MetricClassNameGenerator;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -41,8 +42,7 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof Stmt\Class_) {
 
-            $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
-            $class = $this->metrics->get($name);
+            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
             $sy = $dc = $sc = array();
 
