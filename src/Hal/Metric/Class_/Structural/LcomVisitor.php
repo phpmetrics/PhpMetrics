@@ -40,7 +40,8 @@ class LcomVisitor extends NodeVisitorAbstract
 
             // we build a graph of internal dependencies in class
             $graph = new Graph();
-            $class = $this->metrics->get($node->namespacedName->toString());
+            $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
+            $class = $this->metrics->get($name);
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {

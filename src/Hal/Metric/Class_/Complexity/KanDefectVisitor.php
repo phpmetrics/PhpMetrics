@@ -36,8 +36,8 @@ class KanDefectVisitor extends NodeVisitorAbstract
         if ($node instanceof Stmt\Class_
             || $node instanceof Stmt\Interface_
         ) {
-
-            $class = $this->metrics->get($node->namespacedName->toString());
+            $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
+            $class = $this->metrics->get($name);
 
             $select = $while = $if = 0;
 

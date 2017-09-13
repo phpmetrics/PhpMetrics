@@ -46,7 +46,8 @@ class HalsteadVisitor extends NodeVisitorAbstract
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Function_) {
 
             if ($node instanceof Stmt\Class_) {
-                $classOrFunction = $this->metrics->get($node->namespacedName->toString());
+                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
+                $classOrFunction = $this->metrics->get($name);
             } else {
                 $classOrFunction = new FunctionMetric($node->name);
                 $this->metrics->attach($classOrFunction);
