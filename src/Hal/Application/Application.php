@@ -68,6 +68,8 @@ class Application
         // report
         (new Report\Cli\Reporter($config, $output))->generate($metrics);
         (new Report\Html\Reporter($config, $output))->generate($metrics);
+        (new Report\Csv\Reporter($config, $output))->generate($metrics);
+        (new Report\Json\Reporter($config, $output))->generate($metrics);
         (new Report\Violations\Xml\Reporter($config, $output))->generate($metrics);
 
         // end

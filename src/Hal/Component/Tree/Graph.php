@@ -112,4 +112,44 @@ class Graph implements \Countable
     {
         return $this->datas;
     }
+
+    /**
+     * @return $this
+     */
+    public function resetVisits()
+    {
+        foreach ($this->all() as $node) {
+            $node->visited = false;
+        }
+        return $this;
+    }
+
+    /**
+     * Get the list of all root nodes
+     *
+     *      we can have array of roots : graph can be a "forest"
+     *
+     * @return array
+     */
+    public function getRootNodes()
+    {
+        $roots = [];
+        foreach ($this->all() as $node) {
+
+            $isRoot = true;
+
+            foreach ($node->getEdges() as $edge) {
+                if ($edge->getTo() == $node) {
+                    $isRoot = false;
+                }
+            }
+
+
+            if ($isRoot) {
+                array_push($roots, $node);
+            }
+        }
+
+        return $roots;
+    }
 }

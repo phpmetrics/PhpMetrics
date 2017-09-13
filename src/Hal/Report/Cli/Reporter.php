@@ -69,9 +69,12 @@ Object oriented programming
     Methods                                     {$sum->nbMethods}
     Methods by class                            {$methodsByClass}
     Lack of cohesion of methods                 {$avg->lcom}
+    
+Coupling
     Average afferent coupling                   {$avg->afferentCoupling}
     Average efferent coupling                   {$avg->efferentCoupling}
     Average instability                         {$avg->instability}
+    Depth of Inheritance Tree                   {$metrics->get('tree')->get('depthOfInheritanceTree')}
 
 Complexity
     Average Cyclomatic complexity by class      {$avg->ccn}
