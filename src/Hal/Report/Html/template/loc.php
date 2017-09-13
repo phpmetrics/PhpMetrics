@@ -35,7 +35,7 @@ if(sizeof($array) > 1) {
 <div class="row">
     <div class="column">
         <div class="bloc">
-            <h4>Demographical repartitions of logical lines of code by class</h4>
+            <h4>Percentile distribution of logical lines of code by class</h4>
             <div id="lloc-repartition" style="height: 200px"></div>
             <div class="help" style="text-align: center">Percentile</div>
         </div>
