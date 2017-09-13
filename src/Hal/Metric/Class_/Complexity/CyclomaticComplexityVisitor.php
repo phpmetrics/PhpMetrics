@@ -2,6 +2,7 @@
 namespace Hal\Metric\Class_\Complexity;
 
 use Hal\Component\Reflected\Method;
+use Hal\Metric\Helper\MetricClassNameGenerator;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -46,8 +47,8 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
         if ($node instanceof Stmt\Class_
             || $node instanceof Stmt\Interface_
         ) {
-            $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
-            $class = $this->metrics->get($name);
+
+            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
             $ccn = 1;
             $ccnByMethod = array();
