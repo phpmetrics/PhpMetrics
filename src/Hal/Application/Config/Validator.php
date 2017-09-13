@@ -36,7 +36,7 @@ class Validator
         $config->set('exclude', array_filter(explode(',', $config->get('exclude'))));
 
         // parameters with values
-        $keys = ['report-html', 'report-csv', 'report-violation', 'extensions'];
+        $keys = ['report-html', 'report-csv', 'report-violation', '--report-json', 'extensions'];
         foreach ($keys as $key) {
             $value = $config->get($key);
             if ($config->has($key) && empty($value) || true === $value) {
