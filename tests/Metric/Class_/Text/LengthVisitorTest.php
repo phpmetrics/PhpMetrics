@@ -2,10 +2,8 @@
 namespace Test\Hal\Metric\Class_\Structural;
 
 use Hal\Metric\Class_\ClassEnumVisitor;
-use Hal\Metric\Class_\Text\HalsteadVisitor;
 use Hal\Metric\Class_\Text\LengthVisitor;
 use Hal\Metric\Metrics;
-use PhpParser\Lexer;
 use PhpParser\ParserFactory;
 
 /**
@@ -18,7 +16,7 @@ class LengthVisitorTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider provideExamples
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $functionName, $loc, $lloc, $cloc)
+    public function testLineCountsAreWellCalculated($example, $functionName, $loc, $lloc, $cloc)
     {
         $metrics = new Metrics();
 
@@ -41,7 +39,7 @@ class LengthVisitorTest extends \PHPUnit_Framework_TestCase {
     public function provideExamples()
     {
         return [
-            [ __DIR__.'/../../examples/loc1.php', 'A', 18, 11, 7],
+            [ __DIR__.'/../../examples/loc1.php', 'A', 21, 13, 8],
         ];
     }
 
