@@ -13,7 +13,8 @@ class Parser
             return $config;
         }
 
-        if (preg_match('!\.php$!', $argv[0]) || preg_match('!phpmetrics$!', $argv[0]) || preg_match('!phpmetrics.phar$!', $argv[0])) {
+        // If ends with ".php", "phpmetrics" or "phpmetrics.phar"...
+        if (preg_match('!(\.php)|(phpmetrics(\.phar)?)$!', $argv[0])) {
             array_shift($argv);
         }
 

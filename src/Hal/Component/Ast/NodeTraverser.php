@@ -25,9 +25,9 @@ class NodeTraverser extends Mother
     {
         parent::__construct($cloneNodes);
 
-        if(null === $stopCondition) {
-            $stopCondition = function($node) {
-                if($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
+        if (null === $stopCondition) {
+            $stopCondition = function ($node) {
+                if ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
                     return false;
                 }
 
@@ -38,7 +38,8 @@ class NodeTraverser extends Mother
         $this->stopCondition = $stopCondition;
     }
 
-    protected function traverseArray(array $nodes) {
+    protected function traverseArray(array $nodes)
+    {
         $doNodes = array();
 
         foreach ($nodes as $i => &$node) {
@@ -51,7 +52,7 @@ class NodeTraverser extends Mother
                     $return = $visitor->enterNode($node);
                     if (self::DONT_TRAVERSE_CHILDREN === $return) {
                         $traverseChildren = false;
-                    } else if (null !== $return) {
+                    } elseif (null !== $return) {
                         $node = $return;
                     }
                 }
@@ -84,7 +85,4 @@ class NodeTraverser extends Mother
 
         return $nodes;
     }
-
-
-
 }

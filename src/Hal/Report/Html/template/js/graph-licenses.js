@@ -1,4 +1,5 @@
-function chartLicenses(json) {
+function chartLicenses(json)
+{
 
     var diameter = document.getElementById('svg-licenses').offsetWidth;
 

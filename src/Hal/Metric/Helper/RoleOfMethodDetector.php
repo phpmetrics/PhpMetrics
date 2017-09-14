@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Metric\Helper;
 
-
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -73,5 +72,4 @@ class RoleOfMethodDetector
 
         return null;
     }
-
 }

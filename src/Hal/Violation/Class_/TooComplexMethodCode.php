@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Violation\Class_;
 
-
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
@@ -32,7 +31,6 @@ class TooComplexMethodCode implements Violation
             $metric->get('violations')->add($this);
             return;
         }
-
     }
 
     /**
@@ -55,6 +53,5 @@ This class looks really complex.
 
 Maybe you should delegate some code to other objects or split complex method.
 EOT;
-
     }
 }

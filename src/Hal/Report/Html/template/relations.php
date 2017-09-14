@@ -4,7 +4,6 @@
 $relations = [];
 $classesCp = [];
 foreach ($classes as $class) {
-
     $class['name'] = '\\' . $class['name'];
     $classesCp[$class['name']] = $class;
     $classesCp[$class['name']]['externals'] = [];

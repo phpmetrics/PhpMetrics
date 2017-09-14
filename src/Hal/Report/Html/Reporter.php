@@ -57,13 +57,13 @@ class Reporter
         }
 
         // copy sources
-        if(!file_exists($logDir . '/js')) {
+        if (!file_exists($logDir . '/js')) {
             mkdir($logDir.'/js', 0755, true);
         }
-        if(!file_exists($logDir . '/css')) {
+        if (!file_exists($logDir . '/css')) {
             mkdir($logDir.'/css', 0755, true);
         }
-        if(!file_exists($logDir . '/images')) {
+        if (!file_exists($logDir . '/images')) {
             mkdir($logDir.'/images', 0755, true);
         }
         if(!file_exists($logDir . '/fonts')) {
@@ -106,7 +106,6 @@ class Reporter
         );
 
         $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir));
-
     }
 
     /**
@@ -193,8 +192,13 @@ class Reporter
             }
         }
 
-        return sprintf('<span title="Last value: %s" class="progress progress-%s progress-%s">%s %s</span>', $oldValue,
-            $goodOrBad, $r, $diff,
-            $svg[$r]);
+        return sprintf(
+            '<span title="Last value: %s" class="progress progress-%s progress-%s">%s %s</span>',
+            $oldValue,
+            $goodOrBad,
+            $r,
+            $diff,
+            $svg[$r]
+        );
     }
 }

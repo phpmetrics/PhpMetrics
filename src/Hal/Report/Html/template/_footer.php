@@ -1,7 +1,7 @@
 </div>
 
 <!-- Sidebar -->
-<?php if(!isset($fullwidth) || $fullwidth === false) {?>
+<?php if (!isset($fullwidth) || $fullwidth === false) {?>
 <div id="sidebar">
     <div class="content">
         <div class="logo">
@@ -31,7 +31,7 @@
                         Violations (<?php echo $sum->violations->total;?>)
                     </a>
                 </li>
-                <?php if($config->has('junit')) { ?>
+                <?php if ($config->has('junit')) { ?>
                     <li>
                         <a href="junit.html">
                             <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -107,7 +107,7 @@
                         Coupling
                     </a>
                 </li>
-                <?php if($config->has('git')) { ?>
+                <?php if ($config->has('git')) { ?>
                 <li>
                     <a href="git.html">
                         <img src="images/logo-git.png" alt="">

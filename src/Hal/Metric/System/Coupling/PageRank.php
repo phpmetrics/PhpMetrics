@@ -91,5 +91,4 @@ class PageRank
 
         return $pageRank;
     }
-
 }

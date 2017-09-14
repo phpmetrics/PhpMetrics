@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Violation;
 
-
 /**
  * Class Violations
  * @package Hal\Violation

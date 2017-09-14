@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Violation\Class_;
 
-
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
@@ -32,7 +31,6 @@ class TooDependent implements Violation
             $metric->get('violations')->add($this);
             return;
         }
-
     }
 
     /**
@@ -48,13 +46,14 @@ class TooDependent implements Violation
      */
     public function getDescription()
     {
+        $efferentCoupling = $this->metric->get('efferentCoupling');
+
         return <<<EOT
 This class looks use really high number of components.
 
-* Efferent coupling is {$this->metric->get('efferentCoupling')}, so this class uses {$this->metric->get('efferentCoupling')} different external components.
+* Efferent coupling is {$efferentCoupling}, so this class uses {$efferentCoupling} different external components.
 
 Maybe you should check why this class has lot of dependencies.
 EOT;
-
     }
 }

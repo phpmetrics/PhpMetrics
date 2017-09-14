@@ -43,12 +43,10 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
 
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
-
             $sy = $dc = $sc = array();
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
-
                     // number of returns and calls
                     $output = 0;
                     $fanout = [];

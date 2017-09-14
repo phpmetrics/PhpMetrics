@@ -56,7 +56,6 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
-
                     // iterate over children, recursively
                     $cb = function ($node) use (&$cb) {
                         $ccn = 0;

@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Violation;
 
-
 use Hal\Metric\Metric;
 
 interface Violation

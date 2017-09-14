@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Violation\Class_;
 
-
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
@@ -54,6 +53,5 @@ This class looks really long.
 
 Maybe your class should not exceed 200 lines of logical code
 EOT;
-
     }
 }

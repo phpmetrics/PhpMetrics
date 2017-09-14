@@ -146,7 +146,7 @@
                                     <td><?php echo $package->required; ?></td>
                                     <?php if (0 !== count($packagesInstalled)) {?><td><?php echo $package->installed; ?></td><?php } ?>
                                     <td><?php echo $package->latest; ?></td>
-                                    <td><?php foreach($package->license as $license) { ?>
+                                    <td><?php foreach ($package->license as $license) { ?>
                                             <a target="_blank" href="https://spdx.org/licenses/<?php echo $license;?>.html"><?php echo $license;?></a>
                                         <?php } ?>
                                     </td>
@@ -168,7 +168,7 @@
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">Licences of Composer dependencies</div>
-                <?php if(0 === sizeof($packages)) { ?>
+                <?php if (0 === sizeof($packages)) { ?>
                     <div>No composer.json file found</div>
                 <?php } ?>
                 <div id="svg-licenses"></div>

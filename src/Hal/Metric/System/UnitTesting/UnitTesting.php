@@ -61,7 +61,8 @@ class UnitTesting
         }
 
         // parsing of XML file without any dependency to DomDocument or simpleXML
-        // we want to be compatible with every platforms. Maybe (probably) that's a really stupid idea, but I want to try it :p
+        // we want to be compatible with every platforms.
+        // Maybe (probably) that's a really stupid idea, but I want to try it :p
         $testsuites = [];
         $alreadyParsed = [];
 
@@ -148,7 +149,6 @@ class UnitTesting
             $assertions += $suite->assertions;
 
             foreach ($externals as $external) {
-
                 // search for this external in metrics
                 if (!$metrics->has($external)) {
                     continue;

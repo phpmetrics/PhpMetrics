@@ -38,14 +38,12 @@ class LcomVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-
             // we build a graph of internal dependencies in class
             $graph = new GraphDeduplicated();
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
-
                     if (!$graph->has($stmt->name . '()')) {
                         $graph->insert(new TreeNode($stmt->name . '()'));
                     }
@@ -78,7 +76,6 @@ class LcomVisitor extends NodeVisitorAbstract
                                 return;
                             }
                         }
-
                     });
                 }
             }

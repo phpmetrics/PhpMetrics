@@ -31,7 +31,20 @@ class Validator
 
         // excluded directories
         if (!$config->has('exclude')) {
-            $config->set('exclude', 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec');
+            $defaultExcludeList = [
+                'vendor',
+                'test',
+                'Test',
+                'tests',
+                'Tests',
+                'testing',
+                'Testing',
+                'bower_components',
+                'node_modules',
+                'cache',
+                'spec'
+            ];
+            $config->set('exclude', \implode(',', $defaultExcludeList));
         }
         $config->set('exclude', array_filter(explode(',', $config->get('exclude'))));
 
@@ -39,7 +52,7 @@ class Validator
         $keys = ['report-html', 'report-csv', 'report-violation', '--report-json', 'extensions'];
         foreach ($keys as $key) {
             $value = $config->get($key);
-            if ($config->has($key) && empty($value) || true === $value) {
+            if (($config->has($key) && empty($value)) || true === $value) {
                 throw new ConfigException(sprintf('%s option requires a value', $key));
             }
         }

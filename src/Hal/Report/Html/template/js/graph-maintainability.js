@@ -1,4 +1,5 @@
-function chartMaintainability() {
+function chartMaintainability()
+{
 
     var diameter = document.getElementById('svg-maintainability').offsetWidth;
 
