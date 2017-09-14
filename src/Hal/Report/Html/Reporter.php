@@ -66,9 +66,13 @@ class Reporter
         if(!file_exists($logDir . '/images')) {
             mkdir($logDir.'/images', 0755, true);
         }
+        if(!file_exists($logDir . '/fonts')) {
+            mkdir($logDir.'/fonts', 0755, true);
+        }
         recurse_copy(__DIR__ . '/template/js', $logDir . '/js');
         recurse_copy(__DIR__ . '/template/css', $logDir . '/css');
         recurse_copy(__DIR__ . '/template/images', $logDir . '/images');
+        recurse_copy(__DIR__ . '/template/fonts', $logDir . '/fonts');
 
         // render dynamic pages
         $this->renderPage(__DIR__ . '/template/index.php', $logDir . '/index.html', $consolidated, $history);

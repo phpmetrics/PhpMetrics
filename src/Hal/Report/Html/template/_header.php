@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/milligram.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,700">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/roboto.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/material-icons.css">
 </head>
 <body>
 
@@ -17,7 +17,6 @@
     <div class="headerbarInner">
         <div class="float-left navigation-title">
             <a href="http://phpmetrics.org/">
-                <!--<img class="img" src="images/logo.png" height="60" alt="PhpMetrics" title="PhpMetrics">-->
                 <h1 class="title">PhpMetrics</h1>
                 <span class="subtitle">
                 Static analyzer for PHP
