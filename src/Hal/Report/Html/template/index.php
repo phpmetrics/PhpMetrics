@@ -122,10 +122,14 @@
                 <div class="clusterize small">
                     <div id="clusterizePackages" class="clusterize-scroll">
                         <table>
+                            <?php
+                            $packagesInstalled = isset($project['composer']['packages-installed']) ? $project['composer']['packages-installed'] : [];
+                            ?>
                             <thead>
                             <tr>
                                 <th>Package</th>
                                 <th>Required</th>
+                                <?php if (0 !== count($packagesInstalled)) {?><th>Installed</th><?php } ?>
                                 <th>Latest</th>
                                 <th>License</th>
                             </tr>
@@ -137,20 +141,24 @@
                                 return strcmp($a->name, $b->name);
                             });
                             foreach ($packages as $package) { ?>
-                                <tr>
+                                <tr<?php if (null !== $package->installed && $package->installed !== $package->latest) { echo ' style="color:orangered"'; }?>>
                                     <td><?php echo $package->name; ?></td>
                                     <td><?php echo $package->required; ?></td>
+                                    <?php if (0 !== count($packagesInstalled)) {?><td><?php echo $package->installed; ?></td><?php } ?>
                                     <td><?php echo $package->latest; ?></td>
                                     <td><?php foreach($package->license as $license) { ?>
                                             <a target="_blank" href="https://spdx.org/licenses/<?php echo $license;?>.html"><?php echo $license;?></a>
-                                        <?php }; ?>
+                                        <?php } ?>
                                     </td>
                                 </tr>
                             <?php } ?>
                             </tbody>
                         </table>
-                        <?php if(0 === sizeof($packages)) { ?>
+                        <?php if(0 === count($packages)) { ?>
                             <div>No composer.json file found</div>
+                        <?php } ?>
+                        <?php if(0 === count($packagesInstalled)) { ?>
+                            <div>No composer.lock file found</div>
                         <?php } ?>
                     </div>
                 </div>
