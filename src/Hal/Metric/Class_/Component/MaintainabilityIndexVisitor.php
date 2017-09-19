@@ -47,15 +47,11 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_) {
+        if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
 
-            if ($node instanceof Stmt\Class_) {
-                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
-                $classOrFunction = $this->metrics->get($name);
-            } else {
-                $classOrFunction = new FunctionMetric($node->name);
-                $this->metrics->attach($classOrFunction);
-            }
+            $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
+            $classOrFunction = $this->metrics->get($name);
+
             if (null === $lloc = $classOrFunction->get('lloc')) {
                 throw new \LogicException('please enable length (lloc) visitor first');
             }

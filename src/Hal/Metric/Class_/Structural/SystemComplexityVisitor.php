@@ -40,7 +40,7 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_) {
+        if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
 
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 

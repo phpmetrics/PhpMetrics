@@ -36,6 +36,7 @@ class KanDefectVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof Stmt\Class_
             || $node instanceof Stmt\Interface_
+            || $node instanceof Stmt\Trait_
         ) {
 
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
