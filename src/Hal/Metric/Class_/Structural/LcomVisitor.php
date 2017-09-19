@@ -1,7 +1,7 @@
 <?php
 namespace Hal\Metric\Class_\Structural;
 
-use Hal\Component\Tree\Graph;
+use Hal\Component\Tree\GraphDeduplicated;
 use Hal\Component\Tree\Node as TreeNode;
 use Hal\Metric\Helper\MetricClassNameGenerator;
 use Hal\Metric\Metrics;
@@ -40,7 +40,7 @@ class LcomVisitor extends NodeVisitorAbstract
         if ($node instanceof Stmt\Class_) {
 
             // we build a graph of internal dependencies in class
-            $graph = new Graph();
+            $graph = new GraphDeduplicated();
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
             foreach ($node->stmts as $stmt) {

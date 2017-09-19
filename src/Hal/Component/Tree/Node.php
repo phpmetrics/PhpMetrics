@@ -109,4 +109,11 @@ class Node
         return $this;
     }
 
+    /**
+     * @return string Unique id for this node independent of class name or node type
+     */
+    public function getUniqueId()
+    {
+        return spl_object_hash($this);
+    }
 }

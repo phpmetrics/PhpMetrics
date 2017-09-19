@@ -2,7 +2,7 @@
 
 namespace Hal\Metric\System\Coupling;
 
-use Hal\Component\Tree\Graph;
+use Hal\Component\Tree\GraphDeduplicated;
 use Hal\Component\Tree\Node;
 use Hal\Component\Tree\Operator\SizeOfTree;
 use Hal\Metric\ClassMetric;
@@ -27,7 +27,7 @@ class DepthOfInheritanceTree
         $projectMetric = new ProjectMetric('tree');
 
         // building graph with parents / childs relations only
-        $graph = new Graph();
+        $graph = new GraphDeduplicated();
 
         foreach ($metrics->all() as $metric) {
             if (!$metric instanceof ClassMetric) {

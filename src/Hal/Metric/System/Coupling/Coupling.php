@@ -2,7 +2,7 @@
 
 namespace Hal\Metric\System\Coupling;
 
-use Hal\Component\Tree\Graph;
+use Hal\Component\Tree\GraphDeduplicated;
 use Hal\Component\Tree\Node;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
@@ -22,7 +22,7 @@ class Coupling
     {
 
         // build a graph of relations
-        $graph = new Graph();
+        $graph = new GraphDeduplicated();
 
         foreach ($metrics->all() as $metric) {
             if (!$metric instanceof ClassMetric) {
