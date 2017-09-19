@@ -91,7 +91,7 @@ class Finder
                     $files[] = $file[0];
                 }
             } elseif (is_file($path)) {
-                $files = array($path);
+                $files[] = $path;
             }
         }
         return $files;
