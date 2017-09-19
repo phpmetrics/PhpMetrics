@@ -1,9 +1,10 @@
 <?php
 namespace Hal\Application\Config;
 
+use Hal\Application\Config\File\ConfigFileReaderFactory;
+
 class Parser
 {
-
     public function parse($argv)
     {
         $config = new Config;
@@ -14,6 +15,15 @@ class Parser
 
         if (preg_match('!\.php$!', $argv[0]) || preg_match('!phpmetrics$!', $argv[0]) || preg_match('!phpmetrics.phar$!', $argv[0])) {
             array_shift($argv);
+        }
+
+        // Checking for a configuration file option key and importing options
+        foreach ($argv as $k => $arg) {
+            if (preg_match('!\-\-config=(.*)!', $arg, $matches)) {
+                $fileReader = ConfigFileReaderFactory::createFromFileName($matches[1]);
+                $fileReader->read($config);
+                unset($argv[$k]);
+            }
         }
 
         // arguments with options
