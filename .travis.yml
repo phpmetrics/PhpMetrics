@@ -17,6 +17,12 @@ matrix:
   - php: hhvm
   - php: hhvm-nightly
 
+services:
+  - docker
+
+install:
+  - docker build -t test_phpmetrics .
+
 before_script:
   - composer selfupdate --quiet
   - composer install --prefer-dist --no-interaction --no-progress
@@ -25,6 +31,7 @@ before_script:
 
 script:
   - make test
+  - docker run --rm test_phpmetrics
 
 before_deploy:
   - make build
