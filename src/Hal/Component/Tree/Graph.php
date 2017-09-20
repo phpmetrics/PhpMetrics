@@ -12,7 +12,7 @@ namespace Hal\Component\Tree;
 class Graph implements \Countable
 {
     /**
-     * @var array
+     * @var Node[]
      */
     private $datas = array();
 
@@ -81,7 +81,7 @@ class Graph implements \Countable
 
     /**
      * @param $key
-     * @return null
+     * @return Node|null
      */
     public function get($key)
     {

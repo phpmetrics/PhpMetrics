@@ -25,13 +25,13 @@ class Issuer
     private $debug = [];
 
     /**
-     * @var OutputInterface
+     * @var Output
      */
     private $output;
 
     /**
      * Issuer constructor.
-     * @param OutputInterface $output
+     * @param Output $output
      */
     public function __construct(Output $output)
     {

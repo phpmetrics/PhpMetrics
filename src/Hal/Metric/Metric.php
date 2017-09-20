@@ -8,6 +8,11 @@ namespace Hal\Metric;
 interface Metric
 {
     /**
+     * @return string
+     */
+    public function getName();
+
+    /**
      * @param $key
      * @return mixed
      */

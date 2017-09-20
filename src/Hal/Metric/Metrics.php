@@ -14,7 +14,7 @@ class Metrics implements \JsonSerializable
     private $data = [];
 
     /**
-     * @param $metric
+     * @param Metric $metric
      * @return $this
      */
     public function attach($metric)
@@ -25,7 +25,7 @@ class Metrics implements \JsonSerializable
 
     /**
      * @param $key
-     * @return null
+     * @return Metric|null
      */
     public function get($key)
     {
