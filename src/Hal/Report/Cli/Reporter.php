@@ -109,6 +109,7 @@ EOT;
             if (0 === sizeof($commits)) {
                 $out .= "\n    NA";
             }
+            $out .= "\n";
         }
 
         // Junit
@@ -116,7 +117,7 @@ EOT;
             $out .= <<<EOT
             
 Unit testing
-    Number of unit tests                        {$metrics->get('unitTesting')->get('nbTests')}
+    Number of unit tests                        {$metrics->get('unitTesting')->get('nbSuites')}
     Classes called by tests                     {$metrics->get('unitTesting')->get('nbCoveredClasses')}
     Classes called by tests (percent)           {$metrics->get('unitTesting')->get('percentCoveredClasses')} %
 EOT;
