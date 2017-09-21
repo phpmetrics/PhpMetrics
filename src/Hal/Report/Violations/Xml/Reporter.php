@@ -42,10 +42,10 @@ class Reporter
 
         // map of levels
         $map = [
-            Violation::CRITICAL => 4,
-            Violation::ERROR => 3,
-            Violation::WARNING => 1,
-            Violation::INFO => 0,
+            Violation::CRITICAL => 1,
+            Violation::ERROR => 2,
+            Violation::WARNING => 3,
+            Violation::INFO => 4,
         ];
 
         // root
