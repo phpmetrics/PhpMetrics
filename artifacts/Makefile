@@ -6,9 +6,11 @@ include artifacts/phar/Makefile
 include artifacts/debian/Makefile
 
 prepare-build:
-	@rm -Rf ${BUILD_DIR}
-	@mkdir ${BUILD_DIR}
+	@# Disable the deletion of all releases packages as task build-debian is disabled.
+	@#rm -Rf ${BUILD_DIR}
+	@#mkdir ${BUILD_DIR}
+	@# Only remove the phar that must be replaced by the new release.
+	@rm -f ${BUILD_DIR}/phpmetrics.phar
 
 build: prepare-build build-phar #build-deb
-	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/${CURRENT_TAG}/g" .github/ISSUE_TEMPLATE.md
 
