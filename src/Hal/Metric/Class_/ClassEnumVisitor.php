@@ -32,6 +32,7 @@ class ClassEnumVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof Stmt\Class_
             || $node instanceof Stmt\Interface_
+            || $node instanceof Stmt\Trait_
         ) {
 
             if ($node instanceof Stmt\Interface_) {
