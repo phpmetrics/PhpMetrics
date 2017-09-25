@@ -51,8 +51,8 @@ class LcomVisitor extends NodeVisitorAbstract
 
                     \iterate_over_node($stmt, function ($node) use ($from, &$graph) {
 
-                        if ($node instanceof Node\Expr\PropertyFetch && isset($node->var->name) && $node->var->name == 'this') {
-                            $name = getNameOfNode($node);
+                        if ($node instanceof Node\Expr\PropertyFetch && isset($node->var->name) && 'this' == $node->var->name) {
+                            $name = \getNameOfNode($node);
                             // use of attribute $this->xxx;
                             if (!$graph->has($name)) {
                                 $graph->insert(new TreeNode($name));
@@ -64,10 +64,10 @@ class LcomVisitor extends NodeVisitorAbstract
 
 
                         if ($node instanceof Node\Expr\MethodCall) {
-                            if (!$node->var instanceof Node\Expr\New_ && isset($node->var->name) && getNameOfNode($node->var) === 'this') {
+                            if (!$node->var instanceof Node\Expr\New_ && isset($node->var->name) && 'this' === \getNameOfNode($node->var)) {
                                 // use of method call $this->xxx();
                                 // use of attribute $this->xxx;
-                                $name = getNameOfNode($node->name) . '()';
+                                $name = \getNameOfNode($node->name) . '()';
                                 if (!$graph->has($name)) {
                                     $graph->insert(new TreeNode($name));
                                 }

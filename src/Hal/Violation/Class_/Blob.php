@@ -5,6 +5,11 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
 
+/**
+ * Class Blob
+ *
+ * @package Hal\Violation\Class_
+ */
 class Blob implements Violation
 {
 
@@ -36,7 +41,7 @@ class Blob implements Violation
             $suspect++;
         }
 
-        if (sizeof($metric->get('externals')) >= 8) {
+        if (\count($metric->get('externals')) >= 8) {
             $suspect++;
         }
 

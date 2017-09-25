@@ -14,7 +14,7 @@ class Packagist
      */
     public function get($package)
     {
-        $response = new \StdClass;
+        $response = new \stdClass;
         $response->latest = null;
         $response->license = [];
         $response->homepage = null;
@@ -22,25 +22,25 @@ class Packagist
         $response->zip = null;
         $response->compare = null;
 
-        if (!preg_match('/\w+\/\w+/', $package)) {
+        if (!\preg_match('/\w+\/\w+/', $package)) {
             return $response;
         }
-        list($user, $name) = explode('/', $package);
-        $uri = sprintf('https://packagist.org/packages/%s/%s.json', $user, $name);
-        $json = json_decode(@file_get_contents($uri));
+        list($user, $name) = \explode('/', $package);
+        $uri = \sprintf('https://packagist.org/packages/%s/%s.json', $user, $name);
+        $json = \json_decode(@\file_get_contents($uri));
 
-        if (!isset($json->package) || !is_object($json->package)) {
+        if (!isset($json->package) || !\is_object($json->package)) {
             return $response;
         }
 
         // get latest version
         $latest = '0.0.0';
         foreach ((array)$json->package->versions as $version => $datas) {
-            $version = preg_replace('([^\.\d])', '', $version);
-            if (!preg_match('!\d+\.\d+\.\d+!', $version)) {
+            $version = \preg_replace('([^\.\d])', '', $version);
+            if (!\preg_match('!\d+\.\d+\.\d+!', $version)) {
                 continue;
             }
-            if ($compare = version_compare($version, $latest) == 1) {
+            if ($compare = (1 == \version_compare($version, $latest))) {
                 $latest = $version;
                 $response->name = $package;
                 $response->latest = $version;

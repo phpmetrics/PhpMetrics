@@ -5,6 +5,11 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
 
+/**
+ * Class TooLong
+ *
+ * @package Hal\Violation\Class_
+ */
 class TooLong implements Violation
 {
 

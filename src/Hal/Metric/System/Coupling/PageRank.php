@@ -32,7 +32,7 @@ class PageRank
 
         // save in the metrics object
         foreach ($ranks as $name => $rank) {
-            $metrics->get($name)->set('pageRank', round($rank, 2));
+            $metrics->get($name)->set('pageRank', \round($rank, 2));
         }
     }
 
@@ -44,9 +44,9 @@ class PageRank
      */
     private function calculatePageRank($linkGraph, $dampingFactor = 0.15)
     {
-        $pageRank = array();
-        $tempRank = array();
-        $nodeCount = count($linkGraph);
+        $pageRank = [];
+        $tempRank = [];
+        $nodeCount = \count($linkGraph);
 
         // initialise the PR as 1/n
         foreach ($linkGraph as $node => $outbound) {
@@ -62,7 +62,7 @@ class PageRank
 
             // distribute the PR of each page
             foreach ($linkGraph as $node => $outbound) {
-                $outboundCount = count($outbound);
+                $outboundCount = \count($outbound);
                 foreach ($outbound as $link) {
                     // case of unversionned dependency
                     if (!isset($tempRank[$link])) {
@@ -77,7 +77,7 @@ class PageRank
             foreach ($linkGraph as $node => $outbound) {
                 $tempRank[$node] = ($dampingFactor / $nodeCount)
                     + (1 - $dampingFactor) * $tempRank[$node];
-                $change += abs($pageRank[$node] - $tempRank[$node]);
+                $change += \abs($pageRank[$node] - $tempRank[$node]);
                 $pageRank[$node] = $tempRank[$node];
                 $tempRank[$node] = 0;
                 $total += $pageRank[$node];

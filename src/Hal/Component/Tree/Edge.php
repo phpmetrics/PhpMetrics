@@ -9,6 +9,11 @@
 
 namespace Hal\Component\Tree;
 
+/**
+ * Class Edge
+ *
+ * @package Hal\Component\Tree
+ */
 class Edge
 {
     /**
@@ -58,6 +63,6 @@ class Edge
      */
     public function asString()
     {
-        return sprintf('%s -> %s', $this->from->getKey(), $this->to->getKey());
+        return \sprintf('%s -> %s', $this->from->getKey(), $this->to->getKey());
     }
 }

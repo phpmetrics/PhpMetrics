@@ -8,15 +8,22 @@ use Hal\Metric\Class_\Coupling\ExternalsVisitor;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 
+/**
+ * Class UnitTesting
+ *
+ * @package Hal\Metric\System\UnitTesting
+ */
 class UnitTesting
 {
 
     /**
      * @var array
      */
-    private $files = [];
+    private $files;
 
     /**
      * @var Config
@@ -25,6 +32,8 @@ class UnitTesting
 
     /**
      * GitChanges constructor.
+     *
+     * @param Config $config
      * @param array $files
      */
     public function __construct(Config $config, array $files)
@@ -46,11 +55,10 @@ class UnitTesting
 
         // parse junit file
         $filename = $this->config->get('junit');
-        if (!file_exists($filename) || !is_readable($filename)) {
+        if (!\file_exists($filename) || !\is_readable($filename)) {
             throw new ConfigException('JUnit report cannot be read');
         }
 
-        $unitsTests = [];
         $infoAboutTests = [];
         $assertions = 0;
         $projectMetric = new ProjectMetric('unitTesting');
@@ -64,7 +72,6 @@ class UnitTesting
         // we want to be compatible with every platforms.
         // Maybe (probably) that's a really stupid idea, but I want to try it :p
         $testsuites = [];
-        $alreadyParsed = [];
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->load($filename);
@@ -73,12 +80,12 @@ class UnitTesting
 
         // JUNIT format
         foreach ($xpath->query('//testsuite[@file]') as $suite) {
-            array_push($testsuites, (object)[
+            $testsuites[] = (object)[
                 'file' => $suite->getAttribute('file'),
                 'name' => $suite->getAttribute('name'),
                 'assertions' => $suite->getAttribute('assertions'),
                 'time' => $suite->getAttribute('time'),
-            ]);
+            ];
         }
 
         // CODECEPTION format (file is stored in the <testcase> node
@@ -102,9 +109,10 @@ class UnitTesting
                 $assertions = $case === $suite->firstChild->nextSibling ? $suite->getAttribute('assertions') : 0;
             }
 
-            $testsuites[$case->getAttribute('class')] = (object)[
+            $attributeClass = $case->getAttribute('class');
+            $testsuites[$attributeClass] = (object)[
                 'file' => $case->getAttribute('file'),
-                'name' => $case->getAttribute('class'),
+                'name' => $attributeClass,
                 'assertions' => $assertions,
                 'time' => $suite->getAttribute('time'),
             ];
@@ -115,16 +123,16 @@ class UnitTesting
         foreach ($testsuites as $suite) {
             $metricsOfUnitTest = new Metrics();
             $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-            $traverser = new \PhpParser\NodeTraverser();
-            $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
+            $traverser = new NodeTraverser();
+            $traverser->addVisitor(new NameResolver());
             $traverser->addVisitor(new ClassEnumVisitor($metricsOfUnitTest));
             $traverser->addVisitor(new ExternalsVisitor($metricsOfUnitTest));
 
-            if (!file_exists($suite->file) || !is_readable($suite->file)) {
+            if (!\file_exists($suite->file) || !\is_readable($suite->file)) {
                 throw new \LogicException('Cannot find source file referenced in testsuite: ' . $suite->file);
             }
 
-            $code = file_get_contents($suite->file);
+            $code = \file_get_contents($suite->file);
             $stmts = $parser->parse($code);
             $traverser->traverse($stmts);
 
@@ -138,8 +146,8 @@ class UnitTesting
 
             // global stats for each test
             $infoAboutTests[$suite->name] = (object)[
-                'nbExternals' => sizeof(array_unique($externals)),
-                'externals' => array_unique($externals),
+                'nbExternals' => \count(\array_unique($externals)),
+                'externals' => \array_unique($externals),
                 'filename' => $suite->file,
                 'classname' => $suite->name,
                 'assertions' => $suite->assertions,
@@ -177,11 +185,11 @@ class UnitTesting
 
         $projectMetric->set('assertions', $assertions);
         $projectMetric->set('tests', $infoAboutTests);
-        $projectMetric->set('nbSuites', sizeof($testsuites));
+        $projectMetric->set('nbSuites', \count($testsuites));
         $projectMetric->set('nbCoveredClasses', $nb);
-        $projectMetric->set('percentCoveredClasses', round($nb / max($sum, 1) * 100, 2));
+        $projectMetric->set('percentCoveredClasses', \round($nb / \max($sum, 1) * 100, 2));
         $projectMetric->set('nbUncoveredClasses', $sum - $nb);
-        $projectMetric->set('percentUncoveredClasses', round(($sum - $nb) / max($sum, 1) * 100, 2));
+        $projectMetric->set('percentUncoveredClasses', \round(($sum - $nb) / \max($sum, 1) * 100, 2));
 
         $metrics->attach($projectMetric);
     }

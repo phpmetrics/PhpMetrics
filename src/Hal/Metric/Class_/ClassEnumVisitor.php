@@ -11,6 +11,11 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
 
+/**
+ * Class ClassEnumVisitor
+ *
+ * @package Hal\Metric\Class_
+ */
 class ClassEnumVisitor extends NodeVisitorAbstract
 {
     /**
@@ -28,6 +33,10 @@ class ClassEnumVisitor extends NodeVisitorAbstract
     }
 
 
+    /**
+     * @param Node $node
+     * @return false|int|null|Node|Node[]|void
+     */
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_
@@ -38,7 +47,7 @@ class ClassEnumVisitor extends NodeVisitorAbstract
                 $class = new InterfaceMetric($node->namespacedName->toString());
                 $class->set('interface', true);
             } else {
-                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
+                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'. \spl_object_hash($node));
                 $class = new ClassMetric($name);
                 $class->set('interface', false);
             }
@@ -76,13 +85,13 @@ class ClassEnumVisitor extends NodeVisitorAbstract
                         }
                     }
 
-                    array_push($methods, $function);
+                    $methods[] = $function;
                 }
             }
 
             $class->set('methods', $methods);
-            $class->set('nbMethodsIncludingGettersSetters', sizeof($methods));
-            $class->set('nbMethods', sizeof($methods) - ($nbGetters + $nbSetters));
+            $class->set('nbMethodsIncludingGettersSetters', \count($methods));
+            $class->set('nbMethods', \count($methods) - ($nbGetters + $nbSetters));
             $class->set('nbMethodsPrivate', $methodsPrivate);
             $class->set('nbMethodsPublic', $methodsPublic);
             $class->set('nbMethodsGetter', $nbGetters);

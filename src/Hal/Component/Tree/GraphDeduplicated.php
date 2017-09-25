@@ -2,6 +2,11 @@
 
 namespace Hal\Component\Tree;
 
+/**
+ * Class GraphDeduplicated
+ *
+ * @package Hal\Component\Tree
+ */
 class GraphDeduplicated extends Graph
 {
     /**

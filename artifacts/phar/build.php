@@ -41,7 +41,7 @@ $phar->setStub(<<<STUB
 Phar::mapPhar('phpmetrics.phar');
 
 require_once 'phar://phpmetrics.phar/vendor/autoload.php';
-(new \Hal\Application\Application())->run(\$argv);
+(new \Hal\Application\Application(\$argv))->run();
 
 __HALT_COMPILER();
 STUB

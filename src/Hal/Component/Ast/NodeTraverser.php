@@ -21,32 +21,38 @@ class NodeTraverser extends Mother
 {
     protected $stopCondition;
 
+    /**
+     * NodeTraverser constructor.
+     *
+     * @param bool $cloneNodes
+     * @param null $stopCondition
+     */
     public function __construct($cloneNodes = false, $stopCondition = null)
     {
         parent::__construct($cloneNodes);
 
         if (null === $stopCondition) {
             $stopCondition = function ($node) {
-                if ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
-                    return false;
-                }
-
-                return true;
+                return !($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_);
             };
         }
 
         $this->stopCondition = $stopCondition;
     }
 
+    /**
+     * @param array $nodes
+     * @return array
+     */
     protected function traverseArray(array $nodes)
     {
-        $doNodes = array();
+        $doNodes = [];
 
         foreach ($nodes as $i => &$node) {
-            if (is_array($node)) {
+            if (\is_array($node)) {
                 $node = $this->traverseArray($node);
             } elseif ($node instanceof Node) {
-                $traverseChildren = call_user_func($this->stopCondition, $node);
+                $traverseChildren = \call_user_func($this->stopCondition, $node);
 
                 foreach ($this->visitors as $visitor) {
                     $return = $visitor->enterNode($node);
@@ -65,21 +71,23 @@ class NodeTraverser extends Mother
                     $return = $visitor->leaveNode($node);
 
                     if (self::REMOVE_NODE === $return) {
-                        $doNodes[] = array($i, array());
+                        $doNodes[] = [$i, []];
                         break;
-                    } elseif (is_array($return)) {
-                        $doNodes[] = array($i, $return);
+                    }
+                    if (\is_array($return)) {
+                        $doNodes[] = [$i, $return];
                         break;
-                    } elseif (null !== $return) {
+                    }
+                    if (null !== $return) {
                         $node = $return;
                     }
                 }
             }
-        }
+        } unset($node);
 
         if (!empty($doNodes)) {
-            while (list($i, $replace) = array_pop($doNodes)) {
-                array_splice($nodes, $i, 1, $replace);
+            while (list($i, $replace) = \array_pop($doNodes)) {
+                \array_splice($nodes, $i, 1, $replace);
             }
         }
 

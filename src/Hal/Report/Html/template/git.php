@@ -12,16 +12,16 @@ if (isset($project['git'], $project['git']['history'])) {
     $history = array_slice($history, -24);
     $json = [];
     foreach ($history as $date => $values) {
-        array_push($json, (object)[
+        $json[] = (object)[
             'date' => $date,
             'key' => 'Additions',
             'value' => abs($values['additions']),
-        ]);
-        array_push($json, (object)[
+        ];
+        $json[] = (object)[
             'date' => $date,
             'key' => 'Removes',
             'value' => abs($values['removes']),
-        ]);
+        ];
     }
 }
 

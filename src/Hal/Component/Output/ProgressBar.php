@@ -66,10 +66,10 @@ class ProgressBar
         $this->current++;
 
         if ($this->hasAnsi()) {
-            $percent = round($this->current / $this->max * 100);
+            $percent = \round($this->current / $this->max * 100);
             $this->output->write("\x0D");
             $this->output->write("\x1B[2K");
-            $this->output->write(sprintf('... %s%% ...', $percent));
+            $this->output->write(\sprintf('... %s%% ...', $percent));
         } else {
             $this->output->write('.');
         }
@@ -94,17 +94,17 @@ class ProgressBar
      */
     protected function hasAnsi()
     {
-        if (DIRECTORY_SEPARATOR === '\\') {
+        if (\DIRECTORY_SEPARATOR === '\\') {
             return
-                0 >= version_compare(
+                0 >= \version_compare(
                     '10.0.10586',
-                    PHP_WINDOWS_VERSION_MAJOR . '.' . PHP_WINDOWS_VERSION_MINOR . '.' . PHP_WINDOWS_VERSION_BUILD
+                    \PHP_WINDOWS_VERSION_MAJOR . '.' . \PHP_WINDOWS_VERSION_MINOR . '.' . \PHP_WINDOWS_VERSION_BUILD
                 )
-                || false !== getenv('ANSICON')
-                || 'ON' === getenv('ConEmuANSI')
-                || 'xterm' === getenv('TERM');
+                || false !== \getenv('ANSICON')
+                || 'ON' === \getenv('ConEmuANSI')
+                || 'xterm' === \getenv('TERM');
         }
 
-        return function_exists('posix_isatty') && @posix_isatty($this->stream);
+        return \function_exists('posix_isatty') && @\posix_isatty($this->stream);
     }
 }

@@ -46,37 +46,35 @@ class ExternalsVisitor extends NodeVisitorAbstract
         }
 
         if ($node instanceof Stmt\Use_) {
-            $this->uses = array_merge($this->uses, $node->uses);
+            $this->uses = \array_merge($this->uses, $node->uses);
         }
 
         if ($node instanceof Stmt\Class_
             || $node instanceof Stmt\Interface_
             || $node instanceof Stmt\Trait_
         ) {
-
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
             $parents = [];
-            $nodeClass = $node;
 
             $dependencies = [];
 
             // extends
             if (isset($node->extends)) {
-                if (is_array($node->extends)) {
+                if (\is_array($node->extends)) {
                     foreach ((array)$node->extends as $interface) {
-                        array_push($dependencies, (string)$interface);
-                        array_push($parents, (string)$interface);
+                        $dependencies[] = (string)$interface;
+                        $parents[] = (string)$interface;
                     }
                 } else {
-                    array_push($dependencies, (string)$node->extends);
-                    array_push($parents, (string)$node->extends);
+                    $dependencies[] = (string)$node->extends;
+                    $parents[] = (string)$node->extends;
                 }
             }
 
             // implements
             if (isset($node->implements)) {
                 foreach ($node->implements as $interface) {
-                    array_push($dependencies, (string)$interface);
+                    $dependencies[] = (string)$interface;
                 }
             }
 
@@ -85,7 +83,7 @@ class ExternalsVisitor extends NodeVisitorAbstract
                     // return
                     if (isset($stmt->returnType)) {
                         if ($stmt->returnType instanceof Node\Name\FullyQualified) {
-                            array_push($dependencies, (string)$stmt->returnType);
+                            $dependencies[] = (string)$stmt->returnType;
                         }
                     }
 
@@ -93,7 +91,7 @@ class ExternalsVisitor extends NodeVisitorAbstract
                     foreach ($stmt->params as $param) {
                         if ($param->type) {
                             if ($param->type instanceof Node\Name\FullyQualified) {
-                                array_push($dependencies, (string)$param->type);
+                                $dependencies[] = (string)$param->type;
                             }
                         }
                     }
@@ -103,22 +101,22 @@ class ExternalsVisitor extends NodeVisitorAbstract
                         switch (true) {
                             case $node instanceof Node\Expr\New_:
                                 // new MyClass
-                                array_push($dependencies, getNameOfNode($node));
+                                $dependencies[] = \getNameOfNode($node);
                                 break;
                             case $node instanceof Node\Expr\StaticCall:
                                 // MyClass::Call
-                                array_push($dependencies, getNameOfNode($node));
+                                $dependencies[] = \getNameOfNode($node);
                                 break;
                         }
                     });
 
                     // annotations
                     $comments = $stmt->getDocComment();
-                    if ($comments && false !== preg_match_all('!\s+\*\s+@(\w+)!', $comments->getText(), $matches)) {
+                    if ($comments && false !== \preg_match_all('!\s+\*\s+@(\w+)!', $comments->getText(), $matches)) {
                         foreach ($matches[1] as $check) {
                             foreach ($this->uses as $use) {
                                 if ($use->alias === $check) {
-                                    array_push($dependencies, (string)($use->name));
+                                    $dependencies[] = (string)$use->name;
                                 }
                             }
                         }

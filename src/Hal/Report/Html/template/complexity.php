@@ -52,7 +52,7 @@ require __DIR__ . '/_header.php'; ?>
                         <th>Class</th>
                         <th class="js-sort-number">Class cycl.</th>
                         <th class="js-sort-number">Max method cycl.</th>
-                        <?php if ($config->has('junit')) { ?>
+                        <?php if ($this->config->has('junit')) { ?>
                             <th class="js-sort-number">Unit testsuites calling it</th>
                         <?php } ?><th class="js-sort-number">Relative system complexity</th>
                         <th class="js-sort-number">Relative data complexity</th>
@@ -67,7 +67,7 @@ require __DIR__ . '/_header.php'; ?>
                             <td><?php echo $class['name']; ?></td>
                             <td><?php echo isset($class['ccn']) ? $class['ccn'] : ''; ?></td>
                             <td><?php echo isset($class['ccnMethodMax']) ? $class['ccnMethodMax'] : ''; ?></td>
-                            <?php if ($config->has('junit')) { ?>
+                            <?php if ($this->config->has('junit')) { ?>
                                 <td><?php echo isset($class['numberOfUnitTests']) ? $class['numberOfUnitTests'] : ''; ?></td>
                             <?php } ?>
                             <td><?php echo isset($class['relativeSystemComplexity']) ? $class['relativeSystemComplexity'] : ''; ?></td>

@@ -6,6 +6,11 @@ use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
 use Hal\Metric\Metrics;
 
+/**
+ * Class Reporter
+ *
+ * @package Hal\Report\Cli
+ */
 class Reporter
 {
 
@@ -31,6 +36,9 @@ class Reporter
     }
 
 
+    /**
+     * @param Metrics $metrics
+     */
     public function generate(Metrics $metrics)
     {
         if ($this->config->has('quiet')) {
@@ -45,11 +53,11 @@ class Reporter
 
         $methodsByClass = $locByClass = $locByMethod = 0;
         if ($sum->nbClasses > 0) {
-            $methodsByClass = round($sum->nbMethods / $sum->nbClasses, 2);
-            $locByClass = round($sum->lloc / $sum->nbClasses);
+            $methodsByClass = \round($sum->nbMethods / $sum->nbClasses, 2);
+            $locByClass = \round($sum->lloc / $sum->nbClasses);
         }
         if ($sum->nbMethods > 0) {
-            $locByMethod = round($sum->lloc / $sum->nbMethods);
+            $locByMethod = \round($sum->lloc / $sum->nbMethods);
         }
 
         $out = <<<EOT
@@ -99,14 +107,14 @@ EOT;
             foreach ($consolidated->getFiles() as $name => $file) {
                 $commits[$name] = $file['gitChanges'];
             }
-            arsort($commits);
-            $commits = array_slice($commits, 0, 10);
+            \arsort($commits);
+            $commits = \array_slice($commits, 0, 10);
 
             $out .= "\nTop 10 committed files";
             foreach ($commits as $file => $nb) {
-                $out .= sprintf("\n    %d    %s", $nb, $file);
+                $out .= \sprintf("\n    %d    %s", $nb, $file);
             }
-            if (0 === sizeof($commits)) {
+            if (0 === \count($commits)) {
                 $out .= "\n    NA";
             }
             $out .= "\n";

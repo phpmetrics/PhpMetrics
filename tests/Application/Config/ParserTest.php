@@ -14,8 +14,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testICanParseArguments($argv, $expected)
     {
-        $parser = new Parser();
-        $config = $parser->parse($argv);
+        $config = (new Parser())->parse($argv);
         $this->assertEquals($expected, $config->all());
     }
 

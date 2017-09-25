@@ -1,59 +1,104 @@
 <?php
+/**
+ * (c) Jean-François Lépine <https://twitter.com/Halleck45>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Hal\Application\Config;
 
 /**
  * Class Validator
+ *
+ * Validator for application configuration.
+ * Check all configuration keys/values pairs.
+ *
  * @package Hal\Application\Config
  */
 class Validator
 {
+    /** @var Config The application configuration. */
+    private $config;
+
     /**
-     * @param Config $config
-     * @throws ConfigException
+     * Validator constructor.
+     *
+     * @param Config $config The application configuration to check.
      */
-    public function validate(Config $config)
+    public function __construct(Config $config)
     {
-        // required
-        if (!$config->has('files')) {
-            throw new ConfigException('Directory to parse is missing or incorrect');
+        $this->config = $config;
+    }
+
+    /**
+     * Validates all configuration values.
+     * @throws ConfigException When the checks are failing.
+     */
+    public function validate()
+    {
+        $this->checkFiles()
+            ->setDefaults()
+            ->checkValueOptions();
+    }
+
+    /**
+     * Checks the "files" option, which is the list of files to parse with the application.
+     * @return $this
+     * @throws ConfigException When the files to parse are not defined in the configuration.
+     * @throws ConfigException When some files listed in the configuration does not exist.
+     */
+    private function checkFiles()
+    {
+        if (!$this->config->has('files')) {
+            throw ConfigException::missingFileOption();
         }
-        foreach ($config->get('files') as $dir) {
-            if (!file_exists($dir)) {
-                throw new ConfigException(sprintf('Directory %s does not exist', $dir));
+        foreach ($this->config->get('files') as $dir) {
+            if (!\file_exists($dir)) {
+                throw ConfigException::missingFile($dir);
             }
         }
 
-        // extensions
-        if (!$config->has('extensions')) {
-            $config->set('extensions', 'php,inc');
-        }
-        $config->set('extensions', explode(',', $config->get('extensions')));
+        return $this;
+    }
 
-        // excluded directories
-        if (!$config->has('exclude')) {
-            $defaultExcludeList = [
-                'vendor',
-                'test',
-                'Test',
-                'tests',
-                'Tests',
-                'testing',
-                'Testing',
-                'bower_components',
-                'node_modules',
-                'cache',
-                'spec'
-            ];
-            $config->set('exclude', \implode(',', $defaultExcludeList));
+    /**
+     * Set the default values for options "extensions" and "exclude".
+     * @return $this
+     */
+    private function setDefaults()
+    {
+        // Set default value for option "extensions".
+        if (!$this->config->has('extensions')) {
+            $this->config->set('extensions', 'php,inc');
         }
-        $config->set('exclude', array_filter(explode(',', $config->get('exclude'))));
+        $this->config->set('extensions', \explode(',', $this->config->get('extensions')));
 
-        // parameters with values
-        $keys = ['report-html', 'report-csv', 'report-violation', '--report-json', 'extensions'];
+        // Set default value for option "exclude".
+        if (!$this->config->has('exclude')) {
+            $this->config->set(
+                'exclude',
+                'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec'
+            );
+        }
+        $this->config->set('exclude', \array_filter(\explode(',', $this->config->get('exclude'))));
+
+        return $this;
+    }
+
+    /**
+     * Checks the options that must have values really have values defined.
+     * @throws ConfigException When an option that requires a value does not have a value.
+     */
+    private function checkValueOptions()
+    {
+        // Following keys are options that must have a value defined.
+        $keys = ['config', 'report-html', 'report-csv', 'report-violation', 'report-json', 'extensions'];
+
         foreach ($keys as $key) {
-            $value = $config->get($key);
-            if (($config->has($key) && empty($value)) || true === $value) {
-                throw new ConfigException(sprintf('%s option requires a value', $key));
+            $value = $this->config->get($key);
+            if ($this->config->has($key) && (empty($value) || true === $value)) {
+                throw ConfigException::missingMandatoryOptionValue($key);
             }
         }
     }
@@ -61,7 +106,7 @@ class Validator
     /**
      * @return string
      */
-    public function help()
+    public static function help()
     {
         return <<<EOT
 Usage:
@@ -70,19 +115,21 @@ Usage:
 
 Required:
 
-    <directories>                       List of directories to parse, separated by a comma (,)
+    <directories>                       List of files/directories to parse, separated by a comma (,)
 
 Optional:
 
+    --config=<file>                     Configuration file in JSON or Ini to set configuration
     --exclude=<directory>               List of directories to exclude, separated by a comma (,)
     --extensions=<php,inc>              List of extensions to parse, separated by a comma (,)
-    --report-html=<directory>           Folder where report HTML will be generated
-    --report-csv=<file>                 File where report CSV will be generated
-    --report-json=<file>                File where report Json will be generated
-    --report-violations=<file>          File where XML violations report will be generated
     --git[=</path/to/git_binary>]       Perform analyses based on Git History (default binary path: "git")
+    --help                              Display this help output
     --junit[=</path/to/junit.xml>]      Evaluates metrics according to JUnit logs
     --quiet                             Quiet mode
+    --report-csv=<file>                 File where report CSV will be generated
+    --report-html=<directory>           Folder where report HTML will be generated
+    --report-json=<file>                File where report Json will be generated
+    --report-violations=<file>          File where XML violations report will be generated
     --version                           Display current version
 
 Examples:

@@ -5,6 +5,11 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
 
+/**
+ * Class TooComplexClassCode
+ *
+ * @package Hal\Violation\Class_
+ */
 class TooComplexClassCode implements Violation
 {
 

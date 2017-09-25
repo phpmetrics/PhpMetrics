@@ -38,13 +38,12 @@ class KanDefectVisitor extends NodeVisitorAbstract
             || $node instanceof Stmt\Interface_
             || $node instanceof Stmt\Trait_
         ) {
-
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
 
             $select = $while = $if = 0;
 
-            iterate_over_node($node, function ($node) use (&$while, &$select, &$if) {
+            \iterate_over_node($node, function ($node) use (&$while, &$select, &$if) {
                 switch (true) {
                     case $node instanceof Stmt\Do_:
                     case $node instanceof Stmt\Foreach_:
@@ -61,7 +60,7 @@ class KanDefectVisitor extends NodeVisitorAbstract
             });
 
             $defect = 0.15 + 0.23 *  $while + 0.22 *  $select + 0.07 * $if;
-            $class->set('kanDefect', round($defect, 2));
+            $class->set('kanDefect', \round($defect, 2));
         }
     }
 }

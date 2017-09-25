@@ -72,7 +72,8 @@ class CycleDetector
                 if (!$edge->getTo()->visited && $this->detectCycle($edge->getTo(), $recursionStack)) {
                     $edge->cyclic = $edge->getTo()->cyclic = true;
                     return true;
-                } elseif ($recursionStack[$edge->getTo()->getKey()]) {
+                }
+                if ($recursionStack[$edge->getTo()->getKey()]) {
                     $edge->cyclic = $edge->getTo()->cyclic = true;
                     return true;
                 }

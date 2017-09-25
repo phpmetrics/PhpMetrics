@@ -9,12 +9,17 @@
 
 namespace Hal\Component\Tree;
 
+/**
+ * Class HashMap
+ *
+ * @package Hal\Component\Tree
+ */
 class HashMap implements \Countable, \IteratorAggregate
 {
     /**
      * @var array
      */
-    private $nodes = array();
+    private $nodes = [];
 
     /**
      * @param Node $node
@@ -49,7 +54,7 @@ class HashMap implements \Countable, \IteratorAggregate
      */
     public function count()
     {
-        return sizeof($this->nodes);
+        return \count($this->nodes);
     }
 
     /**

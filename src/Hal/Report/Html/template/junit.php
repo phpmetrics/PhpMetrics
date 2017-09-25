@@ -121,7 +121,7 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
                                 <td>
                                     <?php
                                     foreach ($suite->externals as $index => $external) { ?>
-                                        <?php echo ($index === 0) ? '' : '<br />'; ?>
+                                        <?php echo (0 === $index) ? '' : '<br />'; ?>
                                         <span class="badge" title="Cyclomatic complexity of class">
                                         <?php echo $getMetricForClass($external, 'ccn'); ?>
                                     </span>
@@ -189,10 +189,10 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
             $unitTimeJson->name = 'Execution time';
             $unitTimeJson->children = [];
             foreach ($unit['tests'] as $test) {
-                array_push($unitTimeJson->children, [
+                $unitTimeJson->children[] = [
                     'name' => $test->classname,
                     'time' => (float)$test->time,
-                ]);
+                ];
             }
             ?>
 

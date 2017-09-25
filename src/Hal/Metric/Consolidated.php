@@ -3,6 +3,11 @@ namespace Hal\Metric;
 
 use Hal\Violation\Violation;
 
+/**
+ * Class Consolidated
+ *
+ * @package Hal\Metric
+ */
 class Consolidated
 {
     /**
@@ -18,17 +23,17 @@ class Consolidated
     /**
      * @var array
      */
-    private $classes = [];
+    private $classes;
 
     /**
      * @var array
      */
-    private $files = [];
+    private $files;
 
     /**
      * @var array
      */
-    private $project = [];
+    private $project;
 
     /**
      * Consolided constructor.
@@ -36,6 +41,8 @@ class Consolidated
      */
     public function __construct(Metrics $metrics)
     {
+        $classMetrics = [];
+
         // grouping results
         $classes = [];
         $functions = [];
@@ -43,9 +50,10 @@ class Consolidated
         $project = [];
         $nbInterfaces = 0;
         foreach ($metrics->all() as $key => $item) {
-            $classItem = get_class($item);
+            $classItem = \get_class($item);
             if (ClassMetric::class === $classItem) {
                 $classes[] = $item->all();
+                $classMetrics[] = $item;
             } elseif (InterfaceMetric::class === $classItem) {
                 $nbInterfaces++;
             } elseif (FunctionMetric::class === $classItem) {
@@ -82,26 +90,26 @@ class Consolidated
             'mi' => [],
         ];
 
-        foreach ($metrics->all() as $key => $item) {
+        foreach ($classMetrics as $key => $item) {
             $sum->loc += $item->get('loc');
             $sum->lloc += $item->get('lloc');
             $sum->cloc += $item->get('cloc');
             $sum->nbMethods += $item->get('nbMethods');
 
             foreach ($avg as $k => $a) {
-                array_push($avg->$k, $item->get($k));
+                $avg->$k[] = $item->get($k);
             }
         }
-        $sum->nbClasses = count($classes);
+        $sum->nbClasses = \count($classes);
         $sum->nbInterfaces = $nbInterfaces;
 
         foreach ($avg as &$a) {
-            if (sizeof($a) > 0) {
-                $a = round(array_sum($a) / sizeof($a), 2);
+            if (\count($a) > 0) {
+                $a = \round(\array_sum($a) / \count($a), 2);
             } else {
                 $a = 0;
             }
-        }
+        } unset($a);
 
         // sums of violations
         $violations = [
@@ -125,7 +133,6 @@ class Consolidated
             }
         }
         $sum->violations = (object)$violations;
-
 
         $this->avg = $avg;
         $this->sum = $sum;

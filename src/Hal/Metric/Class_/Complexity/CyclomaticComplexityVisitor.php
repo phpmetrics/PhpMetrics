@@ -48,11 +48,10 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
             || $node instanceof Stmt\Interface_
             || $node instanceof Stmt\Trait_
         ) {
-
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
             $ccn = 1;
-            $ccnByMethod = array();
+            $ccnByMethod = [];
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
@@ -84,7 +83,7 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
                                 break;
                             case $node instanceof Node\Expr\Ternary:
                             case $node instanceof Node\Expr\BinaryOp\Coalesce:
-                                $ccn = $ccn + 2;
+                                $ccn += 2;
                                 break;
                         }
                         return $ccn;
@@ -100,8 +99,8 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
             $class->set('ccn', $ccn);
 
             $class->set('ccnMethodMax', 0);
-            if (count($ccnByMethod)) {
-                $class->set('ccnMethodMax', max($ccnByMethod));
+            if (\count($ccnByMethod)) {
+                $class->set('ccnMethodMax', \max($ccnByMethod));
             }
         }
     }

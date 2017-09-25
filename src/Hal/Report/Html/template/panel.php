@@ -13,7 +13,7 @@ require __DIR__ . '/_header.php'; ?>
             <div class="bloc bloc-number">
                 <div class="number">
                     <?php echo $sum->nbClasses; ?>
-                    <small> (<?php echo(sizeof($classes) ? round($sum->nbClasses / sizeof($classes) * 100) : '0'); ?>
+                    <small> (<?php echo(count($classes) ? round($sum->nbClasses / count($classes) * 100) : '0'); ?>
                         %)
                     </small>
                 </div>
@@ -23,7 +23,7 @@ require __DIR__ . '/_header.php'; ?>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="number"><?php echo $sum->nbInterfaces; ?>
-                    <small> (<?php echo(sizeof($classes) ? round($sum->nbInterfaces / sizeof($classes) * 100) : '0'); ?>
+                    <small> (<?php echo(count($classes) ? round($sum->nbInterfaces / count($classes) * 100) : '0'); ?>
                         %)
                     </small>
                 </div>

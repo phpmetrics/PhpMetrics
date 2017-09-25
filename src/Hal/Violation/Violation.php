@@ -3,6 +3,11 @@ namespace Hal\Violation;
 
 use Hal\Metric\Metric;
 
+/**
+ * Interface Violation
+ *
+ * @package Hal\Violation
+ */
 interface Violation
 {
     const INFO = 0;

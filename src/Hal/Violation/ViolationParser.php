@@ -4,6 +4,11 @@ namespace Hal\Violation;
 use Hal\Metric\Metrics;
 use Hal\Violation\Class_;
 
+/**
+ * Class ViolationParser
+ *
+ * @package Hal\Violation
+ */
 class ViolationParser
 {
 

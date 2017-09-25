@@ -5,6 +5,9 @@ use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Param;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Assign;
 
 /**
  * Class RoleOfMethodDetector
@@ -18,18 +21,18 @@ class RoleOfMethodDetector
      */
     private $fingerprints = [
         'getter' => [
-            'PhpParser\\Node\\Stmt\\ClassMethod',
-            'PhpParser\\Node\\Stmt\\Return_',
-            'PhpParser\\Node\\Expr\\PropertyFetch',
-            'PhpParser\\Node\\Expr\\Variable',
+            ClassMethod::class,
+            Return_::class,
+            PropertyFetch::class,
+            Variable::class,
         ],
         'setter' => [
-            'PhpParser\\Node\\Stmt\\ClassMethod',
-            'PhpParser\\Node\\Expr\\Assign',
-            'PhpParser\\Node\\Expr\\Variable',
-            'PhpParser\\Node\\Expr\\PropertyFetch',
-            'PhpParser\\Node\\Expr\\Variable',
-            'PhpParser\\Node\\Param',
+            ClassMethod::class,
+            Assign::class,
+            Variable::class,
+            PropertyFetch::class,
+            Variable::class,
+            Param::class,
         ]
     ];
 
@@ -46,7 +49,7 @@ class RoleOfMethodDetector
 
         // build a fingerprint of the given method
         $fingerprintOfMethod = [];
-        iterate_over_node($node, function ($node) use (&$fingerprintOfMethod) {
+        \iterate_over_node($node, function ($node) use (&$fingerprintOfMethod) {
 
             // avoid cast
             if ($node instanceof Cast) {
@@ -54,14 +57,14 @@ class RoleOfMethodDetector
             }
 
             // avoid fluent interface
-            if ($node instanceof Return_ && $node->expr instanceof Variable && $node->expr->name === 'this') {
-                unset($fingerprintOfMethod[sizeof($fingerprintOfMethod) - 1]);
+            if ($node instanceof Return_ && $node->expr instanceof Variable && 'this' === $node->expr->name) {
+                unset($fingerprintOfMethod[\count($fingerprintOfMethod) - 1]);
                 return;
             }
 
-            $fingerprintOfMethod[] = get_class($node);
+            $fingerprintOfMethod[] = \get_class($node);
         });
-        $fingerprintOfMethod = array_reverse($fingerprintOfMethod);
+        $fingerprintOfMethod = \array_reverse($fingerprintOfMethod);
 
         // compare with database of fingerprints
         foreach ($this->fingerprints as $type => $fingerprint) {

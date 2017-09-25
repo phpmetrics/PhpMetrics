@@ -7,6 +7,11 @@ use Hal\Metric\Consolided;
 use Hal\Metric\Metrics;
 use Hal\Violation\Violation;
 
+/**
+ * Class Reporter
+ *
+ * @package Hal\Report\Violations\Xml
+ */
 class Reporter
 {
 
@@ -32,6 +37,9 @@ class Reporter
     }
 
 
+    /**
+     * @param Metrics $metrics
+     */
     public function generate(Metrics $metrics)
     {
 
@@ -49,15 +57,15 @@ class Reporter
         ];
 
         // root
-        $xml = new \DOMDocument("1.0", "UTF-8");
+        $xml = new \DOMDocument('1.0', 'UTF-8');
         $xml->formatOutput = true;
-        $root = $xml->createElement("pmd");
+        $root = $xml->createElement('pmd');
         $root->setAttribute('version', '@package_version@');
-        $root->setAttribute('timestamp', date('c'));
+        $root->setAttribute('timestamp', \date('c'));
 
         foreach ($metrics->all() as $metric) {
             $violations = $metric->get('violations');
-            if (sizeof($violations) == 0) {
+            if (0 == \count($violations)) {
                 continue;
             }
 
@@ -81,9 +89,9 @@ class Reporter
         $xml->appendChild($root);
 
         // save file
-        file_exists(dirname($logFile)) || mkdir(dirname($logFile), 0755, true);
-        file_put_contents($logFile, $xml->saveXML());
+        \file_exists(\dirname($logFile)) || \mkdir(\dirname($logFile), 0755, true);
+        \file_put_contents($logFile, $xml->saveXML());
 
-        $this->output->writeln(sprintf('XML report generated in "%s"', $logFile));
+        $this->output->writeln(\sprintf('XML report generated in "%s"', $logFile));
     }
 }

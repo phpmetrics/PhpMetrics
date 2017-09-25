@@ -31,14 +31,14 @@ class Finder
      *
      * @var array
      */
-    private $extensions = [];
+    private $extensions;
 
     /**
      * Subdirectories to exclude
      *
      * @var array
      */
-    private $excludedDirs = [];
+    private $excludedDirs;
 
     /**
      * Flags for RecursiveDirectoryIterator
@@ -48,8 +48,8 @@ class Finder
     private $flags;
 
     /**
-     * @param string $extensions regex of file extensions to include
-     * @param string $excludedDirs regex of directories to exclude
+     * @param array|string $extensions regex of file extensions to include
+     * @param array|string $excludedDirs regex of directories to exclude
      * @param integer $flags
      */
     public function __construct(array $extensions = ['php'], array $excludedDirs = [], $flags = null)
@@ -75,12 +75,12 @@ class Finder
             : '.+';
 
         foreach ($paths as $path) {
-            if (is_dir($path)) {
-                $path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            if (\is_dir($path)) {
+                $path = \rtrim($path, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
                 $directory = new RecursiveDirectoryIterator($path, $this->flags);
                 $iterator = new RecursiveIteratorIterator($directory);
 
-                $filterRegex = sprintf('`^%s%s$`', $regexForFilter, '\.(' . implode('|', $this->extensions) . ')');
+                $filterRegex = \sprintf('`^%s%s$`', $regexForFilter, '\.(' . \implode('|', $this->extensions) . ')');
 
                 $filteredIterator = new RegexIterator(
                     $iterator,
@@ -91,7 +91,7 @@ class Finder
                 foreach ($filteredIterator as $file) {
                     $files[] = $file[0];
                 }
-            } elseif (is_file($path)) {
+            } elseif (\is_file($path)) {
                 $files[] = $path;
             }
         }

@@ -9,6 +9,11 @@
 
 namespace Hal\Component\Tree;
 
+/**
+ * Class GraphException
+ *
+ * @package Hal\Component\Tree
+ */
 class GraphException extends \LogicException
 {
 }

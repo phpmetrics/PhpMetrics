@@ -2,6 +2,7 @@
 namespace Hal\Application;
 
 use Hal\Application\Config\Config;
+use Hal\Application\Config\ConfigException;
 use Hal\Component\Ast\NodeTraverser;
 use Hal\Component\Issue\Issuer;
 use Hal\Component\Output\Output;
@@ -23,6 +24,7 @@ use Hal\Metric\System\Coupling\PageRank;
 use Hal\Metric\System\Packages\Composer\Composer;
 use Hal\Metric\System\UnitTesting\UnitTesting;
 use PhpParser\Error;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 
 /**
@@ -49,7 +51,10 @@ class Analyze
 
     /**
      * Analyze constructor.
+     *
+     * @param Config $config
      * @param Output $output
+     * @param Issuer $issuer
      */
     public function __construct(Config $config, Output $output, Issuer $issuer)
     {
@@ -60,11 +65,15 @@ class Analyze
 
     /**
      * Runs analyze
+     *
+     * @param $files
+     * @return Metrics
+     * @throws ConfigException
      */
     public function run($files)
     {
         // config
-        ini_set('xdebug.max_nesting_level', 3000);
+        \ini_set('xdebug.max_nesting_level', 3000);
 
         $metrics = new Metrics();
 
@@ -76,7 +85,7 @@ class Analyze
         // prepare parser
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser(false, $whenToStop);
-        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
+        $traverser->addVisitor(new NameResolver());
         $traverser->addVisitor(new ClassEnumVisitor($metrics));
         $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
         $traverser->addVisitor(new ExternalsVisitor($metrics));
@@ -89,19 +98,19 @@ class Analyze
         $traverser->addVisitor(new SystemComplexityVisitor($metrics));
 
         // create a new progress bar (50 units)
-        $progress = new ProgressBar($this->output, sizeof($files));
+        $progress = new ProgressBar($this->output, \count($files));
         $progress->start();
 
         foreach ($files as $file) {
             $progress->advance();
-            $code = file_get_contents($file);
+            $code = \file_get_contents($file);
             $this->issuer->set('filename', $file);
             try {
                 $stmts = $parser->parse($code);
                 $this->issuer->set('statements', $stmts);
                 $traverser->traverse($stmts);
             } catch (Error $e) {
-                $this->output->writeln(sprintf('<error>Cannot parse %s</error>', $file));
+                $this->output->writeln(\sprintf('<error>Cannot parse %s</error>', $file));
             }
             $this->issuer->clear('filename');
             $this->issuer->clear('statements');

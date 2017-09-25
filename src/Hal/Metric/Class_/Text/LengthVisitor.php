@@ -36,7 +36,7 @@ class LengthVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Function_ || $node instanceof Stmt\Trait_) {
             if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
+                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'. \spl_object_hash($node));
                 $classOrFunction = $this->metrics->get($name);
             } else {
                 $classOrFunction = new FunctionMetric($node->name);
@@ -45,31 +45,31 @@ class LengthVisitor extends NodeVisitorAbstract
 
 
             $prettyPrinter = new PrettyPrinter\Standard();
-            $code = $prettyPrinter->prettyPrintFile(array($node));
+            $code = $prettyPrinter->prettyPrintFile([$node]);
 
             // count all lines
-            $loc = sizeof(preg_split('/\r\n|\r|\n/', $code)) - 1;
+            $loc = \count(\preg_split('/\r\n|\r|\n/', $code)) - 1;
 
             // count and remove multi lines comments
             $cloc = 0;
-            if (preg_match_all('!/\*.*?\*/!s', $code, $matches)) {
+            if (\preg_match_all('!/\*.*?\*/!s', $code, $matches)) {
                 foreach ($matches[0] as $match) {
-                    $cloc += max(1, sizeof(preg_split('/\r\n|\r|\n/', $match)));
+                    $cloc += \max(1, \count(\preg_split('/\r\n|\r|\n/', $match)));
                 }
             }
-            $code = preg_replace('!/\*.*?\*/!s', '', $code);
+            $code = \preg_replace('!/\*.*?\*/!s', '', $code);
 
             // count and remove single line comments
-            $code = preg_replace_callback('!(\'[^\']*\'|"[^"]*")|((?:#|\/\/).*$)!m', function (array $matches) use (&$cloc) {
+            $code = \preg_replace_callback('!(\'[^\']*\'|"[^"]*")|((?:#|\/\/).*$)!m', function (array $matches) use (&$cloc) {
                 if (isset($matches[2])) {
-                    $cloc += 1;
+                    ++$cloc;
                 }
                 return $matches[1];
             }, $code, -1);
 
             // count and remove empty lines
-            $code = trim(preg_replace('!(^\s*[\r\n])!sm', '', $code));
-            $lloc = sizeof(preg_split('/\r\n|\r|\n/', $code));
+            $code = \trim(\preg_replace('!(^\s*[\r\n])!m', '', $code));
+            $lloc = \count(\preg_split('/\r\n|\r|\n/', $code));
 
             // save result
             $classOrFunction

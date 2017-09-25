@@ -3,6 +3,11 @@
 
 <?php
 // calculate percentiles
+/**
+ * @param $arr
+ * @param float $percentile
+ * @return mixed
+ */
 function procentile($arr, $percentile = 0.95)
 {
     sort($arr);
@@ -13,13 +18,13 @@ function procentile($arr, $percentile = 0.95)
 $array = [];
 foreach ($classes as $class) {
     if (isset($class['lloc'])) {
-        array_push($array, $class['lloc']);
+        $array[] = $class['lloc'];
     }
 }
 
 // 2. percentile map
 $json = [];
-if (sizeof($array) > 1) {
+if (count($array) > 1) {
     $range = range(0.5, 1, .05);
     foreach ($range as $percentile) {
         $json[] = (object)[

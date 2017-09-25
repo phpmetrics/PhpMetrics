@@ -9,6 +9,11 @@
 
 namespace Hal\Component\Tree;
 
+/**
+ * Class Node
+ *
+ * @package Hal\Component\Tree
+ */
 class Node
 {
 
@@ -25,7 +30,7 @@ class Node
     /**
      * @var Edge[]
      */
-    private $edges = array();
+    private $edges = [];
 
     /**
      * @var bool
@@ -87,7 +92,7 @@ class Node
      */
     public function addEdge(Edge $edge)
     {
-        array_push($this->edges, $edge);
+        $this->edges[] = $edge;
         return $this;
     }
 
@@ -114,6 +119,6 @@ class Node
      */
     public function getUniqueId()
     {
-        return spl_object_hash($this);
+        return \spl_object_hash($this);
     }
 }

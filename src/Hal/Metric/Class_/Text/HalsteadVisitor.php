@@ -45,7 +45,7 @@ class HalsteadVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Function_ || $node instanceof Stmt\Trait_) {
             if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
+                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'. \spl_object_hash($node));
                 $classOrFunction = $this->metrics->get($name);
             } else {
                 $classOrFunction = new FunctionMetric($node->name);
@@ -56,7 +56,7 @@ class HalsteadVisitor extends NodeVisitorAbstract
             $operands = [];
             $operators = [];
 
-            iterate_over_node($node, function ($node) use (&$operators, &$operands) {
+            \iterate_over_node($node, function ($node) use (&$operators, &$operands) {
 
                 if ($node instanceof Node\Expr\BinaryOp
                     || $node instanceof Node\Expr\AssignOp
@@ -69,7 +69,7 @@ class HalsteadVisitor extends NodeVisitorAbstract
                     || $node instanceof Node\Expr\Assign
                 ) {
                     // operators
-                    array_push($operators, get_class($node));
+                    $operators[] = \get_class($node);
                 }
 
                 if ($node instanceof Node\Expr\Cast
@@ -83,30 +83,30 @@ class HalsteadVisitor extends NodeVisitorAbstract
                     } elseif (isset($node->name)) {
                         $name = $node->name;
                     } else {
-                        $name = get_class($node);
+                        $name = \get_class($node);
                     }
-                    array_push($operands, $name);
+                    $operands[] = $name;
                 }
             });
 
             // calculate halstead metrics
-            $uniqueOperators = array_map('unserialize', array_unique(array_map('serialize', $operators)));
-            $uniqueOperands = array_map('unserialize', array_unique(array_map('serialize', $operands)));
+            $uniqueOperators = \array_map('\unserialize', \array_unique(\array_map('\serialize', $operators)));
+            $uniqueOperands = \array_map('\unserialize', \array_unique(\array_map('\serialize', $operands)));
 
-            $n1 = sizeof($uniqueOperators, COUNT_NORMAL);
-            $n2 = sizeof($uniqueOperands, COUNT_NORMAL);
-            $N1 = sizeof($operators, COUNT_NORMAL);
-            $N2 = sizeof($operands, COUNT_NORMAL);
+            $n1 = \count($uniqueOperators);
+            $n2 = \count($uniqueOperands);
+            $N1 = \count($operators);
+            $N2 = \count($operands);
 
-            if (($n2 == 0) || ($N2 == 0)) {
+            if ((0 == $n2) || (0 == $N2)) {
                 // files without operators
                 $V = $n1 = $n2 = $N1 = $N2 = $E = $D = $B = $T = $I = $L = 0;
             } else {
                 $devAbility = 3000;
                 $N = $N1 + $N2;
                 $n = $n1 + $n2;
-                $V = $N * log($n, 2);
-                $L = (2 / max(1, $n1)) * ($n2 / $N2);
+                $V = $N * \log($n, 2);
+                $L = (2 / \max(1, $n1)) * ($n2 / $N2);
                 $D = ($n1 / 2) * ($N2 / $n2);
                 $E = $V * $D;
                 $B = $V / $devAbility;
@@ -118,13 +118,13 @@ class HalsteadVisitor extends NodeVisitorAbstract
             $classOrFunction
                 ->set('length', $N1 + $N2)
                 ->set('vocabulary', $n1 + $n2)
-                ->set('volume', round($V, 2))
-                ->set('difficulty', round($D, 2))
-                ->set('effort', round($E, 2))
-                ->set('level', round($L, 2))
-                ->set('bugs', round($B, 2))
-                ->set('time', round($T))
-                ->set('intelligentContent', round($I, 2))
+                ->set('volume', \round($V, 2))
+                ->set('difficulty', \round($D, 2))
+                ->set('effort', \round($E, 2))
+                ->set('level', \round($L, 2))
+                ->set('bugs', \round($B, 2))
+                ->set('time', \round($T))
+                ->set('intelligentContent', \round($I, 2))
                 ->set('number_operators', $N1)
                 ->set('number_operands', $N2)
                 ->set('number_operators_unique', $n1)

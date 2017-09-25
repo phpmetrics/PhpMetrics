@@ -72,7 +72,7 @@ class Coupling
             $metric
                 ->set('afferentCoupling', $afferent)
                 ->set('efferentCoupling', $efferent)
-                ->set('instability', round($instability, 2));
+                ->set('instability', \round($instability, 2));
         }
     }
 }

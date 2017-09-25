@@ -41,9 +41,8 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
-            $sy = $dc = $sc = array();
+            $sy = $dc = $sc = [];
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
@@ -51,21 +50,21 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
                     $output = 0;
                     $fanout = [];
 
-                    iterate_over_node($node, function ($node) use (&$output, &$fanout) {
+                    \iterate_over_node($node, function ($node) use (&$output, &$fanout) {
                         switch (true) {
                             case $node instanceof Stmt\Return_:
                                 $output++;
                                 break;
                             case $node instanceof Node\Expr\StaticCall:
                             case $node instanceof Node\Expr\MethodCall:
-                                array_push($fanout, getNameOfNode($node));
+                                $fanout[] = \getNameOfNode($node);
                         }
                     });
 
-                    $fanout = sizeof(array_unique($fanout));
-                    $v = sizeof($stmt->params) + $output;
+                    $fanout = \count(\array_unique($fanout));
+                    $v = \count($stmt->params) + $output;
                     $ldc = $v / ($fanout + 1);
-                    $lsc = pow($fanout, 2);
+                    $lsc = \pow($fanout, 2);
                     $sy[] = $ldc + $lsc;
                     $dc[] = $ldc;
                     $sc[] = $lsc;
@@ -74,12 +73,12 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
 
             // average for class
             $class
-                ->set('relativeStructuralComplexity', empty($sc) ? 0 : round(array_sum($sc) / sizeof($sc), 2))
-                ->set('relativeDataComplexity', empty($dc) ? 0 : round(array_sum($dc) / sizeof($dc), 2))
-                ->set('relativeSystemComplexity', empty($sy) ? 0 : round(array_sum($sy) / sizeof($sy), 2))
-                ->set('totalStructuralComplexity', round(array_sum($sc), 2))
-                ->set('totalDataComplexity', round(array_sum($dc), 2))
-                ->set('totalSystemComplexity', round(array_sum($dc) + array_sum($sc), 2));
+                ->set('relativeStructuralComplexity', empty($sc) ? 0 : \round(\array_sum($sc) / \count($sc), 2))
+                ->set('relativeDataComplexity', empty($dc) ? 0 : \round(\array_sum($dc) / \count($dc), 2))
+                ->set('relativeSystemComplexity', empty($sy) ? 0 : \round(\array_sum($sy) / \count($sy), 2))
+                ->set('totalStructuralComplexity', \round(\array_sum($sc), 2))
+                ->set('totalDataComplexity', \round(\array_sum($dc), 2))
+                ->set('totalSystemComplexity', \round(\array_sum($dc) + \array_sum($sc), 2));
         }
     }
 }

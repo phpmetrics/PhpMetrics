@@ -1,6 +1,11 @@
 <?php
 namespace Hal\Metric;
 
+/**
+ * Trait BagTrait
+ *
+ * @package Hal\Metric
+ */
 trait BagTrait
 {
     private $name;
@@ -82,6 +87,6 @@ trait BagTrait
      */
     public function jsonSerialize()
     {
-        return array_merge($this->all(), ['_type' => get_class($this)]);
+        return \array_merge($this->all(), ['_type' => \get_class($this)]);
     }
 }

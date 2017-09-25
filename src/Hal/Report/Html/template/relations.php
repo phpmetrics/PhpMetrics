@@ -18,14 +18,14 @@ foreach ($classes as $class) {
             ];
         }
         $classesCp[$class['name']]['externals'][] = $ext;
-    }
+    } unset($ext);
 }
 foreach ($classesCp as $class) {
-    array_push($relations, (object)[
+    $relations[] = (object)[
         'name' => $class['name'],
         'size' => 3000,
-        'relations' => (array)array_values(array_unique($class['externals'])),
-    ]);
+        'relations' => array_values(array_unique($class['externals'])),
+    ];
 }
 ?>
 

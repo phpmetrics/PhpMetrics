@@ -29,7 +29,7 @@ foreach ($classes as $c) {
                     <?php foreach ($classesC as $class) { ?>
                         <tr>
                             <?php foreach ($class as $k => $v) { ?>
-                                <td class="js-sort-number"><?php echo is_array($v) ? sizeof($v) : $v; ?></td>
+                                <td class="js-sort-number"><?php echo is_array($v) ? count($v) : $v; ?></td>
                             <?php } ?>
                         </tr>
                     <?php } ?>

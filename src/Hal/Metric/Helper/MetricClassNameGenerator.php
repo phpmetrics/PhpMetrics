@@ -17,7 +17,7 @@ class MetricClassNameGenerator
     public static function getName(Node $node)
     {
         return ($node instanceof Node\Stmt\Class_ && $node->isAnonymous()) ?
-            'anonymous@' . spl_object_hash($node) :
+            'anonymous@' . \spl_object_hash($node) :
             $node->namespacedName->toString();
     }
 }

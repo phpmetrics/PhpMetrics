@@ -5,6 +5,11 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
 
+/**
+ * Class TooDependent
+ *
+ * @package Hal\Violation\Class_
+ */
 class TooDependent implements Violation
 {
 

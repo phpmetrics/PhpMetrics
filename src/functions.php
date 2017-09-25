@@ -75,8 +75,7 @@ function iterate_over_node($node, $callback)
     $myVisitor = new MyVisitor($callback);
     $traverser = new \PhpParser\NodeTraverser();
     $traverser->addVisitor($myVisitor);
-    $traverser->traverse(array($node));
-    return;
+    $traverser->traverse([$node]);
 }
 
 /**
@@ -150,7 +149,7 @@ function recurse_copy($src, $dst)
         mkdir($dst);
     }
     while (false !== ($file = readdir($dir))) {
-        if (($file != '.') && ($file != '..')) {
+        if (('.' != $file) && ('..' != $file)) {
             if (is_dir($src . '/' . $file)) {
                 recurse_copy($src . '/' . $file, $dst . '/' . $file);
             } else {

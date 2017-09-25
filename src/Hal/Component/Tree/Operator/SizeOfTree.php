@@ -12,6 +12,11 @@ namespace Hal\Component\Tree\Operator;
 use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\Node;
 
+/**
+ * Class SizeOfTree
+ *
+ * @package Hal\Component\Tree\Operator
+ */
 class SizeOfTree
 {
     /**
@@ -43,14 +48,13 @@ class SizeOfTree
 
         $edges = $node->getEdges();
 
-        if (0 === sizeof($edges)) {
+        if (0 === \count($edges)) {
             return 0;
         }
 
         // our tree is not binary : interface can have more than one parent
         $max = 0;
         foreach ($edges as $edge) {
-
             if ($edge->getFrom() == $node) {
                 continue;
             }
@@ -68,6 +72,7 @@ class SizeOfTree
      * Get depth of node
      *
      * @param Node $node
+     * @param bool $uniqs
      * @return int
      */
     public function getNumberOfChilds(Node $node, $uniqs = false)
@@ -75,7 +80,7 @@ class SizeOfTree
 
         $edges = $node->getEdges();
 
-        if (0 === sizeof($edges)) {
+        if (0 === \count($edges)) {
             return 0;
         }
 
@@ -84,8 +89,6 @@ class SizeOfTree
         $n = 0;
 
         foreach ($edges as $edge) {
-
-
             if ($edge->getTo() == $node) {
                 continue;
             }
@@ -117,9 +120,9 @@ class SizeOfTree
     {
         $ns = [];
         foreach ($this->graph->getRootNodes() as $node) {
-            array_push($ns, $this->getLongestBranch($node));
+            $ns[] = $this->getLongestBranch($node);
         }
-        return round(array_sum($ns) / max(1, sizeof($ns)), 2);
+        return \round(\array_sum($ns) / \max(1, \count($ns)), 2);
     }
 
     /**
@@ -130,7 +133,6 @@ class SizeOfTree
     {
         $max = 1;
         foreach ($node->getEdges() as $edge) {
-
             if ($node == $edge->getTo()) {
                 // only descendants
                 continue;

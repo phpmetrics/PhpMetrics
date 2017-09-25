@@ -23,7 +23,7 @@ class TestOutput implements Output
      */
     public function writeln($message)
     {
-        $this->write(PHP_EOL . $message);
+        $this->write(\PHP_EOL . $message);
         return $this;
     }
 

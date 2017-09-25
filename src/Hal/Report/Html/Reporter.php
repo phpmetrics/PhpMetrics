@@ -7,6 +7,11 @@ use Hal\Metric\Consolidated;
 use Hal\Metric\Consolided;
 use Hal\Metric\Metrics;
 
+/**
+ * Class Reporter
+ *
+ * @package Hal\Report\Html
+ */
 class Reporter
 {
 
@@ -32,9 +37,11 @@ class Reporter
     }
 
 
+    /**
+     * @param Metrics $metrics
+     */
     public function generate(Metrics $metrics)
     {
-
         $logDir = $this->config->get('report-html');
         if (!$logDir) {
             return;
@@ -48,31 +55,31 @@ class Reporter
             'avg' => $consolidated->getAvg(),
             'sum' => $consolidated->getSum()
         ];
-        $files = glob($logDir . '/js/history-*.json');
-        $next = sizeof($files) + 1;
+        $files = \glob($logDir . '/js/history-*.json');
+        $next = \count($files) + 1;
         $history = [];
-        natsort($files);
+        \natsort($files);
         foreach ($files as $filename) {
-            array_push($history, json_decode(file_get_contents($filename)));
+            $history[] = \json_decode(\file_get_contents($filename));
         }
 
         // copy sources
-        if (!file_exists($logDir . '/js')) {
-            mkdir($logDir.'/js', 0755, true);
+        if (!\file_exists($logDir . '/js')) {
+            \mkdir($logDir.'/js', 0755, true);
         }
-        if (!file_exists($logDir . '/css')) {
-            mkdir($logDir.'/css', 0755, true);
+        if (!\file_exists($logDir . '/css')) {
+            \mkdir($logDir.'/css', 0755, true);
         }
-        if (!file_exists($logDir . '/images')) {
-            mkdir($logDir.'/images', 0755, true);
+        if (!\file_exists($logDir . '/images')) {
+            \mkdir($logDir.'/images', 0755, true);
         }
-        if(!file_exists($logDir . '/fonts')) {
-            mkdir($logDir.'/fonts', 0755, true);
+        if (!\file_exists($logDir . '/fonts')) {
+            \mkdir($logDir.'/fonts', 0755, true);
         }
-        recurse_copy(__DIR__ . '/template/js', $logDir . '/js');
-        recurse_copy(__DIR__ . '/template/css', $logDir . '/css');
-        recurse_copy(__DIR__ . '/template/images', $logDir . '/images');
-        recurse_copy(__DIR__ . '/template/fonts', $logDir . '/fonts');
+        \recurse_copy(__DIR__ . '/template/js', $logDir . '/js');
+        \recurse_copy(__DIR__ . '/template/css', $logDir . '/css');
+        \recurse_copy(__DIR__ . '/template/images', $logDir . '/images');
+        \recurse_copy(__DIR__ . '/template/fonts', $logDir . '/fonts');
 
         // render dynamic pages
         $this->renderPage(__DIR__ . '/template/index.php', $logDir . '/index.html', $consolidated, $history);
@@ -90,27 +97,29 @@ class Reporter
         $this->renderPage(__DIR__ . '/template/junit.php', $logDir . '/junit.html', $consolidated, $history);
 
         // js data
-        file_put_contents(
-            sprintf('%s/js/history-%d.json', $logDir, $next),
-            json_encode($today, JSON_PRETTY_PRINT)
+        \file_put_contents(
+            \sprintf('%s/js/history-%d.json', $logDir, $next),
+            \json_encode($today, \JSON_PRETTY_PRINT)
         );
-	    file_put_contents(
-            sprintf('%s/js/latest.json', $logDir),
-            json_encode($today, JSON_PRETTY_PRINT)
+        \file_put_contents(
+            \sprintf('%s/js/latest.json', $logDir),
+            \json_encode($today, \JSON_PRETTY_PRINT)
         );
 
         // json data
-        file_put_contents(
+        \file_put_contents(
             $logDir . '/js/classes.js',
-            'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
+            'var classes = ' . \json_encode($consolidated->getClasses(), \JSON_PRETTY_PRINT)
         );
 
-        $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir));
+        $this->output->writeln(\sprintf('HTML report generated in "%s" directory', $logDir));
     }
 
     /**
      * @param $source
      * @param $destination
+     * @param Consolidated $consolidated
+     * @param $history
      * @return $this
      */
     public function renderPage($source, $destination, Consolidated $consolidated, $history)
@@ -120,19 +129,20 @@ class Reporter
         $this->classes = $classes = $consolidated->getClasses();
         $this->files = $files = $consolidated->getFiles();
         $this->project = $project = $consolidated->getProject();
-        $config = $this->config;
         $this->history = $history;
 
-        ob_start();
+        \ob_start();
         require $source;
-        $content = ob_get_clean();
-        file_put_contents($destination, $content);
+        $content = \ob_get_clean();
+        \file_put_contents($destination, $content);
         return $this;
     }
 
     /**
      * @param $type
      * @param $key
+     * @param bool $lowIsBetter
+     * @param bool $highIsBetter
      * @return string
      */
     protected function getTrend($type, $key, $lowIsBetter = false, $highIsBetter = false)
@@ -152,7 +162,7 @@ class Reporter
     <path d="M0 0h24v24H0z" fill="none"/>
 </svg>';
 
-        $last = end($this->history);
+        $last = \end($this->history);
         if (!isset($last->$type->$key)) {
             return '';
         }
@@ -192,7 +202,7 @@ class Reporter
             }
         }
 
-        return sprintf(
+        return \sprintf(
             '<span title="Last value: %s" class="progress progress-%s progress-%s">%s %s</span>',
             $oldValue,
             $goodOrBad,

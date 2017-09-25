@@ -1,13 +1,20 @@
 <?php
 namespace Hal\Metric;
 
+/**
+ * Class Registry
+ *
+ * @package Hal\Metric
+ */
 class Registry
 {
     public function allForProject()
     {
-
     }
 
+    /**
+     * @return array
+     */
     public function allForStructures()
     {
         return [

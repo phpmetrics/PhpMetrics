@@ -5,6 +5,11 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
 
+/**
+ * Class ProbablyBugged
+ *
+ * @package Hal\Violation\Class_
+ */
 class ProbablyBugged implements Violation
 {
 
@@ -27,7 +32,6 @@ class ProbablyBugged implements Violation
 
         $this->metric = $metric;
 
-        $suspect = 0;
         if ($metric->get('bugs') >= .35) {
             $metric->get('violations')->add($this);
             return;

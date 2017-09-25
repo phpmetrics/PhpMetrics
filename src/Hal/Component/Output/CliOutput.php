@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * (c) Jean-François Lépine <https://twitter.com/Halleck45>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,13 +10,20 @@ namespace Hal\Component\Output;
 
 /**
  * Class CliOutput
- * @package Hal\Component\Issue
+ *
+ * Implementation of the Output interface linked to CLI feed (STDOUT/STDERR buffers).
+ *
+ * @package Hal\Component\Output
  */
 class CliOutput implements Output
 {
-    /**
-     * @var bool
-     */
+    /** @var string buffer name of the standard output. */
+    const BUFFER_OUTPUT = 'php://stdout';
+
+    /** @var string buffer name of the error output. */
+    const BUFFER_ERROR = 'php://stderr';
+
+    /** @var bool Defines the quite mode. If quiet, no standard output must be written, but only error outputs. */
     private $quietMode = false;
 
     /**
@@ -25,8 +31,7 @@ class CliOutput implements Output
      */
     public function writeln($message)
     {
-        $this->write(PHP_EOL . $message);
-        return $this;
+        return $this->write(\PHP_EOL . $message);
     }
 
     /**
@@ -34,7 +39,7 @@ class CliOutput implements Output
      */
     public function write($message)
     {
-        $this->quietMode||file_put_contents('php://stdout', $message);
+        $this->quietMode || \file_put_contents(static::BUFFER_OUTPUT, $message);
         return $this;
     }
 
@@ -43,7 +48,7 @@ class CliOutput implements Output
      */
     public function err($message)
     {
-        file_put_contents('php://stderr', $message);
+        \file_put_contents(static::BUFFER_ERROR, $message);
         return $this;
     }
 
@@ -52,13 +57,12 @@ class CliOutput implements Output
      */
     public function clearln()
     {
-        $this->writeln("\x0D");
-        $this->writeln("\x1B[2K");
-        return $this;
+        return $this->writeln("\x0D" . \PHP_EOL . "\x1B[2K");
     }
 
     /**
-     * @param boolean $quietMode
+     * Set the quiet mode flag.
+     * @param boolean $quietMode Boolean value that will be used to set the quiet mode flag.
      * @return $this
      */
     public function setQuietMode($quietMode)

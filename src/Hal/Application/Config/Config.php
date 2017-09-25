@@ -1,6 +1,11 @@
 <?php
 namespace Hal\Application\Config;
 
+/**
+ * Class Config
+ *
+ * @package Hal\Application\Config
+ */
 class Config
 {
 

@@ -9,17 +9,22 @@
 
 namespace Hal\Component\Tree;
 
+/**
+ * Class Graph
+ *
+ * @package Hal\Component\Tree
+ */
 class Graph implements \Countable
 {
     /**
      * @var Node[]
      */
-    private $datas = array();
+    private $datas = [];
 
     /**
      * @var Edge[]
      */
-    private $edges = array();
+    private $edges = [];
 
     /**
      * @param Node $node
@@ -28,7 +33,7 @@ class Graph implements \Countable
     public function insert(Node $node)
     {
         if ($this->has($node->getKey())) {
-            throw new GraphException(sprintf('node %s is already present', $node->getKey()));
+            throw new GraphException(\sprintf('node %s is already present', $node->getKey()));
         }
         $this->datas[$node->getKey()] = $node;
         return $this;
@@ -51,7 +56,7 @@ class Graph implements \Countable
         $edge = new Edge($from, $to);
         $from->addEdge($edge);
         $to->addEdge($edge);
-        array_push($this->edges, $edge);
+        $this->edges[] = $edge;
 
         return $this;
     }
@@ -63,10 +68,10 @@ class Graph implements \Countable
     {
         $string = '';
         foreach ($this->all() as $node) {
-            $string .= sprintf("%s;\n", $node->getKey());
+            $string .= \sprintf("%s;\n", $node->getKey());
         }
         foreach ($this->getEdges() as $edge) {
-            $string .= sprintf("%s;\n", $edge->asString());
+            $string .= \sprintf("%s;\n", $edge->asString());
         }
         return $string;
     }
@@ -102,7 +107,7 @@ class Graph implements \Countable
      */
     public function count()
     {
-        return sizeof($this->datas);
+        return \count($this->datas);
     }
 
     /**
@@ -135,7 +140,6 @@ class Graph implements \Countable
     {
         $roots = [];
         foreach ($this->all() as $node) {
-
             $isRoot = true;
 
             foreach ($node->getEdges() as $edge) {
@@ -146,7 +150,7 @@ class Graph implements \Countable
 
 
             if ($isRoot) {
-                array_push($roots, $node);
+                $roots[] = $node;
             }
         }
 

@@ -20,6 +20,8 @@ class Composer
 
     /**
      * GitChanges constructor.
+     *
+     * @param Config $config
      * @param array $files
      */
     public function __construct(Config $config, array $files)
@@ -42,10 +44,9 @@ class Composer
 
         $packagist = new Packagist();
         foreach ($rawRequirements as $requirement => $version) {
-
             $package = $packagist->get($requirement);
 
-            $packages[$requirement] = (object)array(
+            $packages[$requirement] = (object)[
                 'name' => $requirement,
                 'required' => $version,
                 'installed' => isset($rawInstalled[$requirement]) ? $rawInstalled[$requirement] : null,
@@ -53,7 +54,7 @@ class Composer
                 'license' => $package->license,
                 'homepage' => $package->homepage,
                 'zip' => $package->zip,
-            );
+            ];
         }
 
         $projectMetric->set('packages', $packages);
@@ -85,7 +86,7 @@ class Composer
             $rawRequirements[] = (array)$composerJson->require;
         }
 
-        return \call_user_func_array('array_merge', $rawRequirements);
+        return \call_user_func_array('\array_merge', $rawRequirements);
     }
 
     /**
@@ -124,6 +125,6 @@ class Composer
             $rawInstalled[] = $installed;
         }
 
-        return \call_user_func_array('array_merge', $rawInstalled);
+        return \call_user_func_array('\array_merge', $rawInstalled);
     }
 }

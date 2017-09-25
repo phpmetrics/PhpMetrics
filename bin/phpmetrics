@@ -1,20 +1,15 @@
 #!/usr/bin/env php
 <?php
-function includeIfExists($file)
-{
-    if (file_exists($file)) {
-        return include $file;
-    }
-}
-if (
-    (!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php'))
-    && (!$loader = includeIfExists(__DIR__.'/../../../autoload.php'))
-) {
-    die(
-        'You must set up the project dependencies, run the following commands:'.PHP_EOL.
-        'curl -s http://getcomposer.org/installer | php'.PHP_EOL.
-        'php composer.phar install'.PHP_EOL
-    );
-};
 
-(new \Hal\Application\Application())->run($argv);
+$vendorAutoload = __DIR__ . '/../vendor/autoload.php';
+$autoload = __DIR__ . '/../../../autoload.php';
+
+if (!((file_exists($vendorAutoload) && include $vendorAutoload) || (file_exists($autoload) && include $autoload))) {
+    die(
+        'You must set up the project dependencies, run the following commands:' . PHP_EOL .
+        'curl -s http://getcomposer.org/installer | php' . PHP_EOL .
+        'php composer.phar install' . PHP_EOL
+    );
+}
+
+(new \Hal\Application\Application($argv))->run();

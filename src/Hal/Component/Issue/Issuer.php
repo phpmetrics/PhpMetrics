@@ -39,35 +39,34 @@ class Issuer
     }
 
     /**
-     * @param $errno
      * @param $errstr
      * @param $errfile
      * @param $errline
-     * @throws \ErrorException
+     * @internal param $errno
      */
-    public function onError($errno, $errstr, $errfile, $errline)
+    public function onError($errstr, $errfile, $errline)
     {
-        if (error_reporting() == 0) {
+        if (0 == \error_reporting()) {
             return;
         }
-        $php = PHP_VERSION;
-        $os = php_uname();
-        $phpmetrics = getVersion();
-        $traces = debug_backtrace(0, 10);
+        $php = \PHP_VERSION;
+        $os = \PHP_OS;
+        $phpmetrics = \getVersion();
+        $traces = \debug_backtrace(0, 10);
         $trace = '';
         foreach ($traces as $c) {
             if (isset($c['file'])) {
-                $trace .= sprintf("+ %s (line %d)\n", $c['file'], $c['line']);
+                $trace .= \sprintf("+ %s (line %d)\n", $c['file'], $c['line']);
             }
         }
 
         $debug = '';
         foreach ($this->debug as $key => $value) {
-            if ($value instanceof Node || is_array($value)) {
+            if ($value instanceof Node || \is_array($value)) {
                 $value = (new Standard())->prettyPrint($value);
             }
 
-            $debug .= sprintf("%s: %s\n", $key, $value);
+            $debug .= \sprintf("%s: %s\n", $key, $value);
         }
 
         $logfile = './phpmetrics-error.log';
@@ -125,7 +124,7 @@ EOT;
      */
     public function enable()
     {
-        set_error_handler([$this, 'onError']);
+        \set_error_handler([$this, 'onError']);
         return $this;
     }
 
@@ -134,7 +133,7 @@ EOT;
      */
     public function disable()
     {
-        restore_error_handler();
+        \restore_error_handler();
         return $this;
     }
 
@@ -147,13 +146,14 @@ EOT;
     }
 
     /**
+     * @param $logfile
      * @param $log
      * @return $this
      */
     protected function log($logfile, $log)
     {
-        if (is_writable(getcwd())) {
-            file_put_contents($logfile, $log);
+        if (\is_writable(\getcwd())) {
+            \file_put_contents($logfile, $log);
         } else {
             $this->output->write($log);
         }

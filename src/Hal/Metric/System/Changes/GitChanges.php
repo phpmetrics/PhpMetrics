@@ -7,13 +7,18 @@ use Hal\Metric\FileMetric;
 use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
 
+/**
+ * Class GitChanges
+ *
+ * @package Hal\Metric\System\Changes
+ */
 class GitChanges
 {
 
     /**
      * @var array
      */
-    private $files = [];
+    private $files;
 
     /**
      * @var Config
@@ -22,6 +27,8 @@ class GitChanges
 
     /**
      * GitChanges constructor.
+     *
+     * @param Config $config
      * @param array $files
      */
     public function __construct(Config $config, array $files)
@@ -42,26 +49,26 @@ class GitChanges
         }
 
         $bin = $this->config->get('git');
-        if (is_bool($bin)) {
+        if (\is_bool($bin)) {
             $bin = 'git';
         }
 
-        if (sizeof($this->files) == 0) {
+        if (0 == \count($this->files)) {
             return;
         }
 
-        $r = shell_exec(sprintf('%s --version', $bin));
-        if (!preg_match('!git version!', $r)) {
-            throw new ConfigException(sprintf('Git binary (%s) incorrect', $bin));
+        $r = \shell_exec(\sprintf('%s --version', $bin));
+        if (!\preg_match('!git version!', $r)) {
+            throw new ConfigException(\sprintf('Git binary (%s) incorrect', $bin));
         }
 
         // get all history (for only on directory for the moment
         // @todo: git history for multiple repositories
         // 500 last commits max
-        $file = current($this->files);
-        $command = sprintf("cd %s && %s log --format='* %%at\t%%cn' --numstat -n 500", realpath(dirname($file)), $bin);
-        $r = shell_exec($command);
-        $r = array_filter(explode(PHP_EOL, $r));
+        $file = \current($this->files);
+        $command = \sprintf("cd %s && %s log --format='* %%at\t%%cn' --numstat -n 500", \realpath(\dirname($file)), $bin);
+        $r = \shell_exec($command);
+        $r = \array_filter(\explode(\PHP_EOL, $r));
 
 
         // build a range of commits info, stepped by week number
@@ -78,7 +85,7 @@ class GitChanges
         $authors = [];
 
         foreach ($r as $line) {
-            if (preg_match('!^\* (\d+)\s+(.*)!', $line, $matches)) {
+            if (\preg_match('!^\* (\d+)\s+(.*)!', $line, $matches)) {
                 // head line
 
                 if (isset($date)) {
@@ -100,7 +107,7 @@ class GitChanges
                 list(, $timestamp, $author) = $matches;
                 $date = (new \DateTime())->setTimestamp($timestamp)->format($dateFormat);
 
-                if (is_null($firstCommitDate)) {
+                if (null === $firstCommitDate) {
                     $firstCommitDate = $timestamp;
                 }
 
@@ -110,7 +117,7 @@ class GitChanges
                 }
                 $authors[$author]['commits']++;
             } else {
-                if (preg_match('!(\d+)\s+(\d+)\s+(.*)!', $line, $matches)) {
+                if (\preg_match('!(\d+)\s+(\d+)\s+(.*)!', $line, $matches)) {
                     // additions and changes for each file
                     list(, $additions, $removes, $filename) = $matches;
 
@@ -143,9 +150,9 @@ class GitChanges
         // build a range of dates since first commit
         // (pad weeks without any commit)
         $current = $firstCommitDate;
-        $last = time();
+        $last = \time();
         while ($current <= $last) {
-            $key = date($dateFormat, $current);
+            $key = \date($dateFormat, $current);
             if (!isset($history[$key])) {
                 $history[$key] = [
                     'nbFiles' => 0,
@@ -153,7 +160,7 @@ class GitChanges
                     'removes' => 0,
                 ];
             }
-            $current = strtotime('+7 day', $current);
+            $current = \strtotime('+7 day', $current);
         }
 
 
@@ -176,6 +183,6 @@ class GitChanges
      */
     private function doesThisFileShouldBeCounted($file)
     {
-        return preg_match('!\.(php|inc)$!i', $file);
+        return \preg_match('!\.(php|inc)$!i', $file);
     }
 }
