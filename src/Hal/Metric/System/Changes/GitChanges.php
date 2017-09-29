@@ -59,7 +59,11 @@ class GitChanges
         // @todo: git history for multiple repositories
         // 500 last commits max
         $file = current($this->files);
-        $command = sprintf("cd %s && %s log --format='* %%at\t%%cn' --numstat -n 500", realpath(dirname($file)), $bin);
+        $command = sprintf(
+            "cd %s && %s log --format='* %%at\t%%cn' --numstat -n 500",
+            escapeshellarg(realpath(dirname($file))),
+            escapeshellarg($bin)
+        );
         $r = shell_exec($command);
         $r = array_filter(explode(PHP_EOL, $r));
 
