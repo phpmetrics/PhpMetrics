@@ -1,103 +1,110 @@
 <?php
+/**
+ * (c) Jean-François Lépine <https://twitter.com/Halleck45>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Hal\Metric\Class_;
 
-use Hal\Component\Reflected\Method;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\FunctionMetric;
+use Hal\Metric\Helper\MetricClassNameGenerator;
 use Hal\Metric\Helper\RoleOfMethodDetector;
 use Hal\Metric\InterfaceMetric;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
-use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\NodeVisitorAbstract;
 
 /**
  * Class ClassEnumVisitor
+ * Visitor that count elements that are in class-like structures.
  *
  * @package Hal\Metric\Class_
  */
 class ClassEnumVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var Metrics
-     */
+    /** @var Metrics The Metrics object that will store all data analysis. */
     private $metrics;
 
     /**
      * ClassEnumVisitor constructor.
-     * @param Metrics $metrics
+     * @param Metrics $metrics The Metrics object that will store all data analysis.
      */
     public function __construct(Metrics $metrics)
     {
         $this->metrics = $metrics;
     }
 
-
     /**
-     * @param Node $node
-     * @return false|int|null|Node|Node[]|void
+     * Executed when leaving the traversing of the node. Used to calculates the following elements:
+     * - List of methods
+     * - Number of methods including the accessors
+     * - Number of methods excluding the accessors
+     * - Number of private/protected methods
+     * - Number of public methods
+     * - Number of getters
+     * - Number of setters
+     *
+     * It also register the element in the metrics system. This visitor must be called before any visitor used for
+     * metrics.
+     *
+     * @param Node $node The current node to leave to make the analysis.
+     * @return void
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_
-            || $node instanceof Stmt\Interface_
-            || $node instanceof Stmt\Trait_
-        ) {
-            if ($node instanceof Stmt\Interface_) {
-                $class = new InterfaceMetric($node->namespacedName->toString());
-                $class->set('interface', true);
-            } else {
-                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'. \spl_object_hash($node));
-                $class = new ClassMetric($name);
-                $class->set('interface', false);
-            }
-
-            $methods = [];
-
-            $methodsPublic = $methodsPrivate = $nbGetters = $nbSetters = 0;
-            $roleDetector = new RoleOfMethodDetector();
-            foreach ($node->stmts as $stmt) {
-                if ($stmt instanceof Stmt\ClassMethod) {
-                    $function = new FunctionMetric($stmt->name);
-
-                    $role = $roleDetector->detects($stmt);
-                    $function->set('role', $role);
-                    switch ($role) {
-                        case 'getter':
-                            $nbGetters++;
-                            break;
-                        case 'setter':
-                            $nbSetters++;
-                            break;
-                    }
-
-                    if (null === $role) {
-                        if ($stmt->isPublic()) {
-                            $methodsPublic++;
-                            $function->set('public', true);
-                            $function->set('private', false);
-                        }
-
-                        if ($stmt->isPrivate() || $stmt->isProtected()) {
-                            $methodsPrivate++;
-                            $function->set('public', false);
-                            $function->set('private', true);
-                        }
-                    }
-
-                    $methods[] = $function;
-                }
-            }
-
-            $class->set('methods', $methods);
-            $class->set('nbMethodsIncludingGettersSetters', \count($methods));
-            $class->set('nbMethods', \count($methods) - ($nbGetters + $nbSetters));
-            $class->set('nbMethodsPrivate', $methodsPrivate);
-            $class->set('nbMethodsPublic', $methodsPublic);
-            $class->set('nbMethodsGetter', $nbGetters);
-            $class->set('nbMethodsSetters', $nbSetters);
-
-            $this->metrics->attach($class);
+        // This visitor analysis is based on elements that might own methods. Only ClassLike can have them.
+        if (!($node instanceof ClassLike)) {
+            return;
         }
+
+        $isInterface = ($node instanceof Interface_);
+        $nodeName = MetricClassNameGenerator::getName($node);
+        $class = $isInterface ? new InterfaceMetric($nodeName) : new ClassMetric($nodeName);
+        $class->set('interface', $isInterface);
+
+        $methods = [];
+
+        $methodsPublic = $methodsPrivate = $nbGetters = $nbSetters = 0;
+        $roleDetector = new RoleOfMethodDetector();
+        foreach ($node->stmts as $stmt) {
+            if (!($stmt instanceof ClassMethod)) {
+                // Ignore statements that are not methods.
+                continue;
+            }
+
+            $function = new FunctionMetric($stmt->name);
+
+            $role = $roleDetector->detects($stmt);
+            $function->set('role', $role);
+
+            $nbGetters += ('getter' === $role);
+            $nbSetters += ('setter' === $role);
+
+            if (null === $role) {
+                $function->set('public', $stmt->isPublic());
+                $function->set('private', !$stmt->isPublic());
+
+                $methodsPublic += $stmt->isPublic();
+                $methodsPrivate += !$stmt->isPublic();
+            }
+
+            $methods[] = $function;
+        }
+
+        $class->set('methods', $methods)
+            ->set('nbMethodsIncludingGettersSetters', \count($methods))
+            ->set('nbMethods', \count($methods) - ($nbGetters + $nbSetters))
+            ->set('nbMethodsPrivate', $methodsPrivate)
+            ->set('nbMethodsPublic', $methodsPublic)
+            ->set('nbMethodsGetter', $nbGetters)
+            ->set('nbMethodsSetters', $nbSetters);
+
+        $this->metrics->attach($class);
     }
 }

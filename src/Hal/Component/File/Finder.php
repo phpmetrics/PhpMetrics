@@ -63,7 +63,7 @@ class Finder
      * Find files in path
      *
      * @param array $paths
-     * @return array
+     * @return string[]
      * @internal param string $path
      */
     public function fetch(array $paths)

@@ -31,7 +31,6 @@ class Composer
 
     /**
      * @param Metrics $metrics
-     * @throws ConfigException
      */
     public function calculate(Metrics $metrics)
     {
