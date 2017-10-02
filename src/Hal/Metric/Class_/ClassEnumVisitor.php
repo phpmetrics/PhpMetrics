@@ -13,7 +13,7 @@ use Hal\Metric\FunctionMetric;
 use Hal\Metric\Helper\MetricClassNameGenerator;
 use Hal\Metric\Helper\RoleOfMethodDetector;
 use Hal\Metric\InterfaceMetric;
-use Hal\Metric\Metrics;
+use Hal\Metric\MetricsVisitorTrait;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -28,17 +28,7 @@ use PhpParser\NodeVisitorAbstract;
  */
 class ClassEnumVisitor extends NodeVisitorAbstract
 {
-    /** @var Metrics The Metrics object that will store all data analysis. */
-    private $metrics;
-
-    /**
-     * ClassEnumVisitor constructor.
-     * @param Metrics $metrics The Metrics object that will store all data analysis.
-     */
-    public function __construct(Metrics $metrics)
-    {
-        $this->metrics = $metrics;
-    }
+    use MetricsVisitorTrait;
 
     /**
      * Executed when leaving the traversing of the node. Used to calculates the following elements:

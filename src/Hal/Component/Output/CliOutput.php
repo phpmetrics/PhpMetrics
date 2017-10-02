@@ -61,6 +61,22 @@ class CliOutput implements Output
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getFileDescriptor()
+    {
+        return \STDOUT;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getErrorFileDescriptor()
+    {
+        return \STDERR;
+    }
+
+    /**
      * Set the quiet mode flag.
      * @param boolean $quietMode Boolean value that will be used to set the quiet mode flag.
      * @return $this

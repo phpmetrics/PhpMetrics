@@ -1,97 +1,87 @@
 <?php
+/**
+ * (c) Jean-François Lépine <https://twitter.com/Halleck45>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Hal\Metric\Class_\Structural;
 
 use Hal\Component\Tree\GraphDeduplicated;
 use Hal\Component\Tree\Node as TreeNode;
 use Hal\Metric\Helper\MetricClassNameGenerator;
-use Hal\Metric\Metrics;
+use Hal\Metric\Helper\NodeChecker;
+use Hal\Metric\MetricsVisitorTrait;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Lack of cohesion of methods
+ * Class CyclomaticComplexityVisitor
+ * Calculates the lack of cohesion of methods.
  *
- * Class ExternalsVisitor
- * @package Hal\Metric\Class_\Coupling
+ * @package Hal\Metric\Class_\Structural
  */
 class LcomVisitor extends NodeVisitorAbstract
 {
+    use MetricsVisitorTrait;
 
     /**
-     * @var Metrics
-     */
-    private $metrics;
-
-    /**
-     * ClassEnumVisitor constructor.
-     * @param Metrics $metrics
-     */
-    public function __construct(Metrics $metrics)
-    {
-        $this->metrics = $metrics;
-    }
-
-    /**
-     * @inheritdoc
+     * Executed when leaving the traversing of the node. Used to calculates the following elements:
+     * - Lack of cohesion of method
+     * @param Node $node The current node to leave to make the analysis.
+     * @return void
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-            // we build a graph of internal dependencies in class
-            $graph = new GraphDeduplicated();
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+        $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
-            foreach ($node->stmts as $stmt) {
-                if ($stmt instanceof Stmt\ClassMethod) {
-                    if (!$graph->has($stmt->name . '()')) {
-                        $graph->insert(new TreeNode($stmt->name . '()'));
-                    }
-                    $from = $graph->get($stmt->name . '()');
-
-                    \iterate_over_node($stmt, function ($node) use ($from, &$graph) {
-
-                        if ($node instanceof Node\Expr\PropertyFetch && isset($node->var->name) && 'this' == $node->var->name) {
-                            $name = \getNameOfNode($node);
-                            // use of attribute $this->xxx;
-                            if (!$graph->has($name)) {
-                                $graph->insert(new TreeNode($name));
-                            }
-                            $to = $graph->get($name);
-                            $graph->addEdge($from, $to);
-                            return;
-                        }
-
-
-                        if ($node instanceof Node\Expr\MethodCall) {
-                            if (!$node->var instanceof Node\Expr\New_ && isset($node->var->name) && 'this' === \getNameOfNode($node->var)) {
-                                // use of method call $this->xxx();
-                                // use of attribute $this->xxx;
-                                $name = \getNameOfNode($node->name) . '()';
-                                if (!$graph->has($name)) {
-                                    $graph->insert(new TreeNode($name));
-                                }
-                                $to = $graph->get($name);
-                                $graph->addEdge($from, $to);
-                                return;
-                            }
-                        }
-                    });
-                }
-            }
-
-            // we count paths
-            $paths = 0;
-            foreach ($graph->all() as $node) {
-                $paths += $this->traverse($node);
-            }
-
-            $class->set('lcom', $paths);
+        if (!($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) || null === $class) {
+            return;
         }
+
+        // Building a graph of internal dependencies in class.
+        $graph = new GraphDeduplicated();
+
+        foreach ($node->stmts as $stmt) {
+            if (!($stmt instanceof Stmt\ClassMethod)) {
+                continue;
+            }
+
+            $graph->insertFromName($stmt->name . '()');
+            $from = $graph->get($stmt->name . '()');
+
+            \iterate_over_node($stmt, function ($node) use ($from, $graph) {
+                $nodeChecker = new NodeChecker($node);
+
+                if ($nodeChecker->isCalledByProperty()) {
+                    // use of attribute $this->xxx;
+                    $name = \getNameOfNode($node);
+                    $graph->addEdge($from, $graph->insertFromName($name)->get($name));
+                    return;
+                }
+
+                if ($nodeChecker->isCalledByMethodCall()) {
+                    // use of method call $this->xxx();
+                    $name = \getNameOfNode($node->name) . '()';
+                    $graph->addEdge($from, $graph->insertFromName($name)->get($name));
+                    return;
+                }
+            });
+        }
+
+        // We count paths.
+        $paths = 0;
+        foreach ($graph->all() as $node) {
+            $paths += $this->traverse($node);
+        }
+
+        $class->set('lcom', $paths);
     }
 
     /**
-     * Traverse node, and return 1 if node has not been visited yet
+     * Traverse node, and return 1 if node has not been visited yet.
      *
      * @param TreeNode $node
      * @return int
@@ -103,10 +93,7 @@ class LcomVisitor extends NodeVisitorAbstract
         }
         $node->visited = true;
 
-        foreach ($node->getAdjacents() as $adjacent) {
-            $this->traverse($adjacent);
-        }
-
+        \array_map([$this, 'traverse'], $node->getAdjacents());
         return 1;
     }
 }

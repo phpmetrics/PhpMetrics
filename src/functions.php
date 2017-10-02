@@ -100,7 +100,7 @@ function getNameOfNode($node)
     }
 
     if ($node instanceof \PhpParser\Node\Name) {
-        return (string)implode($node->parts);
+        return implode($node->parts);
     }
 
     if (isset($node->name) && $node->name instanceof \PhpParser\Node\Expr\Variable) {

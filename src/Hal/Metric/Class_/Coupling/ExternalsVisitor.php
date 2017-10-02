@@ -9,7 +9,7 @@
 namespace Hal\Metric\Class_\Coupling;
 
 use Hal\Metric\Helper\MetricClassNameGenerator;
-use Hal\Metric\Metrics;
+use Hal\Metric\MetricsVisitorTrait;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
@@ -24,26 +24,16 @@ use PhpParser\NodeVisitorAbstract;
  */
 class ExternalsVisitor extends NodeVisitorAbstract
 {
+    use MetricsVisitorTrait;
+
     /** @var Stmt\UseUse[] List of external dependencies found with the "use" keyword. */
     private $uses = [];
-
-    /** @var Metrics The Metrics object that will store all data analysis. */
-    private $metrics;
 
     /** @var string[] List of all parents for a given element to be parsed. */
     private $parents = [];
 
     /** @var string[] List of all external dependencies for a given element to be parsed. */
     private $externals = [];
-
-    /**
-     * ExternalsVisitor constructor.
-     * @param Metrics $metrics The Metrics object that will store all data analysis.
-     */
-    public function __construct(Metrics $metrics)
-    {
-        $this->metrics = $metrics;
-    }
 
     /**
      * Executed when leaving the traversing of the node. Used to calculates the following elements:

@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Jean-François Lépine <https://twitter.com/Halleck45>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Hal\Component\Tree;
 
@@ -9,20 +15,19 @@ namespace Hal\Component\Tree;
  */
 class GraphDeduplicated extends Graph
 {
-    /**
-     * @var array list of already present edges in this graph
-     */
+    /** @var bool[] List of already present edges in this graph. */
     private $edgesMap = [];
 
     /**
-     * @param Node $from
-     * @param Node $to
+     * Add an edge to the map only if not already there.
      *
+     * @param Node $from Node where the edge starts.
+     * @param Node $to Node where the edge ends.
      * @return $this
      */
     public function addEdge(Node $from, Node $to)
     {
-        $key = $from->getUniqueId().'->'.$to->getUniqueId();
+        $key = $from->getUniqueId() . '->' . $to->getUniqueId();
 
         if (isset($this->edgesMap[$key])) {
             return $this;

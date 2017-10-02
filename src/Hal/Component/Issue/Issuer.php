@@ -1,5 +1,4 @@
 <?php
-
 /*
  * (c) Jean-François Lépine <https://twitter.com/Halleck45>
  *
@@ -19,14 +18,10 @@ use PhpParser\PrettyPrinter\Standard;
  */
 class Issuer
 {
-    /**
-     * @var array
-     */
+    /** @var array List of debug information where key is the type of information. */
     private $debug = [];
 
-    /**
-     * @var Output
-     */
+    /** @var Output The output system to print/log issues. */
     private $output;
 
     /**
@@ -39,19 +34,21 @@ class Issuer
     }
 
     /**
-     * @param $errstr
-     * @param $errfile
-     * @param $errline
-     * @internal param $errno
+     * Method that may be the internal error handler if the issuer is enabled.
+     *
+     * @param string $errStr Message of the error.
+     * @param string $errFile Filename where the error occurred.
+     * @param int $errLine Line number in the file where the error occurred.
      */
-    public function onError($errstr, $errfile, $errline)
+    public function onError($errStr, $errFile, $errLine)
     {
-        if (0 == \error_reporting()) {
+        if (0 === \error_reporting()) {
             return;
         }
         $php = \PHP_VERSION;
         $os = \PHP_OS;
-        $phpmetrics = \getVersion();
+        $phpMetrics = \getVersion();
+
         $traces = \debug_backtrace(0, 10);
         $trace = '';
         foreach ($traces as $c) {
@@ -73,18 +70,18 @@ class Issuer
 
         $message = <<<EOT
 
-<error>We're sorry : an unexpected error occured.</error>
+<error>We're sorry : an unexpected error occurred.</error>
  
-<question>Can you help us ?</question> 
+<question>Can you help us?</question> 
 Please open a new issue at https://github.com/phpmetrics/PhpMetrics/issues/new, and copy-paste the content of this file:
- $logfile
+ {$logfile}
  
 Thanks for your help :)
 
 EOT;
 
         $log = <<<EOT
-## Title: $errstr
+## Title: {$errStr}
 
 ## Message:
 
@@ -92,22 +89,22 @@ Hi,
 
 This issue occured:
 
-$errstr
+{$errStr}
 
 **Environment**
 
-+ PHP: $php
-+ PhpMetrics: $phpmetrics
-+ Operating System: $os
-+ File: $errfile (line $errline)
++ PHP: {$php}
++ PhpMetrics: {$phpMetrics}
++ Operating System: {$os}
++ File: {$errFile} (line {$errLine})
 
 <details>
   <summary>Details</summary>
   ```
-$trace
+{$trace}
 
-
-$debug
+        
+{$debug}
 ```
 </details>
 
@@ -120,6 +117,7 @@ EOT;
     }
 
     /**
+     * Enable the issuer. This will update the internal error handler to manage errors by this way.
      * @return $this
      */
     public function enable()
@@ -129,6 +127,7 @@ EOT;
     }
 
     /**
+     * Disable the issuer. This will restore the internal error handler.
      * @return $this
      */
     public function disable()
@@ -138,7 +137,8 @@ EOT;
     }
 
     /**
-     * @param $status
+     * End the script with the given status code.
+     * @param int $status The status code to give to end the script.
      */
     protected function terminate($status)
     {
@@ -146,8 +146,9 @@ EOT;
     }
 
     /**
-     * @param $logfile
-     * @param $log
+     * Log the issue file in the current working directory if possible, otherwise, just log with the output.
+     * @param string $logfile The file name of the issue log.
+     * @param string $log The log content.
      * @return $this
      */
     protected function log($logfile, $log)
@@ -161,8 +162,9 @@ EOT;
     }
 
     /**
-     * @param $debugKey
-     * @param $value
+     * Define or reset a debug key.
+     * @param string $debugKey The debug key to be set.
+     * @param mixed $value The value associated to the debug key.
      * @return $this
      */
     public function set($debugKey, $value)
@@ -172,7 +174,8 @@ EOT;
     }
 
     /**
-     * @param $debugKey
+     * Clean the value for a given debug key.
+     * @param string $debugKey The debug key value to erase.
      * @return $this
      */
     public function clear($debugKey)

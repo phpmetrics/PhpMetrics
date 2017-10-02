@@ -1,5 +1,4 @@
 <?php
-
 /*
  * (c) Jean-François Lépine <https://twitter.com/Halleck45>
  *
@@ -9,34 +8,19 @@
 
 namespace Hal\Component\Output;
 
-    /**
-     * Class CliOutput
-     * @package Hal\Component\Output
-     */
-    /**
-     * Class CliOutput
-     * @package Hal\Component\Issue
-     */
 /**
  * Class ProgressBar
  * @package Hal\Component\Output
  */
 class ProgressBar
 {
-
-    /**
-     * @var Output
-     */
+    /** @var Output Output instance that is used to make some output. */
     private $output;
 
-    /**
-     * @var int
-     */
+    /** @var int Value that limit the progress bar. When the current reach this limit, the progress bar is 100%. */
     private $max;
 
-    /**
-     * @var int
-     */
+    /** @var int Current value to be compared to the maximum to give a state for the progress bar. */
     private $current = 0;
 
     /**
@@ -51,15 +35,18 @@ class ProgressBar
     }
 
     /**
-     * Start progress bar
+     * Start progress bar.
+     * @return $this
      */
     public function start()
     {
         $this->current = 0;
+        return $this;
     }
 
     /**
-     * Advance progress bar
+     * Advance progress bar.
+     * @return $this
      */
     public function advance()
     {
@@ -73,10 +60,13 @@ class ProgressBar
         } else {
             $this->output->write('.');
         }
+
+        return $this;
     }
 
     /**
-     * Clear console
+     * Clear console.
+     * @return $this
      */
     public function clear()
     {
@@ -85,10 +75,12 @@ class ProgressBar
             $this->output->write("\x1B[2K");
             $this->output->clearln();
         }
+
+        return $this;
     }
 
     /**
-     * Detects ANSI support
+     * Detects ANSI support.
      *
      * @return bool
      */
@@ -105,6 +97,6 @@ class ProgressBar
                 || 'xterm' === \getenv('TERM');
         }
 
-        return \function_exists('posix_isatty') && @\posix_isatty($this->stream);
+        return \function_exists('posix_isatty') && \posix_isatty($this->output->getFileDescriptor());
     }
 }

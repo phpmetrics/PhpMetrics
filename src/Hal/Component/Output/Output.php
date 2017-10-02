@@ -43,4 +43,16 @@ interface Output
      * @return $this
      */
     public function clearln();
+
+    /**
+     * Returns the current or default file descriptor used to make the default output.
+     * @return resource
+     */
+    public function getFileDescriptor();
+
+    /**
+     * Returns the current or default file descriptor used to make the error output.
+     * @return resource
+     */
+    public function getErrorFileDescriptor();
 }

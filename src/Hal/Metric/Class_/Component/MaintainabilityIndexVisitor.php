@@ -1,9 +1,17 @@
 <?php
+/**
+ * (c) Jean-François Lépine <https://twitter.com/Halleck45>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Hal\Metric\Class_\Component;
 
-
-use Hal\Metric\Metrics;
-use Hoa\Ruler\Model\Bag\Scalar;
+use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Metric\Metric;
+use Hal\Metric\MetricException;
+use Hal\Metric\MetricsVisitorTrait;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
@@ -24,77 +32,74 @@ use PhpParser\NodeVisitorAbstract;
  *      MI = MIwoc + MIcw
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
+ * @package Hal\Metric\Class_\Component
  */
 class MaintainabilityIndexVisitor extends NodeVisitorAbstract
 {
+    use MetricsVisitorTrait;
 
     /**
-     * @var Metrics
-     */
-    private $metrics;
-
-    /**
-     * ClassEnumVisitor constructor.
-     * @param Metrics $metrics
-     */
-    public function __construct(Metrics $metrics)
-    {
-        $this->metrics = $metrics;
-    }
-
-    /**
-     * @inheritdoc
+     * Executed when leaving the traversing of the node. Used to calculates the following elements:
+     * - Maintainability index
+     * - Maintainability index without comments
+     * - Comments weight
+     *
+     * This visitor must be called after the following visitors:
+     * - LengthVisitor
+     * - CyclomaticComplexityVisitor
+     * - HalsteadVisitor
+     *
+     * @param Node $node The current node to leave to make the analysis.
+     * @return void
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-            $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'. \spl_object_hash($node));
-            $classOrFunction = $this->metrics->get($name);
+        $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
-            if (null === $lloc = $classOrFunction->get('lloc')) {
-                throw new \LogicException('please enable length (lloc) visitor first');
-            }
-            if (null === $cloc = $classOrFunction->get('cloc')) {
-                throw new \LogicException('please enable length (cloc) visitor first');
-            }
-            if (null === $loc = $classOrFunction->get('loc')) {
-                throw new \LogicException('please enable length (loc) visitor first');
-            }
-            if (null === $ccn = $classOrFunction->get('ccn')) {
-                throw new \LogicException('please enable McCabe visitor first');
-            }
-            if (null === $volume = $classOrFunction->get('volume')) {
-                throw new \LogicException('please enable Halstead visitor first');
-            }
-
-            // maintainability index without comment
-            $MIwoC = \max(
-                (171
-                    - (5.2 * \log($volume))
-                    - (0.23 * $ccn)
-                    - (16.2 * \log($lloc))
-                ) * 100 / 171,
-                0
-            );
-            if (\is_infinite($MIwoC)) {
-                $MIwoC = 171;
-            }
-
-            // comment weight
-            if ($loc > 0) {
-                $CM = $cloc / $loc;
-                $commentWeight = 50 * \sin(\sqrt(2.4 * $CM));
-            }
-
-            // maintainability index
-            $mi = $MIwoC + $commentWeight;
-
-            // save result
-            $classOrFunction
-                ->set('mi', \round($mi, 2))
-                ->set('mIwoC', \round($MIwoC, 2))
-                ->set('commentWeight', \round($commentWeight, 2));
-            $this->metrics->attach($classOrFunction);
+        if (!($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) || null === $class) {
+            return;
         }
+
+        list($loc, $cLoc, $lLoc, $ccn, $volume) = $this->checkVisitors($class);
+
+        // Calculate the maintainability index without any comments.
+        $MIwoC = \max((171 - (5.2 * \log($volume)) - (0.23 * $ccn) - (16.2 * \log($lLoc))) * 100 / 171, 0);
+        $MIwoC = [$MIwoC, 171][\is_infinite($MIwoC)];
+
+        // Calculate the comments weight.
+        $commentWeight = 50 * \sin(\sqrt(2.4 * $cLoc / [$loc, 1][$loc > 0]));
+
+        // Calculate the maintainability index.
+        $mi = $MIwoC + $commentWeight;
+
+        $class
+            ->set('mi', \round($mi, 2))
+            ->set('mIwoC', \round($MIwoC, 2))
+            ->set('commentWeight', \round($commentWeight, 2));
+        $this->metrics->attach($class);
+    }
+
+    /**
+     * Check all required visitors and return the values stored thanks to them required for the current visitor.
+     * @param Metric $class
+     * @return array
+     */
+    private function checkVisitors(Metric $class)
+    {
+        if ((null === ($loc = $class->get('loc')))
+            || (null === ($cLoc = $class->get('cloc')))
+            || (null === ($lLoc = $class->get('lloc')))
+        ) {
+            throw MetricException::disabledLengthVisitor();
+        }
+
+        if (null === ($ccn = $class->get('ccn'))) {
+            throw MetricException::disabledCyclomaticComplexityVisitor();
+        }
+        if (null === ($volume = $class->get('volume'))) {
+            throw MetricException::disabledHalsteadVisitor();
+        }
+
+        return [$loc, $cLoc, $lLoc, $ccn, $volume];
     }
 }

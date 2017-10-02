@@ -1,5 +1,4 @@
 <?php
-
 /*
  * (c) Jean-François Lépine <https://twitter.com/Halleck45>
  *
@@ -10,12 +9,15 @@
 namespace Hal\Component\Output;
 
 /**
- * Class CliOutput
- * @package Hal\Component\Issue
+ * Class TestOutput
+ * @package Hal\Component\Output
  */
 class TestOutput implements Output
 {
+    /** @var string Content of the output message when written from the default buffer. */
     public $output;
+
+    /** @var string Content of the error message when written from the error buffer. */
     public $err;
 
     /**
@@ -50,5 +52,21 @@ class TestOutput implements Output
      */
     public function clearln()
     {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFileDescriptor()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getErrorFileDescriptor()
+    {
+        return null;
     }
 }

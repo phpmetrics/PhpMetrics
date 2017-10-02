@@ -1,66 +1,71 @@
 <?php
+/**
+ * (c) Jean-François Lépine <https://twitter.com/Halleck45>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Hal\Metric\Class_\Complexity;
 
-use Hal\Component\Reflected\Method;
 use Hal\Metric\Helper\MetricClassNameGenerator;
-use Hal\Metric\Metrics;
+use Hal\Metric\MetricsVisitorTrait;
 use PhpParser\Node;
-use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Do_;
+use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Switch_;
+use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeVisitorAbstract;
 
 /**
  * Calculate Kan's defects
  *
- * defects = 0.15 + 0.23 *  number of do…while() + 0.22 *  number of select() + 0.07 * number of if()
+ * Kan's defects = 0.15 + 0.23 *  number of do…while() + 0.22 * number of select() + 0.07 * number of if().
+ * @package Hal\Metric\Class_\Complexity
  */
 class KanDefectVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var Metrics
-     */
-    private $metrics;
+    use MetricsVisitorTrait;
 
     /**
-     * ClassEnumVisitor constructor.
-     * @param Metrics $metrics
+     * @var float The Kan defect value. Starts to 0.15 and increase depending on the occurrences of some control
+     *            structures like foreach, do…while, switch and if.
      */
-    public function __construct(Metrics $metrics)
-    {
-        $this->metrics = $metrics;
-    }
+    private $defect = 0.15;
 
     /**
-     * @inheritdoc
+     * Executed when leaving the traversing of the node. Used to calculates the following elements:
+     * - Kan's defect
+     * @param Node $node The current node to leave to make the analysis.
+     * @return void
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_
-            || $node instanceof Stmt\Interface_
-            || $node instanceof Stmt\Trait_
-        ) {
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+        $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
-
-            $select = $while = $if = 0;
-
-            \iterate_over_node($node, function ($node) use (&$while, &$select, &$if) {
-                switch (true) {
-                    case $node instanceof Stmt\Do_:
-                    case $node instanceof Stmt\Foreach_:
-                    case $node instanceof Stmt\While_:
-                        $while++;
-                        break;
-                    case $node instanceof Stmt\If_:
-                        $if++;
-                        break;
-                    case $node instanceof Stmt\Switch_:
-                        $select++;
-                        break;
-                }
-            });
-
-            $defect = 0.15 + 0.23 *  $while + 0.22 *  $select + 0.07 * $if;
-            $class->set('kanDefect', \round($defect, 2));
+        if (!($node instanceof ClassLike) || null === $class) {
+            return;
         }
+
+        \iterate_over_node($node, [$this, 'incrementDefect']);
+
+        $class->set('kanDefect', \round($this->defect, 2));
+    }
+
+    /**
+     * Increments the Kan's defect value based on the following rules:
+     * - "Do…while" and "foreach" worth 0.23
+     * - "If" worth 0.07
+     * - "Switch" worth 0.22
+     * @param Node $node The given node to test.
+     * @return void
+     */
+    protected function incrementDefect(Node $node)
+    {
+        $this->defect += [0.23, 0][$node instanceof Do_ || $node instanceof Foreach_ || $node instanceof While_];
+        $this->defect += [0.07, 0][$node instanceof If_];
+        $this->defect += [0.22, 0][$node instanceof Switch_];
     }
 }

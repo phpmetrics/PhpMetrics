@@ -101,22 +101,20 @@ class Analyze
             ->addVisitor(new SystemComplexityVisitor($metrics));
 
         // create a new progress bar (50 units)
-        $progress = new ProgressBar($this->output, \count($files));
-        $progress->start();
+        $progress = (new ProgressBar($this->output, \count($files)))->start();
 
         foreach ($files as $file) {
             $progress->advance();
-            $code = \file_get_contents($file);
             $this->issuer->set('filename', $file);
             try {
-                $stmts = $parser->parse($code);
+                $stmts = $parser->parse(\file_get_contents($file));
                 $this->issuer->set('statements', $stmts);
                 $nodeTraverse->traverse($stmts);
             } catch (Error $e) {
-                $this->output->writeln(\sprintf('<error>Cannot parse %s</error>', $file));
+                $msg = '<error>Cannot parse %s</error><message>Exception: %s</message>';
+                $this->output->writeln(\sprintf($msg, $file, $e->getMessage()));
             }
-            $this->issuer->clear('filename');
-            $this->issuer->clear('statements');
+            $this->issuer->clear('filename')->clear('statements');
         }
 
         $progress->clear();
@@ -128,15 +126,12 @@ class Analyze
         (new Coupling())->calculate($metrics);
         (new DepthOfInheritanceTree())->calculate($metrics);
 
-        //
         // File analyses
         (new GitChanges($this->config, $files))->calculate($metrics);
 
-        //
         // Unit test
         (new UnitTesting($this->config, $files))->calculate($metrics);
 
-        //
         // Composer
         (new Composer($this->config, $files))->calculate($metrics);
 

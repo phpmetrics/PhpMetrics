@@ -40,6 +40,20 @@ class Graph implements \Countable
     }
 
     /**
+     * Insert a non-existing node based on its name into the current graph.
+     * @param string $name
+     * @return $this
+     */
+    public function insertFromName($name)
+    {
+        if ($this->has($name)) {
+            return $this;
+        }
+
+        return $this->insert(new Node($name));
+    }
+
+    /**
      * @param Node $from
      * @param Node $to
      * @return $this
