@@ -54,9 +54,9 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
-
-        if (!($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) || null === $class) {
+        if (!($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_)
+            || (null === ($class = $this->metrics->get(MetricClassNameGenerator::getName($node))))
+        ) {
             return;
         }
 
@@ -67,7 +67,7 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
         $MIwoC = [$MIwoC, 171][\is_infinite($MIwoC)];
 
         // Calculate the comments weight.
-        $commentWeight = 50 * \sin(\sqrt(2.4 * $cLoc / [$loc, 1][$loc > 0]));
+        $commentWeight = 50 * \sin(\sqrt(2.4 * $cLoc / [1, $loc][$loc > 0]));
 
         // Calculate the maintainability index.
         $mi = $MIwoC + $commentWeight;

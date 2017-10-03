@@ -12,6 +12,7 @@ use Hal\Metric\Helper\MetricClassNameGenerator;
 use Hal\Metric\MetricsVisitorTrait;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 
@@ -44,9 +45,9 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
-
-        if (!($node instanceof Stmt\ClassLike) || null === $class) {
+        if (!($node instanceof ClassLike)
+            || (null === ($class = $this->metrics->get(MetricClassNameGenerator::getName($node))))
+        ) {
             return;
         }
 

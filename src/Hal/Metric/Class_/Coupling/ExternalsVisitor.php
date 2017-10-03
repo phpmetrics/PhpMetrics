@@ -13,6 +13,7 @@ use Hal\Metric\MetricsVisitorTrait;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 
@@ -57,8 +58,9 @@ class ExternalsVisitor extends NodeVisitorAbstract
 
         // Do not find all parents and dependencies when dealing with something that is not a ClassLike statement.
         // Also, stop here if the metrics of the element has not been already created.
-        $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
-        if (!($node instanceof Stmt\ClassLike) || null === $class) {
+        if (!($node instanceof ClassLike)
+            || (null === ($class = $this->metrics->get(MetricClassNameGenerator::getName($node))))
+        ) {
             return;
         }
 
@@ -67,7 +69,7 @@ class ExternalsVisitor extends NodeVisitorAbstract
         $this->externals = [];
         $this->parseExtends($node)
             ->parseImplements($node);
-        array_map([$this, 'parseStatements', $node->stmts]);
+        array_map([$this, 'parseStatements'], $node->stmts);
 
         $class->set('externals', $this->externals);
         $class->set('parents', $this->parents);
@@ -155,7 +157,7 @@ class ExternalsVisitor extends NodeVisitorAbstract
                     break;
             }
         });
-        $this->externals[] = array_merge($this->externals, $dependencies);
+        $this->externals = array_merge($this->externals, $dependencies);
 
         // Parse annotations.
         $comments = $stmt->getDocComment();

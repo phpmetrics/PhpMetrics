@@ -43,9 +43,9 @@ class KanDefectVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
-
-        if (!($node instanceof ClassLike) || null === $class) {
+        if (!($node instanceof ClassLike)
+            || (null === ($class = $this->metrics->get(MetricClassNameGenerator::getName($node))))
+        ) {
             return;
         }
 
@@ -62,10 +62,10 @@ class KanDefectVisitor extends NodeVisitorAbstract
      * @param Node $node The given node to test.
      * @return void
      */
-    protected function incrementDefect(Node $node)
+    public function incrementDefect(Node $node)
     {
-        $this->defect += [0.23, 0][$node instanceof Do_ || $node instanceof Foreach_ || $node instanceof While_];
-        $this->defect += [0.07, 0][$node instanceof If_];
-        $this->defect += [0.22, 0][$node instanceof Switch_];
+        $this->defect += [0, 0.23][$node instanceof Do_ || $node instanceof Foreach_ || $node instanceof While_];
+        $this->defect += [0, 0.07][$node instanceof If_];
+        $this->defect += [0, 0.22][$node instanceof Switch_];
     }
 }
