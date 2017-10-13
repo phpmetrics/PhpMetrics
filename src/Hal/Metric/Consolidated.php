@@ -48,7 +48,7 @@ class Consolidated
             $classItem = get_class($item);
             if (ClassMetric::class === $classItem) {
                 $classes[] = $item->all();
-                $classMetrics = $item;
+                $classMetrics[] = $item;
             } elseif (InterfaceMetric::class === $classItem) {
                 $nbInterfaces++;
             } elseif (FunctionMetric::class === $classItem) {
