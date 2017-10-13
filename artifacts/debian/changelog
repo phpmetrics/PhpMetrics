@@ -1,3 +1,77 @@
+phpmetrics (2.2.0) unstable; urgency=low
+   * fix: disabled deb artifact 
+   * fix: disabled deb artifact in travis 
+   * Fix twitter link 
+   * Adjust PHPDoc types 
+   * Fix name resolving of anonymous classes 
+   * Allow // in text without counting it as comment 
+   * Fixed typo in description 
+   * Update style.css 
+   * updated pmd priority levels 
+   * Added changelog 
+   * typo fix 
+   * added links to changelog 
+   * changed markdown to match keep-a-changelog 
+   * added links to footer 
+   * Change heading for LOC graph. 
+   * add preg_quote around dir 
+   * Merge pull request #278 from UFOMelkor/typo/twitter-link 
+   * Merge pull request #281 from UFOMelkor/hotfix/280 
+   * Merge pull request #282 from UFOMelkor/hotfix/273 
+   * Merge pull request #285 from j92/fix_typo 
+   * Merge pull request #287 from rafaelign/master 
+   * Merge pull request #290 from bangpound/patch-1 
+   * Merge pull request #293 from paolomainardi/feature/fix-preg-quoting 
+   * Fix for #280 (anonymous classes support for PHP 7.1) 
+   * Added a newline to the end of a test file 
+   * Merge pull request #299 from FractalizeR-Forks/fix-anonymous-classes-in-php-7.1 
+   * fix: disabled deb artifact 
+   * fix: disabled deb artifact in travis 
+   * way to know parents 
+   * way to get information about depth and childs of node in a tree 
+   * way to get average height of branches in graph 
+   * way to know the Depth of inheritance tree 
+   * way to get the list of metrics 
+   * added CSV report 
+   * added json report 
+   * fixed style 
+   * added the key --report-json to validator 
+   * Merge pull request #301 from phpmetrics/feature/reports 
+   * Adding support for configuration files to read settings from 
+   * Add installed package column when composer.lock file is found. 
+   * Preventing duplicate edges from appearing in a graph using Deduplicated graph class. Fixes #291. 
+   * Add export-ignore option to reduce the archive size of composer downloading. 
+   * Add dockerfile in project to use the latest phar. 
+   * Merge pull request #303 from FractalizeR-Forks/configuration-file-support 
+   * Merge pull request #305 from phpmetrics/fix-284 
+   * Merge pull request #306 from phpmetrics/ignore-export-composer-installation 
+   * Merge pull request #304 from FractalizeR-Forks/avoid_duplicate_edges_in_graph 
+   * Add Traits in parsing through all visitors. 
+   * Fix #286: Missing files in the phar build due to bad regexp filter. 
+   * Fix bad preg_quote usage that fails the regexp and so, fails the Finder. 
+   * Merge pull request #310 from phpmetrics/fix-286 
+   * Add unit tests to check the bugfix about finder. 
+   * Merge pull request #311 from phpmetrics/fix-bad-regexp-finder 
+   * Merge pull request #307 from phpmetrics/fix-244 
+   * Merge pull request #279 from UFOMelkor/docs/phpdoc 
+   * Embed dependent files so generated reports can be used offline 
+   * Fix bad output in the junit report. 
+   * Dropped the changelog 
+   * Merge pull request #312 from phpmetrics/fix-263 
+   * Merge pull request #309 from phpmetrics/fix-308 
+   * Merge pull request #302 from dennisdegreef/localFilesOnly 
+   * Merge pull request #288 from krukru/pmd-priority-rewrite 
+   * Fix makefiles about releasing a new version. 
+   * Fix bad carridge return when displaying the version. 
+   * Merge pull request #313 from phpmetrics/fix-release 
+   * releasing v2.3.0 
+   * Fix missing escapeshellarg on git command arguments to avoid security and access troubles. 
+   * Fix #317: Only consolidate class metrics that groups Classes and Traits to calculate sums and averages. 
+   * Merge pull request #316 from phpmetrics/fix-315 
+   * Merge pull request #318 from phpmetrics/fix-317 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Fri, 13 Oct 2017 18:01:53 +0200
+
 phpmetrics (2.1.0) unstable; urgency=low
    * added calculation for max cyclomatic complexity for method in class 
    * fixed typos (whitespaces) in readme 
@@ -287,6 +361,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
