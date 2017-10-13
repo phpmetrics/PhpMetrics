@@ -1,3 +1,14 @@
+phpmetrics (2.3.0) unstable; urgency=low
+   * Fix missing escapeshellarg on git command arguments to avoid security and access troubles. 
+   * Fix #317: Only consolidate class metrics that groups Classes and Traits to calculate sums and averages. 
+   * Merge pull request #316 from phpmetrics/fix-315 
+   * Merge pull request #318 from phpmetrics/fix-317 
+   * releasing v2.3.1 
+   * HotFix #317: Bad assignement on item classmetrics. 
+   * Merge pull request #319 from phpmetrics/hotfix-classmetric 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Fri, 13 Oct 2017 18:11:18 +0200
+
 phpmetrics (2.2.0) unstable; urgency=low
    * fix: disabled deb artifact 
    * fix: disabled deb artifact in travis 
@@ -361,6 +372,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
