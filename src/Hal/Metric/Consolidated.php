@@ -36,6 +36,8 @@ class Consolidated
      */
     public function __construct(Metrics $metrics)
     {
+        $classMetrics = [];
+
         // grouping results
         $classes = [];
         $functions = [];
@@ -46,6 +48,7 @@ class Consolidated
             $classItem = get_class($item);
             if (ClassMetric::class === $classItem) {
                 $classes[] = $item->all();
+                $classMetrics = $item;
             } elseif (InterfaceMetric::class === $classItem) {
                 $nbInterfaces++;
             } elseif (FunctionMetric::class === $classItem) {
@@ -82,7 +85,7 @@ class Consolidated
             'mi' => [],
         ];
 
-        foreach ($metrics->all() as $key => $item) {
+        foreach ($classMetrics as $key => $item) {
             $sum->loc += $item->get('loc');
             $sum->lloc += $item->get('lloc');
             $sum->cloc += $item->get('cloc');
