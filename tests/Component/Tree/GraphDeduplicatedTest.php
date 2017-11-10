@@ -5,11 +5,12 @@ namespace Test;
 use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\GraphDeduplicated;
 use Hal\Component\Tree\Node;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group tree
  */
-class GraphDeduplicatedTest extends \PHPUnit_Framework_TestCase
+class GraphDeduplicatedTest extends TestCase
 {
 
     public function testEdgeDeduplication()

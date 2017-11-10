@@ -7,11 +7,12 @@ use Hal\Component\Tree\GraphFactory;
 use Hal\Component\Tree\HashMap;
 use Hal\Component\Tree\Node;
 use Hal\Component\Tree\Operator\CycleDetector;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group tree
  */
-class CycleDetectorTest extends \PHPUnit_Framework_TestCase {
+class CycleDetectorTest extends TestCase {
 
     public function testCycleIsDetected()
     {

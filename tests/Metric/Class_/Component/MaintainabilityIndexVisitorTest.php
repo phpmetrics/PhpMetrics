@@ -4,13 +4,14 @@ namespace Test\Hal\Metric\Class_\Structural;
 use Hal\Metric\Class_\Component\MaintainabilityIndexVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group metric
  * @group mi
  * @group complex
  */
-class MaintainabilityIndexVisitorTest extends \PHPUnit_Framework_TestCase {
+class MaintainabilityIndexVisitorTest extends TestCase {
 
 
     /**
@@ -44,7 +45,7 @@ class MaintainabilityIndexVisitorTest extends \PHPUnit_Framework_TestCase {
         $code = <<<EOT
 <?php class A {
     public function foo() {
-    
+
     }
 }
 EOT;

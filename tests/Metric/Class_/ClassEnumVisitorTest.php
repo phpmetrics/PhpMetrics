@@ -4,11 +4,12 @@ namespace Test\Hal\Metric\Class_;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group class
  */
-class ClassEnumVisitorTest extends \PHPUnit_Framework_TestCase
+class ClassEnumVisitorTest extends TestCase
 {
 
 

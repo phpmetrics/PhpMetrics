@@ -6,13 +6,14 @@ use Hal\Metric\Class_\Complexity\McCabeVisitor;
 use Hal\Metric\Class_\Coupling\ExternalsVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group metric
  * @group externals
  * @group coupling
  */
-class ExternalsVisitorTest extends \PHPUnit_Framework_TestCase {
+class ExternalsVisitorTest extends TestCase {
 
 
     /**

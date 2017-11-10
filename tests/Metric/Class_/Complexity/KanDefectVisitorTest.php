@@ -7,13 +7,14 @@ use Hal\Metric\Class_\Complexity\KanDefectVisitor;
 use Hal\Metric\Class_\Complexity\McCabeVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group metric
  * @group kan
  * @group defect
  */
-class KanDefectVisitorTest extends \PHPUnit_Framework_TestCase {
+class KanDefectVisitorTest extends TestCase {
 
 
     /**

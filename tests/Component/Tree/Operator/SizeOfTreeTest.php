@@ -6,11 +6,12 @@ use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\GraphFactory;
 use Hal\Component\Tree\Node;
 use Hal\Component\Tree\Operator\SizeOfTree;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group tree
  */
-class SizeOfTreeTest extends \PHPUnit_Framework_TestCase
+class SizeOfTreeTest extends TestCase
 {
 
     /**

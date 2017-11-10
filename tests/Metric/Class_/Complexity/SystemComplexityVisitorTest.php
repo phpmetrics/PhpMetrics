@@ -6,13 +6,14 @@ use Hal\Metric\Class_\Complexity\McCabeVisitor;
 use Hal\Metric\Class_\Structural\SystemComplexityVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group metric
  * @group complexity
  * @group defect
  */
-class SystemComplexityVisitorTest extends \PHPUnit_Framework_TestCase
+class SystemComplexityVisitorTest extends TestCase
 {
 
 

@@ -5,12 +5,13 @@ use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Text\HalsteadVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group halstead
  * @group metric
  */
-class HalsteadVisitorTest extends \PHPUnit_Framework_TestCase {
+class HalsteadVisitorTest extends TestCase {
 
 
     /**

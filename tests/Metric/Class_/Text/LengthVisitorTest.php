@@ -5,12 +5,13 @@ use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Text\LengthVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group loc
  * @group metric
  */
-class LengthVisitorTest extends \PHPUnit_Framework_TestCase {
+class LengthVisitorTest extends TestCase {
 
 
     /**

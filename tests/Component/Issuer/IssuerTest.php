@@ -41,7 +41,7 @@ class IssuerTest extends \PHPUnit_Framework_TestCase
 <?php
 class A{
    public function foo() {
-   
+
    }
 }
 EOT;

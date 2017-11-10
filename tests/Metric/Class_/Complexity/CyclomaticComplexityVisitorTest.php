@@ -6,8 +6,9 @@ use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
 use Hal\Metric\Class_\Complexity\McCabeVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
-class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
+class CyclomaticComplexityVisitorTest extends TestCase {
 
 
     /**

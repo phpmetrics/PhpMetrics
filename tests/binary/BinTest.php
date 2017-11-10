@@ -1,10 +1,12 @@
 <?php
 namespace Test\Binary;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @group binary
  */
-class BinFileTest extends \PHPUnit_Framework_TestCase
+class BinFileTest extends TestCase
 {
     private $phar;
 

@@ -4,11 +4,12 @@ namespace Test\Hal\Metric\System\UnitTesting;
 use Hal\Application\Config\Config;
 use Hal\Metric\Metrics;
 use Hal\Metric\System\UnitTesting\UnitTesting;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group unit
  */
-class UnitTestingTest extends \PHPUnit_Framework_TestCase
+class UnitTestingTest extends TestCase
 {
 
     public function testICanParseJunitXmlFile() {

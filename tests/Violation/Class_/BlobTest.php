@@ -3,11 +3,12 @@ namespace Test\Hal\Violation\Class_;
 
 use Hal\Violation\Class_\Blob;
 use Hal\Violation\Violations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group violation
  */
-class BlobTest extends \PHPUnit_Framework_TestCase
+class BlobTest extends TestCase
 {
     /**
      * @dataProvider provideExamples

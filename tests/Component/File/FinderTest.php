@@ -3,11 +3,12 @@
 namespace Test\Hal\Component\File;
 
 use Hal\Component\File\Finder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group file
  */
-class FinderTest extends \PHPUnit_Framework_TestCase
+class FinderTest extends TestCase
 {
 
     public function testPathsGivenAreRecoveredOverExcluded()
