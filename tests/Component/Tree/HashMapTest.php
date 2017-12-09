@@ -20,7 +20,7 @@ class HashMapTest extends \PHPUnit_Framework_TestCase {
             ->attach(new Node('C', 'value3'))
         ;
 
-        $this->assertEquals(3, sizeof($hash));
+        $this->assertCount(3, $hash);
         $this->assertTrue($hash->has('A'));
         $this->assertTrue($hash->has('B'));
         $this->assertFalse($hash->has('Not'));
