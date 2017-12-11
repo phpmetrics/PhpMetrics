@@ -22,6 +22,7 @@ class ViolationParser
             new Class_\ProbablyBugged(),
             new Class_\TooLong(),
             new Class_\TooDependent(),
+            new Package\StableAbstractionsPrinciple(),
             new Package\StableDependenciesPrinciple(),
         ];
 

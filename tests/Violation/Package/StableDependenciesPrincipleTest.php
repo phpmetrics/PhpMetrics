@@ -20,6 +20,8 @@ class StableDependenciesPrincipleTest extends PHPUnit_Framework_TestCase
         $object = new StableDependenciesPrinciple();
 
         $object->apply($metric->reveal());
+
+        $metric->get('violations')->shouldNotHaveBeenCalled();
     }
 
     /**
