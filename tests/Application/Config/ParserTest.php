@@ -2,12 +2,13 @@
 namespace Test\Hal\Application\Config;
 
 use Hal\Application\Config\Parser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group application
  * @group config
  */
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends TestCase
 {
     /**
      * @dataProvider providesExample

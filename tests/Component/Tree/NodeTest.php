@@ -4,11 +4,12 @@ namespace Test;
 
 use Hal\Component\Tree\Edge;
 use Hal\Component\Tree\Node;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group tree
  */
-class NodeTest extends \PHPUnit_Framework_TestCase {
+class NodeTest extends TestCase {
 
     public function testICanWorkWithNode() {
 

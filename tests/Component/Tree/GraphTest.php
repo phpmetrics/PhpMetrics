@@ -6,11 +6,12 @@ use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\GraphFactory;
 use Hal\Component\Tree\HashMap;
 use Hal\Component\Tree\Node;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group tree
  */
-class GraphTest extends \PHPUnit_Framework_TestCase {
+class GraphTest extends TestCase {
 
     public function testICanAddEdge() {
         $graph = new Graph();

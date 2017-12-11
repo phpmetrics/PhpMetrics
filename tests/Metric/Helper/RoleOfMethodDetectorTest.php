@@ -5,13 +5,14 @@ use Hal\Metric\Helper\RoleOfMethodDetector;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group method
  * @group helper
  * @group parsing
  */
-class RoleOfMethodDetectorTest extends \PHPUnit_Framework_TestCase
+class RoleOfMethodDetectorTest extends TestCase
 {
 
     /**

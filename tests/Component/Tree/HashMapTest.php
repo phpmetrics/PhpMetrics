@@ -5,11 +5,12 @@ use Hal\Component\Token\Token;
 use Hal\Component\Token\Tokenizer;
 use Hal\Component\Tree\HashMap;
 use Hal\Component\Tree\Node;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group tree
  */
-class HashMapTest extends \PHPUnit_Framework_TestCase {
+class HashMapTest extends TestCase {
 
     public function testICanWorkWithHashMap() {
 
