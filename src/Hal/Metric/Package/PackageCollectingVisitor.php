@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeVisitorAbstract;
 
 class PackageCollectingVisitor extends NodeVisitorAbstract
@@ -32,7 +33,7 @@ class PackageCollectingVisitor extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Class_ || $node instanceof Interface_) {
+        if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Trait_) {
             $package = $this->namespace;
 
             $docComment = $node->getDocComment();
@@ -52,7 +53,7 @@ class PackageCollectingVisitor extends NodeVisitorAbstract
             /* @var PackageMetric $packageMetric */
             $elementName = isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node);
             $elementName = (string) $elementName;
-            $packageMetric->addClass((string) $elementName);
+            $packageMetric->addClass($elementName);
 
             $this->metrics->get($elementName)->set('package', $packageName);
         }
