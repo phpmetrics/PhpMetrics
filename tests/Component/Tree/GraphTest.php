@@ -64,9 +64,9 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
         $graph->insert($a);
         $graph->insert($b);
 
-        $this->assertEquals(0, sizeof($graph->getEdges()));
+        $this->assertCount(0, $graph->getEdges());
         $graph->addEdge($a, $b);
-        $this->assertEquals(1, sizeof($graph->getEdges()));
+        $this->assertCount(1, $graph->getEdges());
     }
 
     public function testEdgeIsAddedToFromAndToNode() {
@@ -81,9 +81,9 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
         $graph->addEdge($a, $b);
         $graph->addEdge($b, $c);
 
-        $this->assertEquals(1, sizeof($a->getEdges()));
-        $this->assertEquals(2, sizeof($b->getEdges()));
-        $this->assertEquals(1, sizeof($c->getEdges()));
+        $this->assertCount(1, $a->getEdges());
+        $this->assertCount(2, $b->getEdges());
+        $this->assertCount(1, $c->getEdges());
     }
 
 
@@ -105,7 +105,7 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
         $graph->addEdge($a, $d); // A -> D
 
         $roots = $graph->getRootNodes();
-        $this->assertEquals(2, sizeof($roots));
+        $this->assertCount(2, $roots);
 
         $rootsFound = [
             'A' => false,
