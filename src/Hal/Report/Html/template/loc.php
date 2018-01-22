@@ -24,7 +24,7 @@ if(sizeof($array) > 1) {
     foreach ($range as $percentile) {
         $json[] = (object)[
             'lloc' => percentile($array, $percentile),
-            'percentile' => $percentile * 100,
+            'percentile' => round($percentile * 100),
         ];
     }
 }
