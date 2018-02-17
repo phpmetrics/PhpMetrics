@@ -27,11 +27,7 @@ class NodeTraverser extends Mother
 
         if(null === $stopCondition) {
             $stopCondition = function($node) {
-                if($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
-                    return false;
-                }
-
-                return true;
+                return !$node instanceof Node\Stmt\Class_ && !$node instanceof Node\Stmt\Interface_;
             };
         }
 
