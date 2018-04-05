@@ -13,6 +13,16 @@ class A {
     {
         if(true) {
 
+        } else {
+	        if (true) {
+
+	        } else if (true) {
+
+	        } elseif (true) {
+
+	        } elseif (true) {
+
+	        }
         }
     }
 

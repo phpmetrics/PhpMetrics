@@ -53,7 +53,7 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
     public function provideExamplesForClasses()
     {
         return [
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 4],
+            [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 8],
             [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 5],
             [ __DIR__.'/../../examples/cyclomatic_anon.php', 'Foo\C', 1],
         ];
@@ -62,7 +62,7 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
     public function provideExamplesForMethods()
     {
         return [
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 3],
+            [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 6],
             [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 5],
         ];
     }
