@@ -34,7 +34,7 @@
         "php": ">=5.5",
         "ext-dom": "*",
         "ext-tokenizer": "*",
-        "nikic/php-parser": "v3.*"
+        "nikic/php-parser": "^3|^4"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4.8.27,<=5.7.13"

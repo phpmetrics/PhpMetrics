@@ -30,6 +30,33 @@ class RoleOfMethodDetector
                 'PhpParser\\Node\\Expr\\Variable',
                 'PhpParser\\Node\\Name',
             ],
+            // nicik/php-parser:^4
+            [
+                'PhpParser\\Node\\Stmt\\ClassMethod',
+                'PhpParser\\Node\\Stmt\\Return_',
+                'PhpParser\\Node\\Expr\\PropertyFetch',
+                'PhpParser\\Node\\Identifier',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Identifier',
+            ],
+            [
+                'PhpParser\\Node\\Stmt\\ClassMethod',
+                'PhpParser\\Node\\Stmt\\Return_',
+                'PhpParser\\Node\\Expr\\PropertyFetch',
+                'PhpParser\\Node\\Identifier',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Name',
+                'PhpParser\\Node\\Identifier',
+            ],
+            [
+                'PhpParser\\Node\\Stmt\\ClassMethod',
+                'PhpParser\\Node\\Stmt\\Return_',
+                'PhpParser\\Node\\Expr\\PropertyFetch',
+                'PhpParser\\Node\\Identifier',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Identifier',
+                'PhpParser\\Node\\Identifier',
+            ],
         ],
         'setter' => [
             [
@@ -48,7 +75,48 @@ class RoleOfMethodDetector
                 'PhpParser\\Node\\Expr\\Variable',
                 'PhpParser\\Node\\Param',
                 'PhpParser\\Node\\Name',
-            ]
+            ],
+            // nicik/php-parser:^4
+            [
+                'PhpParser\\Node\\Stmt\\ClassMethod',
+                'PhpParser\\Node\\Stmt\\Expression',
+                'PhpParser\\Node\\Expr\\Assign',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Expr\\PropertyFetch',
+                'PhpParser\\Node\\Identifier',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Param',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Identifier',
+            ],
+            [
+                'PhpParser\\Node\\Stmt\\ClassMethod',
+                'PhpParser\\Node\\Stmt\\Expression',
+                'PhpParser\\Node\\Expr\\Assign',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Expr\\PropertyFetch',
+                'PhpParser\\Node\\Identifier',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Identifier',
+                'PhpParser\\Node\\Param',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Identifier',
+                'PhpParser\\Node\\Identifier',
+            ],
+            [
+                'PhpParser\\Node\\Stmt\\ClassMethod',
+                'PhpParser\\Node\\Stmt\\Expression',
+                'PhpParser\\Node\\Expr\\Assign',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Expr\\PropertyFetch',
+                'PhpParser\\Node\\Identifier',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Identifier',
+                'PhpParser\\Node\\Param',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Name',
+                'PhpParser\\Node\\Identifier',
+            ],
         ]
     ];
 

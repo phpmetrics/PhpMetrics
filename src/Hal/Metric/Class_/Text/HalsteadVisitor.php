@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric\Class_\Text;
 
 use Hal\Metric\FunctionMetric;
@@ -49,7 +50,7 @@ class HalsteadVisitor extends NodeVisitorAbstract
                 $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
                 $classOrFunction = $this->metrics->get($name);
             } else {
-                $classOrFunction = new FunctionMetric($node->name);
+                $classOrFunction = new FunctionMetric((string) $node->name);
                 $this->metrics->attach($classOrFunction);
             }
 
@@ -72,6 +73,14 @@ class HalsteadVisitor extends NodeVisitorAbstract
                 ) {
                     // operators
                     array_push($operators, get_class($node));
+                }
+
+                // nicik/php-parser:^4
+                if ($node instanceof Node\Param
+                    && isset($node->var)
+                    && $node->var instanceof Node\Expr\Variable
+                ) {
+                    return;
                 }
 
                 if (

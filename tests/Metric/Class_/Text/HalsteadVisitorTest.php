@@ -31,9 +31,21 @@ class HalsteadVisitorTest extends \PHPUnit_Framework_TestCase {
         $traverser->traverse($stmts);
 
 
-        $this->assertEquals($nbOperands, $metrics->get($functionName)->get('number_operands'));
-        $this->assertEquals($nbOperators, $metrics->get($functionName)->get('number_operators'));
-        $this->assertEquals($difficulty, $metrics->get($functionName)->get('difficulty'));
+        $this->assertEquals(
+            $nbOperands,
+            $metrics->get($functionName)->get('number_operands'),
+            "Expected $nbOperands operands but got {$metrics->get($functionName)->get('number_operands')}"
+        );
+        $this->assertEquals(
+            $nbOperators,
+            $metrics->get($functionName)->get('number_operators'),
+            "Expected $nbOperators operators but got {$metrics->get($functionName)->get('number_operators')}"
+        );
+        $this->assertEquals(
+            $difficulty,
+            $metrics->get($functionName)->get('difficulty'),
+            "Expected difficulty $difficulty but got {$metrics->get($functionName)->get('difficulty')}"
+        );
     }
 
     public function provideExamples()
