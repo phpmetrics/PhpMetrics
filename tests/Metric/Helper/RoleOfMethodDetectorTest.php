@@ -13,7 +13,6 @@ use PhpParser\ParserFactory;
  */
 class RoleOfMethodDetectorTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @dataProvider provideExamples
      */
@@ -38,7 +37,7 @@ class RoleOfMethodDetectorTest extends \PHPUnit_Framework_TestCase
 
     public function provideExamples()
     {
-        return [
+        $examples = [
             ['getter', '<?php class A { function getName(){ return $this->name; } }  ?>'],
             ['getter', '<?php class A { function getName(){ return (string) $this->name; } }  ?>'],
             ['getter', '<?php class A { function getName(){ return (int) $this->name; } }  ?>'],
@@ -46,7 +45,13 @@ class RoleOfMethodDetectorTest extends \PHPUnit_Framework_TestCase
             ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; } } ?>'],
             ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; return $this; } } ?>'],
             [null, '<?php class A { function foo($string){ $this->name = (string) $name * 3; } } ?>'],
-
         ];
+        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+            $examples[] = ['getter', '<?php class A { function getName(): string { return $this->name; } }'];
+            $examples[] = ['setter', '<?php class A { function setName(string $name): void { $this->name = $name; } }'];
+            $examples[] = ['getter', '<?php class A { function getName(): Name { return $this->name; } }'];
+            $examples[] = ['setter', '<?php class A { function setName(Name $name): void { $this->name = $name; } }'];
+        }
+        return $examples;
     }
 }
