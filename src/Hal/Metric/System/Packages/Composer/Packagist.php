@@ -37,6 +37,9 @@ class Packagist
         // get latest version
         $latest = '0.0.0';
         foreach ((array)$json->package->versions as $version => $datas) {
+            if (stripos($version, 'dev-') === 0) {
+                continue;
+            }
             $version = preg_replace('([^\.\d])', '', $version);
             if (!preg_match('!\d+\.\d+\.\d+!', $version)) {
                 continue;
