@@ -141,7 +141,7 @@
                                 return strcmp($a->name, $b->name);
                             });
                             foreach ($packages as $package) { ?>
-                                <tr<?php if (null !== $package->installed && $package->installed !== $package->latest) { echo ' style="color:orangered"'; }?>>
+                                <tr<?php if (null !== $package->installed && version_compare($package->installed, $package->latest) === -1) { echo ' style="color:orangered"'; }?>>
                                     <td><?php echo $package->name; ?></td>
                                     <td><?php echo $package->required; ?></td>
                                     <?php if (0 !== count($packagesInstalled)) {?><td><?php echo $package->installed; ?></td><?php } ?>
