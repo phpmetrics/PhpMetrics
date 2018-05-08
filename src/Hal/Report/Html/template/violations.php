@@ -46,11 +46,11 @@ $map = [
     <div class="row">
         <div class="column">
             <div class="bloc">
-                <h4>Violations</h4>
+                <h4>Class Violations</h4>
                 <table class="table-pagerank table-small">
                     <thead>
                     <tr>
-                        <th>Component</th>
+                        <th>Class</th>
                         <th>Violations</th>
                     </tr>
                     </thead>
@@ -84,6 +84,57 @@ $map = [
                                     <?php foreach ($class['violations'] as $violation) { ?>
                                         <span
                                             class="badge level level-<?php echo $map[$violation->getLevel()]; ?>"> <?php echo $violation->getName(); ?></span>
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                        <?php }
+                    } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <div class="bloc">
+                <h4>Package Violations</h4>
+                <table class="table-pagerank table-small">
+                    <thead>
+                    <tr>
+                        <th>Package</th>
+                        <th>Violations</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($packages as $package) {
+                        if (sizeof($package['violations']) > 0) {
+                            $currentId = 'bloc-' . uniqid();
+                            ?>
+
+                            <tr>
+                                <td>
+                                    <a onclick="return toggle('<?php echo $currentId; ?>');"><?php echo substr($package['name'], 0, -1); ?></a>
+                                    <div class="violation-list" id="<?php echo $currentId; ?>">
+                                        <?php foreach ($package['violations'] as $violation) { ?>
+                                            <div class="violation">
+                                                <div class="name">
+                                                    <?php echo $violation->getName(); ?>
+                                                    <span
+                                                            class="badge level level-<?php echo $map[$violation->getLevel()]; ?>"><?php echo $map[$violation->getLevel()]; ?></span>
+
+                                                </div>
+                                                <div
+                                                        class="description"><?php echo nl2br($violation->getDescription()); ?></div>
+
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </td>
+
+                                <td valign="top">
+                                    <?php foreach ($package['violations'] as $violation) { ?>
+                                        <span
+                                                class="badge level level-<?php echo $map[$violation->getLevel()]; ?>"> <?php echo $violation->getName(); ?></span>
                                     <?php } ?>
                                 </td>
                             </tr>

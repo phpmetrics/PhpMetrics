@@ -75,6 +75,15 @@ Coupling
     Average efferent coupling                   {$avg->efferentCoupling}
     Average instability                         {$avg->instability}
     Depth of Inheritance Tree                   {$metrics->get('tree')->get('depthOfInheritanceTree')}
+    
+Package
+    Packages                                    {$sum->nbPackages}
+    Average classes per package                 {$avg->classesPerPackage}
+    Average distance                            {$avg->distance}
+    Average incoming class dependencies         {$avg->incomingCDep}
+    Average outgoing class dependencies         {$avg->outgoingCDep}
+    Average incoming package dependencies       {$avg->incomingPDep}
+    Average outgoing package dependencies       {$avg->outgoingPDep}
 
 Complexity
     Average Cyclomatic complexity by class      {$avg->ccn}

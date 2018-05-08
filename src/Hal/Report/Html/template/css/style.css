@@ -376,7 +376,8 @@ a {
 }
 
 .axis path,
-.axis line {
+.axis line,
+.scattered-plot path {
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
@@ -384,6 +385,9 @@ a {
 
 .x.axis path {
     display: none;
+}
+.scattered-plot .x.axis path {
+    display: block;
 }
 .axis path,
 .axis line {

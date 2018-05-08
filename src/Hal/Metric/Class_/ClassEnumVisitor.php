@@ -34,15 +34,16 @@ class ClassEnumVisitor extends NodeVisitorAbstract
             || $node instanceof Stmt\Interface_
             || $node instanceof Stmt\Trait_
         ) {
-
             if ($node instanceof Stmt\Interface_) {
                 $class = new InterfaceMetric($node->namespacedName->toString());
                 $class->set('interface', true);
+                $class->set('abstract', true);
             } else {
 
                 $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
                 $class = new ClassMetric($name);
                 $class->set('interface', false);
+                $class->set('abstract', $node->isAbstract());
             }
 
             $methods = [];

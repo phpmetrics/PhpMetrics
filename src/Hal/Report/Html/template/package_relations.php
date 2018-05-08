@@ -2,39 +2,40 @@
 
 <?php
 $relations = [];
-$classesCp = [];
-foreach ($classes as $class) {
-
-    $class['name'] = '\\' . $class['name'];
-    $classesCp[$class['name']] = $class;
-    $classesCp[$class['name']]['externals'] = [];
-
-
-    foreach ($class['externals'] as &$ext) {
-        $ext = '\\' . $ext;
-        if (!isset($classes[$ext])) {
-            $classesCp[$ext] = [
-                'name' => $ext,
-                'externals' => [],
-            ];
+$getPackageName = function ($name) {
+    return $name === '\\' ? 'global' : substr($name, 0, -1);
+};
+foreach ($packages as $package) {
+    $packageName = $getPackageName($package['name']);
+    $outgoingDependencies = array_map(
+        $getPackageName,
+        isset($package['outgoing_package_dependencies']) ? $package['outgoing_package_dependencies'] : []
+    );
+    $relations[$packageName] = [
+        'name' => $packageName,
+        'size' => 3000,
+        'relations' => $outgoingDependencies,
+    ];
+    // Adding vendor packages
+    foreach ($outgoingDependencies as $each) {
+        if (isset($relations[$each])) {
+            continue;
         }
-        $classesCp[$class['name']]['externals'][] = $ext;
+        $relations[$each] = [
+            'name' => $each,
+            'size' => 3000,
+            'relations' => []
+        ];
     }
 }
-foreach ($classesCp as $class) {
-    array_push($relations, (object)[
-        'name' => $class['name'],
-        'size' => 3000,
-        'relations' => (array)array_values(array_unique($class['externals'])),
-    ]);
-}
+$relations = array_values($relations);
 ?>
 
 
 <div class="row">
     <div class="column">
         <div class="bloc">
-            <h4>Object relations</h4>
+            <h4>Package relations</h4>
             <div id="chart-relations"></div>
         </div>
     </div>
@@ -56,7 +57,7 @@ foreach ($classesCp as $class) {
 
         var diameter = document.getElementById('chart-relations').offsetWidth,
             radius = diameter / 2,
-            innerRadius = radius - 120;
+            innerRadius = radius - 320;
 
         var cluster = d3.layout.cluster()
             .size([360, innerRadius])
@@ -167,16 +168,16 @@ foreach ($classesCp as $class) {
 
             function find(name, data) {
                 name = (data ? name + ' ' : name);
-                var node = map[name], i;
+                var node = map[name];
                 if (!node) {
                     node = map[name] = data || {name: name, children: []};
                     if (name.length) {
-                        node.parent = find(name.substring(0, i = name.lastIndexOf("\\")));
+                        node.parent = find("");
                         if (!node.parent.children) {
                             node.parent.children = []; // fix anomalies
                         }
                         node.parent.children.push(node);
-                        node.key = name;//name.substring(i + 1);
+                        node.key = name.trim();
                     }
                 }
                 return node;
