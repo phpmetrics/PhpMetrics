@@ -3,6 +3,7 @@ namespace Hal\Metric\Helper;
 
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 
@@ -30,33 +31,6 @@ class RoleOfMethodDetector
                 'PhpParser\\Node\\Expr\\Variable',
                 'PhpParser\\Node\\Name',
             ],
-            // nicik/php-parser:^4
-            [
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Stmt\\Return_',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Identifier',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Identifier',
-            ],
-            [
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Stmt\\Return_',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Identifier',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Name',
-                'PhpParser\\Node\\Identifier',
-            ],
-            [
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Stmt\\Return_',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Identifier',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Identifier',
-                'PhpParser\\Node\\Identifier',
-            ],
         ],
         'setter' => [
             [
@@ -83,11 +57,9 @@ class RoleOfMethodDetector
                 'PhpParser\\Node\\Expr\\Assign',
                 'PhpParser\\Node\\Expr\\Variable',
                 'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Identifier',
                 'PhpParser\\Node\\Expr\\Variable',
                 'PhpParser\\Node\\Param',
                 'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Identifier',
             ],
             [
                 'PhpParser\\Node\\Stmt\\ClassMethod',
@@ -95,27 +67,10 @@ class RoleOfMethodDetector
                 'PhpParser\\Node\\Expr\\Assign',
                 'PhpParser\\Node\\Expr\\Variable',
                 'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Identifier',
                 'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Identifier',
-                'PhpParser\\Node\\Param',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Identifier',
-                'PhpParser\\Node\\Identifier',
-            ],
-            [
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Stmt\\Expression',
-                'PhpParser\\Node\\Expr\\Assign',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Identifier',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Identifier',
                 'PhpParser\\Node\\Param',
                 'PhpParser\\Node\\Expr\\Variable',
                 'PhpParser\\Node\\Name',
-                'PhpParser\\Node\\Identifier',
             ],
         ]
     ];
@@ -133,6 +88,11 @@ class RoleOfMethodDetector
         // build a fingerprint of the given method
         $fingerprintOfMethod = [];
         iterate_over_node($node, function ($node) use (&$fingerprintOfMethod) {
+
+            // avoid identifier (php-parser:^4)
+            if ($node instanceof Identifier) {
+                return;
+            }
 
             // avoid cast
             if ($node instanceof Cast) {
