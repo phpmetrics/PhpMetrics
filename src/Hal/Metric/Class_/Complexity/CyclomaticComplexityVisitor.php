@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Metric\Class_\Complexity;
 
-use Hal\Component\Reflected\Method;
 use Hal\Metric\Helper\MetricClassNameGenerator;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
@@ -24,31 +23,22 @@ use PhpParser\NodeVisitorAbstract;
  */
 class CyclomaticComplexityVisitor extends NodeVisitorAbstract
 {
-
     /**
      * @var Metrics
      */
     private $metrics;
 
-    /**
-     * ClassEnumVisitor constructor.
-     * @param Metrics $metrics
-     */
     public function __construct(Metrics $metrics)
     {
         $this->metrics = $metrics;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_
             || $node instanceof Stmt\Interface_
             || $node instanceof Stmt\Trait_
         ) {
-
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
             $ccn = 1;
@@ -62,9 +52,9 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
                         $ccn = 0;
 
                         foreach (get_object_vars($node) as $name => $member) {
-                            foreach (is_array($member) ? $member : [$member] as $member_item) {
-                                if ($member_item instanceof Node) {
-                                    $ccn += $cb($member_item);
+                            foreach (is_array($member) ? $member : [$member] as $memberItem) {
+                                if ($memberItem instanceof Node) {
+                                    $ccn += $cb($memberItem);
                                 }
                             }
                         }
@@ -78,18 +68,23 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
                             case $node instanceof Stmt\Do_:
                             case $node instanceof Node\Expr\BinaryOp\LogicalAnd:
                             case $node instanceof Node\Expr\BinaryOp\LogicalOr:
+                            case $node instanceof Node\Expr\BinaryOp\LogicalXor:
                             case $node instanceof Node\Expr\BinaryOp\BooleanAnd:
                             case $node instanceof Node\Expr\BinaryOp\BooleanOr:
-                            case $node instanceof Node\Expr\BinaryOp\Spaceship:
-                            case $node instanceof Stmt\Case_: // include default
                             case $node instanceof Stmt\Catch_:
-                            case $node instanceof Stmt\Continue_:
-                                $ccn++;
-                                break;
                             case $node instanceof Node\Expr\Ternary:
                             case $node instanceof Node\Expr\BinaryOp\Coalesce:
-                                $ccn = $ccn + 2;
+                                $ccn++;
                                 break;
+                            case $node instanceof Stmt\Case_: // include default
+                                if ($node->cond !== null) { // exclude default
+                                    $ccn++;
+                                }
+                                break;
+                            case $node instanceof Node\Expr\BinaryOp\Spaceship:
+                                $ccn += 2;
+                                break;
+
                         }
                         return $ccn;
                     };

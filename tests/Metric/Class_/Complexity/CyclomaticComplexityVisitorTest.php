@@ -53,9 +53,14 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
     public function provideExamplesForClasses()
     {
         return [
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 8],
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 5],
-            [ __DIR__.'/../../examples/cyclomatic_anon.php', 'Foo\C', 1],
+            'A' => [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 8],
+            'B' => [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 4],
+            'Foo\\C' => [ __DIR__.'/../../examples/cyclomatic_anon.php', 'Foo\\C', 1],
+            'SwitchCase' => [ __DIR__.'/../../examples/cyclomatic_full.php', 'SwitchCase', 4],
+            'IfElseif' => [ __DIR__.'/../../examples/cyclomatic_full.php', 'IfElseif', 7],
+            'Loops' => [ __DIR__.'/../../examples/cyclomatic_full.php', 'Loops', 5],
+            'CatchIt' => [ __DIR__.'/../../examples/cyclomatic_full.php', 'CatchIt', 3],
+            'Logical' => [ __DIR__.'/../../examples/cyclomatic_full.php', 'Logical', 11],
         ];
     }
 
@@ -63,7 +68,7 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
     {
         return [
             [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 6],
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 5],
+            [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 4],
         ];
     }
 
