@@ -60,9 +60,12 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
                     // iterate over children, recursively
                     $cb = function ($node) use (&$cb) {
                         $ccn = 0;
-                        if (isset($node->stmts) && $node->stmts) {
-                            foreach ($node->stmts as $child) {
-                                $ccn += $cb($child);
+
+                        foreach (get_object_vars($node) as $name => $member) {
+                            foreach (is_array($member) ? $member : [$member] as $member_item) {
+                                if ($member_item instanceof Node) {
+                                    $ccn += $cb($member_item);
+                                }
                             }
                         }
 
