@@ -3,7 +3,7 @@
 
 <?php
 // calculate percentiles
-function procentile($arr, $percentile = 0.95)
+function percentile($arr, $percentile = 0.95)
 {
     sort($arr);
     return $arr[round($percentile * count($arr) - 1.0 - $percentile)];
@@ -23,8 +23,8 @@ if(sizeof($array) > 1) {
     $range = range(0.5, 1, .05);
     foreach ($range as $percentile) {
         $json[] = (object)[
-            'lloc' => procentile($array, $percentile),
-            'percentile' => $percentile * 100,
+            'lloc' => percentile($array, $percentile),
+            'percentile' => round($percentile * 100),
         ];
     }
 }
