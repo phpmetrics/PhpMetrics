@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 namespace Hal\Metric\Package;
 
 use Hal\Metric\Metrics;
