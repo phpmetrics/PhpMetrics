@@ -43,7 +43,7 @@ class ClassEnumVisitor extends NodeVisitorAbstract
                 $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
                 $class = new ClassMetric($name);
                 $class->set('interface', false);
-                $class->set('abstract', $node->isAbstract());
+                $class->set('abstract', $node instanceof Stmt\Trait_ || $node->isAbstract());
             }
 
             $methods = [];

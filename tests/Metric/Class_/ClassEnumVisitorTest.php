@@ -132,4 +132,11 @@ interface NotifyPropertyChangedInterface
         $metrics = $this->analyzeCode($code);
         $this->assertTrue($metrics->get('Foo')->get('abstract'));
     }
+
+    public function testItMarksTraitsAsAbstract()
+    {
+        $code = '<?php trait Foo {}';
+        $metrics = $this->analyzeCode($code);
+        $this->assertTrue($metrics->get('Foo')->get('abstract'));
+    }
 }
