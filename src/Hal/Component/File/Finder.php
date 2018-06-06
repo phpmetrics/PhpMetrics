@@ -48,8 +48,8 @@ class Finder
     private $flags;
 
     /**
-     * @param string $extensions regex of file extensions to include
-     * @param string $excludedDirs regex of directories to exclude
+     * @param string[] $extensions   regex of file extensions to include
+     * @param string[] $excludedDirs regex of directories to exclude
      * @param integer $flags
      */
     public function __construct(array $extensions = ['php'], array $excludedDirs = [], $flags = null)
