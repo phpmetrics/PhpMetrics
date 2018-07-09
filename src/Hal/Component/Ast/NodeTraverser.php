@@ -30,7 +30,7 @@ class Traverser
     {
         if(null === $stopCondition) {
             $stopCondition = function($node) {
-                if($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
+                if ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
                     return false;
                 }
 
@@ -96,47 +96,7 @@ class Traverser
 }
 
 if (PHP_VERSION_ID >= 70000) {
-    class NodeTraverser extends Mother
-    {
-        /** @var Traverser */
-        private $traverser;
-
-        public function __construct($cloneNodes = false, $stopCondition = null)
-        {
-            parent::__construct();
-            $this->traverser = new Traverser($this, $stopCondition);
-        }
-
-        public function traverseNode(Node $node): Node
-        {
-            return parent::traverseNode($node);
-        }
-
-        protected function traverseArray(array $nodes): array
-        {
-            return $this->traverser->traverseArray($nodes, $this->visitors);
-        }
-    }
+    class_alias(Php7NodeTraverser::class, __NAMESPACE__ . '\\NodeTraverser');
 } else {
-    class NodeTraverser extends Mother
-    {
-        /** @var Traverser */
-        private $traverser;
-
-        public function __construct($cloneNodes = false, $stopCondition = null)
-        {
-            parent::__construct();
-            $this->traverser = new Traverser($this, $stopCondition);
-        }
-
-        public function traverseNode(Node $node)
-        {
-            return parent::traverseNode($node);
-        }
-
-        protected function traverseArray(array $nodes)
-        {
-            return $this->traverser->traverseArray($nodes, $this->visitors);
-        }
-    }
+    class_alias(Php5NodeTraverser::class, __NAMESPACE__ . '\\NodeTraverser');
 }
