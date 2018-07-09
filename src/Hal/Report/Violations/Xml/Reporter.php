@@ -69,7 +69,7 @@ class Reporter
                 $item->setAttribute('beginline', 1);
                 $item->setAttribute('rule', $violation->getName());
                 $item->setAttribute('ruleset', $violation->getName());
-                $item->setAttribute('externalInfoUrl', 'http://phpmetrics.org/documentation/index.html');
+                $item->setAttribute('externalInfoUrl', 'http://www.phpmetrics.org/documentation/index.html');
                 $item->setAttribute('priority', $map[$violation->getLevel()]);
                 $item->nodeValue = $violation->getDescription();
                 $node->appendChild($item);

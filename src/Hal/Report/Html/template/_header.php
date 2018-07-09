@@ -16,7 +16,7 @@
 <header class="headerbar">
     <div class="headerbarInner">
         <div class="float-left navigation-title">
-            <a href="http://phpmetrics.org/">
+            <a href="http://www.phpmetrics.org/">
                 <h1 class="title">PhpMetrics</h1>
                 <span class="subtitle">
                 Static analyzer for PHP

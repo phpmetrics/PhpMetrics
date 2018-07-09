@@ -37,7 +37,7 @@ class Application
             }
 
             if ($config->has('version')) {
-                $output->writeln(sprintf("PhpMetrics %s <http://phpmetrics.org>\nby Jean-François Lépine <https://twitter.com/Halleck45>\n", getVersion()));
+                $output->writeln(sprintf("PhpMetrics %s <http://www.phpmetrics.org>\nby Jean-François Lépine <https://twitter.com/Halleck45>\n", getVersion()));
                 exit(0);
             }
 
