@@ -1,3 +1,59 @@
+phpmetrics (2.4.0) unstable; urgency=low
+   * HotFix #317: Bad assignement on item classmetrics.
+   * Merge pull request #319 from phpmetrics/hotfix-classmetric
+   * releasing v2.3.2
+   * Adds www. in URLs phpmetrics.org
+   * Add package metrics
+   * Add package violation and some charts
+   * Ignore traits for now
+   * Test package metrics
+   * Add cli output
+   * Use assertCount
+   * Test against PHP 7.2
+   * Merge pull request #333 from carusogabriel/assert-count
+   * Merge pull request #334 from carusogabriel/patch-1
+   * Handle traits like classes
+   * Add Stable Abstractions Principle
+   * Detect getters and setters with types
+   * Improve composer package version comparison
+   * Rename method - typo
+   * Round percentiles on X-axis to prevent roundoff error
+   * Add else and elseif statements to the cyclomatic complexity test
+   * Fix bug that caused cyclomatic complexity to be underreported
+   * Merge pull request #336 from UFOMelkor/hotfix/335-role-detection-with-php7
+   * Support nikic/php-parser:^4
+   * Switch node traverser depending on php version
+   * Merge pull request #337 from juliendufresne/master
+   * Merge pull request #283 from UFOMelkor/feature/package-metrics
+   * Add changelog
+   * Filter identifiers to simplify php-parser:^4 compatibility
+   * Do not crash using php-parser:^4
+   * Add Support for Stmt\Expression
+   * Merge pull request #339 from ssfinney/fixRoundingOnLocReport
+   * Merge pull request #344 from fabianbadoi/fix-343
+   * Remove php 7 code
+   * Change the calculation of cyclomatic complexity
+   * Verify that traits are abstract
+   * Force traits to be abstract
+   * Merge pull request #354 from UFOMelkor/hotfix/351
+   * fix for repeating bloc-ids
+   * Finalize cyclomatic complexity changes
+   * Test against lowest and highest dependencies
+   * Raise version of sebastian/comparator to at least 1.2.3
+   * Merge pull request #356 from dumith-eranga/fix/report-html-violation-bloc-toggle
+   * Fix phpdoc argument types not matching actual types
+   * Fix issue where phpmetrics would not find any files
+   * Add test for current path exclusion
+   * Merge pull request #321 from ottaviano/fix-url-phpmetrics.org
+   * Merge pull request #353 from UFOMelkor/metric/ccn
+   * Merge pull request #347 from UFOMelkor/feature/345-php-parser-4
+   * Do not iterate over ->expr twice
+   * Merge pull request #357 from UFOMelkor/hotfix/ccn
+   * Adjust cc violation limits
+   * Merge pull request #358 from UFOMelkor/feature/cc-violation-adjustments
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Mon, 09 Jul 2018 14:22:08 +0200
+
 phpmetrics (2.3.0) unstable; urgency=low
    * Fix missing escapeshellarg on git command arguments to avoid security and access troubles. 
    * Fix #317: Only consolidate class metrics that groups Classes and Traits to calculate sums and averages. 
@@ -372,6 +428,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
