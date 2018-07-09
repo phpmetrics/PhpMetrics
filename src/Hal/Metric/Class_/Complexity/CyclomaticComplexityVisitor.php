@@ -74,7 +74,9 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
                                 }
                             }
                         }
-
+                        if (isset($node->expr)) {
+                            $ccn += $cb($node->expr);
+                        }
                         switch (true) {
                             case $node instanceof Stmt\If_:
                             case $node instanceof Stmt\ElseIf_:

@@ -117,6 +117,12 @@ class ExternalsVisitor extends NodeVisitorAbstract
                     if ($comments && false !== preg_match_all('!\s+\*\s+@(\w+)!', $comments->getText(), $matches)) {
                         foreach ($matches[1] as $check) {
                             foreach ($this->uses as $use) {
+                                if (method_exists($use, 'getAlias')) {
+                                    if (((string) $use->getAlias()) === $check) {
+                                        array_push($dependencies, (string)($use->name));
+                                    }
+                                    continue;
+                                }
                                 if ($use->alias === $check) {
                                     array_push($dependencies, (string)($use->name));
                                 }

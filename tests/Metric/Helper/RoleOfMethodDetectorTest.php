@@ -38,19 +38,19 @@ class RoleOfMethodDetectorTest extends \PHPUnit_Framework_TestCase
     public function provideExamples()
     {
         $examples = [
-            ['getter', '<?php class A { function getName(){ return $this->name; } }  ?>'],
-            ['getter', '<?php class A { function getName(){ return (string) $this->name; } }  ?>'],
-            ['getter', '<?php class A { function getName(){ return (int) $this->name; } }  ?>'],
-            ['setter', '<?php class A { function setName($string){ $this->name = $name; } } ?>'],
-            ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; } } ?>'],
-            ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; return $this; } } ?>'],
-            [null, '<?php class A { function foo($string){ $this->name = (string) $name * 3; } } ?>'],
+            'getter' => ['getter', '<?php class A { function getName(){ return $this->name; } }  ?>'],
+            'getter with string cast' => ['getter', '<?php class A { function getName(){ return (string) $this->name; } }  ?>'],
+            'getter with int cast' => ['getter', '<?php class A { function getName(){ return (int) $this->name; } }  ?>'],
+            'setter' => ['setter', '<?php class A { function setName($string){ $this->name = $name; } } ?>'],
+            'setter with string cast' => ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; } } ?>'],
+            'setter with $this return' => ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; return $this; } } ?>'],
+            'neither setter nor getter' => [null, '<?php class A { function foo($string){ $this->name = (string) $name * 3; } } ?>'],
         ];
         if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            $examples[] = ['getter', '<?php class A { function getName(): string { return $this->name; } }'];
-            $examples[] = ['setter', '<?php class A { function setName(string $name): void { $this->name = $name; } }'];
-            $examples[] = ['getter', '<?php class A { function getName(): Name { return $this->name; } }'];
-            $examples[] = ['setter', '<?php class A { function setName(Name $name): void { $this->name = $name; } }'];
+            $examples['getter with return scalar'] = ['getter', '<?php class A { function getName(): string { return $this->name; } }'];
+            $examples['setter with scalar hint and return void'] = ['setter', '<?php class A { function setName(string $name): void { $this->name = $name; } }'];
+            $examples['getter with return object'] = ['getter', '<?php class A { function getName(): Name { return $this->name; } }'];
+            $examples['setter with object hint and return void'] = ['setter', '<?php class A { function setName(Name $name): void { $this->name = $name; } }'];
         }
         return $examples;
     }

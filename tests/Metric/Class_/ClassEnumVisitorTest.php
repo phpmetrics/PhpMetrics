@@ -26,11 +26,26 @@ class ClassEnumVisitorTest extends \PHPUnit_Framework_TestCase
         $code = file_get_contents($example);
         $metrics = $this->analyzeCode($code);
 
-        $this->assertSame($nbMethods, $metrics->get($classname)->get('nbMethods'));
-        $this->assertSame($nbMethodsPrivate, $metrics->get($classname)->get('nbMethodsPrivate'));
-        $this->assertSame($nbMethodsPublic, $metrics->get($classname)->get('nbMethodsPublic'));
-        $this->assertSame($nbMethodsIncludingGettersSetters,
-            $metrics->get($classname)->get('nbMethodsIncludingGettersSetters'));
+        $this->assertSame(
+            $nbMethods,
+            $metrics->get($classname)->get('nbMethods'),
+            "Expected $nbMethods methods (without getters and setters) but found {$metrics->get($classname)->get('nbMethods')}"
+        );
+        $this->assertSame(
+            $nbMethodsPrivate,
+            $metrics->get($classname)->get('nbMethodsPrivate'),
+            "Expected $nbMethodsPrivate private methods but got {$metrics->get($classname)->get('nbMethodsPrivate')}"
+        );
+        $this->assertSame(
+            $nbMethodsPublic,
+            $metrics->get($classname)->get('nbMethodsPublic'),
+            "Expected $nbMethodsPublic public methods but got {$metrics->get($classname)->get('nbMethodsPublic')}"
+        );
+        $this->assertSame(
+            $nbMethodsIncludingGettersSetters,
+            $metrics->get($classname)->get('nbMethodsIncludingGettersSetters'),
+            "Expected $nbMethodsPrivate methods including getters and setters but got {$metrics->get($classname)->get('nbMethodsIncludingGettersSetters')}"
+        );
     }
 
     public static function provideExamples()

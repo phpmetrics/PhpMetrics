@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Metric\Class_;
 
-use Hal\Component\Reflected\Method;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\FunctionMetric;
 use Hal\Metric\Helper\RoleOfMethodDetector;
@@ -53,7 +52,7 @@ class ClassEnumVisitor extends NodeVisitorAbstract
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
 
-                    $function = new FunctionMetric($stmt->name);
+                    $function = new FunctionMetric((string) $stmt->name);
 
                     $role = $roleDetector->detects($stmt);
                     $function->set('role', $role);

@@ -11,20 +11,23 @@ namespace Hal\Component\Ast;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser as Mother;
+use PhpParser\NodeVisitor;
 
 /**
  * Custom Ast Traverser
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
+ * @internal
  */
-class NodeTraverser extends Mother
+class Traverser
 {
     protected $stopCondition;
 
-    public function __construct($cloneNodes = false, $stopCondition = null)
-    {
-        parent::__construct($cloneNodes);
+    /** @var NodeTraverser */
+    private $traverser;
 
+    public function __construct(Mother $traverser, $stopCondition = null)
+    {
         if(null === $stopCondition) {
             $stopCondition = function($node) {
                 if($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
@@ -36,20 +39,26 @@ class NodeTraverser extends Mother
         }
 
         $this->stopCondition = $stopCondition;
+        $this->traverser = $traverser;
     }
 
-    protected function traverseArray(array $nodes) {
+    /**
+     * @param array $nodes
+     * @param array|NodeVisitor[] $visitors
+     * @return array
+     */
+    public function traverseArray(array $nodes, array $visitors) {
         $doNodes = array();
 
         foreach ($nodes as $i => &$node) {
             if (is_array($node)) {
-                $node = $this->traverseArray($node);
+                $node = $this->traverseArray($node, $visitors);
             } elseif ($node instanceof Node) {
                 $traverseChildren = call_user_func($this->stopCondition, $node);
 
-                foreach ($this->visitors as $visitor) {
+                foreach ($visitors as $visitor) {
                     $return = $visitor->enterNode($node);
-                    if (self::DONT_TRAVERSE_CHILDREN === $return) {
+                    if (Mother::DONT_TRAVERSE_CHILDREN === $return) {
                         $traverseChildren = false;
                     } else if (null !== $return) {
                         $node = $return;
@@ -57,13 +66,13 @@ class NodeTraverser extends Mother
                 }
 
                 if ($traverseChildren) {
-                    $node = $this->traverseNode($node);
+                    $node = $this->traverser->traverseNode($node);
                 }
 
-                foreach ($this->visitors as $visitor) {
+                foreach ($visitors as $visitor) {
                     $return = $visitor->leaveNode($node);
 
-                    if (self::REMOVE_NODE === $return) {
+                    if (Mother::REMOVE_NODE === $return) {
                         $doNodes[] = array($i, array());
                         break;
                     } elseif (is_array($return)) {
@@ -84,7 +93,50 @@ class NodeTraverser extends Mother
 
         return $nodes;
     }
+}
 
+if (PHP_VERSION_ID >= 70000) {
+    class NodeTraverser extends Mother
+    {
+        /** @var Traverser */
+        private $traverser;
 
+        public function __construct($cloneNodes = false, $stopCondition = null)
+        {
+            parent::__construct();
+            $this->traverser = new Traverser($this, $stopCondition);
+        }
 
+        public function traverseNode(Node $node): Node
+        {
+            return parent::traverseNode($node);
+        }
+
+        protected function traverseArray(array $nodes): array
+        {
+            return $this->traverser->traverseArray($nodes, $this->visitors);
+        }
+    }
+} else {
+    class NodeTraverser extends Mother
+    {
+        /** @var Traverser */
+        private $traverser;
+
+        public function __construct($cloneNodes = false, $stopCondition = null)
+        {
+            parent::__construct();
+            $this->traverser = new Traverser($this, $stopCondition);
+        }
+
+        public function traverseNode(Node $node)
+        {
+            return parent::traverseNode($node);
+        }
+
+        protected function traverseArray(array $nodes)
+        {
+            return $this->traverser->traverseArray($nodes, $this->visitors);
+        }
+    }
 }

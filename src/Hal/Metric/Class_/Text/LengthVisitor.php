@@ -40,7 +40,7 @@ class LengthVisitor extends NodeVisitorAbstract
                 $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
                 $classOrFunction = $this->metrics->get($name);
             } else {
-                $classOrFunction = new FunctionMetric($node->name);
+                $classOrFunction = new FunctionMetric((string) $node->name);
                 $this->metrics->attach($classOrFunction);
             }
 
