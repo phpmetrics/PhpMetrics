@@ -3,13 +3,13 @@
 namespace Test\Hal\Component\File;
 
 use Hal\Component\File\Finder;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @group file
  */
-class FinderTest extends \PHPUnit_Framework_TestCase
+class FinderTest extends PHPUnit_Framework_TestCase
 {
-
     public function testPathsGivenAreRecoveredOverExcluded()
     {
         $exampleRoot = __DIR__ . DIRECTORY_SEPARATOR . 'examples';
@@ -35,5 +35,18 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         \sort($files);
 
         static::assertSame($expected, $files);
+    }
+
+    public function testGivenPathsAreIgnoredRegardingExclusion()
+    {
+        $exampleRoot = __DIR__ . DIRECTORY_SEPARATOR . 'examples';
+        $actualFoundFiles = (new Finder(['php'], ['tests']))->fetch([$exampleRoot]);
+        $expectedFoundFiles = [
+            $exampleRoot . DIRECTORY_SEPARATOR . 'excluded' . DIRECTORY_SEPARATOR . 'excludedFile.php',
+            $exampleRoot . DIRECTORY_SEPARATOR . 'included' . DIRECTORY_SEPARATOR . 'includedFile.php',
+        ];
+        sort($actualFoundFiles);
+        sort($expectedFoundFiles);
+        $this->assertSame($expectedFoundFiles, $actualFoundFiles);
     }
 }

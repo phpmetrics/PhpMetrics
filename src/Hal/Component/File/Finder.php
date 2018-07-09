@@ -77,7 +77,7 @@ class Finder
 
                 $filterRegex = sprintf(
                     '`^%s%s%s$`',
-                    $path,
+                    preg_quote($path, '`'),
                     !empty($this->excludedDirs) ? '((?!' . implode('|', array_map('preg_quote', $this->excludedDirs)) . ').)+' : '.+',
                     '\.(' . implode('|', $this->extensions) . ')'
                 );
