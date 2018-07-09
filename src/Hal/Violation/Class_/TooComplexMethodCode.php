@@ -1,51 +1,48 @@
 <?php
 namespace Hal\Violation\Class_;
 
-
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
 
+/**
+ * According to McCabe,
+ *
+ *  The particular upper bound that has been used for cyclomatic complexity is 10
+ *  which seems like a reasonable, but not magical, upper limit.
+ *
+ * @see http://www.literateprogramming.com/mccabe.pdf
+ */
 class TooComplexMethodCode implements Violation
 {
+    /** @var Metric|null */
+    private $metric;
 
-    /**
-     * @inheritdoc
-     */
     public function getName()
     {
         return 'Too complex method code';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function apply(Metric $metric)
     {
-        if (!$metric instanceof ClassMetric) {
+        if (! $metric instanceof ClassMetric) {
             return;
         }
 
         $this->metric = $metric;
 
-        if ($metric->get('ccnMethodMax') >= 8) {
+        if ($metric->get('ccnMethodMax') > 10) {
             $metric->get('violations')->add($this);
             return;
         }
 
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getLevel()
     {
         return Violation::ERROR;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getDescription()
     {
         return <<<EOT
@@ -55,6 +52,5 @@ This class looks really complex.
 
 Maybe you should delegate some code to other objects or split complex method.
 EOT;
-
     }
 }
