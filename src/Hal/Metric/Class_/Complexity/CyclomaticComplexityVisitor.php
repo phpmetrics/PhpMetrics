@@ -8,8 +8,9 @@ use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Calculate cyclomatic complexity number
+ * Calculate cyclomatic complexity number and weighted method count.
  *
+ * The cyclomatic complexity (CC) is a measure of control structure complexity of a function or procedure.
  * We can calculate ccn in two ways (we choose the second):
  *
  *  1.  Cyclomatic complexity (CC) = E - N + 2P
@@ -18,14 +19,29 @@ use PhpParser\NodeVisitorAbstract;
  *      E = number of edges (transfers of control)
  *      N = number of nodes (sequential group of statements containing only one transfer of control)
  *
- * 2. CC = Number of each decision point
+ *  2. CC = Number of each decision point
  *
+ * The weighted method count (WMC) is count of methods parameterized by a algorithm to compute the weight of a method.
+ * Given a weight metric w and methods m it can be computed as
+ *
+ *  sum m(w') over (w' in w)
+ *
+ * Possible algorithms are:
+ *
+ *  - Cyclomatic Complexity
+ *  - Lines of Code
+ *  - 1 (unweighted WMC)
+ *
+ * This visitor provides two metrics, the maximal CC of all methods from one class (currently stored as ccnMethodMax)
+ * and the WMC using the CC as weight metric (currently stored as ccn).
+ *
+ * @see https://en.wikipedia.org/wiki/Cyclomatic_complexity
+ * @see http://www.literateprogramming.com/mccabe.pdf
+ * @see https://www.pitt.edu/~ckemerer/CK%20research%20papers/MetricForOOD_ChidamberKemerer94.pdf
  */
 class CyclomaticComplexityVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var Metrics
-     */
+    /** @var Metrics */
     private $metrics;
 
     public function __construct(Metrics $metrics)
@@ -41,8 +57,8 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
         ) {
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
-            $ccn = 1;
-            $ccnByMethod = array();
+            $ccn = 0;
+            $ccnByMethod = [0]; // default maxMethodCcn if no methods are available
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
@@ -89,19 +105,15 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
                         return $ccn;
                     };
 
-                    $methodCcn = $cb($stmt);
+                    $methodCcn = $cb($stmt) + 1; // each method by default is CCN 1 even if it's empty
 
                     $ccn += $methodCcn;
-                    $ccnByMethod[] = $methodCcn + 1; // each method by default is CCN 1 even if it's empty
+                    $ccnByMethod[] = $methodCcn;
                 }
             }
 
             $class->set('ccn', $ccn);
-
-            $class->set('ccnMethodMax', 0);
-            if (count($ccnByMethod)) {
-                $class->set('ccnMethodMax', max($ccnByMethod));
-            }
+            $class->set('ccnMethodMax', max($ccnByMethod));
         }
     }
 }
