@@ -57,7 +57,7 @@ $map = [
                     <tbody>
                     <?php foreach ($classes as $class) {
                         if (sizeof($class['violations']) > 0) {
-                            $currentId = 'bloc-' . uniqid();
+                            $currentId = 'bloc-' . uniqid('', true);
                             ?>
 
                             <tr>
