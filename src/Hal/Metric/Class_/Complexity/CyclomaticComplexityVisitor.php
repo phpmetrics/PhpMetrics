@@ -10,16 +10,16 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Calculate cyclomatic complexity number and weighted method count.
  *
- * The cyclomatic complexity (CC) is a measure of control structure complexity of a function or procedure.
+ * The cyclomatic complexity (CCN) is a measure of control structure complexity of a function or procedure.
  * We can calculate ccn in two ways (we choose the second):
  *
- *  1.  Cyclomatic complexity (CC) = E - N + 2P
+ *  1.  Cyclomatic complexity (CCN) = E - N + 2P
  *      Where:
  *      P = number of disconnected parts of the flow graph (e.g. a calling program and a subroutine)
  *      E = number of edges (transfers of control)
  *      N = number of nodes (sequential group of statements containing only one transfer of control)
  *
- *  2. CC = Number of each decision point
+ *  2. CCN = Number of each decision point
  *
  * The weighted method count (WMC) is count of methods parameterized by a algorithm to compute the weight of a method.
  * Given a weight metric w and methods m it can be computed as
@@ -32,8 +32,8 @@ use PhpParser\NodeVisitorAbstract;
  *  - Lines of Code
  *  - 1 (unweighted WMC)
  *
- * This visitor provides two metrics, the maximal CC of all methods from one class (currently stored as ccnMethodMax)
- * and the WMC using the CC as weight metric (currently stored as ccn).
+ * This visitor provides two metrics, the maximal CCN of all methods from one class (currently stored as ccnMethodMax)
+ * and the WMC using the CCN as weight metric (currently stored as ccn).
  *
  * @see https://en.wikipedia.org/wiki/Cyclomatic_complexity
  * @see http://www.literateprogramming.com/mccabe.pdf

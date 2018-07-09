@@ -1,51 +1,44 @@
 <?php
 namespace Hal\Violation\Class_;
 
-
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
 
+/**
+ * 50 as a threshold seems to be widely accepted in open source metric tools.
+ *
+ * @see http://staff.unak.is/andy/StaticAnalysis0809/metrics/wmc.html
+ * @see https://github.com/phpmd/phpmd/blob/f1c145e538d7cf8c2d1a45fd8fb723eca64005f4/src/main/resources/rulesets/codesize.xml#L390
+ */
 class TooComplexClassCode implements Violation
 {
+    /** @var Metric|null */
+    private $metric;
 
-    /**
-     * @inheritdoc
-     */
     public function getName()
     {
         return 'Too complex class code';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function apply(Metric $metric)
     {
-        if (!$metric instanceof ClassMetric) {
+        if (! $metric instanceof ClassMetric) {
             return;
         }
 
         $this->metric = $metric;
 
-        if ($metric->get('ccn') >= 25) {
+        if ($metric->get('ccn') > 50) {
             $metric->get('violations')->add($this);
-            return;
         }
-
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getLevel()
     {
         return Violation::ERROR;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getDescription()
     {
         return <<<EOT
@@ -56,6 +49,5 @@ This class looks really complex.
 
 Maybe you should delegate some code to other objects.
 EOT;
-
     }
 }
