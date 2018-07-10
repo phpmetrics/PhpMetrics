@@ -6,13 +6,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.4.1] - 2017-07-10
+
+### Fixed
+ - Fix parsing errors with PHP < 7 (#360, #361)
+ - Remain CCN for backward compatibility (#359, #362)
+ 
+### Deprecated
+ - CCN by classes is deprecated and will be removed in the next major release (#359, #362)
+
 ## [2.4.0] - 2017-07-09
 
 ### Added
  - Added package metrics (#283)
 
 ### Changed
- - Enhanced composer package comparison (#337, #342 thanks @juliendufresne)
+ - Enhanced composer package comparison (#337, #342, thanks @juliendufresne)
  - Better PHP 7 support (#335, #334, #336 thanks @carusogabriel)
  - Support nikic/php-parser:^4 (#345, #347)
 
