@@ -41,7 +41,7 @@ class Reporter
         $consolidated = new Consolidated($metrics);
         $sum = $consolidated->getSum();
         $avg = $consolidated->getAvg();
-
+        $score = $consolidated->getScore();
 
         $methodsByClass = $locByClass = $locByMethod = 0;
         if ($sum->nbClasses > 0) {
@@ -99,6 +99,9 @@ Violations
     Error                                       {$sum->violations->error}
     Warning                                     {$sum->violations->warning}
     Information                                 {$sum->violations->information}
+    
+Score
+    Maintainability                             {$score->mi}
 
 EOT;
 

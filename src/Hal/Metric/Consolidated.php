@@ -16,6 +16,11 @@ class Consolidated
     private $sum;
 
     /**
+     * @var object
+     */
+    private $score;
+
+    /**
      * @var array
      */
     private $classes = [];
@@ -91,6 +96,10 @@ class Consolidated
             'mi' => [],
         ];
 
+        $score = (object)[
+            'mi' => 0,
+        ];
+
         foreach ($classMetrics as $key => $item) {
             $sum->loc += $item->get('loc');
             $sum->lloc += $item->get('lloc');
@@ -136,6 +145,8 @@ class Consolidated
         $avg->outgoingPDep = round($avg->outgoingPDep / count($packages), 2);
         $avg->classesPerPackage = round($avg->classesPerPackage / count($packages), 2);
 
+        $score->mi = round((100 * $avg->mi) / 171, 2);
+
         // sums of violations
         $violations = [
             'total' => 0,
@@ -169,6 +180,7 @@ class Consolidated
 
         $this->avg = $avg;
         $this->sum = $sum;
+        $this->score = $score;
         $this->classes = $classes;
         $this->files = $files;
         $this->project = $project;
@@ -189,6 +201,14 @@ class Consolidated
     public function getSum()
     {
         return $this->sum;
+    }
+
+    /**
+     * @return object
+     */
+    public function getScore()
+    {
+        return $this->score;
     }
 
     /**
