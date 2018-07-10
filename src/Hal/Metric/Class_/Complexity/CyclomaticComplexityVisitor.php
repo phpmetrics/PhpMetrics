@@ -57,7 +57,8 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
         ) {
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
-            $ccn = 0;
+            $ccn = 1;
+            $wmc = 0;
             $ccnByMethod = [0]; // default maxMethodCcn if no methods are available
 
             foreach ($node->stmts as $stmt) {
@@ -106,11 +107,13 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
 
                     $methodCcn = $cb($stmt) + 1; // each method by default is CCN 1 even if it's empty
 
-                    $ccn += $methodCcn;
+                    $wmc += $methodCcn;
+                    $ccn += $methodCcn - 1;
                     $ccnByMethod[] = $methodCcn;
                 }
             }
 
+            $class->set('wmc', $wmc);
             $class->set('ccn', $ccn);
             $class->set('ccnMethodMax', max($ccnByMethod));
         }

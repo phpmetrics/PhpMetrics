@@ -11,8 +11,8 @@
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label"><a href="loc.html">Lines of code</a></div>
-                <?php echo $this->getTrend('sum', 'loc'); ?>
                 <div class="number"><?php echo $sum->loc; ?></div>
+                <?php echo $this->getTrend('sum', 'loc'); ?>
             </div>
         </div>
         <div class="column">
