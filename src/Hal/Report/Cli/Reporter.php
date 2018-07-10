@@ -87,6 +87,7 @@ Package
 
 Complexity
     Average Cyclomatic complexity by class      {$avg->ccn}
+    Average Weighted method count by class      {$avg->wmc}
     Average Relative system complexity          {$avg->relativeSystemComplexity}
     Average Difficulty                          {$avg->difficulty}
     

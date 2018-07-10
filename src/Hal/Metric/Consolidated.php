@@ -74,6 +74,7 @@ class Consolidated
             'nbMethods' => 0,
         ];
         $avg = (object)[
+            'wmc' => [],
             'ccn' => [],
             'bugs' => [],
             'kanDefect' => [],
