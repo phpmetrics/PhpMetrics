@@ -22,7 +22,7 @@ PhpMetrics provides metrics about PHP project and classes, with beautiful and re
 ## Quick start
 
     composer require phpmetrics/phpmetrics
-    php ./vendor/bin/phpmetrics --report-html=myreport .
+    ./vendor/bin/phpmetrics --report-html=myreport .
     
 Then open the generated `./myreport/index.html` file in your browser. 
 
