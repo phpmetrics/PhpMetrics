@@ -42,5 +42,8 @@
     },
     "bin": [
         "bin/phpmetrics"
-    ]
+    ],
+    "config": {
+        "sort-packages": true
+    }
 }
