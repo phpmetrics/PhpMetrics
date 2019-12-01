@@ -5,6 +5,10 @@ test:
 	./vendor/bin/phpunit -c phpunit.xml.dist
 
 # Codesniffer fix
+phpcs:
+	./vendor/bin/phpcs src/ tests/ --extensions=php -n
+
+# Codesniffer fix
 phpcbf:
 	./vendor/bin/phpcbf src/ tests/ --extensions=php -n
 
