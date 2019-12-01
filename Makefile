@@ -4,7 +4,7 @@ include artifacts/Makefile
 test:
 	./vendor/bin/phpunit -c phpunit.xml.dist
 
-# Codesniffer fix
+# Codesniffer check
 phpcs:
 	./vendor/bin/phpcs src/ tests/ --extensions=php -n
 
