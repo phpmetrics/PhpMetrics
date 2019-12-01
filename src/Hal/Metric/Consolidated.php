@@ -107,8 +107,8 @@ class Consolidated
         $sum->nbPackages = count($packages);
 
         foreach ($avg as &$a) {
-            if (sizeof($a) > 0) {
-                $a = round(array_sum($a) / sizeof($a), 2);
+            if (count($a) > 0) {
+                $a = round(array_sum($a) / count($a), 2);
             } else {
                 $a = 0;
             }

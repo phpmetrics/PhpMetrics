@@ -68,7 +68,7 @@ class Finder
      */
     public function fetch(array $paths)
     {
-        $files = array();
+        $files = [];
         foreach ($paths as $path) {
             if (is_dir($path)) {
                 $path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;

@@ -46,7 +46,7 @@ class GitChanges
             $bin = 'git';
         }
 
-        if (sizeof($this->files) == 0) {
+        if (count($this->files) == 0) {
             return;
         }
 

@@ -34,7 +34,7 @@ class Violations implements \IteratorAggregate, \Countable
      */
     public function count()
     {
-        return sizeof($this->data);
+        return count($this->data);
     }
 
     /**

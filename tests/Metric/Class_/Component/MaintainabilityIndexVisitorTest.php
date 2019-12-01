@@ -54,11 +54,11 @@ EOT;
     }
 
     public function provideValues() {
-        return array(
+        return [
             //    CC    LLOC    CLOC        Volume      MIwoC      mi          commentWeight
-            array(5     , 50    , 20       , 10         , 55.26,   92.1,      36.83 ),
-            array(11    , 45   , 26       , 1777.49    , 39.7,     80.01,      40.3 )
-        );
+            [5     , 50    , 20       , 10         , 55.26,   92.1,      36.83 ],
+            [11    , 45   , 26       , 1777.49    , 39.7,     80.01,      40.3 ]
+        ];
     }
 
 }

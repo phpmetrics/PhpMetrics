@@ -57,7 +57,7 @@ class Reporter
 
         foreach ($metrics->all() as $metric) {
             $violations = $metric->get('violations');
-            if (sizeof($violations) == 0) {
+            if (count($violations) == 0) {
                 continue;
             }
 

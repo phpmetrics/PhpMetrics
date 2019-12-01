@@ -19,7 +19,7 @@ foreach ($classes as $class) {
 
 // 2. percentile map
 $json = [];
-if(sizeof($array) > 1) {
+if(count($array) > 1) {
     $range = range(0.5, 1, .05);
     foreach ($range as $percentile) {
         $json[] = (object)[

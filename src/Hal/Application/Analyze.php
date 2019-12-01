@@ -96,7 +96,7 @@ class Analyze
         $traverser->addVisitor(new PackageCollectingVisitor($metrics));
 
         // create a new progress bar (50 units)
-        $progress = new ProgressBar($this->output, sizeof($files));
+        $progress = new ProgressBar($this->output, count($files));
         $progress->start();
 
         foreach ($files as $file) {

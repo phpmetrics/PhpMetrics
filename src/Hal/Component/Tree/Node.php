@@ -25,7 +25,7 @@ class Node
     /**
      * @var Edge[]
      */
-    private $edges = array();
+    private $edges = [];
 
     /**
      * @var bool

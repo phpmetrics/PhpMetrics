@@ -37,7 +37,7 @@ class Blob implements Violation
             $suspect++;
         }
 
-        if (sizeof($metric->get('externals')) >= 8) {
+        if (count($metric->get('externals')) >= 8) {
             $suspect++;
         }
 

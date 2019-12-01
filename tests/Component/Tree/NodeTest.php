@@ -19,7 +19,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
         $node->setData('value1');
 
         $this->assertEquals('value1', $node->getData());
-        $this->assertEquals(array('B' => $to), $node->getAdjacents());
+        $this->assertEquals(['B' => $to], $node->getAdjacents());
         $this->assertEquals('A', $node->getKey());
 
     }

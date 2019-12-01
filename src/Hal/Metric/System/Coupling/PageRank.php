@@ -44,8 +44,8 @@ class PageRank
      */
     private function calculatePageRank($linkGraph, $dampingFactor = 0.15)
     {
-        $pageRank = array();
-        $tempRank = array();
+        $pageRank = [];
+        $tempRank = [];
         $nodeCount = count($linkGraph);
 
         // initialise the PR as 1/n
