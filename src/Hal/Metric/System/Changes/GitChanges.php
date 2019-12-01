@@ -104,7 +104,7 @@ class GitChanges
                 list(, $timestamp, $author) = $matches;
                 $date = (new \DateTime())->setTimestamp($timestamp)->format($dateFormat);
 
-                if (is_null($firstCommitDate)) {
+                if ($firstCommitDate === null) {
                     $firstCommitDate = $timestamp;
                 }
 
