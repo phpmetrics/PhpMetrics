@@ -8,9 +8,11 @@ use Hal\Component\Tree\Node;
 /**
  * @group tree
  */
-class NodeTest extends \PHPUnit_Framework_TestCase {
+class NodeTest extends \PHPUnit_Framework_TestCase
+{
 
-    public function testICanWorkWithNode() {
+    public function testICanWorkWithNode()
+    {
 
         $node = new Node('A');
         $to = new Node('B');
@@ -21,7 +23,5 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('value1', $node->getData());
         $this->assertEquals(['B' => $to], $node->getAdjacents());
         $this->assertEquals('A', $node->getKey());
-
     }
-
 }

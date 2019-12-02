@@ -10,7 +10,6 @@ use Hal\Component\Issue\Issuer;
 use Hal\Report;
 use Hal\Violation\ViolationParser;
 
-
 class Application
 {
 
@@ -30,7 +29,6 @@ class Application
         try {
             (new Validator())->validate($config);
         } catch (ConfigException $e) {
-
             if ($config->has('help')) {
                 $output->writeln((new Validator())->help());
                 exit(0);
@@ -57,7 +55,7 @@ class Application
         // analyze
         try {
             $metrics = (new Analyze($config, $output, $issuer))->run($files);
-        }catch(ConfigException $e) {
+        } catch (ConfigException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             exit(1);
         }
@@ -76,6 +74,5 @@ class Application
         $output->writeln('');
         $output->writeln('Done');
         $output->writeln('');
-
     }
 }

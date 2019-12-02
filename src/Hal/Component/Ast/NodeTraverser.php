@@ -28,8 +28,8 @@ class Traverser
 
     public function __construct(Mother $traverser, $stopCondition = null)
     {
-        if(null === $stopCondition) {
-            $stopCondition = function($node) {
+        if (null === $stopCondition) {
+            $stopCondition = function ($node) {
                 if ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
                     return false;
                 }
@@ -47,7 +47,8 @@ class Traverser
      * @param array|NodeVisitor[] $visitors
      * @return array
      */
-    public function traverseArray(array $nodes, array $visitors) {
+    public function traverseArray(array $nodes, array $visitors)
+    {
         $doNodes = [];
 
         foreach ($nodes as $i => &$node) {

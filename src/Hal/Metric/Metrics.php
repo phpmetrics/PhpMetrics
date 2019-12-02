@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric;
 
 /**
@@ -52,7 +53,7 @@ class Metrics implements \JsonSerializable
     /**
      * @inheritdoc
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return $this->all();
     }

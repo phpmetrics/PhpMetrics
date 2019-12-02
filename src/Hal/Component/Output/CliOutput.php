@@ -67,4 +67,3 @@ class CliOutput implements Output
         return $this;
     }
 }
-

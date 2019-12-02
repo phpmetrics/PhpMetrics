@@ -53,7 +53,6 @@ class ExternalsVisitor extends NodeVisitorAbstract
             || $node instanceof Stmt\Interface_
             || $node instanceof Stmt\Trait_
         ) {
-
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
             $parents = [];
             $nodeClass = $node;
@@ -137,4 +136,3 @@ class ExternalsVisitor extends NodeVisitorAbstract
         }
     }
 }
-

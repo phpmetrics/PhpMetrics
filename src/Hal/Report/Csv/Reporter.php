@@ -52,7 +52,6 @@ class Reporter
         fputcsv($hwnd, $availables);
 
         foreach ($metrics->all() as $metric) {
-
             if (!$metric instanceof ClassMetric) {
                 continue;
             }
@@ -69,6 +68,5 @@ class Reporter
         }
 
         fclose($hwnd);
-
     }
 }

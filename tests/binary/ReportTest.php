@@ -31,8 +31,12 @@ class BinReportTest extends \PHPUnit_Framework_TestCase
 
     public function testICanProvideMultipleDirectoriesToParse()
     {
-        $command = sprintf('%s --exclude="" %s,%s  2>&1', $this->phar, __DIR__ . '/examples/1',
-            __DIR__ . '/examples/2');
+        $command = sprintf(
+            '%s --exclude="" %s,%s  2>&1',
+            $this->phar,
+            __DIR__ . '/examples/1',
+            __DIR__ . '/examples/2'
+        );
         $r = shell_exec($command);
         $this->assertContains('Object oriented programming', $r);
         $this->assertContains('LOC', $r);
@@ -45,8 +49,13 @@ class BinReportTest extends \PHPUnit_Framework_TestCase
         if (file_exists($destination)) {
             unlink($destination);
         }
-        $command = sprintf('%s --report-csv="%s" %s,%s  2>&1', $this->phar, $destination, __DIR__ . '/examples/1',
-            __DIR__ . '/examples/2');
+        $command = sprintf(
+            '%s --report-csv="%s" %s,%s  2>&1',
+            $this->phar,
+            $destination,
+            __DIR__ . '/examples/1',
+            __DIR__ . '/examples/2'
+        );
         shell_exec($command);
         $this->assertFileExists($destination);
     }
@@ -57,8 +66,13 @@ class BinReportTest extends \PHPUnit_Framework_TestCase
         if (file_exists($destination)) {
             unlink($destination);
         }
-        $command = sprintf('%s --report-json="%s" %s,%s  2>&1', $this->phar, $destination, __DIR__ . '/examples/1',
-            __DIR__ . '/examples/2');
+        $command = sprintf(
+            '%s --report-json="%s" %s,%s  2>&1',
+            $this->phar,
+            $destination,
+            __DIR__ . '/examples/1',
+            __DIR__ . '/examples/2'
+        );
         shell_exec($command);
         $this->assertFileExists($destination);
         $this->assertJson(file_get_contents($destination));

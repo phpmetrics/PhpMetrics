@@ -30,7 +30,6 @@ use Hal\Metric\System\UnitTesting\UnitTesting;
 use PhpParser\Error;
 use PhpParser\ParserFactory;
 
-
 /**
  * Class Analyze
  * @package Hal\Application
@@ -75,7 +74,7 @@ class Analyze
         $metrics = new Metrics();
 
         // traverse all
-        $whenToStop = function() {
+        $whenToStop = function () {
             return true;
         };
 

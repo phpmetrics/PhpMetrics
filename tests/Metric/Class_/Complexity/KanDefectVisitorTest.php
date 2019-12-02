@@ -13,7 +13,8 @@ use PhpParser\ParserFactory;
  * @group kan
  * @group defect
  */
-class KanDefectVisitorTest extends \PHPUnit_Framework_TestCase {
+class KanDefectVisitorTest extends \PHPUnit_Framework_TestCase
+{
 
 
     /**
@@ -42,5 +43,4 @@ class KanDefectVisitorTest extends \PHPUnit_Framework_TestCase {
             [ __DIR__.'/../../examples/kan1.php', 'A', .89],
         ];
     }
-
 }

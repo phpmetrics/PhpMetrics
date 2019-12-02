@@ -21,7 +21,6 @@ class IssuerTest extends \PHPUnit_Framework_TestCase
         try {
             echo new \stdClass();
         } catch (\Exception $e) {
-
         }
 
         $this->assertContains('Object of class stdClass could not be converted to string', $issuer->log);
@@ -54,7 +53,6 @@ EOT;
         try {
             echo new \stdClass();
         } catch (\Exception $e) {
-
         }
 
         $issuer->disable();

@@ -135,7 +135,6 @@ class Graph implements \Countable
     {
         $roots = [];
         foreach ($this->all() as $node) {
-
             $isRoot = true;
 
             foreach ($node->getEdges() as $edge) {

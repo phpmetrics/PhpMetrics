@@ -12,7 +12,8 @@ use PhpParser\ParserFactory;
  * @group externals
  * @group coupling
  */
-class ExternalsVisitorTest extends \PHPUnit_Framework_TestCase {
+class ExternalsVisitorTest extends \PHPUnit_Framework_TestCase
+{
 
 
     /**
@@ -77,5 +78,4 @@ class ExternalsVisitorTest extends \PHPUnit_Framework_TestCase {
             [ __DIR__.'/../../examples/annotations1.php', 'C\\A', ['A\\Route', 'B\\Json']],
         ];
     }
-
 }
