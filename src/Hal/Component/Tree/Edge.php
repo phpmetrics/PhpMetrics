@@ -27,7 +27,6 @@ class Edge
     public $cyclic = false;
 
     /**
-     * Edge constructor.
      * @param Node $from
      * @param Node $to
      */

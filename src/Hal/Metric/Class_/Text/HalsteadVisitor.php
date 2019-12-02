@@ -19,7 +19,6 @@ use PhpParser\NodeVisitorAbstract;
  *      These metrics are therefore computed statically from the code."
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
- * Class HalsteadVisitor
  * @package Hal\Metric\Class_\Coupling
  */
 class HalsteadVisitor extends NodeVisitorAbstract
@@ -31,7 +30,6 @@ class HalsteadVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)

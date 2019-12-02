@@ -6,7 +6,6 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 
 /**
- * Class PageRank
  * @package Hal\Metric\System\Coupling
  */
 class PageRank

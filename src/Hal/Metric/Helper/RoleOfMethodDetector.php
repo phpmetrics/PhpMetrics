@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 
 /**
- * Class RoleOfMethodDetector
  * @package Hal\Metric\Helper
  */
 class RoleOfMethodDetector
