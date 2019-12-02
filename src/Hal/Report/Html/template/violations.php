@@ -56,7 +56,7 @@ $map = [
                     </thead>
                     <tbody>
                     <?php foreach ($classes as $class) {
-                        if (sizeof($class['violations']) > 0) {
+                        if (count($class['violations']) > 0) {
                             $currentId = 'bloc-' . uniqid('', true);
                             ?>
 
@@ -107,7 +107,7 @@ $map = [
                     </thead>
                     <tbody>
                     <?php foreach ($packages as $package) {
-                        if (sizeof($package['violations']) > 0) {
+                        if (count($package['violations']) > 0) {
                             $currentId = 'bloc-' . uniqid();
                             ?>
 

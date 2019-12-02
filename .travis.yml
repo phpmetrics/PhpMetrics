@@ -39,6 +39,7 @@ before_script:
 
 script:
   - make test
+  - make phpcs
   - docker run --rm test_phpmetrics
 
 before_deploy:

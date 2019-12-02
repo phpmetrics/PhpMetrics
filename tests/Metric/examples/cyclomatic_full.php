@@ -40,7 +40,7 @@ class Loops // ccn2: 5
             do {
             } while (false);
         }
-        foreach (array() as $each) {
+        foreach ([] as $each) {
             for ($i = 0; $i < 0; ++$i) {
             }
         }

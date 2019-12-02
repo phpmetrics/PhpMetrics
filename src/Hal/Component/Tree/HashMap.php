@@ -14,7 +14,7 @@ class HashMap implements \Countable, \IteratorAggregate
     /**
      * @var array
      */
-    private $nodes = array();
+    private $nodes = [];
 
     /**
      * @param Node $node
@@ -49,7 +49,7 @@ class HashMap implements \Countable, \IteratorAggregate
      */
     public function count()
     {
-        return sizeof($this->nodes);
+        return count($this->nodes);
     }
 
     /**

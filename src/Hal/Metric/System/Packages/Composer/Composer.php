@@ -45,7 +45,7 @@ class Composer
 
             $package = $packagist->get($requirement);
 
-            $packages[$requirement] = (object)array(
+            $packages[$requirement] = (object)[
                 'name' => $requirement,
                 'required' => $version,
                 'installed' => isset($rawInstalled[$requirement]) ? $rawInstalled[$requirement] : null,
@@ -53,7 +53,7 @@ class Composer
                 'license' => $package->license,
                 'homepage' => $package->homepage,
                 'zip' => $package->zip,
-            );
+            ];
         }
 
         $projectMetric->set('packages', $packages);

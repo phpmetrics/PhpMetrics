@@ -105,10 +105,10 @@ class HalsteadVisitor extends NodeVisitorAbstract
             $uniqueOperators = array_map('unserialize', array_unique(array_map('serialize', $operators)));
             $uniqueOperands = array_map('unserialize', array_unique(array_map('serialize', $operands)));
 
-            $n1 = sizeof($uniqueOperators, COUNT_NORMAL);
-            $n2 = sizeof($uniqueOperands, COUNT_NORMAL);
-            $N1 = sizeof($operators, COUNT_NORMAL);
-            $N2 = sizeof($operands, COUNT_NORMAL);
+            $n1 = count($uniqueOperators, COUNT_NORMAL);
+            $n2 = count($uniqueOperands, COUNT_NORMAL);
+            $N1 = count($operators, COUNT_NORMAL);
+            $N2 = count($operands, COUNT_NORMAL);
 
             if (($n2 == 0) || ($N2 == 0)) {
                 // files without operators

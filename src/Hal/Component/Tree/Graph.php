@@ -14,12 +14,12 @@ class Graph implements \Countable
     /**
      * @var Node[]
      */
-    private $datas = array();
+    private $datas = [];
 
     /**
      * @var Edge[]
      */
-    private $edges = array();
+    private $edges = [];
 
     /**
      * @param Node $node
@@ -102,7 +102,7 @@ class Graph implements \Countable
      */
     public function count()
     {
-        return sizeof($this->datas);
+        return count($this->datas);
     }
 
     /**
