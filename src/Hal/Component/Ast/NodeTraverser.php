@@ -23,7 +23,7 @@ class Traverser
 {
     protected $stopCondition;
 
-    /** @var NodeTraverser */
+    /** @var Mother */
     private $traverser;
 
     public function __construct(Mother $traverser, $stopCondition = null)
@@ -44,7 +44,7 @@ class Traverser
 
     /**
      * @param array $nodes
-     * @param array|NodeVisitor[] $visitors
+     * @param NodeVisitor[] $visitors
      * @return array
      */
     public function traverseArray(array $nodes, array $visitors) {

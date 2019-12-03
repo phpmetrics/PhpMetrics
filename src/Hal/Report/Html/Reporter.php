@@ -4,7 +4,6 @@ namespace Hal\Report\Html;
 use Hal\Application\Config\Config;
 use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
-use Hal\Metric\Consolided;
 use Hal\Metric\Metrics;
 
 class Reporter
@@ -21,7 +20,6 @@ class Reporter
     private $output;
 
     /**
-     * Reporter constructor.
      * @param Config $config
      * @param Output $output
      */

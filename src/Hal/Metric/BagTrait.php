@@ -11,7 +11,6 @@ trait BagTrait
     private $bag = [];
 
     /**
-     * ClassMetric constructor.
      * @param string $name
      */
     public function __construct($name)

@@ -14,7 +14,7 @@ class ConfigFileReaderJson implements ConfigFileReaderInterface
     private $filename;
 
     /**
-     * ConfigFileReaderJson constructor.
+     * @param string $filename
      */
     public function __construct($filename)
     {

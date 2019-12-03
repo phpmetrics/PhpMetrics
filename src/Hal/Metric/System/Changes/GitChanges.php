@@ -21,7 +21,6 @@ class GitChanges
     private $config;
 
     /**
-     * GitChanges constructor.
      * @param array $files
      */
     public function __construct(Config $config, array $files)

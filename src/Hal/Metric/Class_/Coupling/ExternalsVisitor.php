@@ -10,7 +10,6 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * List externals dependencies
  *
- * Class ExternalsVisitor
  * @package Hal\Metric\Class_\Coupling
  */
 class ExternalsVisitor extends NodeVisitorAbstract
@@ -27,7 +26,6 @@ class ExternalsVisitor extends NodeVisitorAbstract
     private $uses = [];
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)

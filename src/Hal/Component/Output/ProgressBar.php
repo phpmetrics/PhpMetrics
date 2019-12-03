@@ -9,16 +9,7 @@
 
 namespace Hal\Component\Output;
 
-    /**
-     * Class CliOutput
-     * @package Hal\Component\Output
-     */
-    /**
-     * Class CliOutput
-     * @package Hal\Component\Issue
-     */
 /**
- * Class ProgressBar
  * @package Hal\Component\Output
  */
 class ProgressBar
@@ -40,7 +31,6 @@ class ProgressBar
     private $current = 0;
 
     /**
-     * ProgressBar constructor.
      * @param Output $output
      * @param int $max
      */

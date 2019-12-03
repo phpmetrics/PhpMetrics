@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Class MyVisitor
- */
 class MyVisitor extends \PhpParser\NodeVisitorAbstract
 {
 
@@ -12,7 +9,6 @@ class MyVisitor extends \PhpParser\NodeVisitorAbstract
     private $callback;
 
     /**
-     * MyVisitor constructor.
      * @param $callback
      */
     public function __construct($callback)
