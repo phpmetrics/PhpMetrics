@@ -4,6 +4,14 @@ include artifacts/Makefile
 test:
 	./vendor/bin/phpunit -c phpunit.xml.dist
 
+# Codesniffer check
+phpcs:
+	./vendor/bin/phpcs src/ tests/ --extensions=php -n
+
+# Codesniffer fix
+phpcbf:
+	./vendor/bin/phpcbf src/ tests/ --extensions=php -n
+
 # Publish new release. Usage:
 #   make tag VERSION=(major|minor|patch)
 # You need to install https://github.com/flazz/semver/ before

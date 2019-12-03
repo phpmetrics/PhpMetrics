@@ -43,7 +43,7 @@ class SizeOfTree
 
         $edges = $node->getEdges();
 
-        if (0 === sizeof($edges)) {
+        if (0 === count($edges)) {
             return 0;
         }
 
@@ -75,7 +75,7 @@ class SizeOfTree
 
         $edges = $node->getEdges();
 
-        if (0 === sizeof($edges)) {
+        if (0 === count($edges)) {
             return 0;
         }
 
@@ -119,7 +119,7 @@ class SizeOfTree
         foreach ($this->graph->getRootNodes() as $node) {
             array_push($ns, $this->getLongestBranch($node));
         }
-        return round(array_sum($ns) / max(1, sizeof($ns)), 2);
+        return round(array_sum($ns) / max(1, count($ns)), 2);
     }
 
     /**

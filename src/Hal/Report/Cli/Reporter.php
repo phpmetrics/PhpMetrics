@@ -116,7 +116,7 @@ EOT;
             foreach ($commits as $file => $nb) {
                 $out .= sprintf("\n    %d    %s", $nb, $file);
             }
-            if (0 === sizeof($commits)) {
+            if (0 === count($commits)) {
                 $out .= "\n    NA";
             }
             $out .= "\n";

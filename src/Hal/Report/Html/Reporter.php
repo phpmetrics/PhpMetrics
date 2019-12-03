@@ -49,7 +49,7 @@ class Reporter
             'sum' => $consolidated->getSum()
         ];
         $files = glob($logDir . '/js/history-*.json');
-        $next = sizeof($files) + 1;
+        $next = count($files) + 1;
         $history = [];
         natsort($files);
         foreach ($files as $filename) {

@@ -48,7 +48,7 @@ class Traverser
      * @return array
      */
     public function traverseArray(array $nodes, array $visitors) {
-        $doNodes = array();
+        $doNodes = [];
 
         foreach ($nodes as $i => &$node) {
             if (is_array($node)) {
@@ -73,10 +73,10 @@ class Traverser
                     $return = $visitor->leaveNode($node);
 
                     if (Mother::REMOVE_NODE === $return) {
-                        $doNodes[] = array($i, array());
+                        $doNodes[] = [$i, []];
                         break;
                     } elseif (is_array($return)) {
-                        $doNodes[] = array($i, $return);
+                        $doNodes[] = [$i, $return];
                         break;
                     } elseif (null !== $return) {
                         $node = $return;

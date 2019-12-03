@@ -75,7 +75,7 @@ function iterate_over_node($node, $callback)
     $myVisitor = new MyVisitor($callback);
     $traverser = new \PhpParser\NodeTraverser();
     $traverser->addVisitor($myVisitor);
-    $traverser->traverse(array($node));
+    $traverser->traverse([$node]);
     return;
 }
 
