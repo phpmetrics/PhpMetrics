@@ -10,7 +10,7 @@ use PhpParser\ParserFactory;
  * @group mi
  * @group complex
  */
-class MaintainabilityIndexVisitorTest extends \PHPUnit_Framework_TestCase {
+class MaintainabilityIndexVisitorTest extends \PHPUnit\Framework\TestCase {
 
 
     /**

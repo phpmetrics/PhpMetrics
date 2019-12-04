@@ -2,7 +2,7 @@
 
 use Hal\Application\Config\File\ConfigFileReaderInterface;
 
-class ConfigFileReaderTest extends \PHPUnit_Framework_TestCase
+class ConfigFileReaderTest extends \PHPUnit\Framework\TestCase
 {
     public function testJsonConfigFile()
     {

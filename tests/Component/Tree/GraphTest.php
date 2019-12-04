@@ -10,7 +10,7 @@ use Hal\Component\Tree\Node;
 /**
  * @group tree
  */
-class GraphTest extends \PHPUnit_Framework_TestCase {
+class GraphTest extends \PHPUnit\Framework\TestCase {
 
     public function testICanAddEdge() {
         $graph = new Graph();

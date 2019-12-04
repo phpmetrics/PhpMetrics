@@ -9,7 +9,7 @@ use Hal\Component\Tree\Node;
 /**
  * @group tree
  */
-class HashMapTest extends \PHPUnit_Framework_TestCase {
+class HashMapTest extends \PHPUnit\Framework\TestCase {
 
     public function testICanWorkWithHashMap() {
 

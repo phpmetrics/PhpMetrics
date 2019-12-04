@@ -10,7 +10,7 @@ use PhpParser\ParserFactory;
 /**
  * @group class
  */
-class ClassEnumVisitorTest extends \PHPUnit_Framework_TestCase
+class ClassEnumVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamples

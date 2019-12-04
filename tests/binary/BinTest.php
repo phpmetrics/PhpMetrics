@@ -4,7 +4,7 @@ namespace Test\Binary;
 /**
  * @group binary
  */
-class BinFileTest extends \PHPUnit_Framework_TestCase
+class BinFileTest extends \PHPUnit\Framework\TestCase
 {
     private $phar;
 

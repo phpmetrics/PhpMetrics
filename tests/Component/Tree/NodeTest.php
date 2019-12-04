@@ -8,7 +8,7 @@ use Hal\Component\Tree\Node;
 /**
  * @group tree
  */
-class NodeTest extends \PHPUnit_Framework_TestCase {
+class NodeTest extends \PHPUnit\Framework\TestCase {
 
     public function testICanWorkWithNode() {
 

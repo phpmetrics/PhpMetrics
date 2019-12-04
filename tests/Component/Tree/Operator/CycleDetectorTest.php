@@ -11,7 +11,7 @@ use Hal\Component\Tree\Operator\CycleDetector;
 /**
  * @group tree
  */
-class CycleDetectorTest extends \PHPUnit_Framework_TestCase {
+class CycleDetectorTest extends \PHPUnit\Framework\TestCase {
 
     public function testCycleIsDetected()
     {

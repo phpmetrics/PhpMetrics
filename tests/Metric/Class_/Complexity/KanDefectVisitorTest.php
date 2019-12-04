@@ -13,7 +13,7 @@ use PhpParser\ParserFactory;
  * @group kan
  * @group defect
  */
-class KanDefectVisitorTest extends \PHPUnit_Framework_TestCase {
+class KanDefectVisitorTest extends \PHPUnit\Framework\TestCase {
 
 
     /**

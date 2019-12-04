@@ -12,7 +12,7 @@ use PhpParser\ParserFactory;
  * @group externals
  * @group coupling
  */
-class ExternalsVisitorTest extends \PHPUnit_Framework_TestCase {
+class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase {
 
 
     /**

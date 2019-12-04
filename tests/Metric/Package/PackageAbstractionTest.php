@@ -7,13 +7,13 @@ use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageAbstraction;
 use Hal\Metric\PackageMetric;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group metric
  * @group package
  */
-class PackageAbstractionTest extends PHPUnit_Framework_TestCase
+class PackageAbstractionTest extends TestCase
 {
     public function testItCalculatesTheAbstractionOfEachPackage()
     {

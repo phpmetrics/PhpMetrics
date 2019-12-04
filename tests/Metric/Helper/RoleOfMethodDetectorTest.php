@@ -11,7 +11,7 @@ use PhpParser\ParserFactory;
  * @group helper
  * @group parsing
  */
-class RoleOfMethodDetectorTest extends \PHPUnit_Framework_TestCase
+class RoleOfMethodDetectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamples

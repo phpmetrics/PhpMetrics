@@ -9,7 +9,7 @@ use Hal\Component\Tree\Node;
 /**
  * @group tree
  */
-class GraphDeduplicatedTest extends \PHPUnit_Framework_TestCase
+class GraphDeduplicatedTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testEdgeDeduplication()

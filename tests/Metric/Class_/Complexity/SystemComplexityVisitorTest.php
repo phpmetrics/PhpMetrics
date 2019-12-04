@@ -12,7 +12,7 @@ use PhpParser\ParserFactory;
  * @group complexity
  * @group defect
  */
-class SystemComplexityVisitorTest extends \PHPUnit_Framework_TestCase
+class SystemComplexityVisitorTest extends \PHPUnit\Framework\TestCase
 {
 
 

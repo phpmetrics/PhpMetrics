@@ -6,13 +6,13 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageDependencies;
 use Hal\Metric\PackageMetric;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 
 /**
  * @group metric
  * @group package
  */
-class PackageDependenciesTest extends PHPUnit_Framework_TestCase
+class PackageDependenciesTest extends TestCase
 {
     public function testItCollectsAllIncomingAndOutgoingPackageDependencies()
     {

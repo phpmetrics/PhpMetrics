@@ -10,7 +10,7 @@ use Hal\Component\Tree\Operator\SizeOfTree;
 /**
  * @group tree
  */
-class SizeOfTreeTest extends \PHPUnit_Framework_TestCase
+class SizeOfTreeTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
