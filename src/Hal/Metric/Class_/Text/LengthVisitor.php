@@ -9,7 +9,6 @@ use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter;
 
 /**
- * Class LengthVisitor
  * @package Hal\Metric\Class_\Text
  */
 class LengthVisitor extends NodeVisitorAbstract
@@ -21,7 +20,6 @@ class LengthVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)
@@ -46,16 +44,16 @@ class LengthVisitor extends NodeVisitorAbstract
 
 
             $prettyPrinter = new PrettyPrinter\Standard();
-            $code = $prettyPrinter->prettyPrintFile(array($node));
+            $code = $prettyPrinter->prettyPrintFile([$node]);
 
             // count all lines
-            $loc = sizeof(preg_split('/\r\n|\r|\n/', $code)) - 1;
+            $loc = count(preg_split('/\r\n|\r|\n/', $code)) - 1;
 
             // count and remove multi lines comments
             $cloc = 0;
             if (preg_match_all('!/\*.*?\*/!s', $code, $matches)) {
                 foreach ($matches[0] as $match) {
-                    $cloc += max(1, sizeof(preg_split('/\r\n|\r|\n/', $match)));
+                    $cloc += max(1, count(preg_split('/\r\n|\r|\n/', $match)));
                 }
             }
             $code = preg_replace('!/\*.*?\*/!s', '', $code);
@@ -70,7 +68,7 @@ class LengthVisitor extends NodeVisitorAbstract
 
             // count and remove empty lines
             $code = trim(preg_replace('!(^\s*[\r\n])!sm', '', $code));
-            $lloc = sizeof(preg_split('/\r\n|\r|\n/', $code));
+            $lloc = count(preg_split('/\r\n|\r|\n/', $code));
 
             // save result
             $classOrFunction

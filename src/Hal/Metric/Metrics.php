@@ -2,7 +2,6 @@
 namespace Hal\Metric;
 
 /**
- * Class Metrics
  * @package Hal\Metric
  */
 class Metrics implements \JsonSerializable

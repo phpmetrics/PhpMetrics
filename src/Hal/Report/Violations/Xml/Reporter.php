@@ -3,7 +3,6 @@ namespace Hal\Report\Violations\Xml;
 
 use Hal\Application\Config\Config;
 use Hal\Component\Output\Output;
-use Hal\Metric\Consolided;
 use Hal\Metric\Metrics;
 use Hal\Violation\Violation;
 
@@ -21,7 +20,6 @@ class Reporter
     private $output;
 
     /**
-     * Reporter constructor.
      * @param Config $config
      * @param Output $output
      */
@@ -57,7 +55,7 @@ class Reporter
 
         foreach ($metrics->all() as $metric) {
             $violations = $metric->get('violations');
-            if (sizeof($violations) == 0) {
+            if (count($violations) == 0) {
                 continue;
             }
 

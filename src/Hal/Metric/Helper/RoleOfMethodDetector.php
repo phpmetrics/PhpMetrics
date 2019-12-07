@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 
 /**
- * Class RoleOfMethodDetector
  * @package Hal\Metric\Helper
  */
 class RoleOfMethodDetector
@@ -101,7 +100,7 @@ class RoleOfMethodDetector
 
             // avoid fluent interface
             if ($node instanceof Return_ && $node->expr instanceof Variable && $node->expr->name === 'this') {
-                unset($fingerprintOfMethod[sizeof($fingerprintOfMethod) - 1]);
+                unset($fingerprintOfMethod[count($fingerprintOfMethod) - 1]);
                 return;
             }
 

@@ -168,7 +168,7 @@
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">Licences of Composer dependencies</div>
-                <?php if(0 === sizeof($packages)) { ?>
+                <?php if(0 === count($packages)) { ?>
                     <div>No composer.json file found</div>
                 <?php } ?>
                 <div id="svg-licenses"></div>

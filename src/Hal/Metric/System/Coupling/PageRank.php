@@ -6,7 +6,6 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 
 /**
- * Class PageRank
  * @package Hal\Metric\System\Coupling
  */
 class PageRank
@@ -44,8 +43,8 @@ class PageRank
      */
     private function calculatePageRank($linkGraph, $dampingFactor = 0.15)
     {
-        $pageRank = array();
-        $tempRank = array();
+        $pageRank = [];
+        $tempRank = [];
         $nodeCount = count($linkGraph);
 
         // initialise the PR as 1/n

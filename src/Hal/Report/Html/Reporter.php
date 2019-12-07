@@ -4,7 +4,6 @@ namespace Hal\Report\Html;
 use Hal\Application\Config\Config;
 use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
-use Hal\Metric\Consolided;
 use Hal\Metric\Metrics;
 
 class Reporter
@@ -21,7 +20,6 @@ class Reporter
     private $output;
 
     /**
-     * Reporter constructor.
      * @param Config $config
      * @param Output $output
      */
@@ -49,7 +47,7 @@ class Reporter
             'sum' => $consolidated->getSum()
         ];
         $files = glob($logDir . '/js/history-*.json');
-        $next = sizeof($files) + 1;
+        $next = count($files) + 1;
         $history = [];
         natsort($files);
         foreach ($files as $filename) {

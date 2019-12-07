@@ -21,7 +21,6 @@ class GitChanges
     private $config;
 
     /**
-     * GitChanges constructor.
      * @param array $files
      */
     public function __construct(Config $config, array $files)
@@ -46,7 +45,7 @@ class GitChanges
             $bin = 'git';
         }
 
-        if (sizeof($this->files) == 0) {
+        if (count($this->files) == 0) {
             return;
         }
 
@@ -104,7 +103,7 @@ class GitChanges
                 list(, $timestamp, $author) = $matches;
                 $date = (new \DateTime())->setTimestamp($timestamp)->format($dateFormat);
 
-                if (is_null($firstCommitDate)) {
+                if ($firstCommitDate === null) {
                     $firstCommitDate = $timestamp;
                 }
 

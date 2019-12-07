@@ -3,7 +3,6 @@ namespace Hal\Violation;
 
 
 /**
- * Class Violations
  * @package Hal\Violation
  */
 class Violations implements \IteratorAggregate, \Countable
@@ -34,7 +33,7 @@ class Violations implements \IteratorAggregate, \Countable
      */
     public function count()
     {
-        return sizeof($this->data);
+        return count($this->data);
     }
 
     /**

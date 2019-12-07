@@ -38,7 +38,7 @@ class B {
 
         }
 
-        foreach(array() as $foo) {
+        foreach([] as $foo) {
             if(false) {
                 continue;
             }

@@ -14,7 +14,7 @@ class ConfigFileReaderJson implements ConfigFileReaderInterface
     private $filename;
 
     /**
-     * ConfigFileReaderJson constructor.
+     * @param string $filename
      */
     public function __construct($filename)
     {
@@ -63,7 +63,7 @@ class ConfigFileReaderJson implements ConfigFileReaderInterface
             foreach (range(0, $iterator->getDepth()) as $depth) {
                 $keys[] = $iterator->getSubIterator($depth)->key();
             }
-            $result[join('-', $keys)] = $leafValue;
+            $result[implode('-', $keys)] = $leafValue;
         }
 
         return $result;

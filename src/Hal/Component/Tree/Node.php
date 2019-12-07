@@ -25,7 +25,7 @@ class Node
     /**
      * @var Edge[]
      */
-    private $edges = array();
+    private $edges = [];
 
     /**
      * @var bool
@@ -38,7 +38,6 @@ class Node
     public $cyclic = false;
 
     /**
-     * Node constructor.
      * @param $key
      * @param mixed $data
      */

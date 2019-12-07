@@ -2,12 +2,12 @@
 namespace Hal\Metric\System\Packages\Composer;
 
 use Hal\Application\Config\Config;
+use Hal\Application\Config\ConfigException;
 use Hal\Component\File\Finder;
 use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
 
 /**
- * Class Composer
  * @package Hal\Metric\System\Packages\Composer
  */
 class Composer
@@ -19,7 +19,6 @@ class Composer
     private $config;
 
     /**
-     * GitChanges constructor.
      * @param array $files
      */
     public function __construct(Config $config, array $files)
@@ -45,7 +44,7 @@ class Composer
 
             $package = $packagist->get($requirement);
 
-            $packages[$requirement] = (object)array(
+            $packages[$requirement] = (object)[
                 'name' => $requirement,
                 'required' => $version,
                 'installed' => isset($rawInstalled[$requirement]) ? $rawInstalled[$requirement] : null,
@@ -53,7 +52,7 @@ class Composer
                 'license' => $package->license,
                 'homepage' => $package->homepage,
                 'zip' => $package->zip,
-            );
+            ];
         }
 
         $projectMetric->set('packages', $packages);

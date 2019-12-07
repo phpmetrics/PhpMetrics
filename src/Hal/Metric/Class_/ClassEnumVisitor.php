@@ -18,7 +18,6 @@ class ClassEnumVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)
@@ -84,8 +83,8 @@ class ClassEnumVisitor extends NodeVisitorAbstract
             }
 
             $class->set('methods', $methods);
-            $class->set('nbMethodsIncludingGettersSetters', sizeof($methods) );
-            $class->set('nbMethods', sizeof($methods) - ($nbGetters + $nbSetters));
+            $class->set('nbMethodsIncludingGettersSetters', count($methods) );
+            $class->set('nbMethods', count($methods) - ($nbGetters + $nbSetters));
             $class->set('nbMethodsPrivate', $methodsPrivate);
             $class->set('nbMethodsPublic', $methodsPublic);
             $class->set('nbMethodsGetter', $nbGetters);
