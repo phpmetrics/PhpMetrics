@@ -14,8 +14,6 @@ use PhpParser\NodeTraverser as Mother;
 use PhpParser\NodeVisitor;
 
 /**
- * Custom Ast Traverser
- *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  * @internal
  */
@@ -23,13 +21,13 @@ class Traverser
 {
     protected $stopCondition;
 
-    /** @var NodeTraverser */
+    /** @var Mother */
     private $traverser;
 
     public function __construct(Mother $traverser, $stopCondition = null)
     {
-        if(null === $stopCondition) {
-            $stopCondition = function($node) {
+        if (null === $stopCondition) {
+            $stopCondition = function ($node) {
                 if ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
                     return false;
                 }
@@ -44,11 +42,12 @@ class Traverser
 
     /**
      * @param array $nodes
-     * @param array|NodeVisitor[] $visitors
+     * @param NodeVisitor[] $visitors
      * @return array
      */
-    public function traverseArray(array $nodes, array $visitors) {
-        $doNodes = array();
+    public function traverseArray(array $nodes, array $visitors)
+    {
+        $doNodes = [];
 
         foreach ($nodes as $i => &$node) {
             if (is_array($node)) {
@@ -73,10 +72,10 @@ class Traverser
                     $return = $visitor->leaveNode($node);
 
                     if (Mother::REMOVE_NODE === $return) {
-                        $doNodes[] = array($i, array());
+                        $doNodes[] = [$i, []];
                         break;
                     } elseif (is_array($return)) {
-                        $doNodes[] = array($i, $return);
+                        $doNodes[] = [$i, $return];
                         break;
                     } elseif (null !== $return) {
                         $node = $return;
