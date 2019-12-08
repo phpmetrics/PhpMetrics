@@ -9,7 +9,6 @@ use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter;
 
 /**
- * Class LengthVisitor
  * @package Hal\Metric\Class_\Text
  */
 class LengthVisitor extends NodeVisitorAbstract
@@ -21,7 +20,6 @@ class LengthVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)

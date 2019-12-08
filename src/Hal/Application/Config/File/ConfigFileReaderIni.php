@@ -12,8 +12,6 @@ class ConfigFileReaderIni implements ConfigFileReaderInterface
     private $filename;
 
     /**
-     * ConfigFileReaderIni constructor.
-     *
      * @param string $filename
      */
     public function __construct($filename)

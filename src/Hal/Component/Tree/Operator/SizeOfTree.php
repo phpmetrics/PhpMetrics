@@ -20,7 +20,6 @@ class SizeOfTree
     private $graph;
 
     /**
-     * SizeOfTree constructor.
      * @param Graph $graph
      */
     public function __construct(Graph $graph)

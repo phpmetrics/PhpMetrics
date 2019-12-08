@@ -14,12 +14,11 @@ class Reporter
     private $config;
 
     /**
-     * @var OutputInterface
+     * @var Output
      */
     private $output;
 
     /**
-     * Reporter constructor.
      * @param Config $config
      * @param Output $output
      */

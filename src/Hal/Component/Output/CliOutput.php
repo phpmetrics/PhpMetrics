@@ -10,7 +10,6 @@
 namespace Hal\Component\Output;
 
 /**
- * Class CliOutput
  * @package Hal\Component\Issue
  */
 class CliOutput implements Output

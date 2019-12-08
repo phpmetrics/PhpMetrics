@@ -31,7 +31,6 @@ use PhpParser\Error;
 use PhpParser\ParserFactory;
 
 /**
- * Class Analyze
  * @package Hal\Application
  */
 class Analyze
@@ -53,7 +52,6 @@ class Analyze
     private $issuer;
 
     /**
-     * Analyze constructor.
      * @param Output $output
      */
     public function __construct(Config $config, Output $output, Issuer $issuer)

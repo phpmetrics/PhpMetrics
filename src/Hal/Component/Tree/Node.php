@@ -38,7 +38,6 @@ class Node
     public $cyclic = false;
 
     /**
-     * Node constructor.
      * @param $key
      * @param mixed $data
      */

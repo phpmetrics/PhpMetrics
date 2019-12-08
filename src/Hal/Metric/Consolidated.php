@@ -34,7 +34,6 @@ class Consolidated
     private $packages;
 
     /**
-     * Consolided constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)

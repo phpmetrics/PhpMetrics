@@ -20,7 +20,6 @@ class Reporter
     private $output;
 
     /**
-     * Reporter constructor.
      * @param Config $config
      * @param Output $output
      */

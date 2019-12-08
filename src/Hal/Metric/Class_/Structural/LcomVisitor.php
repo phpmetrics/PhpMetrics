@@ -12,7 +12,6 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Lack of cohesion of methods
  *
- * Class ExternalsVisitor
  * @package Hal\Metric\Class_\Coupling
  */
 class LcomVisitor extends NodeVisitorAbstract
@@ -24,7 +23,6 @@ class LcomVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)
