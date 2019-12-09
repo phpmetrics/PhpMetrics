@@ -47,7 +47,6 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-
             $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
             $classOrFunction = $this->metrics->get($name);
 
@@ -73,8 +72,9 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
                     - (5.2 * \log($volume))
                     - (0.23 * $ccn)
                     - (16.2 * \log($lloc))
-                ) * 100 / 171
-                , 0);
+                ) * 100 / 171,
+                0
+            );
             if (is_infinite($MIwoC)) {
                 $MIwoC = 171;
             }

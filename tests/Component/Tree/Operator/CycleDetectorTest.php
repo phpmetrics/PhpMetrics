@@ -1,6 +1,7 @@
 <?php
 
 namespace Test;
+
 use Hal\Component\Tree\Edge;
 use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\GraphFactory;
@@ -11,7 +12,8 @@ use Hal\Component\Tree\Operator\CycleDetector;
 /**
  * @group tree
  */
-class CycleDetectorTest extends \PHPUnit_Framework_TestCase {
+class CycleDetectorTest extends \PHPUnit_Framework_TestCase
+{
 
     public function testCycleIsDetected()
     {
@@ -79,7 +81,6 @@ class CycleDetectorTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($d->cyclic);
         $this->assertTrue($e->cyclic);
         $this->assertTrue($f->cyclic);
-
     }
 
     public function testCycleIsNotDetected()

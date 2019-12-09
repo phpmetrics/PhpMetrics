@@ -10,7 +10,8 @@ use PhpParser\ParserFactory;
  * @group mi
  * @group complex
  */
-class MaintainabilityIndexVisitorTest extends \PHPUnit_Framework_TestCase {
+class MaintainabilityIndexVisitorTest extends \PHPUnit_Framework_TestCase
+{
 
 
     /**
@@ -29,9 +30,15 @@ class MaintainabilityIndexVisitorTest extends \PHPUnit_Framework_TestCase {
 
 
         // spy
-        $prophet->set('mIwoC', $mIwoC)->will(function () use ($prophet) {return $prophet->reveal();})->shouldBeCalled();
-        $prophet->set('mi', $mi)->will(function () use ($prophet) {return $prophet->reveal();})->shouldBeCalled();
-        $prophet->set('commentWeight', $commentWeight)->will(function () use ($prophet) {return $prophet->reveal();})->shouldBeCalled();
+        $prophet->set('mIwoC', $mIwoC)->will(function () use ($prophet) {
+            return $prophet->reveal();
+        })->shouldBeCalled();
+        $prophet->set('mi', $mi)->will(function () use ($prophet) {
+            return $prophet->reveal();
+        })->shouldBeCalled();
+        $prophet->set('commentWeight', $commentWeight)->will(function () use ($prophet) {
+            return $prophet->reveal();
+        })->shouldBeCalled();
 
         $class = $prophet->reveal();
         $metrics->attach($class);
@@ -50,15 +57,14 @@ class MaintainabilityIndexVisitorTest extends \PHPUnit_Framework_TestCase {
 EOT;
         $stmts = $parser->parse($code);
         $traverser->traverse($stmts);
-
     }
 
-    public function provideValues() {
+    public function provideValues()
+    {
         return [
             //    CC    LLOC    CLOC        Volume      MIwoC      mi          commentWeight
             [5     , 50    , 20       , 10         , 55.26,   92.1,      36.83 ],
             [11    , 45   , 26       , 1777.49    , 39.7,     80.01,      40.3 ]
         ];
     }
-
 }

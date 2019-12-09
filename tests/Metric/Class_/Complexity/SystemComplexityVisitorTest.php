@@ -44,5 +44,4 @@ class SystemComplexityVisitorTest extends \PHPUnit_Framework_TestCase
             [ __DIR__.'/../../examples/systemcomplexity1.php', 'A', 2.5, 1.0, 3.5],
         ];
     }
-
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Metric\System\Packages\Composer;
 
-
 /**
  * @package Hal\Metric\System\Packages\Composer
  */

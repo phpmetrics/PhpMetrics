@@ -30,7 +30,6 @@ class SizeOfTreeTest extends \PHPUnit_Framework_TestCase
         $graph->addEdge($b, $a); // B -> C
 
         $size = new SizeOfTree($graph);
-
     }
 
     public function testICanGetDepthOfNode()

@@ -71,7 +71,6 @@ class PackageMetric implements Metric, JsonSerializable
             $packageDependencies[] = $packageName;
             $this->set('outgoing_package_dependencies', $packageDependencies);
         }
-
     }
 
     /** @return string[] */
@@ -105,7 +104,6 @@ class PackageMetric implements Metric, JsonSerializable
             $packageDependencies[] = $packageName;
             $this->set('incoming_package_dependencies', $packageDependencies);
         }
-
     }
 
     /** @return string[] */

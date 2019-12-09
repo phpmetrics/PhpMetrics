@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Violation\Class_;
 
-
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
@@ -32,7 +31,6 @@ class TooDependent implements Violation
             $metric->get('violations')->add($this);
             return;
         }
-
     }
 
     /**
@@ -55,6 +53,5 @@ This class looks use really high number of components.
 
 Maybe you should check why this class has lot of dependencies.
 EOT;
-
     }
 }

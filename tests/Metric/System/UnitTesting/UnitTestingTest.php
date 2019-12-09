@@ -11,7 +11,8 @@ use Hal\Metric\System\UnitTesting\UnitTesting;
 class UnitTestingTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testICanParseJunitXmlFile() {
+    public function testICanParseJunitXmlFile()
+    {
 
         $config = new Config();
         $config->set('junit', __DIR__ . '/xml/junit1.xml');
@@ -43,7 +44,8 @@ class UnitTestingTest extends \PHPUnit_Framework_TestCase
         $unit->calculate($metrics);
     }
 
-    public function testICanParseCodeceptionFile() {
+    public function testICanParseCodeceptionFile()
+    {
 
         $config = new Config();
         $config->set('junit', __DIR__ . '/xml/codeception1.xml');

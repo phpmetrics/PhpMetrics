@@ -43,7 +43,6 @@ class HalsteadVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Function_ || $node instanceof Stmt\Trait_) {
-
             if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
                 $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
                 $classOrFunction = $this->metrics->get($name);
@@ -58,8 +57,7 @@ class HalsteadVisitor extends NodeVisitorAbstract
 
             iterate_over_node($node, function ($node) use (&$operators, &$operands) {
 
-                if (
-                    $node instanceof Node\Expr\BinaryOp
+                if ($node instanceof Node\Expr\BinaryOp
                     || $node instanceof Node\Expr\AssignOp
                     || $node instanceof Stmt\If_
                     || $node instanceof Stmt\For_
@@ -81,8 +79,7 @@ class HalsteadVisitor extends NodeVisitorAbstract
                     return;
                 }
 
-                if (
-                    $node instanceof Node\Expr\Cast
+                if ($node instanceof Node\Expr\Cast
                     || $node instanceof Node\Expr\Variable
                     || $node instanceof Node\Param
                     || $node instanceof Node\Scalar

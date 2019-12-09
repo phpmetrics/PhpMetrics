@@ -10,7 +10,8 @@ use PhpParser\ParserFactory;
  * @group loc
  * @group metric
  */
-class LengthVisitorTest extends \PHPUnit_Framework_TestCase {
+class LengthVisitorTest extends \PHPUnit_Framework_TestCase
+{
 
 
     /**
@@ -42,5 +43,4 @@ class LengthVisitorTest extends \PHPUnit_Framework_TestCase {
             [ __DIR__.'/../../examples/loc1.php', 'A', 21, 13, 8],
         ];
     }
-
 }

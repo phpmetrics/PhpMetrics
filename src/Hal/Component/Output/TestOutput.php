@@ -51,4 +51,3 @@ class TestOutput implements Output
     {
     }
 }
-

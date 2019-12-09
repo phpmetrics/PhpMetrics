@@ -35,7 +35,6 @@ class TooComplexMethodCode implements Violation
             $metric->get('violations')->add($this);
             return;
         }
-
     }
 
     public function getLevel()

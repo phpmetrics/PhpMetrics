@@ -41,7 +41,6 @@ class Composer
 
         $packagist = new Packagist();
         foreach ($rawRequirements as $requirement => $version) {
-
             $package = $packagist->get($requirement);
 
             $packages[$requirement] = (object)[
