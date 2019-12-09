@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Violation\Class_;
 
-
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
@@ -68,6 +67,5 @@ A blob object (or "god class") does not follow the Single responsibility princip
 
 Maybe you should reducing the number of methods splitting this object in many sub objects.
 EOT;
-
     }
 }

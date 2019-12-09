@@ -49,7 +49,6 @@ class SizeOfTree
         // our tree is not binary : interface can have more than one parent
         $max = 0;
         foreach ($edges as $edge) {
-
             if ($edge->getFrom() == $node) {
                 continue;
             }
@@ -83,8 +82,6 @@ class SizeOfTree
         $n = 0;
 
         foreach ($edges as $edge) {
-
-
             if ($edge->getTo() == $node) {
                 continue;
             }
@@ -129,7 +126,6 @@ class SizeOfTree
     {
         $max = 1;
         foreach ($node->getEdges() as $edge) {
-
             if ($node == $edge->getTo()) {
                 // only descendants
                 continue;

@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Violation;
 
-
 /**
  * @package Hal\Violation
  */

@@ -33,7 +33,6 @@ class LengthVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Function_ || $node instanceof Stmt\Trait_) {
-
             if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
                 $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
                 $classOrFunction = $this->metrics->get($name);

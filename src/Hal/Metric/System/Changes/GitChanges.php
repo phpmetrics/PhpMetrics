@@ -50,7 +50,7 @@ class GitChanges
         }
 
         $r = shell_exec(sprintf('%s --version', $bin));
-        if(!preg_match('!git version!', $r)) {
+        if (!preg_match('!git version!', $r)) {
             throw new ConfigException(sprintf('Git binary (%s) incorrect', $bin));
         }
 
@@ -112,7 +112,6 @@ class GitChanges
                     $authors[$author] = ['nbFiles' => 0, 'commits' => 0, 'additions' => 0, 'removes' => 0];
                 }
                 $authors[$author]['commits']++;
-
             } else {
                 if (preg_match('!(\d+)\s+(\d+)\s+(.*)!', $line, $matches)) {
                     // additions and changes for each file

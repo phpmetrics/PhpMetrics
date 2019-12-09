@@ -2,9 +2,7 @@
 namespace Test\Hal\Metric\Class_\Coupling;
 
 use Hal\Metric\Class_\ClassEnumVisitor;
-use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
 use Hal\Metric\Class_\Complexity\KanDefectVisitor;
-use Hal\Metric\Class_\Complexity\McCabeVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
 
@@ -13,9 +11,8 @@ use PhpParser\ParserFactory;
  * @group kan
  * @group defect
  */
-class KanDefectVisitorTest extends \PHPUnit\Framework\TestCase {
-
-
+class KanDefectVisitorTest extends \PHPUnit\Framework\TestCase
+{
     /**
      * @dataProvider provideExamples
      */
@@ -42,5 +39,4 @@ class KanDefectVisitorTest extends \PHPUnit\Framework\TestCase {
             [ __DIR__.'/../../examples/kan1.php', 'A', .89],
         ];
     }
-
 }

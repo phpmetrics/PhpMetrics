@@ -63,7 +63,6 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
-
                     // iterate over children, recursively
                     $cb = function ($node) use (&$cb) {
                         $ccn = 0;
@@ -100,7 +99,6 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
                             case $node instanceof Node\Expr\BinaryOp\Spaceship:
                                 $ccn += 2;
                                 break;
-
                         }
                         return $ccn;
                     };

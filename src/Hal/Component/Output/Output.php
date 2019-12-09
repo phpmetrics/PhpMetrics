@@ -37,4 +37,3 @@ interface Output
      */
     public function clearln();
 }
-

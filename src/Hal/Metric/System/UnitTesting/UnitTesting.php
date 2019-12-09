@@ -147,7 +147,6 @@ class UnitTesting
             $assertions += $suite->assertions;
 
             foreach ($externals as $external) {
-
                 // search for this external in metrics
                 if (!$metrics->has($external)) {
                     continue;

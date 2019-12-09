@@ -31,7 +31,7 @@ class ClassA
 {
 }
 CODE
-);
+        );
         $this->assertInstanceOf(PackageMetric::class, $metrics->get('PackA\\SubA\\'));
         $this->assertSame(['PackageA\\ClassA'], $metrics->get('PackA\\SubA\\')->getClasses());
         $this->assertSame('PackA\\SubA\\', $metrics->get('PackageA\\ClassA')->get('package'));
@@ -50,7 +50,7 @@ class ClassA
 {
 }
 CODE
-);
+        );
         $this->assertInstanceOf(PackageMetric::class, $metrics->get('PackA\\'));
         $this->assertSame(['PackageA\\ClassA'], $metrics->get('PackA\\')->getClasses());
         $this->assertSame('PackA\\', $metrics->get('PackageA\\ClassA')->get('package'));
@@ -66,7 +66,7 @@ class ClassA
 {
 }
 CODE
-);
+        );
         $this->assertInstanceOf(PackageMetric::class, $metrics->get('PackageA\\'));
         $this->assertSame(['PackageA\\ClassA'], $metrics->get('PackageA\\')->getClasses());
         $this->assertSame('PackageA\\', $metrics->get('PackageA\\ClassA')->get('package'));
