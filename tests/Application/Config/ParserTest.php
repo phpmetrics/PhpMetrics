@@ -7,7 +7,7 @@ use Hal\Application\Config\Parser;
  * @group application
  * @group config
  */
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider providesExample

@@ -9,13 +9,13 @@ use Hal\Metric\PackageMetric;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group metric
  * @group package
  */
-class PackageCollectingVisitorTest extends PHPUnit_Framework_TestCase
+class PackageCollectingVisitorTest extends TestCase
 {
     public function testItUsesThePackageAndTheSubpackageAnnotationAsPackageName()
     {

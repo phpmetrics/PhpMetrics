@@ -3,9 +3,9 @@ namespace Test\Hal\Component\Ast;
 
 use Hal\Component\Ast\NodeTraverser;
 use PhpParser\NodeTraverser as BaseTraverser;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class NodeTraverserTest extends PHPUnit_Framework_TestCase
+class NodeTraverserTest extends TestCase
 {
     public function testItCanBeInstantiated()
     {

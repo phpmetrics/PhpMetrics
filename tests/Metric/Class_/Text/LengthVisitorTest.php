@@ -10,10 +10,8 @@ use PhpParser\ParserFactory;
  * @group loc
  * @group metric
  */
-class LengthVisitorTest extends \PHPUnit_Framework_TestCase
+class LengthVisitorTest extends \PHPUnit\Framework\TestCase
 {
-
-
     /**
      * @dataProvider provideExamples
      */

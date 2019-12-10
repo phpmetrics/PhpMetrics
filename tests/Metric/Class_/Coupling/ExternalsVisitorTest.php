@@ -2,7 +2,6 @@
 namespace Test\Hal\Metric\Class_\Coupling;
 
 use Hal\Metric\Class_\ClassEnumVisitor;
-use Hal\Metric\Class_\Complexity\McCabeVisitor;
 use Hal\Metric\Class_\Coupling\ExternalsVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
@@ -12,10 +11,8 @@ use PhpParser\ParserFactory;
  * @group externals
  * @group coupling
  */
-class ExternalsVisitorTest extends \PHPUnit_Framework_TestCase
+class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
 {
-
-
     /**
      * @dataProvider provideExamples
      */

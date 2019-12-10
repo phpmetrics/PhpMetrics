@@ -4,9 +4,9 @@ namespace Test\Hal\Metric;
 
 use Hal\Metric\Metric;
 use Hal\Metric\PackageMetric;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PackageMetricTest extends PHPUnit_Framework_TestCase
+class PackageMetricTest extends TestCase
 {
     public function testItIsAMetric()
     {

@@ -8,7 +8,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 
-class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase
+class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamplesForCcn

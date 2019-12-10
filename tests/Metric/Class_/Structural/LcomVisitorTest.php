@@ -6,10 +6,8 @@ use Hal\Metric\Class_\Structural\LcomVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
 
-class LcomVisitorTest extends \PHPUnit_Framework_TestCase
+class LcomVisitorTest extends \PHPUnit\Framework\TestCase
 {
-
-
     /**
      * @dataProvider provideExamples
      */

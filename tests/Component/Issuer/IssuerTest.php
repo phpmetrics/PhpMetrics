@@ -9,7 +9,7 @@ use PhpParser\ParserFactory;
 /**
  * @group issue
  */
-class IssuerTest extends \PHPUnit_Framework_TestCase
+class IssuerTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testICanEnableIssuer()

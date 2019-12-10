@@ -2,15 +2,13 @@
 
 namespace Test;
 
-use Hal\Component\Token\Token;
-use Hal\Component\Token\Tokenizer;
 use Hal\Component\Tree\HashMap;
 use Hal\Component\Tree\Node;
 
 /**
  * @group tree
  */
-class HashMapTest extends \PHPUnit_Framework_TestCase
+class HashMapTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testICanWorkWithHashMap()
@@ -34,7 +32,6 @@ class HashMapTest extends \PHPUnit_Framework_TestCase
 
     public function testICanIterateThroughHashMap()
     {
-        $hash = new HashMap;
         $hash = new HashMap;
         $hash
             ->attach(new Node('A', 'value1'))

@@ -10,10 +10,8 @@ use PhpParser\ParserFactory;
  * @group halstead
  * @group metric
  */
-class HalsteadVisitorTest extends \PHPUnit_Framework_TestCase
+class HalsteadVisitorTest extends \PHPUnit\Framework\TestCase
 {
-
-
     /**
      * @dataProvider provideExamples
      */

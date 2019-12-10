@@ -8,7 +8,7 @@ use Hal\Metric\System\UnitTesting\UnitTesting;
 /**
  * @group unit
  */
-class UnitTestingTest extends \PHPUnit_Framework_TestCase
+class UnitTestingTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testICanParseJunitXmlFile()
