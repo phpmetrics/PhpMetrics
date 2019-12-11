@@ -59,8 +59,43 @@ class IssuerTest extends \PHPUnit\Framework\TestCase
         $issuer->disable();
     }
 
-    public function testIssuerDisplayStatements()
+    public function testIssuerDisplayStatementsOnPhp5()
     {
+        if (PHP_VERSION_ID >= 70000) {
+            $this->markTestSkipped('Skipped for version 5');
+        }
+
+        $output = new TestOutput();
+        $issuer = (new TestIssuer($output))->enable();
+        $code = <<<EOT
+<?php
+class A{
+   public function foo() {
+   
+   }
+}
+EOT;
+
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $stmt = $parser->parse($code);
+        $issuer->set('code', $stmt);
+
+
+        try {
+            echo new \stdClass();
+        } catch (\Exception $e) {
+        }
+
+        $issuer->disable();
+        $this->assertContains('class A', $issuer->log);
+    }
+
+    public function testIssuerDisplayStatementsOnPhp7()
+    {
+        if (PHP_VERSION_ID < 70000) {
+            $this->markTestSkipped('Skipped for version 7');
+        }
+
         $output = new TestOutput();
         $issuer = (new TestIssuer($output))->enable();
         $code = <<<EOT
