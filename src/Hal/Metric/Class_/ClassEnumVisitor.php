@@ -41,6 +41,7 @@ class ClassEnumVisitor extends NodeVisitorAbstract
                 $class = new ClassMetric($name);
                 $class->set('interface', false);
                 $class->set('abstract', $node instanceof Stmt\Trait_ || $node->isAbstract());
+                $class->set('final', !$node instanceof Stmt\Trait_ && $node->isFinal());
             }
 
             $methods = [];
