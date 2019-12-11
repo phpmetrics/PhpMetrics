@@ -11,7 +11,33 @@ use PhpParser\ParserFactory;
  */
 class IssuerTest extends \PHPUnit\Framework\TestCase
 {
-    public function testICanEnableIssuer()
+    /**
+     * @requires PHP < 7.0
+     */
+    public function testICanEnableIssuerPhp5()
+    {
+        $output = new TestOutput();
+        $issuer = (new TestIssuer($output))->enable();
+        $issuer->set('Firstname', 'Jean-François');
+
+        try {
+            echo new \stdClass();
+        } catch (\Exception $e) {
+        }
+
+        $this->assertContains('Object of class stdClass could not be converted to string', $issuer->log);
+        $this->assertContains('Operating System', $issuer->log);
+        $this->assertContains('Details', $issuer->log);
+        $this->assertContains('https://github.com/phpmetrics/PhpMetrics/issues/new', $output->output);
+        $this->assertContains('Firstname: Jean-François', $issuer->log);
+        $this->assertContains('IssuerTest.php (line 21)', $issuer->log);
+        $issuer->disable();
+    }
+
+    /**
+     * @requires PHP >= 7.0
+     */
+    public function testICanEnableIssuerPhp7()
     {
         $output = new TestOutput();
         $issuer = (new TestIssuer($output))->enable();
@@ -27,7 +53,7 @@ class IssuerTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('Details', $issuer->log);
         $this->assertContains('https://github.com/phpmetrics/PhpMetrics/issues/new', $output->output);
         $this->assertContains('Firstname: Jean-François', $issuer->log);
-        $this->assertContains('IssuerTest.php (line 21)', $issuer->log);
+        $this->assertContains('IssuerTest.php (line 47)', $issuer->log);
         $issuer->disable();
     }
 
