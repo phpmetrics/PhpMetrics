@@ -10,7 +10,7 @@
 ![Standard report](https://github.com/phpmetrics/PhpMetrics/raw/master/doc/overview.png)
 
 
-<img src="http://www.phpmetrics.org/images/phpmetrics-maintenability.png" height="80px" alt="PhpMetrics" align="left" style="margin-right:20px"/>
+<img src="https://phpmetrics.org/imagesmetrics-maintenability.png" height="80px" alt="PhpMetrics" align="left" style="margin-right:20px"/>
 
 PhpMetrics provides metrics about PHP project and classes, with beautiful and readable HTML report. 
 
@@ -21,7 +21,7 @@ PhpMetrics provides metrics about PHP project and classes, with beautiful and re
 
 ## Quick start
 
-    composer require phpmetrics/phpmetrics
+    composer require phpmetrics/phpmetrics --dev
     php ./vendor/bin/phpmetrics --report-html=myreport .
     
 Then open the generated `./myreport/index.html` file in your browser. 
@@ -36,7 +36,7 @@ If want, you can [install](https://github.com/phpmetrics/PhpMetrics/blob/master/
 
 ## License
 
-See the LICENSE file.
+See the [LICENSE](LICENSE) file.
 
 ## Contributing
 
