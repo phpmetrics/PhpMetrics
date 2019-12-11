@@ -13,13 +13,18 @@ class GraphTest extends \PHPUnit\Framework\TestCase
     public function testICanAddEdge()
     {
         $graph = new Graph();
-        $a = $this->getMockBuilder('\\Hal\\Component\\Tree\\Node')->disableOriginalConstructor()->getMock();
-        $a->method('getKey')->will($this->returnValue('A'));
-        $a->expects($this->once())->method('addEdge');
-        $b = new Node('B');
+        $a = new Node('node_a');
+        $b = new Node('node_b');
 
         $graph->insert($a)->insert($b);
         $graph->addEdge($a, $b);
+        $this->assertCount(1, $a->getEdges());
+        $this->assertSame($a, $a->getEdges()[0]->getFrom());
+        $this->assertSame($b, $a->getEdges()[0]->getTo());
+
+        $this->assertCount(1, $b->getEdges());
+        $this->assertSame($a, $a->getEdges()[0]->getFrom());
+        $this->assertSame($b, $a->getEdges()[0]->getTo());
     }
 
     /**
