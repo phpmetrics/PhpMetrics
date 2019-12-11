@@ -11,7 +11,6 @@ use PhpParser\ParserFactory;
  */
 class IssuerTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testICanEnableIssuer()
     {
         $output = new TestOutput();
@@ -20,8 +19,7 @@ class IssuerTest extends \PHPUnit_Framework_TestCase
 
         try {
             echo new \stdClass();
-        } catch (\Exception $e) {
-
+        } catch (\Throwable $e) {
         }
 
         $this->assertContains('Object of class stdClass could not be converted to string', $issuer->log);
@@ -29,7 +27,7 @@ class IssuerTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('Details', $issuer->log);
         $this->assertContains('https://github.com/phpmetrics/PhpMetrics/issues/new', $output->output);
         $this->assertContains('Firstname: Jean-François', $issuer->log);
-        $this->assertContains('IssuerTest.php (line 22)', $issuer->log);
+        $this->assertContains('IssuerTest.php (line 21)', $issuer->log);
         $issuer->disable();
     }
 
@@ -53,8 +51,7 @@ EOT;
 
         try {
             echo new \stdClass();
-        } catch (\Exception $e) {
-
+        } catch (\Throwable $e) {
         }
 
         $issuer->disable();
