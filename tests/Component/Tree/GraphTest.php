@@ -13,7 +13,7 @@ class GraphTest extends \PHPUnit\Framework\TestCase
     public function testICanAddEdge()
     {
         $graph = new Graph();
-        $a = $this->getMockBuilder('\\Hal\\Component\\Tree\\Node')->disableOriginalConstructor()->getMock();
+        $a = $this->getMockBuilder(Node::class)->disableOriginalConstructor()->getMock();
         $a->method('getKey')->will($this->returnValue('A'));
         $a->expects($this->once())->method('addEdge');
         $b = new Node('B');
