@@ -9,9 +9,9 @@ Then, in order to run the test suite:
 
     ./vendor/bin/phpunit
 
-Thanks for your help !
+Thanks for your help.
 
-## Releasing
+## Releasing
 
 Please NEVER tag manually.
 
