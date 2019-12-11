@@ -27,7 +27,7 @@ class IssuerTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('Details', $issuer->log);
         $this->assertContains('https://github.com/phpmetrics/PhpMetrics/issues/new', $output->output);
         $this->assertContains('Firstname: Jean-François', $issuer->log);
-        $this->assertContains('IssuerTest.php (line 22)', $issuer->log);
+        $this->assertContains('IssuerTest.php (line 21)', $issuer->log);
         $issuer->disable();
     }
 
