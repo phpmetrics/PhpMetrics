@@ -11,7 +11,6 @@ trait BagTrait
     private $bag = [];
 
     /**
-     * ClassMetric constructor.
      * @param string $name
      */
     public function __construct($name)
@@ -80,7 +79,7 @@ trait BagTrait
     /**
      * @inheritdoc
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return array_merge($this->all(), ['_type' => get_class($this)]);
     }

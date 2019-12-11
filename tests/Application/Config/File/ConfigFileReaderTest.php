@@ -1,14 +1,15 @@
 <?php
+namespace Test\Hal\Application\Config\File;
 
 use Hal\Application\Config\File\ConfigFileReaderInterface;
 
-class ConfigFileReaderTest extends \PHPUnit_Framework_TestCase
+class ConfigFileReaderTest extends \PHPUnit\Framework\TestCase
 {
     public function testJsonConfigFile()
     {
         $configs = [
-            __DIR__.'/examples/config.json',
-            __DIR__.'/examples/config.ini',
+            __DIR__ . '/examples/config.json',
+            __DIR__ . '/examples/config.ini',
         ];
 
         foreach ($configs as $filename) {
@@ -28,7 +29,7 @@ class ConfigFileReaderTest extends \PHPUnit_Framework_TestCase
     private function getExpectedData()
     {
         return [
-            'exclude'     => 'test1',
+            'exclude' => 'test1',
             'report-html' => 'test2',
         ];
     }

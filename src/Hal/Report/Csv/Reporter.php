@@ -9,21 +9,19 @@ use Hal\Metric\Registry;
 
 class Reporter
 {
-
     /**
      * @var Config
      */
     private $config;
 
     /**
-     * @var OutputInterface
+     * @var Output
      */
     private $output;
 
     /**
-     * Reporter constructor.
      * @param Config $config
-     * @param OutputInterface $output
+     * @param Output $output
      */
     public function __construct(Config $config, Output $output)
     {
@@ -52,7 +50,6 @@ class Reporter
         fputcsv($hwnd, $availables);
 
         foreach ($metrics->all() as $metric) {
-
             if (!$metric instanceof ClassMetric) {
                 continue;
             }
@@ -69,6 +66,5 @@ class Reporter
         }
 
         fclose($hwnd);
-
     }
 }

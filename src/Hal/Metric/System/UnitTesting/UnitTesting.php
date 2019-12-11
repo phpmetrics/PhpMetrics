@@ -24,7 +24,6 @@ class UnitTesting
     private $config;
 
     /**
-     * GitChanges constructor.
      * @param array $files
      */
     public function __construct(Config $config, array $files)
@@ -148,7 +147,6 @@ class UnitTesting
             $assertions += $suite->assertions;
 
             foreach ($externals as $external) {
-
                 // search for this external in metrics
                 if (!$metrics->has($external)) {
                     continue;

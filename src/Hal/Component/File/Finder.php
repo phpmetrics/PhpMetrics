@@ -14,8 +14,6 @@ use RecursiveIteratorIterator;
 use RegexIterator;
 
 /**
- * File finder
- *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
 class Finder

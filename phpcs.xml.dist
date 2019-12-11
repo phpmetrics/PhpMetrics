@@ -12,6 +12,16 @@
     <arg name="colors"/>
     <arg value="s"/>
 
+    <rule ref="PSR2">
+        <exclude-pattern>*/Report/Html/template/*.php</exclude-pattern>
+        <exclude-pattern>*/tests/*/examples/*.php</exclude-pattern>
+        <exclude-pattern>*/src/functions.php</exclude-pattern>
+    </rule>
+
+    <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
+        <exclude-pattern>*/tests/*</exclude-pattern>
+    </rule>
+
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
 
     <rule ref="Generic.PHP.ForbiddenFunctions">

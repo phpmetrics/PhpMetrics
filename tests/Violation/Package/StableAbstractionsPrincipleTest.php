@@ -6,12 +6,12 @@ use Hal\Metric\Metric;
 use Hal\Metric\PackageMetric;
 use Hal\Violation\Package\StableAbstractionsPrinciple;
 use Hal\Violation\Violations;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 
 /**
  * @group violation
  */
-class StableAbstractionsPrincipleTest extends PHPUnit_Framework_TestCase
+class StableAbstractionsPrincipleTest extends TestCase
 {
     public function testItIgnoresNonPackageMetrics()
     {

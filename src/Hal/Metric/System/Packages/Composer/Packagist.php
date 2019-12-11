@@ -1,9 +1,7 @@
 <?php
 namespace Hal\Metric\System\Packages\Composer;
 
-
 /**
- * Class Packagist
  * @package Hal\Metric\System\Packages\Composer
  */
 class Packagist

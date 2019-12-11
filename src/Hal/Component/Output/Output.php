@@ -10,12 +10,7 @@
 namespace Hal\Component\Output;
 
 /**
- * Class CliOutput
  * @package Hal\Component\Output
- */
-/**
- * Class CliOutput
- * @package Hal\Component\Issue
  */
 interface Output
 {
@@ -42,4 +37,3 @@ interface Output
      */
     public function clearln();
 }
-

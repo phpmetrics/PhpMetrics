@@ -6,7 +6,7 @@
 function percentile($arr, $percentile = 0.95)
 {
     sort($arr);
-    return $arr[round($percentile * count($arr) - 1.0 - $percentile)];
+    return $arr[max(round($percentile * count($arr) - 1.0 - $percentile), 0)];
 }
 
 // 1. build an associative array

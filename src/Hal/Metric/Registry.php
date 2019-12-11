@@ -5,7 +5,6 @@ class Registry
 {
     public function allForProject()
     {
-
     }
 
     public function allForStructures()

@@ -7,7 +7,7 @@ use Hal\Violation\Violations;
 /**
  * @group violation
  */
-class BlobTest extends \PHPUnit_Framework_TestCase
+class BlobTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamples

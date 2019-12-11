@@ -9,16 +9,7 @@
 
 namespace Hal\Component\Output;
 
-    /**
-     * Class CliOutput
-     * @package Hal\Component\Output
-     */
-    /**
-     * Class CliOutput
-     * @package Hal\Component\Issue
-     */
 /**
- * Class ProgressBar
  * @package Hal\Component\Output
  */
 class ProgressBar
@@ -40,7 +31,6 @@ class ProgressBar
     private $current = 0;
 
     /**
-     * ProgressBar constructor.
      * @param Output $output
      * @param int $max
      */
@@ -96,8 +86,10 @@ class ProgressBar
     {
         if (DIRECTORY_SEPARATOR === '\\') {
             return
-                0 >= version_compare('10.0.10586',
-                    PHP_WINDOWS_VERSION_MAJOR . '.' . PHP_WINDOWS_VERSION_MINOR . '.' . PHP_WINDOWS_VERSION_BUILD)
+                0 >= version_compare(
+                    '10.0.10586',
+                    PHP_WINDOWS_VERSION_MAJOR . '.' . PHP_WINDOWS_VERSION_MINOR . '.' . PHP_WINDOWS_VERSION_BUILD
+                )
                 || false !== getenv('ANSICON')
                 || 'ON' === getenv('ConEmuANSI')
                 || 'xterm' === getenv('TERM');
@@ -106,4 +98,3 @@ class ProgressBar
         return function_exists('posix_isatty') && @posix_isatty($this->stream);
     }
 }
-

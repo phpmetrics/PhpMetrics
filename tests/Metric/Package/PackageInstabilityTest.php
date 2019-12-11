@@ -5,13 +5,13 @@ namespace Test\Hal\Metric\Package;
 use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageInstability;
 use Hal\Metric\PackageMetric;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 
 /**
  * @group metric
  * @group package
  */
-class PackageInstabilityTest extends PHPUnit_Framework_TestCase
+class PackageInstabilityTest extends TestCase
 {
     public function testItCalculatesTheInstabilityOfEachPackage()
     {

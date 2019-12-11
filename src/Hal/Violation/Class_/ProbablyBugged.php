@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Violation\Class_;
 
-
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
@@ -57,6 +56,5 @@ This component contains in theory {$this->metric->get('bugs')} bugs.
 
 Maybe you should check your unit tests for this class.
 EOT;
-
     }
 }

@@ -1,9 +1,7 @@
 <?php
 namespace Hal\Violation;
 
-
 /**
- * Class Violations
  * @package Hal\Violation
  */
 class Violations implements \IteratorAggregate, \Countable

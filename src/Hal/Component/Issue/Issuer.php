@@ -14,7 +14,6 @@ use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 
 /**
- * Class Issuer
  * @package Hal\Component\Issue
  */
 class Issuer
@@ -30,7 +29,6 @@ class Issuer
     private $output;
 
     /**
-     * Issuer constructor.
      * @param Output $output
      */
     public function __construct(Output $output)

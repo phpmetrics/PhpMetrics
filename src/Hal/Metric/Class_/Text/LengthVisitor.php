@@ -9,7 +9,6 @@ use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter;
 
 /**
- * Class LengthVisitor
  * @package Hal\Metric\Class_\Text
  */
 class LengthVisitor extends NodeVisitorAbstract
@@ -21,7 +20,6 @@ class LengthVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)
@@ -35,7 +33,6 @@ class LengthVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Function_ || $node instanceof Stmt\Trait_) {
-
             if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
                 $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
                 $classOrFunction = $this->metrics->get($name);

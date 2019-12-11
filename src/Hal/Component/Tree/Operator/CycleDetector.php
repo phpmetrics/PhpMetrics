@@ -13,7 +13,6 @@ use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\Node;
 
 /**
- * Class CycleDetector
  * @package Hal\Component\Tree\Util
  * @see http://www.geeksforgeeks.org/detect-cycle-in-a-graph/
  */

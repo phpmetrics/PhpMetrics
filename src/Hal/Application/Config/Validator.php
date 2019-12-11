@@ -2,7 +2,6 @@
 namespace Hal\Application\Config;
 
 /**
- * Class Validator
  * @package Hal\Application\Config
  */
 class Validator

@@ -54,7 +54,6 @@ class Coupling
 
             $node = $graph->get($metric->get('name'));
             foreach ($node->getEdges() as $edge) {
-
                 if ($edge->getTo()->getKey() == $node->getKey()) {
                     // affects
                     $afferent++;

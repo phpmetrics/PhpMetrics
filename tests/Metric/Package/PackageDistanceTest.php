@@ -6,13 +6,13 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageDistance;
 use Hal\Metric\PackageMetric;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 
 /**
  * @group metric
  * @group package
  */
-class PackageDistanceTest extends PHPUnit_Framework_TestCase
+class PackageDistanceTest extends TestCase
 {
     /**
      * @dataProvider provideExamples

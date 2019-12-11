@@ -30,9 +30,7 @@ use Hal\Metric\System\UnitTesting\UnitTesting;
 use PhpParser\Error;
 use PhpParser\ParserFactory;
 
-
 /**
- * Class Analyze
  * @package Hal\Application
  */
 class Analyze
@@ -54,7 +52,6 @@ class Analyze
     private $issuer;
 
     /**
-     * Analyze constructor.
      * @param Output $output
      */
     public function __construct(Config $config, Output $output, Issuer $issuer)
@@ -75,7 +72,7 @@ class Analyze
         $metrics = new Metrics();
 
         // traverse all
-        $whenToStop = function() {
+        $whenToStop = function () {
             return true;
         };
 

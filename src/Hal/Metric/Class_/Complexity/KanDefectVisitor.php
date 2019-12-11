@@ -21,7 +21,6 @@ class KanDefectVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)
@@ -38,7 +37,6 @@ class KanDefectVisitor extends NodeVisitorAbstract
             || $node instanceof Stmt\Interface_
             || $node instanceof Stmt\Trait_
         ) {
-
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
 

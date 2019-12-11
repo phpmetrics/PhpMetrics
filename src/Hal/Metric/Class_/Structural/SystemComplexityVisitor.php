@@ -27,7 +27,6 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)
@@ -41,14 +40,12 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
             $sy = $dc = $sc = [];
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
-
                     // number of returns and calls
                     $output = 0;
                     $fanout = [];

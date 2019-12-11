@@ -57,6 +57,4 @@ class DepthOfInheritanceTree
         $projectMetric->set('depthOfInheritanceTree', $averageHeight);
         $metrics->attach($projectMetric);
     }
-
-
 }
