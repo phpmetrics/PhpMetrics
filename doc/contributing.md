@@ -15,12 +15,19 @@ Thanks for your help.
 
 Please NEVER tag manually.
 
-First, changes sources according new tag:
+### Requirements
 
-    make tag <VERSION>
++ You will need to install `semver`
+
+    gem install semver
     
-version can be `major`, `minor` or `patch`
++ Please disable `phar.readonly` in your `php.ini` file
+  
+### Usage
 
-Then create release and Git tag with
+These commands will create phar, debian and binary release, 
+then run all tests and push new release to Github :
 
+    make tag version=<VERSION>
+    # <VERSION> can be `major`, `minor` or `patch`
     make release
