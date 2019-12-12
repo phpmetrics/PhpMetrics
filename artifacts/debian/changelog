@@ -1,3 +1,38 @@
+phpmetrics (2.4.0) unstable; urgency=low
+   * Fix template type 
+   * Verify errors in php<7 
+   * Use class_alias to load php5 or php7 code 
+   * Merge pull request #361 from UFOMelkor/hotfix/360-php56 
+   * Retain the old ccn and add wmc as new metric 
+   * Merge pull request #362 from UFOMelkor/hotfix/remain-ccn 
+   * releasing v2.4.1 
+   * Test on PHP 7.3 
+   * Don't leave notice when array is small 
+   * Add final to class metric 
+   * Update ClassEnumVisitor.php 
+   * Merge pull request #371 from lencse/php73 
+   * Fix issue#380. Typo in Blob report 
+   * Merge pull request #385 from phpmetrics/issue#380 
+   * Added sort package config to composer 
+   * Merge pull request #388 from phpmetrics/sort-packages 
+   * Include codesniffer. Remove alias function and short array syntax (#387) 
+   * Remove superfluous docblocks that are adding no value (#390) 
+   * Skip `self` and `parent` from external dependencies (#1) (#370) 
+   * Trying to fix deprecation of PSR-0 (issue#382) (#384) 
+   * file_exists > is_file (#366) 
+   * Apply PSR-2 codestyle (#389) 
+   * Update phpunit to use highest version possible (#391) 
+   * Merge pull request #375 from gmponos/patch-1 
+   * Merge pull request #372 from lencse/loc-report 
+   * Test against PHP 7.4 (#383) 
+   * releasing 
+   * releasing v2.4.1 
+   * Update contributing.md 
+   * update readme file 
+   * Merge branch 'master' of github.com:phpmetrics/PhpMetrics 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Thu, 12 Dec 2019 09:01:35 +0100
+
 phpmetrics (2.0.0-rc) unstable; urgency=low
    * way to get infos about unexpected bugs 
    * Don't trigger the issuer on suppressed errors 
@@ -624,6 +659,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
