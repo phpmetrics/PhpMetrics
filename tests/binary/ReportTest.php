@@ -8,7 +8,7 @@ class BinReportTest extends \PHPUnit\Framework\TestCase
 {
     private $phar;
 
-    public function __construct()
+    public function setUp()
     {
         $this->phar = __DIR__ . '/../../bin/phpmetrics';
     }

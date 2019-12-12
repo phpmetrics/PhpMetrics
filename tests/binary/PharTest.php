@@ -8,7 +8,7 @@ class PharTest extends \PHPUnit\Framework\TestCase
 {
     private $phar;
 
-    public function __construct()
+    public function setUp()
     {
         $this->phar = __DIR__ . '/../../releases/phpmetrics.phar';
     }
