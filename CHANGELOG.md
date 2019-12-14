@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.5.0] - 2019-12-11
+
+### Changed
+- Test the codebase against PHP 7.3 and 7.4
+
+### Fixed
+- Skip `self` and `parent` from external dependencies of dependency graph (#370) thanks to (@lencse)
+- Don't leave notice when array is small in percentile function of loc report (#372) thanks to (@lencse)
 
 ## [2.4.1] - 2017-07-10
 
