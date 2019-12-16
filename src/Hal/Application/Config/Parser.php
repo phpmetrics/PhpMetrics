@@ -5,9 +5,9 @@ use Hal\Application\Config\File\ConfigFileReaderFactory;
 
 class Parser
 {
-    public function parse($argv)
+    public function parse(array $argv)
     {
-        $config = new Config;
+        $config = new Config();
 
         if (count($argv) === 0) {
             return $config;

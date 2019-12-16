@@ -48,7 +48,7 @@ class Finder
     /**
      * @param string[] $extensions   regex of file extensions to include
      * @param string[] $excludedDirs regex of directories to exclude
-     * @param integer $flags
+     * @param int $flags
      */
     public function __construct(array $extensions = ['php'], array $excludedDirs = [], $flags = null)
     {
@@ -60,9 +60,8 @@ class Finder
     /**
      * Find files in path
      *
-     * @param array $paths
+     * @param string[] $paths
      * @return array
-     * @internal param string $path
      */
     public function fetch(array $paths)
     {

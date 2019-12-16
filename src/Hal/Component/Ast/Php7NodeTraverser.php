@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Component\Ast;
 
 use PhpParser\Node;
@@ -9,6 +10,10 @@ class Php7NodeTraverser extends Mother
     /** @var Traverser */
     private $traverser;
 
+    /**
+     * @param bool $cloneNodes
+     * @param callable|null $stopCondition
+     */
     public function __construct($cloneNodes = false, $stopCondition = null)
     {
         parent::__construct();

@@ -38,7 +38,7 @@ class Node
     public $cyclic = false;
 
     /**
-     * @param $key
+     * @param string $key
      * @param mixed $data
      */
     public function __construct($key, $data = null)
