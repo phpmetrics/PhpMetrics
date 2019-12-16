@@ -49,7 +49,6 @@ class SizeOfTreeTest extends \PHPUnit\Framework\TestCase
         $graph->addEdge($c, $d); // C -> D
         $graph->addEdge($a, $e); // A -> E  (node with multiple childs)
 
-
         $size = new SizeOfTree($graph);
 
         $this->assertEquals(0, $size->getDepthOfNode($a));
@@ -75,7 +74,6 @@ class SizeOfTreeTest extends \PHPUnit\Framework\TestCase
         $graph->addEdge($b, $c); // B -> C
         $graph->addEdge($c, $d); // C -> D
         $graph->addEdge($a, $e); // A -> E  (node with multiple childs)
-
 
         $size = new SizeOfTree($graph);
 

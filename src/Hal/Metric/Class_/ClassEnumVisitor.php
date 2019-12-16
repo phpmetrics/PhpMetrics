@@ -37,7 +37,7 @@ class ClassEnumVisitor extends NodeVisitorAbstract
                 $class->set('interface', true);
                 $class->set('abstract', true);
             } else {
-                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
+                $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
                 $class = new ClassMetric($name);
                 $class->set('interface', false);
                 $class->set('abstract', $node instanceof Stmt\Trait_ || $node->isAbstract());
@@ -50,7 +50,7 @@ class ClassEnumVisitor extends NodeVisitorAbstract
             $roleDetector = new RoleOfMethodDetector();
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
-                    $function = new FunctionMetric((string) $stmt->name);
+                    $function = new FunctionMetric((string)$stmt->name);
 
                     $role = $roleDetector->detects($stmt);
                     $function->set('role', $role);

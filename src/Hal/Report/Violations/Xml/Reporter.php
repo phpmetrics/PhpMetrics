@@ -32,7 +32,6 @@ class Reporter
 
     public function generate(Metrics $metrics)
     {
-
         $logFile = $this->config->get('report-violations');
         if (!$logFile) {
             return;

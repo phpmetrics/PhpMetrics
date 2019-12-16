@@ -16,7 +16,6 @@ class PageRank
      */
     public function calculate(Metrics $metrics)
     {
-
         // build an array of relations
         $links = [];
         foreach ($metrics->all() as $metric) {

@@ -38,7 +38,6 @@ class ExternalsVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-
         if ($node instanceof Stmt\Namespace_) {
             $this->uses = [];
         }
@@ -114,7 +113,7 @@ class ExternalsVisitor extends NodeVisitorAbstract
                         foreach ($matches[1] as $check) {
                             foreach ($this->uses as $use) {
                                 if (method_exists($use, 'getAlias')) {
-                                    if (((string) $use->getAlias()) === $check) {
+                                    if (((string)$use->getAlias()) === $check) {
                                         $this->pushToDependencies($dependencies, (string)($use->name));
                                     }
                                     continue;
@@ -139,6 +138,6 @@ class ExternalsVisitor extends NodeVisitorAbstract
         if ('self' === $lowercase || 'parent' === $lowercase) {
             return;
         }
-        array_push($dependencies, (string) $dependency);
+        array_push($dependencies, (string)$dependency);
     }
 }

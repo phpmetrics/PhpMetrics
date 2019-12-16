@@ -25,14 +25,13 @@ class LcomVisitorTest extends \PHPUnit\Framework\TestCase
         $stmts = $parser->parse($code);
         $traverser->traverse($stmts);
 
-
         $this->assertEquals($expected, $metrics->get($classname)->get('lcom'));
     }
 
     public function provideExamples()
     {
         return [
-            [ __DIR__.'/../../examples/lcom1.php', 'MyClassA', 2]
+            [ __DIR__ . '/../../examples/lcom1.php', 'MyClassA', 2]
         ];
     }
 }

@@ -9,6 +9,8 @@
 
     <config name="ignore_warnings_on_exit" value="1"/>
 
+    <exclude-pattern>*/Report/Html/template/*</exclude-pattern>
+
     <arg name="colors"/>
     <arg value="s"/>
 
@@ -24,6 +26,11 @@
 
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
 
+    <rule ref="Generic.Formatting.NoSpaceAfterCast"/>
+
+    <!-- Forbid PHP 4 constructors -->
+    <rule ref="Generic.NamingConventions.ConstructorName"/>
+    <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>
     <rule ref="Generic.PHP.ForbiddenFunctions">
         <properties>
             <property name="forbiddenFunctions" type="array">
@@ -51,4 +58,39 @@
             </property>
         </properties>
     </rule>
+
+    <rule ref="Squiz.Classes.LowercaseClassKeywords"/>
+    <rule ref="Squiz.Operators.ValidLogicalOperators"/>
+
+    <!-- Spacing rules -->
+    <rule ref="Squiz.Strings.ConcatenationSpacing">
+        <properties>
+            <!-- The one space policy is applied according to PSR-12 -->
+            <property name="spacing" value="1"/>
+            <property name="ignoreNewlines" value="true"/>
+        </properties>
+    </rule>
+
+    <rule ref="Squiz.PHP.Eval"/>
+    <rule ref="Squiz.PHP.LowercasePHPFunctions"/>
+
+    <rule ref="Squiz.WhiteSpace.FunctionOpeningBraceSpace" />
+    <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
+        <properties>
+            <property name="ignoreBlankLines" value="false"/>
+        </properties>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile">
+        <severity>10</severity>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndFile">
+        <severity>10</severity>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines">
+        <severity>10</severity>
+    </rule>
+
+    <!-- Do not use a close tag for PHP -->
+    <rule ref="Zend.Files.ClosingTag"/>
 </ruleset>

@@ -38,7 +38,7 @@ class SystemComplexityVisitorTest extends \PHPUnit\Framework\TestCase
     public function provideExamples()
     {
         return [
-            [ __DIR__.'/../../examples/systemcomplexity1.php', 'A', 2.5, 1.0, 3.5],
+            [ __DIR__ . '/../../examples/systemcomplexity1.php', 'A', 2.5, 1.0, 3.5],
         ];
     }
 }

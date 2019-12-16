@@ -39,7 +39,6 @@ class KanDefectVisitor extends NodeVisitorAbstract
         ) {
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
-
             $select = $while = $if = 0;
 
             iterate_over_node($node, function ($node) use (&$while, &$select, &$if) {

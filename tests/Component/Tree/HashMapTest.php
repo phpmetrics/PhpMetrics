@@ -13,13 +13,11 @@ class HashMapTest extends \PHPUnit\Framework\TestCase
 
     public function testICanWorkWithHashMap()
     {
-
         $hash = new HashMap;
         $hash
             ->attach($node1 = new Node('A', 'value1'))
             ->attach($node2 = new Node('B', 'value2'))
-            ->attach(new Node('C', 'value3'))
-        ;
+            ->attach(new Node('C', 'value3'));
 
         $this->assertCount(3, $hash);
         $this->assertTrue($hash->has('A'));
@@ -36,8 +34,7 @@ class HashMapTest extends \PHPUnit\Framework\TestCase
         $hash
             ->attach(new Node('A', 'value1'))
             ->attach(new Node('B', 'value2'))
-            ->attach(new Node('C', 'value3'))
-        ;
+            ->attach(new Node('C', 'value3'));
         $i = 0;
         foreach ($hash as $item) {
             $i++;

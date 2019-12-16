@@ -12,7 +12,6 @@ class NodeTest extends \PHPUnit\Framework\TestCase
 {
     public function testICanWorkWithNode()
     {
-
         $node = new Node('A');
         $to = new Node('B');
         $edge = new Edge($node, $to);

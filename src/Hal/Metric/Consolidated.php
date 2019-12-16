@@ -166,7 +166,6 @@ class Consolidated
         }
         $sum->violations = (object)$violations;
 
-
         $this->avg = $avg;
         $this->sum = $sum;
         $this->classes = $classes;

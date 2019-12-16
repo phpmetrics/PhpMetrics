@@ -27,7 +27,7 @@ class PackageCollectingVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         if ($node instanceof Namespace_) {
-            $this->namespace = (string) $node->name;
+            $this->namespace = (string)$node->name;
         }
     }
 
@@ -51,8 +51,8 @@ class PackageCollectingVisitor extends NodeVisitorAbstract
                 $this->metrics->attach($packageMetric);
             }
             /* @var PackageMetric $packageMetric */
-            $elementName = isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node);
-            $elementName = (string) $elementName;
+            $elementName = isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node);
+            $elementName = (string)$elementName;
             $packageMetric->addClass($elementName);
 
             $this->metrics->get($elementName)->set('package', $packageName);

@@ -20,7 +20,6 @@ class Coupling
      */
     public function calculate(Metrics $metrics)
     {
-
         // build a graph of relations
         $graph = new GraphDeduplicated();
 

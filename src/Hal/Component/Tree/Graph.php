@@ -143,7 +143,6 @@ class Graph implements \Countable
                 }
             }
 
-
             if ($isRoot) {
                 array_push($roots, $node);
             }

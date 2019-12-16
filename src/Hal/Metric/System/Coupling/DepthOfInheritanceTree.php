@@ -23,7 +23,6 @@ class DepthOfInheritanceTree
      */
     public function calculate(Metrics $metrics)
     {
-
         $projectMetric = new ProjectMetric('tree');
 
         // building graph with parents / childs relations only
