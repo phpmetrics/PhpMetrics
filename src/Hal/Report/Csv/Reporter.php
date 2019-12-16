@@ -36,7 +36,6 @@ class Reporter
             return;
         }
 
-
         $logFile = $this->config->get('report-csv');
         if (!$logFile) {
             return;

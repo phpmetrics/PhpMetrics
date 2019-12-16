@@ -35,7 +35,6 @@ class Reporter
             return;
         }
 
-
         $logFile = $this->config->get('report-json');
         if (!$logFile) {
             return;

@@ -35,7 +35,6 @@ class GitChanges
      */
     public function calculate(Metrics $metrics)
     {
-
         if (!$this->config->has('git')) {
             return;
         }
@@ -65,7 +64,6 @@ class GitChanges
         );
         $r = shell_exec($command);
         $r = array_filter(explode(PHP_EOL, $r));
-
 
         // build a range of commits info, stepped by week number
         $history = [];
@@ -158,7 +156,6 @@ class GitChanges
             }
             $current = strtotime('+7 day', $current);
         }
-
 
         // store results
         $result = new ProjectMetric('git');

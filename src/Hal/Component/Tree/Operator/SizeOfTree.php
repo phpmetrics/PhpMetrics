@@ -39,7 +39,6 @@ class SizeOfTree
      */
     public function getDepthOfNode(Node $node)
     {
-
         $edges = $node->getEdges();
 
         if (0 === count($edges)) {
@@ -70,7 +69,6 @@ class SizeOfTree
      */
     public function getNumberOfChilds(Node $node, $uniqs = false)
     {
-
         $edges = $node->getEdges();
 
         if (0 === count($edges)) {
@@ -94,7 +92,6 @@ class SizeOfTree
             $n += 1 + $this->getNumberOfChilds($edge->getTo(), $uniqs);
 
             $edge->getTo()->visited = false;
-
 
             if ($n > $max) {
                 $max = $n;

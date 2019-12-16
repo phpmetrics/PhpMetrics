@@ -29,7 +29,6 @@ class HalsteadVisitorTest extends \PHPUnit\Framework\TestCase
         $stmts = $parser->parse($code);
         $traverser->traverse($stmts);
 
-
         $this->assertEquals(
             $nbOperands,
             $metrics->get($functionName)->get('number_operands'),
@@ -50,10 +49,10 @@ class HalsteadVisitorTest extends \PHPUnit\Framework\TestCase
     public function provideExamples()
     {
         return [
-            [ __DIR__.'/../../examples/halstead1.php', 'twice', 2, 3, 1.5],
-            [ __DIR__.'/../../examples/halstead2.php', 'maxi', 4, 6, 4.5],
-            [ __DIR__.'/../../examples/halstead3.php', 'f_switch', 3, 9, 1.29],
-            [ __DIR__.'/../../examples/halstead4.php', 'f_while', 9, 13, 10.4],
+            [ __DIR__ . '/../../examples/halstead1.php', 'twice', 2, 3, 1.5],
+            [ __DIR__ . '/../../examples/halstead2.php', 'maxi', 4, 6, 4.5],
+            [ __DIR__ . '/../../examples/halstead3.php', 'f_switch', 3, 9, 1.29],
+            [ __DIR__ . '/../../examples/halstead4.php', 'f_while', 9, 13, 10.4],
         ];
     }
 }

@@ -36,15 +36,15 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
     public function provideExamples()
     {
         return [
-            [ __DIR__.'/../../examples/externals1.php', 'A', ['H', 'C', 'B', 'D']],
-            [ __DIR__.'/../../examples/externals1.php', 'B', []],
-            [ __DIR__.'/../../examples/externals1.php', 'C', []],
-            [ __DIR__.'/../../examples/externals1.php', 'D', []],
-            [ __DIR__.'/../../examples/externals1.php', 'E', ['D', 'F', 'G']],
-            [ __DIR__.'/../../examples/externals1.php', 'F', ['G', 'H']],
-            [ __DIR__.'/../../examples/externals1.php', 'G', []],
-            [ __DIR__.'/../../examples/externals1.php', 'H', []],
-            [ __DIR__.'/../../examples/externals1.php', 'NS1\\A', ['NS2\\B']],
+            [ __DIR__ . '/../../examples/externals1.php', 'A', ['H', 'C', 'B', 'D']],
+            [ __DIR__ . '/../../examples/externals1.php', 'B', []],
+            [ __DIR__ . '/../../examples/externals1.php', 'C', []],
+            [ __DIR__ . '/../../examples/externals1.php', 'D', []],
+            [ __DIR__ . '/../../examples/externals1.php', 'E', ['D', 'F', 'G']],
+            [ __DIR__ . '/../../examples/externals1.php', 'F', ['G', 'H']],
+            [ __DIR__ . '/../../examples/externals1.php', 'G', []],
+            [ __DIR__ . '/../../examples/externals1.php', 'H', []],
+            [ __DIR__ . '/../../examples/externals1.php', 'NS1\\A', ['NS2\\B']],
         ];
     }
 
@@ -72,7 +72,7 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
     public function provideExamplesAnnotation()
     {
         return [
-            [ __DIR__.'/../../examples/annotations1.php', 'C\\A', ['A\\Route', 'B\\Json']],
+            [ __DIR__ . '/../../examples/annotations1.php', 'C\\A', ['A\\Route', 'B\\Json']],
         ];
     }
 }

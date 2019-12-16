@@ -18,7 +18,7 @@ class PackageMetric implements Metric, JsonSerializable
     public function addClass($name)
     {
         $elements = $this->get('classes');
-        $elements[] = (string) $name;
+        $elements[] = (string)$name;
         $this->set('classes', $elements);
     }
 
@@ -26,7 +26,7 @@ class PackageMetric implements Metric, JsonSerializable
     public function setAbstraction($abstraction)
     {
         if ($abstraction !== null) {
-            $abstraction = (float) $abstraction;
+            $abstraction = (float)$abstraction;
         }
         $this->set('abstraction', $abstraction);
     }
@@ -41,7 +41,7 @@ class PackageMetric implements Metric, JsonSerializable
     public function setInstability($instability)
     {
         if ($instability !== null) {
-            $instability = (float) $instability;
+            $instability = (float)$instability;
         }
         $this->set('instability', $instability);
     }

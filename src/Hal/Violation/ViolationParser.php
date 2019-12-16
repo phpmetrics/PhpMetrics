@@ -14,7 +14,6 @@ class ViolationParser
      */
     public function apply(Metrics $metrics)
     {
-
         $violations = [
             new Class_\Blob(),
             new Class_\TooComplexClassCode(),

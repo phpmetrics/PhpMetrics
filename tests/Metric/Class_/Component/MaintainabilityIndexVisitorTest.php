@@ -26,7 +26,6 @@ class MaintainabilityIndexVisitorTest extends \PHPUnit\Framework\TestCase
         $prophet->get('cloc')->willReturn($cloc);
         $prophet->get('volume')->willReturn($volume);
 
-
         // spy
         $prophet->set('mIwoC', $mIwoC)->will(function () use ($prophet) {
             return $prophet->reveal();

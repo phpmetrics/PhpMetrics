@@ -13,7 +13,6 @@ class UnitTestingTest extends \PHPUnit\Framework\TestCase
 
     public function testICanParseJunitXmlFile()
     {
-
         $config = new Config();
         $config->set('junit', __DIR__ . '/xml/junit1.xml');
         $unit = new UnitTesting($config, []);
@@ -46,7 +45,6 @@ class UnitTestingTest extends \PHPUnit\Framework\TestCase
 
     public function testICanParseCodeceptionFile()
     {
-
         $config = new Config();
         $config->set('junit', __DIR__ . '/xml/codeception1.xml');
         $unit = new UnitTesting($config, []);

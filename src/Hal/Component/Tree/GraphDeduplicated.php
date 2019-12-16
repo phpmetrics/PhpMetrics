@@ -17,7 +17,7 @@ class GraphDeduplicated extends Graph
      */
     public function addEdge(Node $from, Node $to)
     {
-        $key = $from->getUniqueId().'->'.$to->getUniqueId();
+        $key = $from->getUniqueId() . '->' . $to->getUniqueId();
 
         if (isset($this->edgesMap[$key])) {
             return $this;

@@ -48,7 +48,6 @@ class LcomVisitor extends NodeVisitorAbstract
                     $from = $graph->get($stmt->name . '()');
 
                     \iterate_over_node($stmt, function ($node) use ($from, &$graph) {
-
                         if ($node instanceof Node\Expr\PropertyFetch && isset($node->var->name) && $node->var->name == 'this') {
                             $name = getNameOfNode($node);
                             // use of attribute $this->xxx;
@@ -59,7 +58,6 @@ class LcomVisitor extends NodeVisitorAbstract
                             $graph->addEdge($from, $to);
                             return;
                         }
-
 
                         if ($node instanceof Node\Expr\MethodCall) {
                             if (!$node->var instanceof Node\Expr\New_ && isset($node->var->name) && getNameOfNode($node->var) === 'this') {

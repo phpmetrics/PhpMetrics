@@ -63,7 +63,7 @@ class Logical // ccn2: 11
 {
     function __invoke()
     {
-        $a = (true || false) and (false && true) or (true xor false);
+        $a = (true || false) && (false && true) || (true xor false);
         $b = $a ? 1 : 2;
         $c = $b ?: 0;
         $d = $b ?? $c;

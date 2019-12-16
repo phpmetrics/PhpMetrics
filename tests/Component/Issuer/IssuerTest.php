@@ -48,7 +48,6 @@ EOT;
         $stmt = $parser->parse($code);
         $issuer->set('code', $stmt);
 
-
         try {
             trigger_error('Object of class stdClass could not be converted to string', E_USER_ERROR);
         } catch (\Exception $e) {

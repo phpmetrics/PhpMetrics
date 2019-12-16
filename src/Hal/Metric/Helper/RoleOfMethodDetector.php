@@ -87,7 +87,6 @@ class RoleOfMethodDetector
         // build a fingerprint of the given method
         $fingerprintOfMethod = [];
         iterate_over_node($node, function ($node) use (&$fingerprintOfMethod) {
-
             // avoid identifier (php-parser:^4)
             if ($node instanceof Identifier) {
                 return;

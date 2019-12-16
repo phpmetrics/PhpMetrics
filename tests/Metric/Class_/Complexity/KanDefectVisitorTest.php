@@ -36,7 +36,7 @@ class KanDefectVisitorTest extends \PHPUnit\Framework\TestCase
     public function provideExamples()
     {
         return [
-            [ __DIR__.'/../../examples/kan1.php', 'A', .89],
+            [ __DIR__ . '/../../examples/kan1.php', 'A', .89],
         ];
     }
 }

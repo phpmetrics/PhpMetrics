@@ -41,7 +41,6 @@ class Reporter
         $sum = $consolidated->getSum();
         $avg = $consolidated->getAvg();
 
-
         $methodsByClass = $locByClass = $locByMethod = 0;
         if ($sum->nbClasses > 0) {
             $methodsByClass = round($sum->nbMethods / $sum->nbClasses, 2);

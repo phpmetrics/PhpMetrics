@@ -38,7 +38,6 @@ class UnitTesting
      */
     public function calculate(Metrics $metrics)
     {
-
         if (!$this->config->has('junit')) {
             return;
         }
@@ -67,7 +66,6 @@ class UnitTesting
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->load($filename);
         $xpath = new \DOMXpath($dom);
-
 
         // JUNIT format
         foreach ($xpath->query('//testsuite[@file]') as $suite) {
