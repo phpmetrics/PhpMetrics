@@ -14,9 +14,9 @@ class Application
 {
 
     /**
-     * @param $argv
+     * @param array $argv
      */
-    public function run($argv)
+    public function run(array $argv)
     {
         // formatter
         $output = new CliOutput();

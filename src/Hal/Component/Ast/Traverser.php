@@ -19,11 +19,18 @@ use PhpParser\NodeVisitor;
  */
 class Traverser
 {
+    /**
+     * @var callable
+     */
     protected $stopCondition;
 
     /** @var Mother */
     private $traverser;
 
+    /**
+     * @param Mother $traverser
+     * @param callable|null $stopCondition
+     */
     public function __construct(Mother $traverser, $stopCondition = null)
     {
         if (null === $stopCondition) {

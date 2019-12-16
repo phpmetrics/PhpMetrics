@@ -15,19 +15,19 @@ namespace Hal\Component\Output;
 interface Output
 {
     /**
-     * @param $message
+     * @param string $message
      * @return $this
      */
     public function writeln($message);
 
     /**
-     * @param $message
+     * @param string $message
      * @return $this
      */
     public function write($message);
 
     /**
-     * @param $message
+     * @param string $message
      * @return $this
      */
     public function err($message);

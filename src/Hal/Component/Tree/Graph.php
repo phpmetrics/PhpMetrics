@@ -14,7 +14,7 @@ class Graph implements \Countable
     /**
      * @var Node[]
      */
-    private $datas = [];
+    private $data = [];
 
     /**
      * @var Edge[]
@@ -30,7 +30,7 @@ class Graph implements \Countable
         if ($this->has($node->getKey())) {
             throw new GraphException(sprintf('node %s is already present', $node->getKey()));
         }
-        $this->datas[$node->getKey()] = $node;
+        $this->data[$node->getKey()] = $node;
         return $this;
     }
 
@@ -85,7 +85,7 @@ class Graph implements \Countable
      */
     public function get($key)
     {
-        return $this->has($key) ? $this->datas[$key] : null;
+        return $this->has($key) ? $this->data[$key] : null;
     }
 
     /**
@@ -94,7 +94,7 @@ class Graph implements \Countable
      */
     public function has($key)
     {
-        return isset($this->datas[$key]);
+        return isset($this->data[$key]);
     }
 
     /**
@@ -102,7 +102,7 @@ class Graph implements \Countable
      */
     public function count()
     {
-        return count($this->datas);
+        return count($this->data);
     }
 
     /**
@@ -110,7 +110,7 @@ class Graph implements \Countable
      */
     public function all()
     {
-        return $this->datas;
+        return $this->data;
     }
 
     /**
