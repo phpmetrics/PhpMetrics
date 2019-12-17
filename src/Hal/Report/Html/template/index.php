@@ -61,7 +61,7 @@
                     <div class="column with-help">
                         <div class="bloc">
                             <div class="label">Maintainability / complexity</div>
-                            <div id="svg-maintainability"></div>
+                            <div id="svg-maintainability" class="svg-container"></div>
                         </div>
                     </div>
                     <div class="column help">

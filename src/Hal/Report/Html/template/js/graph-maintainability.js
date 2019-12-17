@@ -69,4 +69,13 @@ function chartMaintainability() {
         .attr("class", "tooltip")
         .style("opacity", 0);
 
+    // button for saving image
+    var button = d3.select('#svg-maintainability').append('button');
+    button
+      .classed('btn-save-image', true)
+      .text('download')
+      .on('click', function () {
+        var svg = d3.select('#svg-maintainability svg')[0][0];
+        saveSvgAsImage(svg, 'PhpMetrics maintainability / complexity', 1900, 1900);
+      });
 }
