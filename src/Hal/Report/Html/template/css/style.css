@@ -395,8 +395,36 @@ a {
     stroke: #000;
     shape-rendering: crispEdges;
 }
-
-
+.svg-container {
+    position:relative;
+}
+.btn-save-image {
+    position:absolute;
+    top: 0;
+    left: 0;
+    background:#333;
+    color: #FFF;
+    font-size: 0.8em;
+    line-height: 1em;
+    height: 1em;
+    cursor: pointer;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+    -moz-opacity: 0.20;
+    -khtml-opacity: 0.20;
+    opacity: 0.20;
+    transition: opacity .2s ease-out;
+    -moz-transition: opacity .2s ease-out;
+    -webkit-transition: opacity .2s ease-out;
+    -o-transition: opacity .2s ease-out;
+}
+.btn-save-image:hover {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter: alpha(opacity=100);
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity: 1;
+}
 
 /* -------- Table ------------ */
 #table-length tbody {
