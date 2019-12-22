@@ -119,7 +119,7 @@ class Consolidated
         $avg->outgoingCDep = 0;
         $avg->outgoingPDep = 0;
         $avg->classesPerPackage = 0;
-        if ([] !== $packages) {
+        if (0 !== $sum->nbPackages) {
             foreach (array_keys($packages) as $eachName) {
                 /* @var $eachPackage PackageMetric */
                 $eachPackage = $metrics->get($eachName);
