@@ -7,13 +7,11 @@ use Hal\Component\Output\Output;
 use Hal\Metric\Metrics;
 use Hal\Report\ReporterInterface;
 use Hal\Violation\Violation;
-use function date;
-use function dirname;
 
 /**
  * This class takes care about violations to report in XML format.
  */
-final class Reporter implements ReporterInterface
+class Reporter implements ReporterInterface
 {
     /** @var Config */
     private $config;

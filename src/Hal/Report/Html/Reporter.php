@@ -12,7 +12,7 @@ use Hal\Report\ReporterInterface;
 /**
  * This class takes care about the global report in HTML of consolidated metrics.
  */
-final class Reporter implements ReporterInterface
+class Reporter implements ReporterInterface
 {
     /**
      * @var Config

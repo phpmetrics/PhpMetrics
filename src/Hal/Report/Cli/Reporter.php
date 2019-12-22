@@ -7,15 +7,11 @@ use Hal\Metric\Consolidated;
 use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Hal\Report\ReporterInterface;
-use function array_slice;
-use function arsort;
-use function round;
-use function sprintf;
 
 /**
  * This class takes care about the global output into the STDOUT of consolidated metrics.
  */
-final class Reporter implements ReporterInterface
+class Reporter implements ReporterInterface
 {
     /** @var Config */
     private $config;
@@ -79,7 +75,7 @@ final class Reporter implements ReporterInterface
         $treeMetric = $metrics->get('tree');
         if (null !== $treeMetric) {
             $inheritanceTreeDepthReport = <<<EOT
-Depth of Inheritance Tree                   {$treeMetric->get('depthOfInheritanceTree')}
+    Depth of Inheritance Tree                   {$treeMetric->get('depthOfInheritanceTree')}
 
 EOT;
         }
@@ -106,8 +102,7 @@ Coupling
     Average afferent coupling                   {$avg->afferentCoupling}
     Average efferent coupling                   {$avg->efferentCoupling}
     Average instability                         {$avg->instability}
-    {$inheritanceTreeDepthReport}
-
+{$inheritanceTreeDepthReport}
 Package
     Packages                                    {$sum->nbPackages}
     Average classes per package                 {$avg->classesPerPackage}

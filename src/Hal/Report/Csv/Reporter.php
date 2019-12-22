@@ -7,19 +7,11 @@ use Hal\Metric\Metrics;
 use Hal\Metric\Registry;
 use Hal\Report\ReporterInterface;
 use RuntimeException;
-use function array_map;
-use function dirname;
-use function fclose;
-use function file_exists;
-use function fopen;
-use function fputcsv;
-use function is_scalar;
-use function is_writable;
 
 /**
  * This class takes care about the global report in CSV of consolidated metrics.
  */
-final class Reporter implements ReporterInterface
+class Reporter implements ReporterInterface
 {
     /** @var Config */
     private $config;
