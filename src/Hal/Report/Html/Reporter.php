@@ -7,8 +7,12 @@ use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
 use Hal\Metric\Group\Group;
 use Hal\Metric\Metrics;
+use Hal\Report\ReporterInterface;
 
-class Reporter
+/**
+ * This class takes care about the global report in HTML of consolidated metrics.
+ */
+final class Reporter implements ReporterInterface
 {
     /**
      * @var Config
@@ -56,7 +60,9 @@ class Reporter
         $this->templateDir = __DIR__ . '/../../../../templates';
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     public function generate(Metrics $metrics)
     {
         $logDir = $this->config->get('report-html');
@@ -74,35 +80,22 @@ class Reporter
             $reducedMetricsByGroup = $group->reduceMetrics($metrics);
             $consolidatedGroups[$group->getName()] = new Consolidated($reducedMetricsByGroup);
         }
-
         $consolidated = new Consolidated($metrics);
 
-        // history of builds
-        $today = (object)[
-            'avg' => $consolidated->getAvg(),
-            'sum' => $consolidated->getSum()
-        ];
         $files = glob($logDir . '/js/history-*.json');
-        $next = count($files) + 1;
-        $history = [];
         natsort($files);
-        foreach ($files as $filename) {
-            array_push($history, json_decode(file_get_contents($filename)));
+        $history = array_map(static function ($filename) {
+            return json_decode(file_get_contents($filename));
+        }, $files);
+
+        foreach (['js', 'css', 'images', 'fonts'] as $subFolder) {
+            $folder = $logDir . '/' . $subFolder;
+            if (!file_exists($folder)) {
+                mkdir($folder, 0755, true);
+            }
+            recurse_copy(__DIR__ . '/template/' . $subFolder, $folder);
         }
 
-        // copy sources
-        if (!file_exists($logDir . '/js')) {
-            mkdir($logDir . '/js', 0755, true);
-        }
-        if (!file_exists($logDir . '/css')) {
-            mkdir($logDir . '/css', 0755, true);
-        }
-        if (!file_exists($logDir . '/images')) {
-            mkdir($logDir . '/images', 0755, true);
-        }
-        if (!file_exists($logDir . '/fonts')) {
-            mkdir($logDir . '/fonts', 0755, true);
-        }
         recurse_copy($this->templateDir . '/html_report/js', $logDir . '/js');
         recurse_copy($this->templateDir . '/html_report/css', $logDir . '/css');
         recurse_copy($this->templateDir . '/html_report/images', $logDir . '/images');
@@ -126,17 +119,12 @@ class Reporter
         }
         $this->renderPage($this->templateDir . '/html_report/junit.php', $logDir . '/junit.html', $consolidated, $consolidatedGroups, $history);
 
-        // js data
-        file_put_contents(
-            sprintf('%s/js/history-%d.json', $logDir, $next),
-            json_encode($today, JSON_PRETTY_PRINT)
-        );
-        file_put_contents(
-            sprintf('%s/js/latest.json', $logDir),
-            json_encode($today, JSON_PRETTY_PRINT)
-        );
+        $today = (object)['avg' => $consolidated->getAvg(), 'sum' => $consolidated->getSum()];
+        $encodedToday = json_encode($today, JSON_PRETTY_PRINT);
+        $next = count($history) + 1;
+        file_put_contents(sprintf('%s/js/history-%d.json', $logDir, $next), $encodedToday);
+        file_put_contents(sprintf('%s/js/latest.json', $logDir), $encodedToday);
 
-        // json data
         file_put_contents(
             $logDir . '/classes.js',
             'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
@@ -189,6 +177,8 @@ class Reporter
     /**
      * @param $source
      * @param $destination
+     * @param Consolidated $consolidated
+     * @param $history
      * @return $this
      */
     public function renderPage($source, $destination, Consolidated $consolidated, $history)
@@ -212,6 +202,8 @@ class Reporter
     /**
      * @param $type
      * @param $key
+     * @param bool $lowIsBetter
+     * @param bool $highIsBetter
      * @return string
      */
     protected function getTrend($type, $key, $lowIsBetter = false, $highIsBetter = false)
@@ -220,20 +212,20 @@ class Reporter
             return '';
         }
 
-        $svg = [];
-        $svg['gt'] = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        $svg = [
+            'gt' => '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
     <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
     <path d="M0 0h24v24H0z" fill="none"/>
-</svg>';
-        $svg['eq'] = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+</svg>',
+            'eq' => '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
     <path d="M22 12l-4-4v3H3v2h15v3z"/>
     <path d="M0 0h24v24H0z" fill="none"/>
-</svg>';
-        $svg['lt'] = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+</svg>',
+            'lt' => '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
     <path d="M16 18l2.29-2.29-4.88-4.88-4 4L2 7.41 3.41 6l6 6 4-4 6.3 6.29L22 12v6z"/>
     <path d="M0 0h24v24H0z" fill="none"/>
-</svg>';
-
+</svg>',
+        ];
         $last = end($this->history);
         if (!isset($last->$type->$key)) {
             return '';
@@ -241,37 +233,20 @@ class Reporter
 
         $oldValue = $last->$type->$key;
         $newValue = isset($this->$type->$key) ? $this->$type->$key : 0;
-        if ($newValue > $oldValue) {
-            $r = 'gt';
-        } elseif ($newValue < $oldValue) {
-            $r = 'lt';
-        } else {
-            $r = 'eq';
-        }
 
         $diff = $newValue - $oldValue;
-        if ($diff > 0) {
-            $diff = '+' . $diff;
-        }
-
         $goodOrBad = 'neutral';
-        if ($lowIsBetter) {
-            if ($newValue > $oldValue) {
-                $goodOrBad = 'bad';
-            } else {
-                if ($newValue < $oldValue) {
-                    $goodOrBad = 'good';
-                }
-            }
-        }
-        if ($highIsBetter) {
-            if ($newValue > $oldValue) {
-                $goodOrBad = 'good';
-            } else {
-                if ($newValue < $oldValue) {
-                    $goodOrBad = 'bad';
-                }
-            }
+        if ($newValue > $oldValue) {
+            $r = 'gt';
+            $diff = '+' . $diff;
+            $goodOrBad = $lowIsBetter ? 'bad' : $goodOrBad;
+            $goodOrBad = $highIsBetter ? 'good' : $goodOrBad;
+        } elseif ($newValue < $oldValue) {
+            $r = 'lt';
+            $goodOrBad = $lowIsBetter ? 'good' : $goodOrBad;
+            $goodOrBad = $highIsBetter ? 'bad' : $goodOrBad;
+        } else {
+            $r = 'eq';
         }
 
         return sprintf(

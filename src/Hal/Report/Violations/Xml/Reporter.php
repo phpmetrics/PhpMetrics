@@ -1,22 +1,24 @@
 <?php
 namespace Hal\Report\Violations\Xml;
 
+use DOMDocument;
 use Hal\Application\Config\Config;
 use Hal\Component\Output\Output;
 use Hal\Metric\Metrics;
+use Hal\Report\ReporterInterface;
 use Hal\Violation\Violation;
+use function date;
+use function dirname;
 
-class Reporter
+/**
+ * This class takes care about violations to report in XML format.
+ */
+final class Reporter implements ReporterInterface
 {
-
-    /**
-     * @var Config
-     */
+    /** @var Config */
     private $config;
 
-    /**
-     * @var Output
-     */
+    /** @var Output */
     private $output;
 
     /**
@@ -29,7 +31,9 @@ class Reporter
         $this->output = $output;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     public function generate(Metrics $metrics)
     {
         $logFile = $this->config->get('report-violations');
@@ -46,15 +50,16 @@ class Reporter
         ];
 
         // root
-        $xml = new \DOMDocument("1.0", "UTF-8");
+        $xml = new DOMDocument('1.0', 'UTF-8');
         $xml->formatOutput = true;
-        $root = $xml->createElement("pmd");
+        $root = $xml->createElement('pmd');
         $root->setAttribute('version', '@package_version@');
         $root->setAttribute('timestamp', date('c'));
 
         foreach ($metrics->all() as $metric) {
+            /** @var Violation[] $violations */
             $violations = $metric->get('violations');
-            if (count($violations) == 0) {
+            if (0 === count($violations)) {
                 continue;
             }
 
@@ -71,14 +76,13 @@ class Reporter
                 $item->nodeValue = $violation->getDescription();
                 $node->appendChild($item);
             }
-
             $root->appendChild($node);
         }
-
         $xml->appendChild($root);
 
         // save file
-        file_exists(dirname($logFile)) || mkdir(dirname($logFile), 0755, true);
+        $logDir = dirname($logFile);
+        file_exists($logDir) || mkdir($logDir, 0755, true);
         file_put_contents($logFile, $xml->saveXML());
 
         $this->output->writeln(sprintf('XML report generated in "%s"', $logFile));
