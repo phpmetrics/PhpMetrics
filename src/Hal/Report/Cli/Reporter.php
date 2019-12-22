@@ -134,7 +134,6 @@ Violations
     Information                                 {$sum->violations->information}
 
 EOT;
-
     }
 
     /**
