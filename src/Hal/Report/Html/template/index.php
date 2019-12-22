@@ -136,7 +136,7 @@
                             </thead>
                             <tbody id="contentPackages" class="clusterize-content">
                             <?php
-                            $packages = isset($project['composer'], $project['composer']['packages']) ? $project['composer']['packages'] : [];
+                            $packages = isset($project['composer']['packages']) ? $project['composer']['packages'] : [];
                             usort($packages, function ($a, $b) {
                                 return strcmp($a->name, $b->name);
                             });

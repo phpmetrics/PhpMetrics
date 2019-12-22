@@ -1,6 +1,8 @@
 <?php
 namespace Hal\Metric\System\Packages\Composer;
 
+use function is_array;
+
 /**
  * @package Hal\Metric\System\Packages\Composer
  */
@@ -45,7 +47,7 @@ class Packagist
                 $latest = $version;
                 $response->name = $package;
                 $response->latest = $version;
-                $response->license = $datas->license;
+                $response->license = is_array($datas->license) ? $datas->license : [$datas->license];
                 $response->homepage = $datas->homepage;
                 $response->time = $datas->time;
                 $response->zip = $datas->dist->url;
