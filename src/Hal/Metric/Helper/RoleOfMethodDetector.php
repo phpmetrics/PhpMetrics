@@ -4,6 +4,8 @@ namespace Hal\Metric\Helper;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 
@@ -29,6 +31,12 @@ class RoleOfMethodDetector
                 'PhpParser\\Node\\Expr\\PropertyFetch',
                 'PhpParser\\Node\\Expr\\Variable',
                 'PhpParser\\Node\\Name',
+            ],
+            [
+                'PhpParser\\Node\\Stmt\\ClassMethod',
+                'PhpParser\\Node\\Stmt\\Return_',
+                'PhpParser\\Node\\Expr\\PropertyFetch',
+                'PhpParser\\Node\\Expr\\Variable',
             ],
         ],
         'setter' => [
@@ -70,6 +78,16 @@ class RoleOfMethodDetector
                 'PhpParser\\Node\\Param',
                 'PhpParser\\Node\\Expr\\Variable',
                 'PhpParser\\Node\\Name',
+            ],[
+                // function setOk(?bool $ok): self { $this->isOk = $ok; return $this; }
+                'PhpParser\\Node\\Stmt\\ClassMethod',
+                'PhpParser\\Node\\Stmt\\Expression',
+                'PhpParser\\Node\\Expr\\Assign',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Expr\\PropertyFetch',
+                'PhpParser\\Node\\Expr\\Variable',
+                'PhpParser\\Node\\Param',
+                'PhpParser\\Node\\Expr\\Variable',
             ],
         ]
     ];
@@ -100,6 +118,16 @@ class RoleOfMethodDetector
             // avoid fluent interface
             if ($node instanceof Return_ && $node->expr instanceof Variable && $node->expr->name === 'this') {
                 unset($fingerprintOfMethod[count($fingerprintOfMethod) - 1]);
+                return;
+            }
+
+            // avoid type hint
+            if ($node instanceof Name) {
+                return;
+            }
+
+            // avoid nullable type
+            if ($node instanceof NullableType) {
                 return;
             }
 

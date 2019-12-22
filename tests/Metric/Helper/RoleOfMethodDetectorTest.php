@@ -51,6 +51,10 @@ class RoleOfMethodDetectorTest extends \PHPUnit\Framework\TestCase
             $examples['setter with scalar hint and return void'] = ['setter', '<?php class A { function setName(string $name): void { $this->name = $name; } }'];
             $examples['getter with return object'] = ['getter', '<?php class A { function getName(): Name { return $this->name; } }'];
             $examples['setter with object hint and return void'] = ['setter', '<?php class A { function setName(Name $name): void { $this->name = $name; } }'];
+            $examples['getter with return optional'] = ['getter', '<?php class A { function isOk(): ?bool { return $this->isOk; } }'];
+            $examples['setter fluent with param optional'] = ['setter', '<?php class A { function setOk(?bool $ok): self { $this->isOk = $ok; return $this; } }'];
+            $examples['setter fluent non typed with param optional'] = ['setter', '<?php class A { function setOk(?bool $ok) { $this->isOk = $ok; return $this; } }'];
+            $examples['setter with param optional'] = ['setter', '<?php class A { function setOk(?bool $ok) { $this->isOk = $ok; } }'];
         }
         return $examples;
     }
