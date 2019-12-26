@@ -119,22 +119,24 @@ class Consolidated
         $avg->outgoingCDep = 0;
         $avg->outgoingPDep = 0;
         $avg->classesPerPackage = 0;
-        foreach (array_keys($packages) as $eachName) {
-            /* @var $eachPackage PackageMetric */
-            $eachPackage = $metrics->get($eachName);
-            $avg->distance += $eachPackage->getDistance();
-            $avg->incomingCDep += count($eachPackage->getIncomingClassDependencies());
-            $avg->incomingPDep += count($eachPackage->getIncomingPackageDependencies());
-            $avg->outgoingCDep += count($eachPackage->getOutgoingClassDependencies());
-            $avg->outgoingPDep += count($eachPackage->getOutgoingPackageDependencies());
-            $avg->classesPerPackage += count($eachPackage->getClasses());
+        if (0 !== $sum->nbPackages) {
+            foreach (array_keys($packages) as $eachName) {
+                /* @var $eachPackage PackageMetric */
+                $eachPackage = $metrics->get($eachName);
+                $avg->distance += $eachPackage->getDistance();
+                $avg->incomingCDep += count($eachPackage->getIncomingClassDependencies());
+                $avg->incomingPDep += count($eachPackage->getIncomingPackageDependencies());
+                $avg->outgoingCDep += count($eachPackage->getOutgoingClassDependencies());
+                $avg->outgoingPDep += count($eachPackage->getOutgoingPackageDependencies());
+                $avg->classesPerPackage += count($eachPackage->getClasses());
+            }
+            $avg->distance = round($avg->distance / $sum->nbPackages, 2);
+            $avg->incomingCDep = round($avg->incomingCDep / $sum->nbPackages, 2);
+            $avg->incomingPDep = round($avg->incomingPDep / $sum->nbPackages, 2);
+            $avg->outgoingCDep = round($avg->outgoingCDep / $sum->nbPackages, 2);
+            $avg->outgoingPDep = round($avg->outgoingPDep / $sum->nbPackages, 2);
+            $avg->classesPerPackage = round($avg->classesPerPackage / $sum->nbPackages, 2);
         }
-        $avg->distance = round($avg->distance / count($packages), 2);
-        $avg->incomingCDep = round($avg->incomingCDep / count($packages), 2);
-        $avg->incomingPDep = round($avg->incomingPDep / count($packages), 2);
-        $avg->outgoingCDep = round($avg->outgoingCDep / count($packages), 2);
-        $avg->outgoingPDep = round($avg->outgoingPDep / count($packages), 2);
-        $avg->classesPerPackage = round($avg->classesPerPackage / count($packages), 2);
 
         // sums of violations
         $violations = [
