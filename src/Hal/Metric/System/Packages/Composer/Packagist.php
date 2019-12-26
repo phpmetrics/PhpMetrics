@@ -45,7 +45,7 @@ class Packagist
                 $latest = $version;
                 $response->name = $package;
                 $response->latest = $version;
-                $response->license = $datas->license;
+                $response->license = (array)$datas->license;
                 $response->homepage = $datas->homepage;
                 $response->time = $datas->time;
                 $response->zip = $datas->dist->url;
