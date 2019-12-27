@@ -1,4 +1,7 @@
-<?php require __DIR__ . '/_header.php'; ?>
+<?php
+// If maintainability index is requested to be without comments, this is true. False otherwise.
+$modeMIWOC = $config->has('maintainability-index-without-comments');
+require __DIR__ . '/_header.php'; ?>
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
@@ -69,7 +72,7 @@
                             <p>Each file is symbolized by a circle. Size of the circle represents the Cyclomatic
                                 complexity.
                                 Color
-                                of the circle represents the Maintainability Index.</p>
+                                of the circle represents the Maintainability Index<?php echo $modeMIWOC ? ' (without comments)' : '' ?>.</p>
 
                             <p>Large red circles will be probably hard to maintain.</p>
                         </div>
@@ -95,14 +98,23 @@
                             <tbody id="contentClassRank" class="clusterize-content">
                             <?php
                             $classesS = $classes;
-                            usort($classesS, function ($a, $b) {
+                            usort($classesS, static function ($a, $b) {
                                 return strcmp($b['pageRank'], $a['pageRank']);
                             });
                             //$classesS = array_slice($classesS, 0, 10);
                             foreach ($classesS as $class) { ?>
                                 <tr>
-                                    <td><?php echo $class['name']; ?> <span class="badge"
-                                                                            title="Maintainability Index"><?php echo isset($class['mi']) ? $class['mi'] : ''; ?></span>
+                                    <td><?php echo $class['name']; ?>
+                                        <?php
+                                            if ($modeMIWOC) {
+                                                $badgeTitle = 'Maintainability Index (w/o comments)';
+                                                $mi = isset($class['mIwoC']) ? $class['mIwoC'] : '';
+                                            } else {
+                                                $badgeTitle = 'Maintainability Index';
+                                                $mi = isset($class['mi']) ? $class['mi'] : '';
+                                            }
+                                        ?>
+                                        <span class="badge" title="<?php echo $badgeTitle; ?>"><?php echo $mi; ?></span>
                                     </td>
                                     <td><?php echo $class['pageRank']; ?></td>
                                 </tr>
@@ -180,7 +192,10 @@
     <script type="text/javascript">
         document.onreadystatechange = function () {
             if (document.readyState === 'complete') {
-                chartMaintainability();
+                <?php
+                    $withoutCommentsArg = $modeMIWOC ? 'true' : 'false';
+                ?>
+                chartMaintainability(<?php echo $withoutCommentsArg ?>);
 
                 new Clusterize({
                     scrollId: 'clusterizeClassRank',

@@ -1,5 +1,7 @@
 <?php
 $fullwidth = true;
+// If maintainability index is requested to be without comments, this is true. False otherwise.
+$modeMIWOC = $config->has('maintainability-index-without-comments');
 require __DIR__ . '/_header.php'; ?>
 
     <div class="row">
@@ -81,14 +83,23 @@ require __DIR__ . '/_header.php'; ?>
                     <tbody>
                     <?php
                     $classesS = $classes;
-                    usort($classesS, function ($a, $b) {
+                    usort($classesS, static function ($a, $b) {
                         return strcmp($b['pageRank'], $a['pageRank']);
                     });
                     $classesS = array_slice($classesS, 0, 10);
                     foreach ($classesS as $class) { ?>
                         <tr>
-                            <td><?php echo $class['name']; ?> <span class="badge"
-                                                                    title="Maintainability Index"><?php echo isset($class['mi']) ? $class['mi'] : ''; ?></span>
+                            <td><?php echo $class['name']; ?>
+                                <?php
+                                if ($modeMIWOC) {
+                                    $badgeTitle = 'Maintainability Index (w/o comments)';
+                                    $mi = isset($class['mIwoC']) ? $class['mIwoC'] : '';
+                                } else {
+                                    $badgeTitle = 'Maintainability Index';
+                                    $mi = isset($class['mi']) ? $class['mi'] : '';
+                                }
+                                ?>
+                                <span class="badge" title="<?php echo $badgeTitle; ?>"><?php echo $mi; ?></span>
                             </td>
                             <td><?php echo $class['pageRank']; ?></td>
                         </tr>
@@ -122,7 +133,10 @@ require __DIR__ . '/_header.php'; ?>
     <script type="text/javascript">
         document.onreadystatechange = function () {
             if (document.readyState === 'complete') {
-                chartMaintainability();
+                <?php
+                $withoutCommentsArg = $modeMIWOC ? 'true' : 'false';
+                ?>
+                chartMaintainability(<?php echo $withoutCommentsArg ?>);
             }
         };
     </script>

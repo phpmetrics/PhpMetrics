@@ -1,4 +1,4 @@
-function chartMaintainability() {
+function chartMaintainability(withoutComment) {
 
     var diameter = document.getElementById('svg-maintainability').offsetWidth;
 
@@ -37,23 +37,38 @@ function chartMaintainability() {
             return d.r;
         })
         .style("fill", function (d) {
-            if (d.mi > 85) {
-                return '#8BC34A';
-            } else if (d.mi > 69) {
-                return '#FFC107';
+            if (true === withoutComment) {
+                if (d.mIwoC > 65) {
+                    return '#8BC34A';
+                } else if (d.mIwoC > 53) {
+                    return '#FFC107';
+                } else {
+                    return '#F44336';
+                }
             } else {
-                return '#F44336';
+                if (d.mi > 85) {
+                    return '#8BC34A';
+                } else if (d.mi > 69) {
+                    return '#FFC107';
+                } else {
+                    return '#F44336';
+                }
             }
         })
-        .attr("transform", function (d) {
-            return "translate(" + d.x + "," + d.y + ")";
-        })
         .on('mouseover', function (d) {
-            var text = '<strong>' + d.name + '</strong>'
-                + "<br />Cyclomatic Complexity : " + d.ccn
-                + "<br />Maintainability Index: " + d.mi;
+            if (true === withoutComment) {
+                var text = '<strong>' + d.name + '</strong>'
+                    + "<br />Cyclomatic Complexity : " + d.ccn
+                    + "<br />Maintainability Index (w/o comments): " + d.mIwoC;
+            } else {
+                var text = '<strong>' + d.name + '</strong>'
+                    + "<br />Cyclomatic Complexity : " + d.ccn
+                    + "<br />Maintainability Index: " + d.mi;
+            }
             d3.select('.tooltip').html(text);
-            d3.select(".tooltip").style("opacity", 1);
+            d3.select(".tooltip")
+                .style("opacity", 1)
+                .style("z-index", 1);
         })
         .on('mousemove', function () {
             d3.select(".tooltip")
@@ -61,7 +76,9 @@ function chartMaintainability() {
                 .style("top", (d3.event.pageY + 5) + "px");
         })
         .on('mouseout', function () {
-            d3.select(".tooltip").style("opacity", 0);
+            d3.select(".tooltip")
+                .style("opacity", 0)
+                .style("z-index", -1);
         });
 
     d3.select("body")
