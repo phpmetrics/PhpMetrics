@@ -9,13 +9,10 @@
 
     <config name="ignore_warnings_on_exit" value="1"/>
 
-    <exclude-pattern>*/Report/Html/template/*</exclude-pattern>
-
     <arg name="colors"/>
     <arg value="s"/>
 
     <rule ref="PSR2">
-        <exclude-pattern>*/Report/Html/template/*.php</exclude-pattern>
         <exclude-pattern>*/tests/*/examples/*.php</exclude-pattern>
         <exclude-pattern>*/src/functions.php</exclude-pattern>
     </rule>
