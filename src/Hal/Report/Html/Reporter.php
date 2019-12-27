@@ -8,7 +8,6 @@ use Hal\Metric\Metrics;
 
 class Reporter
 {
-
     /**
      * @var Config
      */
@@ -66,27 +65,27 @@ class Reporter
         if (!file_exists($logDir . '/fonts')) {
             mkdir($logDir . '/fonts', 0755, true);
         }
-        recurse_copy(__DIR__ . '/template/js', $logDir . '/js');
-        recurse_copy(__DIR__ . '/template/css', $logDir . '/css');
-        recurse_copy(__DIR__ . '/template/images', $logDir . '/images');
-        recurse_copy(__DIR__ . '/template/fonts', $logDir . '/fonts');
+        recurse_copy(PROJECT_DIR . '/templates/html_report/js', $logDir . '/js');
+        recurse_copy(PROJECT_DIR . '/templates/html_report/css', $logDir . '/css');
+        recurse_copy(PROJECT_DIR . '/templates/html_report/images', $logDir . '/images');
+        recurse_copy(PROJECT_DIR . '/templates/html_report/fonts', $logDir . '/fonts');
 
         // render dynamic pages
-        $this->renderPage(__DIR__ . '/template/index.php', $logDir . '/index.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/loc.php', $logDir . '/loc.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/relations.php', $logDir . '/relations.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/coupling.php', $logDir . '/coupling.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/all.php', $logDir . '/all.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/oop.php', $logDir . '/oop.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/complexity.php', $logDir . '/complexity.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/panel.php', $logDir . '/panel.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/violations.php', $logDir . '/violations.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/packages.php', $logDir . '/packages.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/package_relations.php', $logDir . '/package_relations.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/index.php', $logDir . '/index.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/loc.php', $logDir . '/loc.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/relations.php', $logDir . '/relations.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/coupling.php', $logDir . '/coupling.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/all.php', $logDir . '/all.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/oop.php', $logDir . '/oop.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/complexity.php', $logDir . '/complexity.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/panel.php', $logDir . '/panel.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/violations.php', $logDir . '/violations.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/packages.php', $logDir . '/packages.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/package_relations.php', $logDir . '/package_relations.html', $consolidated, $history);
         if ($this->config->has('git')) {
-            $this->renderPage(__DIR__ . '/template/git.php', $logDir . '/git.html', $consolidated, $history);
+            $this->renderPage(PROJECT_DIR . '/templates/html_report/git.php', $logDir . '/git.html', $consolidated, $history);
         }
-        $this->renderPage(__DIR__ . '/template/junit.php', $logDir . '/junit.html', $consolidated, $history);
+        $this->renderPage(PROJECT_DIR . '/templates/html_report/junit.php', $logDir . '/junit.html', $consolidated, $history);
 
         // js data
         file_put_contents(
