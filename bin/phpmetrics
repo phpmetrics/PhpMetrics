@@ -17,4 +17,6 @@ if (
     );
 };
 
+define('PROJECT_DIR', dirname(__DIR__));
+
 (new \Hal\Application\Application())->run($argv);
