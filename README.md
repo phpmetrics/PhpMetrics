@@ -4,7 +4,8 @@
 [![License](https://poser.pugx.org/phpmetrics/phpmetrics/license.svg)](https://packagist.org/packages/phpmetrics/phpmetrics)
 [![Build Status](https://secure.travis-ci.org/phpmetrics/PhpMetrics.svg)](http://travis-ci.org/phpmetrics/PhpMetrics)
 [![Latest Stable Version](https://poser.pugx.org/phpmetrics/phpmetrics/v/stable.svg)](https://packagist.org/packages/phpmetrics/phpmetrics)
-[![Dependency Status](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815/badge.svg)](https://www.versioneye.com/user/projects/534fe1f9fe0d0774a8000815)
+[![Slack](https://img.shields.io/badge/slack/phpmetrics-yellow.svg?logo=slack)](https://join.slack.com/t/phpmetrics/shared_invite/enQtODU3MjQ4ODAxOTM5LWRhOGFhODMxN2JmMDRmOGVjNGQ0ZjNjNzVlNDIwNzQ2MWQ2YzgxYmRlNmM5NzIzZjlhYTFjZjZhYzAyMjM0YmE)
+
 
 
 ![Standard report](https://github.com/phpmetrics/PhpMetrics/raw/master/doc/overview.png)
