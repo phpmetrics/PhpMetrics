@@ -74,8 +74,8 @@ require __DIR__ . '/_header.php'; ?>
                                 </div>
                             </div>
                             <div class="icon-container">
-                                <span class="dot dot-first active"></span>
-                                <span class="dot dot-second"></span>
+                                <span class="dot dot-first active" title="Maintainability / complexity"></span>
+                                <span class="dot dot-second" title="Maintainability without comments / complexity"></span>
                             </div>
                         </div>
                     </div>

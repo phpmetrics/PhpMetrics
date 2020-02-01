@@ -46,15 +46,24 @@
         for (var i = 0; i < slides.length; i += 1) {
             slides[i].setAttribute('style', 'transform:translateX(-' + carouselCount + '%)');
         }
-        activeDot(e.target || e.srcElement);
+        activeDot();
     }
 
-    function activeDot(target)
+    function activeDot()
     {
         for (var i = 0; i < dots.length; i++) {
             dots[i].classList.remove('active')
         }
-        target.classList.add('active');
+        switch (carouselCount) {
+            case 0:
+                dots[0].classList.add('active');
+                break;
+            case 100:
+                dots[1].classList.add('active');
+                break;
+            default:
+                break;
+        }
     }
 
     // create new Event to dispatch click for auto scroll
