@@ -1,6 +1,4 @@
 <?php
-// If maintainability index is requested to be without comments, this is true. False otherwise.
-$modeMIWOC = $config->has('maintainability-index-without-comments');
 require __DIR__ . '/_header.php'; ?>
     <div class="row">
         <div class="column">
@@ -62,18 +60,30 @@ require __DIR__ . '/_header.php'; ?>
             <div class="column column-help-inner">
                 <div class="row">
                     <div class="column with-help">
-                        <div class="bloc">
-                            <div class="label">Maintainability / complexity</div>
-                            <div id="svg-maintainability" class="svg-container"></div>
+                        <div class="bloc bloc-graph">
+                            <div class="bloc-graph-carousel">
+                                <div class="bloc-graph-items">
+                                    <div class="bloc-graph-item first">
+                                        <div class="label">Maintainability / complexity</div>
+                                        <div id="svg-maintainability" class="svg-container"></div>
+                                    </div>
+                                    <div class="bloc-graph-item second">
+                                        <div class="label">Maintainability without comments / complexity</div>
+                                        <div id="svg-maintainability-without-comments" class="svg-container"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="icon-container">
+                                <span class="dot dot-first active"></span>
+                                <span class="dot dot-second"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="column help">
                         <div class="help-inner">
                             <p>Each file is symbolized by a circle. Size of the circle represents the Cyclomatic
                                 complexity.
-                                Color
-                                of the circle represents the Maintainability Index<?php echo $modeMIWOC ? ' (without comments)' : '' ?>.</p>
-
+                                Color of the circle represents the Maintainability Index.</p>
                             <p>Large red circles will be probably hard to maintain.</p>
                         </div>
                     </div>
@@ -106,15 +116,13 @@ require __DIR__ . '/_header.php'; ?>
                                 <tr>
                                     <td><?php echo $class['name']; ?>
                                         <?php
-                                            if ($modeMIWOC) {
-                                                $badgeTitle = 'Maintainability Index (w/o comments)';
-                                                $mi = isset($class['mIwoC']) ? $class['mIwoC'] : '';
-                                            } else {
-                                                $badgeTitle = 'Maintainability Index';
-                                                $mi = isset($class['mi']) ? $class['mi'] : '';
-                                            }
+                                            $badgeTitleMIWOC = 'Maintainability Index (w/o comments)';
+                                            $mIwoC = isset($class['mIwoC']) ? $class['mIwoC'] : '';
+                                            $badgeTitleMI = 'Maintainability Index';
+                                            $mi = isset($class['mi']) ? $class['mi'] : '';
                                         ?>
-                                        <span class="badge" title="<?php echo $badgeTitle; ?>"><?php echo $mi; ?></span>
+                                        <span class="badge" title="<?php echo $badgeTitleMI;?>"><?php echo $mi;?></span>
+                                        <span class="badge" title="<?php echo $badgeTitleMIWOC;?>"><?php echo $mIwoC;?></span>
                                     </td>
                                     <td><?php echo $class['pageRank']; ?></td>
                                 </tr>
@@ -192,10 +200,8 @@ require __DIR__ . '/_header.php'; ?>
     <script type="text/javascript">
         document.onreadystatechange = function () {
             if (document.readyState === 'complete') {
-                <?php
-                    $withoutCommentsArg = $modeMIWOC ? 'true' : 'false';
-                ?>
-                chartMaintainability(<?php echo $withoutCommentsArg ?>);
+                chartMaintainability(true);
+                chartMaintainability(false);
 
                 new Clusterize({
                     scrollId: 'clusterizeClassRank',
@@ -210,7 +216,7 @@ require __DIR__ . '/_header.php'; ?>
                 // prepare json for packages pie
                 <?php
                 $json = [];
-                $packages = isset($project['composer'], $project['composer']['packages']) ? $project['composer']['packages'] : [];
+                $packages = isset($project['composer']['packages']) ? $project['composer']['packages'] : [];
                 foreach ($packages as $package) {
                     foreach ($package->license as $license) {
                         if (!isset($json[$license])) {

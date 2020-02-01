@@ -1,16 +1,17 @@
-function chartMaintainability(withoutComment) {
+function chartMaintainability(withoutComment)
+{
+    var chartId = withoutComment ? 'svg-maintainability-without-comments' : 'svg-maintainability';
 
-    var diameter = document.getElementById('svg-maintainability').offsetWidth;
+    var diameter = document.getElementById(chartId).offsetWidth;
 
     var json = {
         name: 'chart',
         children: classes
     };
 
-    var svg = d3.select('#svg-maintainability').append('svg')
+    var svg = d3.select('#' + chartId).append('svg')
         .attr('width', diameter)
         .attr('height', diameter);
-
 
     var bubble = d3.layout.pack()
         .size([diameter, diameter])
@@ -56,12 +57,13 @@ function chartMaintainability(withoutComment) {
             }
         })
         .on('mouseover', function (d) {
+            var text = '';
             if (true === withoutComment) {
-                var text = '<strong>' + d.name + '</strong>'
+                text = '<strong>' + d.name + '</strong>'
                     + "<br />Cyclomatic Complexity : " + d.ccn
                     + "<br />Maintainability Index (w/o comments): " + d.mIwoC;
             } else {
-                var text = '<strong>' + d.name + '</strong>'
+                text = '<strong>' + d.name + '</strong>'
                     + "<br />Cyclomatic Complexity : " + d.ccn
                     + "<br />Maintainability Index: " + d.mi;
             }
@@ -87,12 +89,15 @@ function chartMaintainability(withoutComment) {
         .style("opacity", 0);
 
     // button for saving image
-    var button = d3.select('#svg-maintainability').append('button');
+    var button = d3.select('#' + chartId).append('button');
     button
       .classed('btn-save-image', true)
       .text('download')
       .on('click', function () {
-        var svg = d3.select('#svg-maintainability svg')[0][0];
-        saveSvgAsImage(svg, 'PhpMetrics maintainability / complexity', 1900, 1900);
+        var svg = d3.select('#' + chartId + ' svg')[0][0];
+        var nameImage = (withoutComment)
+            ? 'PhpMetrics maintainability without comments / complexity'
+            : 'PhpMetrics maintainability / complexity';
+        saveSvgAsImage(svg, nameImage, 1900, 1900);
       });
 }

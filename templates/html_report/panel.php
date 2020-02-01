@@ -1,7 +1,5 @@
 <?php
 $fullwidth = true;
-// If maintainability index is requested to be without comments, this is true. False otherwise.
-$modeMIWOC = $config->has('maintainability-index-without-comments');
 require __DIR__ . '/_header.php'; ?>
 
     <div class="row">
@@ -91,15 +89,13 @@ require __DIR__ . '/_header.php'; ?>
                         <tr>
                             <td><?php echo $class['name']; ?>
                                 <?php
-                                if ($modeMIWOC) {
-                                    $badgeTitle = 'Maintainability Index (w/o comments)';
-                                    $mi = isset($class['mIwoC']) ? $class['mIwoC'] : '';
-                                } else {
-                                    $badgeTitle = 'Maintainability Index';
-                                    $mi = isset($class['mi']) ? $class['mi'] : '';
-                                }
+                                $badgeTitleMIWOC = 'Maintainability Index (w/o comments)';
+                                $mIwoC = isset($class['mIwoC']) ? $class['mIwoC'] : '';
+                                $badgeTitleMI = 'Maintainability Index';
+                                $mi = isset($class['mi']) ? $class['mi'] : '';
                                 ?>
-                                <span class="badge" title="<?php echo $badgeTitle; ?>"><?php echo $mi; ?></span>
+                                <span class="badge" title="<?php echo $badgeTitleMI;?>"><?php echo $mi;?></span>
+                                <span class="badge" title="<?php echo $badgeTitleMIWOC;?>"><?php echo $mIwoC;?></span>
                             </td>
                             <td><?php echo $class['pageRank']; ?></td>
                         </tr>
@@ -120,23 +116,32 @@ require __DIR__ . '/_header.php'; ?>
             </div>
         </div>
         <div class="column">
-            <div class="bloc">
-                <h4>Maintainability / complexity</h4>
-                <div id="svg-maintainability"></div>
+            <div class="bloc bloc-graph">
+                <div class="bloc-graph-carousel">
+                    <div class="bloc-graph-items">
+                        <h4 class="bloc-graph-item first">
+                            <h4>Maintainability / complexity</h4>
+                            <div id="svg-maintainability"></div>
+                        </div>
+                        <h4 class="bloc-graph-item second">
+                            <h4>Maintainability without comments / complexity</h4>
+                            <div id="svg-maintainability-without-comments"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="icon-container">
+                    <span class="dot dot-first active"></span>
+                    <span class="dot dot-second"></span>
+                </div>
             </div>
         </div>
-
-
-
     </div>
 
     <script type="text/javascript">
         document.onreadystatechange = function () {
             if (document.readyState === 'complete') {
-                <?php
-                $withoutCommentsArg = $modeMIWOC ? 'true' : 'false';
-                ?>
-                chartMaintainability(<?php echo $withoutCommentsArg ?>);
+                chartMaintainability(true);
+                chartMaintainability(false);
             }
         };
     </script>

@@ -56,21 +56,20 @@ Usage:
 
 Required:
 
-    <directories>                               List of directories to parse, separated by a comma (,)
+    <directories>                     List of directories to parse, separated by a comma (,)
 
 Optional:
 
-    --exclude=<directory>                       List of directories to exclude, separated by a comma (,)
-    --extensions=<php,inc>                      List of extensions to parse, separated by a comma (,)
-    --report-html=<directory>                   Folder where report HTML will be generated
-    --report-csv=<file>                         File where report CSV will be generated
-    --report-json=<file>                        File where report Json will be generated
-    --report-violations=<file>                  File where XML violations report will be generated
-    --git[=</path/to/git_binary>]               Perform analyses based on Git History (default binary path: "git")
-    --junit[=</path/to/junit.xml>]              Evaluates metrics according to JUnit logs
-    --maintainability-index-without-comments    Ignore comments when calculating Maintainability Index
-    --quiet                                     Quiet mode
-    --version                                   Display current version
+    --exclude=<directory>             List of directories to exclude, separated by a comma (,)
+    --extensions=<php,inc>            List of extensions to parse, separated by a comma (,)
+    --report-html=<directory>         Folder where report HTML will be generated
+    --report-csv=<file>               File where report CSV will be generated
+    --report-json=<file>              File where report Json will be generated
+    --report-violations=<file>        File where XML violations report will be generated
+    --git[=</path/to/git_binary>]     Perform analyses based on Git History (default binary path: "git")
+    --junit[=</path/to/junit.xml>]    Evaluates metrics according to JUnit logs
+    --quiet                           Quiet mode
+    --version                         Display current version
 
 Examples:
 
