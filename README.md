@@ -31,6 +31,10 @@ Then open the generated `./myreport/index.html` file in your browser.
 
 If want, you can [install](https://github.com/phpmetrics/PhpMetrics/blob/master/doc/installation.md) PhpMetrics globally with your favorite package manager. You can also visit our [documentation](http://www.phpmetrics.org/documentation/index.html).
 
+## Metrics list
+
+See the [metrics](doc/metrics.md) file.
+
 ## Author
 
 + Jean-François Lépine <[@Halleck45](https://twitter.com/Halleck45)>
