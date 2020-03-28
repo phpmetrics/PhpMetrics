@@ -94,15 +94,22 @@ require __DIR__ . '/_header.php'; ?>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">ClassRank
-                    <small>(Google's page rank applied to relations between classes)</small>
+                    <small>(<a href="https://en.wikipedia.org/wiki/PageRank" target="_blank">Google's page rank applied to relations between classes)</a></small>
+                </div>
+                <div class="help">
+                    <div class="help-inner">
+                        <p>
+                            Page Rank is a way to measure de importance of a class. There is no "good" or "bad" page rank. This metrics reflects interactions in your code.
+                        </p>
+                    </div>
                 </div>
                 <div class="clusterize small">
                     <div id="clusterizeClassRank" class="clusterize-scroll">
-                        <table>
+                        <table class="table-small">
                             <thead>
                             <tr>
-                                <th>Class</th>
                                 <th>ClassRank</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody id="contentClassRank" class="clusterize-content">
@@ -114,7 +121,9 @@ require __DIR__ . '/_header.php'; ?>
                             //$classesS = array_slice($classesS, 0, 10);
                             foreach ($classesS as $class) { ?>
                                 <tr>
-                                    <td><?php echo $class['name']; ?>
+                                    <td><?php echo $class['pageRank']; ?></td>
+                                    <td>
+                                        <span class="path"><?php echo $class['name']; ?></span>
                                         <?php
                                             $badgeTitleMIWOC = 'Maintainability Index (w/o comments)';
                                             $mIwoC = isset($class['mIwoC']) ? $class['mIwoC'] : '';
@@ -124,7 +133,6 @@ require __DIR__ . '/_header.php'; ?>
                                         <span class="badge" title="<?php echo $badgeTitleMI;?>"><?php echo $mi;?></span>
                                         <span class="badge" title="<?php echo $badgeTitleMIWOC;?>"><?php echo $mIwoC;?></span>
                                     </td>
-                                    <td><?php echo $class['pageRank']; ?></td>
                                 </tr>
                             <?php } ?>
                             </tbody>

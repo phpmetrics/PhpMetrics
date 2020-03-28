@@ -74,7 +74,7 @@ if (count($lcom) > 0) {
                     <?php
                     foreach ($classes as $class) { ?>
                         <tr>
-                            <td><?php echo $class['name']; ?></td>
+                            <td><span class="path"><?php echo $class['name']; ?></span></td>
                             <td><?php echo isset($class['lcom']) ? $class['lcom'] : ''; ?></td>
                             <td><?php echo isset($class['volume']) ? $class['volume'] : ''; ?></td>
                             <td><?php echo isset($class['ccn']) ? $class['ccn'] : ''; ?></td>

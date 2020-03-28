@@ -25,7 +25,7 @@ require __DIR__ . '/_header.php'; ?>
                     <?php
                     foreach ($packages as $package) { ?>
                         <tr>
-                            <td><?= $package['name'] === '\\' ? 'global' : substr($package['name'], 0, -1); ?></td>
+                            <td><span class="path"><?= $package['name'] === '\\' ? 'global' : substr($package['name'], 0, -1); ?></span></td>
                             <td><?= $package['classes'] ? count($package['classes']) : 0; ?></td>
                             <td><?= isset($package['abstraction']) ? round($package['abstraction'], 3) : ''; ?></td>
                             <td><?= isset($package['instability']) ? round($package['instability'], 3) : ''; ?></td>

@@ -23,7 +23,7 @@
                 <tbody>
                 <?php foreach ($classes as $class) { ?>
                     <tr>
-                        <td><?php echo $class['name']; ?></td>
+                        <td><span class="path"><?php echo $class['name']; ?></span></td>
                         <td><?php echo isset($class['afferentCoupling']) ? $class['afferentCoupling'] : ''; ?></td>
                         <td><?php echo isset($class['efferentCoupling']) ? $class['efferentCoupling'] : ''; ?></td>
                         <td><?php echo isset($class['instability']) ? $class['instability'] : ''; ?></td>
