@@ -56,20 +56,20 @@ Usage:
 
 Required:
 
-    <directories>                       List of directories to parse, separated by a comma (,)
+    <directories>                     List of directories to parse, separated by a comma (,)
 
 Optional:
 
-    --exclude=<directory>               List of directories to exclude, separated by a comma (,)
-    --extensions=<php,inc>              List of extensions to parse, separated by a comma (,)
-    --report-html=<directory>           Folder where report HTML will be generated
-    --report-csv=<file>                 File where report CSV will be generated
-    --report-json=<file>                File where report Json will be generated
-    --report-violations=<file>          File where XML violations report will be generated
-    --git[=</path/to/git_binary>]       Perform analyses based on Git History (default binary path: "git")
-    --junit[=</path/to/junit.xml>]      Evaluates metrics according to JUnit logs
-    --quiet                             Quiet mode
-    --version                           Display current version
+    --exclude=<directory>             List of directories to exclude, separated by a comma (,)
+    --extensions=<php,inc>            List of extensions to parse, separated by a comma (,)
+    --report-html=<directory>         Folder where report HTML will be generated
+    --report-csv=<file>               File where report CSV will be generated
+    --report-json=<file>              File where report Json will be generated
+    --report-violations=<file>        File where XML violations report will be generated
+    --git[=</path/to/git_binary>]     Perform analyses based on Git History (default binary path: "git")
+    --junit[=</path/to/junit.xml>]    Evaluates metrics according to JUnit logs
+    --quiet                           Quiet mode
+    --version                         Display current version
 
 Examples:
 
@@ -80,7 +80,7 @@ Examples:
 
     phpmetrics --report-violations="./build/violations.xml" ./src,./lib
 
-        Analyze the "./src" and "./lib" directories, and generate the "./build/violations.xml" file. This file could 
+        Analyze the "./src" and "./lib" directories, and generate the "./build/violations.xml" file. This file could
         be read by any Continuous Integration Platform, and follows the "PMD Violation" standards.
 
 EOT;

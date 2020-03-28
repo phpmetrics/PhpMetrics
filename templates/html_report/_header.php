@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/roboto.css">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/material-icons.css">
+    <link rel="stylesheet" href="css/graph-carousel.css">
 </head>
 <body>
 

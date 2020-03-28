@@ -175,6 +175,7 @@
 <script type="text/javascript" src="js/d3.hexbin.v0.js"></script>
 <script type="text/javascript" src="js/sort-table.min.js"></script>
 <script type="text/javascript" src="js/graph-maintainability.js"></script>
+<script type="text/javascript" src="js/graph-carousel.js"></script>
 <script type="text/javascript" src="js/graph-licenses.js"></script>
 <script type="text/javascript" src="js/FileSaver.min.js"></script>
 

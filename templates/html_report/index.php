@@ -1,4 +1,5 @@
-<?php require __DIR__ . '/_header.php'; ?>
+<?php
+require __DIR__ . '/_header.php'; ?>
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
@@ -59,18 +60,30 @@
             <div class="column column-help-inner">
                 <div class="row">
                     <div class="column with-help">
-                        <div class="bloc">
-                            <div class="label">Maintainability / complexity</div>
-                            <div id="svg-maintainability" class="svg-container"></div>
+                        <div class="bloc bloc-graph">
+                            <div class="bloc-graph-carousel">
+                                <div class="bloc-graph-items">
+                                    <div class="bloc-graph-item first">
+                                        <div class="label">Maintainability / complexity</div>
+                                        <div id="svg-maintainability" class="svg-container"></div>
+                                    </div>
+                                    <div class="bloc-graph-item second">
+                                        <div class="label">Maintainability without comments / complexity</div>
+                                        <div id="svg-maintainability-without-comments" class="svg-container"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="icon-container">
+                                <span class="dot dot-first active" title="Maintainability / complexity"></span>
+                                <span class="dot dot-second" title="Maintainability without comments / complexity"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="column help">
                         <div class="help-inner">
                             <p>Each file is symbolized by a circle. Size of the circle represents the Cyclomatic
                                 complexity.
-                                Color
-                                of the circle represents the Maintainability Index.</p>
-
+                                Color of the circle represents the Maintainability Index.</p>
                             <p>Large red circles will be probably hard to maintain.</p>
                         </div>
                     </div>
@@ -95,14 +108,21 @@
                             <tbody id="contentClassRank" class="clusterize-content">
                             <?php
                             $classesS = $classes;
-                            usort($classesS, function ($a, $b) {
+                            usort($classesS, static function ($a, $b) {
                                 return strcmp($b['pageRank'], $a['pageRank']);
                             });
                             //$classesS = array_slice($classesS, 0, 10);
                             foreach ($classesS as $class) { ?>
                                 <tr>
-                                    <td><?php echo $class['name']; ?> <span class="badge"
-                                                                            title="Maintainability Index"><?php echo isset($class['mi']) ? $class['mi'] : ''; ?></span>
+                                    <td><?php echo $class['name']; ?>
+                                        <?php
+                                            $badgeTitleMIWOC = 'Maintainability Index (w/o comments)';
+                                            $mIwoC = isset($class['mIwoC']) ? $class['mIwoC'] : '';
+                                            $badgeTitleMI = 'Maintainability Index';
+                                            $mi = isset($class['mi']) ? $class['mi'] : '';
+                                        ?>
+                                        <span class="badge" title="<?php echo $badgeTitleMI;?>"><?php echo $mi;?></span>
+                                        <span class="badge" title="<?php echo $badgeTitleMIWOC;?>"><?php echo $mIwoC;?></span>
                                     </td>
                                     <td><?php echo $class['pageRank']; ?></td>
                                 </tr>
@@ -180,7 +200,8 @@
     <script type="text/javascript">
         document.onreadystatechange = function () {
             if (document.readyState === 'complete') {
-                chartMaintainability();
+                chartMaintainability(true);
+                chartMaintainability(false);
 
                 new Clusterize({
                     scrollId: 'clusterizeClassRank',
@@ -195,7 +216,7 @@
                 // prepare json for packages pie
                 <?php
                 $json = [];
-                $packages = isset($project['composer'], $project['composer']['packages']) ? $project['composer']['packages'] : [];
+                $packages = isset($project['composer']['packages']) ? $project['composer']['packages'] : [];
                 foreach ($packages as $package) {
                     foreach ($package->license as $license) {
                         if (!isset($json[$license])) {

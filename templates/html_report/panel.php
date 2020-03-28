@@ -81,14 +81,21 @@ require __DIR__ . '/_header.php'; ?>
                     <tbody>
                     <?php
                     $classesS = $classes;
-                    usort($classesS, function ($a, $b) {
+                    usort($classesS, static function ($a, $b) {
                         return strcmp($b['pageRank'], $a['pageRank']);
                     });
                     $classesS = array_slice($classesS, 0, 10);
                     foreach ($classesS as $class) { ?>
                         <tr>
-                            <td><?php echo $class['name']; ?> <span class="badge"
-                                                                    title="Maintainability Index"><?php echo isset($class['mi']) ? $class['mi'] : ''; ?></span>
+                            <td><?php echo $class['name']; ?>
+                                <?php
+                                $badgeTitleMIWOC = 'Maintainability Index (w/o comments)';
+                                $mIwoC = isset($class['mIwoC']) ? $class['mIwoC'] : '';
+                                $badgeTitleMI = 'Maintainability Index';
+                                $mi = isset($class['mi']) ? $class['mi'] : '';
+                                ?>
+                                <span class="badge" title="<?php echo $badgeTitleMI;?>"><?php echo $mi;?></span>
+                                <span class="badge" title="<?php echo $badgeTitleMIWOC;?>"><?php echo $mIwoC;?></span>
                             </td>
                             <td><?php echo $class['pageRank']; ?></td>
                         </tr>
@@ -109,20 +116,32 @@ require __DIR__ . '/_header.php'; ?>
             </div>
         </div>
         <div class="column">
-            <div class="bloc">
-                <h4>Maintainability / complexity</h4>
-                <div id="svg-maintainability"></div>
+            <div class="bloc bloc-graph">
+                <div class="bloc-graph-carousel">
+                    <div class="bloc-graph-items">
+                        <h4 class="bloc-graph-item first">
+                            <h4>Maintainability / complexity</h4>
+                            <div id="svg-maintainability"></div>
+                        </div>
+                        <h4 class="bloc-graph-item second">
+                            <h4>Maintainability without comments / complexity</h4>
+                            <div id="svg-maintainability-without-comments"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="icon-container">
+                    <span class="dot dot-first active" title="Maintainability / complexity"></span>
+                    <span class="dot dot-second" title="Maintainability without comments / complexity"></span>
+                </div>
             </div>
         </div>
-
-
-
     </div>
 
     <script type="text/javascript">
         document.onreadystatechange = function () {
             if (document.readyState === 'complete') {
-                chartMaintainability();
+                chartMaintainability(true);
+                chartMaintainability(false);
             }
         };
     </script>
