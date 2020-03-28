@@ -20,7 +20,8 @@ tag:
 	@echo "New release: `semver tag`"
 	@echo Releasing sources
 	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" \
-		.github/ISSUE_TEMPLATE.md \
+		.github/ISSUE_TEMPLATE/Bug_report.md \
+		.github/ISSUE_TEMPLATE/Feature_request.md \
 		src/functions.php \
 		artifacts/debian/control \
 		artifacts/bintray.json \
@@ -31,7 +32,7 @@ tag:
 
 # Tag git with last release
 release: build
-	git add .semver .github/ISSUE_TEMPLATE.md src/functions.php doc/installation.md artifacts/* releases/*
+	git add .semver .github/ISSUE_TEMPLATE/Bug_report.md .github/ISSUE_TEMPLATE/Feature_request.md src/functions.php doc/installation.md artifacts/* releases/*
 	git commit -m "releasing `semver tag`"
 	git tag `semver tag`
 	git push -u origin master
