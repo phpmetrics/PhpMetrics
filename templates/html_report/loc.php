@@ -61,11 +61,13 @@ if(count($array) > 1) {
                 foreach ($classes as $class) { ?>
                     <tr>
                         <td><span class="path"><?php echo $class['name']; ?></span></td>
-                        <td><?php echo isset($class['lloc']) ? $class['lloc'] : ''; ?></td>
-                        <td><?php echo isset($class['cloc']) ? $class['cloc'] : ''; ?></td>
-                        <td><?php echo isset($class['volume']) ? $class['volume'] : ''; ?></td>
-                        <td><?php echo isset($class['intelligentContent']) ? $class['intelligentContent'] : ''; ?></td>
-                        <td><?php echo isset($class['commentWeight']) ? $class['commentWeight'] : ''; ?></td>
+                        <?php foreach (['lloc', 'cloc', 'volume', 'intelligentContent', 'commentWeight'] as $attribute) {?>
+                            <td>
+                                <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>);">
+                                <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
+                                </span>
+                            </td>
+                        <?php } ?>
                     </tr>
                 <?php } ?>
             </table>
