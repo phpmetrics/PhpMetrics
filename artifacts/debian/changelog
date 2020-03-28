@@ -1,3 +1,62 @@
+phpmetrics (2.4.1) unstable; urgency=low
+   * Test on PHP 7.3 
+   * Don't leave notice when array is small 
+   * Add final to class metric 
+   * Update ClassEnumVisitor.php 
+   * Merge pull request #371 from lencse/php73 
+   * Fix issue#380. Typo in Blob report 
+   * Merge pull request #385 from phpmetrics/issue#380 
+   * Added sort package config to composer 
+   * Merge pull request #388 from phpmetrics/sort-packages 
+   * Include codesniffer. Remove alias function and short array syntax (#387) 
+   * Remove superfluous docblocks that are adding no value (#390) 
+   * Skip `self` and `parent` from external dependencies (#1) (#370) 
+   * Trying to fix deprecation of PSR-0 (issue#382) (#384) 
+   * file_exists > is_file (#366) 
+   * Apply PSR-2 codestyle (#389) 
+   * Update phpunit to use highest version possible (#391) 
+   * Merge pull request #375 from gmponos/patch-1 
+   * Merge pull request #372 from lencse/loc-report 
+   * Test against PHP 7.4 (#383) 
+   * releasing 
+   * releasing v2.4.1 
+   * Update contributing.md 
+   * update readme file 
+   * Merge branch 'master' of github.com:phpmetrics/PhpMetrics 
+   * Fixed binary tests 
+   * releasing v2.5.0 
+   * Documented how to release (#392) 
+   * Added editor config file (#393) 
+   * Updated changelog (#394) 
+   * improve docblocks 
+   * Added more codesniffer rules 
+   * Merge pull request #396 from phpmetrics/add-more-phpcs-rules 
+   * Merge pull request #395 from phpmetrics/docblock-improvements 
+   * Way to download report 
+   * Merge pull request #399 from phpmetrics/download_chart 
+   * Exclude doc and artifacts from phar 
+   * Explicitly define the class \Hal\Component\Ast\NodeTraverser to make PhpMetrics work using composer --classmap-authoritative. (#402) 
+   * Merge pull request #400 from phpmetrics/exclude-phar-files 
+   * Resolve PHP7 getters / setters (#405) 
+   * Ensure the packagist license is an array so they can be displayed. (#404) 
+   * Fix warning "Division by zero" when no package is defined. (#401) 
+   * move templates out of src 
+   * Remove folders from phpcs 
+   * Merge pull request #406 from phpmetrics/move-templates-out 
+   * Provide new issue template format. 
+   * Added Slack link (#411) 
+   * Provide configuration option "--maintainability-index-without-comments". 
+   * Remove command line and always provide metrics MI without comments additionnaly from MI. Add a carousel in the main HTML report page to display both graph at the same time. 
+   * Move new files for carousel inside new template folder after rebasing from master. 
+   * Fix bug with dots in the carousel + add titles on dots for accessibility. 
+   * add metrics description file 
+   * Merge pull request #408 from phpmetrics/new-issue-tpl 
+   * Merge pull request #412 from repzy/metrics-file 
+   * Merge pull request #407 from phpmetrics/issue-325-provide-miwoc 
+   * fix releasing script 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Sat, 28 Mar 2020 14:29:40 +0100
+
 phpmetrics (2.4.0) unstable; urgency=low
    * Fix template type 
    * Verify errors in php<7 
@@ -659,6 +718,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
