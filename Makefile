@@ -33,7 +33,7 @@ tag:
 # Tag git with last release
 release: build
 	git add .semver .github/ISSUE_TEMPLATE/Bug_report.md .github/ISSUE_TEMPLATE/Feature_request.md src/functions.php doc/installation.md artifacts/* releases/*
-	git commit -m "releasing `semver tag`"
-	git tag `semver tag`
+	git commit -S -m "releasing `semver tag`"
+	git tag -s `semver tag`
 	git push -u origin master
 	git push origin `semver tag`

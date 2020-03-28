@@ -25,6 +25,8 @@ Please NEVER tag manually.
   
 ### Usage
 
+Git must configure a GPG key on your Github account to verify commits.
+
 These commands will create phar, debian and binary release, 
 then run all tests and push new release to Github :
 
