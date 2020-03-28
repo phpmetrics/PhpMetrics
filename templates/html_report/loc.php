@@ -60,7 +60,7 @@ if(count($array) > 1) {
                 <?php
                 foreach ($classes as $class) { ?>
                     <tr>
-                        <td><?php echo $class['name']; ?></td>
+                        <td><span class="path"><?php echo $class['name']; ?></span></td>
                         <td><?php echo isset($class['lloc']) ? $class['lloc'] : ''; ?></td>
                         <td><?php echo isset($class['cloc']) ? $class['cloc'] : ''; ?></td>
                         <td><?php echo isset($class['volume']) ? $class['volume'] : ''; ?></td>

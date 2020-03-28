@@ -173,6 +173,7 @@ a {
 .page .content {
     padding: 2em 2em;
     position:relative;
+    margin-top: 80px;
 }
 .report-details {
     position: absolute;
@@ -304,6 +305,13 @@ a {
     background-color: #F44336;
     color: #FFF;
 }
+.path {
+    font-family: "Menlo", "Consolas", "Bitstream Vera Sans Mono", "DejaVu Sans Mono", "Monaco", monospace;
+    color: #2f855a;
+    background-color: #f0fff4;
+    display: inline-block;
+    padding: 1px 4px;
+}
 
 
 
@@ -338,10 +346,13 @@ a {
     background-color: #fff;
     height:100%;
 }
-.column.help {
+.help {
     padding-left:0;
     color: #999;
     font-size: 0.8em;
+    text-align: left;
+}
+.column.help {
     align-items: stretch;
     display: flex;
 }
@@ -429,6 +440,10 @@ a {
 }
 
 /* -------- Table ------------ */
+table tr td {
+    border:none;
+    padding: 4px 0;
+}
 #table-length tbody {
     font-size: 0.8em;
 }

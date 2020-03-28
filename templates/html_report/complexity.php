@@ -71,7 +71,7 @@ require __DIR__ . '/_header.php'; ?>
                     <?php
                     foreach ($classes as $class) { ?>
                         <tr>
-                            <td><?php echo $class['name']; ?></td>
+                            <td><span class="path"><?php echo $class['name']; ?></span></td>
                             <td><?php echo isset($class['wmc']) ? $class['wmc'] : ''; ?></td>
                             <td><?php echo isset($class['ccn']) ? $class['ccn'] : ''; ?></td>
                             <td><?php echo isset($class['ccnMethodMax']) ? $class['ccnMethodMax'] : ''; ?></td>

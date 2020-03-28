@@ -62,7 +62,9 @@ $map = [
 
                             <tr>
                                 <td>
-                                    <a onclick="return toggle('<?php echo $currentId; ?>');"><?php echo $class['name']; ?></a>
+                                    <a onclick="return toggle('<?php echo $currentId; ?>');">
+                                        <span class="path"><?php echo $class['name']; ?></span>
+                                    </a>
                                     <div class="violation-list" id="<?php echo $currentId; ?>">
                                         <?php foreach ($class['violations'] as $violation) { ?>
                                             <div class="violation">
@@ -113,7 +115,9 @@ $map = [
 
                             <tr>
                                 <td>
-                                    <a onclick="return toggle('<?php echo $currentId; ?>');"><?php echo substr($package['name'], 0, -1); ?></a>
+                                    <a onclick="return toggle('<?php echo $currentId; ?>');">
+                                        <span class="path"><?php echo substr($package['name'], 0, -1); ?></span>
+                                    </a>
                                     <div class="violation-list" id="<?php echo $currentId; ?>">
                                         <?php foreach ($package['violations'] as $violation) { ?>
                                             <div class="violation">
