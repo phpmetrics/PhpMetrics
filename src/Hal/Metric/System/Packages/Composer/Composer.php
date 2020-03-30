@@ -43,15 +43,11 @@ class Composer
         foreach ($rawRequirements as $requirement => $version) {
             $package = $packagist->get($requirement);
 
-            $packages[$requirement] = (object)[
-                'name' => $requirement,
-                'required' => $version,
-                'installed' => isset($rawInstalled[$requirement]) ? $rawInstalled[$requirement] : null,
-                'latest' => $package->latest,
-                'license' => $package->license,
-                'homepage' => $package->homepage,
-                'zip' => $package->zip,
-            ];
+            $package->installed = isset($rawInstalled[$requirement]) ? $rawInstalled[$requirement] : null;
+            $package->required = $version;
+            $package->name = $requirement;
+            $package->status = version_compare($package->required, $package->latest) === -1 ? 'outdated' : 'latest';
+            $packages[$requirement] = $package;
         }
 
         $projectMetric->set('packages', $packages);

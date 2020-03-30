@@ -149,6 +149,11 @@ require __DIR__ . '/_header.php'; ?>
                 <div class="label">Composer dependencies</div>
                 <div class="clusterize small">
                     <div id="clusterizePackages" class="clusterize-scroll">
+
+
+                        https://pbs.twimg.com/media/DoHnLMSU4AE_DXV.png
+                        https://i.pinimg.com/originals/78/e4/d4/78e4d48461832e7f3ca987d27abc574e.png
+
                         <table>
                             <?php
                             $packagesInstalled = isset($project['composer']['packages-installed']) ? $project['composer']['packages-installed'] : [];
@@ -168,9 +173,27 @@ require __DIR__ . '/_header.php'; ?>
                             usort($packages, function ($a, $b) {
                                 return strcmp($a->name, $b->name);
                             });
+<<<<<<< HEAD
                             foreach ($packages as $package) { ?>
                                 <tr<?php if (null !== $package->installed && version_compare($package->installed, $package->latest) === -1) { echo ' style="color:orangered"'; }?>>
                                     <td><?php echo $package->name; ?></td>
+=======
+                            foreach ($packages as $package) if( !preg_match('!(^php$|^ext\-)!', $package->name)) { ?>
+                                <tr>
+                                    <td>
+                                        <a target="_blank" href="https://packagist.org/packages/<?php echo $package->name; ?>">
+                                            <?php echo $package->name; ?>
+                                        </a>
+                                        <div class="help">
+                                            <div class="help-inner">
+                                                <?php echo $package->description; ?>
+                                                <?php if ('outdated' === $package->status) { ?>
+                                                    <span class="help-warning">This package should be updated.</span>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                    </td>
+>>>>>>> 0fb9df8... wip
                                     <td><?php echo $package->required; ?></td>
                                     <?php if (0 !== count($packagesInstalled)) {?><td><?php echo $package->installed; ?></td><?php } ?>
                                     <td><?php echo $package->latest; ?></td>

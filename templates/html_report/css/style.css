@@ -580,3 +580,9 @@ footer {
         max-height: 400px !important;
     }
 }
+
+
+/* ------ composer ----- */
+.help-warning {
+    background-color: #fbd38d;
+}
