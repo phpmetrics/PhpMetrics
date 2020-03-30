@@ -47,7 +47,6 @@ Phar::mapPhar('phpmetrics.phar');
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 require_once 'phar://phpmetrics.phar/vendor/autoload.php';
-define('PROJECT_DIR', dirname(__DIR__));
 (new \Hal\Application\Application())->run(\$argv);
 
 __HALT_COMPILER();
