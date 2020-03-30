@@ -136,8 +136,11 @@ class Analyze
         // Unit test
         (new UnitTesting($this->config, $files))->calculate($metrics);
 
+        $this->output->clearln();
+
         //
         // Composer
+        $this->output->write('Executing composer analyzes, requesting https://packagist.org...');
         (new Composer($this->config, $files))->calculate($metrics);
 
         $this->output->clearln();

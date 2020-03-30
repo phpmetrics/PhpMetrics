@@ -295,7 +295,7 @@ a {
     font-size: 0.8em;
     position: absolute;
     right: 10px;
-    bottom: 10px;
+    top: 10px;
 }
 .progress svg {
     vertical-align:middle;;
@@ -340,7 +340,33 @@ a[target="_blank"]::before {
     color: #333;
     text-align: left;
 }
-
+.bloc .number, .bloc .number-alternate {
+    min-height: 55px;
+}
+.bloc .chart-in-number {
+    margin-top:1em;
+}
+.bloc .bloc-action {
+    background-color: #f3f7fa;
+    text-align: center;
+    padding:10px 0;
+    margin:0 -15px -15px -15px;
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    font-size: 0.9em;
+    color: #95999c;
+}
+.bloc .bloc-action a {
+    color: #48566c;
+    text-decoration: none;
+}
+.bloc .bloc-action a:hover {
+    color: #000;
+}
 .bloc .label {
     color: #333;
     text-align: left;
@@ -380,6 +406,39 @@ a[target="_blank"]::before {
 .column-help {
     margin-bottom: 0 !important;
 }
+
+/* ----- list ----- */
+.list {
+    text-align: left;
+}
+.list-item {
+    padding:1em;
+    position: relative;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.list-item-title {
+    font-weight: bold;
+}
+.list-item:hover {
+    background-color: #EBF8FF;
+}
+.table-metrics {
+    margin: 0.5em;
+    text-align: center;
+}
+.table-metrics td {
+    text-align: center;
+}
+.table-metrics .card-number {
+    font-weight: bold;
+}
+.table-metrics .card-label {
+    color: #333;
+    font-size: 0.9em;
+}
+
 /* -------- charts ---------------- */
 .tooltip {
     position: absolute;
@@ -595,4 +654,10 @@ footer {
     .clusterize-scroll {
         max-height: 400px !important;
     }
+}
+
+
+/* ------ composer ----- */
+.help-warning {
+    background-color: #fbd38d;
 }
