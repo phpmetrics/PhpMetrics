@@ -41,18 +41,20 @@ class Composer
 
         $packagist = new Packagist();
         foreach ($rawRequirements as $requirement => $version) {
-            $package = $packagist->get($requirement);
+            $installed = isset($rawInstalled[$requirement]) ? $rawInstalled[$requirement] : null;
+            $package = $packagist->get($requirement, $installed);
 
-            $packages[$requirement] = (object)[
-                'name' => $requirement,
-                'required' => $version,
-                'installed' => isset($rawInstalled[$requirement]) ? $rawInstalled[$requirement] : null,
-                'latest' => $package->latest,
-                'license' => $package->license,
-                'homepage' => $package->homepage,
-                'zip' => $package->zip,
-            ];
+            $package->installed = $installed;
+            $package->required = $version;
+            $package->name = $requirement;
+            $package->status = version_compare($package->required, $package->latest) === -1 ? 'outdated' : 'latest';
+            $packages[$requirement] = $package;
         }
+
+        // exclude extensions
+        $packages = array_filter($packages, function ($package) {
+            return !preg_match('!(^php$|^ext\-)!', $package->name);
+        });
 
         $projectMetric->set('packages', $packages);
         $projectMetric->set('packages-installed', $rawInstalled);
