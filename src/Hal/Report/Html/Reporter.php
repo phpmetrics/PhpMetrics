@@ -19,6 +19,11 @@ class Reporter
     private $output;
 
     /**
+     * @var string
+     */
+    protected $templateDir;
+
+    /**
      * @param Config $config
      * @param Output $output
      */
@@ -26,6 +31,7 @@ class Reporter
     {
         $this->config = $config;
         $this->output = $output;
+        $this->templateDir = __DIR__ . '/../../../../templates';
     }
 
 
@@ -65,27 +71,27 @@ class Reporter
         if (!file_exists($logDir . '/fonts')) {
             mkdir($logDir . '/fonts', 0755, true);
         }
-        recurse_copy(PROJECT_DIR . '/templates/html_report/js', $logDir . '/js');
-        recurse_copy(PROJECT_DIR . '/templates/html_report/css', $logDir . '/css');
-        recurse_copy(PROJECT_DIR . '/templates/html_report/images', $logDir . '/images');
-        recurse_copy(PROJECT_DIR . '/templates/html_report/fonts', $logDir . '/fonts');
+        recurse_copy($this->templateDir . '/html_report/js', $logDir . '/js');
+        recurse_copy($this->templateDir . '/html_report/css', $logDir . '/css');
+        recurse_copy($this->templateDir . '/html_report/images', $logDir . '/images');
+        recurse_copy($this->templateDir . '/html_report/fonts', $logDir . '/fonts');
 
         // render dynamic pages
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/index.php', $logDir . '/index.html', $consolidated, $history);
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/loc.php', $logDir . '/loc.html', $consolidated, $history);
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/relations.php', $logDir . '/relations.html', $consolidated, $history);
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/coupling.php', $logDir . '/coupling.html', $consolidated, $history);
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/all.php', $logDir . '/all.html', $consolidated, $history);
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/oop.php', $logDir . '/oop.html', $consolidated, $history);
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/complexity.php', $logDir . '/complexity.html', $consolidated, $history);
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/panel.php', $logDir . '/panel.html', $consolidated, $history);
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/violations.php', $logDir . '/violations.html', $consolidated, $history);
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/packages.php', $logDir . '/packages.html', $consolidated, $history);
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/package_relations.php', $logDir . '/package_relations.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/index.php', $logDir . '/index.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/loc.php', $logDir . '/loc.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/relations.php', $logDir . '/relations.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/coupling.php', $logDir . '/coupling.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/all.php', $logDir . '/all.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/oop.php', $logDir . '/oop.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/complexity.php', $logDir . '/complexity.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/panel.php', $logDir . '/panel.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/violations.php', $logDir . '/violations.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/packages.php', $logDir . '/packages.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/package_relations.php', $logDir . '/package_relations.html', $consolidated, $history);
         if ($this->config->has('git')) {
-            $this->renderPage(PROJECT_DIR . '/templates/html_report/git.php', $logDir . '/git.html', $consolidated, $history);
+            $this->renderPage($this->templateDir . '/html_report/git.php', $logDir . '/git.html', $consolidated, $history);
         }
-        $this->renderPage(PROJECT_DIR . '/templates/html_report/junit.php', $logDir . '/junit.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/junit.php', $logDir . '/junit.html', $consolidated, $history);
 
         // js data
         file_put_contents(
