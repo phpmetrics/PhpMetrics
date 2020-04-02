@@ -1,3 +1,17 @@
+phpmetrics (2.6.0) unstable; urgency=low
+   * Force GPG key for relasing 
+   * Improved page rank report, and UI #416 
+   * Merge pull request #420 from phpmetrics/416_improved_pagerank 
+   * Improved UI with help and gradients 
+   * hot fixing phar 
+   * Merge pull request #422 from phpmetrics/hf_phar 
+   * Remove not useful constant 
+   * Merge pull request #423 from phpmetrics/improved_code 
+   * releasing v2.6.1 
+   * Merge pull request #421 from phpmetrics/improved_ui 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Thu, 02 Apr 2020 22:21:45 +0200
+
 phpmetrics (2.5.0) unstable; urgency=low
    * Documented how to release (#392) 
    * Added editor config file (#393) 
@@ -759,6 +773,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
