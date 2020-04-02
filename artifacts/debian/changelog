@@ -1,3 +1,44 @@
+phpmetrics (2.5.0) unstable; urgency=low
+   * Documented how to release (#392) 
+   * Added editor config file (#393) 
+   * Updated changelog (#394) 
+   * improve docblocks 
+   * Added more codesniffer rules 
+   * Merge pull request #396 from phpmetrics/add-more-phpcs-rules 
+   * Merge pull request #395 from phpmetrics/docblock-improvements 
+   * Way to download report 
+   * Merge pull request #399 from phpmetrics/download_chart 
+   * Exclude doc and artifacts from phar 
+   * Explicitly define the class \Hal\Component\Ast\NodeTraverser to make PhpMetrics work using composer --classmap-authoritative. (#402) 
+   * Merge pull request #400 from phpmetrics/exclude-phar-files 
+   * Resolve PHP7 getters / setters (#405) 
+   * Ensure the packagist license is an array so they can be displayed. (#404) 
+   * Fix warning "Division by zero" when no package is defined. (#401) 
+   * move templates out of src 
+   * Remove folders from phpcs 
+   * Merge pull request #406 from phpmetrics/move-templates-out 
+   * Provide new issue template format. 
+   * Added Slack link (#411) 
+   * Provide configuration option "--maintainability-index-without-comments". 
+   * Remove command line and always provide metrics MI without comments additionnaly from MI. Add a carousel in the main HTML report page to display both graph at the same time. 
+   * Move new files for carousel inside new template folder after rebasing from master. 
+   * Fix bug with dots in the carousel + add titles on dots for accessibility. 
+   * add metrics description file 
+   * Merge pull request #408 from phpmetrics/new-issue-tpl 
+   * Merge pull request #412 from repzy/metrics-file 
+   * Merge pull request #407 from phpmetrics/issue-325-provide-miwoc 
+   * fix releasing script 
+   * releasing v2.6.0 
+   * Force GPG key for relasing 
+   * Improved page rank report, and UI #416 
+   * Merge pull request #420 from phpmetrics/416_improved_pagerank 
+   * hot fixing phar 
+   * Merge pull request #422 from phpmetrics/hf_phar 
+   * Remove not useful constant 
+   * Merge pull request #423 from phpmetrics/improved_code 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Thu, 02 Apr 2020 21:54:40 +0200
+
 phpmetrics (2.4.1) unstable; urgency=low
    * Test on PHP 7.3 
    * Don't leave notice when array is small 
@@ -718,6 +759,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
