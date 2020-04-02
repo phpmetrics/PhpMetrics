@@ -56,6 +56,11 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
     <div class="column">
         <div class="bloc">
             <h4>These classes are never called by tests</h4>
+            <div class="help">
+                <div class="help-inner">
+                    Tests with high Cyclomatic number or high probability of bugs should be covered by unit tests.
+                </div>
+            </div>
             <div class="clusterize small">
                 <div id="scrollAreaJunitNeverCalled" class="clusterize-scroll">
                     <table>
@@ -74,9 +79,14 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
                             }
                             ?>
                             <tr>
-                                <td><?php echo $class['name']; ?></td>
-                                <td><?php echo $class['ccn']; ?></td>
-                                <td><?php echo $class['bugs']; ?></td>
+                                <td><span class="path"><?php echo $class['name']; ?></span></td>
+                                <?php foreach (['ccn', 'bugs'] as $attribute) {?>
+                                    <td>
+                                        <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>);">
+                                        <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
+                                        </span>
+                                    </td>
+                                <?php } ?>
                             </tr>
                             <?php
                         }
@@ -111,21 +121,21 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
                         <thead>
                         <tr>
                             <th>TestSuite</th>
-                            <th class="js-sort-number">Called classes</th>
+                            <th class="js-sort-number">Called by these classes</th>
                         </tr>
                         </thead>
                         <tbody id="contentAreaJunitCalled" class="clusterize-content">
                         <?php foreach ($unit['tests'] as $suite) { ?>
                             <tr>
-                                <td><?php echo $suite->classname; ?></td>
-                                <td>
+                                <td valign="top"><span class="path"><?php echo $suite->classname; ?></span></td>
+                                <td style="padding-bottom: 1em;">
                                     <?php
                                     foreach ($suite->externals as $index => $external) { ?>
                                         <?php echo ($index === 0) ? '' : '<br />'; ?>
                                         <span class="badge" title="Cyclomatic complexity of class">
-                                        <?php echo $getMetricForClass($external, 'ccn'); ?>
-                                    </span>
-                                        <?php echo $external; ?>
+                                            <?php echo $getMetricForClass($external, 'ccn'); ?>
+                                        </span>
+                                        <span class="path"><?php echo $external; ?></span>
                                     <?php } ?>
                                 </td>
                             </tr>
@@ -248,7 +258,7 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
                     return d.dx > d.w ? 1 : 0.2;
                 })
                 .attr('fill', function (d) {
-                    return '#FFFFFF'
+                    return '#333'
                 });
 
             //d3.select(window).on("click", function () {

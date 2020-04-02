@@ -293,6 +293,9 @@ a {
     display: inline-block;
     padding: 1px 5px;
     font-size: 0.8em;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
 }
 .progress svg {
     vertical-align:middle;;
@@ -312,20 +315,30 @@ a {
     display: inline-block;
     padding: 1px 4px;
 }
-
+a[target="_blank"]::before {
+    content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);
+    margin: 0 5px 0 3px;
+}
 
 
 /* ------------ Bloc number ------ */
 .bloc {
+    position: relative;
     text-align: center;
     background: #FFF;
     padding: 15px;
-    border: 1px solid #F7F7F7;
+    border: 0;
+    box-shadow: 0 2px 7px 0 rgba(42, 51, 83, 0.12), 0 5px 15px rgba(0, 0, 0, 0.06);
+    transition: all .15s ease;
+    border-radius: .5rem;
+    border-top: 4px solid #48bb78
 }
 
 .bloc .number {
-    font-size: 2em;
-    font-weight: bold;;
+    font-size: 2.1em;
+    font-weight: bold;
+    color: #333;
+    text-align: left;
 }
 
 .bloc .label {
@@ -338,6 +351,9 @@ a {
 .bloc-number {
     min-height: 140px;
 }
+.bloc h4 {
+    text-align: left;
+}
 .column.with-help {
     padding-right:0;
     padding-bottom:0;
@@ -348,9 +364,9 @@ a {
 }
 .help {
     padding-left:0;
-    color: #999;
-    font-size: 0.8em;
+    color: hsl(0, 0%, 55%);
     text-align: left;
+    font-size: 0.9em;
 }
 .column.help {
     align-items: stretch;

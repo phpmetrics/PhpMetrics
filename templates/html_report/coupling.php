@@ -24,10 +24,13 @@
                 <?php foreach ($classes as $class) { ?>
                     <tr>
                         <td><span class="path"><?php echo $class['name']; ?></span></td>
-                        <td><?php echo isset($class['afferentCoupling']) ? $class['afferentCoupling'] : ''; ?></td>
-                        <td><?php echo isset($class['efferentCoupling']) ? $class['efferentCoupling'] : ''; ?></td>
-                        <td><?php echo isset($class['instability']) ? $class['instability'] : ''; ?></td>
-                        <td><?php echo isset($class['pageRank']) ? $class['pageRank'] : ''; ?></td>
+                        <?php foreach (['afferentCoupling', 'efferentCoupling', 'instability', 'pageRank'] as $attribute) {?>
+                            <td>
+                                <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>);">
+                                <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
+                                </span>
+                            </td>
+                        <?php } ?>
                     </tr>
                 <?php } ?>
                 </tbody>

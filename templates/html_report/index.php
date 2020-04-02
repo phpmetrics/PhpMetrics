@@ -6,20 +6,20 @@ require __DIR__ . '/_header.php'; ?>
                 <div class="label"><a href="violations.html">Violations</a> (<?php echo $sum->violations->critical; ?>
                     criticals, <?php echo $sum->violations->error; ?> errors)
                 </div>
-                <div class="number"><?php echo $sum->violations->total; ?></div>
+                <div class="number"><?php echo number_format($sum->violations->total, 0); ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label"><a href="loc.html">Lines of code</a></div>
-                <div class="number"><?php echo $sum->loc; ?></div>
+                <div class="number"><?php echo number_format($sum->loc, 0); ?></div>
                 <?php echo $this->getTrend('sum', 'loc'); ?>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label"><a href="oop.html">Classes</a></div>
-                <div class="number"><?php echo $sum->nbClasses; ?></div>
+                <div class="number"><?php echo number_format($sum->nbClasses, 0); ?></div>
                 <?php echo $this->getTrend('sum', 'nbClasses'); ?>
             </div>
         </div>
@@ -30,7 +30,7 @@ require __DIR__ . '/_header.php'; ?>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label"><a href="complexity.html">Average cyclomatic complexity by class</a></div>
-                <div class="number"><?php echo $avg->ccn; ?></div>
+                <div class="number"><?php echo number_format($avg->ccn, 0); ?></div>
                 <?php echo $this->getTrend('avg', 'ccn', true); ?>
             </div>
         </div>
@@ -39,16 +39,25 @@ require __DIR__ . '/_header.php'; ?>
                 <div class="label">
                     <a href="junit.html">Assertions in tests</a>
                 </div>
+                <?php if(isset($project['unitTesting'])) { ?>
                 <div class="number">
-                    <?php echo isset($project['unitTesting']) ? $project['unitTesting']['assertions'] : '--'; ?>
+                    <?php echo $project['unitTesting']['assertions']; ?>
                 </div>
+                <?php } else { ?>
+                    <div class="help">
+                        <div class="help-inner">
+                            No JUnit report found. Use the --junit=&lt;junit.xml&gt; option to analyse your unit tests.
+                            See <a href="https://phpunit.readthedocs.io/fr/latest/textui.html" target="_blank">documentation of PHPUnit if needed</a> (look for the --log-junit parameter)
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label"><a href="complexity.html">Average bugs by class</a></div>
                 <div class="number">
-                    <?php echo $avg->bugs; ?>
+                    <?php echo number_format($avg->bugs, 0); ?>
                 </div>
                 <?php echo $this->getTrend('avg', 'bugs', true); ?>
             </div>
@@ -57,34 +66,36 @@ require __DIR__ . '/_header.php'; ?>
 
     <div class="row">
         <div class="column column-help">
-            <div class="column column-help-inner">
-                <div class="row">
-                    <div class="column with-help">
-                        <div class="bloc bloc-graph">
-                            <div class="bloc-graph-carousel">
-                                <div class="bloc-graph-items">
-                                    <div class="bloc-graph-item first">
-                                        <div class="label">Maintainability / complexity</div>
-                                        <div id="svg-maintainability" class="svg-container"></div>
-                                    </div>
-                                    <div class="bloc-graph-item second">
-                                        <div class="label">Maintainability without comments / complexity</div>
-                                        <div id="svg-maintainability-without-comments" class="svg-container"></div>
+            <div class="bloc">
+                <div class="column column-help-inner">
+                    <div class="row">
+                        <div class="column with-help">
+                            <div class="bloc-graph">
+                                <div class="bloc-graph-carousel">
+                                    <div class="bloc-graph-items">
+                                        <div class="bloc-graph-item first">
+                                            <div class="label">Maintainability / complexity</div>
+                                            <div id="svg-maintainability" class="svg-container"></div>
+                                        </div>
+                                        <div class="bloc-graph-item second">
+                                            <div class="label">Maintainability without comments / complexity</div>
+                                            <div id="svg-maintainability-without-comments" class="svg-container"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="icon-container">
-                                <span class="dot dot-first active" title="Maintainability / complexity"></span>
-                                <span class="dot dot-second" title="Maintainability without comments / complexity"></span>
+                                <div class="icon-container">
+                                    <span class="dot dot-first active" title="Maintainability / complexity"></span>
+                                    <span class="dot dot-second" title="Maintainability without comments / complexity"></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="column help">
-                        <div class="help-inner">
-                            <p>Each file is symbolized by a circle. Size of the circle represents the Cyclomatic
-                                complexity.
-                                Color of the circle represents the Maintainability Index.</p>
-                            <p>Large red circles will be probably hard to maintain.</p>
+                        <div class="column help">
+                            <div class="help-inner">
+                                <p>Each file is symbolized by a circle. Size of the circle represents the Cyclomatic
+                                    complexity.
+                                    Color of the circle represents the Maintainability Index.</p>
+                                <p>Large red circles will be probably hard to maintain.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -121,7 +132,11 @@ require __DIR__ . '/_header.php'; ?>
                             //$classesS = array_slice($classesS, 0, 10);
                             foreach ($classesS as $class) { ?>
                                 <tr>
-                                    <td><?php echo $class['pageRank']; ?></td>
+                                    <td>
+                                        <span class="badge" <?php echo gradientStyleFor($classes, 'pageRank', $class['pageRank']);?>);">
+                                        <?php echo $class['pageRank']; ?>
+                                    </td>
+                                    </td>
                                     <td>
                                         <span class="path"><?php echo $class['name']; ?></span>
                                         <?php
@@ -168,9 +183,13 @@ require __DIR__ . '/_header.php'; ?>
                             usort($packages, function ($a, $b) {
                                 return strcmp($a->name, $b->name);
                             });
-                            foreach ($packages as $package) { ?>
-                                <tr<?php if (null !== $package->installed && version_compare($package->installed, $package->latest) === -1) { echo ' style="color:orangered"'; }?>>
-                                    <td><?php echo $package->name; ?></td>
+                            foreach ($packages as $package) if( !preg_match('!(^php$|^ext\-)!', $package->name)) { ?>
+                                <tr>
+                                    <td>
+                                        <a target="_blank" href="https://packagist.org/packages/<?php echo $package->name; ?>">
+                                            <?php echo $package->name; ?>
+                                        </a>
+                                    </td>
                                     <td><?php echo $package->required; ?></td>
                                     <?php if (0 !== count($packagesInstalled)) {?><td><?php echo $package->installed; ?></td><?php } ?>
                                     <td><?php echo $package->latest; ?></td>

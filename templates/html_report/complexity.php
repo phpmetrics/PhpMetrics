@@ -59,30 +59,29 @@ require __DIR__ . '/_header.php'; ?>
                         <th class="js-sort-number">WMC</th>
                         <th class="js-sort-number">Class cycl.</th>
                         <th class="js-sort-number">Max method cycl.</th>
-                        <?php if ($config->has('junit')) { ?>
-                            <th class="js-sort-number">Unit testsuites calling it</th>
-                        <?php } ?><th class="js-sort-number">Relative system complexity</th>
                         <th class="js-sort-number">Relative data complexity</th>
                         <th class="js-sort-number">Relative structural complexity</th>
                         <th class="js-sort-number">Bugs</th>
                         <th class="js-sort-number">Defects</th>
+                        <?php if ($config->has('junit')) { ?>
+                            <th class="js-sort-number">Unit testsuites calling it</th>
+                        <?php } ?><th class="js-sort-number">Relative system complexity</th>
                     </tr>
                     </thead>
                     <?php
                     foreach ($classes as $class) { ?>
                         <tr>
                             <td><span class="path"><?php echo $class['name']; ?></span></td>
-                            <td><?php echo isset($class['wmc']) ? $class['wmc'] : ''; ?></td>
-                            <td><?php echo isset($class['ccn']) ? $class['ccn'] : ''; ?></td>
-                            <td><?php echo isset($class['ccnMethodMax']) ? $class['ccnMethodMax'] : ''; ?></td>
+                            <?php foreach (['wmc', 'ccn', 'ccnMethodMax', 'relativeSystemComplexity', 'relativeDataComplexity', 'relativeStructuralComplexity', 'bugs', 'kanDefect'] as $attribute) {?>
+                                <td>
+                                    <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>);">
+                                    <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
+                                    </span>
+                                </td>
+                            <?php } ?>
                             <?php if ($config->has('junit')) { ?>
                                 <td><?php echo isset($class['numberOfUnitTests']) ? $class['numberOfUnitTests'] : ''; ?></td>
                             <?php } ?>
-                            <td><?php echo isset($class['relativeSystemComplexity']) ? $class['relativeSystemComplexity'] : ''; ?></td>
-                            <td><?php echo isset($class['relativeDataComplexity']) ? $class['relativeDataComplexity'] : ''; ?></td>
-                            <td><?php echo isset($class['relativeStructuralComplexity']) ? $class['relativeStructuralComplexity'] : ''; ?></td>
-                            <td><?php echo isset($class['bugs']) ? $class['bugs'] : ''; ?></td>
-                            <td><?php echo isset($class['kanDefect']) ? $class['kanDefect'] : ''; ?></td>
                         </tr>
                     <?php } ?>
                 </table>

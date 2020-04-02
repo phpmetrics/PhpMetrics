@@ -75,12 +75,13 @@ if (count($lcom) > 0) {
                     foreach ($classes as $class) { ?>
                         <tr>
                             <td><span class="path"><?php echo $class['name']; ?></span></td>
-                            <td><?php echo isset($class['lcom']) ? $class['lcom'] : ''; ?></td>
-                            <td><?php echo isset($class['volume']) ? $class['volume'] : ''; ?></td>
-                            <td><?php echo isset($class['ccn']) ? $class['ccn'] : ''; ?></td>
-                            <td><?php echo isset($class['ccnMethodMax']) ? $class['ccnMethodMax'] : ''; ?></td>
-                            <td><?php echo isset($class['bugs']) ? $class['bugs'] : ''; ?></td>
-                            <td><?php echo isset($class['difficulty']) ? $class['difficulty'] : ''; ?></td>
+                            <?php foreach (['lcom', 'volume', 'ccn', 'ccnMethodMax', 'bugs', 'difficulty'] as $attribute) {?>
+                                <td>
+                                    <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>);">
+                                    <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
+                                    </span>
+                                </td>
+                            <?php } ?>
                         </tr>
                     <?php } ?>
                 </table>
