@@ -8,7 +8,7 @@ require __DIR__ . '/_header.php'; ?>
                 </div>
                 <div class="number"><?php echo number_format($sum->violations->total, 0); ?></div>
                 <div class="bloc-action">
-                    <a href="violation.html">View details &gt;</a>
+                    <a href="violations.html">View details &gt;</a>
                 </div>
             </div>
         </div>
@@ -180,28 +180,30 @@ require __DIR__ . '/_header.php'; ?>
     </div>
 
     <div class="row">
-        <div class="column">
-            <div class="bloc bloc-number">
-                <div class="label">
-                    <a href="composer.html">Composer</a>
-                </div>
-                <?php
-                $packages = isset($project['composer']['packages']) ? $project['composer']['packages'] : [];
-                $packagesInstalled = isset($project['composer']['packages-installed']) ? $project['composer']['packages-installed'] : [];
-                if([] === $packages) { ?>
-                    <div class="help number-alternate"><div class="help-inner">No composer.json file found</div></div>
-                <?php } else {?>
-                    <div class="number">
-                        <?php echo count($packages);?> dependencies
+        <?php if($this->isHomePage()) {?>
+            <div class="column">
+                <div class="bloc bloc-number">
+                    <div class="label">
+                        <a href="composer.html">Composer</a>
                     </div>
-                <?php } ?>
+                    <?php
+                    $packages = isset($project['composer']['packages']) ? $project['composer']['packages'] : [];
+                    $packagesInstalled = isset($project['composer']['packages-installed']) ? $project['composer']['packages-installed'] : [];
+                    if ([] === $packages) { ?>
+                        <div class="help number-alternate"><div class="help-inner">No composer.json file found</div></div>
+                    <?php } else {?>
+                        <div class="number">
+                            <?php echo count($packages);?> dependencies
+                        </div>
+                    <?php } ?>
 
-                <div id="svg-licenses" class="chart-in-number"></div>
-                <div class="bloc-action">
-                    <a href="composer.html">View details &gt;</a>
+                    <div id="svg-licenses" class="chart-in-number"></div>
+                    <div class="bloc-action">
+                        <a href="composer.html">View details &gt;</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        <?php }?>
         <div class="column"></div>
         <div class="column"></div>
     </div>

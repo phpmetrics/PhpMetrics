@@ -13,7 +13,7 @@ Please note that the `~/.composer/vendor/bin` directory must be in your `$PATH`.
 export PATH=~/.composer/vendor/bin:$PATH
 ```
     
-## Phar
+## Phar
 
 ```bash
 curl https://github.com/phpmetrics/PhpMetrics/releases/download/v2.6.2/phpmetrics.phar
@@ -40,7 +40,7 @@ brew install phpmetrics
 yaourt install phpmetrics
 ```
 
-## Docker
+## Docker
 
 ```bash
 docker run --rm \

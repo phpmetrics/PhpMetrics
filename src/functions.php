@@ -214,3 +214,16 @@ function gradientAlphaFor($array, $attribute, $currentValue)
 function gradientStyleFor($array, $attribute, $currentValue) {
     return sprintf(' style="background-color: hsla(203, 82%%, 76%%, %s);"', gradientAlphaFor($array, $attribute, $currentValue));
 }
+
+/**
+ * Calculate percentalies
+ *
+ * @param float[]|int[] $arr
+ * @param float $percentile
+ * @return mixed
+ */
+function percentile($arr, $percentile = 0.95)
+{
+    sort($arr);
+    return $arr[max(round($percentile * count($arr) - 1.0 - $percentile), 0)];
+}

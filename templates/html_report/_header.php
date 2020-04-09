@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>PhpMetrics report</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/milligram.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/roboto.css">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/material-icons.css">
-    <link rel="stylesheet" href="css/graph-carousel.css">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/milligram.min.css">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/style.css">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/roboto.css">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/normalize.css">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/material-icons.css">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/graph-carousel.css">
 </head>
 <body>
 
@@ -48,8 +48,21 @@
 
 
 <div class="page">
-    <div class="content">
+    <div class="content content-first">
         <div class="report-details">
             Created at <?php echo date('Y-m-d H:i:s'); ?>
         , with PHPMetrics <?php echo getVersion(); ?> (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
+
+        <?php if ([] !== $this->groups) {?>
+        <div class="content-full group-tabs">
+            <ul class="tabs">
+                <li class="<?php if(!$this->currentGroup) { echo 'active'; }?>"><a href="<?php echo $this->assetPath;?>index.html">All</a></li>
+                <?php foreach ($this->groups as $group) { ?>
+                    <li class="<?php if ($group->getName() === $this->currentGroup) { echo 'active'; }?> ">
+                        <a href="<?php echo $this->assetPath . $group->getName();?>/index.html"><?php echo $group->getName();?></a>
+                    </li>
+                <?php } ?>
+            </ul>
+        </div>
+        <?php } ?>
