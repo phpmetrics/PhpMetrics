@@ -173,7 +173,12 @@ a {
 .page .content {
     padding: 2em 2em;
     position:relative;
+}
+.content-first {
     margin-top: 80px;
+}
+.content-full {
+    padding: 0;
 }
 .report-details {
     position: absolute;
@@ -546,6 +551,40 @@ table tr td {
 
 .js-sort-table thead th {
     cursor: pointer;
+}
+
+/* ---- tabs ---- */
+.tabs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.tabs li {
+    list-style: none;
+    display: inline-block;
+    margin:0;
+}
+.tabs li a {
+    text-decoration: none;
+    padding: .5em 1em;
+    display: inline-block;
+    border-top: 4px solid #FFF;
+    border-bottom: 4px solid #FFF;
+}
+.tabs li a:hover, .tabs li.active a  {
+    border-bottom: 4px solid #48bb78;
+}
+.tabs li.active a  {
+    font-weight: bold;
+}
+
+.group-tabs {
+    background-color: #fff;
+    line-height: 2em;
+    margin-bottom: 1em;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
 }
 
 /* ---- relations ---- */

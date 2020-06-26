@@ -1,9 +1,11 @@
 <?php
+
 namespace Hal\Report\Html;
 
 use Hal\Application\Config\Config;
 use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
+use Hal\Metric\Group\Group;
 use Hal\Metric\Metrics;
 
 class Reporter
@@ -22,6 +24,26 @@ class Reporter
      * @var string
      */
     protected $templateDir;
+
+    /**
+     * @var Consolidated[]
+     */
+    private $consolidatedByGroups;
+
+    /**
+     * @var Group[]
+     */
+    private $groups = [];
+
+    /**
+     * @var string
+     */
+    private $currentGroup;
+
+    /**
+     * @var string
+     */
+    private $assetPath = '';
 
     /**
      * @param Config $config
@@ -43,6 +65,16 @@ class Reporter
         }
 
         // consolidate
+
+        /** @var Group[] $groups */
+        $groups = $this->config->get('groups');
+        $this->groups = $groups;
+        $consolidatedGroups = [];
+        foreach ($groups as $group) {
+            $reducedMetricsByGroup = $group->reduceMetrics($metrics);
+            $consolidatedGroups[$group->getName()] = new Consolidated($reducedMetricsByGroup);
+        }
+
         $consolidated = new Consolidated($metrics);
 
         // history of builds
@@ -90,9 +122,9 @@ class Reporter
         $this->renderPage($this->templateDir . '/html_report/package_relations.php', $logDir . '/package_relations.html', $consolidated, $history);
         $this->renderPage($this->templateDir . '/html_report/composer.php', $logDir . '/composer.html', $consolidated, $history);
         if ($this->config->has('git')) {
-            $this->renderPage($this->templateDir . '/html_report/git.php', $logDir . '/git.html', $consolidated, $history);
+            $this->renderPage($this->templateDir . '/html_report/git.php', $logDir . '/git.html', $consolidated, $consolidatedGroups, $history);
         }
-        $this->renderPage($this->templateDir . '/html_report/junit.php', $logDir . '/junit.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/junit.php', $logDir . '/junit.html', $consolidated, $consolidatedGroups, $history);
 
         // js data
         file_put_contents(
@@ -106,7 +138,49 @@ class Reporter
 
         // json data
         file_put_contents(
-            $logDir . '/js/classes.js',
+            $logDir . '/classes.js',
+            'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
+        );
+
+        // HTML files to generate
+        $filesToGenerate = [
+            'index',
+            'loc',
+            'relations',
+            'coupling',
+            'all',
+            'oop',
+            'complexity',
+            'panel',
+            'violation',
+            'packages',
+            'package_relations',
+            'composer',
+        ];
+
+        // consolidated by groups
+        foreach ($consolidatedGroups as $name => $consolidated) {
+            $outDir = $logDir . DIRECTORY_SEPARATOR . $name;
+            $this->currentGroup = $name;
+            $this->assetPath = '../';
+
+            if (!file_exists($outDir)) {
+                mkdir($outDir, 0755, true);
+            }
+
+            foreach ($filesToGenerate as $filename) {
+                $this->renderPage(
+                    sprintf('%s/html_report/%s.php', $this->templateDir, $filename),
+                    sprintf('%s/%s.html', $outDir, $filename),
+                    $consolidated,
+                    $history
+                );
+            }
+        }
+
+        // json data
+        file_put_contents(
+            $outDir . '/classes.js',
             'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
         );
 
@@ -143,6 +217,10 @@ class Reporter
      */
     protected function getTrend($type, $key, $lowIsBetter = false, $highIsBetter = false)
     {
+        if (!$this->isHomePage()) {
+            return '';
+        }
+
         $svg = [];
         $svg['gt'] = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
     <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
@@ -205,5 +283,13 @@ class Reporter
             $diff,
             $svg[$r]
         );
+    }
+
+    /**
+     * @return bool
+     */
+    private function isHomePage()
+    {
+        return null === $this->currentGroup;
     }
 }

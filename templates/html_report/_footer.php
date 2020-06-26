@@ -5,7 +5,7 @@
 <div id="sidebar">
     <div class="content">
         <div class="logo">
-            <a href="http://www.phpmetrics.org"><img src="images/phpmetrics-maintenability.png"
+            <a href="http://www.phpmetrics.org"><img src="<?php echo $this->assetPath;?>images/phpmetrics-maintenability.png"
                                                  alt="Logo PhpMetrics"/></a>
             <h1>PhpMetrics</h1>
         </div>
@@ -31,13 +31,15 @@
                         Violations (<?php echo $sum->violations->total;?>)
                     </a>
                 </li>
-                <li>
-                    <a href="composer.html">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-                        Composer
-                    </a>
-                </li>
-                <?php if($config->has('junit')) { ?>
+                <?php if($this->isHomePage()) {?>
+                    <li>
+                        <a href="composer.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                            Composer
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($this->isHomePage() && $config->has('junit')) { ?>
                     <li>
                         <a href="junit.html">
                             <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -131,7 +133,7 @@
                         Package relations
                     </a>
                 </li>
-                <?php if($config->has('git')) { ?>
+                <?php if($this->isHomePage() && $config->has('git')) { ?>
                 <li>
                     <a href="git.html">
                         <img src="images/logo-git.png" alt="">
@@ -176,19 +178,19 @@
 <?php } ?>
 </div>
 
-<script type="text/javascript" src="js/functions.js"></script>
-<script type="text/javascript" src="js/d3.v3.js"></script>
-<script type="text/javascript" src="js/d3.hexbin.v0.js"></script>
-<script type="text/javascript" src="js/sort-table.min.js"></script>
-<script type="text/javascript" src="js/graph-maintainability.js"></script>
-<script type="text/javascript" src="js/graph-carousel.js"></script>
-<script type="text/javascript" src="js/graph-licenses.js"></script>
-<script type="text/javascript" src="js/FileSaver.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/functions.js"></script>
+<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/d3.v3.js"></script>
+<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/d3.hexbin.v0.js"></script>
+<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/sort-table.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/graph-maintainability.js"></script>
+<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/graph-carousel.js"></script>
+<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/graph-licenses.js"></script>
+<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/FileSaver.min.js"></script>
 
-<script src="js/clusterize.min.js"></script>
-<link rel="stylesheet" href="css/clusterize.css">
+<script src="<?php echo $this->assetPath; ?>js/clusterize.min.js"></script>
+<link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/clusterize.css">
 
-<script type="text/javascript" src="js/classes.js"></script>
+<script type="text/javascript" src="classes.js"></script>
 
 <script type="text/javascript">
     var accessibilityEnabled = false;

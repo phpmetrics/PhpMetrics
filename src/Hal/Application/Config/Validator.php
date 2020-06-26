@@ -1,5 +1,8 @@
 <?php
+
 namespace Hal\Application\Config;
+
+use Hal\Metric\Group\Group;
 
 /**
  * @package Hal\Application\Config
@@ -32,10 +35,26 @@ class Validator
         if (!$config->has('exclude')) {
             $config->set('exclude', 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec');
         }
+
+        // retro-compatibility with excludes as string in config files
+        if (is_array($config->get('exclude'))) {
+            $config->set('exclude', implode(',', $config->get('exclude')));
+        }
         $config->set('exclude', array_filter(explode(',', $config->get('exclude'))));
 
+        // groups by regex
+        if (!$config->has('groups')) {
+            $config->set('groups', []);
+        }
+        $groupsRaw = $config->get('groups');
+
+        $groups = array_map(static function (array $groupRaw): Group {
+            return new Group($groupRaw['name'], $groupRaw['match']);
+        }, $groupsRaw);
+        $config->set('groups', $groups);
+
         // parameters with values
-        $keys = ['report-html', 'report-csv', 'report-violation', '--report-json', 'extensions'];
+        $keys = ['report-html', 'report-csv', 'report-violation', 'report-json', 'extensions', 'config'];
         foreach ($keys as $key) {
             $value = $config->get($key);
             if ($config->has($key) && empty($value) || true === $value) {
@@ -60,6 +79,7 @@ Required:
 
 Optional:
 
+    --config=<file>                   Use a file for configuration
     --exclude=<directory>             List of directories to exclude, separated by a comma (,)
     --extensions=<php,inc>            List of extensions to parse, separated by a comma (,)
     --report-html=<directory>         Folder where report HTML will be generated

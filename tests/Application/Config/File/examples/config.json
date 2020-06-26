@@ -1,6 +1,40 @@
 {
-  "exclude": "test1",
+  "includes": [
+      "src/Hal/Component"
+  ],
+  "excludes": [
+      "tests"
+  ],
+  "extensions": [
+      "php",
+      "php8"
+  ],
   "report": {
-    "html": "test2"
+      "html": "tmp/report/",
+      "csv": "/tmp/report.csv",
+      "json": "/tmp/report.json",
+      "violations": "/tmp/violations.xml"
+  },
+  "groups": [
+      {
+          "name": "Controllers",
+          "match": "!component!i"
+      },
+      {
+          "name": "Domain",
+          "match": "!app!i"
+      },
+      {
+          "name": "Models",
+          "match": "!app!i"
+      }
+  ],
+  "plugins": {
+      "git": {
+          "binary": "git"
+      },
+      "junit": {
+          "file": "/tmp/junit.xml"
+      }
   }
 }
