@@ -27,7 +27,7 @@ PhpMetrics provides metrics about PHP project and classes, with beautiful and re
     
 Then open the generated `./myreport/index.html` file in your browser. 
 
-## Configuration file
+## Configure
 
 Use the `--config=<file>.json` option. For example:
 
