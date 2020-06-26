@@ -31,7 +31,7 @@ Then open the generated `./myreport/index.html` file in your browser.
 
 Use the `--config=<file>.json` option. For example:
 
-```json
+```js
 {
     "includes": [   // directory and files to analyze, relative to config file directory 
         "src"
@@ -45,11 +45,15 @@ Use the `--config=<file>.json` option. For example:
         "json": "/tmp/report.json",         // destination file for JSON report
         "violations": "/tmp/violations.xml" // destination file for XML violations report
     },
-    "groups": [     // "layers" of code. You can group your classes and packages by regex, to visualise specific HTML report for each of them
+    "groups": [     // "layers" of code. You can group your classes and packages by regex, 
+                    // to visualise specific HTML report for each of them
         {
             "name": "Component",      // name of the layer
-            "match": "!component!i"   // regular expression used to match the group (based on the name of the fully qualified class name)
-                                      // remember to double escape (for json, then for regex): set "!\\\\MyPackage\\\\!" if you want to capture expression "\MyPackage\"
+            "match": "!component!i"   // regular expression used to match the group (based on 
+                                      // the name of the fully qualified class name)
+                                      // remember to double escape (for json, then for regex): 
+                                      // set "!\\\\MyPackage\\\\!" if you want to capture  
+                                      // expression "\MyPackage\"
         },
         {
             "name": "Example",
