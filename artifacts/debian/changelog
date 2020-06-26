@@ -1,3 +1,14 @@
+phpmetrics (2.6.1) unstable; urgency=low
+   * Improved UI with help and gradients 
+   * Merge pull request #421 from phpmetrics/improved_ui 
+   * releasing v2.6.2 
+   * New composer report and improved UI 
+   * Merge pull request #424 from phpmetrics/ui_composer 
+   * Group analyzed components by layer 
+   * Merge pull request #428 from phpmetrics/config_group 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Fri, 26 Jun 2020 22:22:02 +0200
+
 phpmetrics (2.6.0) unstable; urgency=low
    * Force GPG key for relasing 
    * Improved page rank report, and UI #416 
@@ -773,6 +784,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
