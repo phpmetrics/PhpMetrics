@@ -178,12 +178,6 @@ class Reporter
             }
         }
 
-        // json data
-        file_put_contents(
-            $outDir . '/classes.js',
-            'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
-        );
-
         $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir));
     }
 
