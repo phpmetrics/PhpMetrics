@@ -30,6 +30,6 @@ Git must configure a GPG key on your Github account to verify commits.
 These commands will create phar, debian and binary release, 
 then run all tests and push new release to Github :
 
-    make tag version=<VERSION>
+    make tag VERSION=<VERSION>
     # <VERSION> can be `major`, `minor` or `patch`
     make release
