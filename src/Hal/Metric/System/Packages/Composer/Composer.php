@@ -47,7 +47,7 @@ class Composer
             $package->installed = $installed;
             $package->required = $version;
             $package->name = $requirement;
-            $package->status = version_compare($package->required, $package->latest) === -1 ? 'outdated' : 'latest';
+            $package->status = version_compare($installed, $package->latest, '<') ? 'outdated' : 'latest';
             $packages[$requirement] = $package;
         }
 
