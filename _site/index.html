@@ -1,222 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
 
-<head>
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Static analysis must be understandable | PhpMetrics, static analyzer for PHP</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Static analysis must be understandable" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Beautiful and readable informations about your PHP code" />
+<meta property="og:description" content="Beautiful and readable informations about your PHP code" />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="PhpMetrics, static analyzer for PHP" />
+<script type="application/ld+json">
+{"@type":"WebSite","headline":"Static analysis must be understandable","url":"http://localhost:4000/","name":"PhpMetrics, static analyzer for PHP","description":"Beautiful and readable informations about your PHP code","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="description" content="PhpMetrics is a quality tool for PHP. It provide beautiful reports about Maintenability, Complexity, Difficulty... of your code.">
-    <meta name="author" content="Jean-François Lépine">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="/assets/css/style.css?v=8d3e43e04cb784f223c862472e4ab4b3f71856e7">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">PhpMetrics, static analyzer for PHP</h1>
+      <h2 class="project-tagline">Beautiful and readable informations about your PHP code</h2>
+      
+        <a href="https://github.com/Halleck45/tmp-website" class="btn">View on GitHub</a>
+      
+      
+    </section>
 
-    <title>PhpMetrics, by Jean-François Lépine</title>
+    <section class="main-content">
+      <h2 id="static-analysis-must-be-understandable">Static analysis must be understandable</h2>
 
-    <link href="/css/mui.min.css" rel="stylesheet" type="text/css" />
-    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700" rel="stylesheet" type="text/css" />
-    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+<p>PhpMetrics analyze your PHP code and provides HTML, JSON, CSV… reports about complexity, dependencies, coupling, violations, and more !</p>
 
-    <!-- IE8 support for HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+<p><img src="/assets/img/phpmetrics-overview.png" alt="PhpMetrics HTML report" /></p>
 
+<h2 id="quick-start">Quick start</h2>
 
-</head>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>composer require phpmetrics/phpmetrics --dev
+php ./vendor/bin/phpmetrics --report-html=myreport &lt;folder-to-analyze&gt;
+</code></pre></div></div>
 
+<p>Then open the generated <code class="language-plaintext highlighter-rouge">./myreport/index.html</code> file in your browser.</p>
 
-<body>
+<h2 id="configure">Configure</h2>
 
-    <header>
-        <nav class="mui-appbar" role="navigation">
-    <div class="mui-container">
-        <table id="appbar-inner">
-            <tr class="mui-appbar-height">
-                <td>
-                    <a class="appbar-brand" href="http://localhost:4000">PhpMetrics</a>
-                </td>
-                <td id="appbar-cell-right">
-                    <a href="http://localhost:4000/report/latest/index.html">Demo</a>
-                    <a href="http://localhost:4000#install" class="mui-hidden-xs">Download</a>
-                    <a href="http://localhost:4000/documentation/index.html">Documentation</a>
-                    <a href="http://localhost:4000/about.html">About</a>
-                </td>
-            </tr>
-        </table>
-    </div>
-</nav>
+<p>Use the <code class="language-plaintext highlighter-rouge">--config=&lt;file&gt;.json</code> option. For example:</p>
 
-    </header>
-    <div class="mui-row" style="position: relative; height:100%;">
-        <div class="mui-col-md-2" style="height:100%">
-            <nav id="sidenav">
-    <div>
-        <h2 class="mui-appbar-line-height"><a href="http://localhost:4000">PhpMetrics</a></h2>
-    </div>
-    <div class="mui-divider"></div>
-    <ul>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+    <span class="dl">"</span><span class="s2">includes</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>   <span class="c1">// directory and files to analyze, relative to config file directory </span>
+        <span class="dl">"</span><span class="s2">src</span><span class="dl">"</span>
+    <span class="p">],</span>
+    <span class="dl">"</span><span class="s2">exclude</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>    <span class="c1">// regex of files (or directory) to exclude from analyze</span>
+      <span class="dl">"</span><span class="s2">tests</span><span class="dl">"</span>
+    <span class="p">],</span>
+    <span class="dl">"</span><span class="s2">report</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>     <span class="c1">// list of reports to generate (html, json, csv or violation)</span>
+        <span class="dl">"</span><span class="s2">html</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/tmp/report/</span><span class="dl">"</span><span class="p">,</span>             <span class="c1">// destination directory of HTML report </span>
+        <span class="dl">"</span><span class="s2">csv</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/tmp/report.csv</span><span class="dl">"</span><span class="p">,</span>           <span class="c1">// destination file for CSV report</span>
+        <span class="dl">"</span><span class="s2">json</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/tmp/report.json</span><span class="dl">"</span><span class="p">,</span>         <span class="c1">// destination file for JSON report</span>
+        <span class="dl">"</span><span class="s2">violations</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/tmp/violations.xml</span><span class="dl">"</span> <span class="c1">// destination file for XML violations report</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">groups</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>     <span class="c1">// "layers" of code. You can group your classes and packages by regex, </span>
+                    <span class="c1">// to visualise specific HTML report for each of them</span>
+        <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Component</span><span class="dl">"</span><span class="p">,</span>      <span class="c1">// name of the layer</span>
+            <span class="dl">"</span><span class="s2">match</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">!component!i</span><span class="dl">"</span>   <span class="c1">// regular expression used to match the group (based on </span>
+                                      <span class="c1">// the name of the fully qualified class name)</span>
+                                      <span class="c1">// remember to double escape (for json, then for regex): </span>
+                                      <span class="c1">// set "!\\\\MyPackage\\\\!" if you want to capture  </span>
+                                      <span class="c1">// expression "\MyPackage\"</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Example</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">match</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">!example!</span><span class="dl">"</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="dl">"</span><span class="s2">plugins</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">git</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">binary</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">git</span><span class="dl">"</span>           <span class="c1">// if defined, runs git analyze</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">junit</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">file</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/tmp/junit.xml</span><span class="dl">"</span>  <span class="c1">// if defined, JUnit report file will be analyzed            </span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="dl">"</span><span class="s2">extensions</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span> <span class="dl">"</span><span class="s2">php</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">php8</span><span class="dl">"</span> <span class="p">],</span>        <span class="c1">// default: ["php", "inc"]</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-        <li>
-            <strong class="">Getting Started</strong>
-            <ul>
-                <li><a class="" href="http://localhost:4000/documentation/index.html">Metrics</a></li>
-                <li><a class="" href="http://localhost:4000/documentation/how-to-read-report.html">How to read report</a></li>
-                <li><a class="" href="http://localhost:4000/documentation/how-to-understand-metrics.html">How to understand metrics</a></li>
+<h2 id="more">More</h2>
 
-            </ul>
-        </li>
-        <li>
-            <strong class="">Continous integration</strong>
-            <ul>
-                <li><a class="" href="http://localhost:4000/documentation/jenkins.html">Jenkins and Sonar</a></li>
+<p>If want, you can <a href="https://github.com/phpmetrics/PhpMetrics/blob/master/doc/installation.md">install</a> PhpMetrics globally with your favorite package manager (APT, Brew…). You can also visit our <a href="http://www.phpmetrics.org/documentation/index.html">documentation</a>.</p>
 
-            </ul>
-        </li>
-        <li>
-            <strong class="">External resources</strong>
-            <ul>
-                <li><a class="" href="https://www.sitepoint.com/visualize-codes-quality-phpmetrics/">PhpMetrics on SitePoint</a></li>
-                <li><a class="" href="https://peteraba.com/blog/phpmetrics-of-popular-projects/">PhpMetrics of popular php projects</a></li>
-                <li><a class="" href="https://gist.github.com/Halleck45/c205ddff88643f3ba51d">Parsing PhpMetrics with PhantomJS</a></li>
-                <li><a class="" href="http://blog.lepine.pro/industrialisation/bornes-pour-les-indicateurs-et-metriques/">How are calculated boundaries</a> (french)</li>
-                <li><a class="" href="https://github.com/Halleck45/PhpMetrics-jetbrains">PhpStom integration</a></li>
+<p>You can integrate PhpMetrics directly <a href="https://github.com/phpmetrics/PhpMetricsCollectorBundle">in the debug bar of your Symgony project</a>, 
+or <a href="https://github.com/phpmetrics/PhpMetrics-jetbrains">in PhpStorm</a>.</p>
 
-            </ul>
-        </li>
-        <li>
-            <strong class="">Contribute</strong>
-            <ul>
-                <li><a class="" href="https://github.com/Halleck45/PhpMetrics">PhpMetrics on github</a></li>
-                <li><a class="" href="https://github.com/Halleck45/PhpMetrics/issues">Issues</a></li>
+<p><img src="/assets/img/phpmetrics-symfony.png" alt="PhpMetrics Symfony" /></p>
 
-            </ul>
-        </li>
+<h2 id="metrics-list">Metrics list</h2>
 
-    </ul>
+<p>See the <a href="https://github.com/phpmetrics/PhpMetrics/blob/master/doc/metrics.md">metrics</a> file.</p>
 
-</nav>
-        </div>
-        <div class="mui-cold-md-10">
-            <div class="mui-container">
-            <div id="hero-panel" class="mui-panel">
-    <div id="f-welcome" class="mui-text-center">
-        <img class="img-responsive" src="images/phpmetrics-maintenability.png" alt="" width="100" height="100">
-        <div class="mui-text-title">PhpMetrics is a static analysis tout for PHP<p></p></div>
-        <div id="f-buttons">
-            <a class="mui-btn mui-btn-primary mui-btn-lg" href="https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar"><i class="icon-file-download"></i> DOWNLOAD (phar)</a>
-            <a class="mui-btn mui-btn-default mui-btn-flat mui-btn-lg" href="https://github.com/Halleck45/PhpMetrics"><i class="icon-github"></i> View on GitHub</a>
-        </div>
-    </div>
-</div>
+<h2 id="author">Author</h2>
+
+<p>PhpMetrics is developed by Jean-François Lépine &lt;<a href="https://twitter.com/Halleck45">@Halleck45</a>&gt;, with the help of 
+<a href="https://github.com/phpmetrics/PhpMetrics/graphs/contributors">dozens of awesome contributors</a></p>
+
+<h2 id="license">License</h2>
+
+<p>PhpMetrics is free and Open Source under the <a href="https://github.com/phpmetrics/PhpMetrics/LICENSE">MIT LICENSE</a>.</p>
 
 
-<div class="mui-panel">
-    <h2>Quickstart</h2>
-    <p>
-        PhpMetrics provides various metrics about PHP projects.
-    </p>
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/Halleck45/tmp-website">tmp-website</a> is maintained by <a href="https://github.com/Halleck45">Halleck45</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </section>
 
-    <h3 id="install">Installation</h3>
-
-    With Composer (or <a href="https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar">download the phar</a>):
-    <div class="highlight">
-    <pre>composer global require <span style="color:#0000e6; ">'halleck45/phpmetrics'</span>
-phpmetrics --report-html=myreport.html <span style="color:#40015a; ">/path/of/your/sources</span>
-</pre>
-    </div>
-
-
-
-    <h3>Metrics</h3>
-    <ul>
-        <li>
-            <strong>Complexity</strong>: Cyclomatic complexity, Myer's interval, Relative system complexity
-        </li>
-        <li>
-            <strong>Volume</strong>: Vocabulary, Data complexity, Lines of code, Readability...
-        </li>
-        <li>
-            <strong>Object Oriented</strong>: Lack of cohesion of methods, Coupling, Abstraction...
-        </li>
-        <li>
-            <strong>Maintenability</strong>: Maintenability index, Halstead's metrics, Effort...
-        </li>
-        <li>
-            <a href="http://localhost:4000//documentation/index.html">And more !</a
-        </li>
-    </ul>
-
-    <h3>Readability &amp; Accessibility</h3>
-    <p>
-        PhpMetrics is designed to be understable and easy to use. Thanks to d3js, it will scores your project with beautiful graphs. PhpMetrics has a
-        "colorblind mode".
-        <br />Do not hesitate to <a href="http://localhost:4000/report/latest/index.html">visit the demo</a>.
-    </p>
-    <div>
-        <a href="http://localhost:4000/report/latest/index.html"><img src="images/phpmetrics-report.png" alt="Example of HTML report" style="width: 50%; margin: 0 auto;"/></a>
-    </div>
-
-
-    <h3>Continous Integration</h3>
-    <p>
-        PhpMetrics interacts with <a href="http://jenkins-ci.org/">Jenkins</a> or <a href="www.sonarqube.org">Sonar</a>. It provides reports in many
-        formats (XML, violations, HTML, CSV...). Read <a href="http://localhost:4000/documentation/jenkins.html">Documentation</a>.
-    </p>
-
-
-</div>
-
-<div class="mui-panel">
-    <h2>Open source and free</h2>
-    <div>
-        <iframe src="https://ghbtns.com/github-btn.html?user=Halleck45&repo=PhpMetrics&type=star&count=true" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
-        <iframe src="https://ghbtns.com/github-btn.html?user=Halleck45&repo=PhpMetrics&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
-    </div>
-    <p>
-        <img src="https://poser.pugx.org/halleck45/php-metrics/v/stable.svg" />
-    </p>
-    <p>
-        PhpMetrics is an Open Source project created by <a href="http://www.lepine.pro">Jean-François Lépine</a> (<a href="https://twitter.com/Halleck45">Halleck45</a>).
-    </p>
-    <p>
-        License: <a href="https://github.com/Halleck45/PhpMetrics/blob/master/LICENSE">MIT</a>, sources hosted on <a href="https://github.com/Halleck45/PhpMetrics"><i class="icon icon-github"></i> Github</a>.
-    </p>
-
-
-</div>
-
-
-            </div>
-        </div>
-    </div>
-
-
-
-
-    <footer>
-
-    <nav role="navigation">
-        <div class="mui-container">
-            <div id="g-footer" class="mui-text-center">
-                <ul class="mui-list-unstyled mui-list-inline">
-                    <li><a href="https://github.com/Halleck45/PhpMetrics/issues">Support</a></li>
-                    <li><a href="http://localhost:4000/feedback">Feedback</a></li><li>
-                    <li><a href="https://twitter.com/Halleck45">Twitter</a></li>
-                    <li><a href="https://www.linkedin.com/profile/view?id=90131737&authType=NAME_SEARCH&authToken=OkW0&locale=fr_FR&srchid=901317371400003230246&srchindex=1&srchtotal=1&trk=vsrp_people_res_name&trkInfo=VSRPsearchId%3A901317371400003230246%2CVSRPtargetId%3A90131737%2CVSRPcmpt%3Aprimary">Linkedin</a></li>
-                </ul>
-                <ul id="g-footer-bottomlinks" class="mui-list-inline mui-text-center">
-                    <li>&copy 2015 Jean-François Lépine</li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</footer>
-
-
-</body>
-
-<script src="//cdn.muicss.com/mui-0.0.1/js/mui.min.js"></script>
-
-</body>
-
+    
+  </body>
 </html>

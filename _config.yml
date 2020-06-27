@@ -1,35 +1,3 @@
-# General Jekyll Config
-baseurl: http://www.phpmetrics.org
-url: http://www.phpmetrics.org
-exclude: [LICENSE, CNAME, README.md, TODO.md, .gitignore, Makefile, Capfile, config, node_modules, less]
-
-permalink: :title
-lsi: false # articles associés améliorés (lent)
-markdown: rdiscount
-pygments: true
-paginate: 10
-destination: build
-
-
-
-# Theme customization - please change from the defaults!
-theme:
-  google_analytics_key: UA-5363554-12
-
-phpmetrics_repo: "https://github.com/Halleck45/PhpMetrics"
-
-sitemap:
-    file: "/sitemap.xml"
-    exclude:
-        - "/atom.xml"
-        - "/feed.xml"
-        - "/feed/index.xml"
-        - "/less"
-        - "/site.json"
-        - "/css"
-        - "/node_modules/*"
-        - "config"
-    include_posts:
-        - "/index.html"
-    change_frequency_name: "change_frequency"
-    priority_name: "priority"
+theme: jekyll-theme-cayman
+title: PhpMetrics, static analyzer for PHP
+description: Beautiful and readable informations about your PHP code

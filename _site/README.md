@@ -1,18 +1,12 @@
-# PhpMetrics documentation
+Installation
+-----
 
-## Requirements
+```bash
+bundle install
+```
 
-+ lessc
-+ jekyll
+Then
 
-## Development
-
-Run Jekyll server with
-
-    jekyll server -w --config _config.yml,_config_local.yml
-
-Website will be available on [http://localhost:4000](http://localhost:4000)
-
-## CSS
-
-Please **NEVER** change any CSS file manually. You **should** use the less files contained in `./less` directory.
+```bash
+bundle exec jekyll serve
+```
