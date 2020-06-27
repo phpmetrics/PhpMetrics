@@ -1,3 +1,10 @@
+phpmetrics (2.7.1) unstable; urgency=low
+   * Fix path of reporter 
+   * releasing v2.7.2 
+   * include by default the composer.json localized at the root dir 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Sat, 27 Jun 2020 15:20:54 +0200
+
 phpmetrics (2.7.0) unstable; urgency=low
    * Fixed colors of JSON file in markdown 
    * Fixed markdown and hidden char 
@@ -813,6 +820,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
