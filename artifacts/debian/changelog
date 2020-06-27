@@ -1,3 +1,19 @@
+phpmetrics (2.6.2) unstable; urgency=low
+   * New composer report and improved UI 
+   * Merge pull request #424 from phpmetrics/ui_composer 
+   * Group analyzed components by layer 
+   * Merge pull request #428 from phpmetrics/config_group 
+   * releasing v2.7.0 
+   * Fixed colors of JSON file in markdown 
+   * Fixed markdown and hidden char 
+   * Fix #429, bug when generating html report. 
+   * Fix #431, only outdated packages will be reported 
+   * Merge pull request #430 from pts-contrib/bug-429 
+   * Merge pull request #432 from pts-contrib/bug-431 
+   * fix contribution typo 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Sat, 27 Jun 2020 14:56:42 +0200
+
 phpmetrics (2.6.1) unstable; urgency=low
    * Improved UI with help and gradients 
    * Merge pull request #421 from phpmetrics/improved_ui 
@@ -784,6 +800,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
