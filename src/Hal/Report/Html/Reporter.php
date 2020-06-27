@@ -152,7 +152,7 @@ class Reporter
             'oop',
             'complexity',
             'panel',
-            'violation',
+            'violations',
             'packages',
             'package_relations',
             'composer',
