@@ -64,7 +64,7 @@ class Application
         (new ViolationParser($config, $output))->apply($metrics);
 
         // report
-        (new Report\Cli\Reporter($config, $output))->generate($metrics);
+        //(new Report\Cli\Reporter($config, $output))->generate($metrics);
         (new Report\Html\Reporter($config, $output))->generate($metrics);
         (new Report\Csv\Reporter($config, $output))->generate($metrics);
         (new Report\Json\Reporter($config, $output))->generate($metrics);

@@ -49,6 +49,7 @@ class Consolidated
         $nbInterfaces = 0;
         foreach ($metrics->all() as $key => $item) {
             $classItem = get_class($item);
+            var_dump($item);
             if (ClassMetric::class === $classItem) {
                 $classes[] = $item->all();
                 $classMetrics[] = $item;
@@ -92,6 +93,7 @@ class Consolidated
         ];
 
         foreach ($classMetrics as $key => $item) {
+            var_dump( $item->get('loc'));
             $sum->loc += $item->get('loc');
             $sum->lloc += $item->get('lloc');
             $sum->cloc += $item->get('cloc');
@@ -101,6 +103,7 @@ class Consolidated
                 array_push($avg->$k, $item->get($k));
             }
         }
+        var_dump($sum);
         $sum->nbClasses = count($classes);
         $sum->nbInterfaces = $nbInterfaces;
         $sum->nbPackages = count($packages);
@@ -170,6 +173,8 @@ class Consolidated
 
         $this->avg = $avg;
         $this->sum = $sum;
+        var_dump($sum);
+        var_dump($this->sum);
         $this->classes = $classes;
         $this->files = $files;
         $this->project = $project;

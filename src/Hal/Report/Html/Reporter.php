@@ -73,9 +73,11 @@ class Reporter
         foreach ($groups as $group) {
             $reducedMetricsByGroup = $group->reduceMetrics($metrics);
             $consolidatedGroups[$group->getName()] = new Consolidated($reducedMetricsByGroup);
+            var_dump($consolidatedGroups['Application']->getSum());
         }
-
+exit;
         $consolidated = new Consolidated($metrics);
+        var_dump($consolidated->getSum());exit;
 
         // history of builds
         $today = (object)[
@@ -174,6 +176,12 @@ class Reporter
                     sprintf('%s/%s.html', $outDir, $filename),
                     $consolidated,
                     $history
+                );
+                var_dump($consolidated->getSum());exit;
+
+                file_put_contents(
+                    $outDir . '/classes.js',
+                    'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
                 );
             }
         }

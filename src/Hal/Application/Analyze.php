@@ -141,7 +141,7 @@ class Analyze
         //
         // Composer
         $this->output->write('Executing composer analyzes, requesting https://packagist.org...');
-        (new Composer($this->config, $files))->calculate($metrics);
+        //(new Composer($this->config, $files))->calculate($metrics);
 
         $this->output->clearln();
 
