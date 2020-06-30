@@ -1,3 +1,14 @@
+phpmetrics (2.7.2) unstable; urgency=low
+   * include by default the composer.json localized at the root dir 
+   * releasing v2.7.3 
+   * Create security.yml file 
+   * Bump php package required 
+   * Merge pull request #434 from Mte90/patch-1 
+   * Fix issue with charts in groups - Closes #429, Closes #433 
+   * Merge pull request #437 from phpmetrics/fix_issue_js 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Tue, 30 Jun 2020 22:31:52 +0200
+
 phpmetrics (2.7.1) unstable; urgency=low
    * Fix path of reporter 
    * releasing v2.7.2 
@@ -820,6 +831,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
