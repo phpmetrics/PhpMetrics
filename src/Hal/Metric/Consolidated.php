@@ -107,7 +107,7 @@ class Consolidated
 
         foreach ($avg as &$a) {
             if (count($a) > 0) {
-                $a = round(array_sum($a) / count($a), 2);
+                $a = round(array_sum((array)$a) / count($a), 2);
             } else {
                 $a = 0;
             }
