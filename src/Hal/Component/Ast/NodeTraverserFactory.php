@@ -4,6 +4,7 @@ namespace Hal\Component\Ast;
 
 final class NodeTraverserFactory
 {
+    /** @return CustomNodeTraverser */
     public function getTraverser($cloneNodes = false, $stopCondition = null)
     {
         if (PHP_VERSION_ID >= 70000) {

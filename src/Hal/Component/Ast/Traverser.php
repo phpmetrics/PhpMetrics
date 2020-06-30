@@ -24,14 +24,11 @@ class Traverser
      */
     protected $stopCondition;
 
-    /** @var NodeTraverser */
+    /** @var CustomNodeTraverser */
     private $traverser;
 
-    /**
-     * @param NodeTraverser $traverser
-     * @param callable|null $stopCondition
-     */
-    public function __construct(NodeTraverser $traverser, $stopCondition = null)
+    /** @param callable|null $stopCondition */
+    public function __construct(CustomNodeTraverser $traverser, $stopCondition = null)
     {
         if (null === $stopCondition) {
             $stopCondition = function ($node) {

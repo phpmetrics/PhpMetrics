@@ -5,7 +5,7 @@ namespace Hal\Component\Ast;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 
-class Php7NodeTraverser extends NodeTraverser
+class Php7NodeTraverser extends NodeTraverser implements CustomNodeTraverser
 {
     /** @var Traverser */
     private $traverser;
