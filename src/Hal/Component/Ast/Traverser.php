@@ -10,7 +10,7 @@
 namespace Hal\Component\Ast;
 
 use PhpParser\Node;
-use PhpParser\NodeTraverser as Mother;
+use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 
 /**
@@ -24,14 +24,14 @@ class Traverser
      */
     protected $stopCondition;
 
-    /** @var Mother */
+    /** @var NodeTraverser */
     private $traverser;
 
     /**
-     * @param Mother $traverser
+     * @param NodeTraverser $traverser
      * @param callable|null $stopCondition
      */
-    public function __construct(Mother $traverser, $stopCondition = null)
+    public function __construct(NodeTraverser $traverser, $stopCondition = null)
     {
         if (null === $stopCondition) {
             $stopCondition = function ($node) {
@@ -64,9 +64,9 @@ class Traverser
 
                 foreach ($visitors as $visitor) {
                     $return = $visitor->enterNode($node);
-                    if (Mother::DONT_TRAVERSE_CHILDREN === $return) {
+                    if (NodeTraverser::DONT_TRAVERSE_CHILDREN === $return) {
                         $traverseChildren = false;
-                    } else if (null !== $return) {
+                    } elseif (null !== $return) {
                         $node = $return;
                     }
                 }
@@ -78,7 +78,7 @@ class Traverser
                 foreach ($visitors as $visitor) {
                     $return = $visitor->leaveNode($node);
 
-                    if (Mother::REMOVE_NODE === $return) {
+                    if (NodeTraverser::REMOVE_NODE === $return) {
                         $doNodes[] = [$i, []];
                         break;
                     } elseif (is_array($return)) {

@@ -3,9 +3,9 @@
 namespace Hal\Component\Ast;
 
 use PhpParser\Node;
-use PhpParser\NodeTraverser as Mother;
+use PhpParser\NodeTraverser;
 
-class Php7NodeTraverser extends Mother
+class Php7NodeTraverser extends NodeTraverser
 {
     /** @var Traverser */
     private $traverser;
