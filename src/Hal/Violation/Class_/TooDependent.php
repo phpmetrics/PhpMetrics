@@ -8,6 +8,9 @@ use Hal\Violation\Violation;
 class TooDependent implements Violation
 {
 
+    /** @var Metric|null */
+    private $metric;
+
     /**
      * @inheritdoc
      */
@@ -27,8 +30,8 @@ class TooDependent implements Violation
 
         $this->metric = $metric;
 
-        if ($metric->get('efferentCoupling') >= 20) {
-            $metric->get('violations')->add($this);
+        if ($this->metric->get('efferentCoupling') >= 20) {
+            $this->metric->get('violations')->add($this);
             return;
         }
     }

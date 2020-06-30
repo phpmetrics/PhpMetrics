@@ -29,8 +29,8 @@ class TooComplexClassCode implements Violation
 
         $this->metric = $metric;
 
-        if ($metric->get('wmc') > 50) {
-            $metric->get('violations')->add($this);
+        if ($this->metric->get('wmc') > 50) {
+            $this->metric->get('violations')->add($this);
         }
     }
 

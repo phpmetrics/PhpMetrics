@@ -15,6 +15,7 @@ use Hal\Violation\Violation;
  */
 class TooComplexMethodCode implements Violation
 {
+
     /** @var Metric|null */
     private $metric;
 
@@ -31,8 +32,8 @@ class TooComplexMethodCode implements Violation
 
         $this->metric = $metric;
 
-        if ($metric->get('ccnMethodMax') > 10) {
-            $metric->get('violations')->add($this);
+        if ($this->metric->get('ccnMethodMax') > 10) {
+            $this->metric->get('violations')->add($this);
             return;
         }
     }
