@@ -21,7 +21,7 @@ class Composer
     /**
      * @param array $files
      */
-    public function __construct(Config $config, array $files)
+    public function __construct(Config $config)
     {
         $this->config = $config;
     }
