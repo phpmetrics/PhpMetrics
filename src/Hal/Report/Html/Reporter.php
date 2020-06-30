@@ -175,6 +175,11 @@ class Reporter
                     $consolidated,
                     $history
                 );
+
+                file_put_contents(
+                    $outDir . '/classes.js',
+                    'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
+                );
             }
         }
 
