@@ -80,6 +80,7 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
             }
 
             // comment weight
+            $commentWeight = 0;
             if ($loc > 0) {
                 $CM = $cloc / $loc;
                 $commentWeight = 50 * sin(sqrt(2.4 * $CM));
