@@ -81,7 +81,7 @@ class Analyze
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
 
         /** @var NodeTraverser $traverser */
-        $traverser = (new NodeTraverserFactory)->getTraverser(false, $whenToStop);
+        $traverser = (new NodeTraverserFactory)->getTraverser($whenToStop);
         $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
         $traverser->addVisitor(new ClassEnumVisitor($metrics));
         $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));

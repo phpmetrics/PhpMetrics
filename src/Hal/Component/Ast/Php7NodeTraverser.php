@@ -10,11 +10,8 @@ class Php7NodeTraverser extends NodeTraverser implements CustomNodeTraverser
     /** @var Traverser */
     private $traverser;
 
-    /**
-     * @param bool $cloneNodes
-     * @param callable|null $stopCondition
-     */
-    public function __construct($cloneNodes = false, $stopCondition = null)
+    /** @param callable|null $stopCondition */
+    public function __construct($stopCondition = null)
     {
         parent::__construct();
         $this->traverser = new Traverser($this, $stopCondition);
