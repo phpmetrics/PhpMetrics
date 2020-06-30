@@ -95,6 +95,6 @@ class ProgressBar
                 || 'xterm' === getenv('TERM');
         }
 
-        return function_exists('posix_isatty') && @posix_isatty($this->stream);
+        return function_exists('posix_isatty') && @posix_isatty($this->output);
     }
 }
