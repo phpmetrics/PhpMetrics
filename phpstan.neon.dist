@@ -1,0 +1,10 @@
+parameters:
+    level: 1
+    paths:
+        - src
+        - bin
+        - tests
+    excludes_analyse:
+        - tests/**/examples/*
+    featureToggles:
+        disableRuntimeReflectionProvider: true
