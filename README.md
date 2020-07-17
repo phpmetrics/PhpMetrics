@@ -15,7 +15,7 @@
 
 PhpMetrics provides metrics about PHP project and classes, with beautiful and readable HTML report. 
 
-<b>[Demo](http://www.phpmetrics.org/report/latest/index.html)</b> | [Documentation](http://www.phpmetrics.org/documentation/index.html) | [Twitter](https://twitter.com/Halleck45) | [Contributing](https://github.com/phpmetrics/PhpMetrics/blob/master/doc/contributing.md)
+[Documentation](https://www.phpmetrics.org/index.html) | [Twitter](https://twitter.com/Halleck45) | [Contributing](https://github.com/phpmetrics/PhpMetrics/blob/master/doc/contributing.md)
 
 <br/><br/>
 
@@ -67,14 +67,14 @@ Use the `--config=<file>.json` option. For example:
         "junit": {
             "file": "/tmp/junit.xml"  // if defined, JUnit report file will be analyzed            
         }
-    }
-    "extensions": [ "php", "php8" ],        // default: ["php", "inc"]
+    },
+    "extensions": [ "php", "php8" ]   // default: ["php", "inc"]
 }
 ```
 
 ## More
 
-If want, you can [install](doc/installation.md) PhpMetrics globally with your favorite package manager (APT, Brew...). You can also visit our [documentation](http://www.phpmetrics.org/documentation/index.html).
+If want, you can [install](doc/installation.md) PhpMetrics globally with your favorite package manager (APT, Brew...). You can also visit our [documentation](https://www.phpmetrics.org/index.html).
 
 
 ## Metrics list
