@@ -1,10 +1,17 @@
 parameters:
     level: 1
+
     paths:
         - src
         - bin
         - tests
+
     excludes_analyse:
         - tests/**/examples/*
+        - src/Hal/Component/Ast/Php5NodeTraverser.php
+
     featureToggles:
         disableRuntimeReflectionProvider: true
+
+    # Miscellaneous parameters
+    inferPrivatePropertyTypeFromConstructor: true
