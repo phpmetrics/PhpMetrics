@@ -19,7 +19,7 @@ use PhpParser\PrettyPrinter\Standard;
 class Issuer
 {
     /**
-     * @var array
+     * @var array<string,mixed>
      */
     private $debug = [];
 
@@ -37,16 +37,19 @@ class Issuer
     }
 
     /**
-     * @param $errno
-     * @param $errstr
-     * @param $errfile
-     * @param $errline
+     * @param int $errno
+     * @param string $errstr
+     * @param string $errfile
+     * @param int $errline
+     * @param mixed[] $errcontext
+     * @return bool
+     *
      * @throws \ErrorException
      */
-    public function onError($errno, $errstr, $errfile, $errline)
+    public function onError($errno, $errstr, $errfile, $errline, $errcontext)
     {
         if (error_reporting() == 0) {
-            return;
+            return false;
         }
         $php = PHP_VERSION;
         $os = php_uname();
@@ -115,6 +118,8 @@ EOT;
 
         $this->log($logfile, $log);
         $this->terminate(1);
+
+        return true;
     }
 
     /**
@@ -153,7 +158,7 @@ EOT;
      */
     protected function log($logfile, $log)
     {
-        if (is_writable(getcwd())) {
+        if (getcwd() !== false && is_writable(getcwd())) {
             file_put_contents($logfile, $log);
         } else {
             $this->output->write($log);
@@ -162,8 +167,8 @@ EOT;
     }
 
     /**
-     * @param $debugKey
-     * @param $value
+     * @param string $debugKey
+     * @param mixed $value
      * @return $this
      */
     public function set($debugKey, $value)
@@ -173,7 +178,7 @@ EOT;
     }
 
     /**
-     * @param $debugKey
+     * @param string $debugKey
      * @return $this
      */
     public function clear($debugKey)

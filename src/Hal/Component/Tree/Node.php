@@ -56,7 +56,7 @@ class Node
     }
 
     /**
-     * @return array
+     * @return array<string,Node>
      */
     public function getAdjacents()
     {
@@ -82,7 +82,7 @@ class Node
 
     /**
      * @param Edge $edge
-     * @return $this
+     * @return static
      */
     public function addEdge(Edge $edge)
     {
