@@ -2,6 +2,7 @@
 
 namespace Hal\Metric\Package;
 
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
 use Hal\Metric\PackageMetric;
 use PhpParser\Node;
@@ -29,6 +30,8 @@ class PackageCollectingVisitor extends NodeVisitorAbstract
         if ($node instanceof Namespace_) {
             $this->namespace = (string)$node->name;
         }
+
+        return null;
     }
 
     public function leaveNode(Node $node)
@@ -50,12 +53,19 @@ class PackageCollectingVisitor extends NodeVisitorAbstract
                 $packageMetric = new PackageMetric($packageName);
                 $this->metrics->attach($packageMetric);
             }
-            /* @var PackageMetric $packageMetric */
+            /** @var PackageMetric $packageMetric */
             $elementName = isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node);
             $elementName = (string)$elementName;
             $packageMetric->addClass($elementName);
 
-            $this->metrics->get($elementName)->set('package', $packageName);
+            $metric = $this->metrics->get($elementName);
+            if ($metric === null) {
+                throw new MetricNullException($elementName, self::class);
+            }
+
+            $metric->set('package', $packageName);
         }
+
+        return null;
     }
 }

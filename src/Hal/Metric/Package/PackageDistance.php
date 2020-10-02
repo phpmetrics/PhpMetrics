@@ -6,6 +6,7 @@ use Hal\Metric\PackageMetric;
 
 class PackageDistance
 {
+    /** @return void */
     public function calculate(Metrics $metrics)
     {
         foreach ($metrics->all() as $each) {

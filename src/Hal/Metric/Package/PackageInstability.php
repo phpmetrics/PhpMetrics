@@ -4,9 +4,11 @@ namespace Hal\Metric\Package;
 
 use Hal\Metric\Metrics;
 use Hal\Metric\PackageMetric;
+use Hal\ShouldNotHappenException;
 
 class PackageInstability
 {
+    /** @return void */
     public function calculate(Metrics $metrics)
     {
         /* @var $packages PackageMetric[] */
@@ -31,10 +33,16 @@ class PackageInstability
             $dependentInstabilities = array_map(function ($packageName) use ($instabilitiesByPackage) {
                 return isset($instabilitiesByPackage[$packageName]) ? $instabilitiesByPackage[$packageName] : null;
             }, $eachPackage->getOutgoingPackageDependencies());
+
             $dependentInstabilities = array_combine(
                 $eachPackage->getOutgoingPackageDependencies(),
                 $dependentInstabilities
             );
+
+            if ($dependentInstabilities === false) {
+                throw new ShouldNotHappenException('$dependentInstabilities is false');
+            }
+
             $dependentInstabilities = array_filter($dependentInstabilities, 'is_float');
             $eachPackage->setDependentInstabilities($dependentInstabilities);
         }
