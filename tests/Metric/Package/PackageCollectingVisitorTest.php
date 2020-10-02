@@ -32,9 +32,14 @@ class ClassA
 }
 CODE
         );
-        $this->assertInstanceOf(PackageMetric::class, $metrics->get('PackA\\SubA\\'));
-        $this->assertSame(['PackageA\\ClassA'], $metrics->get('PackA\\SubA\\')->getClasses());
-        $this->assertSame('PackA\\SubA\\', $metrics->get('PackageA\\ClassA')->get('package'));
+
+        $metric = $metrics->get('PackA\\SubA\\');
+        $this->assertInstanceOf(PackageMetric::class, $metric);
+        $this->assertSame(['PackageA\\ClassA'], $metric->getClasses());
+
+        $metric = $metrics->get('PackageA\\ClassA');
+        $this->assertNotNull($metric);
+        $this->assertSame('PackA\\SubA\\', $metric->get('package'));
     }
 
     public function testItUsesThePackageAnnotationAsPackageNameIfNoSubpackageAnnotationExist()
@@ -51,9 +56,14 @@ class ClassA
 }
 CODE
         );
-        $this->assertInstanceOf(PackageMetric::class, $metrics->get('PackA\\'));
-        $this->assertSame(['PackageA\\ClassA'], $metrics->get('PackA\\')->getClasses());
-        $this->assertSame('PackA\\', $metrics->get('PackageA\\ClassA')->get('package'));
+
+        $metric =  $metrics->get('PackA\\');
+        $this->assertInstanceOf(PackageMetric::class, $metric);
+        $this->assertSame(['PackageA\\ClassA'], $metric->getClasses());
+
+        $metric =  $metrics->get('PackageA\\ClassA');
+        $this->assertNotNull($metric);
+        $this->assertSame('PackA\\', $metric->get('package'));
     }
 
     public function testItUsesTheNamespaceAsPackageNameIfNoPackageAnnotationAreAvailable()
@@ -69,7 +79,10 @@ CODE
         );
         $this->assertInstanceOf(PackageMetric::class, $metrics->get('PackageA\\'));
         $this->assertSame(['PackageA\\ClassA'], $metrics->get('PackageA\\')->getClasses());
-        $this->assertSame('PackageA\\', $metrics->get('PackageA\\ClassA')->get('package'));
+
+        $metric = $metrics->get('PackageA\\ClassA');
+        $this->assertNotNull($metric);
+        $this->assertSame('PackageA\\', $metric->get('package'));
     }
 
     /**
@@ -86,6 +99,8 @@ CODE
         $traverser->addVisitor(new PackageCollectingVisitor($metrics));
 
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
 
         return $metrics;

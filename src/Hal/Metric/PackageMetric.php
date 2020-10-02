@@ -22,7 +22,7 @@ class PackageMetric implements Metric, JsonSerializable
         $this->set('classes', $elements);
     }
 
-    /** @param float $abstraction */
+    /** @param float|null $abstraction */
     public function setAbstraction($abstraction)
     {
         if ($abstraction !== null) {
@@ -37,7 +37,7 @@ class PackageMetric implements Metric, JsonSerializable
         return $this->get('abstraction');
     }
 
-    /** @param float $instability */
+    /** @param float|null $instability */
     public function setInstability($instability)
     {
         if ($instability !== null) {

@@ -36,6 +36,7 @@ class PackageDistanceTest extends TestCase
         $this->assertSame($expectedDistance, $package->getNormalizedDistance());
     }
 
+    /** @return mixed[] */
     public static function provideExamples()
     {
         return [

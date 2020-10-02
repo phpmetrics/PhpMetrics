@@ -15,6 +15,12 @@ class SystemComplexityVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamples
+     *
+     * @param string $filename
+     * @param string $class
+     * @param float $rdc
+     * @param float $rsc
+     * @param float $rsysc
      */
     public function testLackOfCohesionOfMethodsIsWellCalculated($filename, $class, $rdc, $rsc, $rsysc)
     {
@@ -27,14 +33,22 @@ class SystemComplexityVisitorTest extends \PHPUnit\Framework\TestCase
         $traverser->addVisitor(new SystemComplexityVisitor($metrics));
 
         $code = file_get_contents($filename);
+        $this->assertNotFalse($code);
+
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
 
-        $this->assertSame($rdc, $metrics->get('A')->get('relativeDataComplexity'));
-        $this->assertSame($rsc, $metrics->get('A')->get('relativeStructuralComplexity'));
-        $this->assertSame($rsysc, $metrics->get('A')->get('relativeSystemComplexity'));
+        $metric = $metrics->get('A');
+        $this->assertNotNull($metric);
+
+        $this->assertSame($rdc, $metric->get('relativeDataComplexity'));
+        $this->assertSame($rsc, $metric->get('relativeStructuralComplexity'));
+        $this->assertSame($rsysc, $metric->get('relativeSystemComplexity'));
     }
 
+    /** @return mixed[] */
     public function provideExamples()
     {
         return [

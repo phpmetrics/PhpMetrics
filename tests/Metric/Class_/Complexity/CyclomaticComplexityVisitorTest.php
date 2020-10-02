@@ -12,6 +12,10 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamplesForCcn
+     *
+     * @param string $example
+     * @param string $classname
+     * @param int $expectedCcn
      */
     public function testCcnOfClassesIsWellCalculated($example, $classname, $expectedCcn)
     {
@@ -24,14 +28,25 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
         $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
 
         $code = file_get_contents($example);
+        $this->assertNotFalse($code);
+
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
 
-        $this->assertSame($expectedCcn, $metrics->get($classname)->get('ccn'));
+        $metric = $metrics->get($classname);
+        $this->assertNotNull($metric);
+
+        $this->assertSame($expectedCcn, $metric->get('ccn'));
     }
 
     /**
      * @dataProvider provideExamplesForWmc
+     *
+     * @param string $example
+     * @param string $classname
+     * @param int $expectedWmc
      */
     public function testWeightedMethodCountOfClassesIsWellCalculated($example, $classname, $expectedWmc)
     {
@@ -44,16 +59,26 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
         $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
 
         $code = file_get_contents($example);
+        $this->assertNotFalse($code);
+
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
 
-        $this->assertSame($expectedWmc, $metrics->get($classname)->get('wmc'));
+        $metric = $metrics->get($classname);
+        $this->assertNotNull($metric);
+        $this->assertSame($expectedWmc, $metric->get('wmc'));
     }
 
     /**
      * @dataProvider provideExamplesForMaxCc
+     *
+     * @param string $example
+     * @param string $classname
+     * @param int $expected
      */
-    public function testMaximalCyclomaticComplexityOfMethodsIsWellCalculated($example, $classname, $expectedCcnMethodMax)
+    public function testMaximalCyclomaticComplexityOfMethodsIsWellCalculated($example, $classname, $expected)
     {
         $metrics = new Metrics();
 
@@ -64,12 +89,20 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
         $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
 
         $code = file_get_contents($example);
+        $this->assertNotFalse($code);
+
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
 
-        $this->assertSame($expectedCcnMethodMax, $metrics->get($classname)->get('ccnMethodMax'));
+        $metric = $metrics->get($classname);
+        $this->assertNotNull($metric);
+
+        $this->assertSame($expected, $metric->get('ccnMethodMax'));
     }
 
+    /** @return array<string,mixed> */
     public static function provideExamplesForWmc()
     {
         return [
@@ -84,6 +117,7 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /** @return array<string,mixed> */
     public static function provideExamplesForCcn()
     {
         return [
@@ -98,6 +132,7 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /** @return mixed[] */
     public static function provideExamplesForMaxCc()
     {
         return [

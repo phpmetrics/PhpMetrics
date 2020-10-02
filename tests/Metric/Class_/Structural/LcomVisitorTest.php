@@ -10,6 +10,10 @@ class LcomVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamples
+     *
+     * @param string $example
+     * @param string $classname
+     * @param int $expected
      */
     public function testLackOfCohesionOfMethodsIsWellCalculated($example, $classname, $expected)
     {
@@ -22,12 +26,20 @@ class LcomVisitorTest extends \PHPUnit\Framework\TestCase
         $traverser->addVisitor(new LcomVisitor($metrics));
 
         $code = file_get_contents($example);
+        $this->assertNotFalse($code);
+
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
 
-        $this->assertEquals($expected, $metrics->get($classname)->get('lcom'));
+        $metric = $metrics->get($classname);
+        $this->assertNotNull($metric);
+
+        $this->assertEquals($expected, $metric->get('lcom'));
     }
 
+    /** @return mixed[] */
     public function provideExamples()
     {
         return [

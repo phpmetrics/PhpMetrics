@@ -1,5 +1,9 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/jangregor/phpstan-prophecy/extension.neon
+
 parameters:
-    level: 1
+    level: max
 
     paths:
         - src
@@ -9,6 +13,12 @@ parameters:
     excludes_analyse:
         - tests/**/examples/*
         - src/Hal/Component/Ast/Php5NodeTraverser.php
+
+    ignoreErrors:
+        - '#Method [\w\\]+::test[\w]+\(\) has no return typehint specified#'
+        -
+            message: '#Cannot call method count\(\) on null#'
+            path: tests/Violation
 
     featureToggles:
         disableRuntimeReflectionProvider: true

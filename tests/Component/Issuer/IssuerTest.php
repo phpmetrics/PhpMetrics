@@ -39,7 +39,7 @@ class IssuerTest extends \PHPUnit\Framework\TestCase
 <?php
 class A{
    public function foo() {
-   
+
    }
 }
 EOT;
@@ -60,6 +60,7 @@ EOT;
 
 class TestIssuer extends Issuer
 {
+    /** @var mixed */
     public $log;
 
     protected function terminate($status)
@@ -70,5 +71,6 @@ class TestIssuer extends Issuer
     protected function log($logfile, $log)
     {
         $this->log = $log;
+        return $this;
     }
 }

@@ -73,8 +73,8 @@ class Issuer
         $message = <<<EOT
 
 <error>We're sorry : an unexpected error occured.</error>
- 
-<question>Can you help us ?</question> Please open a new issue at https://github.com/phpmetrics/PhpMetrics/issues/new, and copy-paste the content 
+
+<question>Can you help us ?</question> Please open a new issue at https://github.com/phpmetrics/PhpMetrics/issues/new, and copy-paste the content
 of this file: $logfile ?
 
 Thanks for your help :)
@@ -136,7 +136,9 @@ EOT;
     }
 
     /**
-     * @param $status
+     * @param int|string $status
+     *
+     * @return void
      */
     protected function terminate($status)
     {
@@ -144,8 +146,10 @@ EOT;
     }
 
     /**
-     * @param $log
-     * @return $this
+     * @param string $logfile
+     * @param mixed $log
+     *
+     * @return static
      */
     protected function log($logfile, $log)
     {

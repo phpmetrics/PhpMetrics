@@ -6,8 +6,10 @@ namespace Test\Binary;
  */
 class PharTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var string */
     private $phar;
 
+    /** @return void */
     public function setUp()
     {
         $this->phar = __DIR__ . '/../../releases/phpmetrics.phar';
@@ -17,6 +19,8 @@ class PharTest extends \PHPUnit\Framework\TestCase
     {
         $command = sprintf('%s --version', $this->phar);
         $r = shell_exec($command);
+
+        $this->assertNotNull($r);
         $this->assertContains('PhpMetrics', $r);
     }
 
@@ -24,6 +28,8 @@ class PharTest extends \PHPUnit\Framework\TestCase
     {
         $command = sprintf('%s --exclude="" %s 2>&1', $this->phar, __DIR__ . '/examples/1');
         $r = shell_exec($command);
+
+        $this->assertNotNull($r);
         $this->assertContains('Object oriented programming', $r);
         $this->assertContains('LOC', $r);
         $this->assertRegExp('!Classes\s+2!', $r);
@@ -38,6 +44,8 @@ class PharTest extends \PHPUnit\Framework\TestCase
             __DIR__ . '/examples/2'
         );
         $r = shell_exec($command);
+
+        $this->assertNotNull($r);
         $this->assertContains('Object oriented programming', $r);
         $this->assertContains('LOC', $r);
         $this->assertRegExp('!Classes\s+4!', $r);
