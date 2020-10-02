@@ -61,7 +61,7 @@ class Application
         }
 
         // violations
-        (new ViolationParser($config, $output))->apply($metrics);
+        (new ViolationParser())->apply($metrics);
 
         // report
         (new Report\Cli\Reporter($config, $output))->generate($metrics);

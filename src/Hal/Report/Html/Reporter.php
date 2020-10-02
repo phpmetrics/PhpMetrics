@@ -45,6 +45,9 @@ class Reporter
      */
     private $assetPath = '';
 
+    /** @var array */
+    private $history;
+
     /**
      * @param Config $config
      * @param Output $output
@@ -191,14 +194,14 @@ class Reporter
      * @param $destination
      * @return $this
      */
-    public function renderPage($source, $destination, Consolidated $consolidated, $history)
+    private function renderPage($source, $destination, Consolidated $consolidated, $history)
     {
-        $this->sum = $sum = $consolidated->getSum();
-        $this->avg = $avg = $consolidated->getAvg();
-        $this->classes = $classes = $consolidated->getClasses();
-        $this->files = $files = $consolidated->getFiles();
-        $this->project = $project = $consolidated->getProject();
-        $this->packages = $packages = $consolidated->getPackages();
+        $sum = $consolidated->getSum();
+        $avg = $consolidated->getAvg();
+        $classes = $consolidated->getClasses();
+        $files = $consolidated->getFiles();
+        $project = $consolidated->getProject();
+        $packages = $consolidated->getPackages();
         $config = $this->config;
         $this->history = $history;
 

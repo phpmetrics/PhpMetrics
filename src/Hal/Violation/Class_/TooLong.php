@@ -8,6 +8,9 @@ use Hal\Violation\Violation;
 class TooLong implements Violation
 {
 
+    /** @var Metric|null */
+    private $metric;
+
     /**
      * @inheritdoc
      */
@@ -27,8 +30,8 @@ class TooLong implements Violation
 
         $this->metric = $metric;
 
-        if ($metric->get('lloc') >= 200) {
-            $metric->get('violations')->add($this);
+        if ($this->metric->get('lloc') >= 200) {
+            $this->metric->get('violations')->add($this);
         }
     }
 

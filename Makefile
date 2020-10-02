@@ -12,6 +12,9 @@ phpcs:
 phpcbf:
 	./vendor/bin/phpcbf src/ tests/ --extensions=php -n
 
+phpstan:
+	tools/phpstan analyse --memory-limit 256M
+
 # Publish new release. Usage:
 #   make tag VERSION=(major|minor|patch)
 # You need to install https://github.com/flazz/semver/ before

@@ -8,6 +8,9 @@ use Hal\Violation\Violation;
 class ProbablyBugged implements Violation
 {
 
+    /** @var Metric|null */
+    private $metric;
+
     /**
      * @inheritdoc
      */
@@ -28,8 +31,8 @@ class ProbablyBugged implements Violation
         $this->metric = $metric;
 
         $suspect = 0;
-        if ($metric->get('bugs') >= .35) {
-            $metric->get('violations')->add($this);
+        if ($this->metric->get('bugs') >= .35) {
+            $this->metric->get('violations')->add($this);
             return;
         }
     }

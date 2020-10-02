@@ -8,6 +8,9 @@ use Hal\Violation\Violation;
 class Blob implements Violation
 {
 
+    /** @var Metric|null */
+    private $metric;
+
     /**
      * @inheritdoc
      */
@@ -28,20 +31,20 @@ class Blob implements Violation
         $this->metric = $metric;
 
         $suspect = 0;
-        if ($metric->get('nbMethodsPublic') >= 8) {
+        if ($this->metric->get('nbMethodsPublic') >= 8) {
             $suspect++;
         }
 
-        if ($metric->get('lcom') >= 3) {
+        if ($this->metric->get('lcom') >= 3) {
             $suspect++;
         }
 
-        if (count($metric->get('externals')) >= 8) {
+        if (count($this->metric->get('externals')) >= 8) {
             $suspect++;
         }
 
         if ($suspect >= 3) {
-            $metric->get('violations')->add($this);
+            $this->metric->get('violations')->add($this);
         }
     }
 

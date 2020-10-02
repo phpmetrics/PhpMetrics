@@ -2,7 +2,7 @@
 namespace Hal\Application;
 
 use Hal\Application\Config\Config;
-use Hal\Component\Ast\NodeTraverser;
+use Hal\Component\Ast\NodeTraverserFactory;
 use Hal\Component\Issue\Issuer;
 use Hal\Component\Output\Output;
 use Hal\Component\Output\ProgressBar;
@@ -28,6 +28,7 @@ use Hal\Metric\System\Coupling\PageRank;
 use Hal\Metric\System\Packages\Composer\Composer;
 use Hal\Metric\System\UnitTesting\UnitTesting;
 use PhpParser\Error;
+use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 
 /**
@@ -78,7 +79,9 @@ class Analyze
 
         // prepare parser
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $traverser = new NodeTraverser(false, $whenToStop);
+
+        /** @var NodeTraverser $traverser */
+        $traverser = (new NodeTraverserFactory)->getTraverser($whenToStop);
         $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
         $traverser->addVisitor(new ClassEnumVisitor($metrics));
         $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
@@ -141,7 +144,7 @@ class Analyze
         //
         // Composer
         $this->output->write('Executing composer analyzes, requesting https://packagist.org...');
-        (new Composer($this->config, $files))->calculate($metrics);
+        (new Composer($this->config))->calculate($metrics);
 
         $this->output->clearln();
 
