@@ -2,10 +2,12 @@
 namespace Hal\Metric\Class_\Complexity;
 
 use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
+use UnexpectedValueException;
 
 /**
  * Calculate cyclomatic complexity number and weighted method count.
@@ -55,7 +57,11 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
             || $node instanceof Stmt\Interface_
             || $node instanceof Stmt\Trait_
         ) {
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+            $name = MetricClassNameGenerator::getName($node);
+            $class = $this->metrics->get($name);
+            if ($class === null) {
+                throw new MetricNullException($name, self::class);
+            }
 
             $ccn = 1;
             $wmc = 0;
@@ -115,5 +121,7 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
             $class->set('ccn', $ccn);
             $class->set('ccnMethodMax', max($ccnByMethod));
         }
+
+        return null;
     }
 }
