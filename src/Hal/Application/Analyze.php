@@ -64,11 +64,15 @@ class Analyze
 
     /**
      * Runs analyze
+     *
+     * @param string[] $files
+     *
+     * @return Metrics
      */
     public function run($files)
     {
         // config
-        ini_set('xdebug.max_nesting_level', 3000);
+        ini_set('xdebug.max_nesting_level', '3000');
 
         $metrics = new Metrics();
 
@@ -102,9 +106,16 @@ class Analyze
         foreach ($files as $file) {
             $progress->advance();
             $code = file_get_contents($file);
+            if ($code === false) {
+                continue;
+            }
+
             $this->issuer->set('filename', $file);
             try {
                 $stmts = $parser->parse($code);
+                if ($stmts === null) {
+                    continue;
+                }
                 $this->issuer->set('statements', $stmts);
                 $traverser->traverse($stmts);
             } catch (Error $e) {

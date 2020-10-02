@@ -1,15 +1,17 @@
 <?php
 
+use PhpParser\Node;
+
 class MyVisitor extends \PhpParser\NodeVisitorAbstract
 {
 
     /**
-     * @var
+     * @var callable
      */
     private $callback;
 
     /**
-     * @param $callback
+     * @param callable $callback
      */
     public function __construct($callback)
     {
@@ -22,12 +24,15 @@ class MyVisitor extends \PhpParser\NodeVisitorAbstract
     public function leaveNode(\PhpParser\Node $node)
     {
         call_user_func($this->callback, $node);
+        return null;
     }
 }
 
 /**
- * @param $node
- * @param $callback
+ * @param Node $node
+ * @param callable $callback
+ *
+ * @return void
  */
 function iterate_over_node($node, $callback)
 {
@@ -76,7 +81,7 @@ function iterate_over_node($node, $callback)
 }
 
 /**
- * @param $node
+ * @param Node|string $node
  * @return string|null
  */
 function getNameOfNode($node)
@@ -136,12 +141,18 @@ function getNameOfNode($node)
 }
 
 /**
- * @param $src
- * @param $dst
+ * @param string $src
+ * @param string $dst
+ *
+ * @return void
  */
 function recurse_copy($src, $dst)
 {
     $dir = opendir($src);
+    if ($dir === false) {
+        return;
+    }
+
     if (!file_exists($dst)) {
         mkdir($dst);
     }
@@ -166,10 +177,10 @@ function getVersion()
 }
 
 /**
- * @param array $array
+ * @param mixed[] $array
  * @param string $attribute
  * @param mixed $currentValue
- * @return false|float
+ * @return float
  */
 function gradientAlphaFor($array, $attribute, $currentValue)
 {
@@ -206,7 +217,7 @@ function gradientAlphaFor($array, $attribute, $currentValue)
 /**
  * Style an element according its position in range
  *
- * @param array $array
+ * @param mixed[] $array
  * @param string $attribute
  * @param mixed $currentValue
  * @return string

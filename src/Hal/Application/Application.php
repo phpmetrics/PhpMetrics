@@ -14,7 +14,9 @@ class Application
 {
 
     /**
-     * @param array $argv
+     * @param string[] $argv
+     *
+     * @return void
      */
     public function run(array $argv)
     {
