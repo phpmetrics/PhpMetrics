@@ -91,5 +91,7 @@ class ClassEnumVisitor extends NodeVisitorAbstract
 
             $this->metrics->attach($class);
         }
+
+        return null;
     }
 }

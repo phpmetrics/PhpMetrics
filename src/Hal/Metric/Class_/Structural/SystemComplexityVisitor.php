@@ -2,6 +2,7 @@
 namespace Hal\Metric\Class_\Structural;
 
 use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -40,7 +41,11 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+            $name = MetricClassNameGenerator::getName($node);
+            $class = $this->metrics->get($name);
+            if ($class === null) {
+                throw new MetricNullException($name, self::class);
+            }
 
             $sy = $dc = $sc = [];
 
@@ -80,5 +85,7 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
                 ->set('totalDataComplexity', round(array_sum($dc), 2))
                 ->set('totalSystemComplexity', round(array_sum($dc) + array_sum($sc), 2));
         }
+
+        return null;
     }
 }

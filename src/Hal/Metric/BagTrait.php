@@ -6,7 +6,7 @@ trait BagTrait
     private $name;
 
     /**
-     * @var array
+     * @var array<string,mixed>
      */
     private $bag = [];
 
@@ -28,9 +28,9 @@ trait BagTrait
     }
 
     /**
-     * @param $key
-     * @param $value
-     * @return $this
+     * @param string $key
+     * @param mixed $value
+     * @return static
      */
     public function set($key, $value)
     {
@@ -39,7 +39,7 @@ trait BagTrait
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return bool
      */
     public function has($key)
@@ -48,8 +48,8 @@ trait BagTrait
     }
 
     /**
-     * @param $key
-     * @return null
+     * @param string $key
+     * @return mixed|null
      */
     public function get($key)
     {
@@ -57,7 +57,7 @@ trait BagTrait
     }
 
     /**
-     * @return array
+     * @return array<string,mixed>
      */
     public function all()
     {
@@ -65,8 +65,8 @@ trait BagTrait
     }
 
     /**
-     * @param array $array
-     * @return $this
+     * @param array<string,mixed> $array
+     * @return static
      */
     public function fromArray(array $array)
     {

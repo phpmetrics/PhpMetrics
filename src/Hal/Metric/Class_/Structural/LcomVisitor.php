@@ -4,7 +4,9 @@ namespace Hal\Metric\Class_\Structural;
 use Hal\Component\Tree\GraphDeduplicated;
 use Hal\Component\Tree\Node as TreeNode;
 use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
+use Hal\ShouldNotHappenException;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
@@ -38,7 +40,12 @@ class LcomVisitor extends NodeVisitorAbstract
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
             // we build a graph of internal dependencies in class
             $graph = new GraphDeduplicated();
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+
+            $name = MetricClassNameGenerator::getName($node);
+            $class = $this->metrics->get($name);
+            if ($class === null) {
+                throw new MetricNullException($name, self::class);
+            }
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
@@ -46,15 +53,21 @@ class LcomVisitor extends NodeVisitorAbstract
                         $graph->insert(new TreeNode($stmt->name . '()'));
                     }
                     $from = $graph->get($stmt->name . '()');
+                    if ($from === null) {
+                        throw new ShouldNotHappenException('Graph $from is null');
+                    }
 
                     \iterate_over_node($stmt, function ($node) use ($from, &$graph) {
                         if ($node instanceof Node\Expr\PropertyFetch && isset($node->var->name) && $node->var->name == 'this') {
-                            $name = getNameOfNode($node);
+                            $name = (string)getNameOfNode($node);
                             // use of attribute $this->xxx;
                             if (!$graph->has($name)) {
                                 $graph->insert(new TreeNode($name));
                             }
                             $to = $graph->get($name);
+                            if ($to === null) {
+                                throw new ShouldNotHappenException('Graph $to is null');
+                            }
                             $graph->addEdge($from, $to);
                             return;
                         }
@@ -68,6 +81,9 @@ class LcomVisitor extends NodeVisitorAbstract
                                     $graph->insert(new TreeNode($name));
                                 }
                                 $to = $graph->get($name);
+                                if ($to === null) {
+                                    throw new ShouldNotHappenException('Graph $to is null');
+                                }
                                 $graph->addEdge($from, $to);
                                 return;
                             }
@@ -84,6 +100,8 @@ class LcomVisitor extends NodeVisitorAbstract
 
             $class->set('lcom', $paths);
         }
+
+        return null;
     }
 
     /**
