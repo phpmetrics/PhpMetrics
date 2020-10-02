@@ -22,6 +22,11 @@ class Php7NodeTraverser extends NodeTraverser implements CustomNodeTraverser
         return parent::traverseNode($node);
     }
 
+    /**
+     * @param Node[] $nodes
+     *
+     * @return Node[]
+     */
     protected function traverseArray(array $nodes): array
     {
         return $this->traverser->traverseArray($nodes, $this->visitors);
