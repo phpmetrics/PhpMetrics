@@ -39,17 +39,16 @@
         ]
     },
     "require": {
-        "php": ">=5.5",
+        "php": "^7.1",
         "ext-dom": "*",
         "ext-tokenizer": "*",
-        "nikic/php-parser": "^3|^4"
+        "nikic/php-parser": "^4.10"
     },
     "require-dev": {
         "jangregor/phpstan-prophecy": "^0.8.0",
+        "pattisahusiwa/coding-standard": "^0.3.0",
         "phpstan/phpstan-phpunit": "^0.12.16",
-        "phpunit/phpunit": "^7.0",
-        "sebastian/comparator": ">=1.2.3",
-        "squizlabs/php_codesniffer": "^3.5"
+        "phpunit/phpunit": "^7.0"
     },
     "bin": [
         "phpmetrics/bin/phpmetrics"
