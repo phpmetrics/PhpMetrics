@@ -42,6 +42,7 @@
         "php": "^7.1",
         "ext-dom": "*",
         "ext-tokenizer": "*",
+        "adhocore/cli": "^0.8.3",
         "nikic/php-parser": "^4.10"
     },
     "require-dev": {
