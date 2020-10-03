@@ -14,6 +14,12 @@ class LengthVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamples
+     *
+     * @param string $example
+     * @param string $functionName
+     * @param int $loc
+     * @param int $lloc
+     * @param int $cloc
      */
     public function testLineCountsAreWellCalculated($example, $functionName, $loc, $lloc, $cloc)
     {
@@ -26,14 +32,22 @@ class LengthVisitorTest extends \PHPUnit\Framework\TestCase
         $traverser->addVisitor(new LengthVisitor($metrics));
 
         $code = file_get_contents($example);
+        $this->assertNotFalse($code);
+
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
 
-        $this->assertEquals($lloc, $metrics->get($functionName)->get('lloc'));
-        $this->assertEquals($cloc, $metrics->get($functionName)->get('cloc'));
-        $this->assertEquals($loc, $metrics->get($functionName)->get('loc'));
+        $metric = $metrics->get($functionName);
+        $this->assertNotNull($metric);
+
+        $this->assertEquals($lloc, $metric->get('lloc'));
+        $this->assertEquals($cloc, $metric->get('cloc'));
+        $this->assertEquals($loc, $metric->get('loc'));
     }
 
+    /** @return mixed[] */
     public function provideExamples()
     {
         return [

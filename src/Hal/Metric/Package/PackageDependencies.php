@@ -10,6 +10,7 @@ use Hal\Metric\PackageMetric;
 
 class PackageDependencies
 {
+    /** @return void */
     public function calculate(Metrics $metrics)
     {
         $classes = array_filter($metrics->all(), function (Metric $metric) {
@@ -24,13 +25,16 @@ class PackageDependencies
     /**
      * @param ClassMetric|InterfaceMetric|Metric $class
      * @param Metrics $metrics
+     *
+     * @return void
      */
     private function increaseDependencies(Metric $class, Metrics $metrics)
     {
         if (! $class->has('package') || ! $class->has('externals')) {
             return;
         }
-        $incomingPackage = $metrics->get($class->get('package')); /* @var $incomingPackage PackageMetric */
+        /** @var PackageMetric $incomingPackage */
+        $incomingPackage = $metrics->get($class->get('package'));
         foreach ($class->get('externals') as $outgoingClassName) {
             // same package?
             if (in_array($outgoingClassName, $incomingPackage->getClasses())) {
@@ -46,11 +50,17 @@ class PackageDependencies
         }
     }
 
+    /**
+     * @param string $className
+     * @return string
+     */
     private function getPackageOfClass($className, Metrics $metrics)
     {
-        if ($metrics->has($className) && $metrics->get($className)->has('package')) {
-            return $metrics->get($className)->get('package');
+        $metric = $metrics->get($className);
+        if ($metric !== null && $metric->has('package')) {
+            return $metric->get('package');
         }
+
         if (strpos($className, '\\') === false) {
             return '\\';
         }

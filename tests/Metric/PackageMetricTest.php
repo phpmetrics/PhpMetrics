@@ -124,7 +124,7 @@ class PackageMetricTest extends TestCase
 
         $metric->setNormalizedDistance(1);
         $this->assertSame(1, $metric->getNormalizedDistance());
-        $this->assertSame(1/sqrt(2), $metric->getDistance());
+        $this->assertEquals(1/sqrt(2), $metric->getDistance());
     }
 
     public function testItMyaHasDependentInstabilities()

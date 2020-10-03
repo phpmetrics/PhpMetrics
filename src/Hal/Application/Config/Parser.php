@@ -5,6 +5,11 @@ use Hal\Application\Config\File\ConfigFileReaderFactory;
 
 class Parser
 {
+    /**
+     * @param string[] $argv
+     *
+     * @return Config
+     */
     public function parse(array $argv)
     {
         $config = new Config();

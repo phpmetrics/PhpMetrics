@@ -21,9 +21,7 @@ class ConfigFileReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->getExpectedData(), $config->all());
     }
 
-    /**
-     *
-     */
+    /** @return array<string,mixed> */
     private function getExpectedData()
     {
         return [

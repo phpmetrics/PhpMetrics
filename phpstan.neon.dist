@@ -1,5 +1,9 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/jangregor/phpstan-prophecy/extension.neon
+
 parameters:
-    level: 1
+    level: max
 
     paths:
         - src
@@ -9,6 +13,72 @@ parameters:
     excludes_analyse:
         - tests/**/examples/*
         - src/Hal/Component/Ast/Php5NodeTraverser.php
+
+    ignoreErrors:
+        - '#Method [\w\\]+::test[\w]+\(\) has no return typehint specified#'
+        -
+            message: '#Call to function is_array\(\) with PhpParser\\Node will always evaluate to false#'
+            path: src/Hal/Component/Ast/Traverser.php
+        -
+            message: '#Parameter.+expects PhpParser\\Node, int\|PhpParser\\Node given#'
+            path: src/Hal/Component/Ast/Traverser.php
+        -
+            message: '#Parameter.+prettyPrint\(\) expects array<PhpParser\\Node>, array\|PhpParser\\Node given#'
+            path: src/Hal/Component/Issue/Issuer.php
+        -
+            message: '#Access to an undefined property PhpParser\\Node::\$namespacedName#'
+            path: src/Hal/Metric/Helper/MetricClassNameGenerator.php
+        -
+            message: '#Instanceof between Hal\\Metric\\Metric and Hal\\Metric\\InterfaceMetric will always evaluate to false#'
+            path: src/Hal/Metric/Package/PackageDependencies.php
+        -
+            message: '#class Hal\\Metric\\FileMetric constructor expects string, int\|string given#'
+            path: src/Hal/Metric/System/Changes/GitChanges.php
+        -
+            message: '#Packagist::get\(\) invoked with 2 parameters, 1 required#'
+            path: src/Hal/Metric/System/Packages/Composer/Composer.php
+        -
+            message: '#Access to an undefined property object::\$[\w]+#'
+            path: src/Hal/Metric/System/Packages/Composer/Packagist.php
+        -
+            message: '#Cannot access offset 0 on \(int\|string\)#'
+            path: src/Hal/Metric/System/Packages/Composer/Packagist.php
+        -
+            message: '#Call to an undefined method DOMNode::getAttribute#'
+            path: src/Hal/Metric/System/UnitTesting/UnitTesting.php
+        -
+            message: '#Cannot (call method \w+\(\)|access property \$\w+) on DOMNode\|null#'
+            path: src/Hal/Metric/System/UnitTesting/UnitTesting.php
+        -
+            message: '#(Property|Method) Hal\\Metric\\\w+::(\$(name|bag)|fromArray\(\)) has no (return )?typehint specified#'
+            path: src/Hal/Metric
+        -
+            message: '#Method Hal\\Metric\\\w+::fromArray\(\) has parameter \$array with no value type specified in iterable type array#'
+            path: src/Hal/Metric
+        -
+            message: '#Argument of an invalid type stdClass supplied for foreach, only iterables are supported#'
+            path: src/Hal/Metric/Consolidated.php
+        -
+            message: '#Comparison operation ">=" between 0 and 1 is always false#'
+            path: src/Hal/Component/Output/ProgressBar.php
+        -
+            message: '#Parameter.+posix_isatty expects int\|resource, Hal\\Component\\Output\\Output given#'
+            path: src/Hal/Component/Output/ProgressBar.php
+        -
+            message: '#Property Hal\\Component\\Output\\TestOutput::\$\w+ has no typehint specified#'
+            path: src/Hal/Component/Output/TestOutput.php
+        -
+            message: '#Method.+TestOutput::clearln\(\) should return.+but return statement is missing#'
+            path: src/Hal/Component/Output/TestOutput.php
+        -
+            message: '#Access to an undefined property object::\$\w+.$#'
+            path: src/Hal/Report/Cli/Reporter.php
+        -
+            message: '#Method.+renderPage\(\) invoked with 5 parameters, 4 required#'
+            path: src/Hal/Report/Html/Reporter.php
+        -
+            message: '#Parameter \#4 \$history.+Reporter::renderPage\(\).+Consolidated> given#'
+            path: src/Hal/Report/Html/Reporter.php
 
     featureToggles:
         disableRuntimeReflectionProvider: true

@@ -16,21 +16,21 @@ class Consolidated
     private $sum;
 
     /**
-     * @var array
+     * @var array<string,mixed>[]
      */
     private $classes = [];
 
     /**
-     * @var array
+     * @var array<string,array<string,mixed>>
      */
     private $files = [];
 
     /**
-     * @var array
+     * @var array<string,array<string,mixed>>
      */
     private $project = [];
 
-    /** @var array */
+    /** @var array<string,array<string,mixed>> */
     private $packages;
 
     /**
@@ -121,7 +121,7 @@ class Consolidated
         $avg->classesPerPackage = 0;
         if (0 !== $sum->nbPackages) {
             foreach (array_keys($packages) as $eachName) {
-                /* @var $eachPackage PackageMetric */
+                /** @var PackageMetric $eachPackage */
                 $eachPackage = $metrics->get($eachName);
                 $avg->distance += $eachPackage->getDistance();
                 $avg->incomingCDep += count($eachPackage->getIncomingClassDependencies());
@@ -193,7 +193,7 @@ class Consolidated
     }
 
     /**
-     * @return array
+     * @return array<string,mixed>[]
      */
     public function getClasses()
     {
@@ -201,7 +201,7 @@ class Consolidated
     }
 
     /**
-     * @return array
+     * @return array<string,array<string,mixed>>
      */
     public function getFiles()
     {
@@ -209,7 +209,7 @@ class Consolidated
     }
 
     /**
-     * @return array
+     * @return array<string,array<string,mixed>>
      */
     public function getProject()
     {
@@ -217,7 +217,7 @@ class Consolidated
     }
 
     /**
-     * @return array
+     * @return array<string,array<string,mixed>>
      */
     public function getPackages()
     {

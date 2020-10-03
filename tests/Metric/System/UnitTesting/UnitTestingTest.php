@@ -19,14 +19,17 @@ class UnitTestingTest extends \PHPUnit\Framework\TestCase
         $metrics = new Metrics();
         $unit->calculate($metrics);
 
-        $this->assertEquals(2, $metrics->get('unitTesting')->get('nbSuites'));
-        $this->assertCount(2, $metrics->get('unitTesting')->get('tests'));
+        $metric = $metrics->get('unitTesting');
+        $this->assertNotNull($metric);
 
-        $tests = $metrics->get('unitTesting')->get('tests');
+        $this->assertEquals(2, $metric->get('nbSuites'));
+        $this->assertCount(2, $metric->get('tests'));
+
+        $tests = $metric->get('tests');
         $this->assertArrayHasKey('Test\Hal\Application\Config\ParserTest', $tests);
         $this->assertEquals(7, $tests['Test\Hal\Application\Config\ParserTest']->assertions);
 
-        $tests = $metrics->get('unitTesting')->get('tests');
+        $tests = $metric->get('tests');
         $this->assertArrayHasKey('Test\Hal\Component\Issue\IssuerTest', $tests);
         $this->assertEquals(6, $tests['Test\Hal\Component\Issue\IssuerTest']->assertions);
     }
@@ -51,7 +54,10 @@ class UnitTestingTest extends \PHPUnit\Framework\TestCase
         $metrics = new Metrics();
         $unit->calculate($metrics);
 
-        $this->assertEquals(3, $metrics->get('unitTesting')->get('nbSuites'));
-        $this->assertEquals(27, $metrics->get('unitTesting')->get('assertions'));
+        $metric = $metrics->get('unitTesting');
+        $this->assertNotNull($metric);
+
+        $this->assertEquals(3, $metric->get('nbSuites'));
+        $this->assertEquals(27, $metric->get('assertions'));
     }
 }

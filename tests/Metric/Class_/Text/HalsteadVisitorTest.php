@@ -14,8 +14,14 @@ class HalsteadVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamples
+     *
+     * @param string $example
+     * @param string $name
+     * @param int $operators
+     * @param int $operands
+     * @param float $difficulty
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $functionName, $nbOperators, $nbOperands, $difficulty)
+    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $name, $operators, $operands, $difficulty)
     {
         $metrics = new Metrics();
 
@@ -26,26 +32,34 @@ class HalsteadVisitorTest extends \PHPUnit\Framework\TestCase
         $traverser->addVisitor(new HalsteadVisitor($metrics));
 
         $code = file_get_contents($example);
+        $this->assertNotFalse($code);
+
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
 
+        $metric = $metrics->get($name);
+        $this->assertNotNull($metric);
+
         $this->assertEquals(
-            $nbOperands,
-            $metrics->get($functionName)->get('number_operands'),
-            "Expected $nbOperands operands but got {$metrics->get($functionName)->get('number_operands')}"
+            $operands,
+            $metric->get('number_operands'),
+            "Expected $operands operands but got {$metric->get('number_operands')}"
         );
         $this->assertEquals(
-            $nbOperators,
-            $metrics->get($functionName)->get('number_operators'),
-            "Expected $nbOperators operators but got {$metrics->get($functionName)->get('number_operators')}"
+            $operators,
+            $metric->get('number_operators'),
+            "Expected $operators operators but got {$metric->get('number_operators')}"
         );
         $this->assertEquals(
             $difficulty,
-            $metrics->get($functionName)->get('difficulty'),
-            "Expected difficulty $difficulty but got {$metrics->get($functionName)->get('difficulty')}"
+            $metric->get('difficulty'),
+            "Expected difficulty $difficulty but got {$metric->get('difficulty')}"
         );
     }
 
+    /** @return mixed[] */
     public function provideExamples()
     {
         return [

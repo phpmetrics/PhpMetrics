@@ -43,6 +43,7 @@ class StableAbstractionsPrincipleTest extends TestCase
         $this->assertSame($expectedViolationCount, $metric->get('violations')->count());
     }
 
+    /** @return mixed[] */
     public static function provideExamples()
     {
         return [

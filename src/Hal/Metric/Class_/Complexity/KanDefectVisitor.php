@@ -3,6 +3,7 @@ namespace Hal\Metric\Class_\Complexity;
 
 use Hal\Component\Reflected\Method;
 use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -37,7 +38,11 @@ class KanDefectVisitor extends NodeVisitorAbstract
             || $node instanceof Stmt\Interface_
             || $node instanceof Stmt\Trait_
         ) {
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+            $name = MetricClassNameGenerator::getName($node);
+            $class = $this->metrics->get($name);
+            if ($class === null) {
+                throw new MetricNullException($name, self::class);
+            }
 
             $select = $while = $if = 0;
 
@@ -60,5 +65,7 @@ class KanDefectVisitor extends NodeVisitorAbstract
             $defect = 0.15 + 0.23 *  $while + 0.22 *  $select + 0.07 * $if;
             $class->set('kanDefect', round($defect, 2));
         }
+
+        return null;
     }
 }

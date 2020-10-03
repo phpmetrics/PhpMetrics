@@ -3,6 +3,7 @@ namespace Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
+use Hal\ShouldNotHappenException;
 use Hal\Violation\Violation;
 
 class ProbablyBugged implements Violation
@@ -50,6 +51,10 @@ class ProbablyBugged implements Violation
      */
     public function getDescription()
     {
+        if ($this->metric === null) {
+            throw new ShouldNotHappenException('Metric property is null');
+        }
+
         return <<<EOT
 This component contains in theory {$this->metric->get('bugs')} bugs.
 

@@ -1,6 +1,7 @@
 <?php
 namespace Test\Hal\Violation\Class_;
 
+use Hal\Metric\ClassMetric;
 use Hal\Violation\Class_\Blob;
 use Hal\Violation\Violations;
 
@@ -11,6 +12,11 @@ class BlobTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamples
+     *
+     * @param int $expected
+     * @param int $nbMethodsPublic
+     * @param int $lcom
+     * @param int $nbExternals
      */
     public function testGlobIsFound($expected, $nbMethodsPublic, $lcom, $nbExternals)
     {
@@ -23,9 +29,11 @@ class BlobTest extends \PHPUnit\Framework\TestCase
 
         $object = new Blob();
         $object->apply($class);
+
         $this->assertEquals($expected, $class->get('violations')->count());
     }
 
+    /** @return mixed[] */
     public function provideExamples()
     {
         return [

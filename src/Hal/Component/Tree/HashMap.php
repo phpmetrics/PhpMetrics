@@ -9,16 +9,19 @@
 
 namespace Hal\Component\Tree;
 
+/**
+ * @implements \IteratorAggregate<string,Node>
+ */
 class HashMap implements \Countable, \IteratorAggregate
 {
     /**
-     * @var array
+     * @var array<string,Node>
      */
     private $nodes = [];
 
     /**
      * @param Node $node
-     * @return $this
+     * @return static<Node>
      */
     public function attach(Node $node)
     {
@@ -27,8 +30,8 @@ class HashMap implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @param $key
-     * @return Node
+     * @param string $key
+     * @return Node|null
      */
     public function get($key)
     {
@@ -36,7 +39,7 @@ class HashMap implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return bool
      */
     public function has($key)
@@ -52,9 +55,6 @@ class HashMap implements \Countable, \IteratorAggregate
         return count($this->nodes);
     }
 
-    /**
-     * @return \ArrayIterator
-     */
     public function getIterator()
     {
         return new \ArrayIterator($this->nodes);

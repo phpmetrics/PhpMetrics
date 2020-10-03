@@ -42,6 +42,8 @@ class ProgressBar
 
     /**
      * Start progress bar
+     *
+     * @return void
      */
     public function start()
     {
@@ -50,6 +52,8 @@ class ProgressBar
 
     /**
      * Advance progress bar
+     *
+     * @return void
      */
     public function advance()
     {
@@ -67,6 +71,8 @@ class ProgressBar
 
     /**
      * Clear console
+     *
+     *  @return void
      */
     public function clear()
     {

@@ -2,6 +2,7 @@
 namespace Hal\Metric\Class_\Component;
 
 use Hal\Metric\FunctionMetric;
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
 use Hoa\Ruler\Model\Bag\Scalar;
 use PhpParser\Node;
@@ -49,6 +50,9 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
             $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
             $classOrFunction = $this->metrics->get($name);
+            if ($classOrFunction === null) {
+                throw new MetricNullException($name, self::class);
+            }
 
             if (null === $lloc = $classOrFunction->get('lloc')) {
                 throw new \LogicException('please enable length (lloc) visitor first');
@@ -96,5 +100,7 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
                 ->set('commentWeight', round($commentWeight, 2));
             $this->metrics->attach($classOrFunction);
         }
+
+        return null;
     }
 }

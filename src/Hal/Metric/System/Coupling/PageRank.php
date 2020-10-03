@@ -3,6 +3,7 @@
 namespace Hal\Metric\System\Coupling;
 
 use Hal\Metric\ClassMetric;
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
 
 /**
@@ -13,6 +14,8 @@ class PageRank
 
     /**
      * @param Metrics $metrics
+     *
+     * @return void
      */
     public function calculate(Metrics $metrics)
     {
@@ -30,15 +33,19 @@ class PageRank
 
         // save in the metrics object
         foreach ($ranks as $name => $rank) {
-            $metrics->get($name)->set('pageRank', round($rank, 2));
+            $metric = $metrics->get($name);
+            if ($metric === null) {
+                throw new MetricNullException($name, self::class);
+            }
+            $metric->set('pageRank', round($rank, 2));
         }
     }
 
     /**
      * @see http://phpir.com/pagerank-in-php/
-     * @param $linkGraph
+     * @param mixed[] $linkGraph
      * @param float $dampingFactor
-     * @return array
+     * @return float[]
      */
     private function calculatePageRank($linkGraph, $dampingFactor = 0.15)
     {

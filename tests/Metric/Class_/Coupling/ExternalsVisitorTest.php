@@ -15,6 +15,10 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamples
+     *
+     * @param string $example
+     * @param string $classname
+     * @param string[] $expected
      */
     public function testDependenciesAreFound($example, $classname, $expected)
     {
@@ -27,12 +31,20 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
         $traverser->addVisitor(new ExternalsVisitor($metrics));
 
         $code = file_get_contents($example);
+        $this->assertNotFalse($code);
+
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
 
-        $this->assertSame($expected, $metrics->get($classname)->get('externals'));
+        $metric = $metrics->get($classname);
+        $this->assertNotNull($metric);
+
+        $this->assertSame($expected, $metric->get('externals'));
     }
 
+    /** @return mixed[] */
     public function provideExamples()
     {
         return [
@@ -51,6 +63,10 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider provideExamplesAnnotation
+     *
+     * @param string $example
+     * @param string $classname
+     * @param string[] $expected
      */
     public function testDependenciesAreFoundEvenInAnnotation($example, $classname, $expected)
     {
@@ -63,12 +79,20 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
         $traverser->addVisitor(new ExternalsVisitor($metrics));
 
         $code = file_get_contents($example);
+        $this->assertNotFalse($code);
+
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
 
-        $this->assertSame($expected, $metrics->get($classname)->get('externals'));
+        $metric = $metrics->get($classname);
+        $this->assertNotNull($metric);
+
+        $this->assertSame($expected, $metric->get('externals'));
     }
 
+    /** @return mixed[] */
     public function provideExamplesAnnotation()
     {
         return [

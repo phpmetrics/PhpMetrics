@@ -12,6 +12,8 @@ class Validator
     /**
      * @param Config $config
      * @throws ConfigException
+     *
+     * @return void
      */
     public function validate(Config $config)
     {

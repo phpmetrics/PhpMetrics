@@ -2,6 +2,7 @@
 namespace Hal\Metric\Class_\Coupling;
 
 use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -50,7 +51,12 @@ class ExternalsVisitor extends NodeVisitorAbstract
             || $node instanceof Stmt\Interface_
             || $node instanceof Stmt\Trait_
         ) {
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+            $name = MetricClassNameGenerator::getName($node);
+            $class = $this->metrics->get($name);
+            if ($class === null) {
+                throw new MetricNullException($name, self::class);
+            }
+
             $parents = [];
 
             $dependencies = [];
@@ -98,11 +104,11 @@ class ExternalsVisitor extends NodeVisitorAbstract
                         switch (true) {
                             case $node instanceof Node\Expr\New_:
                                 // new MyClass
-                                $this->pushToDependencies($dependencies, getNameOfNode($node));
+                                $this->pushToDependencies($dependencies, (string)getNameOfNode($node));
                                 break;
                             case $node instanceof Node\Expr\StaticCall:
                                 // MyClass::Call
-                                $this->pushToDependencies($dependencies, getNameOfNode($node));
+                                $this->pushToDependencies($dependencies, (string)getNameOfNode($node));
                                 break;
                         }
                     });
@@ -130,8 +136,16 @@ class ExternalsVisitor extends NodeVisitorAbstract
             $class->set('externals', $dependencies);
             $class->set('parents', $parents);
         }
+
+        return null;
     }
 
+    /**
+     * @param string[] $dependencies
+     * @param string $dependency
+     *
+     * @return void
+     */
     private function pushToDependencies(array &$dependencies, $dependency)
     {
         $lowercase = strtolower($dependency);

@@ -20,7 +20,6 @@ class ConfigFileReaderFactory
                 return new ConfigFileReaderJson($filename);
             case 'ini':
                 return new ConfigFileReaderIni($filename);
-                break;
             default:
                 throw new \InvalidArgumentException("Unsupported config file format: '$filename'");
         }

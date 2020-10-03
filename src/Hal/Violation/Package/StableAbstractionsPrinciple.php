@@ -4,6 +4,7 @@ namespace Hal\Violation\Package;
 
 use Hal\Metric\Metric;
 use Hal\Metric\PackageMetric;
+use Hal\ShouldNotHappenException;
 use Hal\Violation\Violation;
 
 class StableAbstractionsPrinciple implements Violation
@@ -21,7 +22,11 @@ class StableAbstractionsPrinciple implements Violation
         if (! $metric instanceof PackageMetric) {
             return;
         }
-        if (abs($metric->getDistance()) > sqrt(2)/4) {
+        $distance = $metric->getDistance();
+        if ($distance === null) {
+            throw new ShouldNotHappenException('Distance is null');
+        }
+        if (abs($distance) > sqrt(2)/4) {
             $this->metric = $metric;
             $metric->get('violations')->add($this);
         }
@@ -34,6 +39,10 @@ class StableAbstractionsPrinciple implements Violation
 
     public function getDescription()
     {
+        if ($this->metric === null) {
+            throw new ShouldNotHappenException('Metric property is null');
+        }
+
         $violation = $this->metric->getDistance() > 0
             ? 'instable and abstract'
             : 'stable and concrete';

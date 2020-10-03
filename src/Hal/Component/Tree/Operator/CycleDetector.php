@@ -50,7 +50,7 @@ class CycleDetector
 
     /**
      * @param Node $node
-     * @param $recursionStack
+     * @param array<string,bool> $recursionStack
      * @return bool
      */
     private function detectCycle(Node $node, &$recursionStack)

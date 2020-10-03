@@ -9,6 +9,7 @@
 
 namespace Hal\Component\File;
 
+use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
@@ -27,14 +28,14 @@ class Finder
     /**
      * Extensions to match
      *
-     * @var array
+     * @var string[]
      */
     private $extensions = [];
 
     /**
      * Subdirectories to exclude
      *
-     * @var array
+     * @var string[]
      */
     private $excludedDirs = [];
 
@@ -50,18 +51,21 @@ class Finder
      * @param string[] $excludedDirs regex of directories to exclude
      * @param int $flags
      */
-    public function __construct(array $extensions = ['php'], array $excludedDirs = [], $flags = null)
+    public function __construct(array $extensions = ['php'], array $excludedDirs = [], $flags = -1)
     {
         $this->extensions = $extensions;
         $this->excludedDirs = $excludedDirs;
         $this->flags = $flags;
+        if ($flags === -1) {
+            $this->flags = FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::CURRENT_AS_FILEINFO;
+        }
     }
 
     /**
      * Find files in path
      *
      * @param string[] $paths
-     * @return array
+     * @return string[]
      */
     public function fetch(array $paths)
     {

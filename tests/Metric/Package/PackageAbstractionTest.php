@@ -33,9 +33,20 @@ class PackageAbstractionTest extends TestCase
         $object = new PackageAbstraction();
         $object->calculate($metrics);
 
-        $this->assertSame(0.5, $metrics->get('SemiAbstract\\')->getAbstraction());
-        $this->assertSame(1.0, $metrics->get('Abstract\\')->getAbstraction());
-        $this->assertSame(0.0, $metrics->get('Concrete\\')->getAbstraction());
+        /** @var PackageMetric */
+        $metric = $metrics->get('SemiAbstract\\');
+        $this->assertNotNull($metric);
+        $this->assertSame(0.5, $metric->getAbstraction());
+
+        /** @var PackageMetric */
+        $metric = $metrics->get('Abstract\\');
+        $this->assertNotNull($metric);
+        $this->assertSame(1.0, $metric->getAbstraction());
+
+        /** @var PackageMetric */
+        $metric = $metrics->get('Concrete\\');
+        $this->assertNotNull($metric);
+        $this->assertSame(0.0, $metric->getAbstraction());
     }
 
     /**
@@ -54,7 +65,9 @@ class PackageAbstractionTest extends TestCase
     }
 
     /**
+     * @param string $packageName
      * @param ClassMetric[] $classes
+     *
      * @return Metric[] $metrics
      */
     private function aPackage($packageName, array $classes)

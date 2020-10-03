@@ -3,6 +3,7 @@ namespace Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
+use Hal\ShouldNotHappenException;
 use Hal\Violation\Violation;
 
 /**
@@ -45,6 +46,10 @@ class TooComplexMethodCode implements Violation
 
     public function getDescription()
     {
+        if ($this->metric === null) {
+            throw new ShouldNotHappenException('Metric property is null');
+        }
+
         return <<<EOT
 This class looks really complex.
 

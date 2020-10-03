@@ -6,8 +6,10 @@ namespace Test\Binary;
  */
 class BinReportTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var string */
     private $phar;
 
+    /** @return void */
     public function setUp()
     {
         $this->phar = __DIR__ . '/../../bin/phpmetrics';
@@ -24,6 +26,8 @@ class BinReportTest extends \PHPUnit\Framework\TestCase
     {
         $command = sprintf('%s --exclude="" %s 2>&1', $this->phar, __DIR__ . '/examples/1');
         $r = shell_exec($command);
+
+        $this->assertNotNull($r);
         $this->assertContains('Object oriented programming', $r);
         $this->assertContains('LOC', $r);
         $this->assertRegExp('!Classes\s+2!', $r);
@@ -38,6 +42,8 @@ class BinReportTest extends \PHPUnit\Framework\TestCase
             __DIR__ . '/examples/2'
         );
         $r = shell_exec($command);
+
+        $this->assertNotNull($r);
         $this->assertContains('Object oriented programming', $r);
         $this->assertContains('LOC', $r);
         $this->assertRegExp('!Classes\s+4!', $r);
@@ -75,6 +81,9 @@ class BinReportTest extends \PHPUnit\Framework\TestCase
         );
         shell_exec($command);
         $this->assertFileExists($destination);
-        $this->assertJson(file_get_contents($destination));
+
+        $content = file_get_contents($destination);
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
     }
 }

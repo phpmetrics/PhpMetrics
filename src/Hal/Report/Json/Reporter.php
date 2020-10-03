@@ -28,7 +28,7 @@ class Reporter
         $this->output = $output;
     }
 
-
+    /** @return void */
     public function generate(Metrics $metrics)
     {
         if ($this->config->has('quiet')) {

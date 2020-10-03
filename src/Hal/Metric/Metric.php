@@ -13,26 +13,26 @@ interface Metric
     public function getName();
 
     /**
-     * @param $key
+     * @param string $key
      * @return mixed
      */
     public function get($key);
 
     /**
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed $value
      * @return mixed
      */
     public function set($key, $value);
 
     /**
-     * @param $key
+     * @param string $key
      * @return mixed
      */
     public function has($key);
 
     /**
-     * @return array
+     * @return array<string,mixed>
      */
     public function all();
 }

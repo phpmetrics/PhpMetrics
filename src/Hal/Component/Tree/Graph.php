@@ -80,7 +80,7 @@ class Graph implements \Countable
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return Node|null
      */
     public function get($key)
@@ -89,7 +89,7 @@ class Graph implements \Countable
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return bool
      */
     public function has($key)
@@ -129,7 +129,7 @@ class Graph implements \Countable
      *
      *      we can have array of roots : graph can be a "forest"
      *
-     * @return array
+     * @return Node[]
      */
     public function getRootNodes()
     {

@@ -3,6 +3,7 @@
 namespace Hal\Metric\Class_\Text;
 
 use Hal\Metric\FunctionMetric;
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
 use Hoa\Ruler\Model\Bag\Scalar;
 use PhpParser\Node;
@@ -47,8 +48,13 @@ class HalsteadVisitor extends NodeVisitorAbstract
                 $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
                 $classOrFunction = $this->metrics->get($name);
             } else {
-                $classOrFunction = new FunctionMetric((string)$node->name);
+                $name = (string)$node->name;
+                $classOrFunction = new FunctionMetric($name);
                 $this->metrics->attach($classOrFunction);
+            }
+
+            if ($classOrFunction === null) {
+                throw new MetricNullException($name, self::class);
             }
 
             // search for operands and operators
@@ -137,5 +143,7 @@ class HalsteadVisitor extends NodeVisitorAbstract
                 ->set('number_operands_unique', $n2);
             $this->metrics->attach($classOrFunction);
         }
+
+        return null;
     }
 }

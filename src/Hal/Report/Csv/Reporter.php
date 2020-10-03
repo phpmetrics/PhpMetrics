@@ -6,6 +6,7 @@ use Hal\Component\Output\Output;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 use Hal\Metric\Registry;
+use Hal\ShouldNotHappenException;
 
 class Reporter
 {
@@ -29,7 +30,7 @@ class Reporter
         $this->output = $output;
     }
 
-
+    /** @return void */
     public function generate(Metrics $metrics)
     {
         if ($this->config->has('quiet')) {
@@ -46,6 +47,9 @@ class Reporter
 
         $availables = (new Registry())->allForStructures();
         $hwnd = fopen($logFile, 'w');
+        if ($hwnd === false) {
+            throw new ShouldNotHappenException('Cannot open log file for CSV reporter');
+        }
         fputcsv($hwnd, $availables);
 
         foreach ($metrics->all() as $metric) {

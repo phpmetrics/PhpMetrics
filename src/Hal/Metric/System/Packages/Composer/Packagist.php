@@ -1,6 +1,8 @@
 <?php
 namespace Hal\Metric\System\Packages\Composer;
 
+use Hal\ShouldNotHappenException;
+
 /**
  * @package Hal\Metric\System\Packages\Composer
  */
@@ -8,7 +10,7 @@ class Packagist
 {
 
     /**
-     * @param $package
+     * @param string $package
      * @return \StdClass
      */
     public function get($package)
@@ -36,7 +38,11 @@ class Packagist
         }
         list($user, $name) = explode('/', $package);
         $uri = sprintf('https://packagist.org/packages/%s/%s.json', $user, $name);
-        $json = json_decode(@file_get_contents($uri));
+        $uriContent = @file_get_contents($uri);
+        if ($uriContent === false) {
+            throw new ShouldNotHappenException('Retrieve package from packagist return false');
+        }
+        $json = json_decode($uriContent);
 
         if (!isset($json->package) || !is_object($json->package)) {
             return $response;

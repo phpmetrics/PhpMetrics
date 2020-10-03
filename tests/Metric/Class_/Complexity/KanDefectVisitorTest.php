@@ -15,6 +15,10 @@ class KanDefectVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamples
+     *
+     * @param string $example
+     * @param string $classname
+     * @param float $expected
      */
     public function testLackOfCohesionOfMethodsIsWellCalculated($example, $classname, $expected)
     {
@@ -27,12 +31,20 @@ class KanDefectVisitorTest extends \PHPUnit\Framework\TestCase
         $traverser->addVisitor(new KanDefectVisitor($metrics));
 
         $code = file_get_contents($example);
+        $this->assertNotFalse($code);
+
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
 
-        $this->assertSame($expected, $metrics->get($classname)->get('kanDefect'));
+        $metric =  $metrics->get($classname);
+        $this->assertNotNull($metric);
+
+        $this->assertSame($expected, $metric->get('kanDefect'));
     }
 
+    /** @return mixed[]*/
     public function provideExamples()
     {
         return [

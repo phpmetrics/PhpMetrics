@@ -4,7 +4,11 @@ namespace Hal\Component\Ast;
 
 final class NodeTraverserFactory
 {
-    /** @return CustomNodeTraverser */
+    /**
+     * @param callable|null $stopCondition
+     *
+     * @return CustomNodeTraverser
+     */
     public function getTraverser($stopCondition = null)
     {
         if (PHP_VERSION_ID >= 70000) {

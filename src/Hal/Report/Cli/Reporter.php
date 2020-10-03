@@ -4,6 +4,7 @@ namespace Hal\Report\Cli;
 use Hal\Application\Config\Config;
 use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
 
 class Reporter
@@ -29,7 +30,7 @@ class Reporter
         $this->output = $output;
     }
 
-
+    /** @return void */
     public function generate(Metrics $metrics)
     {
         if ($this->config->has('quiet')) {
@@ -50,6 +51,11 @@ class Reporter
             $locByMethod = round($sum->lloc / $sum->nbMethods);
         }
 
+        $treeMetric = $metrics->get('tree');
+        if ($treeMetric === null) {
+            throw new MetricNullException('tree', self::class);
+        }
+
         $out = <<<EOT
 LOC
     Lines of code                               {$sum->loc}
@@ -67,13 +73,13 @@ Object oriented programming
     Methods                                     {$sum->nbMethods}
     Methods by class                            {$methodsByClass}
     Lack of cohesion of methods                 {$avg->lcom}
-    
+
 Coupling
     Average afferent coupling                   {$avg->afferentCoupling}
     Average efferent coupling                   {$avg->efferentCoupling}
     Average instability                         {$avg->instability}
-    Depth of Inheritance Tree                   {$metrics->get('tree')->get('depthOfInheritanceTree')}
-    
+    Depth of Inheritance Tree                   {$treeMetric->get('depthOfInheritanceTree')}
+
 Package
     Packages                                    {$sum->nbPackages}
     Average classes per package                 {$avg->classesPerPackage}
@@ -88,7 +94,7 @@ Complexity
     Average Weighted method count by class      {$avg->wmc}
     Average Relative system complexity          {$avg->relativeSystemComplexity}
     Average Difficulty                          {$avg->difficulty}
-    
+
 Bugs
     Average bugs by class                       {$avg->bugs}
     Average defects by class (Kan)              {$avg->kanDefect}
@@ -122,12 +128,16 @@ EOT;
 
         // Junit
         if ($this->config->has('junit')) {
+            $unitMetric = $metrics->get('unitTesting');
+            if ($unitMetric === null) {
+                throw new MetricNullException('unitTesting', self::class);
+            }
             $out .= <<<EOT
-            
+
 Unit testing
-    Number of unit tests                        {$metrics->get('unitTesting')->get('nbSuites')}
-    Classes called by tests                     {$metrics->get('unitTesting')->get('nbCoveredClasses')}
-    Classes called by tests (percent)           {$metrics->get('unitTesting')->get('percentCoveredClasses')} %
+    Number of unit tests                        {$unitMetric->get('nbSuites')}
+    Classes called by tests                     {$unitMetric->get('nbCoveredClasses')}
+    Classes called by tests (percent)           {$unitMetric->get('percentCoveredClasses')} %
 EOT;
         }
 

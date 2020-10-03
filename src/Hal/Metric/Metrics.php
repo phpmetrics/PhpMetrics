@@ -9,13 +9,13 @@ class Metrics implements \JsonSerializable
 {
 
     /**
-     * @var array
+     * @var array<string,Metric>
      */
     private $data = [];
 
     /**
      * @param Metric $metric
-     * @return $this
+     * @return static
      */
     public function attach($metric)
     {
@@ -24,7 +24,7 @@ class Metrics implements \JsonSerializable
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return Metric|null
      */
     public function get($key)
@@ -33,7 +33,7 @@ class Metrics implements \JsonSerializable
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return bool
      */
     public function has($key)

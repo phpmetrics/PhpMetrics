@@ -65,6 +65,8 @@ class SizeOfTree
      * Get depth of node
      *
      * @param Node $node
+     * @param bool $uniqs
+     *
      * @return int
      */
     public function getNumberOfChilds(Node $node, $uniqs = false)

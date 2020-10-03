@@ -45,16 +45,17 @@ class Traverser
     }
 
     /**
-     * @param array $nodes
+     * @param Node[] $nodes
      * @param NodeVisitor[] $visitors
-     * @return array
+     *
+     * @return Node[]
      */
     public function traverseArray(array $nodes, array $visitors)
     {
         $doNodes = [];
 
         foreach ($nodes as $i => &$node) {
-            if (is_array($node)) {
+            if (is_array($node)) { // @phpstan_ignore_line
                 $node = $this->traverseArray($node, $visitors);
             } elseif ($node instanceof Node) {
                 $traverseChildren = call_user_func($this->stopCondition, $node);

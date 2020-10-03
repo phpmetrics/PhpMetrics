@@ -11,6 +11,9 @@ class ParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider providesExample
+     *
+     * @param string[] $argv
+     * @param array<string,mixed> $expected
      */
     public function testICanParseArguments($argv, $expected)
     {
@@ -19,6 +22,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $config->all());
     }
 
+    /** @return array<mixed> */
     public function providesExample()
     {
         return [

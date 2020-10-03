@@ -6,6 +6,7 @@ use Hal\Application\Config\ConfigException;
 use Hal\Component\File\Finder;
 use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
+use Hal\ShouldNotHappenException;
 
 /**
  * @package Hal\Metric\System\Packages\Composer
@@ -18,9 +19,6 @@ class Composer
      */
     private $config;
 
-    /**
-     * @param array $files
-     */
     public function __construct(Config $config)
     {
         $this->config = $config;
@@ -28,7 +26,8 @@ class Composer
 
     /**
      * @param Metrics $metrics
-     * @throws ConfigException
+     *
+     * @return void
      */
     public function calculate(Metrics $metrics)
     {
@@ -62,7 +61,7 @@ class Composer
 
     /**
      * Returns the requirements defined in the composer(-dist)?.json file.
-     * @return array
+     * @return mixed[]
      */
     protected function getComposerJsonRequirements()
     {
@@ -79,7 +78,11 @@ class Composer
             if (!\preg_match('/composer(-dist)?\.json/', $filename)) {
                 continue;
             }
-            $composerJson = (object)\json_decode(\file_get_contents($filename));
+            $fileContent = \file_get_contents($filename);
+            if ($fileContent === false) {
+                throw new ShouldNotHappenException('Get composer content return false');
+            }
+            $composerJson = (object)\json_decode($fileContent);
 
             if (!isset($composerJson->require)) {
                 continue;
@@ -93,8 +96,8 @@ class Composer
 
     /**
      * Returns the installed packages from the composer.lock file.
-     * @param array $rootPackageRequirements List of requirements to match installed packages only with requirements.
-     * @return array
+     * @param mixed[] $rootPackageRequirements List of requirements to match installed packages only with requirements.
+     * @return mixed[]
      */
     protected function getComposerLockInstalled($rootPackageRequirements)
     {
@@ -109,7 +112,11 @@ class Composer
             if (false === \strpos($filename, 'composer.lock')) {
                 continue;
             }
-            $composerLockJson = (object)\json_decode(\file_get_contents($filename));
+            $fileContent = \file_get_contents($filename);
+            if ($fileContent === false) {
+                throw new ShouldNotHappenException('Get composer lock content return false');
+            }
+            $composerLockJson = (object)\json_decode($fileContent);
 
             if (!isset($composerLockJson->packages)) {
                 continue;

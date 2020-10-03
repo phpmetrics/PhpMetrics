@@ -2,7 +2,9 @@
 namespace Hal\Metric\Class_\Text;
 
 use Hal\Metric\FunctionMetric;
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
+use Hal\ShouldNotHappenException;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
@@ -37,24 +39,40 @@ class LengthVisitor extends NodeVisitorAbstract
                 $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
                 $classOrFunction = $this->metrics->get($name);
             } else {
-                $classOrFunction = new FunctionMetric((string)$node->name);
+                $name = (string)$node->name;
+                $classOrFunction = new FunctionMetric($name);
                 $this->metrics->attach($classOrFunction);
+            }
+
+            if ($classOrFunction === null) {
+                throw new MetricNullException($name, self::class);
             }
 
             $prettyPrinter = new PrettyPrinter\Standard();
             $code = $prettyPrinter->prettyPrintFile([$node]);
 
             // count all lines
-            $loc = count(preg_split('/\r\n|\r|\n/', $code)) - 1;
+            $allLines = preg_split('/\r\n|\r|\n/', $code);
+            if ($allLines === false) {
+                throw new ShouldNotHappenException('Count all lines return false');
+            }
+            $loc = count($allLines) - 1;
 
             // count and remove multi lines comments
             $cloc = 0;
             if (preg_match_all('!/\*.*?\*/!s', $code, $matches)) {
                 foreach ($matches[0] as $match) {
-                    $cloc += max(1, count(preg_split('/\r\n|\r|\n/', $match)));
+                    $matched = preg_split('/\r\n|\r|\n/', $match);
+                    if ($matched === false) {
+                        throw new ShouldNotHappenException('Count and remove multi lines comments return false');
+                    }
+                    $cloc += max(1, count($matched));
                 }
             }
             $code = preg_replace('!/\*.*?\*/!s', '', $code);
+            if ($code === null) {
+                throw new ShouldNotHappenException('Preg replace return null');
+            }
 
             // count and remove single line comments
             $code = preg_replace_callback('!(\'[^\']*\'|"[^"]*")|((?:#|\/\/).*$)!m', function (array $matches) use (&$cloc) {
@@ -63,10 +81,22 @@ class LengthVisitor extends NodeVisitorAbstract
                 }
                 return $matches[1];
             }, $code, -1);
+            if ($code === null) {
+                throw new ShouldNotHappenException('Count and remove single line comments return null');
+            }
 
             // count and remove empty lines
-            $code = trim(preg_replace('!(^\s*[\r\n])!sm', '', $code));
-            $lloc = count(preg_split('/\r\n|\r|\n/', $code));
+            $emptyLines = preg_replace('!(^\s*[\r\n])!sm', '', $code);
+            if ($emptyLines === null) {
+                throw new ShouldNotHappenException('Remove empty lines return null');
+            }
+            $code = trim($emptyLines);
+            $countCode = preg_split('/\r\n|\r|\n/', $code);
+            if ($countCode === false) {
+                throw new ShouldNotHappenException('Count empty lines return false');
+            }
+
+            $lloc = count($countCode);
 
             // save result
             $classOrFunction
@@ -75,5 +105,7 @@ class LengthVisitor extends NodeVisitorAbstract
                 ->set('lloc', $lloc);
             $this->metrics->attach($classOrFunction);
         }
+
+        return null;
     }
 }

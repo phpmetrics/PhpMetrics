@@ -48,6 +48,7 @@ class StableDependenciesPrincipleTest extends TestCase
         $this->assertSame($expectedViolationCount, $violations->count());
     }
 
+    /** @return mixed[] */
     public static function provideExamples()
     {
         return [

@@ -64,7 +64,7 @@ class ConfigFileReaderJson implements ConfigFileReaderInterface
             // "exclude" is a string
             // excludes is an array
             $config->set('exclude', implode(',', $jsonData['excludes']));
-        } else if (isset($jsonData['exclude'])) {
+        } elseif (isset($jsonData['exclude'])) {
             $config->set('exclude', $jsonData['exclude']);
         }
 
@@ -86,6 +86,8 @@ class ConfigFileReaderJson implements ConfigFileReaderInterface
     }
 
     /**
+     * @param string $path
+     *
      * @return string
      */
     private function resolvePath($path)

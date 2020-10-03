@@ -14,8 +14,16 @@ class MaintainabilityIndexVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideValues
+     *
+     * @param int $ccn
+     * @param int $lloc
+     * @param int $cloc
+     * @param float $volume
+     * @param float $mIwoC
+     * @param float $mi
+     * @param float $weight
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($ccn, $lloc, $cloc, $volume, $mIwoC, $mi, $commentWeight)
+    public function testLackOfCohesionOfMethodsIsWellCalculated($ccn, $lloc, $cloc, $volume, $mIwoC, $mi, $weight)
     {
         $metrics = new Metrics();
         $prophet = $this->prophesize('Hal\Metric\ClassMetric');
@@ -33,7 +41,7 @@ class MaintainabilityIndexVisitorTest extends \PHPUnit\Framework\TestCase
         $prophet->set('mi', $mi)->will(function () use ($prophet) {
             return $prophet->reveal();
         })->shouldBeCalled();
-        $prophet->set('commentWeight', $commentWeight)->will(function () use ($prophet) {
+        $prophet->set('commentWeight', $weight)->will(function () use ($prophet) {
             return $prophet->reveal();
         })->shouldBeCalled();
 
@@ -48,14 +56,17 @@ class MaintainabilityIndexVisitorTest extends \PHPUnit\Framework\TestCase
         $code = <<<EOT
 <?php class A {
     public function foo() {
-    
+
     }
 }
 EOT;
         $stmts = $parser->parse($code);
+        $this->assertNotNull($stmts);
+
         $traverser->traverse($stmts);
     }
 
+    /** @return mixed[] */
     public function provideValues()
     {
         return [

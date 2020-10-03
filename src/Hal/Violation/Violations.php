@@ -3,11 +3,13 @@ namespace Hal\Violation;
 
 /**
  * @package Hal\Violation
+ *
+ * @implements \IteratorAggregate<int,Violation>
  */
 class Violations implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array
+     * @var Violation[]
      */
     private $data = [];
 
@@ -21,6 +23,8 @@ class Violations implements \IteratorAggregate, \Countable
 
     /**
      * @param Violation $violation
+     *
+     * @return void
      */
     public function add(Violation $violation)
     {

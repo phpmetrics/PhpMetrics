@@ -7,6 +7,7 @@ use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
 use Hal\Metric\Group\Group;
 use Hal\Metric\Metrics;
+use Hal\ShouldNotHappenException;
 
 class Reporter
 {
@@ -45,7 +46,7 @@ class Reporter
      */
     private $assetPath = '';
 
-    /** @var array */
+    /** @var string[] */
     private $history;
 
     /**
@@ -59,7 +60,7 @@ class Reporter
         $this->templateDir = __DIR__ . '/../../../../templates';
     }
 
-
+    /** @return void */
     public function generate(Metrics $metrics)
     {
         $logDir = $this->config->get('report-html');
@@ -86,11 +87,18 @@ class Reporter
             'sum' => $consolidated->getSum()
         ];
         $files = glob($logDir . '/js/history-*.json');
+        if ($files === false) {
+            throw new ShouldNotHappenException('Glob logdir operation return false');
+        }
         $next = count($files) + 1;
         $history = [];
         natsort($files);
         foreach ($files as $filename) {
-            array_push($history, json_decode(file_get_contents($filename)));
+            $content = file_get_contents($filename);
+            if ($content === false) {
+                throw new ShouldNotHappenException('File get content return false');
+            }
+            array_push($history, json_decode($content));
         }
 
         // copy sources
@@ -190,9 +198,10 @@ class Reporter
     }
 
     /**
-     * @param $source
-     * @param $destination
-     * @return $this
+     * @param string $source
+     * @param string $destination
+     * @param string[] $history
+     * @return static
      */
     private function renderPage($source, $destination, Consolidated $consolidated, $history)
     {
@@ -213,8 +222,12 @@ class Reporter
     }
 
     /**
-     * @param $type
-     * @param $key
+     * @todo: This function is unused
+     *
+     * @param mixed $type
+     * @param string $key
+     * @param bool $lowIsBetter
+     * @param bool $highIsBetter
      * @return string
      */
     protected function getTrend($type, $key, $lowIsBetter = false, $highIsBetter = false)

@@ -1,6 +1,7 @@
 <?php
 namespace Hal\Metric\Helper;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -15,7 +16,7 @@ use PhpParser\Node\Stmt\Return_;
 class RoleOfMethodDetector
 {
     /**
-     * @var array
+     * @var array<string,array<string[]>>
      */
     private $fingerprints = [
         'getter' => [
@@ -93,7 +94,7 @@ class RoleOfMethodDetector
     ];
 
     /**
-     * @param $node
+     * @param Node $node
      * @return string|null
      */
     public function detects($node)

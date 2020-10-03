@@ -15,11 +15,15 @@ class RoleOfMethodDetectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamples
+     *
+     * @param string $expected
+     * @param string $code
      */
     public function testICanDetectRoleOfMethod($expected, $code)
     {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $stmt = $parser->parse($code);
+        $this->assertNotNull($stmt);
 
         $helper = new RoleOfMethodDetector();
 
@@ -35,6 +39,7 @@ class RoleOfMethodDetectorTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /** @return mixed[] */
     public function provideExamples()
     {
         $examples = [

@@ -5,7 +5,7 @@ namespace Hal\Component\Tree;
 class GraphDeduplicated extends Graph
 {
     /**
-     * @var array list of already present edges in this graph
+     * @var array<string,bool> list of already present edges in this graph
      */
     private $edgesMap = [];
 

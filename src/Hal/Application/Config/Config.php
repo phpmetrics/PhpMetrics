@@ -5,13 +5,13 @@ class Config
 {
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private $bag = [];
 
     /**
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed $value
      * @return $this
      */
     public function set($key, $value)
@@ -21,7 +21,7 @@ class Config
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return bool
      */
     public function has($key)
@@ -30,8 +30,8 @@ class Config
     }
 
     /**
-     * @param $key
-     * @return null
+     * @param string $key
+     * @return mixed|null
      */
     public function get($key)
     {
@@ -39,7 +39,7 @@ class Config
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function all()
     {
@@ -47,7 +47,7 @@ class Config
     }
 
     /**
-     * @param array $array
+     * @param array<string,mixed> $array
      * @return $this
      */
     public function fromArray(array $array)
