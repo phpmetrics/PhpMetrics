@@ -2,7 +2,7 @@
 <phpunit colors="true" bootstrap="vendor/autoload.php" forceCoversAnnotation="true" beStrictAboutCoversAnnotation="true">
 
   <testsuites>
-    <testsuite>
+    <testsuite name="all">
       <directory suffix="Test.php">tests</directory>
     </testsuite>
   </testsuites>

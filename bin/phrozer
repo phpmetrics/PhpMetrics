@@ -3,6 +3,7 @@
 
 use Phrozer\Phrozer;
 use Phrozer\AppExit;
+use Phrozer\DiFactory;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -17,5 +18,5 @@ PHP Project Analyzer
 ====================================
 ";
 
-$app = new Phrozer(new AppExit, $logo);
+$app = new Phrozer(DiFactory::container(), new AppExit, $logo);
 $app->handle($_SERVER['argv']);

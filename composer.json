@@ -41,7 +41,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Phrozer\\App\\": "tests"
+            "Phrozer\\Tests\\": "tests"
         }
     },
     "require": {

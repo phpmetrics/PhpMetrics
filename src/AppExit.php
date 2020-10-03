@@ -2,6 +2,7 @@
 
 namespace Phrozer;
 
+/** @codeCoverageIgnore */
 final class AppExit implements ExitInterface
 {
 

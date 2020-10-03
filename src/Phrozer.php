@@ -3,8 +3,9 @@
 namespace Phrozer;
 
 use Ahc\Cli\Application;
+use Phrozer\Console\Command\AnalyseCommand;
+use Psr\Container\ContainerInterface;
 use Xynha\Container\DiContainer;
-use Xynha\Container\DiRuleList;
 
 final class Phrozer
 {
@@ -16,13 +17,9 @@ final class Phrozer
 
     private $cli;
 
-    public function __construct(ExitInterface $exit, string $logo)
+    public function __construct(ContainerInterface $dic, ExitInterface $exit, string $logo)
     {
-        $rules = FileLoader::loadJson(__DIR__ . '/dirules.json');
-
-        $rlist = new DiRuleList();
-        $rlist = $rlist->addRules($rules);
-        $this->dic = new DiContainer($rlist);
+        $this->dic = $dic;
 
         $this->cli = new Application(self::APP_NAME, self::APP_VERSION, [$exit, 'onExit']);
         $this->cli->logo($logo);
@@ -31,6 +28,8 @@ final class Phrozer
     /** @param string[] $argv */
     public function handle(array $argv) : void
     {
+        $this->cli->add($this->dic->get(AnalyseCommand::class));
+
         $this->cli->handle($argv);
     }
 }
