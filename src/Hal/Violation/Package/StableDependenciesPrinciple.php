@@ -4,6 +4,7 @@ namespace Hal\Violation\Package;
 
 use Hal\Metric\Metric;
 use Hal\Metric\PackageMetric;
+use Hal\ShouldNotHappenException;
 use Hal\Violation\Violation;
 
 class StableDependenciesPrinciple implements Violation
@@ -11,7 +12,7 @@ class StableDependenciesPrinciple implements Violation
     /** @var PackageMetric|null */
     private $metric;
 
-    /** @var array */
+    /** @var float[] */
     private $violatingInstabilities = [];
 
     public function getName()
@@ -45,10 +46,19 @@ class StableDependenciesPrinciple implements Violation
 
     public function getDescription()
     {
+        if ($this->metric === null) {
+            throw new ShouldNotHappenException('Metric property is null');
+        }
+
+        $value = $this->metric->getInstability();
+        if ($value === null) {
+            throw new ShouldNotHappenException('Instability is null');
+        }
+
         $count = count($this->violatingInstabilities);
-        $thisInstability = round($this->metric->getInstability(), 3);
+        $thisInstability = round($value, 3);
         $packages = implode("\n* ", array_map(function ($name, $instability) {
-            $name = $name === '\\' ? 'global' : substr($name, 0, -1);
+            $name = $name === '\\' ? 'global' : substr((string)$name, 0, -1);
             $instability = round($instability, 3);
             return "$name ($instability)";
         }, array_keys($this->violatingInstabilities), $this->violatingInstabilities));

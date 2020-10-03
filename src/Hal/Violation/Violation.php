@@ -17,6 +17,8 @@ interface Violation
 
     /**
      * @param Metric $metric
+     *
+     * @return void
      */
     public function apply(Metric $metric);
 
