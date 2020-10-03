@@ -7,8 +7,8 @@ function includeIfExists($file)
     }
 }
 if (
-    (!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php'))
-    && (!$loader = includeIfExists(__DIR__.'/../../../autoload.php'))
+    (!$loader = includeIfExists(__DIR__.'/../../vendor/autoload.php'))
+    && (!$loader = includeIfExists(__DIR__.'/../../../../autoload.php'))
 ) {
     die(
         'You must set up the project dependencies, run the following commands:'.PHP_EOL.

@@ -24,11 +24,19 @@
     "support": {
         "issues": "https://github.com/PhpMetrics/PhpMetrics/issues"
     },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
     "autoload": {
-        "psr-0": {
-            "Hal\\": "./src/"
+        "psr-4": {
+            "Hal\\": "phpmetrics/src/Hal"
         },
-        "files": ["./src/functions.php"]
+        "files": [
+            "phpmetrics/src/functions.php"
+        ]
     },
     "require": {
         "php": ">=5.5",
@@ -44,9 +52,6 @@
         "squizlabs/php_codesniffer": "^3.5"
     },
     "bin": [
-        "bin/phpmetrics"
-    ],
-    "config": {
-        "sort-packages": true
-    }
+        "phpmetrics/bin/phpmetrics"
+    ]
 }
