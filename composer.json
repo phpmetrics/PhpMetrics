@@ -32,22 +32,30 @@
     },
     "autoload": {
         "psr-4": {
+            "Phrozer\\": "src",
             "Hal\\": "phpmetrics/src/Hal"
         },
         "files": [
             "phpmetrics/src/functions.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Phrozer\\App\\": "tests"
+        }
+    },
     "require": {
         "php": "^7.1",
         "ext-dom": "*",
         "ext-tokenizer": "*",
         "adhocore/cli": "^0.8.3",
-        "nikic/php-parser": "^4.10"
+        "nikic/php-parser": "^4.10",
+        "xynha/dicontainer": "^0.4.0"
     },
     "require-dev": {
         "jangregor/phpstan-prophecy": "^0.8.0",
         "pattisahusiwa/coding-standard": "^0.3.0",
+        "pepakriz/phpstan-exception-rules": "^0.11.1",
         "phpstan/phpstan-phpunit": "^0.12.16",
         "phpunit/phpunit": "^7.0"
     },

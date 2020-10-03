@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit bootstrap="./vendor/autoload.php">
+<phpunit colors="true" bootstrap="vendor/autoload.php" forceCoversAnnotation="true" beStrictAboutCoversAnnotation="true">
 
   <testsuites>
-    <testsuite name="PhpMetrics Suite">
-      <directory>phpmetrics/tests</directory>
+    <testsuite>
+      <directory suffix="Test.php">tests</directory>
     </testsuite>
   </testsuites>
 
-  <groups>
-    <exclude>
-      <group>binary</group>
-    </exclude>
-  </groups>
-
   <filter>
-    <whitelist>
-      <directory>phpmetrics/src</directory>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">src</directory>
     </whitelist>
   </filter>
 </phpunit>
