@@ -12,7 +12,6 @@ parameters:
 
     excludes_analyse:
         - phpmetrics/tests/**/examples/*
-        - phpmetrics/src/Hal/Component/Ast/Php5NodeTraverser.php
 
     ignoreErrors:
         - '#Method [\w\\]+::test[\w]+\(\) has no return typehint specified#'
