@@ -6,6 +6,7 @@ use Hal\Component\Tree\GraphDeduplicated;
 use Hal\Component\Tree\Node;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
+use Hal\ShouldNotHappenException;
 
 /**
  * Estimates coupling (based on work of Henry And Kafura)
@@ -17,6 +18,8 @@ class Coupling
 
     /**
      * @param Metrics $metrics
+     *
+     * @return void
      */
     public function calculate(Metrics $metrics)
     {
@@ -32,6 +35,9 @@ class Coupling
                 $graph->insert(new Node($metric->get('name')));
             }
             $from = $graph->get($metric->get('name'));
+            if ($from === null) {
+                throw new ShouldNotHappenException('Graph $from is null');
+            }
 
             foreach ($metric->get('externals') as $external) {
                 if (!$graph->has($external)) {
@@ -39,6 +45,9 @@ class Coupling
                 }
 
                 $to = $graph->get($external);
+                if ($to === null) {
+                    throw new ShouldNotHappenException('Graph $to is null');
+                }
 
                 $graph->addEdge($from, $to);
             }
@@ -52,6 +61,9 @@ class Coupling
             $efferent = $afferent = 0;
 
             $node = $graph->get($metric->get('name'));
+            if ($node === null) {
+                throw new ShouldNotHappenException('Graph $node is null');
+            }
             foreach ($node->getEdges() as $edge) {
                 if ($edge->getTo()->getKey() == $node->getKey()) {
                     // affects

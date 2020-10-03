@@ -3,10 +3,16 @@ namespace Hal\Metric;
 
 class Registry
 {
+    /**
+     * @todo: remove this function
+     *
+     * @return void
+     */
     public function allForProject()
     {
     }
 
+    /** @return string[] */
     public function allForStructures()
     {
         return [

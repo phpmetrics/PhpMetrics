@@ -6,15 +6,17 @@ use Hal\Application\Config\ConfigException;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Coupling\ExternalsVisitor;
 use Hal\Metric\ClassMetric;
+use Hal\Metric\MetricNullException;
 use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
+use Hal\ShouldNotHappenException;
 use PhpParser\ParserFactory;
 
 class UnitTesting
 {
 
     /**
-     * @var array
+     * @var string[]
      */
     private $files = [];
 
@@ -24,7 +26,7 @@ class UnitTesting
     private $config;
 
     /**
-     * @param array $files
+     * @param string[] $files
      */
     public function __construct(Config $config, array $files)
     {
@@ -34,6 +36,9 @@ class UnitTesting
 
     /**
      * @param Metrics $metrics
+     *
+     * @return void
+     *
      * @throws ConfigException
      */
     public function calculate(Metrics $metrics)
@@ -68,42 +73,48 @@ class UnitTesting
         $xpath = new \DOMXpath($dom);
 
         // JUNIT format
-        foreach ($xpath->query('//testsuite[@file]') as $suite) {
-            array_push($testsuites, (object)[
-                'file' => $suite->getAttribute('file'),
-                'name' => $suite->getAttribute('name'),
-                'assertions' => $suite->getAttribute('assertions'),
-                'time' => $suite->getAttribute('time'),
-            ]);
+        $domList = $xpath->query('//testsuite[@file]');
+        if ($domList !== false) {
+            foreach ($domList as $suite) {
+                array_push($testsuites, (object)[
+                    'file' => $suite->getAttribute('file'),
+                    'name' => $suite->getAttribute('name'),
+                    'assertions' => $suite->getAttribute('assertions'),
+                    'time' => $suite->getAttribute('time'),
+                ]);
+            }
         }
 
         // CODECEPTION format (file is stored in the <testcase> node
-        foreach ($xpath->query('//testcase[@file]') as $index => $case) {
-            $suite = $case->parentNode;
+        $domList = $xpath->query('//testcase[@file]');
+        if ($domList !== false) {
+            foreach ($domList as $index => $case) {
+                $suite = $case->parentNode;
 
-            if ($suite->hasAttribute('file')) {
-                // avoid duplicates
-                continue;
+                if ($suite->hasAttribute('file')) {
+                    // avoid duplicates
+                    continue;
+                }
+
+                if (isset($testsuites[$case->getAttribute('class')])) {
+                    // codeception does not consider testcase like junit does
+                    continue;
+                }
+
+                if ($suite->hasAttribute('assertions')) {
+                    // codeception store assertions in testsuite, not in testcase
+                    // (but it stores classname in the testcase node) oO
+                    // so we will store "assertions" in the first testcase of the testsuite only
+                    $assertions = $case === $suite->firstChild->nextSibling ? $suite->getAttribute('assertions') : 0;
+                }
+
+                $testsuites[$case->getAttribute('class')] = (object)[
+                    'file' => $case->getAttribute('file'),
+                    'name' => $case->getAttribute('class'),
+                    'assertions' => $assertions,
+                    'time' => $suite->getAttribute('time'),
+                ];
             }
-
-            if (isset($testsuites[$case->getAttribute('class')])) {
-                // codeception does not consider testcase like junit does
-                continue;
-            }
-
-            if ($suite->hasAttribute('assertions')) {
-                // codeception store assertions in testsuite, not in testcase
-                // (but it stores classname in the testcase node) oO
-                // so we will store "assertions" in the first testcase of the testsuite only
-                $assertions = $case === $suite->firstChild->nextSibling ? $suite->getAttribute('assertions') : 0;
-            }
-
-            $testsuites[$case->getAttribute('class')] = (object)[
-                'file' => $case->getAttribute('file'),
-                'name' => $case->getAttribute('class'),
-                'assertions' => $assertions,
-                'time' => $suite->getAttribute('time'),
-            ];
         }
 
         // analyze each unit test
@@ -121,7 +132,13 @@ class UnitTesting
             }
 
             $code = file_get_contents($suite->file);
+            if ($code === false) {
+                throw new ShouldNotHappenException('Get suite file content return false');
+            }
             $stmts = $parser->parse($code);
+            if ($stmts === null) {
+                throw new ShouldNotHappenException('Cannot parse suite file');
+            }
             $traverser->traverse($stmts);
 
             if (!$metricsOfUnitTest->has($suite->name)) {
@@ -130,6 +147,9 @@ class UnitTesting
 
             // list of externals sources of unit test
             $metric = $metricsOfUnitTest->get($suite->name);
+            if ($metric === null) {
+                throw new MetricNullException($suite->name, self::class);
+            }
             $externals = (array)$metric->get('externals');
 
             // global stats for each test
@@ -151,9 +171,13 @@ class UnitTesting
                 }
 
                 // SUT (tested class) has unit test
-                $numberOfUnitTest = $metrics->get($external)->get('numberOfUnitTests');
+                $metric = $metrics->get($external);
+                if ($metric === null) {
+                    throw new MetricNullException($external, self::class);
+                }
+                $numberOfUnitTest = $metric->get('numberOfUnitTests');
                 $numberOfUnitTest++;
-                $metrics->get($external)->set('numberOfUnitTests', $numberOfUnitTest);
+                $metric->set('numberOfUnitTests', $numberOfUnitTest);
             }
         }
 

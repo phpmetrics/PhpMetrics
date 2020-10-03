@@ -6,12 +6,13 @@ use Hal\Application\Config\ConfigException;
 use Hal\Metric\FileMetric;
 use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
+use Hal\ShouldNotHappenException;
 
 class GitChanges
 {
 
     /**
-     * @var array
+     * @var string[]
      */
     private $files = [];
 
@@ -21,7 +22,7 @@ class GitChanges
     private $config;
 
     /**
-     * @param array $files
+     * @param string[] $files
      */
     public function __construct(Config $config, array $files)
     {
@@ -31,6 +32,9 @@ class GitChanges
 
     /**
      * @param Metrics $metrics
+     *
+     * @return void
+     *
      * @throws ConfigException
      */
     public function calculate(Metrics $metrics)
@@ -49,6 +53,9 @@ class GitChanges
         }
 
         $r = shell_exec(sprintf('%s --version', $bin));
+        if ($r === null) {
+            throw new ShouldNotHappenException('Execute git return null');
+        }
         if (!preg_match('!git version!', $r)) {
             throw new ConfigException(sprintf('Git binary (%s) incorrect', $bin));
         }
@@ -57,12 +64,19 @@ class GitChanges
         // @todo: git history for multiple repositories
         // 500 last commits max
         $file = current($this->files);
+        $realpath = realpath(dirname($file));
+        if ($realpath === false) {
+            throw new ShouldNotHappenException('Cannot get realpath of ' . dirname($file));
+        }
         $command = sprintf(
             "cd %s && %s log --format='* %%at\t%%cn' --numstat -n 500",
-            escapeshellarg(realpath(dirname($file))),
+            escapeshellarg($realpath),
             escapeshellarg($bin)
         );
         $r = shell_exec($command);
+        if ($r === null) {
+            throw new ShouldNotHappenException('Execute git log return null');
+        }
         $r = array_filter(explode(PHP_EOL, $r));
 
         // build a range of commits info, stepped by week number
@@ -171,11 +185,15 @@ class GitChanges
     }
 
     /**
-     * @param $file
+     * @param string $file
      * @return int
      */
     private function doesThisFileShouldBeCounted($file)
     {
-        return preg_match('!\.(php|inc)$!i', $file);
+        $retval = preg_match('!\.(php|inc)$!i', $file);
+        if ($retval === false) {
+            throw new ShouldNotHappenException('preg_match in doesThisFileShouldBeCounted return false');
+        }
+        return $retval;
     }
 }

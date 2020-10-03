@@ -8,6 +8,7 @@ use Hal\Component\Tree\Operator\SizeOfTree;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
+use Hal\ShouldNotHappenException;
 
 /**
  * Estimates DIT
@@ -20,6 +21,8 @@ class DepthOfInheritanceTree
 
     /**
      * @param Metrics $metrics
+     *
+     * @return void
      */
     public function calculate(Metrics $metrics)
     {
@@ -38,6 +41,9 @@ class DepthOfInheritanceTree
             }
 
             $to = $graph->get($metric->get('name'));
+            if ($to === null) {
+                throw new ShouldNotHappenException('Graph $to is null');
+            }
 
             foreach ($metric->get('parents') as $parent) {
                 if (!$graph->has($parent)) {
@@ -45,6 +51,9 @@ class DepthOfInheritanceTree
                 }
 
                 $from = $graph->get($parent);
+                if ($from === null) {
+                    throw new ShouldNotHappenException('Graph $from is null');
+                }
 
                 $graph->addEdge($from, $to);
             }

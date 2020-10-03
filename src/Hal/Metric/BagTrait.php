@@ -3,6 +3,7 @@ namespace Hal\Metric;
 
 trait BagTrait
 {
+    /** @var string */
     private $name;
 
     /**
