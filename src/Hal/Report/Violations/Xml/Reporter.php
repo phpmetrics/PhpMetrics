@@ -29,7 +29,7 @@ class Reporter
         $this->output = $output;
     }
 
-
+    /** @return void */
     public function generate(Metrics $metrics)
     {
         $logFile = $this->config->get('report-violations');
@@ -63,11 +63,11 @@ class Reporter
 
             foreach ($violations as $violation) {
                 $item = $xml->createElement('violation');
-                $item->setAttribute('beginline', 1);
+                $item->setAttribute('beginline', '1');
                 $item->setAttribute('rule', $violation->getName());
                 $item->setAttribute('ruleset', $violation->getName());
                 $item->setAttribute('externalInfoUrl', 'http://www.phpmetrics.org/documentation/index.html');
-                $item->setAttribute('priority', $map[$violation->getLevel()]);
+                $item->setAttribute('priority', (string)$map[$violation->getLevel()]);
                 $item->nodeValue = $violation->getDescription();
                 $node->appendChild($item);
             }
