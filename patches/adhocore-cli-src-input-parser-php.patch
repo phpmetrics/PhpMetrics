@@ -1,0 +1,13 @@
+--- /dev/null
++++ ../src/Input/Parser.php
+@@ -203,7 +203,9 @@
+     /**
+      * Validate if all required arguments/options have proper values.
+      *
+-     * @throw RuntimeException If value missing for required ones.
++     * @return void
++     *
++     * @throws RuntimeException If value missing for required ones.
+      */
+     protected function validate()
+     {

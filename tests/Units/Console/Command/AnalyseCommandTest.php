@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phrozer\Component\TaskExecutor;
 use Phrozer\Console\CliInput;
@@ -21,8 +22,10 @@ final class AnalyseCommandTest extends TestCase
     /** @var Phrozer */
     private $app;
 
+    /** @var MockObject|TaskExecutor */
     private $mock;
 
+    /** @return void */
     protected function setUp()
     {
         parent::setUp();

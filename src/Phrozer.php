@@ -4,15 +4,15 @@ namespace Phrozer;
 
 use Ahc\Cli\Application;
 use Phrozer\Console\Command\AnalyseCommand;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
-use Xynha\Container\DiContainer;
 
 final class Phrozer
 {
     public const APP_NAME = 'phrozer';
     public const APP_VERSION = '0.1';
 
-    /** @var DiContainer */
+    /** @var ContainerInterface */
     private $dic;
 
     private $cli;
@@ -25,7 +25,11 @@ final class Phrozer
         $this->cli->logo($logo);
     }
 
-    /** @param string[] $argv */
+    /**
+     * @param string[] $argv
+     *
+     * @throws ContainerExceptionInterface
+     */
     public function handle(array $argv) : void
     {
         $this->cli->add($this->dic->get(AnalyseCommand::class));

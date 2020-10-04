@@ -7,6 +7,12 @@ use Phrozer\Component\TaskExecutor;
 use Phrozer\Console\CliInput;
 use RuntimeException;
 
+/**
+ * @property-read string $dir
+ * @property-read string[] $dirs
+ * @property-read string|null $exclude
+ * @property-read string|null $ext
+ */
 final class AnalyseCommand extends Command
 {
 
@@ -30,10 +36,11 @@ final class AnalyseCommand extends Command
         $this->exec = $exec;
     }
 
+    /** @return void */
     public function execute()
     {
         $dirs = array_merge([$this->dir], $this->dirs);
-        $cliData = new CliInput($dirs, $this->exclude);
+        $cliData = new CliInput($dirs, $this->exclude, $this->ext);
         $this->exec->process($cliData);
     }
 

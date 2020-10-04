@@ -53,7 +53,9 @@
         "xynha/dicontainer": "^0.4.0"
     },
     "require-dev": {
+        "cweagans/composer-patches": "^1.6",
         "jangregor/phpstan-prophecy": "^0.8.0",
+        "migrify/vendor-patches": "^0.3.48",
         "pattisahusiwa/coding-standard": "^0.3.0",
         "pepakriz/phpstan-exception-rules": "^0.11.1",
         "phpstan/phpstan-phpunit": "^0.12.16",
@@ -61,5 +63,12 @@
     },
     "bin": [
         "phpmetrics/bin/phpmetrics"
-    ]
+    ],
+    "extra": {
+        "patches": {
+            "adhocore/cli": [
+                "patches/adhocore-cli-src-input-parser-php.patch"
+            ]
+        }
+    }
 }
