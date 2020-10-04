@@ -1,77 +1,68 @@
 <?php declare(strict_types=1);
 
-use Phpmetrix\CliApplication;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Phpmetrix\Console\CliInput;
 use Phpmetrix\Console\Command\AnalyzeCommand;
-use Phpmetrix\DiFactory;
-use Phpmetrix\ExitInterface;
 use Phpmetrix\Runner\TaskExecutor;
 
 /**
  * @covers Phpmetrix\Console\Command\AnalyzeCommand
- *
- * @uses Phpmetrix\CliApplication
- * @uses Phpmetrix\DiFactory
- * @uses Phpmetrix\Console\CliInput
  */
 final class AnalyzeCommandTest extends TestCase
 {
 
-    /** @var CliApplication */
-    private $app;
-
-    /** @var MockObject|TaskExecutor */
-    private $mock;
+    /** @var AnalyzeCommand */
+    private $command;
 
     /** @return void */
     protected function setUp()
     {
         parent::setUp();
 
-        $this->mock = $this->createMock(TaskExecutor::class);
-        $exitMock = $this->createMock(ExitInterface::class);
-
-        $rules['$analyser'] = ['instanceOf' => $this->mock];
-        $rules[AnalyzeCommand::class] = ['substitutions' => [TaskExecutor::class => '$analyser']];
-
-        $this->app = new CliApplication(DiFactory::container($rules), $exitMock, '');
+        $mock = $this->createMock(TaskExecutor::class);
+        $this->command = new AnalyzeCommand($mock);
     }
 
     public function testPassOnlyOneDirectory()
     {
-        $expected = new CliInput(['src']);
-        $this->mock->expects($this->once())->method('process')->with($this->equalTo($expected));
+        $args = ['analyse', 'src'];
+        $this->command->parse($args);
 
-        $args = ['appname', 'analyse', 'src'];
-        $this->app->handle($args);
+        $this->assertSame('src', $this->command->dir);
+        $this->assertSame([], $this->command->dirs);
+        $this->assertSame(null, $this->command->exclude);
+        $this->assertSame(null, $this->command->ext);
     }
 
     public function testPassMultipleDirectories()
     {
-        $expected = new CliInput(['src', 'bin', 'test']);
-        $this->mock->expects($this->once())->method('process')->with($this->equalTo($expected));
+        $args = ['analyse', 'src', 'bin', 'test'];
+        $this->command->parse($args);
 
-        $args = ['appname', 'analyse', 'src', 'bin', 'test'];
-        $this->app->handle($args);
+        $this->assertSame('src', $this->command->dir);
+        $this->assertSame(['bin', 'test'], $this->command->dirs);
     }
 
     public function testExcludeDirectories()
     {
-        $expected = new CliInput(['src'], 'vendor,tests');
-        $this->mock->expects($this->once())->method('process')->with($this->equalTo($expected));
+        $args = ['analyse', 'src', '--exclude', 'vendor,tests'];
+        $this->command->parse($args);
 
-        $args = ['appname', 'analyse', 'src', '--exclude', 'vendor,tests'];
-        $this->app->handle($args);
+        $this->assertSame('vendor,tests', $this->command->exclude);
     }
 
     public function testExcludeWithEqual()
     {
-        $expected = new CliInput(['src'], 'vendor,tests');
-        $this->mock->expects($this->once())->method('process')->with($this->equalTo($expected));
+        $args = ['analyse', 'src', '-e=vendor,tests'];
+        $this->command->parse($args);
 
-        $args = ['appname', 'analyse', 'src', '--exclude=vendor,tests'];
-        $this->app->handle($args);
+        $this->assertSame('vendor,tests', $this->command->exclude);
+    }
+
+    public function testPassExtension()
+    {
+        $args = ['analyse', 'src', '--ext=php,inc'];
+        $this->command->parse($args);
+
+        $this->assertSame('php,inc', $this->command->ext);
     }
 }

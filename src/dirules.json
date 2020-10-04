@@ -1,4 +1,7 @@
 {
+    "Psr\\Container\\ContainerInterface": {
+        "instanceOf": "Xynha\\Container\\DiContainer"
+    },
     "PhpParser\\Parser": {
         "getFrom": [
             [
@@ -19,5 +22,8 @@
         "substitutions": {
             "Phpmetrix\\Runner\\TaskExecutor": "Phpmetrix\\Runner\\Analyzer"
         }
+    },
+    "Phpmetrix\\ExitInterface": {
+        "instanceOf": "Phpmetrix\\AppExit"
     }
 }

@@ -8,9 +8,9 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers Phpmetrix\CliApplication
  * @covers Phpmetrix\DiFactory
+ * @covers Phpmetrix\Console\Command\AnalyzeCommand
  *
  * @uses Phpmetrix\Console\CliInput
- * @uses Phpmetrix\Console\Command\AnalyzeCommand
  * @uses Phpmetrix\Runner\Analyzer
  * @uses Phpmetrix\Parser\PhpParser
  * @uses Phpmetrix\Parser\AstTraverser
@@ -22,8 +22,9 @@ final class CliApplicationTest extends TestCase
     {
         try {
             $exitMock = $this->createMock(ExitInterface::class);
-            $app = new CliApplication(DiFactory::container(), $exitMock, '');
+            $rules[ExitInterface::class] = ['instanceOf' => $exitMock];
 
+            $app = DiFactory::container($rules)->get(CliApplication::class);
             $app->handle(['appname', 'analyse', __DIR__ . '/_empty']);
         } catch (\Throwable $th) {
             $msg = sprintf("Application integration test failed.\nMessage: %s", $th->getMessage());

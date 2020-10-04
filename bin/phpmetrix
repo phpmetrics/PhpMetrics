@@ -1,11 +1,10 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
-use Phpmetrix\AppExit;
 use Phpmetrix\CliApplication;
 use Phpmetrix\DiFactory;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$app = new CliApplication(DiFactory::container(), new AppExit, '');
+$app = DiFactory::container()->get(CliApplication::class);
 $app->handle($_SERVER['argv']);
