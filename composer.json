@@ -56,6 +56,7 @@
         "xynha/dicontainer": "^0.4.0"
     },
     "require-dev": {
+        "cweagans/composer-patches": "^1.6",
         "pattisahusiwa/coding-standard": "^0.3.0",
         "pepakriz/phpstan-exception-rules": "^0.11.1",
         "phpstan/phpstan-phpunit": "^0.12.16",

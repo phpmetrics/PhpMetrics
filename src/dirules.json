@@ -1,4 +1,20 @@
 {
+    "PhpParser\\Parser": {
+        "getFrom": [
+            [
+                "PhpParser\\ParserFactory",
+                "create"
+            ],
+            [
+                1
+            ]
+        ]
+    },
+    "Phpmetrix\\Parser\\PhpParser": {
+        "substitutions": {
+            "PhpParser\\NodeTraverserInterface": "Phpmetrix\\Parser\\AstTraverser"
+        }
+    },
     "Phpmetrix\\Console\\Command\\AnalyzeCommand": {
         "substitutions": {
             "Phpmetrix\\Runner\\TaskExecutor": "Phpmetrix\\Runner\\Analyzer"

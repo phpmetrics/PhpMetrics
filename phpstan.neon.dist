@@ -12,6 +12,7 @@ parameters:
     ignoreErrors:
         - '#Method [\w\\]+::test[\w]+\(\) has no return typehint specified#'
         - '#ContainerExceptionInterface is not subtype of Throwable#'
+        - '#RuntimeException is not compatible with parent#'
 
     # Miscellaneous parameters
     inferPrivatePropertyTypeFromConstructor: true
