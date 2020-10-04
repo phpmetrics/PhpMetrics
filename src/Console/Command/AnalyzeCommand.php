@@ -13,7 +13,7 @@ use RuntimeException;
  * @property-read string|null $exclude
  * @property-read string|null $ext
  */
-final class AnalyseCommand extends Command
+final class AnalyzeCommand extends Command
 {
 
     /** @var TaskExecutor */

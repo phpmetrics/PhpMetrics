@@ -3,7 +3,7 @@
 namespace Phpmetrix;
 
 use Ahc\Cli\Application;
-use Phpmetrix\Console\Command\AnalyseCommand;
+use Phpmetrix\Console\Command\AnalyzeCommand;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
@@ -32,7 +32,7 @@ final class CliApplication
      */
     public function handle(array $argv) : void
     {
-        $this->cli->add($this->dic->get(AnalyseCommand::class));
+        $this->cli->add($this->dic->get(AnalyzeCommand::class));
 
         $this->cli->handle($argv);
     }

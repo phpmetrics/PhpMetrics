@@ -4,7 +4,7 @@ use Phpmetrix\CliApplication;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpmetrix\Console\CliInput;
-use Phpmetrix\Console\Command\AnalyseCommand;
+use Phpmetrix\Console\Command\AnalyzeCommand;
 use Phpmetrix\DiFactory;
 use Phpmetrix\ExitInterface;
 use Phpmetrix\Runner\TaskExecutor;
@@ -12,12 +12,12 @@ use Phpmetrix\Runner\TaskExecutor;
 /**
  * @covers Phpmetrix\CliApplication
  * @covers Phpmetrix\DiFactory
- * @covers Phpmetrix\Console\Command\AnalyseCommand
+ * @covers Phpmetrix\Console\Command\AnalyzeCommand
  *
  * @uses Phpmetrix\Console\CliInput
  * @uses Phpmetrix\FileLoader
  */
-final class AnalyseCommandTest extends TestCase
+final class AnalyzeCommandTest extends TestCase
 {
 
     /** @var CliApplication */
@@ -35,7 +35,7 @@ final class AnalyseCommandTest extends TestCase
         $exitMock = $this->createMock(ExitInterface::class);
 
         $rules['$analyser'] = ['instanceOf' => $this->mock];
-        $rules[AnalyseCommand::class] = ['substitutions' => [TaskExecutor::class => '$analyser']];
+        $rules[AnalyzeCommand::class] = ['substitutions' => [TaskExecutor::class => '$analyser']];
 
         $this->app = new CliApplication(DiFactory::container($rules), $exitMock, '');
     }
