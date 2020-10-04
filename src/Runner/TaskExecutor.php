@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Phrozer\Runner;
+namespace Phpmetrix\Runner;
 
-use Phrozer\Console\CliInput;
+use Phpmetrix\Console\CliInput;
 
 interface TaskExecutor
 {

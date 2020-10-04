@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Phrozer;
+namespace Phpmetrix;
 
 use Ahc\Cli\Application;
-use Phrozer\Console\Command\AnalyseCommand;
+use Phpmetrix\Console\Command\AnalyseCommand;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
-final class Phrozer
+final class CliApplication
 {
-    public const APP_NAME = 'phrozer';
+    public const APP_NAME = 'Phpmetrix';
     public const APP_VERSION = '0.1';
 
     /** @var ContainerInterface */

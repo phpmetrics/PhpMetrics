@@ -1,25 +1,25 @@
 <?php declare(strict_types=1);
 
+use Phpmetrix\CliApplication;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Phrozer\Console\CliInput;
-use Phrozer\DiFactory;
-use Phrozer\ExitInterface;
-use Phrozer\Phrozer;
-use Phrozer\Runner\TaskExecutor;
+use Phpmetrix\Console\CliInput;
+use Phpmetrix\DiFactory;
+use Phpmetrix\ExitInterface;
+use Phpmetrix\Runner\TaskExecutor;
 
 /**
- * @covers Phrozer\Phrozer
- * @covers Phrozer\DiFactory
- * @covers Phrozer\Console\Command\AnalyseCommand
+ * @covers Phpmetrix\CliApplication
+ * @covers Phpmetrix\DiFactory
+ * @covers Phpmetrix\Console\Command\AnalyseCommand
  *
- * @uses Phrozer\Console\CliInput
- * @uses Phrozer\FileLoader
+ * @uses Phpmetrix\Console\CliInput
+ * @uses Phpmetrix\FileLoader
  */
 final class AnalyseCommandTest extends TestCase
 {
 
-    /** @var Phrozer */
+    /** @var CliApplication */
     private $app;
 
     /** @var MockObject|TaskExecutor */
@@ -34,7 +34,7 @@ final class AnalyseCommandTest extends TestCase
         $rules[TaskExecutor::class] = ['instanceOf' => $this->mock];
 
         $exitMock = $this->createMock(ExitInterface::class);
-        $this->app = new Phrozer(DiFactory::container($rules), $exitMock, '');
+        $this->app = new CliApplication(DiFactory::container($rules), $exitMock, '');
     }
 
     public function testPassOnlyOneDirectory()

@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Phrozer\Console\Command;
+namespace Phpmetrix\Console\Command;
 
 use Ahc\Cli\Input\Command;
-use Phrozer\Runner\TaskExecutor;
-use Phrozer\Console\CliInput;
+use Phpmetrix\Runner\TaskExecutor;
+use Phpmetrix\Console\CliInput;
 use RuntimeException;
 
 /**

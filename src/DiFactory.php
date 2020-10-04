@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Phrozer;
+namespace Phpmetrix;
 
 use Psr\Container\ContainerInterface;
 use Xynha\Container\DiContainer;

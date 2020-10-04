@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Phrozer;
+namespace Phpmetrix;
 
 /** @codeCoverageIgnore */
 final class AppExit implements ExitInterface

@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use Phrozer\Console\CliInput;
+use Phpmetrix\Console\CliInput;
 
 /**
- * @covers Phrozer\Console\CliInput
+ * @covers Phpmetrix\Console\CliInput
  */
 final class CliInputTest extends TestCase
 {

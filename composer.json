@@ -32,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Phrozer\\": "src",
+            "Phpmetrix\\": "src",
             "Hal\\": "phpmetrics/src/Hal"
         },
         "files": [
@@ -41,7 +41,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Phrozer\\Tests\\": "tests"
+            "Phpmetrix\\Tests\\": "tests"
         }
     },
     "require": {
