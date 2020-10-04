@@ -1,1 +1,7 @@
-{}
+{
+    "Phpmetrix\\Console\\Command\\AnalyseCommand": {
+        "substitutions": {
+            "Phpmetrix\\Runner\\TaskExecutor": "Phpmetrix\\Runner\\Analyser"
+        }
+    }
+}

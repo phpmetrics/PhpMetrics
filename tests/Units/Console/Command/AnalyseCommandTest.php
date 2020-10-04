@@ -4,6 +4,7 @@ use Phpmetrix\CliApplication;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpmetrix\Console\CliInput;
+use Phpmetrix\Console\Command\AnalyseCommand;
 use Phpmetrix\DiFactory;
 use Phpmetrix\ExitInterface;
 use Phpmetrix\Runner\TaskExecutor;
@@ -31,9 +32,11 @@ final class AnalyseCommandTest extends TestCase
         parent::setUp();
 
         $this->mock = $this->createMock(TaskExecutor::class);
-        $rules[TaskExecutor::class] = ['instanceOf' => $this->mock];
-
         $exitMock = $this->createMock(ExitInterface::class);
+
+        $rules['$analyser'] = ['instanceOf' => $this->mock];
+        $rules[AnalyseCommand::class] = ['substitutions' => [TaskExecutor::class => '$analyser']];
+
         $this->app = new CliApplication(DiFactory::container($rules), $exitMock, '');
     }
 
