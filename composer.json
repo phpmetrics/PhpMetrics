@@ -49,6 +49,7 @@
         "ext-dom": "*",
         "ext-tokenizer": "*",
         "adhocore/cli": "^0.8.3",
+        "nette/utils": "^3.1",
         "nikic/php-parser": "^4.10",
         "xynha/dicontainer": "^0.4.0"
     },

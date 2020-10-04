@@ -10,12 +10,11 @@ use Phpmetrix\ExitInterface;
 use Phpmetrix\Runner\TaskExecutor;
 
 /**
- * @covers Phpmetrix\CliApplication
- * @covers Phpmetrix\DiFactory
  * @covers Phpmetrix\Console\Command\AnalyzeCommand
  *
+ * @uses Phpmetrix\CliApplication
+ * @uses Phpmetrix\DiFactory
  * @uses Phpmetrix\Console\CliInput
- * @uses Phpmetrix\FileLoader
  */
 final class AnalyzeCommandTest extends TestCase
 {
