@@ -2,11 +2,11 @@
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Phrozer\Component\TaskExecutor;
 use Phrozer\Console\CliInput;
 use Phrozer\DiFactory;
 use Phrozer\ExitInterface;
 use Phrozer\Phrozer;
+use Phrozer\Runner\TaskExecutor;
 
 /**
  * @covers Phrozer\Phrozer

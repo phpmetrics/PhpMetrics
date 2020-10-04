@@ -3,7 +3,7 @@
 namespace Phrozer\Console\Command;
 
 use Ahc\Cli\Input\Command;
-use Phrozer\Component\TaskExecutor;
+use Phrozer\Runner\TaskExecutor;
 use Phrozer\Console\CliInput;
 use RuntimeException;
 

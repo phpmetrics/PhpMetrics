@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Phrozer\Component;
+namespace Phrozer\Runner;
 
 use Phrozer\Console\CliInput;
 
