@@ -2,6 +2,7 @@
 
 namespace Phpmetrix\Parser;
 
+use PhpParser\Error;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
 use PhpParser\Parser;
@@ -32,9 +33,14 @@ final class PhpParser
      */
     public function parse(SplFileInfo $file) : void
     {
-        $stmt = $this->parser->parse($file->getContents());
+        try {
+            $stmt = $this->parser->parse($file->getContents());
+        } catch (Error $exc) {
+            throw new ParserException($file->getRelativePathname() . ': ' . $exc->getMessage());
+        }
+
         if ($stmt === null) {
-            throw new ParserException('Parse function return null when parsing ' . $file->getFilename());
+            throw new ParserException('Parse function return null when parsing ' . $file->getRelativePathname());
         }
 
         $this->traverser->traverse($stmt);

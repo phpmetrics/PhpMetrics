@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
+use Phpmetrix\Parser\ParserException;
 use Phpmetrix\Parser\PhpParser;
-use PhpParser\Error;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -40,7 +40,7 @@ final class PhpParserTest extends TestCase
 
     public function testParseSyntaxError()
     {
-        $this->expectException(Error::class);
+        $this->expectException(ParserException::class);
         $this->expectExceptionMessageRegExp('#Syntax error#');
 
         $spl = new SplFileInfo(__DIR__ . '/_data/syntax-error.inc', '', '');
