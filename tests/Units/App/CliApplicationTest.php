@@ -6,14 +6,9 @@ use Phpmetrix\ExitInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Phpmetrix\CliApplication
- * @covers Phpmetrix\DiFactory
- * @covers Phpmetrix\Console\Command\AnalyzeCommand
- *
- * @uses Phpmetrix\Console\CliInput
- * @uses Phpmetrix\Runner\Analyzer
- * @uses Phpmetrix\Parser\PhpParser
- * @uses Phpmetrix\Parser\AstTraverser
+ * @covers \Phpmetrix\CliApplication
+ * @covers \Phpmetrix\DiFactory
+ * @covers \Phpmetrix\Console\Command\AnalyzeCommand
  */
 final class CliApplicationTest extends TestCase
 {

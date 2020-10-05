@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true" bootstrap="vendor/autoload.php" forceCoversAnnotation="true" beStrictAboutCoversAnnotation="true">
+<phpunit colors="true" bootstrap="vendor/autoload.php" forceCoversAnnotation="true" beStrictAboutCoversAnnotation="false">
 
   <testsuites>
     <testsuite name="all">
@@ -10,6 +10,7 @@
   <filter>
     <whitelist processUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">src</directory>
+      <directory suffix=".php">phpmetrics/src</directory>
     </whitelist>
   </filter>
 </phpunit>

@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
- * @covers Phpmetrix\Parser\PhpParser
+ * @covers \Phpmetrix\Parser\PhpParser
  */
 final class PhpParserTest extends TestCase
 {

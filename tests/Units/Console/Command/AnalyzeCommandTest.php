@@ -5,7 +5,7 @@ use Phpmetrix\Console\Command\AnalyzeCommand;
 use Phpmetrix\Runner\TaskExecutor;
 
 /**
- * @covers Phpmetrix\Console\Command\AnalyzeCommand
+ * @covers \Phpmetrix\Console\Command\AnalyzeCommand
  */
 final class AnalyzeCommandTest extends TestCase
 {

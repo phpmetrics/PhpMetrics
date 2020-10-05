@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Phpmetrix\Console\CliInput;
 
 /**
- * @covers Phpmetrix\Console\CliInput
+ * @covers \Phpmetrix\Console\CliInput
  */
 final class CliInputTest extends TestCase
 {
