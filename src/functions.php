@@ -227,3 +227,32 @@ function percentile($arr, $percentile = 0.95)
     sort($arr);
     return $arr[max(round($percentile * count($arr) - 1.0 - $percentile), 0)];
 }
+
+/**
+ * Download the given URI and decode it as JSON.
+ * @param string $uri
+ *
+ * @return mixed
+ */
+function getURIContentAsJson($uri){
+    // get the json file
+    $httpsProxy = getenv('https_proxy');
+    if (!empty($httpsProxy)) {
+        return json_decode(@file_get_contents($uri, false, [
+            'http' => [
+                'proxy'           => str_replace(
+                    'https://',
+                    'tcp://',
+                    str_replace(
+                        'http://',
+                        'tcp://',
+                        $httpsProxy
+                    )
+                ),
+                'request_fulluri' => true,
+            ],
+        ]));
+    } else {
+        return json_decode(@file_get_contents($uri));
+    }
+}

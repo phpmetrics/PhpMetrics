@@ -36,7 +36,7 @@ class Packagist
         }
         list($user, $name) = explode('/', $package);
         $uri = sprintf('https://packagist.org/packages/%s/%s.json', $user, $name);
-        $json = json_decode(@file_get_contents($uri));
+        $json = getURIContentAsJson($uri);
 
         if (!isset($json->package) || !is_object($json->package)) {
             return $response;
