@@ -36,7 +36,7 @@ class Packagist
         }
         list($user, $name) = explode('/', $package);
         $uri = sprintf('https://packagist.org/packages/%s/%s.json', $user, $name);
-        $json = getURIContentAsJson($uri);
+        $json = $this->getURIContentAsJson($uri);
 
         if (!isset($json->package) || !is_object($json->package)) {
             return $response;
@@ -76,5 +76,46 @@ class Packagist
         }
 
         return $response;
+    }
+
+    /**
+     * Download the given URI and decode it as JSON.
+     *
+     * @param string $uri
+     *
+     * @return mixed
+     */
+    private function getURIContentAsJson($uri)
+    {
+        // get the json file
+        $httpsProxy = getenv('https_proxy');
+        if ('' !== $httpsProxy) {
+            $tcpProxy = str_replace(
+                'https://',
+                'tcp://',
+                str_replace(
+                    'http://',
+                    'tcp://',
+                    $httpsProxy
+                )
+            );
+            $context = stream_context_create(
+                [
+                    'http' => [
+                        'proxy'           => $tcpProxy,
+                        'request_fulluri' => true,
+                    ],
+                ]
+            );
+            return json_decode(
+                @file_get_contents(
+                    $uri,
+                    false,
+                    $context
+                )
+            );
+        } else {
+            return json_decode(@file_get_contents($uri));
+        }
     }
 }
