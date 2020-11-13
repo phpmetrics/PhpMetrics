@@ -87,35 +87,41 @@ class Packagist
      */
     private function getURIContentAsJson($uri)
     {
-        // get the json file
+        // Get the environment variable.
         $httpsProxy = getenv('https_proxy');
+        $context    = null;
         if ('' !== $httpsProxy) {
-            $tcpProxy = str_replace(
-                'https://',
-                'tcp://',
-                str_replace(
-                    'http://',
-                    'tcp://',
-                    $httpsProxy
-                )
-            );
+            // Create the context.
             $context = stream_context_create(
                 [
                     'http' => [
-                        'proxy'           => $tcpProxy,
+                        'proxy' => $this->tcpProtocol($httpsProxy),
                         'request_fulluri' => true,
                     ],
                 ]
             );
-            return json_decode(
-                @file_get_contents(
-                    $uri,
-                    false,
-                    $context
-                )
-            );
-        } else {
-            return json_decode(@file_get_contents($uri));
         }
+
+        return json_decode(@file_get_contents($uri, false, $context));
+    }
+
+    /**
+     * Replace http or https protocols with tcp for creating the stream context.
+     *
+     * @param string $httpsProxy
+     *
+     * @return string
+     */
+    private function tcpProtocol($httpsProxy)
+    {
+        return str_replace(
+            'https://',
+            'tcp://',
+            str_replace(
+                'http://',
+                'tcp://',
+                $httpsProxy
+            )
+        );
     }
 }
