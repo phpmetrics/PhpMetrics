@@ -89,13 +89,13 @@ class Packagist
     {
         // Get the environment variable.
         $httpsProxy = getenv('https_proxy');
-        $context    = null;
+        $context = null;
         if ('' !== $httpsProxy) {
             // Create the context.
             $context = stream_context_create(
                 [
                     'http' => [
-                        'proxy' => $this->tcpProtocol($httpsProxy),
+                        'proxy' => str_replace(['http://', 'https://'], 'tcp://', $httpsProxy),
                         'request_fulluri' => true,
                     ],
                 ]
@@ -103,25 +103,5 @@ class Packagist
         }
 
         return json_decode(@file_get_contents($uri, false, $context));
-    }
-
-    /**
-     * Replace http or https protocols with tcp for creating the stream context.
-     *
-     * @param string $httpsProxy
-     *
-     * @return string
-     */
-    private function tcpProtocol($httpsProxy)
-    {
-        return str_replace(
-            'https://',
-            'tcp://',
-            str_replace(
-                'http://',
-                'tcp://',
-                $httpsProxy
-            )
-        );
     }
 }
