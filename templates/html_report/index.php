@@ -131,7 +131,7 @@ require __DIR__ . '/_header.php'; ?>
                 <div class="help">
                     <div class="help-inner">
                         <p>
-                            Page Rank is a way to measure de importance of a class. There is no "good" or "bad" page rank. This metrics reflects interactions in your code.
+                            Page Rank is a way to measure the importance of a class. There is no "good" or "bad" page rank. This metric reflects interactions in your code.
                         </p>
                     </div>
                 </div>
