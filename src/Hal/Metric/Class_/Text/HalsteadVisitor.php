@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric\Class_\Text;
 
 use Hal\Metric\FunctionMetric;
@@ -18,7 +19,6 @@ use PhpParser\NodeVisitorAbstract;
  *      These metrics are therefore computed statically from the code."
  *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
- * Class HalsteadVisitor
  * @package Hal\Metric\Class_\Coupling
  */
 class HalsteadVisitor extends NodeVisitorAbstract
@@ -30,7 +30,6 @@ class HalsteadVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)
@@ -44,12 +43,11 @@ class HalsteadVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Function_ || $node instanceof Stmt\Trait_) {
-
             if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
+                $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
                 $classOrFunction = $this->metrics->get($name);
             } else {
-                $classOrFunction = new FunctionMetric($node->name);
+                $classOrFunction = new FunctionMetric((string)$node->name);
                 $this->metrics->attach($classOrFunction);
             }
 
@@ -58,9 +56,7 @@ class HalsteadVisitor extends NodeVisitorAbstract
             $operators = [];
 
             iterate_over_node($node, function ($node) use (&$operators, &$operands) {
-
-                if (
-                    $node instanceof Node\Expr\BinaryOp
+                if ($node instanceof Node\Expr\BinaryOp
                     || $node instanceof Node\Expr\AssignOp
                     || $node instanceof Stmt\If_
                     || $node instanceof Stmt\For_
@@ -74,8 +70,15 @@ class HalsteadVisitor extends NodeVisitorAbstract
                     array_push($operators, get_class($node));
                 }
 
-                if (
-                    $node instanceof Node\Expr\Cast
+                // nicik/php-parser:^4
+                if ($node instanceof Node\Param
+                    && isset($node->var)
+                    && $node->var instanceof Node\Expr\Variable
+                ) {
+                    return;
+                }
+
+                if ($node instanceof Node\Expr\Cast
                     || $node instanceof Node\Expr\Variable
                     || $node instanceof Node\Param
                     || $node instanceof Node\Scalar
@@ -96,10 +99,10 @@ class HalsteadVisitor extends NodeVisitorAbstract
             $uniqueOperators = array_map('unserialize', array_unique(array_map('serialize', $operators)));
             $uniqueOperands = array_map('unserialize', array_unique(array_map('serialize', $operands)));
 
-            $n1 = sizeof($uniqueOperators, COUNT_NORMAL);
-            $n2 = sizeof($uniqueOperands, COUNT_NORMAL);
-            $N1 = sizeof($operators, COUNT_NORMAL);
-            $N2 = sizeof($operands, COUNT_NORMAL);
+            $n1 = count($uniqueOperators, COUNT_NORMAL);
+            $n2 = count($uniqueOperands, COUNT_NORMAL);
+            $N1 = count($operators, COUNT_NORMAL);
+            $N2 = count($operands, COUNT_NORMAL);
 
             if (($n2 == 0) || ($N2 == 0)) {
                 // files without operators

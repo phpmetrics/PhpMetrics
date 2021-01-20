@@ -1,7 +1,6 @@
 <?php
 namespace Hal\Metric\Class_;
 
-use Hal\Component\Reflected\Method;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\FunctionMetric;
 use Hal\Metric\Helper\RoleOfMethodDetector;
@@ -19,7 +18,6 @@ class ClassEnumVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)
@@ -34,15 +32,16 @@ class ClassEnumVisitor extends NodeVisitorAbstract
             || $node instanceof Stmt\Interface_
             || $node instanceof Stmt\Trait_
         ) {
-
             if ($node instanceof Stmt\Interface_) {
                 $class = new InterfaceMetric($node->namespacedName->toString());
                 $class->set('interface', true);
+                $class->set('abstract', true);
             } else {
-
-                $name = (string) (isset($node->namespacedName) ? $node->namespacedName : 'anonymous@'.spl_object_hash($node));
+                $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
                 $class = new ClassMetric($name);
                 $class->set('interface', false);
+                $class->set('abstract', $node instanceof Stmt\Trait_ || $node->isAbstract());
+                $class->set('final', !$node instanceof Stmt\Trait_ && $node->isFinal());
             }
 
             $methods = [];
@@ -51,8 +50,7 @@ class ClassEnumVisitor extends NodeVisitorAbstract
             $roleDetector = new RoleOfMethodDetector();
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
-
-                    $function = new FunctionMetric($stmt->name);
+                    $function = new FunctionMetric((string)$stmt->name);
 
                     $role = $roleDetector->detects($stmt);
                     $function->set('role', $role);
@@ -84,8 +82,8 @@ class ClassEnumVisitor extends NodeVisitorAbstract
             }
 
             $class->set('methods', $methods);
-            $class->set('nbMethodsIncludingGettersSetters', sizeof($methods) );
-            $class->set('nbMethods', sizeof($methods) - ($nbGetters + $nbSetters));
+            $class->set('nbMethodsIncludingGettersSetters', count($methods));
+            $class->set('nbMethods', count($methods) - ($nbGetters + $nbSetters));
             $class->set('nbMethodsPrivate', $methodsPrivate);
             $class->set('nbMethodsPublic', $methodsPublic);
             $class->set('nbMethodsGetter', $nbGetters);

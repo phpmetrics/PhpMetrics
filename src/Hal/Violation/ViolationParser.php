@@ -3,6 +3,7 @@ namespace Hal\Violation;
 
 use Hal\Metric\Metrics;
 use Hal\Violation\Class_;
+use Hal\Violation\Package;
 
 class ViolationParser
 {
@@ -13,7 +14,6 @@ class ViolationParser
      */
     public function apply(Metrics $metrics)
     {
-
         $violations = [
             new Class_\Blob(),
             new Class_\TooComplexClassCode(),
@@ -21,6 +21,8 @@ class ViolationParser
             new Class_\ProbablyBugged(),
             new Class_\TooLong(),
             new Class_\TooDependent(),
+            new Package\StableAbstractionsPrinciple(),
+            new Package\StableDependenciesPrinciple(),
         ];
 
         foreach ($metrics->all() as $metric) {

@@ -14,8 +14,6 @@ use RecursiveIteratorIterator;
 use RegexIterator;
 
 /**
- * File finder
- *
  * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
 class Finder
@@ -48,9 +46,9 @@ class Finder
     private $flags;
 
     /**
-     * @param string $extensions regex of file extensions to include
-     * @param string $excludedDirs regex of directories to exclude
-     * @param integer $flags
+     * @param string[] $extensions   regex of file extensions to include
+     * @param string[] $excludedDirs regex of directories to exclude
+     * @param int $flags
      */
     public function __construct(array $extensions = ['php'], array $excludedDirs = [], $flags = null)
     {
@@ -62,13 +60,12 @@ class Finder
     /**
      * Find files in path
      *
-     * @param array $paths
+     * @param string[] $paths
      * @return array
-     * @internal param string $path
      */
     public function fetch(array $paths)
     {
-        $files = array();
+        $files = [];
         foreach ($paths as $path) {
             if (is_dir($path)) {
                 $path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
@@ -76,7 +73,8 @@ class Finder
                 $iterator = new RecursiveIteratorIterator($directory);
 
                 $filterRegex = sprintf(
-                    '`^%s%s$`',
+                    '`^%s%s%s$`',
+                    preg_quote($path, '`'),
                     !empty($this->excludedDirs) ? '((?!' . implode('|', array_map('preg_quote', $this->excludedDirs)) . ').)+' : '.+',
                     '\.(' . implode('|', $this->extensions) . ')'
                 );

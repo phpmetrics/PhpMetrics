@@ -9,19 +9,17 @@ use PhpParser\ParserFactory;
 /**
  * @group issue
  */
-class IssuerTest extends \PHPUnit_Framework_TestCase
+class IssuerTest extends \PHPUnit\Framework\TestCase
 {
-
-    public function testICanEnableIssuer()
+    public function testICanEnableIssuerPhp5()
     {
         $output = new TestOutput();
         $issuer = (new TestIssuer($output))->enable();
         $issuer->set('Firstname', 'Jean-François');
 
         try {
-            echo new \stdClass();
+            trigger_error('Object of class stdClass could not be converted to string', E_USER_ERROR);
         } catch (\Exception $e) {
-
         }
 
         $this->assertContains('Object of class stdClass could not be converted to string', $issuer->log);
@@ -29,7 +27,7 @@ class IssuerTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('Details', $issuer->log);
         $this->assertContains('https://github.com/phpmetrics/PhpMetrics/issues/new', $output->output);
         $this->assertContains('Firstname: Jean-François', $issuer->log);
-        $this->assertContains('IssuerTest.php (line 22)', $issuer->log);
+        $this->assertContains('IssuerTest.php (line 21)', $issuer->log);
         $issuer->disable();
     }
 
@@ -50,11 +48,9 @@ EOT;
         $stmt = $parser->parse($code);
         $issuer->set('code', $stmt);
 
-
         try {
-            echo new \stdClass();
+            trigger_error('Object of class stdClass could not be converted to string', E_USER_ERROR);
         } catch (\Exception $e) {
-
         }
 
         $issuer->disable();

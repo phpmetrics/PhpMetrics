@@ -10,29 +10,24 @@
 namespace Hal\Component\Output;
 
 /**
- * Class CliOutput
  * @package Hal\Component\Output
- */
-/**
- * Class CliOutput
- * @package Hal\Component\Issue
  */
 interface Output
 {
     /**
-     * @param $message
+     * @param string $message
      * @return $this
      */
     public function writeln($message);
 
     /**
-     * @param $message
+     * @param string $message
      * @return $this
      */
     public function write($message);
 
     /**
-     * @param $message
+     * @param string $message
      * @return $this
      */
     public function err($message);
@@ -42,4 +37,3 @@ interface Output
      */
     public function clearln();
 }
-

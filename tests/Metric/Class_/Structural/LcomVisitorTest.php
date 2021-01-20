@@ -6,9 +6,8 @@ use Hal\Metric\Class_\Structural\LcomVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
 
-class LcomVisitorTest extends \PHPUnit_Framework_TestCase {
-
-
+class LcomVisitorTest extends \PHPUnit\Framework\TestCase
+{
     /**
      * @dataProvider provideExamples
      */
@@ -26,15 +25,13 @@ class LcomVisitorTest extends \PHPUnit_Framework_TestCase {
         $stmts = $parser->parse($code);
         $traverser->traverse($stmts);
 
-
         $this->assertEquals($expected, $metrics->get($classname)->get('lcom'));
     }
 
     public function provideExamples()
     {
         return [
-            [ __DIR__.'/../../examples/lcom1.php', 'MyClassA', 2]
+            [ __DIR__ . '/../../examples/lcom1.php', 'MyClassA', 2]
         ];
     }
-
 }

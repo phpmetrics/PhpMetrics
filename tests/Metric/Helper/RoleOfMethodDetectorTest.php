@@ -11,9 +11,8 @@ use PhpParser\ParserFactory;
  * @group helper
  * @group parsing
  */
-class RoleOfMethodDetectorTest extends \PHPUnit_Framework_TestCase
+class RoleOfMethodDetectorTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @dataProvider provideExamples
      */
@@ -38,15 +37,25 @@ class RoleOfMethodDetectorTest extends \PHPUnit_Framework_TestCase
 
     public function provideExamples()
     {
-        return [
-            ['getter', '<?php class A { function getName(){ return $this->name; } }  ?>'],
-            ['getter', '<?php class A { function getName(){ return (string) $this->name; } }  ?>'],
-            ['getter', '<?php class A { function getName(){ return (int) $this->name; } }  ?>'],
-            ['setter', '<?php class A { function setName($string){ $this->name = $name; } } ?>'],
-            ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; } } ?>'],
-            ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; return $this; } } ?>'],
-            [null, '<?php class A { function foo($string){ $this->name = (string) $name * 3; } } ?>'],
-
+        $examples = [
+            'getter' => ['getter', '<?php class A { function getName(){ return $this->name; } }  ?>'],
+            'getter with string cast' => ['getter', '<?php class A { function getName(){ return (string) $this->name; } }  ?>'],
+            'getter with int cast' => ['getter', '<?php class A { function getName(){ return (int) $this->name; } }  ?>'],
+            'setter' => ['setter', '<?php class A { function setName($string){ $this->name = $name; } } ?>'],
+            'setter with string cast' => ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; } } ?>'],
+            'setter with $this return' => ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; return $this; } } ?>'],
+            'neither setter nor getter' => [null, '<?php class A { function foo($string){ $this->name = (string) $name * 3; } } ?>'],
         ];
+        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+            $examples['getter with return scalar'] = ['getter', '<?php class A { function getName(): string { return $this->name; } }'];
+            $examples['setter with scalar hint and return void'] = ['setter', '<?php class A { function setName(string $name): void { $this->name = $name; } }'];
+            $examples['getter with return object'] = ['getter', '<?php class A { function getName(): Name { return $this->name; } }'];
+            $examples['setter with object hint and return void'] = ['setter', '<?php class A { function setName(Name $name): void { $this->name = $name; } }'];
+            $examples['getter with return optional'] = ['getter', '<?php class A { function isOk(): ?bool { return $this->isOk; } }'];
+            $examples['setter fluent with param optional'] = ['setter', '<?php class A { function setOk(?bool $ok): self { $this->isOk = $ok; return $this; } }'];
+            $examples['setter fluent non typed with param optional'] = ['setter', '<?php class A { function setOk(?bool $ok) { $this->isOk = $ok; return $this; } }'];
+            $examples['setter with param optional'] = ['setter', '<?php class A { function setOk(?bool $ok) { $this->isOk = $ok; } }'];
+        }
+        return $examples;
     }
 }

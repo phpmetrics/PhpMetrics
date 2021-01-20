@@ -30,8 +30,10 @@ class Consolidated
      */
     private $project = [];
 
+    /** @var array */
+    private $packages;
+
     /**
-     * Consolided constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)
@@ -42,6 +44,7 @@ class Consolidated
         $classes = [];
         $functions = [];
         $files = [];
+        $packages = [];
         $project = [];
         $nbInterfaces = 0;
         foreach ($metrics->all() as $key => $item) {
@@ -57,6 +60,8 @@ class Consolidated
                 $files[$key] = $item->all();
             } elseif (ProjectMetric::class === $classItem) {
                 $project[$key] = $item->all();
+            } elseif (PackageMetric::class === $classItem) {
+                $packages[$key] = $item->all();
             }
         }
 
@@ -68,6 +73,7 @@ class Consolidated
             'nbMethods' => 0,
         ];
         $avg = (object)[
+            'wmc' => [],
             'ccn' => [],
             'bugs' => [],
             'kanDefect' => [],
@@ -97,13 +103,39 @@ class Consolidated
         }
         $sum->nbClasses = count($classes);
         $sum->nbInterfaces = $nbInterfaces;
+        $sum->nbPackages = count($packages);
 
         foreach ($avg as &$a) {
-            if (sizeof($a) > 0) {
-                $a = round(array_sum($a) / sizeof($a), 2);
+            if (count($a) > 0) {
+                $a = round(array_sum((array)$a) / count($a), 2);
             } else {
                 $a = 0;
             }
+        }
+
+        $avg->distance = 0;
+        $avg->incomingCDep = 0;
+        $avg->incomingPDep = 0;
+        $avg->outgoingCDep = 0;
+        $avg->outgoingPDep = 0;
+        $avg->classesPerPackage = 0;
+        if (0 !== $sum->nbPackages) {
+            foreach (array_keys($packages) as $eachName) {
+                /* @var $eachPackage PackageMetric */
+                $eachPackage = $metrics->get($eachName);
+                $avg->distance += $eachPackage->getDistance();
+                $avg->incomingCDep += count($eachPackage->getIncomingClassDependencies());
+                $avg->incomingPDep += count($eachPackage->getIncomingPackageDependencies());
+                $avg->outgoingCDep += count($eachPackage->getOutgoingClassDependencies());
+                $avg->outgoingPDep += count($eachPackage->getOutgoingPackageDependencies());
+                $avg->classesPerPackage += count($eachPackage->getClasses());
+            }
+            $avg->distance = round($avg->distance / $sum->nbPackages, 2);
+            $avg->incomingCDep = round($avg->incomingCDep / $sum->nbPackages, 2);
+            $avg->incomingPDep = round($avg->incomingPDep / $sum->nbPackages, 2);
+            $avg->outgoingCDep = round($avg->outgoingCDep / $sum->nbPackages, 2);
+            $avg->outgoingPDep = round($avg->outgoingPDep / $sum->nbPackages, 2);
+            $avg->classesPerPackage = round($avg->classesPerPackage / $sum->nbPackages, 2);
         }
 
         // sums of violations
@@ -127,14 +159,21 @@ class Consolidated
                 $violations[$name]++;
             }
         }
+        foreach ($packages as $package) {
+            foreach ($package['violations'] as $violation) {
+                $violations['total']++;
+                $name = $map[$violation->getLevel()];
+                $violations[$name]++;
+            }
+        }
         $sum->violations = (object)$violations;
-
 
         $this->avg = $avg;
         $this->sum = $sum;
         $this->classes = $classes;
         $this->files = $files;
         $this->project = $project;
+        $this->packages = $packages;
     }
 
     /**
@@ -175,5 +214,13 @@ class Consolidated
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPackages()
+    {
+        return $this->packages;
     }
 }

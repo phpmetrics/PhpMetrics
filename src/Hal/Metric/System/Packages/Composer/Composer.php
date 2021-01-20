@@ -2,12 +2,12 @@
 namespace Hal\Metric\System\Packages\Composer;
 
 use Hal\Application\Config\Config;
+use Hal\Application\Config\ConfigException;
 use Hal\Component\File\Finder;
 use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
 
 /**
- * Class Composer
  * @package Hal\Metric\System\Packages\Composer
  */
 class Composer
@@ -19,7 +19,6 @@ class Composer
     private $config;
 
     /**
-     * GitChanges constructor.
      * @param array $files
      */
     public function __construct(Config $config, array $files)
@@ -42,19 +41,20 @@ class Composer
 
         $packagist = new Packagist();
         foreach ($rawRequirements as $requirement => $version) {
+            $installed = isset($rawInstalled[$requirement]) ? $rawInstalled[$requirement] : null;
+            $package = $packagist->get($requirement, $installed);
 
-            $package = $packagist->get($requirement);
-
-            $packages[$requirement] = (object)array(
-                'name' => $requirement,
-                'required' => $version,
-                'installed' => isset($rawInstalled[$requirement]) ? $rawInstalled[$requirement] : null,
-                'latest' => $package->latest,
-                'license' => $package->license,
-                'homepage' => $package->homepage,
-                'zip' => $package->zip,
-            );
+            $package->installed = $installed;
+            $package->required = $version;
+            $package->name = $requirement;
+            $package->status = version_compare($installed, $package->latest, '<') ? 'outdated' : 'latest';
+            $packages[$requirement] = $package;
         }
+
+        // exclude extensions
+        $packages = array_filter($packages, function ($package) {
+            return !preg_match('!(^php$|^ext\-)!', $package->name);
+        });
 
         $projectMetric->set('packages', $packages);
         $projectMetric->set('packages-installed', $rawInstalled);
@@ -70,7 +70,10 @@ class Composer
 
         // find composer.json files
         $finder = new Finder(['json'], $this->config->get('exclude'));
-        $files = $finder->fetch($this->config->get('files'));
+
+        // include root dir by default
+        $files = array_merge($this->config->get('files'), ['./']);
+        $files = $finder->fetch($files);
 
         foreach ($files as $filename) {
             if (!\preg_match('/composer(-dist)?\.json/', $filename)) {

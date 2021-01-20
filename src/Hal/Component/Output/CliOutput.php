@@ -10,7 +10,6 @@
 namespace Hal\Component\Output;
 
 /**
- * Class CliOutput
  * @package Hal\Component\Issue
  */
 class CliOutput implements Output
@@ -21,7 +20,8 @@ class CliOutput implements Output
     private $quietMode = false;
 
     /**
-     * @inheritdoc
+     * @param string $message
+     * @return $this
      */
     public function writeln($message)
     {
@@ -30,7 +30,8 @@ class CliOutput implements Output
     }
 
     /**
-     * @inheritdoc
+     * @param string $message
+     * @return $this
      */
     public function write($message)
     {
@@ -39,7 +40,8 @@ class CliOutput implements Output
     }
 
     /**
-     * @inheritdoc
+     * @param string $message
+     * @return $this
      */
     public function err($message)
     {
@@ -47,9 +49,6 @@ class CliOutput implements Output
         return $this;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function clearln()
     {
         $this->writeln("\x0D");
@@ -58,7 +57,7 @@ class CliOutput implements Output
     }
 
     /**
-     * @param boolean $quietMode
+     * @param bool $quietMode
      * @return $this
      */
     public function setQuietMode($quietMode)
@@ -67,4 +66,3 @@ class CliOutput implements Output
         return $this;
     }
 }
-

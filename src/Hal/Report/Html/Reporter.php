@@ -1,15 +1,15 @@
 <?php
+
 namespace Hal\Report\Html;
 
 use Hal\Application\Config\Config;
 use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
-use Hal\Metric\Consolided;
+use Hal\Metric\Group\Group;
 use Hal\Metric\Metrics;
 
 class Reporter
 {
-
     /**
      * @var Config
      */
@@ -21,7 +21,31 @@ class Reporter
     private $output;
 
     /**
-     * Reporter constructor.
+     * @var string
+     */
+    protected $templateDir;
+
+    /**
+     * @var Consolidated[]
+     */
+    private $consolidatedByGroups;
+
+    /**
+     * @var Group[]
+     */
+    private $groups = [];
+
+    /**
+     * @var string
+     */
+    private $currentGroup;
+
+    /**
+     * @var string
+     */
+    private $assetPath = '';
+
+    /**
      * @param Config $config
      * @param Output $output
      */
@@ -29,18 +53,28 @@ class Reporter
     {
         $this->config = $config;
         $this->output = $output;
+        $this->templateDir = __DIR__ . '/../../../../templates';
     }
 
 
     public function generate(Metrics $metrics)
     {
-
         $logDir = $this->config->get('report-html');
         if (!$logDir) {
             return;
         }
 
         // consolidate
+
+        /** @var Group[] $groups */
+        $groups = $this->config->get('groups');
+        $this->groups = $groups;
+        $consolidatedGroups = [];
+        foreach ($groups as $group) {
+            $reducedMetricsByGroup = $group->reduceMetrics($metrics);
+            $consolidatedGroups[$group->getName()] = new Consolidated($reducedMetricsByGroup);
+        }
+
         $consolidated = new Consolidated($metrics);
 
         // history of builds
@@ -49,7 +83,7 @@ class Reporter
             'sum' => $consolidated->getSum()
         ];
         $files = glob($logDir . '/js/history-*.json');
-        $next = sizeof($files) + 1;
+        $next = count($files) + 1;
         $history = [];
         natsort($files);
         foreach ($files as $filename) {
@@ -57,56 +91,99 @@ class Reporter
         }
 
         // copy sources
-        if(!file_exists($logDir . '/js')) {
-            mkdir($logDir.'/js', 0755, true);
+        if (!file_exists($logDir . '/js')) {
+            mkdir($logDir . '/js', 0755, true);
         }
-        if(!file_exists($logDir . '/css')) {
-            mkdir($logDir.'/css', 0755, true);
+        if (!file_exists($logDir . '/css')) {
+            mkdir($logDir . '/css', 0755, true);
         }
-        if(!file_exists($logDir . '/images')) {
-            mkdir($logDir.'/images', 0755, true);
+        if (!file_exists($logDir . '/images')) {
+            mkdir($logDir . '/images', 0755, true);
         }
-        if(!file_exists($logDir . '/fonts')) {
-            mkdir($logDir.'/fonts', 0755, true);
+        if (!file_exists($logDir . '/fonts')) {
+            mkdir($logDir . '/fonts', 0755, true);
         }
-        recurse_copy(__DIR__ . '/template/js', $logDir . '/js');
-        recurse_copy(__DIR__ . '/template/css', $logDir . '/css');
-        recurse_copy(__DIR__ . '/template/images', $logDir . '/images');
-        recurse_copy(__DIR__ . '/template/fonts', $logDir . '/fonts');
+        recurse_copy($this->templateDir . '/html_report/js', $logDir . '/js');
+        recurse_copy($this->templateDir . '/html_report/css', $logDir . '/css');
+        recurse_copy($this->templateDir . '/html_report/images', $logDir . '/images');
+        recurse_copy($this->templateDir . '/html_report/fonts', $logDir . '/fonts');
 
         // render dynamic pages
-        $this->renderPage(__DIR__ . '/template/index.php', $logDir . '/index.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/loc.php', $logDir . '/loc.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/relations.php', $logDir . '/relations.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/coupling.php', $logDir . '/coupling.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/all.php', $logDir . '/all.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/oop.php', $logDir . '/oop.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/complexity.php', $logDir . '/complexity.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/panel.php', $logDir . '/panel.html', $consolidated, $history);
-        $this->renderPage(__DIR__ . '/template/violations.php', $logDir . '/violations.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/index.php', $logDir . '/index.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/loc.php', $logDir . '/loc.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/relations.php', $logDir . '/relations.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/coupling.php', $logDir . '/coupling.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/all.php', $logDir . '/all.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/oop.php', $logDir . '/oop.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/complexity.php', $logDir . '/complexity.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/panel.php', $logDir . '/panel.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/violations.php', $logDir . '/violations.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/packages.php', $logDir . '/packages.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/package_relations.php', $logDir . '/package_relations.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/composer.php', $logDir . '/composer.html', $consolidated, $history);
         if ($this->config->has('git')) {
-            $this->renderPage(__DIR__ . '/template/git.php', $logDir . '/git.html', $consolidated, $history);
+            $this->renderPage($this->templateDir . '/html_report/git.php', $logDir . '/git.html', $consolidated, $consolidatedGroups, $history);
         }
-        $this->renderPage(__DIR__ . '/template/junit.php', $logDir . '/junit.html', $consolidated, $history);
+        $this->renderPage($this->templateDir . '/html_report/junit.php', $logDir . '/junit.html', $consolidated, $consolidatedGroups, $history);
 
         // js data
         file_put_contents(
             sprintf('%s/js/history-%d.json', $logDir, $next),
             json_encode($today, JSON_PRETTY_PRINT)
         );
-	    file_put_contents(
+        file_put_contents(
             sprintf('%s/js/latest.json', $logDir),
             json_encode($today, JSON_PRETTY_PRINT)
         );
 
         // json data
         file_put_contents(
-            $logDir . '/js/classes.js',
+            $logDir . '/classes.js',
             'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
         );
 
-        $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir));
+        // HTML files to generate
+        $filesToGenerate = [
+            'index',
+            'loc',
+            'relations',
+            'coupling',
+            'all',
+            'oop',
+            'complexity',
+            'panel',
+            'violations',
+            'packages',
+            'package_relations',
+            'composer',
+        ];
 
+        // consolidated by groups
+        foreach ($consolidatedGroups as $name => $consolidated) {
+            $outDir = $logDir . DIRECTORY_SEPARATOR . $name;
+            $this->currentGroup = $name;
+            $this->assetPath = '../';
+
+            if (!file_exists($outDir)) {
+                mkdir($outDir, 0755, true);
+            }
+
+            foreach ($filesToGenerate as $filename) {
+                $this->renderPage(
+                    sprintf('%s/html_report/%s.php', $this->templateDir, $filename),
+                    sprintf('%s/%s.html', $outDir, $filename),
+                    $consolidated,
+                    $history
+                );
+
+                file_put_contents(
+                    $outDir . '/classes.js',
+                    'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
+                );
+            }
+        }
+
+        $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir));
     }
 
     /**
@@ -121,6 +198,7 @@ class Reporter
         $this->classes = $classes = $consolidated->getClasses();
         $this->files = $files = $consolidated->getFiles();
         $this->project = $project = $consolidated->getProject();
+        $this->packages = $packages = $consolidated->getPackages();
         $config = $this->config;
         $this->history = $history;
 
@@ -138,6 +216,9 @@ class Reporter
      */
     protected function getTrend($type, $key, $lowIsBetter = false, $highIsBetter = false)
     {
+        if (!$this->isHomePage()) {
+            return '';
+        }
 
         $svg = [];
         $svg['gt'] = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -193,8 +274,21 @@ class Reporter
             }
         }
 
-        return sprintf('<span title="Last value: %s" class="progress progress-%s progress-%s">%s %s</span>', $oldValue,
-            $goodOrBad, $r, $diff,
-            $svg[$r]);
+        return sprintf(
+            '<span title="Last value: %s" class="progress progress-%s progress-%s">%s %s</span>',
+            $oldValue,
+            $goodOrBad,
+            $r,
+            $diff,
+            $svg[$r]
+        );
+    }
+
+    /**
+     * @return bool
+     */
+    private function isHomePage()
+    {
+        return null === $this->currentGroup;
     }
 }

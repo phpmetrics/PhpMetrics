@@ -10,7 +10,7 @@ use Hal\Component\Tree\Operator\SizeOfTree;
 /**
  * @group tree
  */
-class SizeOfTreeTest extends \PHPUnit_Framework_TestCase
+class SizeOfTreeTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -30,7 +30,6 @@ class SizeOfTreeTest extends \PHPUnit_Framework_TestCase
         $graph->addEdge($b, $a); // B -> C
 
         $size = new SizeOfTree($graph);
-
     }
 
     public function testICanGetDepthOfNode()
@@ -49,7 +48,6 @@ class SizeOfTreeTest extends \PHPUnit_Framework_TestCase
         $graph->addEdge($b, $c); // B -> C
         $graph->addEdge($c, $d); // C -> D
         $graph->addEdge($a, $e); // A -> E  (node with multiple childs)
-
 
         $size = new SizeOfTree($graph);
 
@@ -76,7 +74,6 @@ class SizeOfTreeTest extends \PHPUnit_Framework_TestCase
         $graph->addEdge($b, $c); // B -> C
         $graph->addEdge($c, $d); // C -> D
         $graph->addEdge($a, $e); // A -> E  (node with multiple childs)
-
 
         $size = new SizeOfTree($graph);
 

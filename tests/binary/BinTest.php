@@ -4,11 +4,11 @@ namespace Test\Binary;
 /**
  * @group binary
  */
-class BinFileTest extends \PHPUnit_Framework_TestCase
+class BinFileTest extends \PHPUnit\Framework\TestCase
 {
     private $phar;
 
-    public function __construct()
+    public function setUp()
     {
         $this->phar = __DIR__ . '/../../bin/phpmetrics';
     }
@@ -31,8 +31,12 @@ class BinFileTest extends \PHPUnit_Framework_TestCase
 
     public function testICanProvideMultipleDirectoriesToParse()
     {
-        $command = sprintf('%s --exclude="" %s,%s  2>&1', $this->phar, __DIR__ . '/examples/1',
-            __DIR__ . '/examples/2');
+        $command = sprintf(
+            '%s --exclude="" %s,%s  2>&1',
+            $this->phar,
+            __DIR__ . '/examples/1',
+            __DIR__ . '/examples/2'
+        );
         $r = shell_exec($command);
         $this->assertContains('Object oriented programming', $r);
         $this->assertContains('LOC', $r);

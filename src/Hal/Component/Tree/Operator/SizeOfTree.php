@@ -20,7 +20,6 @@ class SizeOfTree
     private $graph;
 
     /**
-     * SizeOfTree constructor.
      * @param Graph $graph
      */
     public function __construct(Graph $graph)
@@ -40,17 +39,15 @@ class SizeOfTree
      */
     public function getDepthOfNode(Node $node)
     {
-
         $edges = $node->getEdges();
 
-        if (0 === sizeof($edges)) {
+        if (0 === count($edges)) {
             return 0;
         }
 
         // our tree is not binary : interface can have more than one parent
         $max = 0;
         foreach ($edges as $edge) {
-
             if ($edge->getFrom() == $node) {
                 continue;
             }
@@ -72,10 +69,9 @@ class SizeOfTree
      */
     public function getNumberOfChilds(Node $node, $uniqs = false)
     {
-
         $edges = $node->getEdges();
 
-        if (0 === sizeof($edges)) {
+        if (0 === count($edges)) {
             return 0;
         }
 
@@ -84,8 +80,6 @@ class SizeOfTree
         $n = 0;
 
         foreach ($edges as $edge) {
-
-
             if ($edge->getTo() == $node) {
                 continue;
             }
@@ -98,7 +92,6 @@ class SizeOfTree
             $n += 1 + $this->getNumberOfChilds($edge->getTo(), $uniqs);
 
             $edge->getTo()->visited = false;
-
 
             if ($n > $max) {
                 $max = $n;
@@ -119,7 +112,7 @@ class SizeOfTree
         foreach ($this->graph->getRootNodes() as $node) {
             array_push($ns, $this->getLongestBranch($node));
         }
-        return round(array_sum($ns) / max(1, sizeof($ns)), 2);
+        return round(array_sum($ns) / max(1, count($ns)), 2);
     }
 
     /**
@@ -130,7 +123,6 @@ class SizeOfTree
     {
         $max = 1;
         foreach ($node->getEdges() as $edge) {
-
             if ($node == $edge->getTo()) {
                 // only descendants
                 continue;

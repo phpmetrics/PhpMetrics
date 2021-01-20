@@ -14,12 +14,11 @@ class Reporter
     private $config;
 
     /**
-     * @var OutputInterface
+     * @var Output
      */
     private $output;
 
     /**
-     * Reporter constructor.
      * @param Config $config
      * @param Output $output
      */
@@ -35,7 +34,6 @@ class Reporter
         if ($this->config->has('quiet')) {
             return;
         }
-
 
         $logFile = $this->config->get('report-json');
         if (!$logFile) {

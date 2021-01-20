@@ -20,7 +20,6 @@ class Reporter
     private $output;
 
     /**
-     * Reporter constructor.
      * @param Config $config
      * @param Output $output
      */
@@ -41,7 +40,6 @@ class Reporter
         $consolidated = new Consolidated($metrics);
         $sum = $consolidated->getSum();
         $avg = $consolidated->getAvg();
-
 
         $methodsByClass = $locByClass = $locByMethod = 0;
         if ($sum->nbClasses > 0) {
@@ -75,9 +73,19 @@ Coupling
     Average efferent coupling                   {$avg->efferentCoupling}
     Average instability                         {$avg->instability}
     Depth of Inheritance Tree                   {$metrics->get('tree')->get('depthOfInheritanceTree')}
+    
+Package
+    Packages                                    {$sum->nbPackages}
+    Average classes per package                 {$avg->classesPerPackage}
+    Average distance                            {$avg->distance}
+    Average incoming class dependencies         {$avg->incomingCDep}
+    Average outgoing class dependencies         {$avg->outgoingCDep}
+    Average incoming package dependencies       {$avg->incomingPDep}
+    Average outgoing package dependencies       {$avg->outgoingPDep}
 
 Complexity
     Average Cyclomatic complexity by class      {$avg->ccn}
+    Average Weighted method count by class      {$avg->wmc}
     Average Relative system complexity          {$avg->relativeSystemComplexity}
     Average Difficulty                          {$avg->difficulty}
     
@@ -106,7 +114,7 @@ EOT;
             foreach ($commits as $file => $nb) {
                 $out .= sprintf("\n    %d    %s", $nb, $file);
             }
-            if (0 === sizeof($commits)) {
+            if (0 === count($commits)) {
                 $out .= "\n    NA";
             }
             $out .= "\n";
@@ -125,7 +133,5 @@ EOT;
 
         $out .= "\n\n";
         $this->output->write($out);
-
     }
-
 }

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * (c) Jean-François Lépine <https://twitter.com/Halleck45>
  *
@@ -9,82 +8,19 @@
 
 namespace Hal\Component\Ast;
 
-use PhpParser\Node;
-use PhpParser\NodeTraverser as Mother;
+if (PHP_VERSION_ID >= 70000) {
+    class_alias(Php7NodeTraverser::class, __NAMESPACE__ . '\\ActualNodeTraverser');
+} else {
+    class_alias(Php5NodeTraverser::class, __NAMESPACE__ . '\\ActualNodeTraverser');
+}
 
 /**
- * Custom Ast Traverser
- *
- * @author Jean-François Lépine <https://twitter.com/Halleck45>
+ * Empty class to refer the good ActualNodeTraverser depending on the PHP version.
+ * This class must be hard-coded and not directly used as an alias because composer can not handle class-aliases when
+ * flag --classmap-authoritative is set.
+ * @see https://github.com/phpmetrics/PhpMetrics/issues/373
  */
-class NodeTraverser extends Mother
+/** @noinspection PhpUndefinedClassInspection */
+class NodeTraverser extends ActualNodeTraverser
 {
-    protected $stopCondition;
-
-    public function __construct($cloneNodes = false, $stopCondition = null)
-    {
-        parent::__construct($cloneNodes);
-
-        if(null === $stopCondition) {
-            $stopCondition = function($node) {
-                if($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
-                    return false;
-                }
-
-                return true;
-            };
-        }
-
-        $this->stopCondition = $stopCondition;
-    }
-
-    protected function traverseArray(array $nodes) {
-        $doNodes = array();
-
-        foreach ($nodes as $i => &$node) {
-            if (is_array($node)) {
-                $node = $this->traverseArray($node);
-            } elseif ($node instanceof Node) {
-                $traverseChildren = call_user_func($this->stopCondition, $node);
-
-                foreach ($this->visitors as $visitor) {
-                    $return = $visitor->enterNode($node);
-                    if (self::DONT_TRAVERSE_CHILDREN === $return) {
-                        $traverseChildren = false;
-                    } else if (null !== $return) {
-                        $node = $return;
-                    }
-                }
-
-                if ($traverseChildren) {
-                    $node = $this->traverseNode($node);
-                }
-
-                foreach ($this->visitors as $visitor) {
-                    $return = $visitor->leaveNode($node);
-
-                    if (self::REMOVE_NODE === $return) {
-                        $doNodes[] = array($i, array());
-                        break;
-                    } elseif (is_array($return)) {
-                        $doNodes[] = array($i, $return);
-                        break;
-                    } elseif (null !== $return) {
-                        $node = $return;
-                    }
-                }
-            }
-        }
-
-        if (!empty($doNodes)) {
-            while (list($i, $replace) = array_pop($doNodes)) {
-                array_splice($nodes, $i, 1, $replace);
-            }
-        }
-
-        return $nodes;
-    }
-
-
-
 }

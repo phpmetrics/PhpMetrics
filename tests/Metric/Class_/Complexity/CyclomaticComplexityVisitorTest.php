@@ -3,23 +3,23 @@ namespace Test\Hal\Metric\Class_\Coupling;
 
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
-use Hal\Metric\Class_\Complexity\McCabeVisitor;
 use Hal\Metric\Metrics;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 
-class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
-
-
+class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
+{
     /**
-     * @dataProvider provideExamplesForClasses
+     * @dataProvider provideExamplesForCcn
      */
-    public function testCyclomaticComplexityOfClassesIsWellCalculated($example, $classname, $expectedCcn)
+    public function testCcnOfClassesIsWellCalculated($example, $classname, $expectedCcn)
     {
         $metrics = new Metrics();
 
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $traverser = new \PhpParser\NodeTraverser();
-        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new NameResolver());
         $traverser->addVisitor(new ClassEnumVisitor($metrics));
         $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
 
@@ -31,15 +31,35 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @dataProvider provideExamplesForMethods
+     * @dataProvider provideExamplesForWmc
      */
-    public function testCyclomaticComplexityOfMethodsIsWellCalculated($example, $classname, $expectedCcnMethodMax)
+    public function testWeightedMethodCountOfClassesIsWellCalculated($example, $classname, $expectedWmc)
     {
         $metrics = new Metrics();
 
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $traverser = new \PhpParser\NodeTraverser();
-        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new NameResolver());
+        $traverser->addVisitor(new ClassEnumVisitor($metrics));
+        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
+
+        $code = file_get_contents($example);
+        $stmts = $parser->parse($code);
+        $traverser->traverse($stmts);
+
+        $this->assertSame($expectedWmc, $metrics->get($classname)->get('wmc'));
+    }
+
+    /**
+     * @dataProvider provideExamplesForMaxCc
+     */
+    public function testMaximalCyclomaticComplexityOfMethodsIsWellCalculated($example, $classname, $expectedCcnMethodMax)
+    {
+        $metrics = new Metrics();
+
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new NameResolver());
         $traverser->addVisitor(new ClassEnumVisitor($metrics));
         $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
 
@@ -50,21 +70,39 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame($expectedCcnMethodMax, $metrics->get($classname)->get('ccnMethodMax'));
     }
 
-    public function provideExamplesForClasses()
+    public static function provideExamplesForWmc()
     {
         return [
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 4],
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 5],
-            [ __DIR__.'/../../examples/cyclomatic_anon.php', 'Foo\C', 1],
+            'A' => [__DIR__ . '/../../examples/cyclomatic1.php', 'A', 10],
+            'B' => [__DIR__ . '/../../examples/cyclomatic1.php', 'B', 4],
+            'Foo\\C' => [__DIR__ . '/../../examples/cyclomatic_anon.php', 'Foo\\C', 1],
+            'SwitchCase' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'SwitchCase', 4],
+            'IfElseif' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'IfElseif', 7],
+            'Loops' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'Loops', 5],
+            'CatchIt' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'CatchIt', 3],
+            'Logical' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'Logical', 11],
         ];
     }
 
-    public function provideExamplesForMethods()
+    public static function provideExamplesForCcn()
     {
         return [
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'A', 3],
-            [ __DIR__.'/../../examples/cyclomatic1.php', 'B', 5],
+            'A' => [__DIR__ . '/../../examples/cyclomatic1.php', 'A', 8],
+            'B' => [__DIR__ . '/../../examples/cyclomatic1.php', 'B', 4],
+            'Foo\\C' => [__DIR__ . '/../../examples/cyclomatic_anon.php', 'Foo\\C', 1],
+            'SwitchCase' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'SwitchCase', 4],
+            'IfElseif' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'IfElseif', 7],
+            'Loops' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'Loops', 5],
+            'CatchIt' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'CatchIt', 3],
+            'Logical' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'Logical', 11],
         ];
     }
 
+    public static function provideExamplesForMaxCc()
+    {
+        return [
+            [__DIR__ . '/../../examples/cyclomatic1.php', 'A', 6],
+            [__DIR__ . '/../../examples/cyclomatic1.php', 'B', 4],
+        ];
+    }
 }

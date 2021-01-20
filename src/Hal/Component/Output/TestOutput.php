@@ -10,7 +10,6 @@
 namespace Hal\Component\Output;
 
 /**
- * Class CliOutput
  * @package Hal\Component\Issue
  */
 class TestOutput implements Output
@@ -52,4 +51,3 @@ class TestOutput implements Output
     {
     }
 }
-

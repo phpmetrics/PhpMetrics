@@ -2,7 +2,6 @@
 namespace Test\Hal\Metric\Class_\Coupling;
 
 use Hal\Metric\Class_\ClassEnumVisitor;
-use Hal\Metric\Class_\Complexity\McCabeVisitor;
 use Hal\Metric\Class_\Structural\SystemComplexityVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
@@ -12,10 +11,8 @@ use PhpParser\ParserFactory;
  * @group complexity
  * @group defect
  */
-class SystemComplexityVisitorTest extends \PHPUnit_Framework_TestCase
+class SystemComplexityVisitorTest extends \PHPUnit\Framework\TestCase
 {
-
-
     /**
      * @dataProvider provideExamples
      */
@@ -41,8 +38,7 @@ class SystemComplexityVisitorTest extends \PHPUnit_Framework_TestCase
     public function provideExamples()
     {
         return [
-            [ __DIR__.'/../../examples/systemcomplexity1.php', 'A', 2.5, 1.0, 3.5],
+            [ __DIR__ . '/../../examples/systemcomplexity1.php', 'A', 2.5, 1.0, 3.5],
         ];
     }
-
 }

@@ -1,25 +1,24 @@
 <?php
+namespace Test\Hal\Application\Config\File;
 
 use Hal\Application\Config\File\ConfigFileReaderInterface;
 
-class ConfigFileReaderTest extends \PHPUnit_Framework_TestCase
+/**
+ * @group config
+ */
+class ConfigFileReaderTest extends \PHPUnit\Framework\TestCase
 {
     public function testJsonConfigFile()
     {
-        $configs = [
-            __DIR__.'/examples/config.json',
-            __DIR__.'/examples/config.ini',
-        ];
+        $filename = __DIR__ . '/examples/config.json';
 
-        foreach ($configs as $filename) {
-            $config = new \Hal\Application\Config\Config();
+        $config = new \Hal\Application\Config\Config();
 
-            /** @var ConfigFileReaderInterface $reader */
-            $reader = \Hal\Application\Config\File\ConfigFileReaderFactory::createFromFileName($filename);
-            $reader->read($config);
+        /** @var ConfigFileReaderInterface $reader */
+        $reader = \Hal\Application\Config\File\ConfigFileReaderFactory::createFromFileName($filename);
+        $reader->read($config);
 
-            $this->assertEquals($this->getExpectedData(), $config->all());
-        }
+        $this->assertEquals($this->getExpectedData(), $config->all());
     }
 
     /**
@@ -28,8 +27,30 @@ class ConfigFileReaderTest extends \PHPUnit_Framework_TestCase
     private function getExpectedData()
     {
         return [
-            'exclude'     => 'test1',
-            'report-html' => 'test2',
+            'exclude' => 'tests',
+            'report-html' => __DIR__ . '/examples/tmp/report/',
+            'report-json' => '/tmp/report.json',
+            'report-csv' => '/tmp/report.csv',
+            'report-violations' => '/tmp/violations.xml',
+            'extensions' => 'php,php8',
+            'git' => 'git',
+            'files' => [
+                __DIR__ . '/examples/src/Hal/Component'
+            ],
+            'groups' => [
+                [
+                    "name" => "Controllers",
+                    "match" => "!component!i"
+                ],
+                [
+                    "name" => "Domain",
+                    "match"=> "!app!i"
+                ],
+                [
+                    "name" => "Models",
+                    "match" => "!app!i"
+                ]
+            ]
         ];
     }
 }

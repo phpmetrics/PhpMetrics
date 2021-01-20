@@ -20,7 +20,6 @@ class Coupling
      */
     public function calculate(Metrics $metrics)
     {
-
         // build a graph of relations
         $graph = new GraphDeduplicated();
 
@@ -54,7 +53,6 @@ class Coupling
 
             $node = $graph->get($metric->get('name'));
             foreach ($node->getEdges() as $edge) {
-
                 if ($edge->getTo()->getKey() == $node->getKey()) {
                     // affects
                     $afferent++;

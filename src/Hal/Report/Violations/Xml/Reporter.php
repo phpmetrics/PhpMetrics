@@ -3,7 +3,6 @@ namespace Hal\Report\Violations\Xml;
 
 use Hal\Application\Config\Config;
 use Hal\Component\Output\Output;
-use Hal\Metric\Consolided;
 use Hal\Metric\Metrics;
 use Hal\Violation\Violation;
 
@@ -21,7 +20,6 @@ class Reporter
     private $output;
 
     /**
-     * Reporter constructor.
      * @param Config $config
      * @param Output $output
      */
@@ -34,7 +32,6 @@ class Reporter
 
     public function generate(Metrics $metrics)
     {
-
         $logFile = $this->config->get('report-violations');
         if (!$logFile) {
             return;
@@ -57,7 +54,7 @@ class Reporter
 
         foreach ($metrics->all() as $metric) {
             $violations = $metric->get('violations');
-            if (sizeof($violations) == 0) {
+            if (count($violations) == 0) {
                 continue;
             }
 
@@ -69,7 +66,7 @@ class Reporter
                 $item->setAttribute('beginline', 1);
                 $item->setAttribute('rule', $violation->getName());
                 $item->setAttribute('ruleset', $violation->getName());
-                $item->setAttribute('externalInfoUrl', 'http://phpmetrics.org/documentation/index.html');
+                $item->setAttribute('externalInfoUrl', 'http://www.phpmetrics.org/documentation/index.html');
                 $item->setAttribute('priority', $map[$violation->getLevel()]);
                 $item->nodeValue = $violation->getDescription();
                 $node->appendChild($item);

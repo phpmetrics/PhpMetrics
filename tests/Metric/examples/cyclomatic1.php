@@ -13,6 +13,16 @@ class A {
     {
         if(true) {
 
+        } else {
+	        if (true) {
+
+	        } else if (true) {
+
+	        } elseif (true) {
+
+	        } elseif (true) {
+
+	        }
         }
     }
 
@@ -28,7 +38,7 @@ class B {
 
         }
 
-        foreach(array() as $foo) {
+        foreach([] as $foo) {
             if(false) {
                 continue;
             }

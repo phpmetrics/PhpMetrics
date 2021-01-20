@@ -12,7 +12,6 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Lack of cohesion of methods
  *
- * Class ExternalsVisitor
  * @package Hal\Metric\Class_\Coupling
  */
 class LcomVisitor extends NodeVisitorAbstract
@@ -24,7 +23,6 @@ class LcomVisitor extends NodeVisitorAbstract
     private $metrics;
 
     /**
-     * ClassEnumVisitor constructor.
      * @param Metrics $metrics
      */
     public function __construct(Metrics $metrics)
@@ -38,21 +36,18 @@ class LcomVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-
             // we build a graph of internal dependencies in class
             $graph = new GraphDeduplicated();
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
-
                     if (!$graph->has($stmt->name . '()')) {
                         $graph->insert(new TreeNode($stmt->name . '()'));
                     }
                     $from = $graph->get($stmt->name . '()');
 
                     \iterate_over_node($stmt, function ($node) use ($from, &$graph) {
-
                         if ($node instanceof Node\Expr\PropertyFetch && isset($node->var->name) && $node->var->name == 'this') {
                             $name = getNameOfNode($node);
                             // use of attribute $this->xxx;
@@ -63,7 +58,6 @@ class LcomVisitor extends NodeVisitorAbstract
                             $graph->addEdge($from, $to);
                             return;
                         }
-
 
                         if ($node instanceof Node\Expr\MethodCall) {
                             if (!$node->var instanceof Node\Expr\New_ && isset($node->var->name) && getNameOfNode($node->var) === 'this') {
@@ -78,7 +72,6 @@ class LcomVisitor extends NodeVisitorAbstract
                                 return;
                             }
                         }
-
                     });
                 }
             }

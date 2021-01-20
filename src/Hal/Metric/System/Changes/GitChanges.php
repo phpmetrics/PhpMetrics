@@ -21,7 +21,6 @@ class GitChanges
     private $config;
 
     /**
-     * GitChanges constructor.
      * @param array $files
      */
     public function __construct(Config $config, array $files)
@@ -36,7 +35,6 @@ class GitChanges
      */
     public function calculate(Metrics $metrics)
     {
-
         if (!$this->config->has('git')) {
             return;
         }
@@ -46,12 +44,12 @@ class GitChanges
             $bin = 'git';
         }
 
-        if (sizeof($this->files) == 0) {
+        if (count($this->files) == 0) {
             return;
         }
 
         $r = shell_exec(sprintf('%s --version', $bin));
-        if(!preg_match('!git version!', $r)) {
+        if (!preg_match('!git version!', $r)) {
             throw new ConfigException(sprintf('Git binary (%s) incorrect', $bin));
         }
 
@@ -66,7 +64,6 @@ class GitChanges
         );
         $r = shell_exec($command);
         $r = array_filter(explode(PHP_EOL, $r));
-
 
         // build a range of commits info, stepped by week number
         $history = [];
@@ -104,7 +101,7 @@ class GitChanges
                 list(, $timestamp, $author) = $matches;
                 $date = (new \DateTime())->setTimestamp($timestamp)->format($dateFormat);
 
-                if (is_null($firstCommitDate)) {
+                if ($firstCommitDate === null) {
                     $firstCommitDate = $timestamp;
                 }
 
@@ -113,7 +110,6 @@ class GitChanges
                     $authors[$author] = ['nbFiles' => 0, 'commits' => 0, 'additions' => 0, 'removes' => 0];
                 }
                 $authors[$author]['commits']++;
-
             } else {
                 if (preg_match('!(\d+)\s+(\d+)\s+(.*)!', $line, $matches)) {
                     // additions and changes for each file
@@ -160,7 +156,6 @@ class GitChanges
             }
             $current = strtotime('+7 day', $current);
         }
-
 
         // store results
         $result = new ProjectMetric('git');

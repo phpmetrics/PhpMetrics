@@ -1,3 +1,462 @@
+phpmetrics (2.7.2) unstable; urgency=low
+   * include by default the composer.json localized at the root dir 
+   * releasing v2.7.3 
+   * Create security.yml file 
+   * Bump php package required 
+   * Merge pull request #434 from Mte90/patch-1 
+   * Fix issue with charts in groups - Closes #429, Closes #433 
+   * Merge pull request #437 from phpmetrics/fix_issue_js 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Tue, 30 Jun 2020 22:31:52 +0200
+
+phpmetrics (2.7.1) unstable; urgency=low
+   * Fix path of reporter 
+   * releasing v2.7.2 
+   * include by default the composer.json localized at the root dir 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Sat, 27 Jun 2020 15:20:54 +0200
+
+phpmetrics (2.7.0) unstable; urgency=low
+   * Fixed colors of JSON file in markdown 
+   * Fixed markdown and hidden char 
+   * Fix #429, bug when generating html report. 
+   * Fix #431, only outdated packages will be reported 
+   * Merge pull request #430 from pts-contrib/bug-429 
+   * Merge pull request #432 from pts-contrib/bug-431 
+   * fix contribution typo 
+   * releasing v2.7.1 
+   * Fix path of reporter 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Sat, 27 Jun 2020 15:06:49 +0200
+
+phpmetrics (2.6.2) unstable; urgency=low
+   * New composer report and improved UI 
+   * Merge pull request #424 from phpmetrics/ui_composer 
+   * Group analyzed components by layer 
+   * Merge pull request #428 from phpmetrics/config_group 
+   * releasing v2.7.0 
+   * Fixed colors of JSON file in markdown 
+   * Fixed markdown and hidden char 
+   * Fix #429, bug when generating html report. 
+   * Fix #431, only outdated packages will be reported 
+   * Merge pull request #430 from pts-contrib/bug-429 
+   * Merge pull request #432 from pts-contrib/bug-431 
+   * fix contribution typo 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Sat, 27 Jun 2020 14:56:42 +0200
+
+phpmetrics (2.6.1) unstable; urgency=low
+   * Improved UI with help and gradients 
+   * Merge pull request #421 from phpmetrics/improved_ui 
+   * releasing v2.6.2 
+   * New composer report and improved UI 
+   * Merge pull request #424 from phpmetrics/ui_composer 
+   * Group analyzed components by layer 
+   * Merge pull request #428 from phpmetrics/config_group 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Fri, 26 Jun 2020 22:22:02 +0200
+
+phpmetrics (2.6.0) unstable; urgency=low
+   * Force GPG key for relasing 
+   * Improved page rank report, and UI #416 
+   * Merge pull request #420 from phpmetrics/416_improved_pagerank 
+   * Improved UI with help and gradients 
+   * hot fixing phar 
+   * Merge pull request #422 from phpmetrics/hf_phar 
+   * Remove not useful constant 
+   * Merge pull request #423 from phpmetrics/improved_code 
+   * releasing v2.6.1 
+   * Merge pull request #421 from phpmetrics/improved_ui 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Thu, 02 Apr 2020 22:21:45 +0200
+
+phpmetrics (2.5.0) unstable; urgency=low
+   * Documented how to release (#392) 
+   * Added editor config file (#393) 
+   * Updated changelog (#394) 
+   * improve docblocks 
+   * Added more codesniffer rules 
+   * Merge pull request #396 from phpmetrics/add-more-phpcs-rules 
+   * Merge pull request #395 from phpmetrics/docblock-improvements 
+   * Way to download report 
+   * Merge pull request #399 from phpmetrics/download_chart 
+   * Exclude doc and artifacts from phar 
+   * Explicitly define the class \Hal\Component\Ast\NodeTraverser to make PhpMetrics work using composer --classmap-authoritative. (#402) 
+   * Merge pull request #400 from phpmetrics/exclude-phar-files 
+   * Resolve PHP7 getters / setters (#405) 
+   * Ensure the packagist license is an array so they can be displayed. (#404) 
+   * Fix warning "Division by zero" when no package is defined. (#401) 
+   * move templates out of src 
+   * Remove folders from phpcs 
+   * Merge pull request #406 from phpmetrics/move-templates-out 
+   * Provide new issue template format. 
+   * Added Slack link (#411) 
+   * Provide configuration option "--maintainability-index-without-comments". 
+   * Remove command line and always provide metrics MI without comments additionnaly from MI. Add a carousel in the main HTML report page to display both graph at the same time. 
+   * Move new files for carousel inside new template folder after rebasing from master. 
+   * Fix bug with dots in the carousel + add titles on dots for accessibility. 
+   * add metrics description file 
+   * Merge pull request #408 from phpmetrics/new-issue-tpl 
+   * Merge pull request #412 from repzy/metrics-file 
+   * Merge pull request #407 from phpmetrics/issue-325-provide-miwoc 
+   * fix releasing script 
+   * releasing v2.6.0 
+   * Force GPG key for relasing 
+   * Improved page rank report, and UI #416 
+   * Merge pull request #420 from phpmetrics/416_improved_pagerank 
+   * hot fixing phar 
+   * Merge pull request #422 from phpmetrics/hf_phar 
+   * Remove not useful constant 
+   * Merge pull request #423 from phpmetrics/improved_code 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Thu, 02 Apr 2020 21:54:40 +0200
+
+phpmetrics (2.4.1) unstable; urgency=low
+   * Test on PHP 7.3 
+   * Don't leave notice when array is small 
+   * Add final to class metric 
+   * Update ClassEnumVisitor.php 
+   * Merge pull request #371 from lencse/php73 
+   * Fix issue#380. Typo in Blob report 
+   * Merge pull request #385 from phpmetrics/issue#380 
+   * Added sort package config to composer 
+   * Merge pull request #388 from phpmetrics/sort-packages 
+   * Include codesniffer. Remove alias function and short array syntax (#387) 
+   * Remove superfluous docblocks that are adding no value (#390) 
+   * Skip `self` and `parent` from external dependencies (#1) (#370) 
+   * Trying to fix deprecation of PSR-0 (issue#382) (#384) 
+   * file_exists > is_file (#366) 
+   * Apply PSR-2 codestyle (#389) 
+   * Update phpunit to use highest version possible (#391) 
+   * Merge pull request #375 from gmponos/patch-1 
+   * Merge pull request #372 from lencse/loc-report 
+   * Test against PHP 7.4 (#383) 
+   * releasing 
+   * releasing v2.4.1 
+   * Update contributing.md 
+   * update readme file 
+   * Merge branch 'master' of github.com:phpmetrics/PhpMetrics 
+   * Fixed binary tests 
+   * releasing v2.5.0 
+   * Documented how to release (#392) 
+   * Added editor config file (#393) 
+   * Updated changelog (#394) 
+   * improve docblocks 
+   * Added more codesniffer rules 
+   * Merge pull request #396 from phpmetrics/add-more-phpcs-rules 
+   * Merge pull request #395 from phpmetrics/docblock-improvements 
+   * Way to download report 
+   * Merge pull request #399 from phpmetrics/download_chart 
+   * Exclude doc and artifacts from phar 
+   * Explicitly define the class \Hal\Component\Ast\NodeTraverser to make PhpMetrics work using composer --classmap-authoritative. (#402) 
+   * Merge pull request #400 from phpmetrics/exclude-phar-files 
+   * Resolve PHP7 getters / setters (#405) 
+   * Ensure the packagist license is an array so they can be displayed. (#404) 
+   * Fix warning "Division by zero" when no package is defined. (#401) 
+   * move templates out of src 
+   * Remove folders from phpcs 
+   * Merge pull request #406 from phpmetrics/move-templates-out 
+   * Provide new issue template format. 
+   * Added Slack link (#411) 
+   * Provide configuration option "--maintainability-index-without-comments". 
+   * Remove command line and always provide metrics MI without comments additionnaly from MI. Add a carousel in the main HTML report page to display both graph at the same time. 
+   * Move new files for carousel inside new template folder after rebasing from master. 
+   * Fix bug with dots in the carousel + add titles on dots for accessibility. 
+   * add metrics description file 
+   * Merge pull request #408 from phpmetrics/new-issue-tpl 
+   * Merge pull request #412 from repzy/metrics-file 
+   * Merge pull request #407 from phpmetrics/issue-325-provide-miwoc 
+   * fix releasing script 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Sat, 28 Mar 2020 14:29:40 +0100
+
+phpmetrics (2.4.0) unstable; urgency=low
+   * Fix template type 
+   * Verify errors in php<7 
+   * Use class_alias to load php5 or php7 code 
+   * Merge pull request #361 from UFOMelkor/hotfix/360-php56 
+   * Retain the old ccn and add wmc as new metric 
+   * Merge pull request #362 from UFOMelkor/hotfix/remain-ccn 
+   * releasing v2.4.1 
+   * Test on PHP 7.3 
+   * Don't leave notice when array is small 
+   * Add final to class metric 
+   * Update ClassEnumVisitor.php 
+   * Merge pull request #371 from lencse/php73 
+   * Fix issue#380. Typo in Blob report 
+   * Merge pull request #385 from phpmetrics/issue#380 
+   * Added sort package config to composer 
+   * Merge pull request #388 from phpmetrics/sort-packages 
+   * Include codesniffer. Remove alias function and short array syntax (#387) 
+   * Remove superfluous docblocks that are adding no value (#390) 
+   * Skip `self` and `parent` from external dependencies (#1) (#370) 
+   * Trying to fix deprecation of PSR-0 (issue#382) (#384) 
+   * file_exists > is_file (#366) 
+   * Apply PSR-2 codestyle (#389) 
+   * Update phpunit to use highest version possible (#391) 
+   * Merge pull request #375 from gmponos/patch-1 
+   * Merge pull request #372 from lencse/loc-report 
+   * Test against PHP 7.4 (#383) 
+   * releasing 
+   * releasing v2.4.1 
+   * Update contributing.md 
+   * update readme file 
+   * Merge branch 'master' of github.com:phpmetrics/PhpMetrics 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Thu, 12 Dec 2019 09:01:35 +0100
+
+phpmetrics (2.0.0-rc) unstable; urgency=low
+   * way to get infos about unexpected bugs 
+   * Don't trigger the issuer on suppressed errors 
+   * Merge pull request #246 from UFOMelkor/hotfix/240 
+   * issuer logs are stored in file instead of stdout 
+   * analyze does not break in case of error 
+   * added tests about namespace resolution in externals 
+   * major issue with traverser 
+   * Way to get metric about Unit tests of project 
+   * added JUnit HTML report file 
+   * added icon for junit report 
+   * changed status code for --help and --version option 
+   * added a way to get latest results directly in json 
+   * released new phar 
+   * moved directory of releases in order to prevserve v1 compatibility 
+   * forced version of phar 
+   * preparing v2 
+   * php7 is now the main version for building artifacts 
+   * updated ci 
+   * releasing v2.0.0 
+   * Fix undefined MaintainabilityIndex on interfaces. 
+   * Run on Trusty Beta Container 
+   * Disable JIT compilation in hhvm, as the JIT is useless for short live scripts like tests. 
+   * Fixed typo 
+   * improved unit testing report 
+   * removed symfony/console component 
+   * force phpunit version to <v6.0 
+   * expose ClassEnumVisitor failure with anonymous class 
+   * now junit parser uses DomDocument. Fixed codeception junit files parsing 
+   * dropped support of PHP 5.4 
+   * improved UI 
+   * fixed link of html report page 
+   * changed colors of Junit report graph 
+   * dropped support of hhvm-nighly 
+   * lot of minors changes in UI 
+   * Merge branch 'master' of https://github.com/marcosh/PhpMetrics into marcosh-master 
+   * way to disable issuer 
+   * fixes #266 - notice while parsing of anonymous classes 
+   * Merge branch 'marcosh-master' 
+   * Merge pull request #265 from Vincentv92/master 
+   * Spelling fixes and removing some extra whitespace 
+   * Merge branch 'fix-undefined-mi-on-interfaces' of https://github.com/niconoe-/PhpMetrics into niconoe--fix-undefined-mi-on-interfaces 
+   * Merge branch 'niconoe--fix-undefined-mi-on-interfaces' 
+   * added calculation for max cyclomatic complexity for method in class 
+   * added tests for #238 
+   * resolving conflict 
+   * Merge branch 'improve-travis-ci' 
+   * updated documentation about PATH envvar and composer gloab require 
+   * fixed typos (whitespaces) in readme 
+   * released v2.1.0 
+   * Merge pull request #272 from kazimierasbutkus/master 
+   * Fix version number. 
+   * Merge pull request #275 from mageekguy/patch-1 
+   * fixes #276 issue whith OutputInterface 
+   * added Composer analysis 
+   * fixed warning with undeclared variable 
+   * minimal support of mobile in HTML report 
+   * fixed issue with composer report : only one composer.json was considered 
+   * simplified and splitted documentation 
+   * fixed typos in README with blank spaces 
+   * fixed link of image in documentation 
+   * added link to spdx license in composer report 
+   * fixed responsive typos 
+   * documentation about releasing 
+   * releasing v2.2.0 
+   * Fix twitter link 
+   * Adjust PHPDoc types 
+   * Fix name resolving of anonymous classes 
+   * Allow // in text without counting it as comment 
+   * Fixed typo in description 
+   * Update style.css 
+   * updated pmd priority levels 
+   * Added changelog 
+   * typo fix 
+   * added links to changelog 
+   * changed markdown to match keep-a-changelog 
+   * added links to footer 
+   * Change heading for LOC graph. 
+   * add preg_quote around dir 
+   * Merge pull request #278 from UFOMelkor/typo/twitter-link 
+   * Merge pull request #281 from UFOMelkor/hotfix/280 
+   * Merge pull request #282 from UFOMelkor/hotfix/273 
+   * Merge pull request #285 from j92/fix_typo 
+   * Merge pull request #287 from rafaelign/master 
+   * Merge pull request #290 from bangpound/patch-1 
+   * Merge pull request #293 from paolomainardi/feature/fix-preg-quoting 
+   * Fix for #280 (anonymous classes support for PHP 7.1) 
+   * Added a newline to the end of a test file 
+   * Merge pull request #299 from FractalizeR-Forks/fix-anonymous-classes-in-php-7.1 
+   * fix: disabled deb artifact 
+   * fix: disabled deb artifact in travis 
+   * way to know parents 
+   * way to get information about depth and childs of node in a tree 
+   * way to get average height of branches in graph 
+   * way to know the Depth of inheritance tree 
+   * way to get the list of metrics 
+   * added CSV report 
+   * added json report 
+   * fixed style 
+   * added the key --report-json to validator 
+   * Merge pull request #301 from phpmetrics/feature/reports 
+   * Adding support for configuration files to read settings from 
+   * Add installed package column when composer.lock file is found. 
+   * Preventing duplicate edges from appearing in a graph using Deduplicated graph class. Fixes #291. 
+   * Add export-ignore option to reduce the archive size of composer downloading. 
+   * Add dockerfile in project to use the latest phar. 
+   * Merge pull request #303 from FractalizeR-Forks/configuration-file-support 
+   * Merge pull request #305 from phpmetrics/fix-284 
+   * Merge pull request #306 from phpmetrics/ignore-export-composer-installation 
+   * Merge pull request #304 from FractalizeR-Forks/avoid_duplicate_edges_in_graph 
+   * Add Traits in parsing through all visitors. 
+   * Fix #286: Missing files in the phar build due to bad regexp filter. 
+   * Fix bad preg_quote usage that fails the regexp and so, fails the Finder. 
+   * Merge pull request #310 from phpmetrics/fix-286 
+   * Add unit tests to check the bugfix about finder. 
+   * Merge pull request #311 from phpmetrics/fix-bad-regexp-finder 
+   * Merge pull request #307 from phpmetrics/fix-244 
+   * Merge pull request #279 from UFOMelkor/docs/phpdoc 
+   * Embed dependent files so generated reports can be used offline 
+   * Fix bad output in the junit report. 
+   * Dropped the changelog 
+   * Merge pull request #312 from phpmetrics/fix-263 
+   * Merge pull request #309 from phpmetrics/fix-308 
+   * Merge pull request #302 from dennisdegreef/localFilesOnly 
+   * Merge pull request #288 from krukru/pmd-priority-rewrite 
+   * Fix makefiles about releasing a new version. 
+   * Fix bad carridge return when displaying the version. 
+   * Merge pull request #313 from phpmetrics/fix-release 
+   * releasing v2.3.0 
+   * Fix missing escapeshellarg on git command arguments to avoid security and access troubles. 
+   * Fix #317: Only consolidate class metrics that groups Classes and Traits to calculate sums and averages. 
+   * Merge pull request #316 from phpmetrics/fix-315 
+   * Merge pull request #318 from phpmetrics/fix-317 
+   * releasing v2.3.1 
+   * HotFix #317: Bad assignement on item classmetrics. 
+   * Merge pull request #319 from phpmetrics/hotfix-classmetric 
+   * releasing v2.3.2 
+   * Adds www. in URLs phpmetrics.org 
+   * Add package metrics 
+   * Add package violation and some charts 
+   * Ignore traits for now 
+   * Test package metrics 
+   * Add cli output 
+   * Use assertCount 
+   * Test against PHP 7.2 
+   * Merge pull request #333 from carusogabriel/assert-count 
+   * Merge pull request #334 from carusogabriel/patch-1 
+   * Handle traits like classes 
+   * Add Stable Abstractions Principle 
+   * Detect getters and setters with types 
+   * Improve composer package version comparison 
+   * Rename method - typo 
+   * Round percentiles on X-axis to prevent roundoff error 
+   * Add else and elseif statements to the cyclomatic complexity test 
+   * Fix bug that caused cyclomatic complexity to be underreported 
+   * Merge pull request #336 from UFOMelkor/hotfix/335-role-detection-with-php7 
+   * Support nikic/php-parser:^4 
+   * Switch node traverser depending on php version 
+   * Merge pull request #337 from juliendufresne/master 
+   * Merge pull request #283 from UFOMelkor/feature/package-metrics 
+   * Add changelog 
+   * Filter identifiers to simplify php-parser:^4 compatibility 
+   * Do not crash using php-parser:^4 
+   * Add Support for Stmt\Expression 
+   * Merge pull request #339 from ssfinney/fixRoundingOnLocReport 
+   * Merge pull request #344 from fabianbadoi/fix-343 
+   * Remove php 7 code 
+   * Change the calculation of cyclomatic complexity 
+   * Verify that traits are abstract 
+   * Force traits to be abstract 
+   * Merge pull request #354 from UFOMelkor/hotfix/351 
+   * fix for repeating bloc-ids 
+   * Finalize cyclomatic complexity changes 
+   * Test against lowest and highest dependencies 
+   * Raise version of sebastian/comparator to at least 1.2.3 
+   * Merge pull request #356 from dumith-eranga/fix/report-html-violation-bloc-toggle 
+   * Fix phpdoc argument types not matching actual types 
+   * Fix issue where phpmetrics would not find any files 
+   * Add test for current path exclusion 
+   * Merge pull request #321 from ottaviano/fix-url-phpmetrics.org 
+   * Merge pull request #353 from UFOMelkor/metric/ccn 
+   * Merge pull request #347 from UFOMelkor/feature/345-php-parser-4 
+   * Do not iterate over ->expr twice 
+   * Merge pull request #357 from UFOMelkor/hotfix/ccn 
+   * Adjust cc violation limits 
+   * Merge pull request #358 from UFOMelkor/feature/cc-violation-adjustments 
+   * releasing 2.4.0 
+   * Fix template type 
+   * Verify errors in php<7 
+   * Use class_alias to load php5 or php7 code 
+   * Merge pull request #361 from UFOMelkor/hotfix/360-php56 
+   * Retain the old ccn and add wmc as new metric 
+   * Merge pull request #362 from UFOMelkor/hotfix/remain-ccn 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Tue, 10 Jul 2018 19:17:23 +0200
+
+phpmetrics (2.4.0) unstable; urgency=low
+   * HotFix #317: Bad assignement on item classmetrics.
+   * Merge pull request #319 from phpmetrics/hotfix-classmetric
+   * releasing v2.3.2
+   * Adds www. in URLs phpmetrics.org
+   * Add package metrics
+   * Add package violation and some charts
+   * Ignore traits for now
+   * Test package metrics
+   * Add cli output
+   * Use assertCount
+   * Test against PHP 7.2
+   * Merge pull request #333 from carusogabriel/assert-count
+   * Merge pull request #334 from carusogabriel/patch-1
+   * Handle traits like classes
+   * Add Stable Abstractions Principle
+   * Detect getters and setters with types
+   * Improve composer package version comparison
+   * Rename method - typo
+   * Round percentiles on X-axis to prevent roundoff error
+   * Add else and elseif statements to the cyclomatic complexity test
+   * Fix bug that caused cyclomatic complexity to be underreported
+   * Merge pull request #336 from UFOMelkor/hotfix/335-role-detection-with-php7
+   * Support nikic/php-parser:^4
+   * Switch node traverser depending on php version
+   * Merge pull request #337 from juliendufresne/master
+   * Merge pull request #283 from UFOMelkor/feature/package-metrics
+   * Add changelog
+   * Filter identifiers to simplify php-parser:^4 compatibility
+   * Do not crash using php-parser:^4
+   * Add Support for Stmt\Expression
+   * Merge pull request #339 from ssfinney/fixRoundingOnLocReport
+   * Merge pull request #344 from fabianbadoi/fix-343
+   * Remove php 7 code
+   * Change the calculation of cyclomatic complexity
+   * Verify that traits are abstract
+   * Force traits to be abstract
+   * Merge pull request #354 from UFOMelkor/hotfix/351
+   * fix for repeating bloc-ids
+   * Finalize cyclomatic complexity changes
+   * Test against lowest and highest dependencies
+   * Raise version of sebastian/comparator to at least 1.2.3
+   * Merge pull request #356 from dumith-eranga/fix/report-html-violation-bloc-toggle
+   * Fix phpdoc argument types not matching actual types
+   * Fix issue where phpmetrics would not find any files
+   * Add test for current path exclusion
+   * Merge pull request #321 from ottaviano/fix-url-phpmetrics.org
+   * Merge pull request #353 from UFOMelkor/metric/ccn
+   * Merge pull request #347 from UFOMelkor/feature/345-php-parser-4
+   * Do not iterate over ->expr twice
+   * Merge pull request #357 from UFOMelkor/hotfix/ccn
+   * Adjust cc violation limits
+   * Merge pull request #358 from UFOMelkor/feature/cc-violation-adjustments
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Mon, 09 Jul 2018 14:22:08 +0200
+
 phpmetrics (2.3.0) unstable; urgency=low
    * Fix missing escapeshellarg on git command arguments to avoid security and access troubles. 
    * Fix #317: Only consolidate class metrics that groups Classes and Traits to calculate sums and averages. 
@@ -372,6 +831,28 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

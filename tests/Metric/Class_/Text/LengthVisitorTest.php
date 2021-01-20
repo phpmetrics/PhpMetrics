@@ -10,9 +10,8 @@ use PhpParser\ParserFactory;
  * @group loc
  * @group metric
  */
-class LengthVisitorTest extends \PHPUnit_Framework_TestCase {
-
-
+class LengthVisitorTest extends \PHPUnit\Framework\TestCase
+{
     /**
      * @dataProvider provideExamples
      */
@@ -30,7 +29,6 @@ class LengthVisitorTest extends \PHPUnit_Framework_TestCase {
         $stmts = $parser->parse($code);
         $traverser->traverse($stmts);
 
-
         $this->assertEquals($lloc, $metrics->get($functionName)->get('lloc'));
         $this->assertEquals($cloc, $metrics->get($functionName)->get('cloc'));
         $this->assertEquals($loc, $metrics->get($functionName)->get('loc'));
@@ -39,8 +37,7 @@ class LengthVisitorTest extends \PHPUnit_Framework_TestCase {
     public function provideExamples()
     {
         return [
-            [ __DIR__.'/../../examples/loc1.php', 'A', 21, 13, 8],
+            [ __DIR__ . '/../../examples/loc1.php', 'A', 21, 13, 8],
         ];
     }
-
 }

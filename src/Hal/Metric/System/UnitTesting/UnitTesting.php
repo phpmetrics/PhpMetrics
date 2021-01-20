@@ -24,7 +24,6 @@ class UnitTesting
     private $config;
 
     /**
-     * GitChanges constructor.
      * @param array $files
      */
     public function __construct(Config $config, array $files)
@@ -39,7 +38,6 @@ class UnitTesting
      */
     public function calculate(Metrics $metrics)
     {
-
         if (!$this->config->has('junit')) {
             return;
         }
@@ -68,7 +66,6 @@ class UnitTesting
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->load($filename);
         $xpath = new \DOMXpath($dom);
-
 
         // JUNIT format
         foreach ($xpath->query('//testsuite[@file]') as $suite) {
@@ -137,7 +134,7 @@ class UnitTesting
 
             // global stats for each test
             $infoAboutTests[$suite->name] = (object)[
-                'nbExternals' => sizeof(array_unique($externals)),
+                'nbExternals' => count(array_unique($externals)),
                 'externals' => array_unique($externals),
                 'filename' => $suite->file,
                 'classname' => $suite->name,
@@ -148,7 +145,6 @@ class UnitTesting
             $assertions += $suite->assertions;
 
             foreach ($externals as $external) {
-
                 // search for this external in metrics
                 if (!$metrics->has($external)) {
                     continue;
@@ -177,7 +173,7 @@ class UnitTesting
 
         $projectMetric->set('assertions', $assertions);
         $projectMetric->set('tests', $infoAboutTests);
-        $projectMetric->set('nbSuites', sizeof($testsuites));
+        $projectMetric->set('nbSuites', count($testsuites));
         $projectMetric->set('nbCoveredClasses', $nb);
         $projectMetric->set('percentCoveredClasses', round($nb / max($sum, 1) * 100, 2));
         $projectMetric->set('nbUncoveredClasses', $sum - $nb);

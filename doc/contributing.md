@@ -9,18 +9,27 @@ Then, in order to run the test suite:
 
     ./vendor/bin/phpunit
 
-Thanks for your help !
+Thanks for your help.
 
-## Releasing
+## Releasing
 
 Please NEVER tag manually.
 
-First, changes sources according new tag:
+### Requirements
 
-    make tag <VERSION>
++ You will need to install `semver`
+
+    gem install semver
     
-version can be `major`, `minor` or `patch`
++ Please disable `phar.readonly` in your `php.ini` file
+  
+### Usage
 
-Then create release and Git tag with
+Git must configure a GPG key on your Github account to verify commits.
 
+These commands will create phar, debian and binary release, 
+then run all tests and push new release to Github :
+
+    make tag VERSION=<VERSION>
+    # <VERSION> can be `major`, `minor` or `patch`
     make release

@@ -16,6 +16,11 @@ use Hal\Metric\Class_\Structural\SystemComplexityVisitor;
 use Hal\Metric\Class_\Text\HalsteadVisitor;
 use Hal\Metric\Class_\Text\LengthVisitor;
 use Hal\Metric\Metrics;
+use Hal\Metric\Package\PackageAbstraction;
+use Hal\Metric\Package\PackageCollectingVisitor;
+use Hal\Metric\Package\PackageDependencies;
+use Hal\Metric\Package\PackageDistance;
+use Hal\Metric\Package\PackageInstability;
 use Hal\Metric\System\Changes\GitChanges;
 use Hal\Metric\System\Coupling\Coupling;
 use Hal\Metric\System\Coupling\DepthOfInheritanceTree;
@@ -25,9 +30,7 @@ use Hal\Metric\System\UnitTesting\UnitTesting;
 use PhpParser\Error;
 use PhpParser\ParserFactory;
 
-
 /**
- * Class Analyze
  * @package Hal\Application
  */
 class Analyze
@@ -49,7 +52,6 @@ class Analyze
     private $issuer;
 
     /**
-     * Analyze constructor.
      * @param Output $output
      */
     public function __construct(Config $config, Output $output, Issuer $issuer)
@@ -70,7 +72,7 @@ class Analyze
         $metrics = new Metrics();
 
         // traverse all
-        $whenToStop = function() {
+        $whenToStop = function () {
             return true;
         };
 
@@ -88,9 +90,10 @@ class Analyze
         $traverser->addVisitor(new MaintainabilityIndexVisitor($metrics));
         $traverser->addVisitor(new KanDefectVisitor($metrics));
         $traverser->addVisitor(new SystemComplexityVisitor($metrics));
+        $traverser->addVisitor(new PackageCollectingVisitor($metrics));
 
         // create a new progress bar (50 units)
-        $progress = new ProgressBar($this->output, sizeof($files));
+        $progress = new ProgressBar($this->output, count($files));
         $progress->start();
 
         foreach ($files as $file) {
@@ -119,6 +122,13 @@ class Analyze
         (new DepthOfInheritanceTree())->calculate($metrics);
 
         //
+        // Package analyses
+        (new PackageDependencies())->calculate($metrics);
+        (new PackageAbstraction())->calculate($metrics);
+        (new PackageInstability())->calculate($metrics);
+        (new PackageDistance())->calculate($metrics);
+
+        //
         // File analyses
         (new GitChanges($this->config, $files))->calculate($metrics);
 
@@ -126,8 +136,11 @@ class Analyze
         // Unit test
         (new UnitTesting($this->config, $files))->calculate($metrics);
 
+        $this->output->clearln();
+
         //
         // Composer
+        $this->output->write('Executing composer analyzes, requesting https://packagist.org...');
         (new Composer($this->config, $files))->calculate($metrics);
 
         $this->output->clearln();
