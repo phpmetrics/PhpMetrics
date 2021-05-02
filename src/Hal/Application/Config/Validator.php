@@ -48,7 +48,7 @@ class Validator
         }
         $groupsRaw = $config->get('groups');
 
-        $groups = array_map(static function (array $groupRaw): Group {
+        $groups = array_map(static function (array $groupRaw) {
             return new Group($groupRaw['name'], $groupRaw['match']);
         }, $groupsRaw);
         $config->set('groups', $groups);
