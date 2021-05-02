@@ -102,7 +102,10 @@ class Composer
 
         // Find composer.lock file
         $finder = new Finder(['lock'], $this->config->get('exclude'));
-        $files = $finder->fetch($this->config->get('files'));
+
+        // include root dir by default
+        $files = array_merge($this->config->get('files'), ['./']);
+        $files = $finder->fetch($files);
 
         // List all composer.lock found in the project.
         foreach ($files as $filename) {
