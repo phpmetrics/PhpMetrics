@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/roboto.css">
     <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/normalize.css">
     <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/material-icons.css">
-    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/graph-carousel.css">
 </head>
 <body>
 
