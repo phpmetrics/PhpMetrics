@@ -33,6 +33,7 @@ class ConfigFileReaderTest extends \PHPUnit\Framework\TestCase
             'report-violations' => '/tmp/violations.xml',
             'extensions' => 'php,php8',
             'git' => 'git',
+            'junit' => '/tmp/junit.xml',
             'files' => [
                 __DIR__ . '/examples/src/Hal/Component'
             ],
