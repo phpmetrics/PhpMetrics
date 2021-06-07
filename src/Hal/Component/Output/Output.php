@@ -36,4 +36,11 @@ interface Output
      * @return $this
      */
     public function clearln();
+
+    /**
+     * Detects ANSI support
+     *
+     * @return bool
+     */
+    public function hasAnsi();
 }
