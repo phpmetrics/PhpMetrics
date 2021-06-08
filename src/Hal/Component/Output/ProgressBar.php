@@ -55,7 +55,7 @@ class ProgressBar
     {
         $this->current++;
 
-        if ($this->hasAnsi()) {
+        if ($this->output->hasAnsi()) {
             $percent = round($this->current / $this->max * 100);
             $this->output->write("\x0D");
             $this->output->write("\x1B[2K");
@@ -70,31 +70,10 @@ class ProgressBar
      */
     public function clear()
     {
-        if ($this->hasAnsi()) {
+        if ($this->output->hasAnsi()) {
             $this->output->write("\x0D");
             $this->output->write("\x1B[2K");
             $this->output->clearln();
         }
-    }
-
-    /**
-     * Detects ANSI support
-     *
-     * @return bool
-     */
-    protected function hasAnsi()
-    {
-        if (DIRECTORY_SEPARATOR === '\\') {
-            return
-                0 >= version_compare(
-                    '10.0.10586',
-                    PHP_WINDOWS_VERSION_MAJOR . '.' . PHP_WINDOWS_VERSION_MINOR . '.' . PHP_WINDOWS_VERSION_BUILD
-                )
-                || false !== getenv('ANSICON')
-                || 'ON' === getenv('ConEmuANSI')
-                || 'xterm' === getenv('TERM');
-        }
-
-        return function_exists('posix_isatty') && @posix_isatty($this->stream);
     }
 }

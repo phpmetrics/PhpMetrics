@@ -50,4 +50,12 @@ class TestOutput implements Output
     public function clearln()
     {
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function hasAnsi()
+    {
+        return false;
+    }
 }
