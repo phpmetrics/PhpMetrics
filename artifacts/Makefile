@@ -12,5 +12,5 @@ prepare-build:
 	@# Only remove the phar that must be replaced by the new release.
 	@rm -f ${BUILD_DIR}/phpmetrics.phar
 
-build: prepare-build build-phar #build-deb
+build: prepare-build build-phar build-deb
 
