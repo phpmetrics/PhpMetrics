@@ -77,7 +77,7 @@ if (count($lcom) > 0) {
                             <td><span class="path"><?php echo $class['name']; ?></span></td>
                             <?php foreach (['lcom', 'volume', 'ccn', 'ccnMethodMax', 'bugs', 'difficulty'] as $attribute) {?>
                                 <td>
-                                    <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>);">
+                                    <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>>
                                     <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
                                     </span>
                                 </td>

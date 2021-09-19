@@ -57,7 +57,7 @@ if(count($array) > 1) {
                         <td><span class="path"><?php echo $class['name']; ?></span></td>
                         <?php foreach (['lloc', 'cloc', 'volume', 'intelligentContent', 'commentWeight'] as $attribute) {?>
                             <td>
-                                <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>);">
+                                <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>>
                                 <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
                                 </span>
                             </td>
