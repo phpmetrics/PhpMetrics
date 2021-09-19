@@ -59,13 +59,14 @@ require __DIR__ . '/_header.php'; ?>
                         <th class="js-sort-number">WMC</th>
                         <th class="js-sort-number">Class cycl.</th>
                         <th class="js-sort-number">Max method cycl.</th>
+                        <th class="js-sort-number">Relative system complexity</th>
                         <th class="js-sort-number">Relative data complexity</th>
                         <th class="js-sort-number">Relative structural complexity</th>
                         <th class="js-sort-number">Bugs</th>
                         <th class="js-sort-number">Defects</th>
                         <?php if ($config->has('junit')) { ?>
                             <th class="js-sort-number">Unit testsuites calling it</th>
-                        <?php } ?><th class="js-sort-number">Relative system complexity</th>
+                        <?php } ?>
                     </tr>
                     </thead>
                     <?php
