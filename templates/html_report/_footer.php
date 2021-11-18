@@ -183,7 +183,6 @@
 <script type="text/javascript" src="<?php echo $this->assetPath; ?>js/d3.hexbin.v0.js"></script>
 <script type="text/javascript" src="<?php echo $this->assetPath; ?>js/sort-table.min.js"></script>
 <script type="text/javascript" src="<?php echo $this->assetPath; ?>js/graph-maintainability.js"></script>
-<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/graph-carousel.js"></script>
 <script type="text/javascript" src="<?php echo $this->assetPath; ?>js/graph-licenses.js"></script>
 <script type="text/javascript" src="<?php echo $this->assetPath; ?>js/FileSaver.min.js"></script>
 

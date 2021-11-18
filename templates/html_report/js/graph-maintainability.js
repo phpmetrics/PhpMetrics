@@ -1,13 +1,22 @@
-function chartMaintainability(withoutComment)
-{
-    var chartId = withoutComment ? 'svg-maintainability-without-comments' : 'svg-maintainability';
-
+function chartMaintainability(withoutComment) {
+    var chartId = 'svg-maintainability';
+    withoutComment = typeof (withoutComment) !== 'undefined' ? withoutComment : false;
     var diameter = document.getElementById(chartId).offsetWidth;
 
     var json = {
         name: 'chart',
         children: classes
     };
+
+    // if already loaded, removed previous node
+    var previous = d3.select('#' + chartId).select('svg');
+    if (previous) {
+        previous.remove();
+    }
+    previous = d3.select('#' + chartId).select('button');
+    if (previous) {
+        previous.remove();
+    }
 
     var svg = d3.select('#' + chartId).append('svg')
         .attr('width', diameter)
@@ -91,13 +100,25 @@ function chartMaintainability(withoutComment)
     // button for saving image
     var button = d3.select('#' + chartId).append('button');
     button
-      .classed('btn-save-image', true)
-      .text('download')
-      .on('click', function () {
-        var svg = d3.select('#' + chartId + ' svg')[0][0];
-        var nameImage = (withoutComment)
-            ? 'PhpMetrics maintainability without comments / complexity'
-            : 'PhpMetrics maintainability / complexity';
-        saveSvgAsImage(svg, nameImage, 1900, 1900);
-      });
+        .classed('btn-save-image', true)
+        .text('download')
+        .on('click', function () {
+            var svg = d3.select('#' + chartId + ' svg')[0][0];
+            var nameImage = (withoutComment)
+                ? 'PhpMetrics maintainability without comments / complexity'
+                : 'PhpMetrics maintainability / complexity';
+            saveSvgAsImage(svg, nameImage, 1900, 1900);
+        });
+}
+
+function toggleChartMaintainability(item) {
+    if (item.getAttribute('data-current') === 'with-comments') {
+        item.setAttribute('data-current', 'without-comments');
+        item.innerHTML = '(without comments)';
+    } else {
+        item.setAttribute('data-current', 'with-comments');
+        item.innerHTML = '(with comments)';
+    }
+
+    chartMaintainability(item.getAttribute('data-current') !== 'with-comments')
 }

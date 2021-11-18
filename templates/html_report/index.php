@@ -91,23 +91,16 @@ require __DIR__ . '/_header.php'; ?>
                 <div class="column column-help-inner">
                     <div class="row">
                         <div class="column with-help">
-                            <div class="bloc-graph">
-                                <div class="bloc-graph-carousel">
-                                    <div class="bloc-graph-items">
-                                        <div class="bloc-graph-item first">
-                                            <div class="label">Maintainability / complexity</div>
-                                            <div id="svg-maintainability" class="svg-container"></div>
-                                        </div>
-                                        <div class="bloc-graph-item second">
-                                            <div class="label">Maintainability without comments / complexity</div>
-                                            <div id="svg-maintainability-without-comments" class="svg-container"></div>
-                                        </div>
-                                    </div>
+                            <div>
+                                <div class="label">
+                                    Maintainability / complexity
+                                    <small><a
+                                            data-current="with-comments"
+                                            onclick="toggleChartMaintainability(this)">
+                                                (with comments)
+                                    </a></small>
                                 </div>
-                                <div class="icon-container">
-                                    <span class="dot dot-first active" title="Maintainability / complexity"></span>
-                                    <span class="dot dot-second" title="Maintainability without comments / complexity"></span>
-                                </div>
+                                <div id="svg-maintainability" class="svg-container"></div>
                             </div>
                         </div>
                         <div class="column help">
@@ -212,8 +205,7 @@ require __DIR__ . '/_header.php'; ?>
     <script type="text/javascript">
         document.onreadystatechange = function () {
             if (document.readyState === 'complete') {
-                chartMaintainability(true);
-                chartMaintainability(false);
+                chartMaintainability();
 
                 new Clusterize({
                     scrollId: 'clusterizeClassRank',
