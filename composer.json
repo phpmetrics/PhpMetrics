@@ -33,7 +33,6 @@
     "require": {
         "php": ">=5.5",
         "ext-dom": "*",
-        "ext-json": "*",
         "ext-tokenizer": "*",
         "nikic/php-parser": "^3|^4"
     },
