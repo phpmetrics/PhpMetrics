@@ -1,14 +1,15 @@
 <?php
-namespace Hal\Report\Cli;
+
+namespace Hal\Report\Json;
 
 use Hal\Application\Config\Config;
 use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
 use Hal\Metric\Metrics;
+use Hal\Report\SummaryProvider;
 
-class Reporter
+class SummaryReporter
 {
-
     /**
      * @var Config
      */
@@ -35,8 +36,15 @@ class Reporter
             return;
         }
 
-        $this->output->write(
-            (new SummaryWriter($metrics, new Consolidated($metrics), $this->config))->getReport()
-        );
+        $logFile = $this->config->get('report-summary-json');
+        if (!$logFile) {
+            return;
+        }
+        if (!file_exists(dirname($logFile)) || !is_writable(dirname($logFile))) {
+            throw new \RuntimeException('You don\'t have permissions to write JSON report in ' . $logFile);
+        }
+
+        $summaryWriter = new SummaryWriter($metrics, new Consolidated($metrics), $this->config);
+        file_put_contents($logFile, json_encode($summaryWriter->getReport(), JSON_PRETTY_PRINT));
     }
 }

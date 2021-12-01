@@ -54,7 +54,7 @@ class Validator
         $config->set('groups', $groups);
 
         // parameters with values
-        $keys = ['report-html', 'report-csv', 'report-violation', 'report-json', 'extensions', 'config'];
+        $keys = ['report-html', 'report-csv', 'report-violation', 'report-json', 'report-summary-json', 'extensions', 'config'];
         foreach ($keys as $key) {
             $value = $config->get($key);
             if ($config->has($key) && empty($value) || true === $value) {
@@ -85,6 +85,7 @@ Optional:
     --report-html=<directory>         Folder where report HTML will be generated
     --report-csv=<file>               File where report CSV will be generated
     --report-json=<file>              File where report Json will be generated
+    --report-summary-json=<file>      File where the summary report Json will be generated
     --report-violations=<file>        File where XML violations report will be generated
     --git[=</path/to/git_binary>]     Perform analyses based on Git History (default binary path: "git")
     --junit[=</path/to/junit.xml>]    Evaluates metrics according to JUnit logs
