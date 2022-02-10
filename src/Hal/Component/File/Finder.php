@@ -39,22 +39,13 @@ class Finder
     private $excludedDirs = [];
 
     /**
-     * Flags for RecursiveDirectoryIterator
-     *
-     * @var integer
-     */
-    private $flags;
-
-    /**
      * @param string[] $extensions   regex of file extensions to include
      * @param string[] $excludedDirs regex of directories to exclude
-     * @param int $flags
      */
-    public function __construct(array $extensions = ['php'], array $excludedDirs = [], $flags = null)
+    public function __construct(array $extensions = ['php'], array $excludedDirs = [])
     {
         $this->extensions = $extensions;
         $this->excludedDirs = $excludedDirs;
-        $this->flags = $flags;
     }
 
     /**
@@ -69,7 +60,7 @@ class Finder
         foreach ($paths as $path) {
             if (is_dir($path)) {
                 $path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-                $directory = new RecursiveDirectoryIterator($path, $this->flags);
+                $directory = new RecursiveDirectoryIterator($path);
                 $iterator = new RecursiveIteratorIterator($directory);
 
                 $filterRegex = sprintf(

@@ -42,12 +42,17 @@ class Composer
         $packagist = new Packagist();
         foreach ($rawRequirements as $requirement => $version) {
             $installed = isset($rawInstalled[$requirement]) ? $rawInstalled[$requirement] : null;
-            $package = $packagist->get($requirement, $installed);
+            $package = $packagist->get($requirement);
 
             $package->installed = $installed;
             $package->required = $version;
             $package->name = $requirement;
-            $package->status = version_compare($installed, $package->latest, '<') ? 'outdated' : 'latest';
+            // Manage case where the package is not hosted on packagist (private repository) so we can't know the status
+            if ($installed === null || $package->latest === null) {
+                $package->status = 'unknown';
+            } else {
+                $package->status = version_compare($installed, $package->latest, '<') ? 'outdated' : 'latest';
+            }
             $packages[$requirement] = $package;
         }
 

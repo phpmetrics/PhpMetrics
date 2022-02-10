@@ -29,6 +29,8 @@ if ([] === $packages) {
                             <div class="help-inner">
                                 <?php if ('outdated' === $package->status) { ?>
                                     <span class="help-warning" style="position: absolute; right: 10px;">This package should be updated.</span>
+                                <?php } elseif ('unknown' === $package->status) { ?>
+                                    <span class="help-info" style="position: absolute; right: 10px;">This package is private.</span>
                                 <?php } ?>
                                 <span class="badge"><?php echo $package->type; ?></span>
                                 <?php echo $package->description; ?>

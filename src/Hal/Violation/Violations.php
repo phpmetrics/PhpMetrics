@@ -14,6 +14,7 @@ class Violations implements \IteratorAggregate, \Countable
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->data);
@@ -30,6 +31,7 @@ class Violations implements \IteratorAggregate, \Countable
     /**
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->data);
