@@ -20,5 +20,23 @@
             "name": "Reporters",
             "match": "!Report!"
         }
-    ]
+    ],
+    "searches": {
+        "Repository which uses Service": {
+            "type": "class",
+            "instanceOf": [
+                "App\\MyRepository"
+            ],
+            "nameMatches": ".*Repository.*",
+            "usesClasses": [
+                ".*Service"
+            ],
+            "failIfFound": true
+        },
+        "Class with too complex code": {
+            "type": "class",
+            "ccn": ">=3",
+            "failIfFound": true
+        }
+    }
 }

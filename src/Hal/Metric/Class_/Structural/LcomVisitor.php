@@ -4,6 +4,7 @@ namespace Hal\Metric\Class_\Structural;
 use Hal\Component\Tree\GraphDeduplicated;
 use Hal\Component\Tree\Node as TreeNode;
 use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Metric\Helper\RoleOfMethodDetector;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -40,8 +41,17 @@ class LcomVisitor extends NodeVisitorAbstract
             $graph = new GraphDeduplicated();
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
 
+            $roleDetector = new RoleOfMethodDetector();
+
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
+
+                    $role = $roleDetector->detects($stmt);
+                    if (in_array($role, ['getter', 'setter'])) {
+                        // We don't want to increase the LCOM for getters and setters,
+                        continue;
+                    }
+
                     if (!$graph->has($stmt->name . '()')) {
                         $graph->insert(new TreeNode($stmt->name . '()'));
                     }

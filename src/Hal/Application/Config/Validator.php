@@ -2,7 +2,11 @@
 
 namespace Hal\Application\Config;
 
+use Hal\Metric\Definitions;
 use Hal\Metric\Group\Group;
+use Hal\Metric\Registry;
+use Hal\Search\Searches;
+use Hal\Search\SearchesValidator;
 
 /**
  * @package Hal\Application\Config
@@ -33,7 +37,8 @@ class Validator
 
         // excluded directories
         if (!$config->has('exclude')) {
-            $config->set('exclude', 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec');
+            $config->set('exclude',
+                'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec');
         }
 
         // retro-compatibility with excludes as string in config files
@@ -52,6 +57,18 @@ class Validator
             return new Group($groupRaw['name'], $groupRaw['match']);
         }, $groupsRaw);
         $config->set('groups', $groups);
+
+        if (!$config->has('composer')) {
+            $config->set('composer', true);
+        }
+        $config->set('composer', filter_var($config->get('composer'), FILTER_VALIDATE_BOOLEAN));
+
+        // Search
+        $validator = new SearchesValidator();
+        if (null === $config->get('searches')) {
+            $config->set('searches', new Searches());
+        }
+        $validator->validates($config->get('searches'));
 
         // parameters with values
         $keys = ['report-html', 'report-csv', 'report-violation', 'report-json', 'extensions', 'config'];
@@ -79,9 +96,10 @@ Required:
 
 Optional:
 
-    --config=<file>                   Use a file for configuration
+    --config=<file>                   Use a file for configuration. File can be a JSON, YAML or INI file.
     --exclude=<directory>             List of directories to exclude, separated by a comma (,)
     --extensions=<php,inc>            List of extensions to parse, separated by a comma (,)
+    --metrics                         Display list of available metrics
     --report-html=<directory>         Folder where report HTML will be generated
     --report-csv=<file>               File where report CSV will be generated
     --report-json=<file>              File where report Json will be generated
@@ -104,5 +122,22 @@ Examples:
         be read by any Continuous Integration Platform, and follows the "PMD Violation" standards.
 
 EOT;
+    }
+
+    public function metrics()
+    {
+        $help = <<<EOT
+Main metrics are:
+
+EOT;
+
+        $registry = new Registry();
+        $definitions = $registry->getDefinitions();
+        foreach ($definitions as $key => $description) {
+            $help .= sprintf("\n    %s%s", str_pad($key, 40, ' ', STR_PAD_RIGHT), $description);
+        }
+
+        $help .= PHP_EOL;
+        return $help;
     }
 }

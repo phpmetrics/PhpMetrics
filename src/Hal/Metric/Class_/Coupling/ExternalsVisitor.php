@@ -52,6 +52,7 @@ class ExternalsVisitor extends NodeVisitorAbstract
         ) {
             $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
             $parents = [];
+            $interfaces = [];
 
             $dependencies = [];
 
@@ -72,6 +73,7 @@ class ExternalsVisitor extends NodeVisitorAbstract
             if (isset($node->implements)) {
                 foreach ($node->implements as $interface) {
                     $this->pushToDependencies($dependencies, (string)$interface);
+                    array_push($interfaces, (string)$interface);
                 }
             }
 
@@ -129,6 +131,7 @@ class ExternalsVisitor extends NodeVisitorAbstract
 
             $class->set('externals', $dependencies);
             $class->set('parents', $parents);
+            $class->set('implements', $interfaces);
         }
     }
 

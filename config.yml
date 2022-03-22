@@ -1,0 +1,23 @@
+---
+composer: false
+includes:
+    - "src"
+excludes:
+extensions:
+    - php
+    - php8
+report:
+    html: "/tmp/report/"
+    csv: "/tmp/report.csv"
+    json: "/tmp/report.json"
+    violations: "/tmp/violations.xml"
+groups:
+    - name: Component
+      match: "!component!i"
+    - name: Metric
+      match: "!metric!i"
+plugins:
+    git:
+        binary: git
+    junit:
+        file: "/tmp/junit.xml"

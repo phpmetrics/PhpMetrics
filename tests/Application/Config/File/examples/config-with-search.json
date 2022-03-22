@@ -1,0 +1,10 @@
+{
+    "searches": {
+        "my-search1": {
+            "type": "class"
+        },
+        "my-search2": {
+            "type": "interface"
+        }
+    }
+}

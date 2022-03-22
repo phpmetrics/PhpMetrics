@@ -16,7 +16,7 @@
 <header class="headerbar">
     <div class="headerbarInner">
         <div class="float-left navigation-title">
-            <a href="http://www.phpmetrics.org/">
+            <a href="https://github.com/phpmetrics/phpmetrics">
                 <h1 class="title">PhpMetrics</h1>
                 <span class="subtitle">
                 Static analyzer for PHP
@@ -25,8 +25,8 @@
         </div>
         <ul class="navigation-list float-right">
             <li class="navigation-item">
-                <a class="navigation-link" href="http://www.phpmetrics.org/documentation/index.html">Documentation</a>
                 <a class="navigation-link" href="https://www.github.com/phpmetrics/phpmetrics">Support</a>
+                <a class="navigation-link" href="https://phpmetrics.github.io/website/">Documentation</a>
             </li>
         </ul>
     </div>
