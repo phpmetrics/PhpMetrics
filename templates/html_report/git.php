@@ -8,7 +8,11 @@ $json = [];
 $history = [];
 if (isset($project['git'], $project['git']['history'])) {
     $history = $project['git']['history'];
-// only last 24 weeks
+
+    // Sort by key (date)
+    ksort($history);
+
+    // only last 24 weeks
     $history = array_slice($history, -24);
     $json = [];
     foreach ($history as $date => $values) {

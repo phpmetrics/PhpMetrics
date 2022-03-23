@@ -97,7 +97,8 @@ class A {
     }
 }
 ';
-        $this->analyzeCode($code);
+        $metrics = $this->analyzeCode($code);
+        $this->assertInstanceOf(Metrics::class, $metrics);
     }
 
 
@@ -124,7 +125,9 @@ interface NotifyPropertyChangedInterface
      */
     public function isTracked(): bool;
 }';
-        $this->analyzeCode($code);
+
+        $metrics = $this->analyzeCode($code);
+        $this->assertInstanceOf(Metrics::class, $metrics);
     }
 
     public function testItDoesNotMarkClassesAsAbstract()

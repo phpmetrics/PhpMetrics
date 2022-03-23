@@ -1,13 +1,17 @@
 <?php
+
 namespace Hal\Application;
 
 use Hal\Application\Config\ConfigException;
 use Hal\Application\Config\Parser;
 use Hal\Application\Config\Validator;
 use Hal\Component\File\Finder;
-use Hal\Component\Output\CliOutput;
 use Hal\Component\Issue\Issuer;
+use Hal\Component\Output\CliOutput;
+use Hal\Metric\SearchMetric;
 use Hal\Report;
+use Hal\Search\PatternSearcher;
+use Hal\Violation\Violation;
 use Hal\Violation\ViolationParser;
 
 class Application
@@ -26,19 +30,29 @@ class Application
 
         // config
         $config = (new Parser())->parse($argv);
+
+        // Help
+        if ($config->has('help')) {
+            $output->writeln((new Validator())->help());
+            exit(0);
+        }
+
+        // Metrics list
+        if ($config->has('metrics')) {
+            $output->writeln((new Validator())->metrics());
+            exit(0);
+        }
+
+        // Version
+        if ($config->has('version')) {
+            $output->writeln(sprintf("PhpMetrics %s <http://www.phpmetrics.org>\nby Jean-François Lépine <https://twitter.com/Halleck45>\n",
+                getVersion()));
+            exit(0);
+        }
+
         try {
             (new Validator())->validate($config);
         } catch (ConfigException $e) {
-            if ($config->has('help')) {
-                $output->writeln((new Validator())->help());
-                exit(0);
-            }
-
-            if ($config->has('version')) {
-                $output->writeln(sprintf("PhpMetrics %s <http://www.phpmetrics.org>\nby Jean-François Lépine <https://twitter.com/Halleck45>\n", getVersion()));
-                exit(0);
-            }
-
             $output->writeln(sprintf("\n<error>%s</error>\n", $e->getMessage()));
             $output->writeln((new Validator())->help());
             exit(1);
@@ -60,19 +74,46 @@ class Application
             exit(1);
         }
 
+        // search
+        $searches = $config->get('searches');
+        $searcher = new PatternSearcher();
+        $foundSearch = new SearchMetric('searches');
+        foreach ($searches->all() as $search) {
+            $foundSearch->set($search->getName(), $searcher->executes($search, $metrics));
+        }
+        $metrics->attach($foundSearch);
+
         // violations
         (new ViolationParser($config, $output))->apply($metrics);
 
         // report
         (new Report\Cli\Reporter($config, $output))->generate($metrics);
+        (new Report\Cli\SearchReporter($config, $output))->generate($metrics);
         (new Report\Html\Reporter($config, $output))->generate($metrics);
         (new Report\Csv\Reporter($config, $output))->generate($metrics);
         (new Report\Json\Reporter($config, $output))->generate($metrics);
         (new Report\Violations\Xml\Reporter($config, $output))->generate($metrics);
 
+        // exit status
+        $shouldExitDueToCriticalViolationsCount = 0;
+        foreach ($metrics->all() as $metric) {
+            foreach ($metric->get('violations') as $violation) {
+                if (Violation::CRITICAL === $violation->getLevel()) {
+                    $shouldExitDueToCriticalViolationsCount++;
+                }
+            }
+        }
+        if (!empty($shouldExitDueToCriticalViolationsCount)) {
+            $output->writeln('');
+            $output->writeln(sprintf('<error>[ERR] Failed du to %d critical violations</error>',
+                $shouldExitDueToCriticalViolationsCount));
+            $output->writeln('');
+            exit(1);
+        }
+
         // end
         $output->writeln('');
-        $output->writeln('Done');
+        $output->writeln('<success>Done</success>');
         $output->writeln('');
     }
 }

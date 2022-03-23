@@ -6,7 +6,7 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageDependencies;
 use Hal\Metric\PackageMetric;
-use \PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group metric
@@ -47,16 +47,24 @@ class PackageDependenciesTest extends TestCase
 
     public function testItSkipsClassesThatHasNoDependencies()
     {
-        $metrics = new Metrics();
-        $metrics->attach((new ClassMetric('OneClass'))->set('package', 'PackageA\\'));
+        $classMetric = (new ClassMetric('OneClass'))->set('package', 'PackageA\\');
+        $metrics = $this->getMockBuilder(Metrics::class)->disableOriginalConstructor()->getMock();
+        $metrics
+            ->expects($this->once())
+            ->method('all')
+            ->will($this->returnValue([$classMetric]));
 
         (new PackageDependencies())->calculate($metrics);
     }
 
     public function testItSkipsClassesThatHasNoPackage()
     {
-        $metrics = new Metrics();
-        $metrics->attach((new ClassMetric('OneClass'))->set('externals', ['AnotherClass']));
+        $classMetric = (new ClassMetric('OneClass'))->set('externals', ['AnotherClass']);
+        $metrics = $this->getMockBuilder(Metrics::class)->disableOriginalConstructor()->getMock();
+        $metrics
+            ->expects($this->once())
+            ->method('all')
+            ->will($this->returnValue([$classMetric]));
 
         (new PackageDependencies())->calculate($metrics);
     }

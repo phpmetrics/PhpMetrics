@@ -1,7 +1,9 @@
 <?php
+
 namespace Hal\Metric\Class_\Complexity;
 
 use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Metric\Helper\RoleOfMethodDetector;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -61,8 +63,17 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
             $wmc = 0;
             $ccnByMethod = [0]; // default maxMethodCcn if no methods are available
 
+            $roleDetector = new RoleOfMethodDetector();
+
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
+
+                    $role = $roleDetector->detects($stmt);
+                    if (in_array($role, ['getter', 'setter'])) {
+                        // We don't want to increase the CCN for getters and setters,
+                        continue;
+                    }
+
                     // iterate over children, recursively
                     $cb = function ($node) use (&$cb) {
                         $ccn = 0;

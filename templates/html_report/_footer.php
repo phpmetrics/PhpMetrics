@@ -5,7 +5,7 @@
 <div id="sidebar">
     <div class="content">
         <div class="logo">
-            <a href="http://www.phpmetrics.org"><img src="<?php echo $this->assetPath;?>images/phpmetrics-maintenability.png"
+            <a href="https://github.com/phpmetrics/phpmetrics"><img src="<?php echo $this->assetPath;?>images/phpmetrics-maintenability.png"
                                                  alt="Logo PhpMetrics"/></a>
             <h1>PhpMetrics</h1>
         </div>

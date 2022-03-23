@@ -32,6 +32,11 @@ class Reporter
 
     public function generate(Metrics $metrics)
     {
+        if(!class_exists('\DOMDocument')) {
+            $this->output->writeln('<error>The DOM extension is not available. Please install it if you want to use the Xml Violations report.</error>');
+            return;
+        }
+
         $logFile = $this->config->get('report-violations');
         if (!$logFile) {
             return;
@@ -54,7 +59,7 @@ class Reporter
 
         foreach ($metrics->all() as $metric) {
             $violations = $metric->get('violations');
-            if (count($violations) == 0) {
+            if (null === $violations || count($violations) == 0) {
                 continue;
             }
 

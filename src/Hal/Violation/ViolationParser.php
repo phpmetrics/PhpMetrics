@@ -1,9 +1,11 @@
 <?php
+
 namespace Hal\Violation;
 
 use Hal\Metric\Metrics;
 use Hal\Violation\Class_;
 use Hal\Violation\Package;
+use Hal\Violation\Search\SearchShouldNotBeFoundPrinciple;
 
 class ViolationParser
 {
@@ -23,6 +25,7 @@ class ViolationParser
             new Class_\TooDependent(),
             new Package\StableAbstractionsPrinciple(),
             new Package\StableDependenciesPrinciple(),
+            new SearchShouldNotBeFoundPrinciple(),
         ];
 
         foreach ($metrics->all() as $metric) {

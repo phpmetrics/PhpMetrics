@@ -35,7 +35,28 @@ class CliOutput implements Output
      */
     public function write($message)
     {
-        $this->quietMode||file_put_contents('php://stdout', $message);
+        if (preg_match_all('!<([a-z]+)(?:=[^}]+)?>(.*?)</\\1>!', $message, $matches, PREG_SET_ORDER)) {
+            list(, $type, $message) = $matches[0];
+            $color = '';
+            switch ($type) {
+                case 'error':
+                    $color = "\033[31m";
+                    break;
+                case 'warning':
+                    $color = "\033[33m";
+                    break;
+                case 'success':
+                    $color = "\033[32m";
+                    break;
+                case 'info':
+                    $color = "\033[34m";
+                    break;
+            }
+
+            $message = $color . $message . "\033[0m";
+        }
+
+        $this->quietMode || file_put_contents('php://stdout', $message);
         return $this;
     }
 

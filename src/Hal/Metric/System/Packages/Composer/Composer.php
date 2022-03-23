@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric\System\Packages\Composer;
 
 use Hal\Application\Config\Config;
@@ -32,6 +33,10 @@ class Composer
      */
     public function calculate(Metrics $metrics)
     {
+        if ($this->config->has('composer') && false === $this->config->get('composer')) {
+            return;
+        }
+
         $projectMetric = new ProjectMetric('composer');
         $projectMetric->set('packages', []);
         $metrics->attach($projectMetric);

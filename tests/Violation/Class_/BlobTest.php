@@ -1,6 +1,7 @@
 <?php
 namespace Test\Hal\Violation\Class_;
 
+use Hal\Metric\ClassMetric;
 use Hal\Violation\Class_\Blob;
 use Hal\Violation\Violations;
 

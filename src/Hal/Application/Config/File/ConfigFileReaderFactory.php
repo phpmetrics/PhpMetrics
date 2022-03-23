@@ -18,6 +18,9 @@ class ConfigFileReaderFactory
         switch (pathinfo($filename, PATHINFO_EXTENSION)) {
             case 'json':
                 return new ConfigFileReaderJson($filename);
+            case 'yaml':
+            case 'yml':
+                return new ConfigFileReaderYaml($filename);
             case 'ini':
                 return new ConfigFileReaderIni($filename);
                 break;
