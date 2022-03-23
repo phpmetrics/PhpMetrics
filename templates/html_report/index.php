@@ -147,7 +147,7 @@ require __DIR__ . '/_header.php'; ?>
                             foreach ($classesS as $class) { ?>
                                 <tr>
                                     <td>
-                                        <span class="badge" <?php echo gradientStyleFor($classes, 'pageRank', $class['pageRank']);?>);">
+                                        <span class="badge" <?php echo gradientStyleFor($classes, 'pageRank', $class['pageRank']);?>>
                                         <?php echo $class['pageRank']; ?>
                                     </td>
                                     </td>

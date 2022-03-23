@@ -59,13 +59,14 @@ require __DIR__ . '/_header.php'; ?>
                         <th class="js-sort-number">WMC</th>
                         <th class="js-sort-number">Class cycl.</th>
                         <th class="js-sort-number">Max method cycl.</th>
+                        <th class="js-sort-number">Relative system complexity</th>
                         <th class="js-sort-number">Relative data complexity</th>
                         <th class="js-sort-number">Relative structural complexity</th>
                         <th class="js-sort-number">Bugs</th>
                         <th class="js-sort-number">Defects</th>
                         <?php if ($config->has('junit')) { ?>
                             <th class="js-sort-number">Unit testsuites calling it</th>
-                        <?php } ?><th class="js-sort-number">Relative system complexity</th>
+                        <?php } ?>
                     </tr>
                     </thead>
                     <?php
@@ -74,7 +75,7 @@ require __DIR__ . '/_header.php'; ?>
                             <td><span class="path"><?php echo $class['name']; ?></span></td>
                             <?php foreach (['wmc', 'ccn', 'ccnMethodMax', 'relativeSystemComplexity', 'relativeDataComplexity', 'relativeStructuralComplexity', 'bugs', 'kanDefect'] as $attribute) {?>
                                 <td>
-                                    <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>);">
+                                    <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>>
                                     <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
                                     </span>
                                 </td>
