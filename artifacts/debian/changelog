@@ -1,3 +1,39 @@
+phpmetrics (2.7.4) unstable; urgency=low
+   * Fix readme file (#438) 
+   * include by default the composer.lock localized at the root dir 
+   * Allow usage behind proxy 
+   * PR review changes 
+   * Refactor  following PR comments 
+   * PR review applied changes 
+   * Add php8 in travis  ci 
+   * Merge pull request #1 from phpmetrics/master 
+   * Fix typo 
+   * Removing PHP 7+ return value typehint 
+   * Merge pull request #454 from crimsonkissaki/crimsonkissaki-patch-1 
+   * Merge pull request #449 from ssfinney/master 
+   * Merge pull request #446 from alediator/proxy_env_use 
+   * Merge pull request #442 from AlexHowansky/master 
+   * [ISSUE-445] Fix warning with test on ansi 
+   * Merge pull request #456 from phpmetrics/ISSUE-445 
+   * [ISSUE-451] remove auto scrolling of charts 
+   * Merge pull request #447 from Big-Shark/patch-2 
+   * [ISSUE-436] Restore deb compilation 
+   * Fixed issue with incorrect table header on the complexity report page 
+   * Removed extraneous and invalid HTML syntax 
+   * Merge pull request #455 from phpmetrics/ISSUE-451 
+   * Solve passing null instead of int by removing the flag on the Finder, that is unused by the code. 
+   * Add PHP Attribute "ReturnTypeWillChange" on internal overload definitions as return type is missing. 
+   * Add "unknown" status for private packages to avoid deprecated error in version_compare usage. 
+   * Merge pull request #458 from phpmetrics/ISSUE-436 
+   * Add command to get summary as Json 
+   * Merge pull request #466 from phpmetrics/remove-php8.1-deprecations 
+   * Way to search patterns of code 
+   * Merge pull request #472 from phpmetrics/searches 
+   * Merge pull request #467 from roelbaka/addJsonSummary 
+   * Merge pull request #464 from denniscoorn-paqt/fix/complexity-table-columns 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 23 Mar 2022 22:00:37 +0100
+
 phpmetrics (2.7.2) unstable; urgency=low
    * include by default the composer.json localized at the root dir 
    * releasing v2.7.3 
@@ -831,6 +867,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 

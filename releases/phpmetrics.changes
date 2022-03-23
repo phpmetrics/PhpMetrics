@@ -2,111 +2,61 @@ Format: 1.8
 Source: phpmetrics
 Binary: phpmetrics
 Architecture: source all
-Version: 1.9.2
+Version: 2.7.4
 Distribution: unstable
 Urgency: low
 Maintainer: Jean-François Lépine <lepinejeanfrancois@yahoo.fr>
 Description:
  phpmetrics - Static analyzer for PHP
 Changes:
- phpmetrics (1.9.2) unstable; urgency=low
+ phpmetrics (2.7.4) unstable; urgency=low
  .
-    * Removed unneeded code
-    * Removed unneeded code
-    * plugin engine: added a way to executing analayzes from plugin and to customize reports
-    * updated tests of formaters in order to take care of extensions service
-    * updated documentation about plugins
-    * Merge pull request #166 from fonsecas72/fix_unused_params
-    * releasing v1.9.2
-    * added bintray.json in process of releasing
-    * minor change in HTML report: footer is fixed
-    * fixed an error in travis with bintray deploy
-    * releasing v1.9.2
-    * added bintray.json in process of releasing
-    * minor change in HTML report: footer is fixed
-    * added new default ruleset object
-    * new command: way to generate default config file
-    * added tests for InitConfigCommand
-    * added template for new issues on github
-    * pass TokenCollection instead of Tokenizer to Metrics
-    * added compatibility with Symfony3
-    * installation of graphviz is checked before running analyze
-    * Merge pull request #211 from phpmetrics/features/210-check-for-graphviz-when-bubbles-chart-is-generated
-    * restored Cache classes (ref #208)
-    * Typo
-    * fixed typos with new plugin feature
-    * Merge pull request #208 from pavarnos/master
-    * Merge pull request #207 from phpmetrics/features/default-ruleset
-    * Merge pull request #202 from phpmetrics/plugins
-    * Merge pull request #197 from phpmetrics/features/192-compatibility-with-sf3
-    * resolving conflicts
-    * Merge branch 'patch-1' of https://github.com/theofidry/PhpMetrics into theofidry-patch-1
-    * Merge branch 'theofidry-patch-1'
-    * releasing v1.10.0
-    * added information about composer plugin in README
-    * imported new v2 stack, with nikic parser
-    * updated CI
-    * cleaned documentation
-    * added CLI report
-    * added screenshot
-    * moved screenshot
-    * removed unused files
-    * downgraded PHPUnit version
-    * way to have Debian package
-    * Artifacts are pushed to bintray
-    * way yo have trends of build
-    * trend for ccn
-    * fixed bad require
-    * way to have Git statistics
-    * added infos about git in CLI report
-    * added some functional tests for Phar artifact
-    * added a TV panel
-    * fixed warnings when log directory already exists
-    * tool to detect role of method (getter, setter)
-    * added Metric interface
-    * way to detect role of method
-    * new violation engine and report
-    * fixed issue when parameter contains double quotes
-    * fixed error in test of phar
-    * fixed tests on PHP <5.6
-    * annotations are listed in externals
-    * Violations in CLI report
-    * added 'cache' in the default exclusion list
-    * new XML violations report
-    * releases are also stored in Github
-    * fixes #236 : incorrect parsing of options with values
-    * fixes #237 - warning in consolidation under php7
-    * updated autoload
-    * updated deb genetation
-    * externals resources are loaded HTTPS
-    * fixed warning with PHP 5.4
-    * git add use --force to add .deb to release
-    * way to get infos about unexpected bugs
-    * Don't trigger the issuer on suppressed errors
-    * Merge pull request #246 from UFOMelkor/hotfix/240
-    * issuer logs are stored in file instead of stdout
-    * analyze does not break in case of error
-    * added tests about namespace resolution in externals
-    * major issue with traverser
-    * Way to get metric about Unit tests of project
-    * added JUnit HTML report file
-    * added icon for junit report
-    * changed status code for --help and --version option
-    * added a way to get latest results directly in json
-    * released new phar
-    * moved directory of releases in order to prevserve v1 compatibility
-    * forced version of phar
+    * Fix readme file (#438)
+    * include by default the composer.lock localized at the root dir
+    * Allow usage behind proxy
+    * PR review changes
+    * Refactor  following PR comments
+    * PR review applied changes
+    * Add php8 in travis  ci
+    * Merge pull request #1 from phpmetrics/master
+    * Fix typo
+    * Removing PHP 7+ return value typehint
+    * Merge pull request #454 from crimsonkissaki/crimsonkissaki-patch-1
+    * Merge pull request #449 from ssfinney/master
+    * Merge pull request #446 from alediator/proxy_env_use
+    * Merge pull request #442 from AlexHowansky/master
+    * [ISSUE-445] Fix warning with test on ansi
+    * Merge pull request #456 from phpmetrics/ISSUE-445
+    * [ISSUE-451] remove auto scrolling of charts
+    * Merge pull request #447 from Big-Shark/patch-2
+    * [ISSUE-436] Restore deb compilation
+    * Fixed issue with incorrect table header on the complexity report page
+    * Removed extraneous and invalid HTML syntax
+    * Merge pull request #455 from phpmetrics/ISSUE-451
+    * Solve passing null instead of int by removing the flag on the Finder, that is unused by the code.
+    * Add PHP Attribute "ReturnTypeWillChange" on internal overload definitions as return type is missing.
+    * Add "unknown" status for private packages to avoid deprecated error in version_compare usage.
+    * Merge pull request #458 from phpmetrics/ISSUE-436
+    * Add command to get summary as Json
+    * Merge pull request #466 from phpmetrics/remove-php8.1-deprecations
+    * Way to search patterns of code
+    * Merge pull request #472 from phpmetrics/searches
+    * Merge pull request #467 from roelbaka/addJsonSummary
+    * Merge pull request #464 from denniscoorn-paqt/fix/complexity-table-columns
  .
-   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Mon, 30 Jan 2017 06:17:27 +0100
+   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 23 Mar 2022 22:00:37 +0100
 Checksums-Sha1:
- 03d2ebf025b92486132e2d13bc6ad711dd7f9312 666 phpmetrics_1.9.2.dsc
- 0b6c3d51f63e925fd413db36d615ccf4fe6bd2e5 253994 phpmetrics_1.9.2.tar.gz
- 4ea3040f59dcada40fcf56edc07f5cfc3ad9ec2b 216628 phpmetrics_1.9.2_all.deb
+ 9b2a4c4689fc7feca0bd0979f9ff98ebea10961d 666 phpmetrics_2.7.4.dsc
+ 71671400cc5db9e342ce248c310d97bbdcd217b3 478184 phpmetrics_2.7.4.tar.gz
+ a3918f0e03f473c5be2c0db99b5c55fc5f2b0875 364108 phpmetrics_2.7.4_all.deb
+ 5b927cfc0f37b8944aca4e049bed38a2c4bb1960 4214 phpmetrics_2.7.4_amd64.buildinfo
 Checksums-Sha256:
- 35d55d02fde7ef4864b6f8ee621696d2949398679727af7e7db0d206b4d8534f 666 phpmetrics_1.9.2.dsc
- b48e9fc9214f9399c50499e5a05c7bbf413b7e52ed219fa6e7b803de5dc65c7e 253994 phpmetrics_1.9.2.tar.gz
- a8ac29159a93eb2840c5946204f95db2f134845765221395140a083e9fd46aa8 216628 phpmetrics_1.9.2_all.deb
+ 4fce9a4e2c24b08731ab81a84576e7f0112948a16218c8c9f6ffbcf81f6e9bad 666 phpmetrics_2.7.4.dsc
+ a7495042a360d898c8b5894fc95648c93a1c76c2b66ec9a2b1ca58f4506b4cc4 478184 phpmetrics_2.7.4.tar.gz
+ ff94bd59f12c1c652412bb0c364be1f35b6c1296ac34e61d19d214f8af8d79f6 364108 phpmetrics_2.7.4_all.deb
+ 2bdac4277e34b794d8bfbb1df1f980e157e12b0857d521c16b5bd128807b4462 4214 phpmetrics_2.7.4_amd64.buildinfo
 Files:
- 3e2326d4739d76fa6fc4f1078d335f62 666 base optional phpmetrics_1.9.2.dsc
- 6d4c58a1a4f359485ee8aebd1c8ec9e5 253994 base optional phpmetrics_1.9.2.tar.gz
- dc88cc458bd5dba4a414f98104ec7886 216628 base optional phpmetrics_1.9.2_all.deb
+ 1830449356b61d9ab07820b2ed105ffd 666 base optional phpmetrics_2.7.4.dsc
+ 83dfafee33529cd500910bf4f4360c82 478184 base optional phpmetrics_2.7.4.tar.gz
+ 332677b22f816e29933a9ce1b208d640 364108 base optional phpmetrics_2.7.4_all.deb
+ e61e471f328939f9e5a6a1e2fc914a56 4214 base optional phpmetrics_2.7.4_amd64.buildinfo
