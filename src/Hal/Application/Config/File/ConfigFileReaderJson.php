@@ -11,7 +11,7 @@ class ConfigFileReaderJson implements ConfigFileReaderInterface
     /**
      * @var string
      */
-    private $filename;
+    protected $filename;
 
     /**
      * @param string $filename

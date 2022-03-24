@@ -7,19 +7,6 @@ use Hal\Application\Config\Config;
 class ConfigFileReaderYaml extends ConfigFileReaderJson implements ConfigFileReaderInterface
 {
     /**
-     * @var string
-     */
-    private $filename;
-
-    /**
-     * @param string $filename
-     */
-    public function __construct($filename)
-    {
-        $this->filename = $filename;
-    }
-
-    /**
      * @param Config $config
      */
     public function read(Config $config)
