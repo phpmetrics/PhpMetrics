@@ -43,20 +43,25 @@ Changes:
     * Merge pull request #472 from phpmetrics/searches
     * Merge pull request #467 from roelbaka/addJsonSummary
     * Merge pull request #464 from denniscoorn-paqt/fix/complexity-table-columns
+    * releasing v2.8.0
+    * Fixes issues with paths
+    * Merge pull request #474 from phpmetrics/fixes_permissions_path
+    * Updates test for phpunit compatibility
+    * Merge pull request #475 from phpmetrics/phpunit-compatibility
  .
-   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 23 Mar 2022 22:00:37 +0100
+   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Thu, 24 Mar 2022 11:19:14 +0100
 Checksums-Sha1:
- 9b2a4c4689fc7feca0bd0979f9ff98ebea10961d 666 phpmetrics_2.7.4.dsc
- 71671400cc5db9e342ce248c310d97bbdcd217b3 478184 phpmetrics_2.7.4.tar.gz
- a3918f0e03f473c5be2c0db99b5c55fc5f2b0875 364108 phpmetrics_2.7.4_all.deb
- 5b927cfc0f37b8944aca4e049bed38a2c4bb1960 4214 phpmetrics_2.7.4_amd64.buildinfo
+ 8751776354032a57532128a38ef0b04ea9b53b27 669 phpmetrics_2.7.4.dsc
+ 963febed403b5b449f2034a89121cc3a6f367a25 1570832 phpmetrics_2.7.4.tar.gz
+ 2483041a2dda5b5e9b517b7d416d154866b9316d 364204 phpmetrics_2.7.4_all.deb
+ adf391007d06372c92d32879704c258fb9c32172 4214 phpmetrics_2.7.4_amd64.buildinfo
 Checksums-Sha256:
- 4fce9a4e2c24b08731ab81a84576e7f0112948a16218c8c9f6ffbcf81f6e9bad 666 phpmetrics_2.7.4.dsc
- a7495042a360d898c8b5894fc95648c93a1c76c2b66ec9a2b1ca58f4506b4cc4 478184 phpmetrics_2.7.4.tar.gz
- ff94bd59f12c1c652412bb0c364be1f35b6c1296ac34e61d19d214f8af8d79f6 364108 phpmetrics_2.7.4_all.deb
- 2bdac4277e34b794d8bfbb1df1f980e157e12b0857d521c16b5bd128807b4462 4214 phpmetrics_2.7.4_amd64.buildinfo
+ a96feb610178ff3f1f28a06ae2fe68d08a6a41be557814c69c345a86a878bab7 669 phpmetrics_2.7.4.dsc
+ a6d64016075243e4d3ccb9e0d11158136d8b84bbfe5d2672bcd6f37e0c7a39f0 1570832 phpmetrics_2.7.4.tar.gz
+ 12a942def04ae9cf761e7cdd60c428851cc523c240f197893c92ef71598f89d3 364204 phpmetrics_2.7.4_all.deb
+ b459b7427c3f4809369f90e7711418ee21271730b7b673ce749fb997f2fe5f48 4214 phpmetrics_2.7.4_amd64.buildinfo
 Files:
- 1830449356b61d9ab07820b2ed105ffd 666 base optional phpmetrics_2.7.4.dsc
- 83dfafee33529cd500910bf4f4360c82 478184 base optional phpmetrics_2.7.4.tar.gz
- 332677b22f816e29933a9ce1b208d640 364108 base optional phpmetrics_2.7.4_all.deb
- e61e471f328939f9e5a6a1e2fc914a56 4214 base optional phpmetrics_2.7.4_amd64.buildinfo
+ f35531d2b4eba935c80b3b88864dc16a 669 base optional phpmetrics_2.7.4.dsc
+ 765ba71069e20acf070b7962bbf289ac 1570832 base optional phpmetrics_2.7.4.tar.gz
+ 6b36562730cab9d957e3d036d4c85748 364204 base optional phpmetrics_2.7.4_all.deb
+ 902a3540657f5ca5bc5fee1cd37003c5 4214 base optional phpmetrics_2.7.4_amd64.buildinfo
