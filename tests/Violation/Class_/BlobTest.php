@@ -1,4 +1,5 @@
 <?php
+
 namespace Test\Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
@@ -15,12 +16,26 @@ class BlobTest extends \PHPUnit\Framework\TestCase
      */
     public function testGlobIsFound($expected, $nbMethodsPublic, $lcom, $nbExternals)
     {
-        $prophet = $this->prophesize('Hal\Metric\ClassMetric');
-        $prophet->get('nbMethodsPublic')->willReturn($nbMethodsPublic);
-        $prophet->get('lcom')->willReturn($lcom);
-        $prophet->get('externals')->willReturn(array_pad([], $nbExternals, ''));
-        $prophet->get('violations')->willReturn(new Violations());
-        $class = $prophet->reveal();
+        $class = $this->getMockBuilder(ClassMetric::class)->disableOriginalConstructor()->getMock();
+
+        $violations = new Violations();
+        $class->method('get')->willReturnCallback(function ($param) use (
+            $violations,
+            $nbMethodsPublic,
+            $lcom,
+            $nbExternals
+        ) {
+            switch ($param) {
+                case 'nbMethodsPublic':
+                    return $nbMethodsPublic;
+                case 'lcom':
+                    return $lcom;
+                case 'externals':
+                    return array_pad([], $nbExternals, '');
+                case 'violations':
+                    return $violations;
+            }
+        });
 
         $object = new Blob();
         $object->apply($class);

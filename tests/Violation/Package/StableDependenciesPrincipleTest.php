@@ -15,13 +15,11 @@ class StableDependenciesPrincipleTest extends TestCase
 {
     public function testItIgnoresNonPackageMetrics()
     {
-        $metric = $this->prophesize(Metric::class);
-
+        $metric = $this->getMockBuilder(Metric::class)->getMock();
+        $metric->expects($this->never())->method('get');
         $object = new StableDependenciesPrinciple();
 
-        $object->apply($metric->reveal());
-
-        $metric->get('violations')->shouldNotHaveBeenCalled();
+        $object->apply($metric);
     }
 
     /**
@@ -36,14 +34,14 @@ class StableDependenciesPrincipleTest extends TestCase
         $expectedViolationCount
     ) {
         $violations = new Violations();
-        $metric = $this->prophesize(PackageMetric::class);
-        $metric->getInstability()->willReturn($packageInstability);
-        $metric->getDependentInstabilities()->willReturn($dependentInstabilities);
-        $metric->get('violations')->willReturn($violations);
+        $metric = $this->getMockBuilder(PackageMetric::class)->disableOriginalConstructor()->getMock();
+        $metric->method('getInstability')->willReturn($packageInstability);
+        $metric->method('getDependentInstabilities')->willReturn($dependentInstabilities);
+        $metric->method('get')->willReturn($violations);
 
         $object = new StableDependenciesPrinciple();
 
-        $object->apply($metric->reveal());
+        $object->apply($metric);
 
         $this->assertSame($expectedViolationCount, $violations->count());
     }
