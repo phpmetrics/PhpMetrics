@@ -2,6 +2,7 @@
 
 namespace Hal\Application;
 
+use Exception;
 use Hal\Application\Config\ConfigException;
 use Hal\Application\Config\Parser;
 use Hal\Application\Config\Validator;
@@ -87,13 +88,19 @@ class Application
         (new ViolationParser($config, $output))->apply($metrics);
 
         // report
-        (new Report\Cli\Reporter($config, $output))->generate($metrics);
-        (new Report\Cli\SearchReporter($config, $output))->generate($metrics);
-        (new Report\Html\Reporter($config, $output))->generate($metrics);
-        (new Report\Csv\Reporter($config, $output))->generate($metrics);
-        (new Report\Json\Reporter($config, $output))->generate($metrics);
-        (new Report\Json\SummaryReporter($config, $output))->generate($metrics);
-        (new Report\Violations\Xml\Reporter($config, $output))->generate($metrics);
+        try {
+            (new Report\Cli\Reporter($config, $output))->generate($metrics);
+            (new Report\Cli\SearchReporter($config, $output))->generate($metrics);
+            (new Report\Html\Reporter($config, $output))->generate($metrics);
+            (new Report\Csv\Reporter($config, $output))->generate($metrics);
+            (new Report\Json\Reporter($config, $output))->generate($metrics);
+            (new Report\Json\SummaryReporter($config, $output))->generate($metrics);
+            (new Report\Violations\Xml\Reporter($config, $output))->generate($metrics);
+        } catch (Exception $e) {
+            $output->writeln(sprintf('<error>Cannot generate report: %s</error>', $e->getMessage()));
+            $output->writeln('');
+            exit(1);
+        }
 
         // exit status
         $shouldExitDueToCriticalViolationsCount = 0;

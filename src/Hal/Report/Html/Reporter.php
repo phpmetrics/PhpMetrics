@@ -7,6 +7,7 @@ use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
 use Hal\Metric\Group\Group;
 use Hal\Metric\Metrics;
+use RuntimeException as RuntimeExceptionAlias;
 
 class Reporter
 {
@@ -103,6 +104,11 @@ class Reporter
         if (!file_exists($logDir . '/fonts')) {
             mkdir($logDir . '/fonts', 0755, true);
         }
+
+        if (!is_writable($logDir)) {
+            throw new RuntimeExceptionAlias(sprintf('Unable to write in the directory "%s"', $logDir));
+        }
+
         recurse_copy($this->templateDir . '/html_report/js', $logDir . '/js');
         recurse_copy($this->templateDir . '/html_report/css', $logDir . '/css');
         recurse_copy($this->templateDir . '/html_report/images', $logDir . '/images');
@@ -193,6 +199,10 @@ class Reporter
      */
     public function renderPage($source, $destination, Consolidated $consolidated, $history)
     {
+        if (!is_writable(dirname($destination))) {
+            throw new RuntimeExceptionAlias(sprintf('Unable to write in the directory "%s"', dirname($destination)));
+        }
+
         $this->sum = $sum = $consolidated->getSum();
         $this->avg = $avg = $consolidated->getAvg();
         $this->classes = $classes = $consolidated->getClasses();
