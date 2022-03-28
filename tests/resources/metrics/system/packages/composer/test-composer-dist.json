@@ -1,0 +1,10 @@
+{
+    "name": "test-dist",
+    "require": {
+        "php": ">=8.1",
+        "ext-test": "*",
+        "foo/baz": "^1.0.0",
+        "test/baz": "~1.0.0|~2.0.0",
+        "dist/baz": "3.4.5"
+    }
+}

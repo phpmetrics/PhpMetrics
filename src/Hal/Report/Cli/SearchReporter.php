@@ -1,88 +1,74 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Report\Cli;
 
 use Hal\Application\Config\Config;
+use Hal\Application\Config\ConfigBagInterface;
 use Hal\Component\Output\Output;
-use Hal\Metric\ClassMetric;
-use Hal\Metric\InterfaceMetric;
+use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Hal\Metric\SearchMetric;
-use Hal\Search\PatternSearcher;
-use Hal\Search\Searches;
+use Hal\Report\ReporterInterface;
+use Hal\Search\SearchInterface;
+use function array_map;
+use function array_splice;
+use function is_array;
+use function sprintf;
+use const PHP_EOL;
 
-class SearchReporter
+/**
+ * Reports the results of the violations defined by the "searches" in the configuration.
+ */
+final class SearchReporter implements ReporterInterface
 {
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var Output
-     */
-    private $output;
-
     /**
      * @param Config $config
      * @param Output $output
      */
-    public function __construct(Config $config, Output $output)
-    {
-        $this->config = $config;
-        $this->output = $output;
+    public function __construct(
+        private readonly ConfigBagInterface $config,
+        private readonly Output $output
+    ) {
     }
 
     /**
      * @param Metrics $metrics
      */
-    public function generate(Metrics $metrics)
+    public function generate(Metrics $metrics): void
     {
         /** @var SearchMetric $searches */
         $searches = $metrics->get('searches');
-        if (empty($searches)) {
-            return;
-        }
-
-        foreach ($searches->all() as $name => $search) {
-
-            if (!is_array($search)) {
+        foreach ($searches->all() as $name => $metricsListInViolation) {
+            if (!is_array($metricsListInViolation)) {
                 continue;
             }
-
-            $this->displayCliReport($name, $search);
+            $this->displayCliReport($name, $metricsListInViolation);
         }
     }
 
-    private function displayCliReport($searchName, array $foundSearch)
+    /**
+     * @param string $searchName
+     * @param array<int, Metric> $metricsListInViolation
+     * @return void
+     */
+    private function displayCliReport(string $searchName, array $metricsListInViolation): void
     {
-        $title = sprintf(
-            '<info>Found %d occurrences for search "%s"</info>',
-            sizeof($foundSearch),
-            $searchName
-        );
+        /** @var SearchInterface $search */
+        $search = $this->config->get('searches')[$searchName];
+        $nbFound = count($metricsListInViolation);
 
-        $config = $this->config->get('searches')->get($searchName)->getConfig();
-        if(!empty($foundSearch) && !empty($config->failIfFound) && true === $config->failIfFound) {
-            $title = sprintf(
-                '<error>[ERR] Found %d occurrences for search "%s"</error>',
-                sizeof($foundSearch),
-                $searchName
-            );
-        }
-
-        $sampleToDisplay = 5;
+        $tag = ([] !== $metricsListInViolation && true === $search->getConfig()['failIfFound']) ? 'error' : 'info';
+        $title = sprintf('<%s>Found %d occurrences for search "%s"</%s>', $tag, $nbFound, $searchName, $tag);
         $this->output->writeln($title);
 
-        $parts = array_slice($foundSearch, 0, $sampleToDisplay);
-        foreach ($parts as $part) {
-            $this->output->writeln(sprintf('- %s', $part->getName()));
-        }
+        array_map(function (Metric $metric): void {
+            $this->output->writeln(sprintf('- %s', $metric->getName()));
+        }, array_splice($metricsListInViolation, 0, 5));
 
-        if (sizeof($foundSearch) > $sampleToDisplay) {
-            $this->output->writeln(sprintf('... and %d more', sizeof($foundSearch) - $sampleToDisplay));
+        if ([] !== $metricsListInViolation) {
+            $this->output->writeln(sprintf('… and %d more', $nbFound - 5));
         }
-
         $this->output->writeln(PHP_EOL);
     }
 }

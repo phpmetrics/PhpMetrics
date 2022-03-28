@@ -1,108 +1,157 @@
 <?php
-namespace Test\Hal\Metric\Class_\Coupling;
+declare(strict_types=1);
 
-use Hal\Metric\Class_\ClassEnumVisitor;
+namespace Tests\Hal\Metric\Class_\Complexity;
+
+use Generator;
 use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
+use Hal\Metric\Helper\MetricNameGenerator;
+use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\ParserFactory;
+use Phake;
+use PhpParser\Node;
+use PHPUnit\Framework\TestCase;
 
-class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
+final class CyclomaticComplexityVisitorTest extends TestCase
 {
     /**
-     * @dataProvider provideExamplesForCcn
+     * @return Generator<string, array{0: Node, 1: array{wmc: int, ccn: int, ccnMethodMax: int}}>
      */
-    public function testCcnOfClassesIsWellCalculated($example, $classname, $expectedCcn)
+    public function provideNodeToCalculateCyclomaticComplexity(): Generator
     {
-        $metrics = new Metrics();
+        $allowedNodeClasses = [
+            'class' => Node\Stmt\Class_::class,
+            'interface' => Node\Stmt\Interface_::class,
+            'trait' => Node\Stmt\Trait_::class
+        ];
+        foreach ($allowedNodeClasses as $kind => $allowedNodeClass) {
+            $node = Phake::mock($allowedNodeClass);
+            $node->namespacedName = Phake::mock(Node\Identifier::class);
+            Phake::when($node)->__call('getMethods', [])->thenReturn([]);
+            Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:' . $kind);
+            $expected = ['wmc' => 0, 'ccn' => 1, 'ccnMethodMax' => 0];
+            yield 'With an empty ' . $kind => [$node, $expected];
+        }
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor(new NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
+        $node = Phake::mock(Node\Stmt\Class_::class);
+        $node->namespacedName = Phake::mock(Node\Identifier::class);
 
-        $code = file_get_contents($example);
-        $stmts = $parser->parse($code);
-        $traverser->traverse($stmts);
+        $methods = [
+            Phake::mock(Node\Stmt\ClassMethod::class), // No nodes in var members.
+            Phake::mock(Node\Stmt\ClassMethod::class), // All nodes in single var member.
+            Phake::mock(Node\Stmt\ClassMethod::class), // All nodes in several var members.
+        ];
+        $complexSetOfNodes = [
+            Phake::mock(Node\Stmt\If_::class),
+            Phake::mock(Node\Stmt\ElseIf_::class),
+            Phake::mock(Node\Stmt\For_::class),
+            Phake::mock(Node\Stmt\Foreach_::class),
+            Phake::mock(Node\Stmt\While_::class),
+            Phake::mock(Node\Stmt\Do_::class),
+            Phake::mock(Node\Expr\BinaryOp\LogicalAnd::class),
+            Phake::mock(Node\Expr\BinaryOp\LogicalOr::class),
+            Phake::mock(Node\Expr\BinaryOp\LogicalXor::class),
+            Phake::mock(Node\Expr\BinaryOp\BooleanAnd::class),
+            Phake::mock(Node\Expr\BinaryOp\BooleanOr::class),
+            Phake::mock(Node\Stmt\Catch_::class),
+            Phake::mock(Node\Expr\Ternary::class),
+            Phake::mock(Node\Expr\BinaryOp\Coalesce::class),
+            Phake::mock(Node\Expr\NullsafeMethodCall::class),
+            Phake::mock(Node\Expr\NullsafePropertyFetch::class),
+            Phake::mock(Node\Expr\BinaryOp\Spaceship::class),
+            Phake::mock(Node::class),
+            'switch-case' => Phake::mock(Node\Stmt\Case_::class),
+            'switch-default' => Phake::mock(Node\Stmt\Case_::class),
+            'match-arm-single-cond' => Phake::mock(Node\MatchArm::class),
+            'match-arm-many-cond' => Phake::mock(Node\MatchArm::class),
+            'match-arm-default' => Phake::mock(Node\MatchArm::class),
+        ];
+        Phake::when($complexSetOfNodes[0])->__call('getType', [])->thenReturn('Stmt_If');
+        Phake::when($complexSetOfNodes[1])->__call('getType', [])->thenReturn('Stmt_ElseIf');
+        Phake::when($complexSetOfNodes[2])->__call('getType', [])->thenReturn('Stmt_For');
+        Phake::when($complexSetOfNodes[3])->__call('getType', [])->thenReturn('Stmt_Foreach');
+        Phake::when($complexSetOfNodes[4])->__call('getType', [])->thenReturn('Stmt_While');
+        Phake::when($complexSetOfNodes[5])->__call('getType', [])->thenReturn('Stmt_Do');
+        Phake::when($complexSetOfNodes[6])->__call('getType', [])->thenReturn('Expr_BinaryOp_LogicalAnd');
+        Phake::when($complexSetOfNodes[7])->__call('getType', [])->thenReturn('Expr_BinaryOp_LogicalOr');
+        Phake::when($complexSetOfNodes[8])->__call('getType', [])->thenReturn('Expr_BinaryOp_LogicalXor');
+        Phake::when($complexSetOfNodes[9])->__call('getType', [])->thenReturn('Expr_BinaryOp_BooleanAnd');
+        Phake::when($complexSetOfNodes[10])->__call('getType', [])->thenReturn('Expr_BinaryOp_BooleanOr');
+        Phake::when($complexSetOfNodes[11])->__call('getType', [])->thenReturn('Stmt_Catch');
+        Phake::when($complexSetOfNodes[12])->__call('getType', [])->thenReturn('Expr_Ternary');
+        Phake::when($complexSetOfNodes[13])->__call('getType', [])->thenReturn('Expr_BinaryOp_Coalesce');
+        Phake::when($complexSetOfNodes[14])->__call('getType', [])->thenReturn('Expr_NullsafeMethodCall');
+        Phake::when($complexSetOfNodes[15])->__call('getType', [])->thenReturn('Expr_NullsafePropertyFetch');
+        Phake::when($complexSetOfNodes[16])->__call('getType', [])->thenReturn('Expr_BinaryOp_Spaceship');
+        Phake::when($complexSetOfNodes[17])->__call('getType', [])->thenReturn('');
+        Phake::when($complexSetOfNodes['switch-case'])->__call('getType', [])->thenReturn('Stmt_Case');
+        Phake::when($complexSetOfNodes['switch-default'])->__call('getType', [])->thenReturn('Stmt_Case');
+        Phake::when($complexSetOfNodes['match-arm-single-cond'])->__call('getType', [])->thenReturn('MatchArm');
+        Phake::when($complexSetOfNodes['match-arm-many-cond'])->__call('getType', [])->thenReturn('MatchArm');
+        Phake::when($complexSetOfNodes['match-arm-default'])->__call('getType', [])->thenReturn('MatchArm');
+        $complexSetOfNodes['switch-case']->cond = Phake::mock(Node\Expr::class);
+        $complexSetOfNodes['switch-default']->cond = null;
+        $complexSetOfNodes['match-arm-single-cond']->conds = [Phake::mock(Node\Expr::class)];
+        $complexSetOfNodes['match-arm-many-cond']->conds = [
+            Phake::mock(Node\Expr::class),
+            Phake::mock(Node\Expr::class),
+            Phake::mock(Node\Expr::class),
+            Phake::mock(Node\Expr::class)
+        ];
+        $complexSetOfNodes['match-arm-default']->conds = null;
 
-        $this->assertSame($expectedCcn, $metrics->get($classname)->get('ccn'));
+        $nodeContainingComplexSetOfNodes = Phake::mock(Node::class);
+        $nodeContainingComplexSetOfNodes->stmts = $complexSetOfNodes;
+
+        $methods[1]->stmts = $nodeContainingComplexSetOfNodes;
+        $methods[2]->stmts = $complexSetOfNodes;
+
+        Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
+        Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:ComplexClass');
+        $expected = ['wmc' => 51, 'ccn' => 49, 'ccnMethodMax' => 25];
+        yield 'With a complex class containing all complex structures' => [$node, $expected];
     }
 
     /**
-     * @dataProvider provideExamplesForWmc
+     * @dataProvider provideNodeToCalculateCyclomaticComplexity
+     * @param Node $node
+     * @param array{wmc: int, ccn: int, ccnMethodMax: int} $expected
+     * @return void
      */
-    public function testWeightedMethodCountOfClassesIsWellCalculated($example, $classname, $expectedWmc)
+    //#[DataProvider('provideNodeToCalculateCyclomaticComplexity')] TODO: PHPUnit 10.
+    public function testICanCalculateTheCyclomaticComplexityFromNode(Node $node, array $expected): void
     {
-        $metrics = new Metrics();
+        $metricsMock = Phake::mock(Metrics::class);
+        $classMetricMock = Phake::mock(Metric::class);
+        $nodeName = MetricNameGenerator::getClassName($node);
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor(new NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
+        Phake::when($metricsMock)->__call('get', [$nodeName])->thenReturn($classMetricMock);
 
-        $code = file_get_contents($example);
-        $stmts = $parser->parse($code);
-        $traverser->traverse($stmts);
+        $visitor = new CyclomaticComplexityVisitor($metricsMock);
+        $visitor->leaveNode($node);
 
-        $this->assertSame($expectedWmc, $metrics->get($classname)->get('wmc'));
+        Phake::verify($metricsMock)->__call('get', [$nodeName]);
+        Phake::verify($classMetricMock)->__call('set', ['wmc', $expected['wmc']]);
+        Phake::verify($classMetricMock)->__call('set', ['ccn', $expected['ccn']]);
+        Phake::verify($classMetricMock)->__call('set', ['ccnMethodMax', $expected['ccnMethodMax']]);
+        Phake::verifyNoOtherInteractions($classMetricMock);
+        Phake::verifyNoOtherInteractions($metricsMock);
     }
 
     /**
-     * @dataProvider provideExamplesForMaxCc
+     * Test that nothing occurs when the Node currently being traversed is not of the expected type.
+     *
+     * @return void
      */
-    public function testMaximalCyclomaticComplexityOfMethodsIsWellCalculated($example, $classname, $expectedCcnMethodMax)
+    public function testNoActionIfNodeIsNotCorrectType(): void
     {
-        $metrics = new Metrics();
+        $node = Phake::mock(Node::class);
+        $metricsMock = Phake::mock(Metrics::class);
+        $visitor = new CyclomaticComplexityVisitor($metricsMock);
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor(new NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
+        $visitor->leaveNode($node);
 
-        $code = file_get_contents($example);
-        $stmts = $parser->parse($code);
-        $traverser->traverse($stmts);
-
-        $this->assertSame($expectedCcnMethodMax, $metrics->get($classname)->get('ccnMethodMax'));
-    }
-
-    public static function provideExamplesForWmc()
-    {
-        return [
-            'A' => [__DIR__ . '/../../examples/cyclomatic1.php', 'A', 10],
-            'B' => [__DIR__ . '/../../examples/cyclomatic1.php', 'B', 4],
-            'Foo\\C' => [__DIR__ . '/../../examples/cyclomatic_anon.php', 'Foo\\C', 1],
-            'SwitchCase' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'SwitchCase', 4],
-            'IfElseif' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'IfElseif', 7],
-            'Loops' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'Loops', 5],
-            'CatchIt' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'CatchIt', 3],
-            'Logical' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'Logical', 11],
-        ];
-    }
-
-    public static function provideExamplesForCcn()
-    {
-        return [
-            'A' => [__DIR__ . '/../../examples/cyclomatic1.php', 'A', 8],
-            'B' => [__DIR__ . '/../../examples/cyclomatic1.php', 'B', 4],
-            'Foo\\C' => [__DIR__ . '/../../examples/cyclomatic_anon.php', 'Foo\\C', 1],
-            'SwitchCase' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'SwitchCase', 4],
-            'IfElseif' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'IfElseif', 7],
-            'Loops' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'Loops', 5],
-            'CatchIt' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'CatchIt', 3],
-            'Logical' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'Logical', 11],
-        ];
-    }
-
-    public static function provideExamplesForMaxCc()
-    {
-        return [
-            [__DIR__ . '/../../examples/cyclomatic1.php', 'A', 6],
-            [__DIR__ . '/../../examples/cyclomatic1.php', 'B', 4],
-        ];
+        Phake::verifyNoInteraction($node);
+        Phake::verifyNoInteraction($metricsMock);
     }
 }

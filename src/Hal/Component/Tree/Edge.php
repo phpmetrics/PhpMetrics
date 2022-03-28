@@ -1,62 +1,36 @@
 <?php
-
-/*
- * (c) Jean-François Lépine <https://twitter.com/Halleck45>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
 namespace Hal\Component\Tree;
 
-class Edge
+use Stringable;
+use function sprintf;
+
+/**
+ * Represents an edge in a graph, linking 2 nodes.
+ */
+final class Edge implements Stringable
 {
-    /**
-     * @var Node
-     */
-    private $from;
+    public bool $cyclic = false;
 
-    /**
-     * @var Node
-     */
-    private $to;
-
-    /**
-     * @var boolean
-     */
-    public $cyclic = false;
-
-    /**
-     * @param Node $from
-     * @param Node $to
-     */
-    public function __construct(Node $from, Node $to)
-    {
-        $this->from = $from;
-        $this->to = $to;
+    public function __construct(
+        private readonly Node $from,
+        private readonly Node $to
+    ) {
     }
 
-    /**
-     * @return Node
-     */
-    public function getFrom()
+    public function getFrom(): Node
     {
         return $this->from;
     }
 
-    /**
-     * @return Node
-     */
-    public function getTo()
+    public function getTo(): Node
     {
         return $this->to;
     }
 
-    /**
-     * @return string
-     */
-    public function asString()
+    public function __toString(): string
     {
-        return sprintf('%s -> %s', $this->from->getKey(), $this->to->getKey());
+        return sprintf('%s ➔ %s', $this->from, $this->to);
     }
 }

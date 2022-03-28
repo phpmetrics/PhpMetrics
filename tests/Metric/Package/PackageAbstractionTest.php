@@ -1,92 +1,95 @@
 <?php
+declare(strict_types=1);
 
-namespace Test\Hal\Metric\Package;
+namespace Tests\Hal\Metric\Package;
 
-use Hal\Metric\ClassMetric;
+use Generator;
 use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageAbstraction;
 use Hal\Metric\PackageMetric;
+use Phake;
 use PHPUnit\Framework\TestCase;
+use function array_map;
+use function explode;
 
-/**
- * @group metric
- * @group package
- */
-class PackageAbstractionTest extends TestCase
+final class PackageAbstractionTest extends TestCase
 {
-    public function testItCalculatesTheAbstractionOfEachPackage()
+    public function testMetricWithoutPackagesIsCalculable(): void
     {
-        $metrics = $this->metricsOf([
-            $this->aPackage('SemiAbstract\\', [
-                $this->aClass('SemiAbstract\\Class_'),
-                $this->anAbstractClass('SemiAbstract\\AbstractClass'),
-            ]),
-            $this->aPackage('Abstract\\', [
-                $this->anAbstractClass('Abstract\\AbstractClass'),
-            ]),
-            $this->aPackage('Concrete\\', [
-                $this->aClass('Stable\\Class_'),
-            ])
-        ]);
+        $metricsMock = Phake::mock(Metrics::class);
+        Phake::when($metricsMock)->__call('getPackageMetrics', [])->thenReturn([]);
 
-        $object = new PackageAbstraction();
-        $object->calculate($metrics);
+        (new PackageAbstraction($metricsMock))->calculate();
 
-        $this->assertSame(0.5, $metrics->get('SemiAbstract\\')->getAbstraction());
-        $this->assertSame(1.0, $metrics->get('Abstract\\')->getAbstraction());
-        $this->assertSame(0.0, $metrics->get('Concrete\\')->getAbstraction());
+        Phake::verify($metricsMock)->__call('getPackageMetrics', []);
+        Phake::verifyNoOtherInteractions($metricsMock);
     }
 
     /**
-     * @param Metric[][] $metrics
-     * @return Metrics
+     * @return Generator<string, array{0: array<PackageMetric>, 1: array<null|float>}>
      */
-    private function metricsOf(array $metrics)
+    public function providePackagesLists(): Generator
     {
-        $result = new Metrics();
-        foreach ($metrics as $eachMetrics) {
-            foreach ($eachMetrics as $eachMetric) {
-                $result->attach($eachMetric);
+        $packages = [Phake::mock(PackageMetric::class)];
+        Phake::when($packages[0])->__call('getClasses', [])->thenReturn([]);
+        $expected = [null];
+        yield 'Single package, no classes' => [$packages, $expected];
+
+        $packages = [
+            Phake::mock(PackageMetric::class), // All classes inside are abstract
+            Phake::mock(PackageMetric::class), // All classes inside are concrete
+            Phake::mock(PackageMetric::class), // Mix of abstract and concrete classes
+        ];
+        Phake::when($packages[0])->__call('getClasses', [])->thenReturn(['Abstract-A', 'Abstract-B', 'Abstract-C']);
+        Phake::when($packages[1])->__call('getClasses', [])->thenReturn(['Concrete-D', 'Concrete-E', 'Concrete-F']);
+        Phake::when($packages[2])->__call('getClasses', [])->thenReturn(['Abstract-G', 'NULL-H', 'Concrete-I']);
+        $expected = [1, 0, 1 / 3];
+        yield '3 packages: 1 all abstract classes, 1 all concrete classes, 1 mixed' => [$packages, $expected];
+    }
+
+    /**
+     * @dataProvider providePackagesLists
+     * @param array<PackageMetric> $packages
+     * @param array<null|float> $expectedPackagesAbstraction
+     * @return void
+     */
+    //#[DataProvider('providePackagesLists')] TODO: PHPUnit 10
+    public function testMetricWithPackagesIsCalculable(array $packages, array $expectedPackagesAbstraction): void
+    {
+        $metricsMock = Phake::mock(Metrics::class);
+        Phake::when($metricsMock)->__call('getPackageMetrics', [])->thenReturn($packages);
+
+        $allClassNames = [];
+
+        Phake::when($metricsMock)->__call('get', [Phake::anyParameters()])->thenReturnCallback(
+            static function (string $className) use (&$allClassNames): null|Metric {
+                [$type, ] = explode('-', $className);
+                $allClassNames[] = $className;
+                if ('NULL' === $type) {
+                    return null;
+                }
+
+                $classMetric = Phake::mock(Metric::class);
+                Phake::when($classMetric)->__call('get', ['abstract'])->thenReturn('Abstract' === $type);
+                return $classMetric;
             }
+        );
+
+        (new PackageAbstraction($metricsMock))->calculate();
+
+        array_map(static function (Phake\IMock $packageMetric, null|float $expectedAbstraction): void {
+            Phake::verify($packageMetric)->__call('getClasses', []);
+            if (null !== $expectedAbstraction) {
+                Phake::verify($packageMetric)->__call('setAbstraction', [$expectedAbstraction]);
+            }
+            Phake::verifyNoOtherInteractions($packageMetric);
+        }, $packages, $expectedPackagesAbstraction);
+
+        Phake::verify($metricsMock)->__call('getPackageMetrics', []);
+        foreach ($allClassNames as $className) {
+            Phake::verify($metricsMock)->__call('get', [$className]);
         }
-        return $result;
-    }
-
-    /**
-     * @param ClassMetric[] $classes
-     * @return Metric[] $metrics
-     */
-    private function aPackage($packageName, array $classes)
-    {
-        $packageMetric = new PackageMetric($packageName);
-        foreach ($classes as $each) {
-            $packageMetric->addClass($each->getName());
-        }
-        $result = $classes;
-        $result[] = $packageMetric;
-        return $result;
-    }
-
-    /**
-     * @param string $className
-     * @return ClassMetric
-     */
-    private function anAbstractClass($className)
-    {
-        $metric = new ClassMetric($className);
-        $metric->set('abstract', true);
-        return $metric;
-    }
-
-    /**
-     * @param string $className
-     * @return ClassMetric
-     */
-    private function aClass($className)
-    {
-        $metric = new ClassMetric($className);
-        $metric->set('abstract', false);
-        return $metric;
+        Phake::verifyNoOtherInteractions($metricsMock);
     }
 }

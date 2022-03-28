@@ -1,26 +1,91 @@
 <?php
-/*
- * (c) Jean-François Lépine <https://twitter.com/Halleck45>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
 namespace Hal\Component\Ast;
 
-if (PHP_VERSION_ID >= 70000) {
-    class_alias(Php7NodeTraverser::class, __NAMESPACE__ . '\\ActualNodeTraverser');
-} else {
-    class_alias(Php5NodeTraverser::class, __NAMESPACE__ . '\\ActualNodeTraverser');
-}
+use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\NodeTraverser as Mother;
+use function array_splice;
+use function is_array;
 
 /**
- * Empty class to refer the good ActualNodeTraverser depending on the PHP version.
- * This class must be hard-coded and not directly used as an alias because composer can not handle class-aliases when
- * flag --classmap-authoritative is set.
- * @see https://github.com/phpmetrics/PhpMetrics/issues/373
+ * Custom node traverser in order to not traverse children further than the CLassLike level.
+ * Deeper traversing will be necessary on purpose, depending on the related metrics to calculate.
  */
-/** @noinspection PhpUndefinedClassInspection */
-class NodeTraverser extends ActualNodeTraverser
+final class NodeTraverser extends Mother
 {
+    /**
+     * @param array<int, mixed> $nodes
+     * @return array<int, mixed>
+     */
+    protected function traverseArray(array $nodes): array
+    {
+        $nodesToReplace = [];
+
+        foreach ($nodes as $i => &$node) {
+            if (is_array($node)) {
+                $node = $this->traverseArray($node);
+                continue;
+            }
+            if (!($node instanceof Node)) {
+                continue;
+            }
+
+            $traverseChildren = !($node instanceof ClassLike);
+
+            $this->makeVisitorsEnterNode($node, $traverseChildren);
+            if ($traverseChildren) {
+                $node = $this->traverseNode($node);
+            }
+            $this->makeVisitorsLeaveNode($node, $i, $nodesToReplace);
+        } unset($node);
+
+        foreach ($nodesToReplace as [$nodePosition, $replacement]) {
+            array_splice($nodes, $nodePosition, 1, $replacement);
+        }
+        return $nodes;
+    }
+
+    /**
+     * Make each visitor enter the given node.
+     */
+    private function makeVisitorsEnterNode(Node $node, bool &$traverseChildren): void
+    {
+        foreach ($this->visitors as $visitor) {
+            $return = $visitor->enterNode($node);
+            if (Mother::DONT_TRAVERSE_CHILDREN === $return) {
+                $traverseChildren = false;
+            } elseif ($return instanceof Node) {
+                $node = $return;
+            }
+        }
+    }
+
+    /**
+     * Make each visitor leave the given node.
+     *
+     * @param Node $node
+     * @param int $nodePosition
+     * @param array<int, array{0:int,1:array<Node>}> $nodesToReplace
+     */
+    private function makeVisitorsLeaveNode(Node $node, int $nodePosition, array &$nodesToReplace): void
+    {
+        foreach ($this->visitors as $visitor) {
+            $return = $visitor->leaveNode($node);
+
+            if (Mother::REMOVE_NODE === $return) {
+                $nodesToReplace[] = [$nodePosition, []];
+                break;
+            }
+            if (is_array($return)) {
+                $nodesToReplace[] = [$nodePosition, $return];
+                break;
+            }
+            if ($return instanceof Node) {
+                /** @var Node $return */
+                $node = $return;
+            }
+        }
+    }
 }

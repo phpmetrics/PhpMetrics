@@ -1,77 +1,52 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Report;
 
-use Hal\Application\Config\Config;
+use Hal\Application\Config\ConfigBagInterface;
 use Hal\Metric\Consolidated;
 use Hal\Metric\Metrics;
+use Hal\Metric\ProjectMetric;
+use stdClass;
+use function round;
 
-abstract class SummaryProvider
+/**
+ * This class calculates and holds all summary values of consolidated metrics, so they can be provided to any summary
+ * writer object.
+ */
+abstract class SummaryProvider implements SummaryProviderInterface
 {
-    /**
-     * @var int
-     */
-    protected $methodsByClass = 0;
+    protected readonly float $methodsByClass;
+    protected readonly int $locByClass;
+    protected readonly int $locByMethod;
+    protected readonly stdClass $sum;
+    protected readonly stdClass $avg;
+    protected readonly float $treeInheritanceDepth;
+    protected readonly Metrics $metrics;
+    protected readonly Consolidated $consolidated;
 
-    /**
-     * @var int
-     */
-    protected $locByClass = 0;
-
-    /**
-     * @var int
-     */
-    protected $locByMethod = 0;
-
-    /**
-     * @var object
-     */
-    protected $sum;
-
-    /**
-     * @var object
-     */
-    protected $avg;
-
-    /**
-     * @var mixed
-     */
-    protected $treeInheritenceDepth;
-
-    /**
-     * @var Consolidated
-     */
-    protected $consolidated;
-
-    /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * @var Metrics
-     */
-    protected $metrics;
-
-    public function __construct(Metrics $metrics, Consolidated $consolidated, Config $config)
+    public function __construct(protected readonly ConfigBagInterface $config)
     {
-        $this->consolidated = $consolidated;
-        $this->config = $config;
-        $this->metrics = $metrics;
-        $this->sum = $consolidated->getSum();
-        $this->avg = $consolidated->getAvg();
-
-        // grouping results
-        if ($this->sum->nbClasses > 0) {
-            $this->methodsByClass = round($this->sum->nbMethods / $this->sum->nbClasses, 2);
-            $this->locByClass = round($this->sum->lloc / $this->sum->nbClasses);
-        }
-        if ($this->sum->nbMethods > 0) {
-            $this->locByMethod = round($this->sum->lloc / $this->sum->nbMethods);
-        }
-
-        $this->treeInheritenceDepth = $metrics->get('tree')->get('depthOfInheritanceTree');
     }
 
-    abstract public function getReport();
+    /**
+     * {@inheritDoc}
+     */
+    final public function summarize(Metrics $metrics): void
+    {
+        $this->metrics = $metrics;
+        $this->consolidated = new Consolidated($metrics);
+        $sum = $this->consolidated->getSum();
+        $this->sum = $sum;
+        $this->avg = $this->consolidated->getAvg();
+
+        // grouping results
+        $this->methodsByClass = ($sum->nbClasses > 0) ? round($sum->nbMethods / $sum->nbClasses, 2) : 0;
+        $this->locByClass = ($sum->nbClasses > 0) ? round($sum->lloc / $sum->nbClasses) : 0;
+        $this->locByMethod = ($sum->nbMethods > 0) ? round($sum->lloc / $sum->nbMethods) : 0;
+
+        /** @var ProjectMetric $wholeGraph */
+        $wholeGraph = $metrics->get('tree');
+        $this->treeInheritanceDepth = $wholeGraph->get('depthOfInheritanceTree');
+    }
 }

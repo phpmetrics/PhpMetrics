@@ -1,0 +1,16 @@
+{
+    "packages": [
+        {
+            "name": "dist/foo",
+            "version": "v6.9.4"
+        },
+        {
+            "name": "dist/bar",
+            "version": "4.30.87"
+        },
+        {
+            "name": "dist/baz",
+            "version": "3.4.5"
+        }
+    ]
+}

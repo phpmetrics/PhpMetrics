@@ -1,0 +1,17 @@
+{
+  "includes": ["Controller", "/src/other/files"],
+  "excludes": ["tests", "Tests"],
+  "extensions": ["php", "php.inc", "php8"],
+  "report": {
+    "html": "report/with/relative/path",
+    "csv": "/report/with/absolute/path"
+  },
+  "groups": [
+    {"name": "Component", "match": "!component!i"},
+    {"name": "Reporters", "match": "!Report!"}
+  ],
+  "plugins": {
+    "git": {"binary": "git"},
+    "junit": {"report": "/tmp/junit.xml"}
+  }
+}

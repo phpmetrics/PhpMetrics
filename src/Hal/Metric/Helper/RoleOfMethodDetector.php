@@ -1,141 +1,134 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Metric\Helper;
 
-use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt;
+use function array_pop;
+use function array_reverse;
+use function in_array;
 
 /**
- * @package Hal\Metric\Helper
+ * This class provides methods to analyse the role of a method.
+ * Methods can be setters, getters, or something else.
+ *
+ * To see some examples, look at tests/Metric/Helper/RoleOfMethodDetectorTest.php
  */
-class RoleOfMethodDetector
+final class RoleOfMethodDetector
 {
-    /**
-     * @var array
-     */
-    private $fingerprints = [
+    /** @var array<string, array<array<class-string<Node>>>>  */
+    private array $fingerprints = [
         'getter' => [
             [
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Stmt\\Return_',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Expr\\Variable',
+                Stmt\ClassMethod::class,
+                Stmt\Return_::class,
+                Expr\PropertyFetch::class,
+                Expr\Variable::class,
             ],
             [
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Stmt\\Return_',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Name',
+                Stmt\ClassMethod::class,
+                Stmt\Return_::class,
+                Expr\PropertyFetch::class,
+                Expr\Variable::class,
+                Node\Name::class,
             ],
             [
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Stmt\\Return_',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Expr\\Variable',
+                Stmt\ClassMethod::class,
+                Stmt\Return_::class,
+                Expr\PropertyFetch::class,
+                Expr\Variable::class,
             ],
         ],
         'setter' => [
             [
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Expr\\Assign',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Param',
+                Stmt\ClassMethod::class,
+                Expr\Assign::class,
+                Expr\Variable::class,
+                Expr\PropertyFetch::class,
+                Expr\Variable::class,
+                Node\Param::class,
             ],
             [
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Expr\\Assign',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Param',
-                'PhpParser\\Node\\Name',
-            ],
-            // nicik/php-parser:^4
-            [
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Stmt\\Expression',
-                'PhpParser\\Node\\Expr\\Assign',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Param',
-                'PhpParser\\Node\\Expr\\Variable',
+                Stmt\ClassMethod::class,
+                Expr\Assign::class,
+                Expr\Variable::class,
+                Expr\PropertyFetch::class,
+                Expr\Variable::class,
+                Node\Param::class,
+                Node\Name::class,
             ],
             [
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Stmt\\Expression',
-                'PhpParser\\Node\\Expr\\Assign',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Param',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Name',
-            ],[
-                // function setOk(?bool $ok): self { $this->isOk = $ok; return $this; }
-                'PhpParser\\Node\\Stmt\\ClassMethod',
-                'PhpParser\\Node\\Stmt\\Expression',
-                'PhpParser\\Node\\Expr\\Assign',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Expr\\PropertyFetch',
-                'PhpParser\\Node\\Expr\\Variable',
-                'PhpParser\\Node\\Param',
-                'PhpParser\\Node\\Expr\\Variable',
+                Stmt\ClassMethod::class,
+                Stmt\Expression::class,
+                Expr\Assign::class,
+                Expr\Variable::class,
+                Expr\PropertyFetch::class,
+                Expr\Variable::class,
+                Node\Param::class,
+                Expr\Variable::class,
+            ],
+            [
+                Stmt\ClassMethod::class,
+                Stmt\Expression::class,
+                Expr\Assign::class,
+                Expr\Variable::class,
+                Expr\PropertyFetch::class,
+                Expr\Variable::class,
+                Node\Param::class,
+                Expr\Variable::class,
+                Node\Name::class,
             ],
         ]
     ];
 
     /**
-     * @param $node
+     * @param NodeIteratorInterface $nodeIterator
+     */
+    public function __construct(private readonly NodeIteratorInterface $nodeIterator)
+    {
+    }
+
+    /**
+     * Detects the role of a method (setter, getter, else).
+     *
+     * @param Node $node
      * @return string|null
      */
-    public function detects($node)
+    public function detects(Node $node): null|string
     {
-        if (! $node instanceof ClassMethod) {
+        if (! $node instanceof Stmt\ClassMethod) {
             return null;
         }
 
-        // build a fingerprint of the given method
+        // Build a fingerprint of the given method
         $fingerprintOfMethod = [];
-        iterate_over_node($node, function ($node) use (&$fingerprintOfMethod) {
-            // avoid identifier (php-parser:^4)
-            if ($node instanceof Identifier) {
+        $this->nodeIterator->iterateOver($node, static function (Node $node) use (&$fingerprintOfMethod): void {
+            // Ignore identifier, cast, type hint, and nullable type
+            if (
+                $node instanceof Node\Identifier
+                || $node instanceof Expr\Cast
+                || $node instanceof Node\Name
+                || $node instanceof Node\ComplexType
+            ) {
                 return;
             }
 
-            // avoid cast
-            if ($node instanceof Cast) {
+            // Ignore fluent interface
+            if ($node instanceof Stmt\Return_ && $node->expr instanceof Expr\Variable && 'this' === $node->expr->name) {
+                // Remove last element that was the "this" variable, because of "return $this;".
+                array_pop($fingerprintOfMethod);
                 return;
             }
 
-            // avoid fluent interface
-            if ($node instanceof Return_ && $node->expr instanceof Variable && $node->expr->name === 'this') {
-                unset($fingerprintOfMethod[count($fingerprintOfMethod) - 1]);
-                return;
-            }
-
-            // avoid type hint
-            if ($node instanceof Name) {
-                return;
-            }
-
-            // avoid nullable type
-            if ($node instanceof NullableType) {
-                return;
-            }
-
-            $fingerprintOfMethod[] = get_class($node);
+            $fingerprintOfMethod[] = $node::class;
         });
+        // As the iteration is recursive, first elements in fingerprint are last discovered. In order to understand the
+        // fingerprint as human-readable code, reverse it.
         $fingerprintOfMethod = array_reverse($fingerprintOfMethod);
 
-        // compare with database of fingerprints
+        // Compare with database of fingerprints
         foreach ($this->fingerprints as $type => $fingerprints) {
             if (in_array($fingerprintOfMethod, $fingerprints, true)) {
                 return $type;

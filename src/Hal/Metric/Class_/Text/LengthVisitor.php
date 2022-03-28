@@ -1,79 +1,113 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Metric\Class_\Text;
 
-use Hal\Metric\FunctionMetric;
+use Hal\Metric\Helper\MetricNameGenerator;
+use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter;
+use function array_map;
+use function array_pad;
+use function max;
+use function preg_match_all;
+use function preg_replace;
+use function preg_replace_callback;
+use function preg_split;
+use function trim;
 
 /**
- * @package Hal\Metric\Class_\Text
+ * This visitor is building metrics for each ClassLike and functions regarding the length of code.
+ * The following metrics are calculated:
+ * - loc: count all lines of code, including logical, comments, mixed and empty lines.
+ * - cloc: count of commented lines of code. Mixed lines (with both logical and commented) are included.
+ * - lloc: count of logical lines of code. Mixed lines (with both logical and commented) are included.
+ *
+ * As there is no metrics about mixed and empty lines, the total number of lines of code can differ from the sum of the
+ * number of commented lines and number of logical lines. Considering the following example:
+ * ```php
+ * $a = 42; // This is the answer to the great question!
+ * ```
+ * will have the following metrics: [loc:1, cloc:1, lloc:1].
  */
-class LengthVisitor extends NodeVisitorAbstract
+final class LengthVisitor extends NodeVisitorAbstract
 {
-
-    /**
-     * @var Metrics
-     */
-    private $metrics;
-
     /**
      * @param Metrics $metrics
+     * @param PrettyPrinter\Standard $prettyPrinter
      */
-    public function __construct(Metrics $metrics)
-    {
-        $this->metrics = $metrics;
+    public function __construct(
+        private readonly Metrics $metrics,
+        private readonly PrettyPrinter\Standard $prettyPrinter
+    ) {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): void
     {
-        if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Function_ || $node instanceof Stmt\Trait_) {
-            if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-                $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
-                $classOrFunction = $this->metrics->get($name);
-            } else {
-                $classOrFunction = new FunctionMetric((string)$node->name);
-                $this->metrics->attach($classOrFunction);
-            }
-
-            $prettyPrinter = new PrettyPrinter\Standard();
-            $code = $prettyPrinter->prettyPrintFile([$node]);
-
-            // count all lines
-            $loc = count(preg_split('/\r\n|\r|\n/', $code)) - 1;
-
-            // count and remove multi lines comments
-            $cloc = 0;
-            if (preg_match_all('!/\*.*?\*/!s', $code, $matches)) {
-                foreach ($matches[0] as $match) {
-                    $cloc += max(1, count(preg_split('/\r\n|\r|\n/', $match)));
-                }
-            }
-            $code = preg_replace('!/\*.*?\*/!s', '', $code);
-
-            // count and remove single line comments
-            $code = preg_replace_callback('!(\'[^\']*\'|"[^"]*")|((?:#|\/\/).*$)!m', function (array $matches) use (&$cloc) {
-                if (isset($matches[2])) {
-                    $cloc += 1;
-                }
-                return $matches[1];
-            }, $code, -1);
-
-            // count and remove empty lines
-            $code = trim(preg_replace('!(^\s*[\r\n])!sm', '', $code));
-            $lloc = count(preg_split('/\r\n|\r|\n/', $code));
-
-            // save result
-            $classOrFunction
-                ->set('cloc', $cloc)
-                ->set('loc', $loc)
-                ->set('lloc', $lloc);
-            $this->metrics->attach($classOrFunction);
+        if (
+            !$node instanceof Stmt\Class_
+            && !$node instanceof Stmt\Function_
+            && !$node instanceof Stmt\Trait_
+            //TODO: && !$node instanceof Stmt\Enum_
+            //TODO: && !$node instanceof Stmt\Interface_ ??
+        ) {
+            return;
         }
+
+        $nodeName = ($node instanceof Stmt\Function_)
+            ? MetricNameGenerator::getFunctionName($node)
+            : MetricNameGenerator::getClassName($node);
+        /** @var Metric $classOrFunction */
+        $classOrFunction = $this->metrics->get($nodeName);
+
+        $code = $this->prettyPrinter->prettyPrintFile([$node]);
+
+        // Count all lines.
+        $loc = $this->countSplitLines($code) - 1;
+
+        // Count and remove multi lines comments.
+        $cloc = 0;
+        preg_match_all('!/\*.*?\*/!s', $code, $matches);
+        array_map(function (string $commentedCode) use (&$cloc): void {
+            $cloc += max(1, $this->countSplitLines($commentedCode));
+        }, $matches[0]);
+        $code = preg_replace('!/\*.*?\*/!s', '', $code);
+
+        // Count and remove single line comments. New PHP 8: Do not remove PHP Attributes (#[...]).
+        $code = preg_replace_callback(
+            '!(\'[^\']*\'|"[^"]*")|((?:#[^\[]|//).*$)!m',
+            static function (array $matches) use (&$cloc): string {
+                [, $logicalCode, $commentedCode] = array_pad($matches, 3, null);
+                $cloc += (null !== $commentedCode);
+                return $logicalCode;
+            },
+            $code
+        );
+
+        // Count and remove empty lines.
+        $code = trim(preg_replace('!(^\s*[\r\n])!m', '', $code));
+        $lloc = '' === $code ? 0 : $this->countSplitLines($code);
+
+        // save result
+        $classOrFunction->set('cloc', $cloc);
+        $classOrFunction->set('loc', $loc);
+        $classOrFunction->set('lloc', $lloc);
+    }
+
+    /**
+     * Count the number of lines in the string code given in argument.
+     *
+     * @param string $code
+     * @return int
+     */
+    private function countSplitLines(string $code): int
+    {
+        return count(preg_split('/\r\n|\r|\n/', $code));
     }
 }

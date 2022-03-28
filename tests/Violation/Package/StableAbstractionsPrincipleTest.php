@@ -1,59 +1,122 @@
 <?php
+declare(strict_types=1);
 
-namespace Violation\Package;
+namespace Tests\Hal\Violation\Package;
 
+use Generator;
 use Hal\Metric\Metric;
 use Hal\Metric\PackageMetric;
 use Hal\Violation\Package\StableAbstractionsPrinciple;
-use Hal\Violation\Violations;
-use \PHPUnit\Framework\TestCase;
+use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
+use Phake;
+use Phake\IMock;
+use PHPUnit\Framework\TestCase;
+use function sqrt;
 
-/**
- * @group violation
- */
-class StableAbstractionsPrincipleTest extends TestCase
+final class StableAbstractionsPrincipleTest extends TestCase
 {
-    public function testItIgnoresNonPackageMetrics()
+    public function testViolationLevel(): void
     {
-        $metric = $this->prophesize(Metric::class);
+        self::assertSame(Violation::WARNING, (new StableAbstractionsPrinciple())->getLevel());
+    }
 
-        $object = new StableAbstractionsPrinciple();
-
-        $object->apply($metric->reveal());
-
-        $metric->get('violations')->shouldNotHaveBeenCalled();
+    public function testViolationName(): void
+    {
+        self::assertSame('Stable Abstractions Principle', (new StableAbstractionsPrinciple())->getName());
     }
 
     /**
-     * @dataProvider provideExamples
-     * @param float $abstractness
-     * @param float $instability
-     * @param int $expectedViolationCount
+     * @return Generator<string, array{0: IMock&Metric, 1: IMock&ViolationsHandlerInterface, 2: bool}>
      */
-    public function testItAddsViolationsIfAPackageIsEitherStableAndConcreteOrInstableAndAbstract($abstractness, $instability, $expectedViolationCount)
+    public function provideMetricToCheckIfViolationApplies(): Generator
     {
-        $metric = new PackageMetric('package');
-        $metric->set('violations', new Violations());
-        $metric->setNormalizedDistance($abstractness + $instability - 1);
+        yield 'Invalid metric' => [Phake::mock(Metric::class), Phake::mock(ViolationsHandlerInterface::class), false];
 
-        $object = new StableAbstractionsPrinciple();
+        $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
+        $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($packageMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
+        Phake::when($packageMetric)->__call('getDistance', [])->thenReturn(0);
+        yield 'Distance is 0' => [$packageMetric, $violationsHandler, false];
 
-        $object->apply($metric);
+        $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
+        $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($packageMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
+        Phake::when($packageMetric)->__call('getDistance', [])->thenReturn(sqrt(2) / 4);
+        yield 'Distance is positive and not too far away' => [$packageMetric, $violationsHandler, false];
 
-        $this->assertSame($expectedViolationCount, $metric->get('violations')->count());
+        $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
+        $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($packageMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
+        Phake::when($packageMetric)->__call('getDistance', [])->thenReturn(-sqrt(2) / 4);
+        yield 'Distance is negative and not too far away' => [$packageMetric, $violationsHandler, false];
+
+        $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
+        $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($packageMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
+        Phake::when($packageMetric)->__call('getDistance', [])->thenReturn(sqrt(2.1) / 4);
+        yield 'Distance is positive but too far away' => [$packageMetric, $violationsHandler, true];
+
+        $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
+        $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($packageMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
+        Phake::when($packageMetric)->__call('getDistance', [])->thenReturn(-sqrt(2.1) / 4);
+        yield 'Distance is negative but too far away' => [$packageMetric, $violationsHandler, true];
+
+        $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
+        $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($packageMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
+        Phake::when($packageMetric)->__call('getDistance', [])->thenReturn(1);
+        yield 'Maximum distance' => [$packageMetric, $violationsHandler, true];
+
+        $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
+        $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($packageMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
+        Phake::when($packageMetric)->__call('getDistance', [])->thenReturn(-1);
+        yield 'Minimum distance' => [$packageMetric, $violationsHandler, true];
     }
 
-    public static function provideExamples()
+    /**
+     * @dataProvider provideMetricToCheckIfViolationApplies
+     * @param IMock&Metric $metric
+     * @param ViolationsHandlerInterface&IMock $violationsHandler
+     * @param bool $violate
+     * @return void
+     */
+    //#[DataProvider('provideMetricToCheckIfViolationApplies')] TODO: PHPUnit 10
+    public function testViolationApplies(
+        IMock&Metric $metric,
+        IMock&ViolationsHandlerInterface $violationsHandler,
+        bool $violate
+    ): void {
+        $violation = new StableAbstractionsPrinciple();
+        $violation->apply($metric);
+
+        if (false === $violate) {
+            Phake::verifyNoInteraction($violationsHandler);
+            return;
+        }
+
+        /** @var IMock&PackageMetric $metric */
+        Phake::verify($metric)->__call('get', ['violations']);
+        Phake::verify($violationsHandler)->__call('add', [$violation]);
+        Phake::verifyNoOtherInteractions($violationsHandler);
+        self::assertSame($this->getExpectedDescription($metric), $violation->getDescription());
+    }
+
+    /**
+     * Returns the expected description of the current violation based on the values stored in the given metrics.
+     *
+     * @param PackageMetric $metric
+     * @return string
+     */
+    private function getExpectedDescription(PackageMetric $metric): string
     {
-        return [
-            'highly instable and highly concrete' => [1, 0, 0],
-            'highly stable and highly abstract' => [0, 1, 0],
-            'highly instable and highly abstract' => [1, 1, 1],
-            'highly stable and highly concrete' => [0, 0, 1],
-            'instable and concrete' => [0.76, 0.24, 0],
-            'stable and abstract' => [0.24, 0.76, 0],
-            'instable and abstract' => [0.76, 0.76, 1],
-            'stable and concrete' => [0.24, 0.24, 1],
-        ];
+        $violation = $metric->getDistance() > 0 ? 'unstable and abstract' : 'stable and concrete';
+        return <<<EOT
+Packages should be either abstract and stable or concrete and unstable.
+
+This package is $violation.
+EOT;
     }
 }

@@ -1,35 +1,54 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Application\Config;
 
 use Hal\Application\Config\File\ConfigFileReaderFactory;
+use function array_pop;
+use function array_shift;
+use function explode;
+use function preg_match;
+use function str_ends_with;
+use function str_starts_with;
+use function trim;
 
-class Parser
+/**
+ * Configuration parser.
+ */
+final class Parser implements ParserInterface
 {
-    public function parse(array $argv)
+    /**
+     * {@inheritDoc}
+     */
+    public function parse(array $argv): Config
     {
         $config = new Config();
 
-        if (count($argv) === 0) {
+        if ([] === $argv) {
             return $config;
         }
 
-        if (preg_match('!\.php$!', $argv[0]) || preg_match('!phpmetrics$!', $argv[0]) || preg_match('!phpmetrics.phar$!', $argv[0])) {
+        if (
+            str_ends_with($argv[0], '.php') ||
+            str_ends_with($argv[0], 'phpmetrics') ||
+            str_ends_with($argv[0], 'phpmetrics.phar')
+        ) {
             array_shift($argv);
         }
 
         // Checking for a configuration file option key and importing options
         foreach ($argv as $k => $arg) {
-            if (preg_match('!\-\-config=(.*)!', $arg, $matches)) {
-                $fileReader = ConfigFileReaderFactory::createFromFileName($matches[1]);
-                $fileReader->read($config);
+            if (preg_match('!--config=(.*)!', $arg, $matches)) {
+                [, $filename] = $matches;
+                ConfigFileReaderFactory::createFromFileName($filename)->read($config);
                 unset($argv[$k]);
             }
         }
 
         // arguments with options
         foreach ($argv as $k => $arg) {
-            if (preg_match('!\-\-([\w\-]+)=(.*)!', $arg, $matches)) {
-                list(, $parameter, $value) = $matches;
+            if (preg_match('!--([\w\-]+)=(.*)!', $arg, $matches)) {
+                [, $parameter, $value] = $matches;
                 $config->set($parameter, trim($value, ' "\''));
                 unset($argv[$k]);
             }
@@ -37,8 +56,8 @@ class Parser
 
         // arguments without options
         foreach ($argv as $k => $arg) {
-            if (preg_match('!\-\-([\w\-]+)$!', $arg, $matches)) {
-                list(, $parameter) = $matches;
+            if (preg_match('!--([\w\-]+)$!', $arg, $matches)) {
+                [, $parameter] = $matches;
                 $config->set($parameter, true);
                 unset($argv[$k]);
             }
@@ -46,7 +65,7 @@ class Parser
 
         // last argument
         $files = array_pop($argv);
-        if ($files && !preg_match('!^\-\-!', $files)) {
+        if ($files && !str_starts_with($files, '--')) {
             $config->set('files', explode(',', $files));
         }
 

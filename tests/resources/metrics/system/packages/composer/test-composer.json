@@ -1,0 +1,13 @@
+{
+    "name": "test",
+    "require": {
+        "php": ">=8.1",
+        "ext-test": "*",
+        "foo/foo": "^1",
+        "foo/bar": "^1.0",
+        "foo/baz": "^1.0.0",
+        "test/foo": "~1|~2",
+        "test/bar": "~1.0|~2.0",
+        "test/baz": "~1.0.0|~2.0.0"
+    }
+}

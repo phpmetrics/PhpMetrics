@@ -1,59 +1,55 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Metric\System\Coupling;
 
 use Hal\Component\Tree\GraphDeduplicated;
-use Hal\Component\Tree\Node;
 use Hal\Component\Tree\Operator\SizeOfTree;
+use Hal\Metric\CalculableInterface;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
+use function array_map;
 
 /**
- * Estimates DIT
+ * Estimates Depth of inheritance tree.
  * @see https://www.cse.iitb.ac.in/~rkj/inheritancemetrics.pdf
- *
- * @author Jean-François Lépine <https://twitter.com/Halleck45>
  */
-class DepthOfInheritanceTree
+final class DepthOfInheritanceTree implements CalculableInterface
 {
+    public function __construct(private readonly Metrics $metrics)
+    {
+    }
 
     /**
-     * @param Metrics $metrics
+     * {@inheritDoc}
      */
-    public function calculate(Metrics $metrics)
+    public function calculate(): void
     {
         $projectMetric = new ProjectMetric('tree');
+        $averageHeight = (new SizeOfTree($this->buildParentChildGraph()))->getAverageHeightOfGraph();
+        $projectMetric->set('depthOfInheritanceTree', $averageHeight);
+        $this->metrics->attach($projectMetric);
+    }
 
-        // building graph with parents / childs relations only
+    /**
+     * Builds a graph with parent-child relations only.
+     *
+     * @return GraphDeduplicated
+     */
+    private function buildParentChildGraph(): GraphDeduplicated
+    {
         $graph = new GraphDeduplicated();
 
-        foreach ($metrics->all() as $metric) {
-            if (!$metric instanceof ClassMetric) {
-                continue;
-            }
+        array_map(static function (ClassMetric $metric) use ($graph): void {
+            $to = $graph->gather($metric->get('name'));
+            /** @var array<string> $parents */
+            $parents = $metric->get('parents');
+            array_map(static function (string $parent) use ($graph, $to): void {
+                $graph->addEdge($graph->gather($parent), $to);
+            }, $parents);
+        }, $this->metrics->getClassMetrics());
 
-            if (!$graph->has($metric->get('name'))) {
-                $graph->insert(new Node($metric->get('name')));
-            }
-
-            $to = $graph->get($metric->get('name'));
-
-            foreach ($metric->get('parents') as $parent) {
-                if (!$graph->has($parent)) {
-                    $graph->insert(new Node($parent));
-                }
-
-                $from = $graph->get($parent);
-
-                $graph->addEdge($from, $to);
-            }
-        }
-
-        $size = new SizeOfTree($graph);
-        $averageHeight = $size->getAverageHeightOfGraph();
-
-        $projectMetric->set('depthOfInheritanceTree', $averageHeight);
-        $metrics->attach($projectMetric);
+        return $graph;
     }
 }

@@ -1,39 +1,55 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Violation\Search;
 
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
+use function array_unique;
+use function implode;
 
-class SearchShouldNotBeFoundPrinciple implements Violation
+/**
+ * This class triggers a violation when a given criterion of research has been detected in some analysed metrics.
+ * It manages custom violations.
+ */
+final class SearchShouldNotBeFoundPrinciple implements Violation
 {
+    /** @var array<string> */
+    private array $concernedSearches = [];
 
-    private $concernedSearches = [];
-
-    public function getName()
+    /**
+     * {@inheritDoc}
+     */
+    public function getName(): string
     {
         return implode(', ', $this->concernedSearches);
     }
 
-    public function apply(Metric $metric)
+    /**
+     * {@inheritDoc}
+     */
+    public function apply(Metric $metric): void
     {
-        if ($metric->has('was-not-expected') && $metric->get('was-not-expected')) {
-            $this->concernedSearches = array_unique(
-                array_merge(
-                    $this->concernedSearches,
-                    $metric->get('was-not-expected-by')
-                )
-            );
-            $metric->get('violations')->add($this);
+        if (true !== $metric->get('was-not-expected')) {
+            return;
         }
+
+        $this->concernedSearches = array_unique([...$this->concernedSearches, ...$metric->get('was-not-expected-by')]);
+        $metric->get('violations')->add($this);
     }
 
-    public function getLevel()
+    /**
+     * {@inheritDoc}
+     */
+    public function getLevel(): int
     {
         return Violation::CRITICAL;
     }
 
-    public function getDescription()
+    /**
+     * {@inheritDoc}
+     */
+    public function getDescription(): string
     {
         return 'According configuration, this component is not expected to be found in the code.';
     }

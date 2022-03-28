@@ -1,7 +1,14 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Metric;
 
-class FileMetric implements Metric, \JsonSerializable
+use JsonSerializable;
+
+/**
+ * Contains all metrics related to a file.
+ */
+class FileMetric implements Metric, JsonSerializable
 {
     use BagTrait;
 }

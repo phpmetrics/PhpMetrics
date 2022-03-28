@@ -1,145 +1,150 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Metric\System\Packages\Composer;
 
-use Hal\Application\Config\Config;
-use Hal\Application\Config\ConfigException;
-use Hal\Component\File\Finder;
+use Hal\Component\File\FinderInterface;
+use Hal\Metric\CalculableInterface;
 use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
+use JsonException;
+use function array_column;
+use function array_filter;
+use function array_flip;
+use function array_intersect_key;
+use function array_keys;
+use function array_map;
+use function array_merge;
+use function array_walk;
+use function file_get_contents;
+use function json_decode;
+use function preg_replace;
+use function str_contains;
+use function str_starts_with;
+use function strtolower;
+use function version_compare;
+use const ARRAY_FILTER_USE_KEY;
+use const JSON_THROW_ON_ERROR;
 
 /**
- * @package Hal\Metric\System\Packages\Composer
+ * This class computes information from Composer dependencies used in the analysed project.
  */
-class Composer
+final class Composer implements CalculableInterface
 {
-
     /**
-     * @var Config
+     * @param Metrics $metrics
+     * @param null|bool $isComposerEnabled If null, default value is true. Only disable this calculation when false.
+     * @param array<string> $pathsList
+     * @param FinderInterface $composerJsonFinder
+     * @param FinderInterface $composerLockFinder
+     * @param ComposerRegistryConnectorInterface $composerRegistryConnector
      */
-    private $config;
-
-    /**
-     * @param array $files
-     */
-    public function __construct(Config $config, array $files)
-    {
-        $this->config = $config;
+    public function __construct(
+        private readonly Metrics $metrics,
+        private readonly null|bool $isComposerEnabled,
+        private readonly array $pathsList,
+        private readonly FinderInterface $composerJsonFinder,
+        private readonly FinderInterface $composerLockFinder,
+        private readonly ComposerRegistryConnectorInterface $composerRegistryConnector,
+    ) {
     }
 
     /**
-     * @param Metrics $metrics
-     * @throws ConfigException
+     * {@inheritDoc}
+     * @throws JsonException
      */
-    public function calculate(Metrics $metrics)
+    public function calculate(): void
     {
-        if ($this->config->has('composer') && false === $this->config->get('composer')) {
+        if (false === $this->isComposerEnabled) {
             return;
         }
 
         $projectMetric = new ProjectMetric('composer');
-        $projectMetric->set('packages', []);
-        $metrics->attach($projectMetric);
-        $packages = [];
+        $this->metrics->attach($projectMetric);
+
         $rawRequirements = $this->getComposerJsonRequirements();
-        $rawInstalled = $this->getComposerLockInstalled(\array_keys($rawRequirements));
+        // Exclude PHP itself and extensions.
+        $rawRequirements = array_filter($rawRequirements, static function (string $package): bool {
+            return 'php' !== strtolower($package) && !str_starts_with($package, 'ext-');
+        }, ARRAY_FILTER_USE_KEY);
+        $rawInstalled = $this->getComposerLockInstalled(array_keys($rawRequirements));
 
-        $packagist = new Packagist();
+        $packages = [];
         foreach ($rawRequirements as $requirement => $version) {
-            $installed = isset($rawInstalled[$requirement]) ? $rawInstalled[$requirement] : null;
-            $package = $packagist->get($requirement);
+            // TODO: $package shouldn't be stdClass but some kind of ComposerPackage entity.
+            $package = $this->composerRegistryConnector->get($requirement);
 
-            $package->installed = $installed;
+            $package->installed = $rawInstalled[$requirement] ?? null;
             $package->required = $version;
             $package->name = $requirement;
             // Manage case where the package is not hosted on packagist (private repository) so we can't know the status
-            if ($installed === null || $package->latest === null) {
+            if (null === $package->installed || null === $package->latest) {
                 $package->status = 'unknown';
             } else {
-                $package->status = version_compare($installed, $package->latest, '<') ? 'outdated' : 'latest';
+                $package->status = version_compare($package->installed, $package->latest, '<') ? 'outdated' : 'latest';
             }
             $packages[$requirement] = $package;
         }
-
-        // exclude extensions
-        $packages = array_filter($packages, function ($package) {
-            return !preg_match('!(^php$|^ext\-)!', $package->name);
-        });
 
         $projectMetric->set('packages', $packages);
         $projectMetric->set('packages-installed', $rawInstalled);
     }
 
     /**
-     * Returns the requirements defined in the composer(-dist)?.json file.
-     * @return array
+     * Returns the requirements defined in the "composer(-dist)?.json" file.
+     *
+     * @return array<string, string>
+     * @throws JsonException When the "composer.json" file cannot be decoded from JSON.
      */
-    protected function getComposerJsonRequirements()
+    private function getComposerJsonRequirements(): array
     {
-        $rawRequirements = [[]];
-
-        // find composer.json files
-        $finder = new Finder(['json'], $this->config->get('exclude'));
-
-        // include root dir by default
-        $files = array_merge($this->config->get('files'), ['./']);
-        $files = $finder->fetch($files);
-
-        foreach ($files as $filename) {
-            if (!\preg_match('/composer(-dist)?\.json/', $filename)) {
-                continue;
+        $rawRequirements = array_map(static function (string $filename): array {
+            if (!str_contains($filename, 'composer.json') && !str_contains($filename, 'composer-dist.json')) {
+                return [];
             }
-            $composerJson = (object)\json_decode(\file_get_contents($filename));
+            /**
+             * @noinspection JsonEncodingApiUsageInspection TODO: Wait for a fix
+             * @see https://github.com/kalessil/phpinspectionsea/issues/1725
+             */
+            $composerJson = json_decode(file_get_contents($filename), true, flags: JSON_THROW_ON_ERROR);
+            $composerJson += ['require' => []];
+            return $composerJson['require'];
+        }, $this->composerJsonFinder->fetch([...$this->pathsList, './']));
 
-            if (!isset($composerJson->require)) {
-                continue;
-            }
-
-            $rawRequirements[] = (array)$composerJson->require;
-        }
-
-        return \call_user_func_array('array_merge', $rawRequirements);
+        return array_merge([], ...$rawRequirements);
     }
 
     /**
-     * Returns the installed packages from the composer.lock file.
-     * @param array $rootPackageRequirements List of requirements to match installed packages only with requirements.
-     * @return array
+     * Returns the installed packages from the "composer.lock" file.
+     *
+     * @param array<string> $rootPackageRequired List of root required packages to only match installed packages.
+     * @return array<string, string>
+     * @throws JsonException When the "composer.lock" file cannot be decoded from JSON.
      */
-    protected function getComposerLockInstalled($rootPackageRequirements)
+    private function getComposerLockInstalled(array $rootPackageRequired): array
     {
-        $rawInstalled = [[]];
-
-        // Find composer.lock file
-        $finder = new Finder(['lock'], $this->config->get('exclude'));
-
-        // include root dir by default
-        $files = array_merge($this->config->get('files'), ['./']);
-        $files = $finder->fetch($files);
-
-        // List all composer.lock found in the project.
-        foreach ($files as $filename) {
-            if (false === \strpos($filename, 'composer.lock')) {
-                continue;
+        $rawInstalled = array_map(static function (string $filename) use ($rootPackageRequired): array {
+            if (!str_contains($filename, 'composer.lock')) {
+                return [];
             }
-            $composerLockJson = (object)\json_decode(\file_get_contents($filename));
+            /**
+             * @noinspection JsonEncodingApiUsageInspection TODO: Wait for a fix
+             * @see https://github.com/kalessil/phpinspectionsea/issues/1725
+             */
+            $composerLock = json_decode(file_get_contents($filename), true, flags: JSON_THROW_ON_ERROR);
+            $composerLock += ['packages' => []];
 
-            if (!isset($composerLockJson->packages)) {
-                continue;
-            }
+            // List all installed packages versions by name.
+            // Only keep packages under the root required packages (not keeping dependencies of dependencies).
+            // Then normalize the version format.
+            $installed = array_column($composerLock['packages'], 'version', 'name');
+            $installed = array_intersect_key($installed, array_flip($rootPackageRequired));
+            array_walk($installed, static function (string &$packageVersion): void {
+                $packageVersion = preg_replace('#[^.\d]#', '', $packageVersion);
+            });
+            return $installed;
+        }, $this->composerLockFinder->fetch([...$this->pathsList, './']));
 
-            $installed = [];
-            foreach ($composerLockJson->packages as $package) {
-                if (!\in_array($package->name, $rootPackageRequirements, true)) {
-                    continue;
-                }
-
-                $installed[$package->name] = \preg_replace('#[^.\d]#', '', $package->version);
-            }
-
-            $rawInstalled[] = $installed;
-        }
-
-        return \call_user_func_array('array_merge', $rawInstalled);
+        return array_merge([], ...$rawInstalled);
     }
 }

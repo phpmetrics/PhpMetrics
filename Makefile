@@ -1,18 +1,25 @@
 .PHONY: docker build
 
 include artifacts/Makefile
+include qa/Makefile
 
-# Run unit tests
-test:
-	./vendor/bin/phpunit -c phpunit.xml.dist
+CURRENT_TAG=$(shell git tag | tail -n 2 | head -n 1)
 
-# Codesniffer check
-phpcs:
-	./vendor/bin/phpcs src/ tests/ --extensions=php -n
+.PHONY: build
+build: build-phar
+	@#TODO: docker build --pull -t phpmetrics/phpmetrics:${CURRENT_TAG}
+	@docker build --pull -t phpmetrics/phpmetrics:3.0.0 .
 
-# Codesniffer fix
-phpcbf:
-	./vendor/bin/phpcbf src/ tests/ --extensions=php -n
+# Build phar
+.PHONY: build-phar
+build-phar: qa
+	@# Remove the phar that must be replaced by the new release.
+	@rm -f releases/phpmetrics.phar
+	@mkdir -p releases
+	@echo Copying sources
+	@mkdir -p /tmp/phpmetrics-build
+	@cp * -R /tmp/phpmetrics-build
+	@rm -Rf /tmp/phpmetrics-build/vendor /tmp/phpmetrics-build/composer.lock
 
 # Used for tag releasing
 # Don't use directly, use `make release` instead
@@ -29,7 +36,8 @@ tag:
 		doc/installation.md
 	@sed -i -r "s/([0-9]{4}\-[0-9]{2}\-[0-9]{2})/`date +%Y-%m-%d`/g" artifacts/bintray.json
 	@make changelog-deb
-
+	@echo Installing dependencies
+	@cd /tmp/phpmetrics-build && docker run --rm -it -u$(shell id -u):0 -v $$PWD:/app -w /app --entrypoint=composer pharbuilder_phpmetrics update --no-dev --optimize-autoloader --prefer-dist
 
 # Tag git with last release
 new_git_version: build tag

@@ -1,25 +1,32 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
 
-class TooDependent implements Violation
+/**
+ * This class triggers a violation when the efferent coupling of a class is grater than or equals to 20.
+ */
+final class TooDependent implements Violation
 {
+    private Metric $metric;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Too dependent';
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function apply(Metric $metric)
+    public function apply(Metric $metric): void
     {
         if (!$metric instanceof ClassMetric) {
             return;
@@ -28,28 +35,30 @@ class TooDependent implements Violation
         $this->metric = $metric;
 
         if ($metric->get('efferentCoupling') >= 20) {
-            $metric->get('violations')->add($this);
-            return;
+            /** @var ViolationsHandlerInterface $violationsHandler */
+            $violationsHandler = $metric->get('violations');
+            $violationsHandler->add($this);
         }
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function getLevel()
+    public function getLevel(): int
     {
         return Violation::INFO;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
+        $coupling = $this->metric->get('efferentCoupling');
         return <<<EOT
 This class looks use really high number of components.
 
-* Efferent coupling is {$this->metric->get('efferentCoupling')}, so this class uses {$this->metric->get('efferentCoupling')} different external components.
+* Efferent coupling is $coupling, so this class uses $coupling different external components.
 
 Maybe you should check why this class has lot of dependencies.
 EOT;

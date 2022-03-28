@@ -6,7 +6,7 @@ if (!file_exists('vendor/autoload.php')) {
     exit(1);
 }
 
-$filename = 'build/phpmetrics.phar';
+$filename = 'releases/phpmetrics.phar';
 if (file_exists($filename)) {
     unlink($filename);
 }
@@ -16,7 +16,7 @@ $phar->setSignatureAlgorithm(\Phar::SHA1);
 $phar->startBuffering();
 
 $files = array_merge(rglob('*.php'), rglob('*.js'), rglob('*.html'), rglob('*.css'), rglob('*.png'), rglob('*.ttf'));
-$exclude = '!^(\.git)|(\.svn)|(bin)|([tT]ests)|(doc)|(artifacts)!';
+$exclude = '!^(\.git)|(\.svn)|(bin)|([tT]ests)|(doc)|(artifacts)|(qa)!';
 foreach ($files as $file) {
     if (preg_match($exclude, $file)) {
         continue;
@@ -28,15 +28,17 @@ foreach ($files as $file) {
 $phar->setStub(<<<STUB
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 
-/*
-* This file is part of the PhpMetrics
-*
-* (c) Jean-François Lépine
-*
-* This source file is subject to the MIT license that is bundled
-* with this source code in the file LICENSE.
-*/
+use Hal\DependencyInjection\DependencyInjectionProcessor;
+/**
+ * This file is part of the PhpMetrics
+ *
+ * (c) Jean-François Lépine
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 Phar::mapPhar('phpmetrics.phar');
 
@@ -47,7 +49,7 @@ Phar::mapPhar('phpmetrics.phar');
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 require_once 'phar://phpmetrics.phar/vendor/autoload.php';
-(new \Hal\Application\Application())->run(\$argv);
+exit((new DependencyInjectionProcessor())->load(\$argv)->run());
 
 __HALT_COMPILER();
 STUB

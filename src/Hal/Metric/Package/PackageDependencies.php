@@ -1,44 +1,65 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Metric\Package;
 
+use Hal\Metric\CalculableInterface;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\InterfaceMetric;
-use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Hal\Metric\PackageMetric;
+use function array_map;
+use function in_array;
+use function str_contains;
+use function strrev;
+use function strstr;
 
-class PackageDependencies
+/**
+ * This class registers the dependencies at package level, instead of class level.
+ * This metric will be used to calculate the package abstraction, package instability and package distance of the
+ * analyzed project.
+ *
+ * This calculable metric depends on other visitors.
+ * @uses \Hal\Metric\Package\PackageCollectingVisitor for the "package" metric applied on classes
+ * @uses \Hal\Metric\Class_\Coupling\ExternalsVisitor for the "externals" metric applied on classes
+ */
+final class PackageDependencies implements CalculableInterface
 {
-    public function calculate(Metrics $metrics)
+    public function __construct(private readonly Metrics $metrics)
     {
-        $classes = array_filter($metrics->all(), function (Metric $metric) {
-            return $metric instanceof ClassMetric || $metric instanceof InterfaceMetric;
-        });
-
-        foreach ($classes as $each) {
-            $this->increaseDependencies($each, $metrics);
-        }
     }
 
     /**
-     * @param ClassMetric|InterfaceMetric|Metric $class
-     * @param Metrics $metrics
+     * {@inheritDoc}
      */
-    private function increaseDependencies(Metric $class, Metrics $metrics)
+    public function calculate(): void
     {
-        if (! $class->has('package') || ! $class->has('externals')) {
-            return;
-        }
-        $incomingPackage = $metrics->get($class->get('package')); /* @var $incomingPackage PackageMetric */
-        foreach ($class->get('externals') as $outgoingClassName) {
-            // same package?
-            if (in_array($outgoingClassName, $incomingPackage->getClasses())) {
+        array_map(
+            $this->increaseDependencies(...),
+            [...$this->metrics->getClassMetrics(), ...$this->metrics->getInterfaceMetrics()]
+        );
+    }
+
+    /**
+     * Add incoming and outgoing dependencies on package level.
+     *
+     * @param ClassMetric|InterfaceMetric $class
+     */
+    private function increaseDependencies(ClassMetric|InterfaceMetric $class): void
+    {
+        /* @var PackageMetric $incomingPackage */
+        $incomingPackage = $this->metrics->get($class->get('package'));
+        /** @var array<string> $externalDependencies */
+        $externalDependencies = $class->get('externals');
+        foreach ($externalDependencies as $outgoingClassName) {
+            // Ignore dependencies that belong to the same current analyzed package.
+            if (in_array($outgoingClassName, $incomingPackage->getClasses(), true)) {
                 continue;
             }
-            $outgoingPackageName = $this->getPackageOfClass($outgoingClassName, $metrics);
+
+            $outgoingPackageName = $this->getPackageOfClass($outgoingClassName);
             $incomingPackage->addOutgoingClassDependency($outgoingClassName, $outgoingPackageName);
-            $outgoingPackage = $metrics->get($outgoingPackageName);
+            $outgoingPackage = $this->metrics->get($outgoingPackageName);
 
             if ($outgoingPackage instanceof PackageMetric) {
                 $outgoingPackage->addIncomingClassDependency($class->getName(), $incomingPackage->getName());
@@ -46,16 +67,18 @@ class PackageDependencies
         }
     }
 
-    private function getPackageOfClass($className, Metrics $metrics)
+    /**
+     * Get the package name from a given fully qualified class name.
+     * Try to find the package name stored in the metrics. If none set, use the fully qualified class name to infer the
+     * package name. When the namespace of the classname is "root" ("\"), then package name is set to "\".
+     *
+     * @param string $className
+     * @return string
+     */
+    private function getPackageOfClass(string $className): string
     {
-        if ($metrics->has($className) && $metrics->get($className)->has('package')) {
-            return $metrics->get($className)->get('package');
-        }
-        if (strpos($className, '\\') === false) {
-            return '\\';
-        }
-        $parts = explode('\\', $className);
-        array_pop($parts);
-        return implode('\\', $parts) . '\\';
+        /** @var null|string $packageName */
+        $packageName = $this->metrics->get($className)?->get('package');
+        return $packageName ?? (str_contains($className, '\\') ? strrev(strstr(strrev($className), '\\')) : '\\');
     }
 }

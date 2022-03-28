@@ -1,146 +1,244 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Metric\Class_\Coupling;
 
-use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Metric\Helper\MetricNameGenerator;
+use Hal\Metric\Helper\NodeIteratorInterface;
+use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
+use Stringable;
+use function array_map;
+use function in_array;
+use function ltrim;
+use function preg_match_all;
+use function property_exists;
+use function str_contains;
+use function strstr;
+use function strtolower;
 
 /**
  * List externals dependencies
- *
- * @package Hal\Metric\Class_\Coupling
  */
-class ExternalsVisitor extends NodeVisitorAbstract
+final class ExternalsVisitor extends NodeVisitorAbstract
 {
-
-    /**
-     * @var Metrics
-     */
-    private $metrics;
-
-    /**
-     * @var Stmt\UseUse[]
-     */
-    private $uses = [];
+    /** @var array<Stmt\UseUse> */
+    private array $uses = [];
+    /** @var array<string> */
+    private array $dependencies = [];
+    /** @var array<string> */
+    private array $parents = [];
+    /** @var array<string> */
+    private array $interfaces = [];
 
     /**
      * @param Metrics $metrics
+     * @param NodeIteratorInterface $nodeIterator
      */
-    public function __construct(Metrics $metrics)
-    {
-        $this->metrics = $metrics;
+    public function __construct(
+        private readonly Metrics $metrics,
+        private readonly NodeIteratorInterface $nodeIterator,
+    ) {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): void
     {
         if ($node instanceof Stmt\Namespace_) {
             $this->uses = [];
+            return;
         }
 
         if ($node instanceof Stmt\Use_) {
-            $this->uses = array_merge($this->uses, $node->uses);
+            $this->uses = [...$this->uses, ...$node->uses];
+            return;
         }
 
-        if ($node instanceof Stmt\Class_
-            || $node instanceof Stmt\Interface_
-            || $node instanceof Stmt\Trait_
+        if (
+            !$node instanceof Stmt\Class_
+            && !$node instanceof Stmt\Interface_
+            && !$node instanceof Stmt\Trait_
+            //TODO: && !$node instanceof Stmt\Enum_ ?
+            //TODO: maybe simply set !$node instanceof Stmt\ClassLike ?
         ) {
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
-            $parents = [];
-            $interfaces = [];
+            return;
+        }
 
-            $dependencies = [];
+        /** @var Metric $class */
+        $class = $this->metrics->get(MetricNameGenerator::getClassName($node));
+        $this->parents = [];
+        $this->interfaces = [];
+        $this->dependencies = [];
 
-            // extends
-            if (isset($node->extends)) {
-                if (is_array($node->extends)) {
-                    foreach ((array)$node->extends as $interface) {
-                        $this->pushToDependencies($dependencies, (string)$interface);
-                        array_push($parents, (string)$interface);
-                    }
-                } else {
-                    $this->pushToDependencies($dependencies, (string)$node->extends);
-                    array_push($parents, (string)$node->extends);
-                }
+        // Extends
+        // In ClassLike instances, only Interface can have several extends.
+        // In ClassLike instances, only Class can have a single extends.
+        if ($node instanceof Stmt\Interface_) {
+            array_map($this->addParent(...), $node->extends);
+        } elseif ($node instanceof Stmt\Class_ && null !== $node->extends) {
+            $this->addParent($node->extends);
+        }
+
+        // Implements
+        // In ClassLike instances, only Class and Enum can have several implements.
+        if ($node instanceof Stmt\Class_ /* TODO: || $node instanceof Stmt\Enum_ */) {
+            array_map($this->addImplementation(...), $node->implements);
+        }
+
+        // Inside methods.
+        array_map($this->checkMethods(...), $node->getMethods());
+
+        // Look for PHPDoc annotations on class level.
+        $this->addDependenciesFromPhpDocAnnotations($node);
+
+        // TODO: Add PHP Attributes
+        // TODO: Add Trait usages.
+        // TODO: Add Properties typehint.
+
+        $class->set('externals', $this->dependencies);
+        $class->set('parents', $this->parents);
+        $class->set('implements', $this->interfaces);
+    }
+
+    /**
+     * @param string|Stringable $dependency
+     * @return void
+     */
+    private function addDependency(string|Stringable $dependency): void
+    {
+        $dependency = (string)$dependency;
+        if (in_array(strtolower($dependency), ['self', 'parent'], true)) {
+            return;
+        }
+        $this->dependencies[] = $dependency;
+    }
+
+    /**
+     * @param string|Stringable $parent
+     * @return void
+     */
+    private function addParent(string|Stringable $parent): void
+    {
+        $parent = (string)$parent;
+        $this->parents[] = $parent;
+        // Parenting is a dependency.
+        $this->addDependency($parent);
+    }
+
+    /**
+     * @param string|Stringable $implements
+     * @return void
+     */
+    private function addImplementation(string|Stringable $implements): void
+    {
+        $implements = (string)$implements;
+        $this->interfaces[] = $implements;
+        // Implementation is a dependency.
+        $this->addDependency($implements);
+    }
+
+    /**
+     * Checks the use of dependencies inside a classMethod.
+     * @param Stmt\ClassMethod $stmt
+     * @return void
+     */
+    private function checkMethods(Stmt\ClassMethod $stmt): void
+    {
+        // Return types in methods.
+        $this->addDependenciesFromTypeHint($stmt->returnType);
+
+        // Type hint of method's arguments
+        array_map(function (Node\Param $param): void {
+            $this->addDependenciesFromTypeHint($param->type);
+        }, $stmt->params);
+
+        // Direct call by class name:
+        // - new MyClass();
+        // - MyClass::staticCall();
+        // - MyClass::$staticProperty;
+        // - MyClass::class;
+        // - instanceof MyClass;
+        $this->nodeIterator->iterateOver($stmt, function (Node $node): void {
+            if ($node instanceof Node\Expr && property_exists($node, 'class') && $node->class instanceof Node\Name) {
+                $this->addDependency($node->class);
             }
+        });
 
-            // implements
-            if (isset($node->implements)) {
-                foreach ($node->implements as $interface) {
-                    $this->pushToDependencies($dependencies, (string)$interface);
-                    array_push($interfaces, (string)$interface);
-                }
-            }
+        // PHP Doc annotations.
+        $this->addDependenciesFromPhpDocAnnotations($stmt);
+    }
 
-            foreach ($node->stmts as $stmt) {
-                if ($stmt instanceof Stmt\ClassMethod) {
-                    // return
-                    if (isset($stmt->returnType)) {
-                        if ($stmt->returnType instanceof Node\Name\FullyQualified) {
-                            $this->pushToDependencies($dependencies, (string)$stmt->returnType);
-                        }
-                    }
-
-                    // Type hint of method's parameters
-                    foreach ($stmt->params as $param) {
-                        if ($param->type) {
-                            if ($param->type instanceof Node\Name\FullyQualified) {
-                                $this->pushToDependencies($dependencies, (string)$param->type);
-                            }
-                        }
-                    }
-
-                    // instantiations, static calls
-                    \iterate_over_node($stmt, function ($node) use (&$dependencies) {
-                        switch (true) {
-                            case $node instanceof Node\Expr\New_:
-                                // new MyClass
-                                $this->pushToDependencies($dependencies, getNameOfNode($node));
-                                break;
-                            case $node instanceof Node\Expr\StaticCall:
-                                // MyClass::Call
-                                $this->pushToDependencies($dependencies, getNameOfNode($node));
-                                break;
-                        }
-                    });
-
-                    // annotations
-                    $comments = $stmt->getDocComment();
-                    if ($comments && false !== preg_match_all('!\s+\*\s+@(\w+)!', $comments->getText(), $matches)) {
-                        foreach ($matches[1] as $check) {
-                            foreach ($this->uses as $use) {
-                                if (method_exists($use, 'getAlias')) {
-                                    if (((string)$use->getAlias()) === $check) {
-                                        $this->pushToDependencies($dependencies, (string)($use->name));
-                                    }
-                                    continue;
-                                }
-                                if ($use->alias === $check) {
-                                    $this->pushToDependencies($dependencies, (string)($use->name));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            $class->set('externals', $dependencies);
-            $class->set('parents', $parents);
-            $class->set('implements', $interfaces);
+    /**
+     * Add dependencies inferred by the node representing a type hint (from parameter or return type) given in argument.
+     *
+     * @param null|Node\Identifier|Node\Name|Node\ComplexType $node
+     * @return void
+     */
+    private function addDependenciesFromTypeHint(null|Node\Identifier|Node\Name|Node\ComplexType $node): void
+    {
+        if ($node instanceof Node\Name) {
+            $this->addDependency($node);
+            return;
+        }
+        if ($node instanceof Node\NullableType) {
+            $this->addDependency($node->type);
+            return;
+        }
+        if ($node instanceof Node\UnionType || $node instanceof Node\IntersectionType) {
+            array_map($this->addDependenciesFromTypeHint(...), $node->types);
         }
     }
 
-    private function pushToDependencies(array &$dependencies, $dependency)
+    /**
+     * Add dependencies inferred by looking at the PHPDoc annotations. Replace PHPDoc annotations by real namespace name
+     * when an alias is used.
+     *
+     * @param Node $node
+     * @return void
+     */
+    private function addDependenciesFromPhpDocAnnotations(Node $node): void
     {
-        $lowercase = strtolower($dependency);
-        if ('self' === $lowercase || 'parent' === $lowercase) {
-            return;
+        $comments = $node->getDocComment();
+        preg_match_all('!\s+\*\s+@([\w\\\\]+)!', (string)$comments?->getReformattedText(), $matches);
+        $annotations = $matches[1] ?? [];
+        foreach ($annotations as $check) {
+            if (null !== ($resolvedName = $this->resolveClassName($check))) {
+                $this->addDependency($resolvedName);
+            }
         }
-        array_push($dependencies, (string)$dependency);
+    }
+
+    /**
+     * Resolves the class name to get the fully qualified class name even if given class name is referring to an alias.
+     *
+     * @param string $classNameToResolve
+     * @return null|string The fully qualified class name with aliases resolved, or NULL if the given class name is not
+     *     resolvable.
+     */
+    private function resolveClassName(string $classNameToResolve): null|string
+    {
+        // If class name is using root namespace, it's already resolved.
+        if ('\\' === $classNameToResolve[0]) {
+            return ltrim($classNameToResolve, '\\');
+        }
+
+        // Otherwise, check with the defined `use` statements.
+        foreach ($this->uses as $use) {
+            $useAlias = (string)$use->getAlias();
+            if ($useAlias === $classNameToResolve && !str_contains($classNameToResolve, '\\')) {
+                return (string)$use->name;
+            }
+            if ($useAlias === strstr($classNameToResolve, '\\', true)) {
+                return $use->name . strstr($classNameToResolve, '\\');
+            }
+        }
+
+        // If not found, the given string is not a resolvable class name.
+        return null;
     }
 }

@@ -1,39 +1,28 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Application\Config\File;
 
-use Hal\Application\Config\Config;
+use Hal\Application\Config\ConfigBagInterface;
+use Hal\Exception\ConfigException\ConfigFileReadingException;
+use function parse_ini_file;
 
-class ConfigFileReaderIni implements ConfigFileReaderInterface
+/**
+ * Reader of a .ini configuration file.
+ */
+final class ConfigFileReaderIni extends AbstractConfigFileReader
 {
     /**
-     * @var string
+     * {@inheritDoc}
      */
-    private $filename;
-
-    /**
-     * @param string $filename
-     */
-    public function __construct($filename)
+    public function read(ConfigBagInterface $config): void
     {
-        $this->filename = $filename;
-    }
-
-    /**
-     * @param Config $config
-     *
-     * @return void
-     */
-    public function read(Config $config)
-    {
-        $options = parse_ini_file($this->filename);
+        $options = parse_ini_file($this->filename, true);
 
         if (false === $options) {
-            throw new \InvalidArgumentException("Cannot parse configuration file '{$this->filename}'");
+            throw ConfigFileReadingException::inIni($this->filename);
         }
 
-        foreach ($options as $name => $value) {
-            $config->set($name, $value);
-        }
+        $this->normalizeConfig($config, $options);
     }
 }

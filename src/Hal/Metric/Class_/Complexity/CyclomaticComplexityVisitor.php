@@ -1,13 +1,23 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Metric\Class_\Complexity;
 
-use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Metric\Helper\MetricNameGenerator;
 use Hal\Metric\Helper\RoleOfMethodDetector;
+use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
+use function array_filter;
+use function array_key_exists;
+use function array_map;
+use function array_sum;
+use function get_object_vars;
+use function in_array;
+use function is_array;
+use function max;
 
 /**
  * Calculate cyclomatic complexity number and weighted method count.
@@ -23,7 +33,7 @@ use PhpParser\NodeVisitorAbstract;
  *
  *  2. CCN = Number of each decision point
  *
- * The weighted method count (WMC) is count of methods parameterized by a algorithm to compute the weight of a method.
+ * The weighted method count (WMC) is count of methods parameterized by an algorithm to compute the weight of a method.
  * Given a weight metric w and methods m it can be computed as
  *
  *  sum m(w') over (w' in w)
@@ -40,91 +50,105 @@ use PhpParser\NodeVisitorAbstract;
  * @see https://en.wikipedia.org/wiki/Cyclomatic_complexity
  * @see http://www.literateprogramming.com/mccabe.pdf
  * @see https://www.pitt.edu/~ckemerer/CK%20research%20papers/MetricForOOD_ChidamberKemerer94.pdf
+ *
+ * @phpstan-type ComplexIncrementCCNode callable(Node): int
  */
-class CyclomaticComplexityVisitor extends NodeVisitorAbstract
+final class CyclomaticComplexityVisitor extends NodeVisitorAbstract
 {
-    /** @var Metrics */
-    private $metrics;
+    /** @var array<string, int> List of values about how much the CC must be incremented for each type of node. */
+    private static array $simpleIncrementList = [
+        'Stmt_If' => 1, // `if (...)`
+        'Stmt_ElseIf' => 1, // `elseif (...)`
+        'Stmt_For' => 1, // `for (...)`
+        'Stmt_Foreach' => 1, // `foreach (...)`
+        'Stmt_While' => 1, // `while (...) { ... }`
+        'Stmt_Do' => 1, // `do { ... } while (...)`
+        'Expr_BinaryOp_LogicalAnd' => 1, // `... and ...`
+        'Expr_BinaryOp_LogicalOr' => 1, // `... or ...`
+        'Expr_BinaryOp_LogicalXor' => 1, // `... xor ...`
+        'Expr_BinaryOp_BooleanAnd' => 1, // `... && ...`
+        'Expr_BinaryOp_BooleanOr' => 1, // `... || ...`
+        'Stmt_Catch' => 1, // `... } catch (...) { ...`
+        'Expr_Ternary' => 1, // `... ? ... : ...`
+        'Expr_BinaryOp_Coalesce' => 1, // `... ?? ...`
+        'Expr_NullsafeMethodCall' => 1, // `$x?->y()`
+        'Expr_NullsafePropertyFetch' => 1, // `$x?->y`
+        'Expr_BinaryOp_Spaceship' => 2, // `... <=> ...`
+    ];
 
-    public function __construct(Metrics $metrics)
-    {
-        $this->metrics = $metrics;
+    /** @var array<string, ComplexIncrementCCNode> List of callbacks defining the increment value for some nodes. */
+    private static array $complexIncrementList;
+
+    public function __construct(
+        private readonly Metrics $metrics,
+        private readonly RoleOfMethodDetector $roleOfMethodDetector
+    ) {
+        // Callbacks cannot be used in class declarations (yet?)
+        self::$complexIncrementList = [
+            // `case ...:` from a `switch`. Ignore `default:`.
+            'Stmt_Case' => static fn (Stmt\Case_ $node): int => (null !== $node->cond) ? 1 : 0,
+            // `... => ...` from a `match`. Ignore `default =>`.
+            'MatchArm' => static fn (Node\MatchArm $node): int => count((array)$node->conds),
+        ];
     }
 
-    public function leaveNode(Node $node)
+    /**
+     * {@inheritDoc}
+     */
+    public function leaveNode(Node $node): void
     {
-        if ($node instanceof Stmt\Class_
-            || $node instanceof Stmt\Interface_
-            || $node instanceof Stmt\Trait_
+        if (
+            !$node instanceof Stmt\Class_
+            && !$node instanceof Stmt\Interface_
+            && !$node instanceof Stmt\Trait_
+            //TODO: && !$node instanceof Stmt\Enum_ ?
+            //TODO: maybe simply set !$node instanceof Stmt\ClassLike ?
         ) {
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+            return;
+        }
 
-            $ccn = 1;
-            $wmc = 0;
-            $ccnByMethod = [0]; // default maxMethodCcn if no methods are available
+        /** @var Metric $class */
+        $class = $this->metrics->get(MetricNameGenerator::getClassName($node));
+        // We don't want to increase the CCN for getters and setters.
+        $methods = array_filter($node->getMethods(), function (Stmt\ClassMethod $stmt): bool {
+            return !in_array($this->roleOfMethodDetector->detects($stmt), ['getter', 'setter'], true);
+        });
+        $ccByMethods = array_map(fn (Stmt\ClassMethod $stmt): int => $this->calculateCC($stmt) + 1, $methods);
+        $weightMethodCount = array_sum($ccByMethods);
+        $classCC = 1 + $weightMethodCount - count($methods);
 
-            $roleDetector = new RoleOfMethodDetector();
+        $class->set('wmc', $weightMethodCount);
+        $class->set('ccn', $classCC);
+        $class->set('ccnMethodMax', max([0, ...$ccByMethods]));
+    }
 
-            foreach ($node->stmts as $stmt) {
-                if ($stmt instanceof Stmt\ClassMethod) {
+    /**
+     * Calculates the cyclomatic complexity over a given Node.
+     * Recursively enters into each sub-node to calculate each related cyclomatic complexity, and sum them.
+     *
+     * @param Node $node
+     * @return int
+     */
+    private function calculateCC(Node $node): int
+    {
+        $cyclomaticComplexity = 0;
 
-                    $role = $roleDetector->detects($stmt);
-                    if (in_array($role, ['getter', 'setter'])) {
-                        // We don't want to increase the CCN for getters and setters,
-                        continue;
-                    }
-
-                    // iterate over children, recursively
-                    $cb = function ($node) use (&$cb) {
-                        $ccn = 0;
-
-                        foreach (get_object_vars($node) as $name => $member) {
-                            foreach (is_array($member) ? $member : [$member] as $memberItem) {
-                                if ($memberItem instanceof Node) {
-                                    $ccn += $cb($memberItem);
-                                }
-                            }
-                        }
-                        switch (true) {
-                            case $node instanceof Stmt\If_:
-                            case $node instanceof Stmt\ElseIf_:
-                            case $node instanceof Stmt\For_:
-                            case $node instanceof Stmt\Foreach_:
-                            case $node instanceof Stmt\While_:
-                            case $node instanceof Stmt\Do_:
-                            case $node instanceof Node\Expr\BinaryOp\LogicalAnd:
-                            case $node instanceof Node\Expr\BinaryOp\LogicalOr:
-                            case $node instanceof Node\Expr\BinaryOp\LogicalXor:
-                            case $node instanceof Node\Expr\BinaryOp\BooleanAnd:
-                            case $node instanceof Node\Expr\BinaryOp\BooleanOr:
-                            case $node instanceof Stmt\Catch_:
-                            case $node instanceof Node\Expr\Ternary:
-                            case $node instanceof Node\Expr\BinaryOp\Coalesce:
-                                $ccn++;
-                                break;
-                            case $node instanceof Stmt\Case_: // include default
-                                if ($node->cond !== null) { // exclude default
-                                    $ccn++;
-                                }
-                                break;
-                            case $node instanceof Node\Expr\BinaryOp\Spaceship:
-                                $ccn += 2;
-                                break;
-                        }
-                        return $ccn;
-                    };
-
-                    $methodCcn = $cb($stmt) + 1; // each method by default is CCN 1 even if it's empty
-
-                    $wmc += $methodCcn;
-                    $ccn += $methodCcn - 1;
-                    $ccnByMethod[] = $methodCcn;
+        foreach (get_object_vars($node) as $member) {
+            foreach (is_array($member) ? $member : [$member] as $memberItem) {
+                if ($memberItem instanceof Node) {
+                    $cyclomaticComplexity += $this->calculateCC($memberItem);
                 }
             }
-
-            $class->set('wmc', $wmc);
-            $class->set('ccn', $ccn);
-            $class->set('ccnMethodMax', max($ccnByMethod));
         }
+
+        $type = $node->getType();
+
+        if (array_key_exists($type, self::$simpleIncrementList)) {
+            return $cyclomaticComplexity + self::$simpleIncrementList[$type];
+        }
+        if (array_key_exists($type, self::$complexIncrementList)) {
+            return $cyclomaticComplexity + self::$complexIncrementList[$type]($node);
+        }
+        return $cyclomaticComplexity;
     }
 }

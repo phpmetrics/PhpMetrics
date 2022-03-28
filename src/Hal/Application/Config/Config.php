@@ -1,60 +1,38 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Application\Config;
 
-class Config
+use function array_key_exists;
+
+/**
+ * Registry of the configuration used for the current PhpMetrics run.
+ */
+final class Config implements ConfigBagInterface
 {
+    /** @var array<string, mixed> */
+    private array $bag = [];
 
-    /**
-     * @var array
-     */
-    private $bag = [];
-
-    /**
-     * @param $key
-     * @param $value
-     * @return $this
-     */
-    public function set($key, $value)
+    public function set(string $key, mixed $value): void
     {
         $this->bag[$key] = $value;
-        return $this;
     }
 
-    /**
-     * @param $key
-     * @return bool
-     */
-    public function has($key)
+    public function has(string $key): bool
     {
-        return isset($this->bag[$key]);
+        return array_key_exists($key, $this->bag);
     }
 
-    /**
-     * @param $key
-     * @return null
-     */
-    public function get($key)
+    public function get(string $key): mixed
     {
         return $this->has($key) ? $this->bag[$key] : null;
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
-    public function all()
+    public function all(): array
     {
         return $this->bag;
-    }
-
-    /**
-     * @param array $array
-     * @return $this
-     */
-    public function fromArray(array $array)
-    {
-        foreach ($array as $key => $value) {
-            $this->set($key, $value);
-        }
-        return $this;
     }
 }

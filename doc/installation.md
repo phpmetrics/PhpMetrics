@@ -1,7 +1,7 @@
 # Installation
 
 
-## Composer
+## Composer
 
 ```bash
 composer global require 'phpmetrics/phpmetrics'

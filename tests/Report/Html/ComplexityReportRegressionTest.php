@@ -1,62 +1,36 @@
 <?php
+declare(strict_types=1);
 
-namespace Test\Hal\Reporter\Html;
+namespace Tests\Hal\Report\Html;
 
 use DOMNode;
-use Hal\Application\Config\Config;
-use Hal\Component\Output\TestOutput;
+use Generator;
+use Hal\Application\Config\ConfigBagInterface;
+use Hal\Component\Output\Output;
 use Hal\Metric\Group\Group;
 use Hal\Metric\Metrics;
 use Hal\Report\Html\Reporter;
+use JsonException;
+use Phake;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DomCrawler\Crawler;
+use function array_map;
+use function file_get_contents;
+use function implode;
+use function iterator_to_array;
+use function sprintf;
+use function sys_get_temp_dir;
+use function uniqid;
+use const DIRECTORY_SEPARATOR;
 
-/**
- * @group reporter
- * @group html
- */
-class ComplexityReportRegressionTest extends TestCase
+final class ComplexityReportRegressionTest extends TestCase
 {
     /**
-     * @dataProvider tableHeaderDataProvider
+     * @return Generator<string, array{0: bool, 1: array<string>}>
      */
-    public function testComplexityHtmlReportContainsCorrectOrderOfTableColumns($junitEnabled, $expectedTableHeader)
+    public function provideTableHeader(): Generator
     {
-        $config = new Config();
-        $output = new TestOutput();
-        $reporter = new Reporter($config, $output);
-
-        // prepares data for report
-        $groups = [];
-        $groups[] = new Group('group', '.*');
-        $config->set('groups', $groups);
-
-        if ($junitEnabled) {
-            $config->set('junit', ['file' => '/tmp/junit.xml']);
-        }
-
-        // prepares destination
-        $destination = implode(DIRECTORY_SEPARATOR, [
-            sys_get_temp_dir(),
-            'phpmetrics-html' . uniqid('', true)
-        ]);
-
-        $config->set('report-html', $destination);
-
-        // generates report
-        $metrics = new Metrics();
-        $reporter->generate($metrics);
-
-        // ensure complexity report contains expected table header columns
-        $content = file_get_contents(sprintf('%s/complexity.html', $destination));
-        $actualTableHeader = $this->getActualTableHeader($content);
-
-        $this->assertEquals($expectedTableHeader, $actualTableHeader);
-    }
-
-    public function tableHeaderDataProvider()
-    {
-        $defaultTableHeader = [
+        $tableHeader = [
             'Class',
             'WMC',
             'Class cycl.',
@@ -67,25 +41,61 @@ class ComplexityReportRegressionTest extends TestCase
             'Bugs',
             'Defects',
         ];
+        yield 'junit disabled' => [false, $tableHeader];
 
-        $junitTableHeader = array_merge($defaultTableHeader, [
-            'Unit testsuites calling it'
-        ]);
-
-        return [
-            'junit disabled' => [false, $defaultTableHeader],
-            'junit enabled' => [true, $junitTableHeader],
-        ];
+        $tableHeader[] = 'Unit testsuites calling it';
+        yield 'junit enabled' => [true, $tableHeader];
     }
 
-    private function getActualTableHeader($content)
+    /**
+     * @dataProvider provideTableHeader
+     * @param bool $junitEnabled
+     * @param array<string> $expectedTableHeader
+     * @return void
+     * @throws JsonException
+     */
+    //#[DataProvider('provideTableHeader')] TODO: PHPUnit 10.
+    public function testComplexityHtmlReportContainsCorrectOrderOfTableColumns(
+        bool $junitEnabled,
+        array $expectedTableHeader
+    ): void {
+        $config = Phake::mock(ConfigBagInterface::class);
+        $output = Phake::mock(Output::class);
+        $reporter = new Reporter($config, $output);
+
+        // prepares data for report
+        $groups = [new Group('group', '.*')];
+        Phake::when($config)->__call('get', ['groups'])->thenReturn($groups);
+
+        if ($junitEnabled) {
+            Phake::when($config)->__call('get', ['junit'])->thenReturn(['file' => '/tmp/junit.xml']);
+            Phake::when($config)->__call('has', ['junit'])->thenReturn(true);
+        }
+
+        // prepares destination
+        $destination = implode(DIRECTORY_SEPARATOR, [sys_get_temp_dir(), 'phpmetrics-html' . uniqid('', true)]);
+        Phake::when($config)->__call('get', ['report-html'])->thenReturn($destination);
+
+        // generates report
+        $reporter->generate(new Metrics());
+
+        // ensure complexity report contains expected table header columns
+        $content = file_get_contents(sprintf('%s/complexity.html', $destination));
+        $actualTableHeader = $this->getActualTableHeader($content);
+
+        self::assertSame($expectedTableHeader, $actualTableHeader);
+    }
+
+    /**
+     * @param string $content
+     * @return array<string>
+     */
+    private function getActualTableHeader(string $content): array
     {
-        $tableHeaderColumnNodes = (new Crawler($content))
+        $headerColumns = (new Crawler($content))
             ->filterXPath('.//table[contains(concat(" ",normalize-space(@class)," ")," js-sort-table ")]/thead/tr')
             ->children();
 
-        return array_map(function (DomNode $node) {
-            return $node->textContent;
-        }, iterator_to_array($tableHeaderColumnNodes));
+        return array_map(static fn (DOMNode $node): string => $node->textContent, iterator_to_array($headerColumns));
     }
 }

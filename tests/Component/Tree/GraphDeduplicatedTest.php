@@ -1,30 +1,26 @@
 <?php
+declare(strict_types=1);
 
-namespace Test;
+namespace Tests\Hal\Component\Tree;
 
-use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\GraphDeduplicated;
 use Hal\Component\Tree\Node;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @group tree
- */
-class GraphDeduplicatedTest extends \PHPUnit\Framework\TestCase
+final class GraphDeduplicatedTest extends TestCase
 {
-
-    public function testEdgeDeduplication()
+    public function testICantHaveTwiceTheSameEdge(): void
     {
         $graph = new GraphDeduplicated();
-        $a = new Node('A');
-        $b = new Node('B');
-        $graph->insert($a);
-        $graph->insert($b);
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
 
-        $graph->addEdge($a, $b);
-        $graph->addEdge($a, $b);
-        $this->assertCount(1, $graph->getEdges());
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeA, $nodeB);
 
-        $graph->addEdge($b, $a);
-        $this->assertCount(2, $graph->getEdges());
+        $expectedOutput = "A;\nB;\nA ➔ B;\n";
+        self::assertSame($expectedOutput, $graph->__toString());
     }
 }

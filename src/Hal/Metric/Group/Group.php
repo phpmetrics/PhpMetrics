@@ -1,70 +1,51 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Metric\Group;
 
+use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
+use function array_map;
+use function preg_match;
 
 /**
  * Class Group
- * Allows to group metrics by regex, given them a name
- * @package Hal\Metric\Group
+ * Allows grouping metrics by regex, given them a name
  */
-class Group
+final class Group implements GroupInterface
 {
     /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $regex;
-
-    /**
      * Group constructor.
+     *
      * @param string $name
      * @param string $regex
      */
-    public function __construct($name, $regex)
-    {
-        $this->name = $name;
-        $this->regex = $regex;
+    public function __construct(
+        public readonly string $name,
+        private readonly string $regex
+    ) {
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRegex()
+    public function getRegex(): string
     {
         return $this->regex;
     }
 
     /**
-     * @param Metrics $metrics
-     * @return Metrics
+     * {@inheritDoc}
      */
-    public function reduceMetrics(Metrics $metrics)
+    public function reduceMetrics(Metrics $metrics): Metrics
     {
-        $all = $metrics->all();
         $matched = new Metrics();
-
-        foreach ($all as $metric) {
+        array_map(function (Metric $metric) use ($matched): void {
             if (!preg_match($this->regex, $metric->getName())) {
-                continue;
+                return;
             }
-
             $matched->attach($metric);
-        }
-
+        }, $metrics->all());
         return $matched;
     }
 }

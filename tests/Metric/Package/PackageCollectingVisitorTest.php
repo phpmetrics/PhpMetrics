@@ -1,93 +1,158 @@
 <?php
+declare(strict_types=1);
 
-namespace Test\Hal\Metric\Package;
+namespace Tests\Hal\Metric\Package;
 
-use Hal\Metric\Class_\ClassEnumVisitor;
+use Generator;
+use Hal\Metric\ClassMetric;
+use Hal\Metric\Helper\MetricNameGenerator;
 use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageCollectingVisitor;
 use Hal\Metric\PackageMetric;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\ParserFactory;
+use Phake;
+use PhpParser\Comment\Doc;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @group metric
- * @group package
- */
-class PackageCollectingVisitorTest extends TestCase
+final class PackageCollectingVisitorTest extends TestCase
 {
-    public function testItUsesThePackageAndTheSubpackageAnnotationAsPackageName()
+    /**
+     * Test that nothing occurs when the Node currently being traversed is not of the expected type.
+     *
+     * @return void
+     */
+    public function testNoActionIfNodeIsNotCorrectType(): void
     {
-        $metrics = $this->analyzeCode(<<<'CODE'
-<?php
-namespace PackageA;
+        $node = Phake::mock(Node::class);
+        $metricsMock = Phake::mock(Metrics::class);
+        $visitor = new PackageCollectingVisitor($metricsMock);
 
-/**
- * @package PackA
- * @subpackage SubA
- */
-class ClassA
-{
-}
-CODE
-        );
-        $this->assertInstanceOf(PackageMetric::class, $metrics->get('PackA\\SubA\\'));
-        $this->assertSame(['PackageA\\ClassA'], $metrics->get('PackA\\SubA\\')->getClasses());
-        $this->assertSame('PackA\\SubA\\', $metrics->get('PackageA\\ClassA')->get('package'));
-    }
+        $visitor->enterNode($node);
+        $visitor->leaveNode($node);
 
-    public function testItUsesThePackageAnnotationAsPackageNameIfNoSubpackageAnnotationExist()
-    {
-        $metrics = $this->analyzeCode(<<<'CODE'
-<?php
-namespace PackageA;
-
-/**
- * @package PackA
- */
-class ClassA
-{
-}
-CODE
-        );
-        $this->assertInstanceOf(PackageMetric::class, $metrics->get('PackA\\'));
-        $this->assertSame(['PackageA\\ClassA'], $metrics->get('PackA\\')->getClasses());
-        $this->assertSame('PackA\\', $metrics->get('PackageA\\ClassA')->get('package'));
-    }
-
-    public function testItUsesTheNamespaceAsPackageNameIfNoPackageAnnotationAreAvailable()
-    {
-        $metrics = $this->analyzeCode(<<<'CODE'
-<?php
-namespace PackageA;
-
-class ClassA
-{
-}
-CODE
-        );
-        $this->assertInstanceOf(PackageMetric::class, $metrics->get('PackageA\\'));
-        $this->assertSame(['PackageA\\ClassA'], $metrics->get('PackageA\\')->getClasses());
-        $this->assertSame('PackageA\\', $metrics->get('PackageA\\ClassA')->get('package'));
+        Phake::verifyNoInteraction($node);
+        Phake::verifyNoInteraction($metricsMock);
     }
 
     /**
-     * @param string $code
-     * @return Metrics
+     * @return Generator<string, array{0: ClassLike, 1: string}>
      */
-    private function analyzeCode($code)
+    public function provideNodesToAssociateToPackage(): Generator
     {
-        $metrics = new Metrics();
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor(new NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new PackageCollectingVisitor($metrics));
+        $allowedNodeClasses = [
+            'class' => Node\Stmt\Class_::class,
+            'interface' => Node\Stmt\Interface_::class,
+            'trait' => Node\Stmt\Trait_::class,
+            //'enum' => Node\Stmt\Enum_::class,
+        ];
+        foreach ($allowedNodeClasses as $kind => $allowedNodeClass) {
+            $node = Phake::mock($allowedNodeClass);
+            $node->namespacedName = Phake::mock(Node\Identifier::class);
+            Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:' . $kind);
+            $nodeDoc = Phake::mock(Doc::class);
+            Phake::when($node)->__call('getDocComment', [])->thenReturn($nodeDoc);
+            Phake::when($nodeDoc)->__call('getText', [])->thenReturn(<<<DOC
+                /**
+                 * @package Foo
+                 * @subpackage Bar
+                 */
+                DOC
+            );
+            $expected = 'Foo\\Bar\\';
+            yield 'Package name from PHPDoc for ' . $kind => [$node, $expected];
 
-        $stmts = $parser->parse($code);
-        $traverser->traverse($stmts);
+            $node = Phake::mock($allowedNodeClass);
+            $node->namespacedName = Phake::mock(Node\Identifier::class);
+            Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:' . $kind);
+            Phake::when($node)->__call('getDocComment', [])->thenReturn(null);
+            $expected = 'UnitTestNamespace\\';
+            yield 'Package name without PHPDoc for ' . $kind => [$node, $expected];
+        }
+    }
 
-        return $metrics;
+    /**
+     * @dataProvider provideNodesToAssociateToPackage
+     * @param ClassLike $node
+     * @param string $expectedPackageName
+     * @return void
+     */
+    //#[DataProvider('provideNodesToAssociateToPackage')] TODO: PHPUnit 10
+    public function testAlreadyExistingPackageMetricIsAttached(ClassLike $node, string $expectedPackageName): void
+    {
+        $metricsMock = Phake::mock(Metrics::class);
+        $nodeName = MetricNameGenerator::getClassName($node);
+        Phake::when($metricsMock)->__call('has', [$expectedPackageName])->thenReturn(true);
+        $namespaceNode = Phake::mock(Node\Stmt\Namespace_::class);
+        $namespaceNode->name = Phake::mock(Node\Identifier::class);
+        Phake::when($namespaceNode->name)->__call('__toString', [])->thenReturn('UnitTestNamespace');
+
+        $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($metricsMock)->__call('get', [$expectedPackageName])->thenReturn($packageMetric);
+        Phake::when($packageMetric)->__call('addClass', [$nodeName])->thenDoNothing();
+        $classMetric = Phake::mock(ClassMetric::class);
+        Phake::when($metricsMock)->__call('get', [$nodeName])->thenReturn($classMetric);
+        Phake::when($classMetric)->__call('set', ['package', $expectedPackageName])->thenDoNothing();
+
+        $visitor = new PackageCollectingVisitor($metricsMock);
+        $visitor->enterNode($namespaceNode);
+        $visitor->leaveNode($node);
+
+        Phake::verify($classMetric)->__call('set', ['package', $expectedPackageName]);
+        Phake::verifyNoOtherInteractions($classMetric);
+        Phake::verify($packageMetric)->__call('addClass', [$nodeName]);
+        Phake::verifyNoOtherInteractions($packageMetric);
+        Phake::verify($metricsMock)->__call('has', [$expectedPackageName]);
+        Phake::verify($metricsMock)->__call('get', [$expectedPackageName]);
+        Phake::verify($metricsMock)->__call('get', [$nodeName]);
+        Phake::verifyNoOtherInteractions($metricsMock);
+    }
+
+    /**
+     * @dataProvider provideNodesToAssociateToPackage
+     * @param ClassLike $node
+     * @param string $expectedPackageName
+     * @return void
+     */
+    //#[DataProvider('provideNodesToAssociateToPackage')] TODO: PHPUnit 10
+    public function testMissingPackageMetricIsAttached(ClassLike $node, string $expectedPackageName): void
+    {
+        $metricsMock = Phake::mock(Metrics::class);
+        $nodeName = MetricNameGenerator::getClassName($node);
+        Phake::when($metricsMock)->__call('has', [$expectedPackageName])->thenReturn(false);
+        $namespaceNode = Phake::mock(Node\Stmt\Namespace_::class);
+        $namespaceNode->name = Phake::mock(Node\Identifier::class);
+        Phake::when($namespaceNode->name)->__call('__toString', [])->thenReturn('UnitTestNamespace');
+
+        $packageMetricCollector = null;
+        Phake::when($metricsMock)->__call('attach', [Phake::anyParameters()])->thenReturnCallback(
+            static function (PackageMetric $packageMetric) use (&$packageMetricCollector): void {
+                $packageMetricCollector = $packageMetric;
+            }
+        );
+
+        $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($metricsMock)->__call('get', [$expectedPackageName])->thenReturn($packageMetric);
+        Phake::when($packageMetric)->__call('addClass', [$nodeName])->thenDoNothing();
+        $classMetric = Phake::mock(ClassMetric::class);
+        Phake::when($metricsMock)->__call('get', [$nodeName])->thenReturn($classMetric);
+        Phake::when($classMetric)->__call('set', ['package', $expectedPackageName])->thenDoNothing();
+
+        $visitor = new PackageCollectingVisitor($metricsMock);
+        $visitor->enterNode($namespaceNode);
+        $visitor->leaveNode($node);
+
+        self::assertInstanceOf(PackageMetric::class, $packageMetricCollector);
+        self::assertSame($expectedPackageName, $packageMetricCollector->getName());
+
+        Phake::verify($classMetric)->__call('set', ['package', $expectedPackageName]);
+        Phake::verifyNoOtherInteractions($classMetric);
+        Phake::verify($packageMetric)->__call('addClass', [$nodeName]);
+        Phake::verifyNoOtherInteractions($packageMetric);
+        Phake::verify($metricsMock)->__call('has', [$expectedPackageName]);
+        Phake::verify($metricsMock)->__call('attach', [$packageMetricCollector]);
+        Phake::verify($metricsMock)->__call('get', [$expectedPackageName]);
+        Phake::verify($metricsMock)->__call('get', [$nodeName]);
+        Phake::verifyNoOtherInteractions($metricsMock);
     }
 }

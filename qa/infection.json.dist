@@ -1,0 +1,16 @@
+{
+    "testFramework":"phpunit",
+    "bootstrap":"vendor/autoload.php",
+    "timeout": 30,
+    "source": {
+        "directories": [
+            "src"
+        ]
+    },
+    "phpUnit": {
+        "configDir": ".",
+        "customPath": "./vendor/bin/phpunit"
+    },
+    "initialTestsPhpOptions": "-d memory_limit=-1 -d zend_extension=xdebug.so",
+    "testFrameworkOptions": "--configuration=./qa/phpunit.xml.dist"
+}

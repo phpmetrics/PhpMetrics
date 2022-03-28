@@ -1,17 +1,24 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
 
-class ProbablyBugged implements Violation
+/**
+ * This class triggers a violation when the probability of bugs in a class according to Halstead metrics is too high.
+ */
+final class ProbablyBugged implements Violation
 {
+    private Metric $metric;
 
     /**
      * @inheritdoc
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Probably bugged';
     }
@@ -19,7 +26,7 @@ class ProbablyBugged implements Violation
     /**
      * @inheritdoc
      */
-    public function apply(Metric $metric)
+    public function apply(Metric $metric): void
     {
         if (!$metric instanceof ClassMetric) {
             return;
@@ -27,17 +34,17 @@ class ProbablyBugged implements Violation
 
         $this->metric = $metric;
 
-        $suspect = 0;
         if ($metric->get('bugs') >= .35) {
-            $metric->get('violations')->add($this);
-            return;
+            /** @var ViolationsHandlerInterface $violationsHandler */
+            $violationsHandler = $metric->get('violations');
+            $violationsHandler->add($this);
         }
     }
 
     /**
      * @inheritdoc
      */
-    public function getLevel()
+    public function getLevel(): int
     {
         return Violation::WARNING;
     }
@@ -45,7 +52,7 @@ class ProbablyBugged implements Violation
     /**
      * @inheritdoc
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return <<<EOT
 This component contains in theory {$this->metric->get('bugs')} bugs.

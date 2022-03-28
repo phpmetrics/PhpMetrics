@@ -1,64 +1,81 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Violation\Package;
 
 use Hal\Metric\Metric;
 use Hal\Metric\PackageMetric;
 use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
+use function array_filter;
+use function array_keys;
+use function array_map;
+use function count;
+use function implode;
+use function round;
+use function sprintf;
+use function substr;
 
-class StableDependenciesPrinciple implements Violation
+/**
+ * This class triggers a violation when a package is less stable than its dependencies, violating the
+ * stable-dependencies principle.
+ * @see https://en.wikipedia.org/wiki/Package_principles#Principles_of_package_coupling
+ */
+final class StableDependenciesPrinciple implements Violation
 {
-    /** @var PackageMetric|null */
-    private $metric;
+    private PackageMetric $metric;
 
-    /** @var array */
-    private $violatingInstabilities = [];
+    /** @var array<string, float> */
+    private array $violatingInstabilities = [];
 
-    public function getName()
+    public function getName(): string
     {
         return 'Stable Dependencies Principle';
     }
 
-    public function apply(Metric $metric)
+    public function apply(Metric $metric): void
     {
         if (! $metric instanceof PackageMetric) {
             return;
         }
+        $this->metric = $metric;
+
         $instability = $metric->getInstability();
         $violatingInstabilities = array_filter(
             $metric->getDependentInstabilities(),
-            function ($otherInstability) use ($instability) {
-                return $otherInstability >= $instability;
-            }
+            static fn (float $otherInstability): bool => $otherInstability >= $instability
         );
-        if (count($violatingInstabilities) > 0) {
+        if ([] !== $violatingInstabilities) {
             $this->violatingInstabilities = $violatingInstabilities;
-            $this->metric = $metric;
-            $metric->get('violations')->add($this);
+            /** @var ViolationsHandlerInterface $violationsHandler */
+            $violationsHandler = $metric->get('violations');
+            $violationsHandler->add($this);
         }
     }
 
-    public function getLevel()
+    public function getLevel(): int
     {
         return Violation::WARNING;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         $count = count($this->violatingInstabilities);
         $thisInstability = round($this->metric->getInstability(), 3);
-        $packages = implode("\n* ", array_map(function ($name, $instability) {
-            $name = $name === '\\' ? 'global' : substr($name, 0, -1);
-            $instability = round($instability, 3);
-            return "$name ($instability)";
-        }, array_keys($this->violatingInstabilities), $this->violatingInstabilities));
+        $packages = implode(
+            "\n* ",
+            array_map(static function (string $name, float $instability): string {
+                $name = '\\' === $name ? 'global' : substr($name, 0, -1);
+                return sprintf('%s (%f0.3)', $name, round($instability, 3));
+            }, array_keys($this->violatingInstabilities), $this->violatingInstabilities)
+        );
         return <<<EOT
 Packages should depend in the direction of stability.
 
-This package is more stable ({$thisInstability}) than {$count} package(s) that it depends on.
+This package is more stable ($thisInstability) than $count package(s) that it depends on.
 The packages that are more stable are
 
-* {$packages}
+* $packages
 EOT;
     }
 }

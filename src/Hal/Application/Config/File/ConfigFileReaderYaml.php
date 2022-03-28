@@ -1,22 +1,27 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Application\Config\File;
 
-use Hal\Application\Config\Config;
+use Hal\Application\Config\ConfigBagInterface;
+use Hal\Exception\ConfigException\ConfigFileReadingException;
+use function yaml_parse_file;
 
-class ConfigFileReaderYaml extends ConfigFileReaderJson implements ConfigFileReaderInterface
+/**
+ * Reader of a .yaml or .yml configuration file.
+ */
+final class ConfigFileReaderYaml extends AbstractConfigFileReader
 {
     /**
-     * @param Config $config
+     * {@inheritDoc}
      */
-    public function read(Config $config)
+    public function read(ConfigBagInterface $config): void
     {
-        if (!function_exists('yaml_parse')) {
-            throw new \RuntimeException('YAML parser not found. Please install the PECL extension "yaml".');
+        $yamlData = yaml_parse_file($this->filename);
+        if (false === $yamlData) {
+            throw ConfigFileReadingException::inYaml($this->filename);
         }
 
-        $json = yaml_parse_file($this->filename);
-
-        $this->parseJson($json, $config);
+        $this->normalizeConfig($config, yaml_parse_file($this->filename));
     }
 }

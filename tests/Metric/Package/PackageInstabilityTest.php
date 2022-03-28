@@ -1,75 +1,96 @@
 <?php
+declare(strict_types=1);
 
-namespace Test\Hal\Metric\Package;
+namespace Tests\Hal\Metric\Package;
 
 use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageInstability;
 use Hal\Metric\PackageMetric;
-use \PHPUnit\Framework\TestCase;
+use Phake;
+use PHPUnit\Framework\TestCase;
+use function array_map;
 
-/**
- * @group metric
- * @group package
- */
-class PackageInstabilityTest extends TestCase
+final class PackageInstabilityTest extends TestCase
 {
-    public function testItCalculatesTheInstabilityOfEachPackage()
+    public function testPackageInstabilityWithoutPackages(): void
     {
-        $packageA = new PackageMetric('PackageA\\');
-        $packageB = new PackageMetric('PackageB\\');
-        $packageC = new PackageMetric('PackageC\\');
+        $metricsMock = Phake::mock(Metrics::class);
+        Phake::when($metricsMock)->__call('getPackageMetrics', [])->thenReturn([]);
 
-        $packageB->addOutgoingClassDependency('ClassA', $packageA->getName());
-        $packageA->addIncomingClassDependency('ClassB', $packageB->getName());
+        (new PackageInstability($metricsMock))->calculate();
 
-        $packageA->addOutgoingClassDependency('ClassC', $packageC->getName());
-        $packageC->addIncomingClassDependency('ClassA', $packageA->getName());
-
-        $metrics = new Metrics();
-        $metrics->attach($packageA);
-        $metrics->attach($packageB);
-        $metrics->attach($packageC);
-
-        (new PackageInstability())->calculate($metrics);
-
-        $this->assertSame(0.5, $packageA->getInstability());
-        $this->assertSame(1.0, $packageB->getInstability());
-        $this->assertSame(0.0, $packageC->getInstability());
+        Phake::verify($metricsMock)->__call('getPackageMetrics', []);
+        Phake::verifyNoOtherInteractions($metricsMock);
     }
 
-    public function testItStoresTheInstabilityOfTheDependentPackagesOfEachPackage()
+    public function testPackageInstabilityIsCalculable(): void
     {
-        $packageA = new PackageMetric('PackageA\\');
-        $packageB = new PackageMetric('PackageB\\');
-        $packageC = new PackageMetric('PackageC\\');
+        $metricsMock = Phake::mock(Metrics::class);
+        $packages = [
+            Phake::mock(PackageMetric::class), // Empty package
+            Phake::mock(PackageMetric::class), // No package dependencies
+            Phake::mock(PackageMetric::class), // Package interdependency with "empty package", no class.
+            Phake::mock(PackageMetric::class), // Package interdependency with "NoPackageDependencies", with class.
+        ];
+        Phake::when($metricsMock)->__call('getPackageMetrics', [])->thenReturn($packages);
+        Phake::when($packages[0])->__call('getName', [])->thenReturn('EmptyPackage');
+        Phake::when($packages[0])->__call('getIncomingClassDependencies', [])->thenReturn([]);
+        Phake::when($packages[0])->__call('getOutgoingClassDependencies', [])->thenReturn([]);
+        Phake::when($packages[0])->__call('getOutgoingPackageDependencies', [])->thenReturn([]);
+        Phake::when($packages[1])->__call('getName', [])->thenReturn('NoPackageDependencies');
+        Phake::when($packages[1])->__call('getIncomingClassDependencies', [])->thenReturn(['A', 'B', 'C']);
+        Phake::when($packages[1])->__call('getOutgoingClassDependencies', [])->thenReturn(['D', 'E']);
+        Phake::when($packages[1])->__call('getOutgoingPackageDependencies', [])->thenReturn([]);
+        Phake::when($packages[2])->__call('getName', [])->thenReturn('NoClassDependencies');
+        Phake::when($packages[2])->__call('getIncomingClassDependencies', [])->thenReturn([]);
+        Phake::when($packages[2])->__call('getOutgoingClassDependencies', [])->thenReturn([]);
+        Phake::when($packages[2])->__call('getOutgoingPackageDependencies', [])->thenReturn(['EmptyPackage']);
+        Phake::when($packages[3])->__call('getName', [])->thenReturn('OmegaPackage');
+        Phake::when($packages[3])->__call('getIncomingClassDependencies', [])->thenReturn(['A', 'B', 'C']);
+        Phake::when($packages[3])->__call('getOutgoingClassDependencies', [])->thenReturn(['D']);
+        Phake::when($packages[3])->__call('getOutgoingPackageDependencies', [])->thenReturn(['NoPackageDependencies']);
+        $instabilityCollector = [];
+        foreach ($packages as $i => $package) {
+            Phake::when($package)->__call('setInstability', [Phake::anyParameters()])->thenReturnCallback(
+                static function (float $instability) use (&$instabilityCollector, $i): void {
+                    $instabilityCollector[$i] = $instability;
+                }
+            );
+            Phake::when($package)->__call('setDependentInstabilities', [Phake::anyParameters()])->thenDoNothing();
+        }
+        Phake::when($packages[0])->__call('getInstability', [])->thenReturn(null);
+        Phake::when($packages[1])->__call('getInstability', [])->thenReturn(2 / 5);
+        Phake::when($packages[2])->__call('getInstability', [])->thenReturn(null);
+        Phake::when($packages[3])->__call('getInstability', [])->thenReturn(1 / 4);
 
-        $packageB->addOutgoingClassDependency('ClassA', $packageA->getName());
-        $packageA->addIncomingClassDependency('ClassB', $packageB->getName());
+        (new PackageInstability($metricsMock))->calculate();
 
-        $packageA->addOutgoingClassDependency('ClassC', $packageC->getName());
-        $packageC->addIncomingClassDependency('ClassA', $packageA->getName());
+        Phake::verify($metricsMock)->__call('getPackageMetrics', []);
+        foreach ($packages as $package) {
+            Phake::verify($package)->__call('getIncomingClassDependencies', []);
+            Phake::verify($package)->__call('getOutgoingClassDependencies', []);
+            Phake::verify($package)->__call('getOutgoingPackageDependencies', []);
+        }
+        Phake::verify($packages[0], Phake::never())->__call('setInstability', [Phake::anyParameters()]);
+        Phake::verify($packages[0], Phake::never())->__call('getName', []);
+        Phake::verify($packages[0], Phake::never())->__call('getInstability', []);
+        Phake::verify($packages[0])->__call('setDependentInstabilities', [[]]);
+        Phake::verify($packages[1])->__call('setInstability', [2 / 5]);
+        Phake::verify($packages[1])->__call('getName', []);
+        Phake::verify($packages[1])->__call('getInstability', []);
+        Phake::verify($packages[1])->__call('setDependentInstabilities', [[]]);
+        Phake::verify($packages[2], Phake::never())->__call('setInstability', [Phake::anyParameters()]);
+        Phake::verify($packages[2], Phake::never())->__call('getName', []);
+        Phake::verify($packages[2], Phake::never())->__call('getInstability', []);
+        Phake::verify($packages[2])->__call('setDependentInstabilities', [[]]);
+        Phake::verify($packages[3])->__call('setInstability', [1 / 4]);
+        Phake::verify($packages[3])->__call('getName', []);
+        Phake::verify($packages[3])->__call('getInstability', []);
+        Phake::verify($packages[3])->__call('setDependentInstabilities', [['NoPackageDependencies' => 2 / 5]]);
 
-        $metrics = new Metrics();
-        $metrics->attach($packageA);
-        $metrics->attach($packageB);
-        $metrics->attach($packageC);
+        self::assertSame([1 => 2 / 5, 3 => 1 / 4], $instabilityCollector);
 
-        (new PackageInstability())->calculate($metrics);
-
-        $this->assertSame([$packageC->getName() => 0.0], $packageA->getDependentInstabilities());
-        $this->assertSame([$packageA->getName() => 0.5], $packageB->getDependentInstabilities());
-        $this->assertSame([], $packageC->getDependentInstabilities());
-    }
-
-    public function testItDoesNotCrashIfOnePackageHasNoIncomingAndNoOutgoingDependencies()
-    {
-        $package = new PackageMetric('PackageA\\');
-
-        $metrics = new Metrics();
-        $metrics->attach($package);
-
-        (new PackageInstability())->calculate($metrics);
-
-        $this->assertNull($package->getInstability());
+        array_map(Phake::verifyNoOtherInteractions(...), $packages);
+        Phake::verifyNoOtherInteractions($metricsMock);
     }
 }

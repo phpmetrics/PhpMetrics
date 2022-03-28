@@ -1,31 +1,46 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Application\Config;
 
-use Hal\Metric\Definitions;
+use Hal\Exception\ConfigException;
 use Hal\Metric\Group\Group;
-use Hal\Metric\Registry;
-use Hal\Search\Searches;
-use Hal\Search\SearchesValidator;
+use Hal\Search\SearchesValidatorInterface;
+use function array_filter;
+use function array_map;
+use function explode;
+use function file_exists;
+use function filter_var;
+use function implode;
+use function is_array;
+use function is_string;
+use const FILTER_VALIDATE_BOOLEAN;
 
 /**
- * @package Hal\Application\Config
+ * Configuration validator class, that is in charge of validate a given Config instance.
+ * Helps the final user to write a valid configuration.
  */
-class Validator
+final class Validator implements ValidatorInterface
 {
     /**
-     * @param Config $config
-     * @throws ConfigException
+     * @param SearchesValidatorInterface $searchesValidator
      */
-    public function validate(Config $config)
+    public function __construct(private readonly SearchesValidatorInterface $searchesValidator)
+    {
+    }
+
+    /**
+     * @throws ConfigException When the configuration is invalid.
+     */
+    public function validate(ConfigBagInterface $config): void
     {
         // required
         if (!$config->has('files')) {
-            throw new ConfigException('Directory to parse is missing or incorrect');
+            throw ConfigException\NoFileToAnalyseException::configHasNoFilesSet();
         }
         foreach ($config->get('files') as $dir) {
             if (!file_exists($dir)) {
-                throw new ConfigException(sprintf('Directory %s does not exist', $dir));
+                throw ConfigException\FileDoesNotExistException::fromConfig($dir);
             }
         }
 
@@ -37,8 +52,8 @@ class Validator
 
         // excluded directories
         if (!$config->has('exclude')) {
-            $config->set('exclude',
-                'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec');
+            $defaultExclude = 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec';
+            $config->set('exclude', $defaultExclude);
         }
 
         // retro-compatibility with excludes as string in config files
@@ -52,10 +67,7 @@ class Validator
             $config->set('groups', []);
         }
         $groupsRaw = $config->get('groups');
-
-        $groups = array_map(static function (array $groupRaw) {
-            return new Group($groupRaw['name'], $groupRaw['match']);
-        }, $groupsRaw);
+        $groups = array_map(static fn (array $raw): Group => new Group($raw['name'], $raw['match']), $groupsRaw);
         $config->set('groups', $groups);
 
         if (!$config->has('composer')) {
@@ -64,81 +76,29 @@ class Validator
         $config->set('composer', filter_var($config->get('composer'), FILTER_VALIDATE_BOOLEAN));
 
         // Search
-        $validator = new SearchesValidator();
-        if (null === $config->get('searches')) {
-            $config->set('searches', new Searches());
+        if (!$config->has('searches')) {
+            $config->set('searches', []);
         }
-        $validator->validates($config->get('searches'));
+        $this->searchesValidator->validates($config->get('searches'));
 
         // parameters with values
-        $keys = ['report-html', 'report-csv', 'report-violation', 'report-json', 'report-summary-json', 'extensions', 'config'];
-        foreach ($keys as $key) {
+        $keys = [
+            'report-html' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
+            'report-csv' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
+            'report-violation' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
+            'report-summary-json' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
+            'report-json' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
+            'config' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
+        ];
+        foreach ($keys as $key => $validationCallback) {
+            if (!$config->has($key)) {
+                continue;
+            }
+
             $value = $config->get($key);
-            if ($config->has($key) && empty($value) || true === $value) {
-                throw new ConfigException(sprintf('%s option requires a value', $key));
+            if (!$validationCallback($value)) {
+                throw ConfigException\MissingOptionValueException::requireValue($key);
             }
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function help()
-    {
-        return <<<EOT
-Usage:
-
-    phpmetrics [...options...] <directories>
-
-Required:
-
-    <directories>                     List of directories to parse, separated by a comma (,)
-
-Optional:
-
-    --config=<file>                   Use a file for configuration. File can be a JSON, YAML or INI file.
-    --exclude=<directory>             List of directories to exclude, separated by a comma (,)
-    --extensions=<php,inc>            List of extensions to parse, separated by a comma (,)
-    --metrics                         Display list of available metrics
-    --report-html=<directory>         Folder where report HTML will be generated
-    --report-csv=<file>               File where report CSV will be generated
-    --report-json=<file>              File where report Json will be generated
-    --report-summary-json=<file>      File where the summary report Json will be generated
-    --report-violations=<file>        File where XML violations report will be generated
-    --git[=</path/to/git_binary>]     Perform analyses based on Git History (default binary path: "git")
-    --junit[=</path/to/junit.xml>]    Evaluates metrics according to JUnit logs
-    --quiet                           Quiet mode
-    --version                         Display current version
-
-Examples:
-
-    phpmetrics --report-html="./report" ./src
-
-        Analyze the "./src" directory and generate a HTML report on the "./report" folder
-
-
-    phpmetrics --report-violations="./build/violations.xml" ./src,./lib
-
-        Analyze the "./src" and "./lib" directories, and generate the "./build/violations.xml" file. This file could
-        be read by any Continuous Integration Platform, and follows the "PMD Violation" standards.
-
-EOT;
-    }
-
-    public function metrics()
-    {
-        $help = <<<EOT
-Main metrics are:
-
-EOT;
-
-        $registry = new Registry();
-        $definitions = $registry->getDefinitions();
-        foreach ($definitions as $key => $description) {
-            $help .= sprintf("\n    %s%s", str_pad($key, 40, ' ', STR_PAD_RIGHT), $description);
-        }
-
-        $help .= PHP_EOL;
-        return $help;
     }
 }

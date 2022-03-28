@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Search;
 
@@ -6,126 +7,129 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\InterfaceMetric;
 use Hal\Metric\Metric;
 use Hal\Metric\Registry;
+use LogicException;
+use function array_intersect_key;
+use function array_keys;
+use function array_map;
+use function in_array;
+use function ltrim;
+use function preg_match;
+use function preg_match_all;
+use const PREG_SET_ORDER;
 
-class Search
+/**
+ * Class that represent a search criterion defined by configuration. Metrics will be confronted against this search to
+ * detect if this causes violations.
+ */
+final class Search implements SearchInterface
 {
     /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var array
-     */
-    private $config;
-
-    /**
      * @param string $name
-     * @param array $config
+     * @param array<string, mixed> $config
      */
-    public function __construct($name, array $config)
-    {
-        $this->name = $name;
-        $this->config = (object)$config;
+    private function __construct(
+        private readonly string $name,
+        private readonly array $config
+    ) {
     }
 
     /**
-     * @return string
+     * Builds a list of Search object from the array given in argument.
+     *
+     * @param array<string, array<string, mixed>> $searches
+     * @return array<int, Search>
      */
-    public function getName()
+    public static function buildListFromArray(array $searches): array
+    {
+        $builder = static fn (string $name, array $search): Search => new self($name, $search);
+        return array_map($builder, array_keys($searches), $searches);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return $this->config;
     }
 
-    public function matches(Metric $metric)
+    /**
+     * {@inheritDoc}
+     */
+    public function matches(Metric $metric): bool
     {
-        $configAsArray = (array)$this->config;
+        $config = $this->config + ['type' => '', 'nameMatches' => '', 'instanceOf' => '', 'usesClasses' => ''];
 
-        if (!empty($this->config->type)) {
-            // Does the search concerns type ?
-            if (!$this->matchExpectedType($metric, $this->config->type)) {
+        // Check if metric object matches some special config criteria, when defined. If not, directly stops.
+        $matchersCallbacks = [
+            'type' => $this->matchExpectedType(...),
+            'nameMatches' => $this->matchExpectedName(...),
+            'instanceOf' => $this->matchInstanceOf(...),
+            'usesClasses' => $this->usesClasses(...),
+        ];
+        foreach ($matchersCallbacks as $key => $callback) {
+            if ('' !== $config[$key] && false === $callback($metric, $config[$key])) {
+                return false;
+            }
+        }
+        // Check if metric object matches some structures (ccn, lcom, mi, etc.)
+        foreach (array_intersect_key($config, Registry::getDefinitions()) as $metricName => $configStructureValue) {
+            if (false === $this->matchesMetric($metric->get($metricName), $configStructureValue)) {
                 return false;
             }
         }
 
-        if (!empty($this->config->nameMatches)) {
-            // Does the search concerns name ?
-            if (!$this->matchExpectedName($metric, $this->config->nameMatches)) {
-                return false;
-            }
+        // Store the fact the search criteria has been found in the metric.
+        $config += ['failIfFound' => false];
+        if (true === $config['failIfFound']) {
+            $metric->set('was-not-expected', true);
+            $metric->set('was-not-expected-by', [...($metric->get('was-not-expected-by') ?? []), $this->name]);
         }
-
-        if (!empty($this->config->instanceOf)) {
-            // Does the search is instance of given class or interface ?
-            if (!$this->matchInstanceOf($metric, $this->config->instanceOf)) {
-                return false;
-            }
-        }
-
-
-        if (!empty($this->config->usesClasses)) {
-            // Does the search use some classes
-            if (!$this->usesClasses($metric, $this->config->usesClasses)) {
-                return false;
-            }
-        }
-
-        $registry = new Registry();
-        foreach ($registry->allForStructures() as $metricName) {
-            if (array_key_exists($metricName, $configAsArray)) {
-                // Does the search use some structures (ccn, etc. )
-                if (!$this->matchesMetric($metric, $metricName, $configAsArray[$metricName])) {
-                    return false;
-                }
-            }
-        }
-
-        // should be latest in checks
-        if (array_key_exists('failIfFound', $configAsArray)) {
-            if (true === $this->config->failIfFound) {
-                $metric->set('was-not-expected', true);
-                if (!$metric->has('was-not-expected-by')) {
-                    $metric->set('was-not-expected-by', []);
-                }
-                $bys = $metric->get('was-not-expected-by');
-                $bys[] = $this->name;
-                $metric->set('was-not-expected-by', $bys);
-            }
-        }
-
         return true;
     }
 
-    private function matchExpectedType(Metric $metric, $expectedType)
+    /**
+     * @param Metric $metric
+     * @param string $expectedType
+     * @return bool
+     */
+    private function matchExpectedType(Metric $metric, string $expectedType): bool
     {
-        switch ($expectedType) {
-            case 'class':
-                return $metric instanceof ClassMetric && !$metric instanceof InterfaceMetric;
-            case 'interface':
-                return $metric instanceof InterfaceMetric;
-        }
-
-        return false;
+        return match ($expectedType) {
+            'class' => $metric instanceof ClassMetric && !$metric instanceof InterfaceMetric,
+            'interface' => $metric instanceof InterfaceMetric,
+            default => false,
+        };
     }
 
-    private function matchExpectedName(Metric $metric, $expectedName)
+    /**
+     * @param Metric $metric
+     * @param string $expectedName
+     * @return bool
+     */
+    private function matchExpectedName(Metric $metric, string $expectedName): bool
     {
-        return preg_match('@' . $expectedName . '@i', $metric->getName());
+        return (bool)preg_match('@' . $expectedName . '@i', $metric->getName());
     }
 
-    private function matchInstanceOf(Metric $metric, $instanceOf)
+    /**
+     * @param Metric $metric
+     * @param array<string> $instanceOf
+     * @return bool
+     */
+    private function matchInstanceOf(Metric $metric, array $instanceOf): bool
     {
         foreach ($instanceOf as $expectedInterface) {
             $expectedInterface = ltrim($expectedInterface, '\\');
-            if (!in_array($expectedInterface, (array)$metric->get('implements'))) {
+            if (!in_array($expectedInterface, (array)$metric->get('implements'), true)) {
                 return false;
             }
         }
@@ -133,7 +137,12 @@ class Search
         return true;
     }
 
-    private function usesClasses(Metric $metric, $usesClasses)
+    /**
+     * @param Metric $metric
+     * @param array<string> $usesClasses
+     * @return bool
+     */
+    private function usesClasses(Metric $metric, array $usesClasses): bool
     {
         foreach ($usesClasses as $expectedClass) {
             foreach ((array)$metric->get('externals') as $use) {
@@ -146,29 +155,27 @@ class Search
         return false;
     }
 
-    private function matchesMetric(Metric $metric, $metricName, $metricValue)
+    /**
+     * @param mixed $metricValue
+     * @param string $configMetricValue
+     * @return bool
+     */
+    private function matchesMetric(mixed $metricValue, string $configMetricValue): bool
     {
-        if (!preg_match_all('!^([=><]*)([\d\.]+)!', $metricValue, $matches, PREG_SET_ORDER)) {
-            throw new \LogicException('Invalid search expression for key ' . $metricValue);
+        if (!preg_match_all('!^([=><]*)([\d.]+)!', $configMetricValue, $matches, PREG_SET_ORDER)) {
+            throw new LogicException('Invalid search expression for key ' . $configMetricValue);
         }
-        list(, $operator, $expected) = $matches[0];
+        [, $operator, $expected] = $matches[0];
 
-        switch ($operator) {
-            case '=':
-            case '':
-                return $metric->get($metricName) == $expected; // do not use === here
-            case '>':
-                return $metric->get($metricName) > $expected;
-            case '<':
-                return $metric->get($metricName) < $expected;
-            case '>=':
-            case '=>':
-                return $metric->get($metricName) >= $expected;
-            case '<=':
-            case '=<':
-                return $metric->get($metricName) <= $expected;
-        }
+        /** @noinspection TypeUnsafeComparisonInspection Expected to be loosely typed in this case. */
+        return match ($operator) {
+            '=', '' => $metricValue == $expected,
+            '>' => $metricValue > $expected,
+            '<' => $metricValue < $expected,
+            '>=', '=>' => $metricValue >= $expected,
+            '<=', '=<' => $metricValue <= $expected,
+            default => false,
+        };
 
-        return false;
     }
 }

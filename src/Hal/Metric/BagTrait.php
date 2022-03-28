@@ -1,87 +1,71 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Metric;
 
+use function array_key_exists;
+
+/**
+ * This bag can store a list of metrics values.
+ */
 trait BagTrait
 {
-    private $name;
-
-    /**
-     * @var array
-     */
-    private $bag = [];
+    /** @var array<string, mixed> */
+    private array $bag = [];
 
     /**
      * @param string $name
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
-        $this->name = $name;
         $this->set('name', $name);
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
-    public function getName()
+    public function getName(): string
     {
-        return $this->name;
+        return $this->bag['name'];
     }
 
     /**
-     * @param $key
-     * @param $value
-     * @return $this
+     * {@inheritDoc}
      */
-    public function set($key, $value)
+    public function set(string $key, mixed $value): void
     {
         $this->bag[$key] = $value;
-        return $this;
     }
 
     /**
-     * @param $key
-     * @return bool
+     * {@inheritDoc}
      */
-    public function has($key)
+    public function has(string $key): bool
     {
-        return isset($this->bag[$key]);
+        return array_key_exists($key, $this->bag);
     }
 
     /**
-     * @param $key
-     * @return null
+     * {@inheritDoc}
      */
-    public function get($key)
+    public function get(string $key): mixed
     {
         return $this->has($key) ? $this->bag[$key] : null;
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
-    public function all()
+    public function all(): array
     {
         return $this->bag;
     }
 
     /**
-     * @param array $array
-     * @return $this
+     * {@inheritDoc}
      */
-    public function fromArray(array $array)
+    public function jsonSerialize(): array
     {
-        foreach ($array as $key => $value) {
-            $this->set($key, $value);
-        }
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
-    {
-        return array_merge($this->all(), ['_type' => get_class($this)]);
+        return [...$this->all(), '_type' => $this::class];
     }
 }

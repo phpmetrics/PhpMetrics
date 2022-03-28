@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<psalm
+    allowStringToStandInForClass="true"
+    cacheDirectory="/tmp/psalm-cache/"
+    errorLevel="2"
+    hideExternalErrors="true"
+>
+    <projectFiles>
+        <directory name="../src" />
+    </projectFiles>
+    <issueHandlers>
+        <!-- Ignore errors when array offset is undefined. Happens a lot when destructuring. -->
+        <InvalidArrayOffset errorLevel="suppress" />
+        <!-- Ignore errors about missing constructor, as some classes are structures (no construct). -->
+        <MissingConstructor errorLevel="suppress" />
+        <!-- Ignore errors on properties that are not set in constructor: some class properties need setters. -->
+        <PropertyNotSetInConstructor errorLevel="suppress" />
+        <!-- Allow iteration over object properties. -->
+        <RawObjectIteration errorLevel="suppress" />
+        <!-- This rule fails to be applied without PropertyNotSetInConstructor. -->
+        <RedundantPropertyInitializationCheck errorLevel="suppress" />
+        <!-- Psalm is executed on a Docker container where file paths are different and may not match. -->
+        <UnresolvableInclude errorLevel="suppress" />
+    </issueHandlers>
+</psalm>

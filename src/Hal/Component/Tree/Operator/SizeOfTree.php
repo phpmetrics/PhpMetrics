@@ -1,140 +1,51 @@
 <?php
-
-/*
- * (c) Jean-François Lépine <https://twitter.com/Halleck45>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
 namespace Hal\Component\Tree\Operator;
 
 use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\Node;
+use Hal\Exception\GraphException\NoSizeForCyclicGraphException;
+use function array_map;
+use function array_sum;
+use function max;
+use function round;
 
-class SizeOfTree
+/**
+ * Calculates the size of a tree, in a graph. This is not possible to calculate the height of a graph when there is a
+ * cyclic dependency on it.
+ */
+final class SizeOfTree
 {
-    /**
-     * @var Graph
-     */
-    private $graph;
-
-    /**
-     * @param Graph $graph
-     */
-    public function __construct(Graph $graph)
-    {
+    public function __construct(
+        private readonly Graph $graph
+    ) {
         if ((new CycleDetector())->isCyclic($graph)) {
-            throw new \LogicException('Cannot get size informations of cyclic graph');
+            throw NoSizeForCyclicGraphException::incalculableSize();
         }
-
-        $this->graph = $graph;
     }
 
     /**
-     * Get depth of node
-     *
-     * @param Node $node
-     * @return int
+     * Get average height of graph.
      */
-    public function getDepthOfNode(Node $node)
+    public function getAverageHeightOfGraph(): float
     {
-        $edges = $node->getEdges();
-
-        if (0 === count($edges)) {
-            return 0;
-        }
-
-        // our tree is not binary : interface can have more than one parent
-        $max = 0;
-        foreach ($edges as $edge) {
-            if ($edge->getFrom() == $node) {
-                continue;
-            }
-
-            $n = 1 + $this->getDepthOfNode($edge->getFrom());
-            if ($n > $max) {
-                $max = $n;
-            }
-        }
-
-        return $max;
+        $longestBranchesByRoot = array_map($this->getLongestBranch(...), $this->graph->getRootNodes());
+        return round(array_sum($longestBranchesByRoot) / max(1, count($longestBranchesByRoot)), 2);
     }
 
     /**
-     * Get depth of node
-     *
-     * @param Node $node
-     * @return int
+     * Get the size of the longest branch starting from the given node.
      */
-    public function getNumberOfChilds(Node $node, $uniqs = false)
-    {
-        $edges = $node->getEdges();
-
-        if (0 === count($edges)) {
-            return 0;
-        }
-
-        // our tree is not binary : interface can have more than one parent
-        $max = 0;
-        $n = 0;
-
-        foreach ($edges as $edge) {
-            if ($edge->getTo() == $node) {
-                continue;
-            }
-
-            if (true == $uniqs && $edge->getTo()->visited) {
-                continue;
-            }
-            $edge->getTo()->visited = true;
-
-            $n += 1 + $this->getNumberOfChilds($edge->getTo(), $uniqs);
-
-            $edge->getTo()->visited = false;
-
-            if ($n > $max) {
-                $max = $n;
-            }
-        }
-
-        return $max;
-    }
-
-    /**
-     * Get average height of graph
-     *
-     * @return float
-     */
-    public function getAverageHeightOfGraph()
-    {
-        $ns = [];
-        foreach ($this->graph->getRootNodes() as $node) {
-            array_push($ns, $this->getLongestBranch($node));
-        }
-        return round(array_sum($ns) / max(1, count($ns)), 2);
-    }
-
-    /**
-     * @param Node $node
-     * @return int
-     */
-    public function getLongestBranch(Node $node)
+    private function getLongestBranch(Node $node): int
     {
         $max = 1;
         foreach ($node->getEdges() as $edge) {
-            if ($node == $edge->getTo()) {
-                // only descendants
+            if ($node === $edge->getTo()) {
                 continue;
             }
-
-            $n = 1 + $this->getLongestBranch($edge->getTo());
-
-            if ($n > $max) {
-                $max = $n;
-            }
+            $max = max($max, 1 + $this->getLongestBranch($edge->getTo()));
         }
-
         return $max;
     }
 }

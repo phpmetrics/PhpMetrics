@@ -1,61 +1,79 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Metric\Package;
 
+use Hal\Metric\Helper\MetricNameGenerator;
+use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Hal\Metric\PackageMetric;
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Trait_;
+use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
+use function preg_match;
 
-class PackageCollectingVisitor extends NodeVisitorAbstract
+/**
+ * Prepares packages metrics for each package.
+ * By default, packages are grouped by namespace, but it can be overloaded by the `package` or `subpackage` annotation.
+ * This visitor is only registering package metrics without calculating any metric.
+ */
+final class PackageCollectingVisitor extends NodeVisitorAbstract
 {
-    /** @var string */
-    private $namespace = '';
+    private string $namespace = '';
 
-    /** @var Metrics */
-    private $metrics;
-
-    public function __construct(Metrics $metrics)
-    {
-        $this->metrics = $metrics;
+    public function __construct(
+        private readonly Metrics $metrics
+    ) {
     }
 
-    public function enterNode(Node $node)
+    /**
+     * {@inheritDoc}
+     */
+    public function enterNode(Node $node): void
     {
-        if ($node instanceof Namespace_) {
+        if ($node instanceof Stmt\Namespace_) {
             $this->namespace = (string)$node->name;
         }
     }
 
-    public function leaveNode(Node $node)
+    /**
+     * {@inheritDoc}
+     */
+    public function leaveNode(Node $node): void
     {
-        if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Trait_) {
-            $package = $this->namespace;
-
-            $docComment = $node->getDocComment();
-            $docBlockText = $docComment ? $docComment->getText() : '';
-            if (preg_match('/^\s*\* @package (.*)/m', $docBlockText, $matches)) {
-                $package = $matches[1];
-            }
-            if (preg_match('/^\s*\* @subpackage (.*)/m', $docBlockText, $matches)) {
-                $package = $package . '\\' . $matches[1];
-            }
-
-            $packageName = $package . '\\';
-            if (! $packageMetric = $this->metrics->get($packageName)) {
-                $packageMetric = new PackageMetric($packageName);
-                $this->metrics->attach($packageMetric);
-            }
-            /* @var PackageMetric $packageMetric */
-            $elementName = isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node);
-            $elementName = (string)$elementName;
-            $packageMetric->addClass($elementName);
-
-            $this->metrics->get($elementName)->set('package', $packageName);
+        if (
+            !$node instanceof Stmt\Class_
+            && !$node instanceof Stmt\Interface_
+            && !$node instanceof Stmt\Trait_
+            //TODO: && !$node instanceof Stmt\Enum_
+            // TODO : replace by ClassLike ?
+        ) {
+            return;
         }
+
+        $package = $this->namespace;
+
+        $docBlockText = (string)$node->getDocComment()?->getText();
+        if (preg_match('/^\s*\*\s*@package\s+(.*)/m', $docBlockText, $matches)) {
+            $package = $matches[1];
+        }
+        if (preg_match('/^\s*\*\s*@subpackage\s+(.*)/m', $docBlockText, $matches)) {
+            $package .= '\\' . $matches[1];
+        }
+
+        $packageName = $package . '\\';
+        if (!$this->metrics->has($packageName)) {
+            $this->metrics->attach(new PackageMetric($packageName));
+        }
+        /** @var PackageMetric $packageMetric */
+        $packageMetric = $this->metrics->get($packageName);
+
+        $elementName = MetricNameGenerator::getClassName($node);
+
+        $packageMetric->addClass($elementName);
+
+        /** @var Metric $class */
+        $class = $this->metrics->get($elementName);
+        $class->set('package', $packageName);
     }
 }

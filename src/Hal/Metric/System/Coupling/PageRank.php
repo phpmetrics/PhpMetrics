@@ -1,90 +1,98 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Metric\System\Coupling;
 
+use Hal\Metric\CalculableInterface;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
+use function abs;
+use function array_fill_keys;
+use function array_keys;
+use function array_map;
+use function round;
 
 /**
- * @package Hal\Metric\System\Coupling
+ * Calculates the PageRank for all classes.
+ * The PageRank is a value that determines how much a class is referenced by its siblings, but with addition of PageRank
+ * deducted to other siblings too.
+ * The more the class is called, the higher its PageRank value will be.
+ * See: http://phpir.com/pagerank-in-php/ for more information.
  */
-class PageRank
+final class PageRank implements CalculableInterface
 {
+    public function __construct(private readonly Metrics $metrics)
+    {
+    }
 
     /**
-     * @param Metrics $metrics
+     * {@inheritDoc}
      */
-    public function calculate(Metrics $metrics)
+    public function calculate(): void
     {
-        // build an array of relations
+        // Build an array of relations.
+        /** @var array<string, array<string>> $links */
         $links = [];
-        foreach ($metrics->all() as $metric) {
-            if (!$metric instanceof ClassMetric) {
-                continue;
-            }
-
+        array_map(static function (ClassMetric $metric) use (&$links): void {
             $links[$metric->get('name')] = $metric->get('externals');
+        }, $this->metrics->getClassMetrics());
+
+        // If no links, no PageRank to be calculated.
+        if ([] === $links) {
+            return;
         }
 
-        $ranks = $this->calculatePageRank($links);
-
-        // save in the metrics object
-        foreach ($ranks as $name => $rank) {
-            $metrics->get($name)->set('pageRank', round($rank, 2));
+        foreach ($this->calculatePageRank($links) as $name => $rank) {
+            /** @var ClassMetric $class */
+            $class = $this->metrics->get($name);
+            $class->set('pageRank', round($rank, 2));
         }
     }
 
     /**
-     * @see http://phpir.com/pagerank-in-php/
-     * @param $linkGraph
-     * @param float $dampingFactor
-     * @return array
+     * Calculates the PageRank based on similar algorithm that Google were using for original PageRank script.
+     *
+     * @param non-empty-array<string, array<string>> $linkGraph
+     * @return non-empty-array<string, float>
      */
-    private function calculatePageRank($linkGraph, $dampingFactor = 0.15)
+    private function calculatePageRank(array $linkGraph): array
     {
-        $pageRank = [];
-        $tempRank = [];
         $nodeCount = count($linkGraph);
-
-        // initialise the PR as 1/n
-        foreach ($linkGraph as $node => $outbound) {
-            $pageRank[$node] = 1 / $nodeCount;
-            $tempRank[$node] = 0;
-        }
+        $linkGraphNodeNames = array_keys($linkGraph);
+        // Initialise all PageRank as 1/n.
+        $pageRank = array_fill_keys($linkGraphNodeNames, 1 / $nodeCount);
+        $tempRank = array_fill_keys($linkGraphNodeNames, 0);
 
         $change = 1;
         $i = 0;
         while ($change > 0.00005 && $i < 100) {
             $change = 0;
-            $i++;
+            ++$i;
 
-            // distribute the PR of each page
+            // Distribute the PageRank of each page.
             foreach ($linkGraph as $node => $outbound) {
                 $outboundCount = count($outbound);
                 foreach ($outbound as $link) {
-                    // case of unversionned dependency
-                    if (!isset($tempRank[$link])) {
-                        $tempRank[$link] = 0;
-                    }
-                    $tempRank[$link] += $pageRank[$node] / $outboundCount;
+                    $tempRank += [$link => 0]; // Init temp rank for current link if not already set.
+                    $tempRank[$link] += $pageRank[$node] / $outboundCount; // Update its value.
                 }
             }
 
             $total = 0;
-            // calculate the new PR using the damping factor
+            $dampingFactor = 0.15;
+            // Calculate the new PageRank using the damping factor.
             foreach ($linkGraph as $node => $outbound) {
-                $tempRank[$node] = ($dampingFactor / $nodeCount)
-                    + (1 - $dampingFactor) * $tempRank[$node];
+                $tempRank[$node] = ($dampingFactor / $nodeCount) + (1 - $dampingFactor) * $tempRank[$node];
                 $change += abs($pageRank[$node] - $tempRank[$node]);
                 $pageRank[$node] = $tempRank[$node];
                 $tempRank[$node] = 0;
                 $total += $pageRank[$node];
             }
 
-            // Normalise the page ranks so it's all a proportion 0-1
-            foreach ($pageRank as $node => $score) {
-                $pageRank[$node] /= $total;
-            }
+            // Normalise the page ranks, so it's all a proportion 0-1
+            foreach ($pageRank as &$score) {
+                $score /= $total;
+            } unset($score);
         }
 
         return $pageRank;

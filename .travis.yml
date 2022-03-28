@@ -3,14 +3,7 @@ dist: trusty
 language: php
 
 php:
- - 5.5
- - 5.6
- - 7.0
- - 7.1
- - 7.2
- - 7.3
- - 7.4
- - 8.0
+ - 8.1
  - nightly
  - hhvm
  - hhvm-nightly
@@ -46,7 +39,7 @@ script:
 
 before_deploy:
   - make build
-  - git add -f build/phpmetrics.phar # build/phpmetrics.deb 
+  - git add -f build/phpmetrics.phar
 
 deploy:
   - provider: releases
@@ -57,7 +50,7 @@ deploy:
     on:
       repo: phpmetrics/PhpMetrics
       tags: true
-      php: '7.0'
+      php: '8.1'
       condition: '-z "$DEPENDENCIES"'
     skip_cleanup: true
   - provider: bintray
@@ -68,6 +61,6 @@ deploy:
     on:
       repo: phpmetrics/PhpMetrics
       tags: true
-      php: '7.0'
+      php: '8.1'
       condition: '-z "$DEPENDENCIES"'
     skip_cleanup: true

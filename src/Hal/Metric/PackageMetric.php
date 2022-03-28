@@ -1,53 +1,63 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Metric;
 
 use JsonSerializable;
+use function in_array;
+use function sqrt;
 
+/**
+ * Contains all metrics related to a whole package.
+ */
 class PackageMetric implements Metric, JsonSerializable
 {
     use BagTrait;
 
-    /** @return string[] */
-    public function getClasses()
+    /**
+     * @return array<int, string>
+     */
+    public function getClasses(): array
     {
-        return $this->has('classes') ? $this->get('classes') : [];
+        return $this->get('classes') ?? [];
     }
 
-    /** @param string $name */
-    public function addClass($name)
+    /**
+     * @param string $name
+     */
+    public function addClass(string $name): void
     {
-        $elements = $this->get('classes');
-        $elements[] = (string)$name;
-        $this->set('classes', $elements);
+        $this->set('classes', [...$this->getClasses(), $name]);
     }
 
-    /** @param float $abstraction */
-    public function setAbstraction($abstraction)
+    /**
+     * @param float $abstraction
+     */
+    public function setAbstraction(float $abstraction): void
     {
-        if ($abstraction !== null) {
-            $abstraction = (float)$abstraction;
-        }
         $this->set('abstraction', $abstraction);
     }
 
-    /** @return float|null */
-    public function getAbstraction()
+    /**
+     * @return float|null
+     */
+    public function getAbstraction(): null|float
     {
         return $this->get('abstraction');
     }
 
-    /** @param float $instability */
-    public function setInstability($instability)
+    /**
+     * @param float $instability
+     */
+    public function setInstability(float $instability): void
     {
-        if ($instability !== null) {
-            $instability = (float)$instability;
-        }
         $this->set('instability', $instability);
     }
 
-    /** @return float|null */
-    public function getInstability()
+    /**
+     * @return float|null
+     */
+    public function getInstability(): null|float
     {
         return $this->get('instability');
     }
@@ -56,96 +66,110 @@ class PackageMetric implements Metric, JsonSerializable
      * @param string $className
      * @param string $packageName
      */
-    public function addOutgoingClassDependency($className, $packageName)
+    public function addOutgoingClassDependency(string $className, string $packageName): void
     {
         if ($packageName === $this->getName()) {
             return;
         }
         $classDependencies = $this->getOutgoingClassDependencies();
         $packageDependencies = $this->getOutgoingPackageDependencies();
-        if (! in_array($className, $classDependencies)) {
-            $classDependencies[] = $className;
-            $this->set('outgoing_class_dependencies', $classDependencies);
+        if (!in_array($className, $classDependencies, true)) {
+            $this->set('outgoing_class_dependencies', [...$classDependencies, $className]);
         }
-        if (! in_array($packageName, $packageDependencies)) {
-            $packageDependencies[] = $packageName;
-            $this->set('outgoing_package_dependencies', $packageDependencies);
+        if (!in_array($packageName, $packageDependencies, true)) {
+            $this->set('outgoing_package_dependencies', [...$packageDependencies, $packageName]);
         }
     }
 
-    /** @return string[] */
-    public function getOutgoingClassDependencies()
+    /**
+     * @return array<string>
+     */
+    public function getOutgoingClassDependencies(): array
     {
-        return $this->has('outgoing_class_dependencies') ? $this->get('outgoing_class_dependencies') : [];
+        return $this->get('outgoing_class_dependencies') ?? [];
     }
 
-    /** @return string[] */
-    public function getOutgoingPackageDependencies()
+    /**
+     * @return array<string>
+     */
+    public function getOutgoingPackageDependencies(): array
     {
-        return $this->has('outgoing_package_dependencies') ? $this->get('outgoing_package_dependencies') : [];
+        return $this->get('outgoing_package_dependencies') ?? [];
     }
 
     /**
      * @param string $className
      * @param string $packageName
      */
-    public function addIncomingClassDependency($className, $packageName)
+    public function addIncomingClassDependency(string $className, string $packageName): void
     {
         if ($packageName === $this->getName()) {
             return;
         }
         $classDependencies = $this->getIncomingClassDependencies();
         $packageDependencies = $this->getIncomingPackageDependencies();
-        if (! in_array($className, $classDependencies)) {
-            $classDependencies[] = $className;
-            $this->set('incoming_class_dependencies', $classDependencies);
+        if (!in_array($className, $classDependencies, true)) {
+            $this->set('incoming_class_dependencies', [...$classDependencies, $className]);
         }
-        if (! in_array($packageName, $packageDependencies)) {
-            $packageDependencies[] = $packageName;
-            $this->set('incoming_package_dependencies', $packageDependencies);
+        if (!in_array($packageName, $packageDependencies, true)) {
+            $this->set('incoming_package_dependencies', [...$packageDependencies, $packageName]);
         }
     }
 
-    /** @return string[] */
-    public function getIncomingClassDependencies()
+    /**
+     * @return array<string>
+     */
+    public function getIncomingClassDependencies(): array
     {
-        return $this->has('incoming_class_dependencies') ? $this->get('incoming_class_dependencies') : [];
+        return $this->get('incoming_class_dependencies') ?? [];
     }
 
-    /** @return string[] */
-    public function getIncomingPackageDependencies()
+    /**
+     * @return array<string>
+     */
+    public function getIncomingPackageDependencies(): array
     {
-        return $this->has('incoming_package_dependencies') ? $this->get('incoming_package_dependencies') : [];
+        return $this->get('incoming_package_dependencies') ?? [];
     }
 
-    /** @param float $normalizedDistance */
-    public function setNormalizedDistance($normalizedDistance)
+    /**
+     * @param float $normalizedDistance
+     */
+    public function setNormalizedDistance(float $normalizedDistance): void
     {
-        $this->set('distance', $normalizedDistance / sqrt(2.0));
+        $this->set('distance', $normalizedDistance / sqrt(2));
         $this->set('normalized_distance', $normalizedDistance);
     }
 
-    /** @return float|null */
-    public function getDistance()
+    /**
+     * @return float|null
+     */
+    public function getDistance(): null|float
     {
         return $this->get('distance');
     }
 
-    /** @return float|null */
-    public function getNormalizedDistance()
+    /**
+     * @return float|null
+     */
+    public function getNormalizedDistance(): null|float
     {
         return $this->get('normalized_distance');
     }
 
-    /** @param float[] $instabilities */
-    public function setDependentInstabilities(array $instabilities)
+    /**
+     * @param array<float> $instabilities
+     */
+    public function setDependentInstabilities(array $instabilities): void
     {
         $this->set('dependent_instabilities', $instabilities);
     }
 
-    /** @return float[] */
-    public function getDependentInstabilities()
+    /**
+     * @return array<float>
+     */
+    public function getDependentInstabilities(): array
     {
-        return $this->has('dependent_instabilities') ? $this->get('dependent_instabilities') : [];
+        return $this->get('dependent_instabilities') ?? [];
     }
 }

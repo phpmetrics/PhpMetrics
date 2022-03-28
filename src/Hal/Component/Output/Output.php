@@ -1,46 +1,24 @@
 <?php
-
-/*
- * (c) Jean-François Lépine <https://twitter.com/Halleck45>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
 namespace Hal\Component\Output;
 
 /**
- * @package Hal\Component\Output
+ * Defines rules about the ways we can output texts.
  */
 interface Output
 {
     /**
-     * @param string $message
-     * @return $this
+     * Writes the given message with a new line in standard output.
      */
-    public function writeln($message);
+    public function writeln(string $message): void;
 
     /**
-     * @param string $message
-     * @return $this
+     * Writes the given message in standard output.
      */
-    public function write($message);
+    public function write(string $message): void;
 
-    /**
-     * @param string $message
-     * @return $this
-     */
-    public function err($message);
+    public function setQuietMode(bool $quietMode): void;
 
-    /**
-     * @return $this
-     */
-    public function clearln();
-
-    /**
-     * Detects ANSI support
-     *
-     * @return bool
-     */
-    public function hasAnsi();
+    public function isQuiet(): bool;
 }

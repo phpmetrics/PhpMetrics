@@ -1,0 +1,350 @@
+<profile version="1.0">
+  <description>PhpMetrics Inspection Profile</description>
+  <option name="default" value="PhpMetrics Inspection Profile" />
+  <inspection_tool class="AccessModifierPresentedInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="AdditionOperationOnArraysInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="AmbiguousMemberInitializationInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="ArrayCastingEquivalentInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="ArrayIndexZero" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="ArrayTypeOfParameterByDefaultValueInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="AssignType" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="AssignmentToFunctionParameterJS" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="BladeClosingSection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="BladeControlDirectives" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CallableReferenceNameMismatchInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="CheckEmptyScriptTag" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CheckValidXmlInScriptTagBody" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CoffeeScriptArgumentsOutsideFunction" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CoffeeScriptFunctionSignatures" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="CoffeeScriptInfiniteLoop" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CoffeeScriptLiteralNotFunction" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CoffeeScriptSillyAssignment" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CoffeeScriptSwitchStatementWithNoDefaultBranch" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CoffeeScriptUnusedLocalSymbols" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="ComparisonOperandsOrderInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="ConditionalExpressionWithIdenticalBranchesJS" enabled="true" level="SERVER PROBLEM" enabled_by_default="true" />
+  <inspection_tool class="ConfusingPlusesOrMinusesJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="CssInvalidAtRule" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CssInvalidCharsetRule" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CssInvalidFunction" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CssInvalidHtmlTagReference" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CssInvalidImport" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CssInvalidMediaFeature" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CssInvalidPropertyValue" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CssInvalidPseudoSelector" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CssMissingComma" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CssNegativeValue" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CssNoGenericFontName" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CssNonIntegerLengthInPixels" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="CssOverwrittenProperties" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CssRedundantUnit" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CssReplaceWithShorthandSafely" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="CssReplaceWithShorthandUnsafely" enabled="false" level="INFORMATION" enabled_by_default="false" />
+  <inspection_tool class="CssUnknownProperty" enabled="false" level="WARNING" enabled_by_default="false">
+    <option name="myCustomPropertiesEnabled" value="false" />
+    <option name="myIgnoreVendorSpecificProperties" value="false" />
+    <option name="myCustomPropertiesList">
+      <value>
+        <list size="0" />
+      </value>
+    </option>
+  </inspection_tool>
+  <inspection_tool class="CssUnknownTarget" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CssUnresolvedClassInComposesRule" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CssUnresolvedCustomProperty" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CssUnusedSymbol" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CucumberExamplesColon" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CucumberMissedExamples" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="CucumberTableInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="CucumberUndefinedStep" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="DebuggerStatementJS" enabled="true" level="INFO" enabled_by_default="true" />
+  <inspection_tool class="DefaultValueInElseBranchInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="DeprecatedConstructorStyleInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="DisconnectedForeachInstructionInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="DuplicateTypeDeclaration" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="EmptyBody" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="EmptyEventHandler" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="EqualityComparisonWithCoercionJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="EscapedMetaCharacter" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="FileHeaderInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="ForLoopThatDoesntUseLoopVariableJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="ForeachInvariantsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="ForeachOnArrayComponentsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="ForgottenDebugOutputInspection" enabled="true" level="ERROR" enabled_by_default="true">
+    <option name="configuration">
+      <list>
+        <option value="\Codeception\Util\Debug::debug" />
+        <option value="\Codeception\Util\Debug::pause" />
+        <option value="\Doctrine\Common\Util\Debug::dump" />
+        <option value="\Doctrine\Common\Util\Debug::export" />
+        <option value="\Illuminate\Support\Debug\Dumper::dump" />
+        <option value="\Symfony\Component\Debug\Debug::enable" />
+        <option value="\Symfony\Component\Debug\DebugClassLoader::enable" />
+        <option value="\Symfony\Component\Debug\ErrorHandler::register" />
+        <option value="\Symfony\Component\Debug\ExceptionHandler::register" />
+        <option value="\TYPO3\CMS\Core\Utility\DebugUtility::debug" />
+        <option value="\Zend\Debug\Debug::dump" />
+        <option value="\Zend\Di\Display\Console::export" />
+        <option value="dd" />
+        <option value="debug_print_backtrace" />
+        <option value="debug_zval_dump" />
+        <option value="dpm" />
+        <option value="dpq" />
+        <option value="dsm" />
+        <option value="dump" />
+        <option value="dvm" />
+        <option value="error_log" />
+        <option value="kpr" />
+        <option value="phpinfo" />
+        <option value="print_r" />
+        <option value="var_dump" />
+        <option value="var_export" />
+        <option value="xdebug_break" />
+        <option value="xdebug_call_class" />
+        <option value="xdebug_call_file" />
+        <option value="xdebug_call_function" />
+        <option value="xdebug_call_line" />
+        <option value="xdebug_code_coverage_started" />
+        <option value="xdebug_debug_zval" />
+        <option value="xdebug_debug_zval_stdout" />
+        <option value="xdebug_dump_superglobals" />
+        <option value="xdebug_enable" />
+        <option value="xdebug_get_code_coverage" />
+        <option value="xdebug_get_collected_errors" />
+        <option value="xdebug_get_declared_vars" />
+        <option value="xdebug_get_function_stack" />
+        <option value="xdebug_get_headers" />
+        <option value="xdebug_get_monitored_functions" />
+        <option value="xdebug_get_profiler_filename" />
+        <option value="xdebug_get_stack_depth" />
+        <option value="xdebug_get_tracefile_name" />
+        <option value="xdebug_is_enabled" />
+        <option value="xdebug_memory_usage" />
+        <option value="xdebug_peak_memory_usage" />
+        <option value="xdebug_print_function_stack" />
+        <option value="xdebug_start_code_coverage" />
+        <option value="xdebug_start_error_collection" />
+        <option value="xdebug_start_function_monitor" />
+        <option value="xdebug_start_trace" />
+        <option value="xdebug_stop_code_coverage" />
+        <option value="xdebug_stop_error_collection" />
+        <option value="xdebug_stop_function_monitor" />
+        <option value="xdebug_stop_trace" />
+        <option value="xdebug_time_index" />
+        <option value="xdebug_var_dump" />
+      </list>
+    </option>
+    <option name="migratedIntoUserSpace" value="true" />
+  </inspection_tool>
+  <inspection_tool class="GenericConstraint" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="GenericObjectTypeUsageInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="GenericParameterShadowed" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="GherkinBrokenTableInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="GherkinMisplacedBackground" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="GherkinScenarioToScenarioOutline" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="GrazieInspection" enabled="false" level="TYPO" enabled_by_default="false" />
+  <inspection_tool class="HtmlExtraClosingTag" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="HtmlMissingClosingTag" enabled="false" level="INFORMATION" enabled_by_default="false" />
+  <inspection_tool class="HtmlUnknownAnchorTarget" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="HtmlUnknownAttribute" enabled="false" level="WARNING" enabled_by_default="false">
+    <option name="myValues">
+      <value>
+        <list size="0" />
+      </value>
+    </option>
+    <option name="myCustomValuesEnabled" value="true" />
+  </inspection_tool>
+  <inspection_tool class="HtmlUnknownBooleanAttribute" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="HtmlUnknownTag" enabled="false" level="WARNING" enabled_by_default="false">
+    <option name="myValues">
+      <value>
+        <list size="7">
+          <item index="0" class="java.lang.String" itemvalue="nobr" />
+          <item index="1" class="java.lang.String" itemvalue="noembed" />
+          <item index="2" class="java.lang.String" itemvalue="comment" />
+          <item index="3" class="java.lang.String" itemvalue="noscript" />
+          <item index="4" class="java.lang.String" itemvalue="embed" />
+          <item index="5" class="java.lang.String" itemvalue="script" />
+          <item index="6" class="java.lang.String" itemvalue="info" />
+        </list>
+      </value>
+    </option>
+    <option name="myCustomValuesEnabled" value="true" />
+  </inspection_tool>
+  <inspection_tool class="HtmlUnknownTarget" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="IfConditionalsWithoutCurvyBracketsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="IfStatementWithTooManyBranchesJS" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <option name="m_limit" value="10" />
+  </inspection_tool>
+  <inspection_tool class="IllegalInheritance" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="IllegalOverride" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="ImplicitMagicMethodCallInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="IsNullFunctionUsageInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="JSHint" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSUnresolvedLibraryURL" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="LanguageDetectionInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="LanguageLevel" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="LocalNameShadowed" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="LoopWhichDoesNotLoopInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="LowPerformanceArrayUniqueUsageInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="LowerAccessLevelInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="LuaDeprecation" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="MatchFunctionSignature" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="MismatchedImportsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="MissingSinceTagDocInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="MkdirRaceConditionInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="MktimeUsageInspection" enabled="true" level="SERVER PROBLEM" enabled_by_default="true" />
+  <inspection_tool class="NonShortCircuitBooleanExpressionJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="OctalEscape" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="OffsetOperationsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="PhingDomInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="PhpArrayKeyDoesNotMatchArrayShapeInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="PhpArrayShapeAttributeCanBeAddedInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="PhpArrayUsedOnlyForWriteInspection" enabled="true" level="INFORMATION" enabled_by_default="true" />
+  <inspection_tool class="PhpCompoundNamespaceDepthInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="PhpDisabledQualityToolComposerInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="PhpIncompatibleReturnTypeInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="PhpLackOfCohesionInspection" enabled="false" level="WARNING" enabled_by_default="false">
+    <option name="myMinimumNumberOfFields" value="0" />
+    <option name="myMinimumNumberOfMethods" value="0" />
+  </inspection_tool>
+  <inspection_tool class="PhpLongTypeFormInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="PhpMethodOrClassCallIsNotCaseSensitiveInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="PhpMissingVisibilityInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="PhpModifierOrderInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="PhpMultipleClassDeclarationsInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="PhpMultipleClassesDeclarationsInOneFile" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="PhpNewClassMissingParameterListInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="PhpOverridingMethodVisibilityInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="PhpPluralMixedCanBeReplacedWithArrayInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="PhpPureAttributeCanBeAddedInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="PhpPureFunctionMayProduceSideEffectsInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="PhpSeparateElseIfInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="PhpStanGlobal" enabled="false" level="WEAK WARNING" enabled_by_default="false">
+    <option name="config" value="$USER_HOME$/Projects/DIL/dp-dil/dev/tools/qachecker/tools/phpstan.neon.dist" />
+  </inspection_tool>
+  <inspection_tool class="PhpTraditionalSyntaxArrayLiteralInspection" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="PhpTraitsUseListInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="PhpUndefinedFieldInspection" enabled="true" level="WARNING" enabled_by_default="true">
+    <option name="NOTIFY_ACCESS_VIA_MAGIC_METHOD" value="false" />
+  </inspection_tool>
+  <inspection_tool class="PhpUnused" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="PhpUsageOfSilenceOperatorInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="PhpVarUsageInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="PrivateConstructorSemanticsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="PropertyCanBeStaticInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="PsalmAdvanceCallableParamsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="PsalmGlobal" enabled="false" level="WEAK WARNING" enabled_by_default="false">
+    <option name="config" value="$USER_HOME$/Projects/DIL/dp-dil/dev/tools/qachecker/tools/psalm.xml.dist" />
+    <option name="showInfo" value="true" />
+    <option name="findUnusedSuppress" value="true" />
+  </inspection_tool>
+  <inspection_tool class="RealpathOnRelativePathsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="ReferenceMismatchInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="RemoveUnusedLocal" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="RequiredAttributes" enabled="false" level="WARNING" enabled_by_default="false">
+    <option name="myAdditionalRequiredHtmlAttributes" value="" />
+  </inspection_tool>
+  <inspection_tool class="ReturnType" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="SassScssResolvedByNameOnly" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="SassScssUnresolvedMixin" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SassScssUnresolvedPlaceholderSelector" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SassScssUnresolvedVariable" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SecurityAdvisoriesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+    <option name="optionConfiguration">
+      <list>
+        <option value="barryvdh/laravel-debugbar" />
+        <option value="behat/behat" />
+        <option value="brianium/paratest" />
+        <option value="codeception/codeception" />
+        <option value="codedungeon/phpunit-result-printer" />
+        <option value="composer/composer" />
+        <option value="doctrine/coding-standard" />
+        <option value="filp/whoops" />
+        <option value="friendsofphp/php-cs-fixer" />
+        <option value="humbug/humbug" />
+        <option value="infection/infection" />
+        <option value="jakub-onderka/php-parallel-lint" />
+        <option value="johnkary/phpunit-speedtrap" />
+        <option value="kalessil/production-dependencies-guard" />
+        <option value="mikey179/vfsStream" />
+        <option value="mockery/mockery" />
+        <option value="mybuilder/phpunit-accelerator" />
+        <option value="orchestra/testbench" />
+        <option value="pdepend/pdepend" />
+        <option value="phan/phan" />
+        <option value="phing/phing" />
+        <option value="phpcompatibility/php-compatibility" />
+        <option value="phpmd/phpmd" />
+        <option value="phpro/grumphp" />
+        <option value="phpspec/phpspec" />
+        <option value="phpspec/prophecy" />
+        <option value="phpstan/phpstan" />
+        <option value="phpunit/phpunit" />
+        <option value="povils/phpmnd" />
+        <option value="roave/security-advisories" />
+        <option value="satooshi/php-coveralls" />
+        <option value="sebastian/phpcpd" />
+        <option value="slevomat/coding-standard" />
+        <option value="spatie/phpunit-watcher" />
+        <option value="squizlabs/php_codesniffer" />
+        <option value="sstalle/php7cc" />
+        <option value="symfony/debug" />
+        <option value="symfony/maker-bundle" />
+        <option value="symfony/phpunit-bridge" />
+        <option value="symfony/var-dumper" />
+        <option value="vimeo/psalm" />
+        <option value="wimg/php-compatibility" />
+        <option value="wp-coding-standards/wpcs" />
+        <option value="yiisoft/yii2-coding-standards" />
+        <option value="yiisoft/yii2-debug" />
+        <option value="yiisoft/yii2-gii" />
+        <option value="zendframework/zend-coding-standard" />
+        <option value="zendframework/zend-debug" />
+        <option value="zendframework/zend-test" />
+      </list>
+    </option>
+  </inspection_tool>
+  <inspection_tool class="SenselessTernaryOperatorInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="ShellCheck" enabled="true" level="ERROR" enabled_by_default="true">
+    <shellcheck_settings value="SC2086" />
+  </inspection_tool>
+  <inspection_tool class="SimplifyLocalAssignment" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SingletonFactoryPatternViolationInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
+    <option name="processCode" value="true" />
+    <option name="processLiterals" value="true" />
+    <option name="processComments" value="true" />
+  </inspection_tool>
+  <inspection_tool class="SqlCheckUsingColumnsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SqlDeprecateTypeInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SqlDerivedTableAliasInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SqlDropIndexedColumnInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SqlNoDataSourceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SqlPostgresqlSelectFromProcedureInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SqlTypeInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="StaticInvocationViaThisInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="StrTrUsageAsStrReplaceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="SwitchStatementWithNoDefaultBranchJS" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="TailRecursionJS" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="TaskInspection" enabled="false" level="INFO" enabled_by_default="false" />
+  <inspection_tool class="TaskProblemsInspection" enabled="false" level="INFO" enabled_by_default="false" />
+  <inspection_tool class="TextLabelInSwitchStatementJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="TypeScriptCheckImport" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="TypeScriptValidateJSTypes" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="TypeUnsafeArraySearchInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="UnNecessaryDoubleQuotesInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="UndeclaredMember" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="UndeclaredVariable" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="UnqualifiedReferenceInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <option name="REPORT_ALL_FUNCTIONS" value="true" />
+    <option name="REPORT_CONSTANTS" value="true" />
+  </inspection_tool>
+  <inspection_tool class="UnreachableStatement" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="UnresolvedReference" enabled="false" level="ERROR" enabled_by_default="false" />
+  <inspection_tool class="UnresolvedSymbol" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="UnresolvedType" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="UnusedImportsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="VueDataFunction" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="VueDuplicateTag" enabled="false" level="WARNING" enabled_by_default="false" />
+</profile>

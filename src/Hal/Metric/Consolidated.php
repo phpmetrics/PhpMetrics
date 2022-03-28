@@ -1,37 +1,32 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Metric;
 
 use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
+use stdClass;
+use function array_keys;
+use function array_map;
+use function array_sum;
+use function get_class;
+use function round;
 
-class Consolidated
+/**
+ * Responsible for the grouping of all metrics to have a sum and average version of each of them.
+ */
+final class Consolidated
 {
-    /**
-     * @var object
-     */
-    private $avg;
-
-    /**
-     * @var object
-     */
-    private $sum;
-
-    /**
-     * @var array
-     */
-    private $classes = [];
-
-    /**
-     * @var array
-     */
-    private $files = [];
-
-    /**
-     * @var array
-     */
-    private $project = [];
-
-    /** @var array */
-    private $packages;
+    private stdClass $avg;
+    private stdClass $sum;
+    /** @var array<int, array<string, mixed>> */
+    private array $classes;
+    /** @var array<string, array<string, mixed>> */
+    private array $files;
+    /** @var array<string, array<string, mixed>> */
+    private array $project;
+    /** @var array<string, array<string, mixed>> */
+    private array $packages;
 
     /**
      * @param Metrics $metrics
@@ -40,9 +35,8 @@ class Consolidated
     {
         $classMetrics = [];
 
-        // grouping results
+        // Grouping results.
         $classes = [];
-        $functions = [];
         $files = [];
         $packages = [];
         $project = [];
@@ -54,8 +48,6 @@ class Consolidated
                 $classMetrics[] = $item;
             } elseif (InterfaceMetric::class === $classItem) {
                 $nbInterfaces++;
-            } elseif (FunctionMetric::class === $classItem) {
-                $functions[$key] = $item->all();
             } elseif (FileMetric::class === $classItem) {
                 $files[$key] = $item->all();
             } elseif (ProjectMetric::class === $classItem) {
@@ -91,14 +83,14 @@ class Consolidated
             'mi' => [],
         ];
 
-        foreach ($classMetrics as $key => $item) {
+        foreach ($classMetrics as $item) {
             $sum->loc += $item->get('loc');
             $sum->lloc += $item->get('lloc');
             $sum->cloc += $item->get('cloc');
             $sum->nbMethods += $item->get('nbMethods');
 
             foreach ($avg as $k => $a) {
-                array_push($avg->$k, $item->get($k));
+                $avg->$k[] = $item->get($k);
             }
         }
         $sum->nbClasses = count($classes);
@@ -106,12 +98,8 @@ class Consolidated
         $sum->nbPackages = count($packages);
 
         foreach ($avg as &$a) {
-            if (count($a) > 0) {
-                $a = round(array_sum((array)$a) / count($a), 2);
-            } else {
-                $a = 0;
-            }
-        }
+            $a = ([] !== $a) ? round(array_sum((array)$a) / count($a), 2) : 0;
+        } unset($a);
 
         $avg->distance = 0;
         $avg->incomingCDep = 0;
@@ -121,7 +109,7 @@ class Consolidated
         $avg->classesPerPackage = 0;
         if (0 !== $sum->nbPackages) {
             foreach (array_keys($packages) as $eachName) {
-                /* @var $eachPackage PackageMetric */
+                /* @var PackageMetric $eachPackage */
                 $eachPackage = $metrics->get($eachName);
                 $avg->distance += $eachPackage->getDistance();
                 $avg->incomingCDep += count($eachPackage->getIncomingClassDependencies());
@@ -146,25 +134,23 @@ class Consolidated
             'error' => 0,
             'critical' => 0,
         ];
-        $map = [
-            Violation::INFO => 'information',
-            Violation::WARNING => 'warning',
-            Violation::ERROR => 'error',
-            Violation::CRITICAL => 'critical',
-        ];
-        foreach ($classes as $class) {
-            foreach ($class['violations'] as $violation) {
+        $violationCounter = static function (array $elementViolations) use (&$violations): void {
+            array_map(static function (Violation $violation) use (&$violations): void {
                 $violations['total']++;
-                $name = $map[$violation->getLevel()];
+                $name = [
+                    Violation::INFO => 'information',
+                    Violation::WARNING => 'warning',
+                    Violation::ERROR => 'error',
+                    Violation::CRITICAL => 'critical',
+                ][$violation->getLevel()];
                 $violations[$name]++;
-            }
-        }
-        foreach ($packages as $package) {
-            foreach ($package['violations'] as $violation) {
-                $violations['total']++;
-                $name = $map[$violation->getLevel()];
-                $violations[$name]++;
-            }
+            }, $elementViolations);
+        };
+
+        foreach ([...$classes, ...$packages] as $element) {
+            /** @var ViolationsHandlerInterface $violationHandler */
+            $violationHandler = $element['violations'];
+            $violationCounter($violationHandler->getAll());
         }
         $sum->violations = (object)$violations;
 
@@ -177,49 +163,49 @@ class Consolidated
     }
 
     /**
-     * @return object
+     * @return stdClass
      */
-    public function getAvg()
+    public function getAvg(): stdClass
     {
         return $this->avg;
     }
 
     /**
-     * @return object
+     * @return stdClass
      */
-    public function getSum()
+    public function getSum(): stdClass
     {
         return $this->sum;
     }
 
     /**
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
-    public function getClasses()
+    public function getClasses(): array
     {
         return $this->classes;
     }
 
     /**
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
-    public function getFiles()
+    public function getFiles(): array
     {
         return $this->files;
     }
 
     /**
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
-    public function getProject()
+    public function getProject(): array
     {
         return $this->project;
     }
 
     /**
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
-    public function getPackages()
+    public function getPackages(): array
     {
         return $this->packages;
     }

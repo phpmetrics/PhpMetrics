@@ -1,61 +1,101 @@
 <?php
-namespace Test\Hal\Metric\Helper;
+declare(strict_types=1);
 
+namespace Tests\Hal\Metric\Helper;
+
+use Generator;
 use Hal\Metric\Helper\RoleOfMethodDetector;
+use Hal\Metric\Helper\SimpleNodeIterator;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
+use function array_map;
 
-/**
- * @group method
- * @group helper
- * @group parsing
- */
-class RoleOfMethodDetectorTest extends \PHPUnit\Framework\TestCase
+final class RoleOfMethodDetectorTest extends TestCase
 {
     /**
-     * @dataProvider provideExamples
+     * @return Generator<string, array{0: null|string, 1: string}>
      */
-    public function testICanDetectRoleOfMethod($expected, $code)
+    public function provideExamples(): Generator
     {
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $stmt = $parser->parse($code);
+        $code = '<?php class A { function _(){ return $this->x; } }';
+        yield 'Getter' => ['getter', $code];
 
-        $helper = new RoleOfMethodDetector();
+        $code = '<?php class A { function _(){ return (string)$this->x; } }';
+        yield 'Getter with cast' => ['getter', $code];
 
-        foreach ($stmt as $node) {
-            if ($node instanceof Class_) {
-                foreach ($node->stmts as $sub) {
-                    if ($sub instanceof ClassMethod) {
-                        $type = $helper->detects($sub);
-                        $this->assertEquals($expected, $type);
-                    }
-                }
-            }
-        }
+        $code = '<?php class A { function _(): string { return $this->x; } }';
+        yield 'Getter with return scalar' => ['getter', $code];
+
+        $code = '<?php class A { function _(): Name { return $this->x; } }';
+        yield 'Getter with return object' => ['getter', $code];
+
+        $code = '<?php class A { function _(): ?bool { return $this->x; } }';
+        yield 'Getter with return optional' => ['getter', $code];
+
+        $code = '<?php class A { function _(): string|int { return $this->x; } }';
+        yield 'Getter with return UnionType' => ['getter', $code];
+
+        $code = '<?php class A { function _(): NameInterface&Name { return $this->x; } }';
+        yield 'Getter with return IntersectType' => ['getter', $code];
+
+        $code = '<?php class A { function _($x){ $this->x = $x; } }';
+        yield 'Setter' => ['setter', $code];
+
+        $code = '<?php class A { function _($x){ $this->x = (string)$x; } }';
+        yield 'Setter with cast' => ['setter', $code];
+
+        $code = '<?php class A { function _($x){ $this->x = $x; return $this; } }';
+        yield 'Fluent setter' => ['setter', $code];
+
+        $code = '<?php class A { function _(string $x): void { $this->x = $x; } }';
+        yield 'Setter with scalar hint and return void' => ['setter', $code];
+
+        $code = '<?php class A { function _(Name $x): void { $this->x = $x; } }';
+        yield 'Setter with object hint and return void' => ['setter', $code];
+
+        $code = '<?php class A { function _(?bool $x): void { $this->x = $x; } }';
+        yield 'Setter with optional hint and return void' => ['setter', $code];
+
+        $code = '<?php class A { function _(string|int $x): void { $this->x = $x; } }';
+        yield 'Setter with UnionType hint and return void' => ['setter', $code];
+
+        $code = '<?php class A { function _(NameInterface&Name $x): void { $this->x = $x; } }';
+        yield 'Setter with IntersectType hint and return void' => ['setter', $code];
+
+        $code = '<?php class A { function _($x): self { $this->x = $x; return $this; } }';
+        yield 'Fluent setter with return self' => ['setter', $code];
+
+        $code = '<?php class A { function _($x): static { $this->x = $x; return $this; } }';
+        yield 'Fluent setter with return static' => ['setter', $code];
+
+        $code = '<?php class A { function _($x): A { $this->x = $x; return $this; } }';
+        yield 'Fluent setter with return __CLASS__' => ['setter', $code];
+
+        $code = '<?php class A { function _($x){ $this->x = (string)$x * 3; } }';
+        yield 'Neither setter nor getter' => [null, $code];
+
+        $code = '<?php class A { use TestTrait; }';
+        yield 'Not even a method' => [null, $code];
     }
 
-    public function provideExamples()
+    /**
+     * @dataProvider provideExamples
+     * @param null|string $expected
+     * @param string $code
+     * @return void
+     */
+    //#[DataProvider('provideExamples')] TODO PHPUnit 10
+    public function testICanDetectRoleOfMethod(null|string $expected, string $code): void
     {
-        $examples = [
-            'getter' => ['getter', '<?php class A { function getName(){ return $this->name; } }  ?>'],
-            'getter with string cast' => ['getter', '<?php class A { function getName(){ return (string) $this->name; } }  ?>'],
-            'getter with int cast' => ['getter', '<?php class A { function getName(){ return (int) $this->name; } }  ?>'],
-            'setter' => ['setter', '<?php class A { function setName($string){ $this->name = $name; } } ?>'],
-            'setter with string cast' => ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; } } ?>'],
-            'setter with $this return' => ['setter', '<?php class A { function setName($string){ $this->name = (string) $name; return $this; } } ?>'],
-            'neither setter nor getter' => [null, '<?php class A { function foo($string){ $this->name = (string) $name * 3; } } ?>'],
-        ];
-        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            $examples['getter with return scalar'] = ['getter', '<?php class A { function getName(): string { return $this->name; } }'];
-            $examples['setter with scalar hint and return void'] = ['setter', '<?php class A { function setName(string $name): void { $this->name = $name; } }'];
-            $examples['getter with return object'] = ['getter', '<?php class A { function getName(): Name { return $this->name; } }'];
-            $examples['setter with object hint and return void'] = ['setter', '<?php class A { function setName(Name $name): void { $this->name = $name; } }'];
-            $examples['getter with return optional'] = ['getter', '<?php class A { function isOk(): ?bool { return $this->isOk; } }'];
-            $examples['setter fluent with param optional'] = ['setter', '<?php class A { function setOk(?bool $ok): self { $this->isOk = $ok; return $this; } }'];
-            $examples['setter fluent non typed with param optional'] = ['setter', '<?php class A { function setOk(?bool $ok) { $this->isOk = $ok; return $this; } }'];
-            $examples['setter with param optional'] = ['setter', '<?php class A { function setOk(?bool $ok) { $this->isOk = $ok; } }'];
-        }
-        return $examples;
+        $helper = new RoleOfMethodDetector(new SimpleNodeIterator());
+
+        // As all snippets tested are all starting with a "class" definition and contains nothing else as class sibling,
+        // all nodes on the 1st level of code being parsed are instances of "Class_" node.
+        array_map(static function (Class_ $node) use ($expected, $helper): void {
+            foreach ($node->stmts as $sub) {
+                self::assertSame($expected, $helper->detects($sub));
+            }
+        }, (new ParserFactory())->create(ParserFactory::PREFER_PHP7)->parse($code));
     }
 }

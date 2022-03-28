@@ -1,12 +1,25 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Report\Json;
 
+use Hal\Exception\NotWritableJsonReportException;
 use Hal\Report\SummaryProvider;
+use function dirname;
+use function file_exists;
+use function is_writable;
 
-class SummaryWriter extends SummaryProvider
+/**
+ * Dedicated writer that defines the content to write in a JSON file when exporting the summary of the metrics.
+ */
+final class SummaryWriter extends SummaryProvider
 {
-    public function getReport()
+    /**
+     * Return the report of the summary, into an array adapted for the JSON report format.
+     *
+     * @return array<string, mixed>
+     */
+    public function getReport(): array
     {
         return [
             'LOC' => [
@@ -30,7 +43,7 @@ class SummaryWriter extends SummaryProvider
                 'avgAfferentCoupling' => $this->avg->afferentCoupling,
                 'avgEfferentCoupling' => $this->avg->efferentCoupling,
                 'avgInstability' => $this->avg->instability,
-                'inheritanceTreeDepth' => $this->treeInheritenceDepth,
+                'inheritanceTreeDepth' => $this->treeInheritanceDepth,
             ],
             'Package' => [
                 'packages' => $this->sum->nbPackages,
@@ -58,5 +71,25 @@ class SummaryWriter extends SummaryProvider
                 'information' => $this->sum->violations->information,
             ]
         ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getReportFile(): string|bool
+    {
+        if ($this->config->has('quiet')) {
+            return false;
+        }
+
+        $logFile = $this->config->get('report-summary-json');
+        if (!$logFile) {
+            return false;
+        }
+        if (!file_exists(dirname($logFile)) || !is_writable(dirname($logFile))) {
+            throw NotWritableJsonReportException::noPermission($logFile);
+        }
+
+        return $logFile;
     }
 }

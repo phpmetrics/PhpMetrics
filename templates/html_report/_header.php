@@ -58,8 +58,8 @@
             <ul class="tabs">
                 <li class="<?php if(!$this->currentGroup) { echo 'active'; }?>"><a href="<?php echo $this->assetPath;?>index.html">All</a></li>
                 <?php foreach ($this->groups as $group) { ?>
-                    <li class="<?php if ($group->getName() === $this->currentGroup) { echo 'active'; }?> ">
-                        <a href="<?php echo $this->assetPath . $group->getName();?>/index.html"><?php echo $group->getName();?></a>
+                    <li class="<?php if ($group->name === $this->currentGroup) { echo 'active'; }?> ">
+                        <a href="<?php echo $this->assetPath . $group->name;?>/index.html"><?php echo $group->name;?></a>
                     </li>
                 <?php } ?>
             </ul>

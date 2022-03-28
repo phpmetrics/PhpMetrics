@@ -1,54 +1,88 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Search;
 
-use Hal\Application\Config\ConfigException;
+use Hal\Exception\ConfigException\SearchValidationException;
 use Hal\Metric\Registry;
+use function array_diff;
+use function array_intersect_key;
+use function array_keys;
+use function array_map;
+use function in_array;
+use function is_array;
+use function is_string;
 
-class SearchesValidator
+/**
+ * This class is responsible for the validation of the configuration options set for the "searches" directive.
+ */
+final class SearchesValidator implements SearchesValidatorInterface
 {
-    public function validates(Searches $searches)
+    /**
+     * {@inheritDoc}
+     */
+    public function validates(array $searches): void
     {
-        foreach ($searches->all() as $search) {
-            $config = $search->getConfig();
+        array_map($this->validateSingleSearch(...), $searches);
+    }
 
-            $allowedKeys = [
-                'type',
-                'nameMatches',
-                'instanceOf',
-                'usesClasses',
-                'failIfFound'
-            ];
-            $registry = new Registry();
-            $allowedKeys = array_merge($allowedKeys, $registry->allForStructures());
+    /**
+     * @param SearchInterface $search
+     * @return void
+     */
+    private function validateSingleSearch(SearchInterface $search): void
+    {
+        $config = $search->getConfig();
 
-            $diff = array_diff(array_keys((array)$config), $allowedKeys);
-            if (count($diff) > 0) {
-                throw new ConfigException(
-                    sprintf(
-                        'Invalid config for search "%s". Allowed keys are {%s}',
-                        $search->getName(),
-                        implode(', ', $allowedKeys)
-                    )
-                );
-            }
+        $allowedKeys = [
+            'type',
+            'nameMatches',
+            'instanceOf',
+            'usesClasses',
+            'failIfFound',
+            ...Registry::allForStructures()
+        ];
 
-            if (isset($config->type) && !in_array($config->type, ['class', 'interface'])) {
-                throw new ConfigException('Invalid config for "type". Should be "class" or "interface"');
-            }
+        if ([] !== array_diff(array_keys($config), $allowedKeys)) {
+            throw SearchValidationException::unknownSearchKey($search->getName(), $allowedKeys);
+        }
 
-            if (isset($config->nameMatches) && !is_string($config->nameMatches)) {
-                throw new ConfigException('Invalid config for "nameMatches". Should be a regex');
-            }
+        // Only validates the configuration value of configuration that are defined.
+        $configConditions = array_intersect_key(self::getConfigurationValidationConditions(), $config);
 
-            if (isset($config->instanceOf) && !is_array($config->instanceOf)) {
-                throw new ConfigException('Invalid config for "instanceOf". Should be an array of classnames');
-            }
-
-            // usesMatches
-            if (isset($config->usesClasses) && !is_array($config->usesClasses)) {
-                throw new ConfigException('Invalid config for "usesClasses". Should be a, array of classnames or regexes matching classnames');
+        foreach ($configConditions as $configProperty => $validation) {
+            if ($validation['condition']($config[$configProperty])) {
+                throw $validation['exception'];
             }
         }
+    }
+
+    /**
+     * Get a list of couple "condition-exception" for each configuration key on which a validation must occur. If the
+     * validation fails, then the exception given in the list for the particular element of configuration must be thrown
+     * by the validator.
+     *
+     * @return array<string, array{condition: callback(mixed): bool, exception: SearchValidationException}>
+     */
+    private static function getConfigurationValidationConditions(): array
+    {
+        return [
+            'type' => [
+                'condition' => static fn (mixed $conf): bool => !in_array($conf, ['class', 'interface'], true),
+                'exception' => SearchValidationException::invalidType(),
+            ],
+            'nameMatches' => [
+                'condition' => static fn (mixed $conf): bool => !is_string($conf),
+                'exception' => SearchValidationException::invalidNameMatches(),
+            ],
+            'instanceOf' => [
+                'condition' => static fn (mixed $conf): bool => !is_array($conf),
+                'exception' => SearchValidationException::invalidInstanceOf(),
+            ],
+            'usesClasses' => [
+                'condition' => static fn (mixed $conf): bool => !is_array($conf),
+                'exception' => SearchValidationException::invalidUsesClasses(),
+            ],
+        ];
     }
 }

@@ -1,9 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
 
 /**
  * According to McCabe,
@@ -13,17 +16,16 @@ use Hal\Violation\Violation;
  *
  * @see http://www.literateprogramming.com/mccabe.pdf
  */
-class TooComplexMethodCode implements Violation
+final class TooComplexMethodCode implements Violation
 {
-    /** @var Metric|null */
-    private $metric;
+    private Metric $metric;
 
-    public function getName()
+    public function getName(): string
     {
         return 'Too complex method code';
     }
 
-    public function apply(Metric $metric)
+    public function apply(Metric $metric): void
     {
         if (! $metric instanceof ClassMetric) {
             return;
@@ -32,17 +34,18 @@ class TooComplexMethodCode implements Violation
         $this->metric = $metric;
 
         if ($metric->get('ccnMethodMax') > 10) {
-            $metric->get('violations')->add($this);
-            return;
+            /** @var ViolationsHandlerInterface $violationsHandler */
+            $violationsHandler = $metric->get('violations');
+            $violationsHandler->add($this);
         }
     }
 
-    public function getLevel()
+    public function getLevel(): int
     {
         return Violation::ERROR;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return <<<EOT
 This class looks really complex.

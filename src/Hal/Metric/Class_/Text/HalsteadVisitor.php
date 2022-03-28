@@ -1,141 +1,189 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Metric\Class_\Text;
 
-use Hal\Metric\FunctionMetric;
+use Closure;
+use Hal\Metric\Helper\MetricNameGenerator;
+use Hal\Metric\Helper\NodeIteratorInterface;
+use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
-use Hoa\Ruler\Model\Bag\Scalar;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
+use function array_map;
+use function array_unique;
+use function log;
+use function max;
+use function property_exists;
+use function round;
 
 /**
  * Calculates Halstead complexity
  *
- *      According Wikipedia, "Halstead complexity measures are software metrics introduced by Maurice Howard Halstead in
- *      1977 as part of his treatise on establishing an empirical science of software development.
- *      Halstead makes the observation that metrics of the software should reflect the implementation or
- *      expression of algorithms in different languages, but be independent of their execution on a specific platform.
- *      These metrics are therefore computed statically from the code."
+ * According to Wikipedia, "Halstead complexity measures are software metrics introduced by Maurice Howard Halstead in
+ * 1977 as part of his treatise on establishing an empirical science of software development.
+ * Halstead makes the observation that metrics of the software should reflect the implementation or
+ * expression of algorithms in different languages, but be independent of their execution on a specific platform.
+ * These metrics are therefore computed statically from the code."
  *
- * @author Jean-François Lépine <https://twitter.com/Halleck45>
- * @package Hal\Metric\Class_\Coupling
+ * The metrics defined by this visitor are:
+ * - Number of operands (variables, properties, fixed values)
+ * - Number of unique operands
+ * - Number of operators (math operators, logical operators, assignments, ...)
+ * - Number of unique operators
+ * - Length: sum of the operators and operands.
+ * - Vocabulary: sum of unique operators and operands.
+ * - Volume: calculated from Length and Vocabulary. A Volume < 100 means an easily readable class.
+ * - Difficulty: represent how hard it is to work on a class without introduce bugs. High value means high risk.
+ * - Level: inverse of the difficulty. High Level means easy to work class.
+ * - Effort: worth the Difficulty times the Volume.
+ * - Time: estimated time in seconds to implement a class, according to the Effort.
+ * - Bugs: estimated number of bugs encountered in a class, according to the Effort and the abilities of the developer
+ *   of the class. As this latest value is purely subjective, Halstead defined 3000 as a good default value for the
+ *   developer's ability. This value must be the closest to 0.
+ * - Intelligence: worth the Volume times the Level. Small value for a class means dumb class. And dumb class means easy
+ *   to understand as a human.
  */
-class HalsteadVisitor extends NodeVisitorAbstract
+final class HalsteadVisitor extends NodeVisitorAbstract
 {
-
-    /**
-     * @var Metrics
-     */
-    private $metrics;
+    /** @var array<int, string> */
+    private static array $operands;
+    /** @var array<int, string> */
+    private static array $operators;
 
     /**
      * @param Metrics $metrics
+     * @param NodeIteratorInterface $nodeIterator
      */
-    public function __construct(Metrics $metrics)
-    {
-        $this->metrics = $metrics;
+    public function __construct(
+        private readonly Metrics $metrics,
+        private readonly NodeIteratorInterface $nodeIterator,
+    ) {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): void
     {
-        if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Function_ || $node instanceof Stmt\Trait_) {
-            if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-                $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
-                $classOrFunction = $this->metrics->get($name);
-            } else {
-                $classOrFunction = new FunctionMetric((string)$node->name);
-                $this->metrics->attach($classOrFunction);
-            }
-
-            // search for operands and operators
-            $operands = [];
-            $operators = [];
-
-            iterate_over_node($node, function ($node) use (&$operators, &$operands) {
-                if ($node instanceof Node\Expr\BinaryOp
-                    || $node instanceof Node\Expr\AssignOp
-                    || $node instanceof Stmt\If_
-                    || $node instanceof Stmt\For_
-                    || $node instanceof Stmt\Switch_
-                    || $node instanceof Stmt\Catch_
-                    || $node instanceof Stmt\Return_
-                    || $node instanceof Stmt\While_
-                    || $node instanceof Node\Expr\Assign
-                ) {
-                    // operators
-                    array_push($operators, get_class($node));
-                }
-
-                // nicik/php-parser:^4
-                if ($node instanceof Node\Param
-                    && isset($node->var)
-                    && $node->var instanceof Node\Expr\Variable
-                ) {
-                    return;
-                }
-
-                if ($node instanceof Node\Expr\Cast
-                    || $node instanceof Node\Expr\Variable
-                    || $node instanceof Node\Param
-                    || $node instanceof Node\Scalar
-                ) {
-                    // operands
-                    if (isset($node->value)) {
-                        $name = $node->value;
-                    } elseif (isset($node->name)) {
-                        $name = $node->name;
-                    } else {
-                        $name = get_class($node);
-                    }
-                    array_push($operands, $name);
-                }
-            });
-
-            // calculate halstead metrics
-            $uniqueOperators = array_map('unserialize', array_unique(array_map('serialize', $operators)));
-            $uniqueOperands = array_map('unserialize', array_unique(array_map('serialize', $operands)));
-
-            $n1 = count($uniqueOperators, COUNT_NORMAL);
-            $n2 = count($uniqueOperands, COUNT_NORMAL);
-            $N1 = count($operators, COUNT_NORMAL);
-            $N2 = count($operands, COUNT_NORMAL);
-
-            if (($n2 == 0) || ($N2 == 0)) {
-                // files without operators
-                $V = $n1 = $n2 = $N1 = $N2 = $E = $D = $B = $T = $I = $L = 0;
-            } else {
-                $devAbility = 3000;
-                $N = $N1 + $N2;
-                $n = $n1 + $n2;
-                $V = $N * log($n, 2);
-                $L = (2 / max(1, $n1)) * ($n2 / $N2);
-                $D = ($n1 / 2) * ($N2 / $n2);
-                $E = $V * $D;
-                $B = $V / $devAbility;
-                $T = $E / 18;
-                $I = $L * $V;
-            }
-
-            // save result
-            $classOrFunction
-                ->set('length', $N1 + $N2)
-                ->set('vocabulary', $n1 + $n2)
-                ->set('volume', round($V, 2))
-                ->set('difficulty', round($D, 2))
-                ->set('effort', round($E, 2))
-                ->set('level', round($L, 2))
-                ->set('bugs', round($B, 2))
-                ->set('time', round($T))
-                ->set('intelligentContent', round($I, 2))
-                ->set('number_operators', $N1)
-                ->set('number_operands', $N2)
-                ->set('number_operators_unique', $n1)
-                ->set('number_operands_unique', $n2);
-            $this->metrics->attach($classOrFunction);
+        if (
+            !$node instanceof Stmt\Class_
+            && !$node instanceof Stmt\Function_
+            && !$node instanceof Stmt\Trait_
+            //TODO: && !$node instanceof Stmt\Enum_
+        ) {
+            return;
         }
+
+        $nodeName = ($node instanceof Stmt\Function_)
+            ? MetricNameGenerator::getFunctionName($node)
+            : MetricNameGenerator::getClassName($node);
+        /** @var Metric $classOrFunction */
+        $classOrFunction = $this->metrics->get($nodeName);
+
+        // Search for operands and operators.
+        self::$operands = [];
+        self::$operators = [];
+
+        $this->nodeIterator->iterateOver($node, $this->getVisitorCallback());
+
+        // Calculate halstead metrics.
+        $uniqueOperators = array_map(unserialize(...), array_unique(array_map(serialize(...), self::$operators)));
+        $uniqueOperands = array_map(unserialize(...), array_unique(array_map(serialize(...), self::$operands)));
+
+        // Set default values.
+        $volume = 0;
+        $nbUniqueOperators = 0;
+        $nbUniqueOperands = 0;
+        $nbOperators = 0;
+        $nbOperands = 0;
+        $effort = 0;
+        $difficulty = 0;
+        $bugs = 0;
+        $time = 0;
+        $intelligentContent = 0;
+        $level = 0;
+        $length = 0;
+        $vocabulary = 0;
+
+        if ([] !== self::$operands) {
+            $nbUniqueOperators = count($uniqueOperators);
+            $nbUniqueOperands = count($uniqueOperands);
+            $nbOperators = count(self::$operators);
+            $nbOperands = count(self::$operands);
+
+            $devAbility = 3000;
+            $length = $nbOperators + $nbOperands;
+            $vocabulary = $nbUniqueOperators + $nbUniqueOperands;
+            $volume = $length * log($vocabulary, 2);
+            $level = (2 / max(1, $nbUniqueOperators)) * ($nbUniqueOperands / $nbOperands);
+            $difficulty = ($nbUniqueOperators / 2) * ($nbOperands / $nbUniqueOperands);
+            $effort = $volume * $difficulty;
+            $bugs = ($effort ** (2 / 3)) / $devAbility;
+            $time = $effort / 18;
+            $intelligentContent = $level * $volume;
+        }
+
+        // Save results.
+        $classOrFunction->set('length', $length);
+        $classOrFunction->set('vocabulary', $vocabulary);
+        $classOrFunction->set('volume', round($volume, 2));
+        $classOrFunction->set('difficulty', round($difficulty, 2));
+        $classOrFunction->set('effort', round($effort, 2));
+        $classOrFunction->set('level', round($level, 2));
+        $classOrFunction->set('bugs', round($bugs, 2));
+        $classOrFunction->set('time', round($time));
+        $classOrFunction->set('intelligentContent', round($intelligentContent, 2));
+        $classOrFunction->set('number_operators', $nbOperators);
+        $classOrFunction->set('number_operands', $nbOperands);
+        $classOrFunction->set('number_operators_unique', $nbUniqueOperators);
+        $classOrFunction->set('number_operands_unique', $nbUniqueOperands);
+    }
+
+    /**
+     * Returns the callback that will calculate the Halstead metrics using each sub-node found while iterating over all
+     * analysed statements.
+     *
+     * @return Closure
+     */
+    private function getVisitorCallback(): Closure
+    {
+        return static function (Node $node): void {
+            if ($node instanceof Node\Param && $node->var instanceof Node\Expr\Variable) {
+                return;
+            }
+
+            if (
+                $node instanceof Node\Expr\BinaryOp
+                || $node instanceof Node\Expr\AssignOp
+                || $node instanceof Stmt\If_
+                || $node instanceof Stmt\For_
+                || $node instanceof Stmt\Switch_
+                || $node instanceof Stmt\Catch_
+                || $node instanceof Stmt\Return_
+                || $node instanceof Stmt\While_
+                || $node instanceof Node\Expr\Assign
+            ) {
+                // operators
+                self::$operators[] = $node->getType();
+            }
+
+            if (
+                $node instanceof Node\Expr\Cast
+                || $node instanceof Node\Expr\Variable
+                || $node instanceof Node\Param
+                || $node instanceof Node\Scalar
+            ) {
+                // operands
+                match (true) {
+                    property_exists($node, 'value') => $name = $node->value,
+                    property_exists($node, 'name') => $name = $node->name,
+                    default => $name = $node->getType(),
+                };
+
+                self::$operands[] = $name;
+            }
+        };
     }
 }

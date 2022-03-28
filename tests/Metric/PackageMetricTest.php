@@ -1,138 +1,76 @@
 <?php
+declare(strict_types=1);
 
-namespace Test\Hal\Metric;
+namespace Tests\Hal\Metric;
 
-use Hal\Metric\Metric;
 use Hal\Metric\PackageMetric;
 use PHPUnit\Framework\TestCase;
+use function sqrt;
 
-class PackageMetricTest extends TestCase
+final class PackageMetricTest extends TestCase
 {
-    public function testItIsAMetric()
+    public function testBagInteractionsInPackageMetricContext(): void
     {
-        $this->assertInstanceOf(Metric::class, new PackageMetric('PackageName\\'));
+        $bagClass = new PackageMetric('UnitTest');
+
+        self::assertSame('UnitTest', $bagClass->getName());
+        self::assertSame('UnitTest', $bagClass->get('name'));
+        self::assertTrue($bagClass->has('name'));
+
+        self::assertNull($bagClass->get('NOT A KEY'));
+
+        $bagClass->set('other', 'FOO');
+        self::assertSame('FOO', $bagClass->get('other'));
+
+        $all = ['name' => 'UnitTest', 'other' => 'FOO'];
+        self::assertSame($all, $bagClass->all());
+        self::assertSame([...$all, '_type' => $bagClass::class], $bagClass->jsonSerialize());
     }
 
-    public function testItAppendsClasses()
+    public function testPackageMetricSpecificBehavior(): void
     {
-        $metric = new PackageMetric('PackageName\\');
+        $packageMetric = new PackageMetric('UnitTest');
 
-        $this->assertSame([], $metric->getClasses());
+        self::assertSame([], $packageMetric->getClasses());
+        self::assertNull($packageMetric->getAbstraction());
+        self::assertNull($packageMetric->getInstability());
+        self::assertSame([], $packageMetric->getOutgoingClassDependencies());
+        self::assertSame([], $packageMetric->getOutgoingPackageDependencies());
+        self::assertSame([], $packageMetric->getIncomingClassDependencies());
+        self::assertSame([], $packageMetric->getIncomingPackageDependencies());
+        self::assertNull($packageMetric->getDistance());
+        self::assertNull($packageMetric->getNormalizedDistance());
+        self::assertSame([], $packageMetric->getDependentInstabilities());
 
-        $metric->addClass('Foo');
-        $this->assertSame(['Foo'], $metric->getClasses());
+        $packageMetric->addClass('A');
+        $packageMetric->addClass('B');
+        $packageMetric->addClass('C');
+        self::assertSame(['A', 'B', 'C'], $packageMetric->getClasses());
 
-        $metric->addClass('Bar');
-        $this->assertSame(['Foo', 'Bar'], $metric->getClasses());
-    }
+        $packageMetric->setAbstraction(3.14);
+        $packageMetric->setInstability(22.3);
+        self::assertSame(3.14, $packageMetric->getAbstraction());
+        self::assertSame(22.3, $packageMetric->getInstability());
 
-    public function testItMayHasAnAbstraction()
-    {
-        $metric = new PackageMetric('PackageName\\');
-        $this->assertNull($metric->getAbstraction());
+        $packageMetric->setNormalizedDistance(-89.2);
+        self::assertSame(-89.2 / sqrt(2), $packageMetric->getDistance());
+        self::assertSame(-89.2, $packageMetric->getNormalizedDistance());
 
-        $metric->setAbstraction(0.8);
-        $this->assertSame(0.8, $metric->getAbstraction());
-    }
+        $packageMetric->addOutgoingClassDependency('A', 'OtherPackage');
+        $packageMetric->addOutgoingClassDependency('B', 'OtherPackage');
+        // Not added because package is same as packageMetric:
+        $packageMetric->addOutgoingClassDependency('Ignored', 'UnitTest');
+        self::assertSame(['A', 'B'], $packageMetric->getOutgoingClassDependencies());
+        self::assertSame(['OtherPackage'], $packageMetric->getOutgoingPackageDependencies());
 
-    public function testItMayHasAnInstability()
-    {
-        $metric = new PackageMetric('PackageName\\');
-        $this->assertNull($metric->getInstability());
+        $packageMetric->addIncomingClassDependency('A', 'OtherPackage');
+        $packageMetric->addIncomingClassDependency('B', 'OtherPackage');
+        // Not added because package is same as packageMetric:
+        $packageMetric->addIncomingClassDependency('Ignored', 'UnitTest');
+        self::assertSame(['A', 'B'], $packageMetric->getIncomingClassDependencies());
+        self::assertSame(['OtherPackage'], $packageMetric->getIncomingPackageDependencies());
 
-        $metric->setInstability(0.8);
-        $this->assertSame(0.8, $metric->getInstability());
-    }
-
-    public function testItHasAUniqueListOfOutgoingClassDependencies()
-    {
-        $metric = new PackageMetric('PackageName\\');
-        $this->assertSame([], $metric->getOutgoingClassDependencies());
-
-        $metric->addOutgoingClassDependency('PackageA\\AnyClass', 'PackageA\\');
-        $metric->addOutgoingClassDependency('PackageA\\AnyClass', 'PackageA\\');
-
-        $this->assertSame(['PackageA\\AnyClass'], $metric->getOutgoingClassDependencies());
-    }
-
-    public function testItDoesNotAddClassesOfItselfAsOutgoingClassDependencies()
-    {
-        $metric = new PackageMetric('PackageA\\');
-        $metric->addOutgoingClassDependency('PackageA\\AnyClass', 'PackageA\\');
-        $this->assertSame([], $metric->getOutgoingClassDependencies());
-    }
-
-    public function testItHasAUniqueListOfOutgoingPackageDependencies()
-    {
-        $metric = new PackageMetric('PackageName\\');
-        $this->assertSame([], $metric->getOutgoingPackageDependencies());
-
-        $metric->addOutgoingClassDependency('PackageA\\AnyClass', 'PackageA\\');
-        $metric->addOutgoingClassDependency('PackageA\\AnotherClass', 'PackageA\\');
-
-        $this->assertSame(['PackageA\\'], $metric->getOutgoingPackageDependencies());
-    }
-
-    public function testItDoesNotAddItselfAsOutgoingClassDependencies()
-    {
-        $metric = new PackageMetric('PackageA\\');
-        $metric->addOutgoingClassDependency('PackageA\\AnyClass', 'PackageA\\');
-        $this->assertSame([], $metric->getOutgoingPackageDependencies());
-    }
-
-    public function testItHasAUniqueListOfIncomingClassDependencies()
-    {
-        $metric = new PackageMetric('PackageName\\');
-        $this->assertSame([], $metric->getOutgoingClassDependencies());
-
-        $metric->addIncomingClassDependency('PackageA\\AnyClass', 'PackageA\\');
-        $metric->addIncomingClassDependency('PackageA\\AnyClass', 'PackageA\\');
-
-        $this->assertSame(['PackageA\\AnyClass'], $metric->getIncomingClassDependencies());
-    }
-
-    public function testItDoesNotAddClassesOfItselfAsIncomingClassDependencies()
-    {
-        $metric = new PackageMetric('PackageA\\');
-        $metric->addIncomingClassDependency('PackageA\\AnyClass', 'PackageA\\');
-        $this->assertSame([], $metric->getIncomingClassDependencies());
-    }
-
-    public function testItHasAUniqueListOfIncomingPackageDependencies()
-    {
-        $metric = new PackageMetric('PackageName\\');
-        $this->assertSame([], $metric->getIncomingPackageDependencies());
-
-        $metric->addIncomingClassDependency('PackageA\\AnyClass', 'PackageA\\');
-        $metric->addIncomingClassDependency('PackageA\\AnotherClass', 'PackageA\\');
-
-        $this->assertSame(['PackageA\\'], $metric->getIncomingPackageDependencies());
-    }
-
-    public function testItDoesNotAddItselfAsIncomingClassDependencies()
-    {
-        $metric = new PackageMetric('PackageA\\');
-        $metric->addIncomingClassDependency('PackageA\\AnyClass', 'PackageA\\');
-        $this->assertSame([], $metric->getIncomingPackageDependencies());
-    }
-
-    public function testItMayHasADistanceAndANormalizedDistance()
-    {
-        $metric = new PackageMetric('PackageA\\');
-        $this->assertNull($metric->getDistance());
-        $this->assertNull($metric->getNormalizedDistance());
-
-        $metric->setNormalizedDistance(1);
-        $this->assertSame(1, $metric->getNormalizedDistance());
-        $this->assertSame(1/sqrt(2), $metric->getDistance());
-    }
-
-    public function testItMyaHasDependentInstabilities()
-    {
-        $metric = new PackageMetric('PackageB\\');
-        $this->assertSame([], $metric->getDependentInstabilities());
-
-        $metric->setDependentInstabilities(['PackageA\\' => 0.04, 'PackageC\\' => 0.5]);
-        $this->assertSame(['PackageA\\' => 0.04, 'PackageC\\' => 0.5], $metric->getDependentInstabilities());
+        $packageMetric->setDependentInstabilities([99.76, -1.2345678, 0]);
+        self::assertSame([99.76, -1.2345678, 0], $packageMetric->getDependentInstabilities());
     }
 }

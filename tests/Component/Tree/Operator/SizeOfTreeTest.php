@@ -1,125 +1,152 @@
 <?php
+declare(strict_types=1);
 
-namespace Test;
+namespace Tests\Hal\Component\Tree\Operator;
 
+use Generator;
 use Hal\Component\Tree\Graph;
-use Hal\Component\Tree\GraphFactory;
 use Hal\Component\Tree\Node;
 use Hal\Component\Tree\Operator\SizeOfTree;
+use Hal\Exception\GraphException\NoSizeForCyclicGraphException;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @group tree
- */
-class SizeOfTreeTest extends \PHPUnit\Framework\TestCase
+final class SizeOfTreeTest extends TestCase
 {
+    /**
+     * Provides cyclic graphs with several examples of cyclic relations.
+     *
+     * @return Generator<string, array{0: Graph}>
+     */
+    public function provideCyclicGraphs(): Generator
+    {
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeB, $nodeA);
+        yield 'A➔B➔A' => [$graph];
+
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $nodeC = new Node('C');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->insert($nodeC);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeB, $nodeC);
+        $graph->addEdge($nodeC, $nodeA);
+        yield 'A➔B➔C➔A' => [$graph];
+
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $nodeC = new Node('C');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->insert($nodeC);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeB, $nodeC);
+        $graph->addEdge($nodeC, $nodeB);
+        yield 'A➔B➔C➔B' => [$graph];
+    }
 
     /**
-     * @expectedException  LogicException
-     * @expectedExceptionMessage Cannot get size informations of cyclic graph
+     * @dataProvider provideCyclicGraphs
+     * @param Graph $graph
+     * @return void
      */
-    public function testICannotGetInfoAboutGraphWhenItIsCyclic()
+    //#[DataProvider('provideCyclicGraphs')] //TODO: PHPUnit 10.
+    public function testICantHaveSizeOfCyclicTree(Graph $graph): void
     {
-        $graph = new Graph();
-        $a = new Node('A');
-        $b = new Node('B');
-
-        $graph->insert($a)->insert($b);
-
-        // case 1
-        $graph->addEdge($a, $b); // A -> B
-        $graph->addEdge($b, $a); // B -> C
-
-        $size = new SizeOfTree($graph);
+        $this->expectExceptionObject(NoSizeForCyclicGraphException::incalculableSize());
+        new SizeOfTree($graph);
     }
 
-    public function testICanGetDepthOfNode()
+    /**
+     * Provides acyclic graphs with their average height.
+     *
+     * @return Generator<string, array{0: Graph, 1: float}>
+     */
+    public function provideAcyclicGraphs(): Generator
     {
         $graph = new Graph();
-        $a = new Node('A');
-        $b = new Node('B');
-        $c = new Node('C');
-        $d = new Node('D');
-        $e = new Node('E');
+        yield 'No node' => [$graph, 0];
 
-        $graph->insert($a)->insert($b)->insert($c)->insert($d)->insert($e);
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $graph->insert($nodeA);
+        $graph->addEdge($nodeA, $nodeA);
+        yield 'A➔A' => [$graph, 1];
 
-        // case 1
-        $graph->addEdge($a, $b); // A -> B
-        $graph->addEdge($b, $c); // B -> C
-        $graph->addEdge($c, $d); // C -> D
-        $graph->addEdge($a, $e); // A -> E  (node with multiple childs)
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->addEdge($nodeA, $nodeB);
+        yield 'A➔B' => [$graph, 2];
 
-        $size = new SizeOfTree($graph);
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $nodeC = new Node('C');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->insert($nodeC);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeC, $nodeC);
+        yield 'A➔B|C➔C' => [$graph, 1.5];
 
-        $this->assertEquals(0, $size->getDepthOfNode($a));
-        $this->assertEquals(1, $size->getDepthOfNode($b));
-        $this->assertEquals(2, $size->getDepthOfNode($c));
-        $this->assertEquals(3, $size->getDepthOfNode($d));
-        $this->assertEquals(1, $size->getDepthOfNode($e));
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $nodeC = new Node('C');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->insert($nodeC);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeB, $nodeC);
+        yield 'A➔B➔C' => [$graph, 3];
+
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $nodeC = new Node('C');
+        $nodeD = new Node('D');
+        $nodeE = new Node('E');
+        $nodeF = new Node('F');
+        $nodeG = new Node('G');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->insert($nodeC);
+        $graph->insert($nodeD);
+        $graph->insert($nodeE);
+        $graph->insert($nodeF);
+        $graph->insert($nodeG);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeB, $nodeC);
+        $graph->addEdge($nodeA, $nodeD);
+        $graph->addEdge($nodeD, $nodeB);
+        $graph->addEdge($nodeE, $nodeC);
+        $graph->addEdge($nodeF, $nodeC);
+        $graph->addEdge($nodeG, $nodeG);
+        // (A➔B➔C) is ignored as shorter than (A➔D➔B➔C), wth same root node.
+        // Therefore, expected average is (4+2+2+1)/4 = 2.25
+        yield 'A➔B➔C|A➔D➔B➔C|E➔C|F➔C|G➔G' => [$graph, 2.25];
     }
 
-    public function testICanGetNbChildsOfNode()
+    /**
+     * @dataProvider provideAcyclicGraphs
+     * @param Graph $graph
+     * @param float $expectedValue
+     * @return void
+     */
+    //#[DataProvider('provideAcyclicGraphs')] //TODO: PHPUnit 10.
+    public function testICanCalculateAverageSizeOfTree(Graph $graph, float $expectedValue): void
     {
-        $graph = new Graph();
-        $a = new Node('A');
-        $b = new Node('B');
-        $c = new Node('C');
-        $d = new Node('D');
-        $e = new Node('E');
-
-        $graph->insert($a)->insert($b)->insert($c)->insert($d)->insert($e);
-
-        // case 1
-        $graph->addEdge($a, $b); // A -> B
-        $graph->addEdge($b, $c); // B -> C
-        $graph->addEdge($c, $d); // C -> D
-        $graph->addEdge($a, $e); // A -> E  (node with multiple childs)
-
-        $size = new SizeOfTree($graph);
-
-        $this->assertEquals(4, $size->getNumberOfChilds($a));
-        $this->assertEquals(2, $size->getNumberOfChilds($b));
-        $this->assertEquals(1, $size->getNumberOfChilds($c));
-        $this->assertEquals(0, $size->getNumberOfChilds($d));
-        $this->assertEquals(0, $size->getNumberOfChilds($e));
-    }
-
-    public function testICanGetInfoAboutAverageHeightOfTree()
-    {
-        $graph = new Graph();
-        $a = new Node('A');
-        $b = new Node('B');
-        $c = new Node('C');
-        $d = new Node('D');
-        $e = new Node('E');
-        $f = new Node('F');
-        $g = new Node('G');
-        $x = new Node('X');
-        $y = new Node('Y');
-        $z = new Node('Z');
-
-        $graph->insert($a)->insert($b)->insert($c)->insert($d)->insert($e)->insert($f)->insert($g);
-        $graph->insert($x)->insert($y)->insert($z);
-
-        // case 1
-        $graph->addEdge($a, $b); // A -> B
-        $graph->addEdge($b, $c); // B -> C
-        $graph->addEdge($c, $d); // C -> D
-        $graph->addEdge($c, $f); // C -> F
-        $graph->addEdge($f, $g); // F -> G
-        $graph->addEdge($a, $e); // A -> E
-        $graph->addEdge($x, $y); // X -> Y
-
-        // longest branch A = 5      A -> B -> C -> F -> G
-        // longest branch X = 2      X -> Y
-        // longest branch Z = 1      Z
-
-        $size = new SizeOfTree($graph);
-
-        $this->assertEquals(5, $size->getLongestBranch($a));
-        $this->assertEquals(2, $size->getLongestBranch($x));
-        $this->assertEquals(1, $size->getLongestBranch($z));
-
-        $this->assertEquals(2.67, $size->getAverageHeightOfGraph());
+        self::assertSame($expectedValue, (new SizeOfTree($graph))->getAverageHeightOfGraph());
     }
 }

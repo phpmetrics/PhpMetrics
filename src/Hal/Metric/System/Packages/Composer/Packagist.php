@@ -1,81 +1,89 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Metric\System\Packages\Composer;
 
-/**
- * @package Hal\Metric\System\Packages\Composer
- */
-class Packagist
-{
+use JsonException;
+use stdClass;
+use function file_get_contents;
+use function json_decode;
+use function ltrim;
+use function preg_match;
+use function sprintf;
+use function str_replace;
+use function stream_context_create;
+use function version_compare;
+use const JSON_THROW_ON_ERROR;
 
+/**
+ * Responsible for the fetching of the information related to external dependencies using Packagist as a registry.
+ */
+final class Packagist implements ComposerRegistryConnectorInterface
+{
     /**
-     * @param $package
-     * @return \StdClass
+     * {@inheritDoc}
+     * @throws JsonException
      */
-    public function get($package)
+    public function get(string $package): stdClass
     {
-        $response = new \StdClass;
-        $response->latest = null;
-        $response->license = [];
-        $response->homepage = null;
-        $response->description = null;
-        $response->time = null;
-        $response->zip = null;
-        $response->compare = null;
-        $response->type = 'unknown';
-        $response->github_stars = 0;
-        $response->github_watchers = 0;
-        $response->github_forks = 0;
-        $response->github_open_issues = 0;
-        $response->download_total = 0;
-        $response->download_monthly = 0;
-        $response->download_daily = 0;
-        $response->favers = 0;
+        $response = [
+            'name' => '',
+            'latest' => null,
+            'license' => [],
+            'homepage' => null,
+            'time' => null,
+            'zip' => null,
+            'type' => 'unknown',
+            'description' => null,
+            'github_stars' => 0,
+            'github_watchers' => 0,
+            'github_forks' => 0,
+            'github_open_issues' => 0,
+            'download_total' => 0,
+            'download_monthly' => 0,
+            'download_daily' => 0,
+            'favorites' => 0,
+        ];
 
         if (!preg_match('/\w+\/\w+/', $package)) {
-            return $response;
+            return (object)$response;
         }
-        list($user, $name) = explode('/', $package);
-        $uri = sprintf('https://packagist.org/packages/%s/%s.json', $user, $name);
-        $json = $this->getURIContentAsJson($uri);
+        $json = $this->getURIContentAsJson(sprintf('https://packagist.org/packages/%s.json', $package));
 
-        if (!isset($json->package) || !is_object($json->package)) {
-            return $response;
+        if (!isset($json->package)) {
+            return (object)$response;
         }
 
-        $response->type = $json->package->type;
-        $response->description = $json->package->description;
-        $response->type = $json->package->type;
-        $response->github_stars = $json->package->github_stars;
-        $response->github_watchers = $json->package->github_watchers;
-        $response->github_forks = $json->package->github_forks;
-        $response->github_open_issues = $json->package->github_open_issues;
-        $response->download_total = $json->package->downloads->total;
-        $response->download_monthly = $json->package->downloads->monthly;
-        $response->download_daily = $json->package->downloads->daily;
-        $response->favers = $json->package->favers;
+        $response['type'] = $json->package->type;
+        $response['description'] = $json->package->description;
+        $response['github_stars'] = $json->package->github_stars;
+        $response['github_watchers'] = $json->package->github_watchers;
+        $response['github_forks'] = $json->package->github_forks;
+        $response['github_open_issues'] = $json->package->github_open_issues;
+        $response['download_total'] = $json->package->downloads->total;
+        $response['download_monthly'] = $json->package->downloads->monthly;
+        $response['download_daily'] = $json->package->downloads->daily;
+        $response['favorites'] = $json->package->favers;
 
         // get latest version
         $latest = '0.0.0';
-        foreach ((array)$json->package->versions as $version => $datas) {
-            if ($version[0] === 'v') {
-                $version = substr($version, 1);
-            }
-            if (!preg_match('#^[\.\d]+$#', $version)) {
+
+        foreach ((array)$json->package->versions as $version => $packageDataAtSpecificVersion) {
+            $version = ltrim($version, 'v');
+            if (!preg_match('#^(\d|\.)+$#', $version) || version_compare($version, $latest, '<')) {
                 continue;
             }
-            if ($compare = version_compare($version, $latest) == 1) {
-                $latest = $version;
-                $response->name = $package;
-                $response->latest = $version;
-                $response->license = (array)$datas->license;
-                $response->homepage = $datas->homepage;
-                $response->time = $datas->time;
-                $response->zip = $datas->dist->url;
-                $response->compare = $compare;
-            }
+
+            $latest = $version;
+            $response['name'] = $package;
+            $response['latest'] = $version;
+            $response['license'] = (array)$packageDataAtSpecificVersion->license;
+            $response['homepage'] = $packageDataAtSpecificVersion->homepage;
+            $response['time'] = $packageDataAtSpecificVersion->time;
+            $response['zip'] = $packageDataAtSpecificVersion->dist->url;
         }
 
-        return $response;
+        return (object)$response;
     }
 
     /**
@@ -83,25 +91,28 @@ class Packagist
      *
      * @param string $uri
      *
-     * @return mixed
+     * @return stdClass
+     * @throws JsonException When the content of the request is not possible to decode the response in JSON.
      */
-    private function getURIContentAsJson($uri)
+    private function getURIContentAsJson(string $uri): stdClass
     {
-        // Get the environment variable.
-        $httpsProxy = getenv('https_proxy');
-        $context = null;
-        if ('' !== $httpsProxy) {
-            // Create the context.
-            $context = stream_context_create(
-                [
-                    'http' => [
-                        'proxy' => str_replace(['http://', 'https://'], 'tcp://', $httpsProxy),
-                        'request_fulluri' => true,
-                    ],
-                ]
-            );
+        $_SERVER += ['HTTP_PROXY' => ''];
+        $httpOptions = ['ignore_errors' => true];
+        if ('' !== $_SERVER['HTTP_PROXY']) {
+            $httpOptions += [
+                'proxy' => str_replace(['http://', 'https://'], 'tcp://', $_SERVER['HTTP_PROXY']),
+                'request_fulluri' => true,
+            ];
+        }
+        $jsonContent = file_get_contents($uri, context: stream_context_create(['http' => $httpOptions]));
+        if (false === $jsonContent) {
+            return (object)[];
         }
 
-        return json_decode(@file_get_contents($uri, false, $context));
+        /**
+         * @noinspection JsonEncodingApiUsageInspection TODO: Wait for a fix
+         * @see https://github.com/kalessil/phpinspectionsea/issues/1725
+         */
+        return json_decode($jsonContent, flags: JSON_THROW_ON_ERROR);
     }
 }

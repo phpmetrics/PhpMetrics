@@ -1,10 +1,4 @@
+.idea
 composer.lock
 vendor
-.idea
-md5sums
-control
-files
-build/phpmetrics.dsc
-build/phpmetrics.deb
-build/phpmetrics.tar.gz
-build/phpmetrics.changes
+qa/reports

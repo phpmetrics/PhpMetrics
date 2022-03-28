@@ -1,151 +1,129 @@
 <?php
-
-/*
- * (c) Jean-François Lépine <https://twitter.com/Halleck45>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
 namespace Hal\Component\Tree;
 
-class Graph implements \Countable
+use Hal\Exception\GraphException\NodeAlreadyDefinedException;
+use Hal\Exception\GraphException\OriginNodeMissingException;
+use Hal\Exception\GraphException\TargetNodeMissingException;
+use Stringable;
+use function array_key_exists;
+use function sprintf;
+
+/**
+ * Represents a relational graph composed of nodes and edges.
+ */
+class Graph implements Stringable
 {
-    /**
-     * @var Node[]
-     */
-    private $data = [];
+    /** @var array<string, Node> */
+    private array $data = [];
+    /** @var array<Edge> */
+    private array $edges = [];
 
-    /**
-     * @var Edge[]
-     */
-    private $edges = [];
-
-    /**
-     * @param Node $node
-     * @return $this
-     */
-    public function insert(Node $node)
+    public function insert(Node $node): void
     {
         if ($this->has($node->getKey())) {
-            throw new GraphException(sprintf('node %s is already present', $node->getKey()));
+            throw NodeAlreadyDefinedException::inGraph($node);
         }
         $this->data[$node->getKey()] = $node;
-        return $this;
     }
 
-    /**
-     * @param Node $from
-     * @param Node $to
-     * @return $this
-     */
-    public function addEdge(Node $from, Node $to)
+    public function addEdge(Node $from, Node $to): void
     {
         if (!$this->has($from->getKey())) {
-            throw new GraphException('from is not is in the graph');
+            throw OriginNodeMissingException::inGraph($from);
         }
         if (!$this->has($to->getKey())) {
-            throw new GraphException('to is not is in the graph');
+            throw TargetNodeMissingException::inGraph($to);
         }
 
         $edge = new Edge($from, $to);
         $from->addEdge($edge);
         $to->addEdge($edge);
-        array_push($this->edges, $edge);
-
-        return $this;
+        $this->edges[] = $edge;
     }
 
     /**
      * @return string
      */
-    public function asString()
+    public function __toString(): string
     {
         $string = '';
-        foreach ($this->all() as $node) {
+        foreach ($this->data as $node) {
             $string .= sprintf("%s;\n", $node->getKey());
         }
-        foreach ($this->getEdges() as $edge) {
-            $string .= sprintf("%s;\n", $edge->asString());
+        foreach ($this->edges as $edge) {
+            $string .= sprintf("%s;\n", $edge);
         }
         return $string;
     }
 
     /**
-     * @return Edge[]
+     * @return array<int, Edge>
      */
-    public function getEdges()
+    public function getEdges(): array
     {
         return $this->edges;
     }
 
-    /**
-     * @param $key
-     * @return Node|null
-     */
-    public function get($key)
+    public function get(string $key): null|Node
     {
         return $this->has($key) ? $this->data[$key] : null;
     }
 
     /**
-     * @param $key
-     * @return bool
+     * Returns the Node requested by $key by creating it if not already existing.
+     *
+     * @param string $key
+     * @return Node
      */
-    public function has($key)
+    public function gather(string $key): Node
     {
-        return isset($this->data[$key]);
+        if (!$this->has($key)) {
+            $this->insert(new Node($key));
+        }
+        return $this->data[$key];
+    }
+
+    public function has(string $key): bool
+    {
+        return array_key_exists($key, $this->data);
     }
 
     /**
-     * @return int
+     * @return array<string, Node>
      */
-    #[\ReturnTypeWillChange]
-    public function count()
-    {
-        return count($this->data);
-    }
-
-    /**
-     * @return Node[]
-     */
-    public function all()
+    public function all(): array
     {
         return $this->data;
     }
 
-    /**
-     * @return $this
-     */
-    public function resetVisits()
+    public function resetVisits(): void
     {
-        foreach ($this->all() as $node) {
+        foreach ($this->data as $node) {
             $node->visited = false;
         }
-        return $this;
     }
 
     /**
      * Get the list of all root nodes
      *
-     *      we can have array of roots : graph can be a "forest"
-     *
-     * @return array
+     * @return array<int, Node>
      */
-    public function getRootNodes()
+    public function getRootNodes(): array
     {
         $roots = [];
         foreach ($this->all() as $node) {
             $isRoot = true;
 
             foreach ($node->getEdges() as $edge) {
-                if ($edge->getTo() == $node) {
+                if ($edge->getFrom() !== $node) {
                     $isRoot = false;
                 }
             }
 
             if ($isRoot) {
-                array_push($roots, $node);
+                $roots[] = $node;
             }
         }
 

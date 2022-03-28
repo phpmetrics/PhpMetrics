@@ -1,64 +1,64 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Report\Html;
 
 use Hal\Application\Config\Config;
+use Hal\Application\Config\ConfigBagInterface;
 use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
 use Hal\Metric\Group\Group;
 use Hal\Metric\Metrics;
-use RuntimeException as RuntimeExceptionAlias;
+use Hal\Report\ReporterInterface;
+use JsonException;
+use RuntimeException;
+use function dirname;
+use function end;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function glob;
+use function is_writable;
+use function json_decode;
+use function json_encode;
+use function mkdir;
+use function natsort;
+use function ob_get_clean;
+use function ob_start;
+use function recurse_copy;
+use function sprintf;
+use const DIRECTORY_SEPARATOR;
+use const JSON_PRETTY_PRINT;
+use const JSON_THROW_ON_ERROR;
 
-class Reporter
+/**
+ * This class is responsible for the report on HTML files.
+ * TODO: Create a View class that manages the rendering.
+ */
+final class Reporter implements ReporterInterface
 {
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var Output
-     */
-    private $output;
-
-    /**
-     * @var string
-     */
-    protected $templateDir;
-
-    /**
-     * @var Consolidated[]
-     */
-    private $consolidatedByGroups;
-
-    /**
-     * @var Group[]
-     */
-    private $groups = [];
-
-    /**
-     * @var string
-     */
-    private $currentGroup;
-
-    /**
-     * @var string
-     */
-    private $assetPath = '';
+    private string $templateDir;
+    /** @var array<Group> */
+    private array $groups = [];
+    private string|null $currentGroup = null;
+    private string $assetPath = '';
 
     /**
      * @param Config $config
-     * @param Output $output
      */
-    public function __construct(Config $config, Output $output)
-    {
-        $this->config = $config;
-        $this->output = $output;
-        $this->templateDir = __DIR__ . '/../../../../templates';
+    public function __construct(
+        private readonly ConfigBagInterface $config,
+        private readonly Output $output
+    ) {
+        $this->templateDir = dirname(__DIR__, 4) . '/templates';
     }
 
 
-    public function generate(Metrics $metrics)
+    /**
+     * {@inheritDoc}
+     * @throws JsonException
+     */
+    public function generate(Metrics $metrics): void
     {
         $logDir = $this->config->get('report-html');
         if (!$logDir) {
@@ -73,7 +73,7 @@ class Reporter
         $consolidatedGroups = [];
         foreach ($groups as $group) {
             $reducedMetricsByGroup = $group->reduceMetrics($metrics);
-            $consolidatedGroups[$group->getName()] = new Consolidated($reducedMetricsByGroup);
+            $consolidatedGroups[$group->name] = new Consolidated($reducedMetricsByGroup);
         }
 
         $consolidated = new Consolidated($metrics);
@@ -88,29 +88,31 @@ class Reporter
         $history = [];
         natsort($files);
         foreach ($files as $filename) {
-            array_push($history, json_decode(file_get_contents($filename)));
+            /* @TODO: Remove @noinspection once https://github.com/kalessil/phpinspectionsea/issues/1725 fixed. */
+            /** @noinspection JsonEncodingApiUsageInspection */
+            $history[] = json_decode(file_get_contents($filename), flags: JSON_THROW_ON_ERROR);
         }
 
         // copy sources
         if (!file_exists($logDir . '/js')) {
-            mkdir($logDir . '/js', 0755, true);
+            mkdir($logDir . '/js', 0o755, true);
         }
         if (!file_exists($logDir . '/css')) {
-            mkdir($logDir . '/css', 0755, true);
+            mkdir($logDir . '/css', 0o755, true);
         }
         if (!file_exists($logDir . '/images')) {
-            mkdir($logDir . '/images', 0755, true);
+            mkdir($logDir . '/images', 0o755, true);
         }
         if (!file_exists($logDir . '/fonts')) {
-            mkdir($logDir . '/fonts', 0755, true);
+            mkdir($logDir . '/fonts', 0o755, true);
         }
 
         if (!is_writable($logDir)) {
-            throw new RuntimeExceptionAlias(sprintf('Unable to write in the directory "%s"', $logDir));
+            throw new RuntimeException(sprintf('Unable to write in the directory "%s"', $logDir));
         }
 
-        copy($this->templateDir . '/html_report/favicon.ico', $logDir . '/favicon.ico');
-
+        // TODO: function usage => should be a method.
+        recurse_copy($this->templateDir . '/html_report/favicon.ico', $logDir . '/favicon.ico');
         recurse_copy($this->templateDir . '/html_report/js', $logDir . '/js');
         recurse_copy($this->templateDir . '/html_report/css', $logDir . '/css');
         recurse_copy($this->templateDir . '/html_report/images', $logDir . '/images');
@@ -130,24 +132,24 @@ class Reporter
         $this->renderPage($this->templateDir . '/html_report/package_relations.php', $logDir . '/package_relations.html', $consolidated, $history);
         $this->renderPage($this->templateDir . '/html_report/composer.php', $logDir . '/composer.html', $consolidated, $history);
         if ($this->config->has('git')) {
-            $this->renderPage($this->templateDir . '/html_report/git.php', $logDir . '/git.html', $consolidated, $consolidatedGroups, $history);
+            $this->renderPage($this->templateDir . '/html_report/git.php', $logDir . '/git.html', $consolidated, $history);
         }
-        $this->renderPage($this->templateDir . '/html_report/junit.php', $logDir . '/junit.html', $consolidated, $consolidatedGroups, $history);
+        $this->renderPage($this->templateDir . '/html_report/junit.php', $logDir . '/junit.html', $consolidated, $history);
 
         // js data
         file_put_contents(
             sprintf('%s/js/history-%d.json', $logDir, $next),
-            json_encode($today, JSON_PRETTY_PRINT)
+            json_encode($today, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
         );
         file_put_contents(
             sprintf('%s/js/latest.json', $logDir),
-            json_encode($today, JSON_PRETTY_PRINT)
+            json_encode($today, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
         );
 
         // json data
         file_put_contents(
             $logDir . '/classes.js',
-            'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
+            'var classes = ' . json_encode($consolidated->getClasses(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
         );
 
         // HTML files to generate
@@ -173,7 +175,7 @@ class Reporter
             $this->assetPath = '../';
 
             if (!file_exists($outDir)) {
-                mkdir($outDir, 0755, true);
+                mkdir($outDir, 0o755, true);
             }
 
             foreach ($filesToGenerate as $filename) {
@@ -186,7 +188,7 @@ class Reporter
 
                 file_put_contents(
                     $outDir . '/classes.js',
-                    'var classes = ' . json_encode($consolidated->getClasses(), JSON_PRETTY_PRINT)
+                    'var classes = ' . json_encode($consolidated->getClasses(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
                 );
             }
         }
@@ -195,14 +197,15 @@ class Reporter
     }
 
     /**
-     * @param $source
-     * @param $destination
-     * @return $this
+     * @param string $source
+     * @param string $destination
+     * @param Consolidated $consolidated
+     * @param array<int, mixed> $history
      */
-    public function renderPage($source, $destination, Consolidated $consolidated, $history)
+    public function renderPage(string $source, string $destination, Consolidated $consolidated, array $history): void
     {
         if (!is_writable(dirname($destination))) {
-            throw new RuntimeExceptionAlias(sprintf('Unable to write in the directory "%s"', dirname($destination)));
+            throw new RuntimeException(sprintf('Unable to write in the directory "%s"', dirname($destination)));
         }
 
         $this->sum = $sum = $consolidated->getSum();
@@ -218,7 +221,6 @@ class Reporter
         require $source;
         $content = ob_get_clean();
         file_put_contents($destination, $content);
-        return $this;
     }
 
     /**
@@ -252,54 +254,29 @@ class Reporter
         }
 
         $oldValue = $last->$type->$key;
-        $newValue = isset($this->$type->$key) ? $this->$type->$key : 0;
-        if ($newValue > $oldValue) {
-            $r = 'gt';
-        } elseif ($newValue < $oldValue) {
-            $r = 'lt';
-        } else {
-            $r = 'eq';
-        }
+        $newValue = $this->$type->$key ?? 0;
+        $trendIndex = 1 + ($newValue <=> $oldValue);
 
         $diff = $newValue - $oldValue;
-        if ($diff > 0) {
-            $diff = '+' . $diff;
-        }
+        $diff = ($diff > 0) ? '+' . $diff : $diff;
 
-        $goodOrBad = 'neutral';
-        if ($lowIsBetter) {
-            if ($newValue > $oldValue) {
-                $goodOrBad = 'bad';
-            } else {
-                if ($newValue < $oldValue) {
-                    $goodOrBad = 'good';
-                }
-            }
-        }
-        if ($highIsBetter) {
-            if ($newValue > $oldValue) {
-                $goodOrBad = 'good';
-            } else {
-                if ($newValue < $oldValue) {
-                    $goodOrBad = 'bad';
-                }
-            }
-        }
+        $trendCodes = [0 => 'lt', 1 => 'eq', 2 => 'gt'];
+        $trendNames = [0 => ($lowIsBetter ? 'good' : 'bad'), 1 => 'neutral', 2 => ($lowIsBetter ? 'bad' : 'good')];
 
         return sprintf(
             '<span title="Last value: %s" class="progress progress-%s progress-%s">%s %s</span>',
             $oldValue,
-            $goodOrBad,
-            $r,
+            $trendNames[$trendIndex],
+            $trendCodes[$trendIndex],
             $diff,
-            $svg[$r]
+            $svg[$trendCodes[$trendIndex]]
         );
     }
 
     /**
      * @return bool
      */
-    private function isHomePage()
+    private function isHomePage(): bool
     {
         return null === $this->currentGroup;
     }

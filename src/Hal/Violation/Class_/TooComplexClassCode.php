@@ -1,27 +1,28 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
 
 /**
  * 50 as a threshold seems to be widely accepted in open source metric tools.
  *
- * @see http://staff.unak.is/andy/StaticAnalysis0809/metrics/wmc.html
- * @see https://github.com/phpmd/phpmd/blob/f1c145e538d7cf8c2d1a45fd8fb723eca64005f4/src/main/resources/rulesets/codesize.xml#L390
+ * @see https://github.com/phpmd/phpmd/blob/master/src/main/resources/rulesets/codesize.xml#L390
  */
-class TooComplexClassCode implements Violation
+final class TooComplexClassCode implements Violation
 {
-    /** @var Metric|null */
-    private $metric;
+    private Metric $metric;
 
-    public function getName()
+    public function getName(): string
     {
         return 'Too complex class code';
     }
 
-    public function apply(Metric $metric)
+    public function apply(Metric $metric): void
     {
         if (! $metric instanceof ClassMetric) {
             return;
@@ -30,16 +31,18 @@ class TooComplexClassCode implements Violation
         $this->metric = $metric;
 
         if ($metric->get('wmc') > 50) {
-            $metric->get('violations')->add($this);
+            /** @var ViolationsHandlerInterface $violationsHandler */
+            $violationsHandler = $metric->get('violations');
+            $violationsHandler->add($this);
         }
     }
 
-    public function getLevel()
+    public function getLevel(): int
     {
         return Violation::ERROR;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return <<<EOT
 This class looks really complex.

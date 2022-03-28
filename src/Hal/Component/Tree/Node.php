@@ -1,118 +1,85 @@
 <?php
-
-/*
- * (c) Jean-François Lépine <https://twitter.com/Halleck45>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
 namespace Hal\Component\Tree;
 
-class Node
+use Stringable;
+use function spl_object_hash;
+
+/**
+ * Represents a node in a graph, that can be linked to other nodes via edges.
+ */
+final class Node implements Stringable
 {
+    /** @var array<int, Edge> */
+    private array $edges = [];
+    public bool $visited = false;
+    public bool $cyclic = false;
 
-    /**
-     * @var mixed
-     */
-    private $data;
-
-    /**
-     * @var string
-     */
-    private $key;
-
-    /**
-     * @var Edge[]
-     */
-    private $edges = [];
-
-    /**
-     * @var bool
-     */
-    public $visited = false;
-
-    /**
-     * @var bool
-     */
-    public $cyclic = false;
-
-    /**
-     * @param string $key
-     * @param mixed $data
-     */
-    public function __construct($key, $data = null)
-    {
-        $this->key = $key;
-        $this->data = $data;
+    public function __construct(
+        private readonly string $key,
+        private mixed $data = null
+    ) {
     }
 
-    /**
-     * @return string
-     */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
 
     /**
-     * @return array
+     * Get all nodes connected to the current Node.
+     *
+     * @return array<string, Node>
      */
-    public function getAdjacents()
+    public function getAllNextBy(): array
     {
-        $adjacents = [];
+        $nextBy = [];
         foreach ($this->edges as $edge) {
-            if ($edge->getFrom()->getKey() != $this->getKey()) {
-                $adjacents[$edge->getFrom()->getKey()] = $edge->getFrom();
+            [$from, $to] = [$edge->getFrom(), $edge->getTo()];
+            if ($from->getKey() !== $this->getKey()) {
+                $nextBy[$from->getKey()] = $from;
             }
-            if ($edge->getTo()->getKey() != $this->getKey()) {
-                $adjacents[$edge->getTo()->getKey()] = $edge->getTo();
+            if ($to->getKey() !== $this->getKey()) {
+                $nextBy[$to->getKey()] = $to;
             }
         }
-        return $adjacents;
+        return $nextBy;
     }
 
     /**
-     * @return Edge[]
+     * @return array<int, Edge>
      */
-    public function getEdges()
+    public function getEdges(): array
     {
         return $this->edges;
     }
 
-    /**
-     * @param Edge $edge
-     * @return $this
-     */
-    public function addEdge(Edge $edge)
+    public function addEdge(Edge $edge): void
     {
-        array_push($this->edges, $edge);
-        return $this;
+        $this->edges[] = $edge;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getData()
+    public function getData(): mixed
     {
         return $this->data;
     }
 
-    /**
-     * @param mixed $data
-     * @return Node
-     */
-    public function setData($data)
+    public function setData(mixed $data): void
     {
         $this->data = $data;
-        return $this;
     }
 
     /**
-     * @return string Unique id for this node independent of class name or node type
+     * Returns a unique id for this node independent of class name or node type.
      */
-    public function getUniqueId()
+    public function getUniqueId(): string
     {
         return spl_object_hash($this);
+    }
+
+    public function __toString(): string
+    {
+        return $this->key;
     }
 }

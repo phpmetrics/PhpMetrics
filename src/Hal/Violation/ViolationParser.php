@@ -1,41 +1,40 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Violation;
 
+use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
-use Hal\Violation\Class_;
-use Hal\Violation\Package;
-use Hal\Violation\Search\SearchShouldNotBeFoundPrinciple;
+use function array_map;
 
-class ViolationParser
+/**
+ * This class is responsible for the application of all violations given to all metrics.
+ * By doing so, every metrics will have a ViolationHandlerInterface object which will hold all related violations.
+ */
+final class ViolationParser implements ViolationParserInterface
 {
+    /** @var array<int, Violation> */
+    private readonly array $violationsChecker;
 
     /**
-     * @param Metrics $metrics
-     * @return $this
+     * @param Violation ...$violation
      */
-    public function apply(Metrics $metrics)
+    public function __construct(Violation ...$violation)
     {
-        $violations = [
-            new Class_\Blob(),
-            new Class_\TooComplexClassCode(),
-            new Class_\TooComplexMethodCode(),
-            new Class_\ProbablyBugged(),
-            new Class_\TooLong(),
-            new Class_\TooDependent(),
-            new Package\StableAbstractionsPrinciple(),
-            new Package\StableDependenciesPrinciple(),
-            new SearchShouldNotBeFoundPrinciple(),
-        ];
+        $this->violationsChecker = $violation;
+    }
 
-        foreach ($metrics->all() as $metric) {
-            $metric->set('violations', new Violations);
+    /**
+     * {@inheritDoc}
+     */
+    public function apply(Metrics $metrics): void
+    {
+        array_map(function (Metric $metric): void {
+            $metric->set('violations', new ViolationsHandler());
 
-            foreach ($violations as $violation) {
+            array_map(static function (Violation $violation) use ($metric): void {
                 $violation->apply($metric);
-            }
-        }
-
-        return $this;
+            }, $this->violationsChecker);
+        }, $metrics->all());
     }
 }

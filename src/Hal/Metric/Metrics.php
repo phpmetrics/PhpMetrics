@@ -1,59 +1,89 @@
 <?php
+declare(strict_types=1);
 
 namespace Hal\Metric;
 
-/**
- * @package Hal\Metric
- */
-class Metrics implements \JsonSerializable
-{
+use JsonSerializable;
+use function array_filter;
+use function array_key_exists;
 
-    /**
-     * @var array
-     */
-    private $data = [];
+/**
+ * Host all Metric objects in a single object.
+ */
+class Metrics implements JsonSerializable
+{
+    /** @var array<string, Metric> */
+    private array $data = [];
 
     /**
      * @param Metric $metric
-     * @return $this
      */
-    public function attach($metric)
+    public function attach(Metric $metric): void
     {
         $this->data[$metric->getName()] = $metric;
-        return $this;
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return Metric|null
      */
-    public function get($key)
+    public function get(string $key): null|Metric
     {
         return $this->has($key) ? $this->data[$key] : null;
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
-        return isset($this->data[$key]);
+        return array_key_exists($key, $this->data);
     }
 
     /**
-     * @return Metric[]
+     * @return array<string, Metric>
      */
-    public function all()
+    public function all(): array
     {
         return $this->data;
     }
 
     /**
-     * @inheritdoc
+     * Returns only metrics that are class related.
+     *
+     * @return array<string, ClassMetric>
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function getClassMetrics(): array
+    {
+        return array_filter($this->data, static fn (Metric $metric): bool => $metric instanceof ClassMetric);
+    }
+
+    /**
+     * Returns only metrics that are interface related.
+     *
+     * @return array<string, InterfaceMetric>
+     */
+    public function getInterfaceMetrics(): array
+    {
+        return array_filter($this->data, static fn (Metric $metric): bool => $metric instanceof InterfaceMetric);
+    }
+
+    /**
+     * Returns only metrics that are package related.
+     *
+     * @return array<string, PackageMetric>
+     */
+    public function getPackageMetrics(): array
+    {
+        return array_filter($this->data, static fn (Metric $metric): bool => $metric instanceof PackageMetric);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @return array<string, Metrics>
+     */
+    public function jsonSerialize(): array
     {
         return $this->all();
     }

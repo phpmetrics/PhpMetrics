@@ -1,52 +1,27 @@
 <?php
+declare(strict_types=1);
 
-namespace Test\Hal\Component\File;
+namespace Tests\Hal\Component\File;
 
 use Hal\Component\File\Finder;
 use PHPUnit\Framework\TestCase;
+use function dirname;
+use function realpath;
 
-/**
- * @group file
- */
-class FinderTest extends TestCase
+final class FinderTest extends TestCase
 {
-    public function testPathsGivenAreRecoveredOverExcluded()
+    public function testFinderCanFetchFilesRegardingConfiguration(): void
     {
-        $exampleRoot = __DIR__ . DIRECTORY_SEPARATOR . 'examples';
+        $resourceFilePath = realpath(dirname(__DIR__, 2)) . '/resources/component/file';
 
-        $extensions = ['php', 'inc', 'phtml'];
-        $excludedDirs = [
-            'excluded', //Simple string name
-            '.excluded', //Name containing a special regex character (".")
-        ];
-
-        $inputFiles = [$exampleRoot];
-
-        $finder = new Finder($extensions, $excludedDirs);
-        $files = $finder->fetch($inputFiles);
-
+        $finder = new Finder(['php', 'inc'], ['excluded', '.excluded']);
+        $fetchedFiles = $finder->fetch([$resourceFilePath, $resourceFilePath . '/directIncludedFile.txt']);
         $expected = [
-            $exampleRoot . DIRECTORY_SEPARATOR . 'included' . DIRECTORY_SEPARATOR . 'includedFile.php',
-            $exampleRoot . DIRECTORY_SEPARATOR . 'includedFile.php.inc',
+            $resourceFilePath . '/included/includedFile.php',
+            $resourceFilePath . '/includedFile.php.inc',
+            $resourceFilePath . '/directIncludedFile.txt',
         ];
 
-        //Sorting the expected and the actual array values to assert both array are same.
-        \sort($expected);
-        \sort($files);
-
-        static::assertSame($expected, $files);
-    }
-
-    public function testGivenPathsAreIgnoredRegardingExclusion()
-    {
-        $exampleRoot = __DIR__ . DIRECTORY_SEPARATOR . 'examples';
-        $actualFoundFiles = (new Finder(['php'], ['tests']))->fetch([$exampleRoot]);
-        $expectedFoundFiles = [
-            $exampleRoot . DIRECTORY_SEPARATOR . 'excluded' . DIRECTORY_SEPARATOR . 'excludedFile.php',
-            $exampleRoot . DIRECTORY_SEPARATOR . 'included' . DIRECTORY_SEPARATOR . 'includedFile.php',
-        ];
-        sort($actualFoundFiles);
-        sort($expectedFoundFiles);
-        $this->assertSame($expectedFoundFiles, $actualFoundFiles);
+        self::assertSame($expected, $fetchedFiles);
     }
 }

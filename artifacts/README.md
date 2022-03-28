@@ -1,10 +1,10 @@
-# Artifacts
+# Artifacts
 
 This folder contains tools for generating and publishing artifacts (.phar, .deb...)
 
 Artifacts are stored at Bintray
 
-## Contributing
+## Contributing
 
 Each type of artifact MUST be in a specific folder. For example, phar artifact goes in `./phar` folder.
 

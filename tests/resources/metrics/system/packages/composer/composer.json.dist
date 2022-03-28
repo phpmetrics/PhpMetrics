@@ -1,0 +1,11 @@
+{
+    "name": "dist",
+    "require": {
+        "php": ">=8.1",
+        "ext-test": "*",
+        "dist/foo": ">=5.0",
+        "dist/bar": "<=4.99.99",
+        "dist/baz": "3.4.5",
+        "not/installed": "0"
+    }
+}

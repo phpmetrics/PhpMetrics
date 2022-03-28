@@ -1,145 +1,129 @@
 <?php
+declare(strict_types=1);
 
-namespace Test;
+namespace Tests\Hal\Component\Tree\Operator;
 
+use Generator;
 use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\Node;
 use Hal\Component\Tree\Operator\CycleDetector;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @group tree
- */
-class CycleDetectorTest extends \PHPUnit\Framework\TestCase
+final class CycleDetectorTest extends TestCase
 {
-    public function testCycleIsDetected()
+    /**
+     * Provides cyclic and acyclic graphs, with their statuses.
+     *
+     * @return Generator<string, array{0: Graph, 1: bool}>
+     */
+    public function provideGraphs(): Generator
     {
         $graph = new Graph();
-        $a = new Node('A');
-        $b = new Node('B');
-        $c = new Node('C');
-        $d = new Node('D');
-        $e = new Node('E');
-        $f = new Node('F');
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeB, $nodeA);
+        yield 'A➔B➔A' => [$graph, true];
 
-        $graph->insert($a)->insert($b)->insert($c)->insert($d)->insert($e)->insert($f);
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $nodeC = new Node('C');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->insert($nodeC);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeB, $nodeC);
+        $graph->addEdge($nodeC, $nodeA);
+        yield 'A➔B➔C➔A' => [$graph, true];
 
-        // cyclic
-        $graph->addEdge($a, $b); // A -> B
-        $graph->addEdge($b, $c); // B -> C
-        $graph->addEdge($c, $d); // C -> D
-        $graph->addEdge($d, $a); // D -> A
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $nodeC = new Node('C');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->insert($nodeC);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeB, $nodeC);
+        $graph->addEdge($nodeC, $nodeB);
+        yield 'A➔B➔C➔B' => [$graph, true];
 
-        // not cyclic
-        $graph->addEdge($e, $a); // E -> A
-        $graph->addEdge($f, $a); // F -> A
+        $graph = new Graph();
+        yield 'No node' => [$graph, false];
 
-        $cycleDetector = new CycleDetector();
-        $isCyclic = $cycleDetector->isCyclic($graph);
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $graph->insert($nodeA);
+        $graph->addEdge($nodeA, $nodeA);
+        yield 'A➔A' => [$graph, false];
 
-        $this->assertTrue($isCyclic);
-        $this->assertTrue($a->cyclic);
-        $this->assertTrue($b->cyclic);
-        $this->assertTrue($c->cyclic);
-        $this->assertTrue($d->cyclic);
-        $this->assertFalse($e->cyclic);
-        $this->assertFalse($f->cyclic);
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->addEdge($nodeA, $nodeB);
+        yield 'A➔B' => [$graph, false];
+
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $nodeC = new Node('C');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->insert($nodeC);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeC, $nodeC);
+        yield 'A➔B|C➔C' => [$graph, false];
+
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $nodeC = new Node('C');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->insert($nodeC);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeB, $nodeC);
+        yield 'A➔B➔C' => [$graph, false];
+
+        $graph = new Graph();
+        $nodeA = new Node('A');
+        $nodeB = new Node('B');
+        $nodeC = new Node('C');
+        $nodeD = new Node('D');
+        $nodeE = new Node('E');
+        $nodeF = new Node('F');
+        $nodeG = new Node('G');
+        $graph->insert($nodeA);
+        $graph->insert($nodeB);
+        $graph->insert($nodeC);
+        $graph->insert($nodeD);
+        $graph->insert($nodeE);
+        $graph->insert($nodeF);
+        $graph->insert($nodeG);
+        $graph->addEdge($nodeA, $nodeB);
+        $graph->addEdge($nodeB, $nodeC);
+        $graph->addEdge($nodeA, $nodeD);
+        $graph->addEdge($nodeD, $nodeB);
+        $graph->addEdge($nodeE, $nodeC);
+        $graph->addEdge($nodeF, $nodeC);
+        $graph->addEdge($nodeG, $nodeG);
+        yield 'A➔B➔C|A➔D➔B➔C|E➔C|F➔C|G➔G' => [$graph, false];
     }
 
-    public function testAllCyclesAreFound()
+    /**
+     * @dataProvider provideGraphs
+     * @param Graph $graph
+     * @param bool $isCyclic
+     * @return void
+     */
+    //#[DataProvider('provideGraphs')] //TODO: PHPUnit 10.
+    public function testICanDetectCyclicTrees(Graph $graph, bool $isCyclic): void
     {
-        $graph = new Graph();
-        $a = new Node('A');
-        $b = new Node('B');
-        $c = new Node('C');
-        $d = new Node('D');
-        $e = new Node('E');
-        $f = new Node('F');
-
-        $graph->insert($a)->insert($b)->insert($c)->insert($d)->insert($e)->insert($f);
-
-        // cyclic
-        $graph->addEdge($a, $b); // A -> B
-        $graph->addEdge($b, $c); // B -> C
-        $graph->addEdge($c, $d); // C -> D
-        $graph->addEdge($d, $a); // D -> A
-
-        // cyclic
-        $graph->addEdge($e, $f); // E -> F
-        $graph->addEdge($f, $e); // F -> E
-
-        $cycleDetector = new CycleDetector();
-        $isCyclic = $cycleDetector->isCyclic($graph);
-
-        $this->assertTrue($isCyclic);
-        $this->assertTrue($a->cyclic);
-        $this->assertTrue($b->cyclic);
-        $this->assertTrue($c->cyclic);
-        $this->assertTrue($d->cyclic);
-        $this->assertTrue($e->cyclic);
-        $this->assertTrue($f->cyclic);
-    }
-
-    public function testCycleIsNotDetected()
-    {
-        $graph = new Graph();
-        $a = new Node('A');
-        $b = new Node('B');
-        $c = new Node('C');
-        $d = new Node('D');
-        $e = new Node('E');
-        $f = new Node('F');
-
-        $graph->insert($a)->insert($b)->insert($c)->insert($d)->insert($e)->insert($f);
-
-        // not cyclic
-        $graph->addEdge($a, $b); // A -> B
-        $graph->addEdge($b, $c); // B -> C
-        $graph->addEdge($c, $d); // C -> D
-
-        // not cyclic
-        $graph->addEdge($d, $e); // D -> E
-        $graph->addEdge($e, $f); // E -> F
-
-        $cycleDetector = new CycleDetector();
-        $isCyclic = $cycleDetector->isCyclic($graph);
-
-        $this->assertFalse($isCyclic);
-        $this->assertFalse($a->cyclic);
-        $this->assertFalse($b->cyclic);
-        $this->assertFalse($c->cyclic);
-        $this->assertFalse($d->cyclic);
-        $this->assertFalse($e->cyclic);
-        $this->assertFalse($f->cyclic);
-    }
-
-    public function testPartCycleIsDetected()
-    {
-        $graph = new Graph();
-        $a = new Node('A');
-        $b = new Node('B');
-        $c = new Node('C');
-        $d = new Node('D');
-        $e = new Node('E');
-
-        $graph->insert($a)->insert($b)->insert($c)->insert($d)->insert($e);
-
-        // cyclic
-        $graph->addEdge($a, $b); // A -> B
-        $graph->addEdge($b, $c); // B -> C
-        $graph->addEdge($c, $a); // C -> A
-
-        // not cyclic
-        $graph->addEdge($d, $e); // D -> E
-        $graph->addEdge($e, $a); // E -> A
-
-        $cycleDetector = new CycleDetector();
-        $isCyclic = $cycleDetector->isCyclic($graph);
-
-        $this->assertTrue($isCyclic);
-        $this->assertTrue($a->cyclic);
-        $this->assertTrue($b->cyclic);
-        $this->assertTrue($c->cyclic);
-        $this->assertFalse($d->cyclic);
-        $this->assertTrue($e->cyclic);
+        self::assertSame($isCyclic, (new CycleDetector())->isCyclic($graph));
     }
 }

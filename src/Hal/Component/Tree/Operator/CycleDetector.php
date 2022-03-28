@@ -1,83 +1,74 @@
 <?php
-
-/*
- * (c) Jean-François Lépine <https://twitter.com/Halleck45>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
 namespace Hal\Component\Tree\Operator;
 
 use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\Node;
+use function array_fill_keys;
+use function array_map;
 
 /**
- * @package Hal\Component\Tree\Util
  * @see http://www.geeksforgeeks.org/detect-cycle-in-a-graph/
  */
-class CycleDetector
+final class CycleDetector
 {
     /**
-     * Check if graph contains cycle
-     *
+     * Check if graph contains cycle.
      * Each node in cycle is flagged with the "cyclic" attribute
-     *
-     * @param Graph $graph
-     * @return bool
      */
-    public function isCyclic(Graph $graph)
+    public function isCyclic(Graph $graph): bool
     {
-        // prepare stack
-        $recursionStack = [];
-        foreach ($graph->all() as $node) {
-            $recursionStack[$node->getKey()] = false;
-        }
+        // Prepare stack.
+        $recursionStack = array_fill_keys(
+            array_map(static fn (Node $node): string => $node->getKey(), $graph->all()),
+            false
+        );
 
-        // start analysis
+        // Start analysis.
         $isCyclic = false;
         foreach ($graph->getEdges() as $edge) {
-            if ($r = $this->detectCycle($edge->getFrom(), $recursionStack)) {
-                $edge->cyclic = true;
-                $isCyclic = true;
+            if ($this->detectCycle($edge->getFrom(), $recursionStack)) {
+                $isCyclic = $edge->cyclic = true;
             }
-
-            $recursionStack[$node->getKey()] = false;
         }
-
         $graph->resetVisits();
-
         return $isCyclic;
     }
 
     /**
-     * @param Node $node
-     * @param $recursionStack
-     * @return bool
+     * Detects if the given Node has cyclic relations with at least another Node.
+     *
+     * @param array<string, bool> $recursionStack
      */
-    private function detectCycle(Node $node, &$recursionStack)
+    private function detectCycle(Node $node, array &$recursionStack): bool
     {
         if (!$node->visited) {
-            // mark the current node as visited and part of recursion stack
+            // Mark the current node as visited and part of recursion stack.
             $recursionStack[$node->getKey()] = true;
             $node->visited = true;
 
-            // recur for all the vertices adjacent to this vertex
+            // Recur for all the vertices adjacent to this vertex.
             foreach ($node->getEdges() as $edge) {
-                if ($edge->getTo() === $node) {
+                $to = $edge->getTo();
+                // Ignore self-referencing relations.
+                if ($to === $node) {
                     continue;
                 }
 
-                if (!$edge->getTo()->visited && $this->detectCycle($edge->getTo(), $recursionStack)) {
-                    $edge->cyclic = $edge->getTo()->cyclic = true;
-                    return true;
-                } elseif ($recursionStack[$edge->getTo()->getKey()]) {
-                    $edge->cyclic = $edge->getTo()->cyclic = true;
+                if (
+                    // Next node not yet visited and when visited, a cycle is detected...
+                    (!$to->visited && $this->detectCycle($to, $recursionStack))
+                    //... or recursion is found, demonstrating a cyclic relation.
+                    || ($recursionStack[$to->getKey()])
+                ) {
+                    $edge->cyclic = $to->cyclic = true;
                     return true;
                 }
             }
         }
-        // remove the vertex from recursion stack
+
+        // Remove the vertex from recursion stack.
         $recursionStack[$node->getKey()] = false;
         return false;
     }

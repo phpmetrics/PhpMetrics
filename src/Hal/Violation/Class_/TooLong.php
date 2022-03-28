@@ -1,17 +1,24 @@
 <?php
+declare(strict_types=1);
+
 namespace Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
 
-class TooLong implements Violation
+/**
+ * This class triggers a violation when the number of logical lines of code into a single class is over 200.
+ */
+final class TooLong implements Violation
 {
+    private Metric $metric;
 
     /**
      * @inheritdoc
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Too long';
     }
@@ -19,7 +26,7 @@ class TooLong implements Violation
     /**
      * @inheritdoc
      */
-    public function apply(Metric $metric)
+    public function apply(Metric $metric): void
     {
         if (!$metric instanceof ClassMetric) {
             return;
@@ -28,14 +35,16 @@ class TooLong implements Violation
         $this->metric = $metric;
 
         if ($metric->get('lloc') >= 200) {
-            $metric->get('violations')->add($this);
+            /** @var ViolationsHandlerInterface $violationsHandler */
+            $violationsHandler = $metric->get('violations');
+            $violationsHandler->add($this);
         }
     }
 
     /**
      * @inheritdoc
      */
-    public function getLevel()
+    public function getLevel(): int
     {
         return Violation::INFO;
     }
@@ -43,7 +52,7 @@ class TooLong implements Violation
     /**
      * @inheritdoc
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return <<<EOT
 This class looks really long.

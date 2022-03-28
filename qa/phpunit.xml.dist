@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="../vendor/autoload.php"
+         cacheResultFile="reports/phpunit/cache/.phpunit.result.cache"
+         colors="true"
+>
+    <php>
+        <ini name="memory_limit" value="-1" />
+        <ini name="error_reporting" value="E_ALL" />
+    </php>
+
+    <testsuites>
+        <testsuite name="PhpMetrics Suite">
+            <directory>../tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage>
+        <include>
+            <directory suffix=".php">../src</directory>
+        </include>
+
+        <report>
+            <html outputDirectory="reports/phpunit/coverage-html/"/>
+            <xml outputDirectory="reports/phpunit/coverage-xml/"/>
+            <clover outputFile="reports/phpunit/coverage-clover.xml"/>
+        </report>
+    </coverage>
+    <logging>
+        <junit outputFile="reports/phpunit/junit.xml"/>
+    </logging>
+</phpunit>
