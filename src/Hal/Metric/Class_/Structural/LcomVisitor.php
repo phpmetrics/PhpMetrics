@@ -6,7 +6,7 @@ namespace Hal\Metric\Class_\Structural;
 use Closure;
 use Hal\Component\Tree\GraphDeduplicated;
 use Hal\Component\Tree\Node as TreeNode;
-use Hal\Metric\Helper\RoleOfMethodDetector;
+use Hal\Metric\Helper\DetectorInterface;
 use Hal\Metric\Helper\MetricNameGenerator;
 use Hal\Metric\Helper\NodeIteratorInterface;
 use Hal\Metric\Metric;
@@ -64,12 +64,12 @@ final class LcomVisitor extends NodeVisitorAbstract
     /**
      * @param Metrics $metrics
      * @param NodeIteratorInterface $nodeIterator
-     * @param RoleOfMethodDetector $roleOfMethodDetector
+     * @param DetectorInterface $roleOfMethodDetector
      */
     public function __construct(
         private readonly Metrics $metrics,
         private readonly NodeIteratorInterface $nodeIterator,
-        private readonly RoleOfMethodDetector $roleOfMethodDetector,
+        private readonly DetectorInterface $roleOfMethodDetector,
     ) {
     }
 

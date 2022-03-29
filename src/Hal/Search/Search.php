@@ -176,6 +176,5 @@ final class Search implements SearchInterface
             '<=', '=<' => $metricValue <= $expected,
             default => false,
         };
-
     }
 }

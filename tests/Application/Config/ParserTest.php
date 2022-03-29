@@ -41,6 +41,7 @@ final class ParserTest extends TestCase
                 ['name' => 'Reporters', 'match' => '!Report!'],
             ],
             'extensions' => 'php,php.inc,php8',
+            'composer' => true,
             'exclude' => 'tests,Tests',
             'git' => 'git',
             'junit' => '/tmp/junit.xml',

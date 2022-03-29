@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use function array_map;
 
 /**
- * @phpstan-type ExpectedType array{externals: array<string>, parents: array<string>}
+ * @phpstan-type ExpectedType array{externals: array<string>, implements: array<string>, parents: array<string>}
  */
 final class ExternalsVisitorTest extends TestCase
 {
@@ -49,8 +49,8 @@ final class ExternalsVisitorTest extends TestCase
         $node->implements = [
             Phake::mock(Node\Name::class), // "B"
             Phake::mock(Node\Name::class), // "C"
-            Phake::mock(Node\Name::class), // Ignored, as "SELF"
-            Phake::mock(Node\Name::class), // Ignored, as "paRenT"
+            Phake::mock(Node\Name::class), // Ignored in dependencies, as "SELF"
+            Phake::mock(Node\Name::class), // Ignored in dependencies, as "paRenT"
         ];
         Phake::when($node->implements[0])->__call('__toString', [])->thenReturn('B');
         Phake::when($node->implements[1])->__call('__toString', [])->thenReturn('C');
@@ -58,20 +58,28 @@ final class ExternalsVisitorTest extends TestCase
         Phake::when($node->implements[3])->__call('__toString', [])->thenReturn('paRenT');
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         Phake::when($node)->__call('getDocComment', [])->thenReturn(null);
-        $expected = ['externals' => ['A', 'B', 'C'], 'parents' => ['A']];
+        $expected = [
+            'externals' => ['A', 'B', 'C'],
+            'implements' => ['B', 'C', 'SELF', 'paRenT'],
+            'parents' => ['A']
+        ];
         yield 'Class without method' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Trait_::class);
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         Phake::when($node)->__call('getDocComment', [])->thenReturn(null);
-        $expected = ['externals' => [], 'parents' => []];
+        $expected = [
+            'externals' => [],
+            'implements' => [],
+            'parents' => []
+        ];
         yield 'Trait without method' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Interface_::class);
         $node->extends = [
             Phake::mock(Node\Name::class), // "A"
-            Phake::mock(Node\Name::class), // Ignored, as "sElF", for expected externals
-            Phake::mock(Node\Name::class), // Ignored, as "PARent", for expected externals
+            Phake::mock(Node\Name::class), // Ignored in dependencies, as "sElF"
+            Phake::mock(Node\Name::class), // Ignored in dependencies, as "PARent"
             Phake::mock(Node\Name::class), // "B"
         ];
         Phake::when($node->extends[0])->__call('__toString', [])->thenReturn('A');
@@ -80,7 +88,11 @@ final class ExternalsVisitorTest extends TestCase
         Phake::when($node->extends[3])->__call('__toString', [])->thenReturn('B');
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         Phake::when($node)->__call('getDocComment', [])->thenReturn(null);
-        $expected = ['externals' => ['A', 'B'], 'parents' => ['A', 'sElF', 'PARent', 'B']];
+        $expected = [
+            'externals' => ['A', 'B'],
+            'implements' => [],
+            'parents' => ['A', 'sElF', 'PARent', 'B']
+        ];
         yield 'Interface without method' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
@@ -88,7 +100,11 @@ final class ExternalsVisitorTest extends TestCase
         $node->implements = ['B', 'C', 'self', 'SELF', 'parent', 'PARENT', 'D'];
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         Phake::when($node)->__call('getDocComment', [])->thenReturn(null);
-        $expected = ['externals' => ['A', 'B', 'C', 'D'], 'parents' => ['A']];
+        $expected = [
+            'externals' => ['A', 'B', 'C', 'D'],
+            'implements' => ['B', 'C', 'self', 'SELF', 'parent', 'PARENT', 'D'],
+            'parents' => ['A']
+        ];
         yield 'ClassLike without method having strings instead of Node\Name for externals' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
@@ -108,7 +124,11 @@ final class ExternalsVisitorTest extends TestCase
             PHPDOC
         );
         Phake::when($node)->__call('getDocComment', [])->thenReturn($docComment);
-        $expected = ['externals' => ['RootClassName', 'V', 'X\\SubClass', 'Y\\SubClass\\SubSubClass'], 'parents' => []];
+        $expected = [
+            'externals' => ['RootClassName', 'V', 'X\\SubClass', 'Y\\SubClass\\SubSubClass'],
+            'implements' => [],
+            'parents' => [],
+        ];
         yield 'Class without method but PHPDoc annotations on class level' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
@@ -289,6 +309,7 @@ final class ExternalsVisitorTest extends TestCase
             'externals' => [
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'V', 'J', 'W\\AA', 'K\\AA', 'X\\AA\\BB', 'K', 'L', 'M'
             ],
+            'implements' => [],
             'parents' => []
         ];
         yield 'Class without extends nor implements but implementing methods' => [$node, $expected];
@@ -317,6 +338,7 @@ final class ExternalsVisitorTest extends TestCase
         $visitor->leaveNode($node);
 
         Phake::verify($classMetricMock)->__call('set', ['externals', $expected['externals']]);
+        Phake::verify($classMetricMock)->__call('set', ['implements', $expected['implements']]);
         Phake::verify($classMetricMock)->__call('set', ['parents', $expected['parents']]);
         Phake::verify($metricsMock)->__call('get', [$nodeName]);
 

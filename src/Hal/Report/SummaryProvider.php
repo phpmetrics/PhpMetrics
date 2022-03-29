@@ -17,8 +17,8 @@ use function round;
 abstract class SummaryProvider implements SummaryProviderInterface
 {
     protected readonly float $methodsByClass;
-    protected readonly int $locByClass;
-    protected readonly int $locByMethod;
+    protected readonly float $locByClass;
+    protected readonly float $locByMethod;
     protected readonly stdClass $sum;
     protected readonly stdClass $avg;
     protected readonly float $treeInheritanceDepth;
@@ -42,8 +42,8 @@ abstract class SummaryProvider implements SummaryProviderInterface
 
         // grouping results
         $this->methodsByClass = ($sum->nbClasses > 0) ? round($sum->nbMethods / $sum->nbClasses, 2) : 0;
-        $this->locByClass = ($sum->nbClasses > 0) ? round($sum->lloc / $sum->nbClasses) : 0;
-        $this->locByMethod = ($sum->nbMethods > 0) ? round($sum->lloc / $sum->nbMethods) : 0;
+        $this->locByClass = ($sum->nbClasses > 0) ? round($sum->lloc / $sum->nbClasses, 2) : 0;
+        $this->locByMethod = ($sum->nbMethods > 0) ? round($sum->lloc / $sum->nbMethods, 2) : 0;
 
         /** @var ProjectMetric $wholeGraph */
         $wholeGraph = $metrics->get('tree');

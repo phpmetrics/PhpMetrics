@@ -8,6 +8,9 @@ use Hal\Application\Config\Config;
 use Hal\Application\Config\Validator;
 use Hal\Exception\ConfigException;
 use Hal\Metric\Group\Group;
+use Hal\Search\SearchesValidatorInterface;
+use Hal\Search\SearchInterface;
+use Phake;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 use function sprintf;
@@ -20,11 +23,13 @@ final class ValidatorTest extends TestCase
     public function testICantValidateConfigurationWithoutFiles(): void
     {
         $config = new Config();
+        $searchesValidator = Phake::mock(SearchesValidatorInterface::class);
+        Phake::when($searchesValidator)->__call('validates', [Phake::anyParameters()])->thenDoNothing();
 
         $this->expectException(ConfigException::class);
         $this->expectExceptionMessage('Directory to parse is missing or incorrect');
 
-        (new Validator())->validate($config);
+        (new Validator($searchesValidator))->validate($config);
     }
 
     /**
@@ -37,11 +42,13 @@ final class ValidatorTest extends TestCase
 
         $config = new Config();
         $config->set('files', [$unknownFilePath]);
+        $searchesValidator = Phake::mock(SearchesValidatorInterface::class);
+        Phake::when($searchesValidator)->__call('validates', [Phake::anyParameters()])->thenDoNothing();
 
         $this->expectException(ConfigException::class);
         $this->expectExceptionMessage(sprintf('Directory %s does not exist', $unknownFilePath));
 
-        (new Validator())->validate($config);
+        (new Validator($searchesValidator))->validate($config);
     }
 
     /**
@@ -80,11 +87,13 @@ final class ValidatorTest extends TestCase
         $config = new Config();
         $config->set('files', ['/tmp']);
         $config->set($configKey, $badValue);
+        $searchesValidator = Phake::mock(SearchesValidatorInterface::class);
+        Phake::when($searchesValidator)->__call('validates', [Phake::anyParameters()])->thenDoNothing();
 
         $this->expectException(ConfigException::class);
         $this->expectExceptionMessage(sprintf('%s option requires a value', $configKey));
 
-        (new Validator())->validate($config);
+        (new Validator($searchesValidator))->validate($config);
     }
 
     /**
@@ -106,10 +115,31 @@ final class ValidatorTest extends TestCase
                 'vendor', 'test', 'Test', 'tests', 'Tests', 'testing', 'Testing', 'bower_components', 'node_modules',
                 'cache', 'spec'
             ],
-            'groups' => []
+            'groups' => [],
+            'composer' => true,
+            'searches' => [],
         ];
 
         yield 'With minimum configuration' => [$config, $expectedConfiguration];
+
+        // Minimum configuration
+        $config = new Config();
+        $config->set('files', ['/tmp']);
+        $config->set('composer', 'false');
+
+        $expectedConfiguration = [
+            'files' => ['/tmp'],
+            'composer' => false,
+            'extensions' => ['php', 'inc'],
+            'exclude' => [
+                'vendor', 'test', 'Test', 'tests', 'Tests', 'testing', 'Testing', 'bower_components', 'node_modules',
+                'cache', 'spec'
+            ],
+            'groups' => [],
+            'searches' => [],
+        ];
+
+        yield 'With minimum configuration, but composer is disabled' => [$config, $expectedConfiguration];
 
         // Complete configuration
         $config = new Config();
@@ -121,6 +151,12 @@ final class ValidatorTest extends TestCase
             ['name' => 'Src', 'match' => '!sources!'],
             ['name' => 'Vendor', 'match' => '!vendor!'],
         ]);
+        $searchMocks = [
+            Phake::mock(SearchInterface::class),
+            Phake::mock(SearchInterface::class),
+            Phake::mock(SearchInterface::class),
+        ];
+        $config->set('searches', $searchMocks);
 
         $expectedConfiguration = [
             'files' => ['/tmp'],
@@ -130,7 +166,9 @@ final class ValidatorTest extends TestCase
                 new Group('App', '#Application#i'),
                 new Group('Src', '!sources!'),
                 new Group('Vendor', '!vendor!'),
-            ]
+            ],
+            'searches' => $searchMocks,
+            'composer' => true,
         ];
 
         yield 'With complete configuration' => [$config, $expectedConfiguration];
@@ -145,6 +183,8 @@ final class ValidatorTest extends TestCase
             ['name' => 'Src', 'match' => '!sources!'],
             ['name' => 'Vendor', 'match' => '!vendor!'],
         ]);
+        $searchMocks = [Phake::mock(SearchInterface::class)];
+        $config->set('searches', $searchMocks);
 
         $expectedConfiguration = [
             'files' => ['/tmp'],
@@ -154,7 +194,9 @@ final class ValidatorTest extends TestCase
                 new Group('App', '#Application#i'),
                 new Group('Src', '!sources!'),
                 new Group('Vendor', '!vendor!'),
-            ]
+            ],
+            'searches' => $searchMocks,
+            'composer' => true,
         ];
 
         yield 'With complete configuration, but using deprecated "exclude"' => [$config, $expectedConfiguration];
@@ -171,7 +213,10 @@ final class ValidatorTest extends TestCase
     //#[DataProvider('provideConfigurations')] // TODO PHPUnit 10: use attribute instead of annotation.
     public function testICanValidateConfiguration(Config $config, array $expectedConfiguration): void
     {
-        (new Validator())->validate($config);
+        $searchesValidator = Phake::mock(SearchesValidatorInterface::class);
+        Phake::when($searchesValidator)->__call('validates', [Phake::anyParameters()])->thenDoNothing();
+
+        (new Validator($searchesValidator))->validate($config);
         $actualConfiguration = $config->all();
 
         // Manage the groups on a second time as they are objects and can't be tested to be the same (they're different
@@ -184,48 +229,8 @@ final class ValidatorTest extends TestCase
             self::assertSame($expectedGroup->name, $actualGroup->name);
             self::assertSame($expectedGroup->getRegex(), $actualGroup->getRegex());
         }, $expectedGroup, $config->get('groups'));
-    }
 
-    /**
-     * Simply check the "help" disclaimer isn't changing without updating the unit tests.
-     */
-    public function testHelp(): void
-    {
-        $expectedHelp = <<<EOT
-Usage:
-
-    phpmetrics [...options...] <directories>
-
-Required:
-
-    <directories>                     List of directories to parse, separated by a comma (,)
-
-Optional:
-
-    --config=<file>                   Use a file for configuration
-    --exclude=<directory>             List of directories to exclude, separated by a comma (,)
-    --extensions=<php,inc>            List of extensions to parse, separated by a comma (,)
-    --report-html=<directory>         Folder where report HTML will be generated
-    --report-csv=<file>               File where report CSV will be generated
-    --report-json=<file>              File where report Json will be generated
-    --report-violations=<file>        File where XML violations report will be generated
-    --git[=</path/to/git_binary>]     Perform analyses based on Git History (default binary path: "git")
-    --junit[=</path/to/junit.xml>]    Evaluates metrics according to JUnit logs
-    --quiet                           Enable the quiet mode
-    --version                         Display current version
-
-Examples:
-
-    phpmetrics --report-html="./report" ./src
-
-        Analyse the "./src" directory and generate an HTML report on the "./report" folder
-
-    phpmetrics --report-violations="./build/violations.xml" ./src,./lib
-
-        Analyse the "./src" and "./lib" directories, and generate the "./build/violations.xml" file. This file could
-        be read by any Continuous Integration Platform, and follows the "PMD Violation" standards.
-
-EOT;
-        self::assertSame($expectedHelp, Validator::help());
+        Phake::verify($searchesValidator)->__call('validates', [$config->get('searches')]);
+        Phake::verifyNoOtherInteractions($searchesValidator);
     }
 }

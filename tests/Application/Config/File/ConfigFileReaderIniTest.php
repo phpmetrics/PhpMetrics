@@ -5,13 +5,12 @@ namespace Tests\Hal\Application\Config\File;
 
 use Hal\Application\Config\Config;
 use Hal\Application\Config\File\ConfigFileReaderIni;
-use InvalidArgumentException;
+use Hal\Exception\ConfigException\ConfigFileReadingException;
 use PHPUnit\Framework\TestCase;
 use function dirname;
 use function realpath;
 use function restore_error_handler;
 use function set_error_handler;
-use function sprintf;
 
 final class ConfigFileReaderIniTest extends TestCase
 {
@@ -26,8 +25,7 @@ final class ConfigFileReaderIniTest extends TestCase
 
         $configFilePath = realpath(dirname(__DIR__, 3)) . '/resources/invalid_config.ini';
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('Cannot parse configuration file "%s".', $configFilePath));
+        $this->expectExceptionObject(ConfigFileReadingException::inIni($configFilePath));
 
         $config = new Config();
         $reader = new ConfigFileReaderIni($configFilePath);
@@ -49,14 +47,12 @@ final class ConfigFileReaderIniTest extends TestCase
 
         // Expectations are inferred from ./tests/resources/test_config.ini.
         $expectedConfig = [
-            'includes' => ['Controller'],
-            'exclude' => 'tests,Tests',
-            'report' => [
-                'html' => '/tmp/report/',
-                'csv' => '/tmp/report.csv',
-                'json' => '/tmp/report.json',
-                'violations' => '/tmp/violations.xml',
-            ]
+            'files' => [realpath(dirname(__DIR__, 3)) . '/resources/Controller'],
+            'composer' => true,
+            'report-html' => '/tmp/report/',
+            'report-csv' => '/tmp/report.csv',
+            'report-json' => '/tmp/report.json',
+            'report-violations' => '/tmp/violations.xml',
         ];
 
         self::assertSame($expectedConfig, $config->all());

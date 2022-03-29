@@ -70,6 +70,7 @@ final class ComposerTest extends TestCase
 
         (new Composer(
             $metricsMock,
+            null,
             ['foo', 'bar'],
             $composerJsonFinderMock,
             $composerLockFinderMock,
@@ -182,5 +183,31 @@ final class ComposerTest extends TestCase
         Phake::verifyNoOtherInteractions($composerLockFinderMock);
         Phake::verifyNoOtherInteractions($composerRegistryConnectorMock);
         Phake::verifyNoOtherInteractions($metricsMock);
+    }
+
+    /**
+     * @return void
+     * @throws JsonException Not thrown in this test.
+     */
+    public function testCalculationOfComposerIsDisabled(): void
+    {
+        $metricsMock = Phake::mock(Metrics::class);
+        $composerJsonFinderMock = Phake::mock(FinderInterface::class);
+        $composerLockFinderMock = Phake::mock(FinderInterface::class);
+        $composerRegistryConnectorMock = Phake::mock(ComposerRegistryConnectorInterface::class);
+
+        (new Composer(
+            $metricsMock,
+            false,
+            [],
+            $composerJsonFinderMock,
+            $composerLockFinderMock,
+            $composerRegistryConnectorMock
+        ))->calculate();
+
+        Phake::verifyNoInteraction($composerJsonFinderMock);
+        Phake::verifyNoInteraction($composerLockFinderMock);
+        Phake::verifyNoInteraction($composerRegistryConnectorMock);
+        Phake::verifyNoInteraction($metricsMock);
     }
 }

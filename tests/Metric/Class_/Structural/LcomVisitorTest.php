@@ -5,6 +5,7 @@ namespace Tests\Hal\Metric\Class_\Structural;
 
 use Generator;
 use Hal\Metric\Class_\Structural\LcomVisitor;
+use Hal\Metric\Helper\DetectorInterface;
 use Hal\Metric\Helper\MetricNameGenerator;
 use Hal\Metric\Helper\SimpleNodeIterator;
 use Hal\Metric\Metric;
@@ -24,13 +25,16 @@ final class LcomVisitorTest extends TestCase
     {
         $node = Phake::mock(Node::class);
         $metricsMock = Phake::mock(Metrics::class);
+        $detector = Phake::mock(DetectorInterface::class);
+
         // TODO: Replace SimpleNodeIterator with a mock.
-        $visitor = new LcomVisitor($metricsMock, new SimpleNodeIterator());
+        $visitor = new LcomVisitor($metricsMock, new SimpleNodeIterator(), $detector);
 
         $visitor->leaveNode($node);
 
         Phake::verifyNoInteraction($node);
         Phake::verifyNoInteraction($metricsMock);
+        Phake::verifyNoInteraction($detector);
     }
 
     /**
@@ -158,6 +162,8 @@ final class LcomVisitorTest extends TestCase
             Phake::mock(Node\Stmt\ClassMethod::class), // C
             Phake::mock(Node\Stmt\ClassMethod::class), // D (calls E)
             Phake::mock(Node\Stmt\ClassMethod::class), // E
+            Phake::mock(Node\Stmt\ClassMethod::class), // F (a getter: ignored)
+            Phake::mock(Node\Stmt\ClassMethod::class), // G (a setter: ignored)
         ];
         $methods[0]->name = Phake::mock(Node\Identifier::class);
         Phake::when($methods[0]->name)->__call('__toString', [])->thenReturn('A');
@@ -186,9 +192,19 @@ final class LcomVisitorTest extends TestCase
         Phake::when($methods[4]->name)->__call('__toString', [])->thenReturn('E');
         Phake::when($methods[4])->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
         $methods[4]->unitTestSubNodes = [];
+        $methods[5]->name = Phake::mock(Node\Identifier::class);
+        Phake::when($methods[5]->name)->__call('__toString', [])->thenReturn('F');
+        Phake::when($methods[5])->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
+        $methods[5]->unitTestSubNodes = [];
+        $methods[5]->role = 'getter';
+        $methods[6]->name = Phake::mock(Node\Identifier::class);
+        Phake::when($methods[6]->name)->__call('__toString', [])->thenReturn('G');
+        Phake::when($methods[6])->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
+        $methods[6]->unitTestSubNodes = [];
+        $methods[6]->role = 'setter';
         Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
         $expected = ['lcom' => 4];
-        yield 'Trait with lcom 4: 5 methods: A(), B(), C(), D()->E()' => [$node, $expected];
+        yield 'Trait with lcom 4: 5 methods: A, B, C, D->E. Methods F and G ignored as accessors' => [$node, $expected];
     }
 
     /**
@@ -204,11 +220,15 @@ final class LcomVisitorTest extends TestCase
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node');
         $metricsMock = Phake::mock(Metrics::class);
         $classMetricMock = Phake::mock(Metric::class);
+        $detector = Phake::mock(DetectorInterface::class);
         $nodeName = MetricNameGenerator::getClassName($node);
         Phake::when($metricsMock)->__call('get', [$nodeName])->thenReturn($classMetricMock);
+        Phake::when($detector)->__call('detects', [Phake::anyParameters()])->thenReturnCallback(
+            static fn (Node $node): string|null => $node->role ?? null
+        );
 
         // TODO: Replace SimpleNodeIterator with a mock.
-        $visitor = new LcomVisitor($metricsMock, new SimpleNodeIterator());
+        $visitor = new LcomVisitor($metricsMock, new SimpleNodeIterator(), $detector);
         $visitor->leaveNode($node);
 
         Phake::verify($classMetricMock)->__call('set', ['lcom', $expected['lcom']]);

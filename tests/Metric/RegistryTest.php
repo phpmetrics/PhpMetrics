@@ -94,7 +94,7 @@ final class RegistryTest extends TestCase
             'nbMethods' => 'Number of methods excluding getters and setters',
             'nbMethodsPrivate' => 'Number of private methods',
             'nbMethodsPublic' => 'Number of public methods',
-            'nbMethodsGetter' => 'Number of getters',
+            'nbMethodsGetters' => 'Number of getters',
             'nbMethodsSetters' => 'Number of setters',
             'afferentCoupling' => 'Afferent coupling',
             'efferentCoupling' => 'Efferent coupling',

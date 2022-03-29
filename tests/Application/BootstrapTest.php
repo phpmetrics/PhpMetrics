@@ -65,24 +65,9 @@ final class BootstrapTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: bool, 1: bool}>
-     */
-    public function provideInvalidConfigurations(): Generator
-    {
-        yield 'Configuration requires for help only' => [true, false];
-        yield 'Configuration requires for version only' => [false, true];
-        yield 'Configuration requires for both help and version' => [true, true];
-        yield 'Configuration is just invalid' => [false, false];
-    }
-
-    /**
-     * @dataProvider provideInvalidConfigurations
-     * @param bool $isHelp
-     * @param bool $isVersion
      * @return void
      */
-    //#[DataProvider('provideInvalidConfigurations')] // TODO PHPUnit 10.
-    public function testICanBootstrapWithInvalidConfiguration(bool $isHelp, bool $isVersion): void
+    public function testICanBootstrapWithInvalidConfiguration(): void
     {
         $mocks = [
             'config' => Phake::mock(ConfigBagInterface::class),
@@ -101,8 +86,6 @@ final class BootstrapTest extends TestCase
         Phake::when($mocks['parser'])->__call('parse', [$argv])->thenReturn($mocks['config']);
         Phake::when($mocks['validator'])->__call('validate', [$mocks['config']])
             ->thenThrow(new FileDoesNotExistException('Dummy error'));
-        Phake::when($mocks['config'])->__call('has', ['help'])->thenReturn($isHelp);
-        Phake::when($mocks['config'])->__call('has', ['version'])->thenReturn($isVersion);
         Phake::when($mocks['config'])->__call('set', [Phake::anyParameters()])->thenDoNothing();
 
         $actualConfig = $bootstrap->prepare($argv);
@@ -110,13 +93,7 @@ final class BootstrapTest extends TestCase
         self::assertSame($mocks['config'], $actualConfig);
         Phake::verify($mocks['parser'])->__call('parse', [$argv]);
         Phake::verify($mocks['validator'])->__call('validate', [$mocks['config']]);
-        Phake::verify($mocks['config'])->__call('has', ['help']);
-        if (!$isHelp) {
-            Phake::verify($mocks['config'])->__call('has', ['version']);
-            if (!$isVersion) {
-                Phake::verify($mocks['config'])->__call('set', ['config-error', 'Dummy error']);
-            }
-        }
+        Phake::verify($mocks['config'])->__call('set', ['config-error', 'Dummy error']);
         array_map(Phake::verifyNoOtherInteractions(...), $mocks);
     }
 }

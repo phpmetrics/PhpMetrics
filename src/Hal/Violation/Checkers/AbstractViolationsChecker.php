@@ -5,6 +5,7 @@ namespace Hal\Violation\Checkers;
 
 use Hal\Metric\Metrics;
 use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
 use function array_fill_keys;
 use function array_map;
 
@@ -31,9 +32,11 @@ abstract class AbstractViolationsChecker implements ViolationsCheckerInterface
     final protected function fillViolationsByLevels(): void
     {
         foreach ($this->metrics->all() as $metric) {
+            /** @var ViolationsHandlerInterface $violationsHandler */
+            $violationsHandler = $metric->get('violations');
             array_map(function (Violation $violation): void {
                 ++$this->violationsByLevel[$violation->getLevel()];
-            }, $metric->get('violations'));
+            }, $violationsHandler->getAll());
         }
     }
 }

@@ -6,6 +6,7 @@ namespace Tests\Hal\Application\Config\File;
 use Generator;
 use Hal\Application\Config\Config;
 use Hal\Application\Config\File\ConfigFileReaderJson;
+use Hal\Exception\ConfigException\ConfigFileReadingException;
 use InvalidArgumentException;
 use JsonException;
 use PHPUnit\Framework\TestCase;
@@ -38,8 +39,7 @@ final class ConfigFileReaderJsonTest extends TestCase
 
         $configFilePath = realpath(dirname(__DIR__, 3)) . '/resources/test_config.no_read_perm';
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('Cannot read configuration file "%s".', $configFilePath));
+        $this->expectExceptionObject(ConfigFileReadingException::inJson($configFilePath));
 
         $config = new Config();
         $reader = new ConfigFileReaderJson($configFilePath);
@@ -72,7 +72,7 @@ final class ConfigFileReaderJsonTest extends TestCase
     public function provideJsonConfigurationFiles(): Generator
     {
         $resourcesTestDir = realpath(dirname(__DIR__, 3)) . '/resources';
-        yield 'Minimum configuration' => [$resourcesTestDir . '/test_config_minimum.json', []];
+        yield 'Minimum configuration' => [$resourcesTestDir . '/test_config_minimum.json', ['composer' => true]];
 
         // Expectations are inferred from associated configuration file.
         $expectedConfig = [
@@ -82,6 +82,7 @@ final class ConfigFileReaderJsonTest extends TestCase
                 ['name' => 'Reporters', 'match' => '!Report!'],
             ],
             'extensions' => 'php,php.inc,php8',
+            'composer' => true,
             'exclude' => 'tests,Tests',
             'git' => 'git',
             'junit' => '/tmp/junit.xml',

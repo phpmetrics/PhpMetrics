@@ -41,8 +41,11 @@ final class Reporter implements ReporterInterface
      */
     public function generate(Metrics $metrics): void
     {
-        if(!class_exists(DOMDocument::class)) {
-            $this->output->writeln('<error>The DOM extension is not available. Please install it if you want to use the Xml Violations report.</error>');
+        if (!class_exists(DOMDocument::class)) {
+            $this->output->writeln(
+                '<error>The DOM extension is not available. '
+                . 'Please install it if you want to use the Xml Violations report.</error>'
+            );
             return;
         }
 

@@ -16,7 +16,7 @@ use function in_array;
  *
  * To see some examples, look at tests/Metric/Helper/RoleOfMethodDetectorTest.php
  */
-final class RoleOfMethodDetector
+final class RoleOfMethodDetector implements DetectorInterface
 {
     /** @var array<string, array<array<class-string<Node>>>>  */
     private array $fingerprints = [

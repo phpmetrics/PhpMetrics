@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Hal\Metric\Class_\Complexity;
 
+use Hal\Metric\Helper\DetectorInterface;
 use Hal\Metric\Helper\MetricNameGenerator;
-use Hal\Metric\Helper\RoleOfMethodDetector;
 use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
@@ -79,9 +79,13 @@ final class CyclomaticComplexityVisitor extends NodeVisitorAbstract
     /** @var array<string, ComplexIncrementCCNode> List of callbacks defining the increment value for some nodes. */
     private static array $complexIncrementList;
 
+    /**
+     * @param Metrics $metrics
+     * @param DetectorInterface $roleOfMethodDetector
+     */
     public function __construct(
         private readonly Metrics $metrics,
-        private readonly RoleOfMethodDetector $roleOfMethodDetector
+        private readonly DetectorInterface $roleOfMethodDetector
     ) {
         // Callbacks cannot be used in class declarations (yet?)
         self::$complexIncrementList = [
