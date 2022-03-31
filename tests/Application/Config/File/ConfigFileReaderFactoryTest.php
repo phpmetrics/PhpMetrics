@@ -8,6 +8,7 @@ use Hal\Application\Config\File\ConfigFileReaderFactory;
 use Hal\Application\Config\File\ConfigFileReaderIni;
 use Hal\Application\Config\File\ConfigFileReaderInterface;
 use Hal\Application\Config\File\ConfigFileReaderJson;
+use Hal\Application\Config\File\ConfigFileReaderYaml;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use function chmod;
@@ -65,6 +66,8 @@ final class ConfigFileReaderFactoryTest extends TestCase
         $resourcesTestDir = realpath(dirname(__DIR__, 3)) . '/resources';
         yield 'JSON file' => [$resourcesTestDir . '/test_config.json', ConfigFileReaderJson::class];
         yield 'Ini file' => [$resourcesTestDir . '/test_config.ini', ConfigFileReaderIni::class];
+        yield 'Yaml file' => [$resourcesTestDir . '/test_config.yaml', ConfigFileReaderYaml::class];
+        yield 'YML file' => [$resourcesTestDir . '/test_config_minimum.yml', ConfigFileReaderYaml::class];
     }
 
     /**

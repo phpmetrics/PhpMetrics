@@ -5,6 +5,7 @@ namespace Hal\Violation\Search;
 
 use Hal\Metric\Metric;
 use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
 use function array_unique;
 use function implode;
 
@@ -35,7 +36,9 @@ final class SearchShouldNotBeFoundPrinciple implements Violation
         }
 
         $this->concernedSearches = array_unique([...$this->concernedSearches, ...$metric->get('was-not-expected-by')]);
-        $metric->get('violations')->add($this);
+        /** @var ViolationsHandlerInterface $violationsHandler */
+        $violationsHandler = $metric->get('violations');
+        $violationsHandler->add($this);
     }
 
     /**

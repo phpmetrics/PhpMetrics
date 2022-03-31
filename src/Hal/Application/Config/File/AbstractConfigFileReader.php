@@ -42,6 +42,7 @@ abstract class AbstractConfigFileReader implements ConfigFileReaderInterface
             'report' => [],
         ];
         $parsingConfiguration = $data + $defaultConfiguration;
+        // Remove all options that are evaluated to an empty array or empty string.
         $options = array_filter([
             'files' => array_map($this->resolvePath(...), $parsingConfiguration['includes']),
             'groups' => $parsingConfiguration['groups'],
@@ -58,7 +59,7 @@ abstract class AbstractConfigFileReader implements ConfigFileReaderInterface
                     $parsingConfiguration['report']
                 )
             )
-        ]);
+        ], static fn (mixed $configValue): bool => [] !== $configValue && '' !== $configValue);
 
         array_map($config->set(...), array_keys($options), $options);
     }

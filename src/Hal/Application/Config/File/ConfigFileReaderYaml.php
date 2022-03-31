@@ -5,6 +5,7 @@ namespace Hal\Application\Config\File;
 
 use Hal\Application\Config\ConfigBagInterface;
 use Hal\Exception\ConfigException\ConfigFileReadingException;
+use function is_array;
 use function yaml_parse_file;
 
 /**
@@ -17,11 +18,11 @@ final class ConfigFileReaderYaml extends AbstractConfigFileReader
      */
     public function read(ConfigBagInterface $config): void
     {
-        $yamlData = yaml_parse_file($this->filename);
-        if (false === $yamlData) {
+        $yamlData = yaml_parse_file($this->filename) ?? [];
+        if (!is_array($yamlData)) {
             throw ConfigFileReadingException::inYaml($this->filename);
         }
 
-        $this->normalizeConfig($config, yaml_parse_file($this->filename));
+        $this->normalizeConfig($config, $yamlData);
     }
 }
