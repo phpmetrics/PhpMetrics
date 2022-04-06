@@ -39,4 +39,11 @@ final class SearchValidationExceptionTest extends TestCase
         $expected = 'Invalid config for "usesClasses". Should be an array of classnames or regexes matching classnames';
         self::assertSame($expected, $exception->getMessage());
     }
+
+    public function testInvalidCustomMetricComparison(): void
+    {
+        $exception = SearchValidationException::invalidCustomMetricComparison('test');
+        $expected = 'Invalid search expression for key test';
+        self::assertSame($expected, $exception->getMessage());
+    }
 }

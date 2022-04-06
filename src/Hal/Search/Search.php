@@ -3,12 +3,15 @@ declare(strict_types=1);
 
 namespace Hal\Search;
 
+use Hal\Exception\ConfigException\SearchValidationException;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\InterfaceMetric;
 use Hal\Metric\Metric;
 use Hal\Metric\Registry;
 use LogicException;
+use function array_filter;
 use function array_intersect_key;
+use function array_key_exists;
 use function array_keys;
 use function array_map;
 use function in_array;
@@ -66,26 +69,35 @@ final class Search implements SearchInterface
      */
     public function matches(Metric $metric): bool
     {
-        $config = $this->config + ['type' => '', 'nameMatches' => '', 'instanceOf' => '', 'usesClasses' => ''];
-
-        // Check if metric object matches some special config criteria, when defined. If not, directly stops.
+        $config = $this->config + ['type' => '', 'nameMatches' => '', 'instanceOf' => [], 'usesClasses' => []];
         $matchersCallbacks = [
             'type' => $this->matchExpectedType(...),
             'nameMatches' => $this->matchExpectedName(...),
             'instanceOf' => $this->matchInstanceOf(...),
             'usesClasses' => $this->usesClasses(...),
         ];
+        $matchersStructures = Registry::getDefinitions();
+        // This array is a sample of all valid and not empty configurations that can match metric.
+        $matchableConfig = array_filter(array_intersect_key($config, [...$matchersCallbacks, ...$matchersStructures]));
+
+        // If there are no matchable metrics, nothing can match.
+        if ([] === $matchableConfig) {
+            return false;
+        }
+        // Check if metric object matches some special config criteria, when defined. If not, directly stops.
         foreach ($matchersCallbacks as $key => $callback) {
-            if ('' !== $config[$key] && false === $callback($metric, $config[$key])) {
+            if (array_key_exists($key, $matchableConfig) && false === $callback($metric, $matchableConfig[$key])) {
                 return false;
             }
         }
-        // Check if metric object matches some structures (ccn, lcom, mi, etc.)
-        foreach (array_intersect_key($config, Registry::getDefinitions()) as $metricName => $configStructureValue) {
+        // Check if metric object matches some structures (ccn, lcom, mi, etc.). If not, directly stops.
+        foreach (array_intersect_key($matchableConfig, $matchersStructures) as $metricName => $configStructureValue) {
             if (false === $this->matchesMetric($metric->get($metricName), $configStructureValue)) {
                 return false;
             }
         }
+
+        // At this point, there are at least 1 match.
 
         // Store the fact the search criteria has been found in the metric.
         $config += ['failIfFound' => false];
@@ -127,9 +139,10 @@ final class Search implements SearchInterface
      */
     private function matchInstanceOf(Metric $metric, array $instanceOf): bool
     {
+        $implements = (array)$metric->get('implements');
         foreach ($instanceOf as $expectedInterface) {
             $expectedInterface = ltrim($expectedInterface, '\\');
-            if (!in_array($expectedInterface, (array)$metric->get('implements'), true)) {
+            if (!in_array($expectedInterface, $implements, true)) {
                 return false;
             }
         }
@@ -144,8 +157,9 @@ final class Search implements SearchInterface
      */
     private function usesClasses(Metric $metric, array $usesClasses): bool
     {
+        $externals = (array)$metric->get('externals');
         foreach ($usesClasses as $expectedClass) {
-            foreach ((array)$metric->get('externals') as $use) {
+            foreach ($externals as $use) {
                 if (preg_match('@' . $expectedClass . '@i', $use)) {
                     return true;
                 }
@@ -162,8 +176,10 @@ final class Search implements SearchInterface
      */
     private function matchesMetric(mixed $metricValue, string $configMetricValue): bool
     {
+        // TODO: This "if" should probably be duplicated to the SearchesValidator.php file to throw exception earlier
+        //       in the process if there is an invalid value for the custom metric.
         if (!preg_match_all('!^([=><]*)([\d.]+)!', $configMetricValue, $matches, PREG_SET_ORDER)) {
-            throw new LogicException('Invalid search expression for key ' . $configMetricValue);
+            throw SearchValidationException::invalidCustomMetricComparison($configMetricValue);
         }
         [, $operator, $expected] = $matches[0];
 

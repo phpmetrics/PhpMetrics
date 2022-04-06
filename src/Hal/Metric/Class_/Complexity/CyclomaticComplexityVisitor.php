@@ -88,12 +88,13 @@ final class CyclomaticComplexityVisitor extends NodeVisitorAbstract
         private readonly DetectorInterface $roleOfMethodDetector
     ) {
         // Callbacks cannot be used in class declarations (yet?)
-        self::$complexIncrementList = [
-            // `case ...:` from a `switch`. Ignore `default:`.
-            'Stmt_Case' => static fn (Stmt\Case_ $node): int => (null !== $node->cond) ? 1 : 0,
-            // `... => ...` from a `match`. Ignore `default =>`.
-            'MatchArm' => static fn (Node\MatchArm $node): int => count((array)$node->conds),
-        ];
+        // TODO: Not instantiating the array already with the key => value syntax because of a glitch in xDebug, failing
+        //       to apply the coverage. Once fixed, it could be written like ['Stmt_Case' => …, 'MatchArm' => …].
+        self::$complexIncrementList = [];
+        // `case ...:` from a `switch`. Ignore `default:`.
+        self::$complexIncrementList['Stmt_Case'] = static fn (Stmt\Case_ $node): int => (null !== $node->cond) ? 1 : 0;
+        // `... => ...` from a `match`. Ignore `default =>`.
+        self::$complexIncrementList['MatchArm'] = static fn (Node\MatchArm $node): int => count((array)$node->conds);
     }
 
     /**

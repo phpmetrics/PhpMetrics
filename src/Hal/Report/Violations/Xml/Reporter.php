@@ -12,7 +12,6 @@ use Hal\Metric\Metrics;
 use Hal\Report\ReporterInterface;
 use Hal\Violation\Violation;
 use function array_map;
-use function class_exists;
 use function date;
 use function dirname;
 use function file_exists;
@@ -41,14 +40,6 @@ final class Reporter implements ReporterInterface
      */
     public function generate(Metrics $metrics): void
     {
-        if (!class_exists(DOMDocument::class)) {
-            $this->output->writeln(
-                '<error>The DOM extension is not available. '
-                . 'Please install it if you want to use the Xml Violations report.</error>'
-            );
-            return;
-        }
-
         $logFile = $this->config->get('report-violations');
         if (!$logFile) {
             return;

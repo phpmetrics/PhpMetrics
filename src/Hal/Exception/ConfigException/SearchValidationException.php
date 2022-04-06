@@ -55,4 +55,13 @@ final class SearchValidationException extends ConfigException
         $msg = 'Invalid config for "usesClasses". Should be an array of classnames or regexes matching classnames';
         return new self($msg);
     }
+
+    /**
+     * @param string $configMetricValue
+     * @return SearchValidationException
+     */
+    public static function invalidCustomMetricComparison(string $configMetricValue): SearchValidationException
+    {
+        return new self('Invalid search expression for key ' . $configMetricValue);
+    }
 }
