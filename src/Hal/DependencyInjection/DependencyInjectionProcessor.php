@@ -35,7 +35,6 @@ use Hal\Metric\Package\PackageDependencies;
 use Hal\Metric\Package\PackageDistance;
 use Hal\Metric\Package\PackageInstability;
 use Hal\Metric\Searches\Searches;
-use Hal\Metric\System\Changes\GitChanges;
 use Hal\Metric\System\Coupling\Coupling;
 use Hal\Metric\System\Coupling\DepthOfInheritanceTree;
 use Hal\Metric\System\Coupling\PageRank;
@@ -123,9 +122,6 @@ final class DependencyInjectionProcessor
                             new PackageAbstraction($metrics),
                             new PackageInstability($metrics),
                             new PackageDistance($metrics),
-                            // File analyses
-                            // TODO: Metrics\Changes
-                            new GitChanges($metrics, $config),
                             // Unit test
                             // TODO: Metrics\UnitTesting
                             new UnitTesting($metrics, $config),

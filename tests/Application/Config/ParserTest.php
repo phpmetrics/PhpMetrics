@@ -43,7 +43,6 @@ final class ParserTest extends TestCase
             'extensions' => 'php,php.inc,php8',
             'composer' => true,
             'exclude' => 'tests,Tests',
-            'git' => 'git',
             'junit' => '/tmp/junit.xml',
             'report-html' => $resourceTestRootDir . '/report/with/relative/path',
             'report-csv' => '/report/with/absolute/path',

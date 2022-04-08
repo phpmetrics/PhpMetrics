@@ -131,9 +131,6 @@ final class Reporter implements ReporterInterface
         $this->renderPage($this->templateDir . '/html_report/packages.php', $logDir . '/packages.html', $consolidated, $history);
         $this->renderPage($this->templateDir . '/html_report/package_relations.php', $logDir . '/package_relations.html', $consolidated, $history);
         $this->renderPage($this->templateDir . '/html_report/composer.php', $logDir . '/composer.html', $consolidated, $history);
-        if ($this->config->has('git')) {
-            $this->renderPage($this->templateDir . '/html_report/git.php', $logDir . '/git.html', $consolidated, $history);
-        }
         $this->renderPage($this->templateDir . '/html_report/junit.php', $logDir . '/junit.html', $consolidated, $history);
 
         // js data

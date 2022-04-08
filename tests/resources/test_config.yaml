@@ -19,7 +19,5 @@ groups:
   - name: "Reporters"
     match: "!Report!"
 plugins:
-  git:
-    binary: "git"
   junit:
     report: "/tmp/junit.xml"

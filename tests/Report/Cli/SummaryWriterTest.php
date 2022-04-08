@@ -26,7 +26,6 @@ final class SummaryWriterTest extends TestCase
         $metrics->attach(new ProjectMetric('tree'));
         $metrics->get('tree')->set('depthOfInheritanceTree', 0);
         $config = Phake::mock(ConfigBagInterface::class);
-        Phake::when($config)->__call('has', ['git'])->thenReturn(false);
         Phake::when($config)->__call('has', ['junit'])->thenReturn(false);
         Phake::when($config)->__call('has', ['quiet'])->thenReturn(false);
         $expected = <<<EOT
@@ -81,7 +80,7 @@ final class SummaryWriterTest extends TestCase
             
             
             EOT;
-        yield 'Metrics without data / Git and JUnit disabled' => [$metrics, $config, $expected];
+        yield 'Metrics without data / JUnit disabled' => [$metrics, $config, $expected];
 
         $metrics = new Metrics();
         $metrics->attach(new ProjectMetric('tree'));
@@ -213,7 +212,6 @@ final class SummaryWriterTest extends TestCase
         $packageC->set('violations', $violationsHandlerPackageC);
 
         $config = Phake::mock(ConfigBagInterface::class);
-        Phake::when($config)->__call('has', ['git'])->thenReturn(false);
         Phake::when($config)->__call('has', ['junit'])->thenReturn(false);
 
         $expected = <<<EOT
@@ -268,7 +266,7 @@ final class SummaryWriterTest extends TestCase
             
             
             EOT;
-        yield 'Metrics with data / Git and JUnit disabled' => [$metrics, $config, $expected];
+        yield 'Metrics with data / JUnit disabled' => [$metrics, $config, $expected];
 
         $metrics = new Metrics();
         $metrics->attach(new ProjectMetric('tree'));
@@ -278,7 +276,6 @@ final class SummaryWriterTest extends TestCase
         $metrics->get('unitTesting')->set('nbCoveredClasses', 0);
         $metrics->get('unitTesting')->set('percentCoveredClasses', 0);
         $config = Phake::mock(ConfigBagInterface::class);
-        Phake::when($config)->__call('has', ['git'])->thenReturn(true);
         Phake::when($config)->__call('has', ['junit'])->thenReturn(true);
         $expected = <<<EOT
             LOC
@@ -328,9 +325,6 @@ final class SummaryWriterTest extends TestCase
                 Error                                       0
                 Warning                                     0
                 Information                                 0
-            
-            Top 10 committed files
-                NA
                         
             Unit testing
                 Number of unit tests                        0
@@ -339,105 +333,7 @@ final class SummaryWriterTest extends TestCase
             
             
             EOT;
-        yield 'Metrics without data / Git and JUnit enabled / No Git changes' => [$metrics, $config, $expected];
-
-        $metrics = new Metrics();
-        $metrics->attach(new ProjectMetric('tree'));
-        $metrics->get('tree')->set('depthOfInheritanceTree', 0);
-        $metrics->attach(new ProjectMetric('unitTesting'));
-        $metrics->get('unitTesting')->set('nbSuites', 0);
-        $metrics->get('unitTesting')->set('nbCoveredClasses', 0);
-        $metrics->get('unitTesting')->set('percentCoveredClasses', 0);
-        $attachGitChanges = static function (string $filename, int $gitChanges) use ($metrics): void {
-            $fileMetric = new FileMetric($filename);
-            $metrics->attach($fileMetric);
-            $fileMetric->set('gitChanges', $gitChanges);
-        };
-        $attachGitChanges('a.php', 3);
-        $attachGitChanges('b.php', 4);
-        $attachGitChanges('d.php', 3);
-        $attachGitChanges('c.php', 3);
-        $attachGitChanges('e.php', 5);
-        $attachGitChanges('aa.php', 1);
-        $attachGitChanges('bb.php', 2);
-        $attachGitChanges('cc.php', 35);
-        $attachGitChanges('dd.php', 9);
-        $attachGitChanges('ee.php', 7);
-        $attachGitChanges('x.php', 2);
-        $attachGitChanges('y.php', 10);
-        $attachGitChanges('z.php', 0);
-        $config = Phake::mock(ConfigBagInterface::class);
-        Phake::when($config)->__call('has', ['git'])->thenReturn(true);
-        Phake::when($config)->__call('has', ['junit'])->thenReturn(true);
-        $expected = <<<EOT
-            LOC
-                Lines of code                               0
-                Logical lines of code                       0
-                Comment lines of code                       0
-                Average volume                              0
-                Average comment weight                      0
-                Average intelligent content                 0
-                Logical lines of code by class              0
-                Logical lines of code by method             0
-            
-            Object oriented programming
-                Classes                                     0
-                Interface                                   0
-                Methods                                     0
-                Methods by class                            0
-                Lack of cohesion of methods                 0
-                
-            Coupling
-                Average afferent coupling                   0
-                Average efferent coupling                   0
-                Average instability                         0
-                Depth of Inheritance Tree                   0
-                
-            Package
-                Packages                                    0
-                Average classes per package                 0
-                Average distance                            0
-                Average incoming class dependencies         0
-                Average outgoing class dependencies         0
-                Average incoming package dependencies       0
-                Average outgoing package dependencies       0
-            
-            Complexity
-                Average Cyclomatic complexity by class      0
-                Average Weighted method count by class      0
-                Average Relative system complexity          0
-                Average Difficulty                          0
-                
-            Bugs
-                Average bugs by class                       0
-                Average defects by class (Kan)              0
-            
-            Violations
-                Critical                                    0
-                Error                                       0
-                Warning                                     0
-                Information                                 0
-            
-            Top 10 committed files
-                35    cc.php
-                10    y.php
-                9    dd.php
-                7    ee.php
-                5    e.php
-                4    b.php
-                3    a.php
-                3    d.php
-                3    c.php
-                2    bb.php
-                        
-            Unit testing
-                Number of unit tests                        0
-                Classes called by tests                     0
-                Classes called by tests (percent)           0 %
-            
-            
-            EOT;
-        yield 'Metrics without data / Git and JUnit enabled / With Git changes' => [$metrics, $config, $expected];
+        yield 'Metrics without data / JUnit enabled' => [$metrics, $config, $expected];
     }
 
     /**
@@ -459,7 +355,6 @@ final class SummaryWriterTest extends TestCase
         self::assertTrue($writer->getReportFile());
         self::assertSame($expectedOutput, $writer->getReport());
 
-        Phake::verify($config)->__call('has', ['git']);
         Phake::verify($config)->__call('has', ['junit']);
         Phake::verify($config)->__call('has', ['quiet']);
         Phake::verifyNoOtherInteractions($config);

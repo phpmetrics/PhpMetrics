@@ -17,7 +17,5 @@ groups:
     - name: Metric
       match: "!metric!i"
 plugins:
-    git:
-        binary: git
     junit:
         file: "/tmp/junit.xml"

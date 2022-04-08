@@ -5,10 +5,6 @@ namespace Hal\Report\Cli;
 
 use Hal\Metric\ProjectMetric;
 use Hal\Report\SummaryProvider;
-use function array_map;
-use function array_slice;
-use function arsort;
-use function sprintf;
 
 /**
  * Dedicated writer that defines the content to write in a CLI output when exporting the summary of the metrics.
@@ -73,8 +69,7 @@ Violations
 
 EOT;
 
-        $out .= $this->addGitMetricsComplements()
-            . $this->addUnitTestMetricsComplements()
+        $out .= $this->addUnitTestMetricsComplements()
             . "\n\n";
 
         return $out;
@@ -86,31 +81,6 @@ EOT;
     public function getReportFile(): bool
     {
         return !$this->config->has('quiet');
-    }
-
-    /**
-     * Add a specific section for Git metrics if the configuration says so.
-     *
-     * @return string
-     */
-    private function addGitMetricsComplements(): string
-    {
-        if (false === $this->config->has('git')) {
-            return '';
-        }
-        $commits = array_map(static fn (array $file): int => $file['gitChanges'], $this->consolidated->getFiles());
-        arsort($commits);
-        $commits = array_slice($commits, 0, 10);
-
-        $out = "\nTop 10 committed files";
-        foreach ($commits as $file => $nb) {
-            $out .= sprintf("\n    %d    %s", $nb, $file);
-        }
-        if ([] === $commits) {
-            $out .= "\n    NA";
-        }
-        $out .= "\n";
-        return $out;
     }
 
     /**
