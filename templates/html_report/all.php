@@ -34,7 +34,9 @@ foreach ($classes as $c) {
                         </tr>
                     <?php } ?>
                     </tbody>
+                </table>
             </div>
         </div>
     </div>
 <?php require __DIR__ . '/_footer.php'; ?>
+

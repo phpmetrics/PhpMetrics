@@ -145,7 +145,7 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
             </div>
         </div>
     </div>
-
+</div>
     <?php require __DIR__ . '/_footer.php'; ?>
 
     <script type="text/javascript">
