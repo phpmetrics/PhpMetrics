@@ -35,21 +35,18 @@ final class ProbablyBuggedTest extends TestCase
         $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
         $classMetric = Phake::mock(ClassMetric::class);
         Phake::when($classMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
-        Phake::when($classMetric)->__call('get', ['numberOfUnitTests'])->thenReturn(3);
         Phake::when($classMetric)->__call('get', ['bugs'])->thenReturn(0.3499);
         yield 'Bugs probability too low' => [$classMetric, $violationsHandler, false];
 
         $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
         $classMetric = Phake::mock(ClassMetric::class);
         Phake::when($classMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
-        Phake::when($classMetric)->__call('get', ['numberOfUnitTests'])->thenReturn(3);
         Phake::when($classMetric)->__call('get', ['bugs'])->thenReturn(0.35);
         yield 'Violations (edge mode)' => [$classMetric, $violationsHandler, true];
 
         $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
         $classMetric = Phake::mock(ClassMetric::class);
         Phake::when($classMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
-        Phake::when($classMetric)->__call('get', ['numberOfUnitTests'])->thenReturn(3);
         Phake::when($classMetric)->__call('get', ['bugs'])->thenReturn(896.34);
         yield 'Violations (overkill)' => [$classMetric, $violationsHandler, true];
     }
@@ -94,7 +91,6 @@ This component contains in theory {$metric->get('bugs')} bugs.
 
 * Calculation is based on number of operators, operands, cyclomatic complexity
 * See more details at https://en.wikipedia.org/wiki/Halstead_complexity_measures
-* {$metric->get('numberOfUnitTests')} testsuites has dependency to this class.
 
 Maybe you should check your unit tests for this class.
 EOT;

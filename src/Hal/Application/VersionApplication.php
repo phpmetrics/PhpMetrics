@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Hal\Application;
 
 use Hal\Component\Output\Output;
-use function getVersion;
 use function sprintf;
 use const PHP_EOL;
 
@@ -22,12 +21,9 @@ final class VersionApplication implements ApplicationInterface
      */
     public function run(): int
     {
-        // TODO: write a parser that will read the .semver file.
-        //$semverFile = PROJECT_ROOT . '/.semver';
-
         $versionMsg = 'PhpMetrics %s <http://www.phpmetrics.org>' . PHP_EOL .
             'by Jean-François Lépine <https://twitter.com/Halleck45>' . PHP_EOL;
-        $this->output->writeln(sprintf($versionMsg, getVersion()));
+        $this->output->writeln(sprintf($versionMsg, VersionInfo::getVersion()));
         return 0;
     }
 }

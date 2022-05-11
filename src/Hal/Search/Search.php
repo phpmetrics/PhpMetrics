@@ -8,7 +8,6 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\InterfaceMetric;
 use Hal\Metric\Metric;
 use Hal\Metric\Registry;
-use LogicException;
 use function array_filter;
 use function array_intersect_key;
 use function array_key_exists;

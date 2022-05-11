@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Hal\Report\Cli;
 
-use Hal\Metric\ProjectMetric;
 use Hal\Report\SummaryProvider;
 
 /**
@@ -18,7 +17,7 @@ final class SummaryWriter extends SummaryProvider
      */
     public function getReport(): string
     {
-        $out = <<<EOT
+        return <<<EOT
 LOC
     Lines of code                               {$this->sum->loc}
     Logical lines of code                       {$this->sum->lloc}
@@ -68,11 +67,6 @@ Violations
     Information                                 {$this->sum->violations->information}
 
 EOT;
-
-        $out .= $this->addUnitTestMetricsComplements()
-            . "\n\n";
-
-        return $out;
     }
 
     /**
@@ -81,27 +75,5 @@ EOT;
     public function getReportFile(): bool
     {
         return !$this->config->has('quiet');
-    }
-
-    /**
-     * Add a specific section for Unit tests metrics if the configuration says so.
-     *
-     * @return string
-     */
-    private function addUnitTestMetricsComplements(): string
-    {
-        if (false === $this->config->has('junit')) {
-            return '';
-        }
-
-        /** @var ProjectMetric $projectUnitTests */
-        $projectUnitTests = $this->metrics->get('unitTesting');
-        return <<<EOT
-            
-Unit testing
-    Number of unit tests                        {$projectUnitTests->get('nbSuites')}
-    Classes called by tests                     {$projectUnitTests->get('nbCoveredClasses')}
-    Classes called by tests (percent)           {$projectUnitTests->get('percentCoveredClasses')} %
-EOT;
     }
 }

@@ -40,7 +40,6 @@ use Hal\Metric\System\Coupling\DepthOfInheritanceTree;
 use Hal\Metric\System\Coupling\PageRank;
 use Hal\Metric\System\Packages\Composer\Composer;
 use Hal\Metric\System\Packages\Composer\Packagist;
-use Hal\Metric\System\UnitTesting\UnitTesting;
 use Hal\Report;
 use Hal\Search\SearchesValidator;
 use Hal\Violation\Checkers\NoCriticalViolationsAllowed;
@@ -122,9 +121,6 @@ final class DependencyInjectionProcessor
                             new PackageAbstraction($metrics),
                             new PackageInstability($metrics),
                             new PackageDistance($metrics),
-                            // Unit test
-                            // TODO: Metrics\UnitTesting
-                            new UnitTesting($metrics, $config),
                             // Composer
                             new Composer(
                                 $metrics,
@@ -154,7 +150,7 @@ final class DependencyInjectionProcessor
                     new Report\Cli\Reporter(new Report\Cli\SummaryWriter($config), $output),
                     new Report\Cli\SearchReporter($config, $output),
                     // TODO: Html\Reporter
-                    new Report\Html\Reporter($config, $output),
+                    new Report\Html\Reporter($config, $output, new Report\Html\ViewHelper()),
                     new Report\Csv\Reporter($config, $output),
                     new Report\Json\Reporter($config, $output),
                     new Report\Json\SummaryReporter(new Report\Json\SummaryWriter($config)),

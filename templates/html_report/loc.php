@@ -1,23 +1,25 @@
-<?php require __DIR__ . '/_header.php'; ?>
-
-
 <?php
 
+use Hal\Report\Html\ViewHelper;
+
+require __DIR__ . '/_header.php';
+/** @var ViewHelper $viewHelper */
+$viewHelper = $this->viewHelper;
+
 // 1. build an associative array
-$array = [];
-foreach ($classes as $class) {
-    if (isset($class['lloc'])) {
-        array_push($array, $class['lloc']);
-    }
-}
+$logicalLinesOfCodeByClass = array_column($classes, 'lloc');
+$nbStats = count($logicalLinesOfCodeByClass);
 
 // 2. percentile map
 $json = [];
-if(count($array) > 1) {
+/** @var \Hal\Report\Html\ViewHelper $viewHelper */
+$viewHelper = $this->viewHelper;
+if ($nbStats > 1) {
+    sort($logicalLinesOfCodeByClass);
     $range = range(0.5, 1, .05);
     foreach ($range as $percentile) {
         $json[] = (object)[
-            'lloc' => percentile($array, $percentile),
+            'lloc' => $logicalLinesOfCodeByClass[max(round($percentile * ($nbStats - 1) - 1), 0)],
             'percentile' => round($percentile * 100),
         ];
     }
@@ -57,7 +59,7 @@ if(count($array) > 1) {
                         <td><span class="path"><?php echo $class['name']; ?></span></td>
                         <?php foreach (['lloc', 'cloc', 'volume', 'intelligentContent', 'commentWeight'] as $attribute) {?>
                             <td>
-                                <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>>
+                                <span class="badge" <?php echo $viewHelper->gradientStyleFor($classes, $attribute, $class[$attribute]);?>>
                                 <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
                                 </span>
                             </td>

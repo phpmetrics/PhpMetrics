@@ -1,3 +1,6 @@
+<?php
+use Hal\Application\VersionInfo;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,7 +53,7 @@
     <div class="content content-first">
         <div class="report-details">
             Created at <?php echo date('Y-m-d H:i:s'); ?>
-        , with PHPMetrics <?php echo getVersion(); ?> (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+        , with PHPMetrics <?php echo VersionInfo::getVersion(); ?> (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         <?php if ([] !== $this->groups) {?>

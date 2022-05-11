@@ -24,8 +24,8 @@
     "support": {
         "issues": "https://github.com/PhpMetrics/PhpMetrics/issues"
     },
-    "autoload": {"psr-4": {"Hal\\": "src/Hal"}, "files": ["src/functions.php"]},
-    "autoload-dev": {"psr-4": {"Tests\\Hal\\": "tests"}, "files": ["src/functions.php"]},
+    "autoload": {"psr-4": {"Hal\\": "src/Hal"}},
+    "autoload-dev": {"psr-4": {"Tests\\Hal\\": "tests"}},
     "require": {
         "php": ">=8.1",
         "ext-dom": "*",
@@ -36,16 +36,16 @@
     "require-dev": {
         "phake/phake": "^4.2.0",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.5",
-        "phpstan/phpstan-strict-rules": "^1.1",
-        "phpstan/phpstan-phpunit": "^1.1",
+        "phpstan/phpstan": "^1.6",
         "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.1",
+        "phpstan/phpstan-strict-rules": "^1.2",
         "phpunit/phpunit": "^9.5",
         "sebastian/comparator": ">=4.0.6",
         "squizlabs/php_codesniffer": "^3.6",
         "symfony/dom-crawler": "^6.0",
         "roave/security-advisories": "dev-latest",
-        "vimeo/psalm": "^4.22"
+        "vimeo/psalm": "^4.23"
     },
     "bin": [
         "bin/phpmetrics"

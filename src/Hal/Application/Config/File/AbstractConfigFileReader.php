@@ -50,7 +50,6 @@ abstract class AbstractConfigFileReader implements ConfigFileReaderInterface
             'composer' => (bool)$parsingConfiguration['composer'],
             'searches' => Search::buildListFromArray($parsingConfiguration['searches']),
             'exclude' => implode(',', $parsingConfiguration['excludes']),
-            'junit' => $parsingConfiguration['plugins']['junit']['report'] ?? '',
             ...array_merge(
                 ...array_map(
                     fn (string $type, string $path): array => ['report-' . $type => $this->resolvePath($path)],

@@ -1,5 +1,11 @@
 <?php
-require __DIR__ . '/_header.php'; ?>
+
+use Hal\Report\Html\ViewHelper;
+
+require __DIR__ . '/_header.php';
+/** @var ViewHelper $viewHelper */
+$viewHelper = $this->viewHelper;
+?>
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
@@ -44,31 +50,6 @@ require __DIR__ . '/_header.php'; ?>
                 <div class="bloc-action">
                     <a href="complexity.html">View details &gt;</a>
                 </div>
-            </div>
-        </div>
-        <div class="column">
-            <div class="bloc bloc-number">
-                <div class="label">
-                    <a href="junit.html">Assertions in tests</a>
-                </div>
-                <?php if(isset($project['unitTesting'])) { ?>
-                    <div class="number">
-                        <?php echo $project['unitTesting']['assertions']; ?>
-                    </div>
-                    <div class="bloc-action">
-                        <a href="junit.html">View details &gt;</a>
-                    </div>
-                <?php } else { ?>
-                    <div class="help number-alternate">
-                        <div class="help-inner">
-                            No JUnit report found. Use the --junit=&lt;junit.xml&gt; option to analyse your unit tests.
-                            See <a href="https://phpunit.readthedocs.io/fr/latest/textui.html" target="_blank">documentation of PHPUnit if needed</a>
-                        </div>
-                    </div>
-                    <div class="bloc-action">
-                        No details
-                    </div>
-                <?php } ?>
             </div>
         </div>
         <div class="column">
@@ -147,7 +128,7 @@ require __DIR__ . '/_header.php'; ?>
                             foreach ($classesS as $class) { ?>
                                 <tr>
                                     <td>
-                                        <span class="badge" <?php echo gradientStyleFor($classes, 'pageRank', $class['pageRank']);?>><?php echo $class['pageRank']; ?></span>
+                                        <span class="badge" <?php echo $viewHelper->gradientStyleFor($classes, 'pageRank', $class['pageRank']);?>><?php echo $class['pageRank']; ?></span>
                                     </td>
                                     <td>
                                         <span class="path"><?php echo $class['name']; ?></span>

@@ -1,5 +1,11 @@
 <?php
-require __DIR__ . '/_header.php'; ?>
+
+use Hal\Report\Html\ViewHelper;
+
+require __DIR__ . '/_header.php';
+/** @var ViewHelper $viewHelper */
+$viewHelper = $this->viewHelper;
+?>
 
     <div class="row">
         <div class="column">
@@ -64,9 +70,6 @@ require __DIR__ . '/_header.php'; ?>
                         <th class="js-sort-number">Relative structural complexity</th>
                         <th class="js-sort-number">Bugs</th>
                         <th class="js-sort-number">Defects</th>
-                        <?php if ($config->has('junit')) { ?>
-                            <th class="js-sort-number">Unit testsuites calling it</th>
-                        <?php } ?>
                     </tr>
                     </thead>
                     <?php
@@ -75,13 +78,10 @@ require __DIR__ . '/_header.php'; ?>
                             <td><span class="path"><?php echo $class['name']; ?></span></td>
                             <?php foreach (['wmc', 'ccn', 'ccnMethodMax', 'relativeSystemComplexity', 'relativeDataComplexity', 'relativeStructuralComplexity', 'bugs', 'kanDefect'] as $attribute) {?>
                                 <td>
-                                    <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>>
+                                    <span class="badge" <?php echo $viewHelper->gradientStyleFor($classes, $attribute, $class[$attribute]);?>>
                                     <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
                                     </span>
                                 </td>
-                            <?php } ?>
-                            <?php if ($config->has('junit')) { ?>
-                                <td><?php echo isset($class['numberOfUnitTests']) ? $class['numberOfUnitTests'] : ''; ?></td>
                             <?php } ?>
                         </tr>
                     <?php } ?>

@@ -12,6 +12,9 @@ use Hal\Metric\Metrics;
 use Hal\Report\ReporterInterface;
 use JsonException;
 use RuntimeException;
+use stdClass;
+use function array_map;
+use function array_values;
 use function dirname;
 use function end;
 use function file_exists;
@@ -25,9 +28,9 @@ use function mkdir;
 use function natsort;
 use function ob_get_clean;
 use function ob_start;
-use function recurse_copy;
+use function rtrim;
+use function shell_exec;
 use function sprintf;
-use const DIRECTORY_SEPARATOR;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 
@@ -48,9 +51,10 @@ final class Reporter implements ReporterInterface
      */
     public function __construct(
         private readonly ConfigBagInterface $config,
-        private readonly Output $output
+        private readonly Output $output,
+        private readonly ViewHelper $viewHelper
     ) {
-        $this->templateDir = dirname(__DIR__, 4) . '/templates';
+        $this->templateDir = dirname(__DIR__, 4) . '/templates/html_report/';
     }
 
 
@@ -64,9 +68,13 @@ final class Reporter implements ReporterInterface
         if (!$logDir) {
             return;
         }
+        $logDir = rtrim($logDir, '/') . '/';
+        $this->createFolderIfNotExists($logDir);
+        if (!is_writable($logDir)) {
+            throw new RuntimeException(sprintf('Unable to write in the directory "%s"', $logDir));
+        }
 
         // consolidate
-
         /** @var Group[] $groups */
         $groups = $this->config->get('groups');
         $this->groups = $groups;
@@ -75,7 +83,6 @@ final class Reporter implements ReporterInterface
             $reducedMetricsByGroup = $group->reduceMetrics($metrics);
             $consolidatedGroups[$group->name] = new Consolidated($reducedMetricsByGroup);
         }
-
         $consolidated = new Consolidated($metrics);
 
         // history of builds
@@ -83,72 +90,54 @@ final class Reporter implements ReporterInterface
             'avg' => $consolidated->getAvg(),
             'sum' => $consolidated->getSum()
         ];
-        $files = glob($logDir . '/js/history-*.json');
-        $next = count($files) + 1;
-        $history = [];
+        $files = glob($logDir . 'js/history-*.json');
         natsort($files);
-        foreach ($files as $filename) {
-            /* @TODO: Remove @noinspection once https://github.com/kalessil/phpinspectionsea/issues/1725 fixed. */
-            /** @noinspection JsonEncodingApiUsageInspection */
-            $history[] = json_decode(file_get_contents($filename), flags: JSON_THROW_ON_ERROR);
-        }
+        $history = array_map(
+            static function (string $filename): stdClass {
+                /* @TODO: Remove @noinspection once https://github.com/kalessil/phpinspectionsea/issues/1725 fixed. */
+                /** @noinspection JsonEncodingApiUsageInspection */
+                return json_decode(file_get_contents($filename), flags: JSON_THROW_ON_ERROR);
+            },
+            array_values($files)
+        );
 
         // copy sources
-        if (!file_exists($logDir . '/js')) {
-            mkdir($logDir . '/js', 0o755, true);
-        }
-        if (!file_exists($logDir . '/css')) {
-            mkdir($logDir . '/css', 0o755, true);
-        }
-        if (!file_exists($logDir . '/images')) {
-            mkdir($logDir . '/images', 0o755, true);
-        }
-        if (!file_exists($logDir . '/fonts')) {
-            mkdir($logDir . '/fonts', 0o755, true);
-        }
-
-        if (!is_writable($logDir)) {
-            throw new RuntimeException(sprintf('Unable to write in the directory "%s"', $logDir));
-        }
-
-        // TODO: function usage => should be a method.
-        recurse_copy($this->templateDir . '/html_report/favicon.ico', $logDir . '/favicon.ico');
-        recurse_copy($this->templateDir . '/html_report/js', $logDir . '/js');
-        recurse_copy($this->templateDir . '/html_report/css', $logDir . '/css');
-        recurse_copy($this->templateDir . '/html_report/images', $logDir . '/images');
-        recurse_copy($this->templateDir . '/html_report/fonts', $logDir . '/fonts');
-
+        array_map(
+            function (string $folder) use ($logDir): void {
+                $destination = $logDir . $folder;
+                $this->createFolderIfNotExists($destination);
+                shell_exec('cp -r ' . $this->templateDir . $folder . ' ' . $destination);
+            },
+            ['favicon.ico', 'js', 'css', 'images', 'fonts']
+        );
         // render dynamic pages
-        $this->renderPage($this->templateDir . '/html_report/index.php', $logDir . '/index.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/loc.php', $logDir . '/loc.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/relations.php', $logDir . '/relations.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/coupling.php', $logDir . '/coupling.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/all.php', $logDir . '/all.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/oop.php', $logDir . '/oop.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/complexity.php', $logDir . '/complexity.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/panel.php', $logDir . '/panel.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/violations.php', $logDir . '/violations.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/packages.php', $logDir . '/packages.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/package_relations.php', $logDir . '/package_relations.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/composer.php', $logDir . '/composer.html', $consolidated, $history);
-        $this->renderPage($this->templateDir . '/html_report/junit.php', $logDir . '/junit.html', $consolidated, $history);
+        $this->renderHtmlPages($logDir, $consolidated, $history);
 
         // js data
-        file_put_contents(
-            sprintf('%s/js/history-%d.json', $logDir, $next),
-            json_encode($today, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
-        );
-        file_put_contents(
-            sprintf('%s/js/latest.json', $logDir),
-            json_encode($today, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
-        );
+        $currentData = json_encode($today, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+        file_put_contents($logDir . sprintf('js/history-%d.json', count($files) + 1), $currentData);
+        file_put_contents($logDir . 'js/latest.json', $currentData);
 
-        // json data
-        file_put_contents(
-            $logDir . '/classes.js',
-            'var classes = ' . json_encode($consolidated->getClasses(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
-        );
+        // consolidated by groups
+        foreach ($consolidatedGroups as $name => $consolidated) {
+            $this->currentGroup = $name;
+            $this->assetPath = '../';
 
+            $this->renderHtmlPages($logDir . $name . '/', $consolidated, $history);
+        }
+
+        $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir));
+    }
+
+    /**
+     * @param string $destination
+     * @param Consolidated $consolidated
+     * @param array $history
+     * @return void
+     * @throws JsonException
+     */
+    private function renderHtmlPages(string $destination, Consolidated $consolidated, array $history): void
+    {
         // HTML files to generate
         $filesToGenerate = [
             'index',
@@ -165,32 +154,21 @@ final class Reporter implements ReporterInterface
             'composer',
         ];
 
-        // consolidated by groups
-        foreach ($consolidatedGroups as $name => $consolidated) {
-            $outDir = $logDir . DIRECTORY_SEPARATOR . $name;
-            $this->currentGroup = $name;
-            $this->assetPath = '../';
+        $this->createFolderIfNotExists($destination);
 
-            if (!file_exists($outDir)) {
-                mkdir($outDir, 0o755, true);
-            }
+        foreach ($filesToGenerate as $filename) {
+            $this->renderPage(
+                sprintf('%s%s.php', $this->templateDir, $filename),
+                sprintf('%s%s.html', $destination, $filename),
+                $consolidated,
+                $history
+            );
 
-            foreach ($filesToGenerate as $filename) {
-                $this->renderPage(
-                    sprintf('%s/html_report/%s.php', $this->templateDir, $filename),
-                    sprintf('%s/%s.html', $outDir, $filename),
-                    $consolidated,
-                    $history
-                );
-
-                file_put_contents(
-                    $outDir . '/classes.js',
-                    'var classes = ' . json_encode($consolidated->getClasses(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
-                );
-            }
+            file_put_contents(
+                $destination . 'classes.js',
+                'var classes = ' . json_encode($consolidated->getClasses(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
+            );
         }
-
-        $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir));
     }
 
     /**
@@ -223,9 +201,10 @@ final class Reporter implements ReporterInterface
     /**
      * @param $type
      * @param $key
+     * @param $lowIsBetter
      * @return string
      */
-    protected function getTrend($type, $key, $lowIsBetter = false, $highIsBetter = false)
+    protected function getTrend($type, $key, $lowIsBetter = false): string
     {
         if (!$this->isHomePage()) {
             return '';
@@ -276,5 +255,19 @@ final class Reporter implements ReporterInterface
     private function isHomePage(): bool
     {
         return null === $this->currentGroup;
+    }
+
+    /**
+     * Creates the folder at the location given in argument if not already exists.
+     * Rights given to this folder are 755.
+     *
+     * @param string $path
+     * @return void
+     */
+    private function createFolderIfNotExists(string $path): void
+    {
+        if (!file_exists($path)) {
+            mkdir($path, 0o755, true);
+        }
     }
 }

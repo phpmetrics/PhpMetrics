@@ -52,7 +52,6 @@ Optional:
     --report-json=<file>              File where report Json will be generated
     --report-summary-json=<file>      File where the summary report Json will be generated
     --report-violations=<file>        File where XML violations report will be generated
-    --junit[=</path/to/junit.xml>]    Evaluates metrics according to JUnit logs
     --quiet                           Enable the quiet mode
     --version                         Display current version
 

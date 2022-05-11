@@ -77,7 +77,6 @@ final class ConfigFileReaderYamlTest extends TestCase
             'extensions' => 'php,php.inc,php8',
             'composer' => false,
             'exclude' => 'tests,Tests',
-            'junit' => '/tmp/junit.xml',
             'report-html' => $resourcesTestDir . '/report/with/relative/path',
             'report-csv' => '/report/with/absolute/path',
         ];

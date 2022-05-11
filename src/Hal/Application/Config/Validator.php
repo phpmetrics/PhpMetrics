@@ -14,7 +14,6 @@ use function filter_var;
 use function implode;
 use function is_array;
 use function is_string;
-use function shell_exec;
 use const FILTER_VALIDATE_BOOLEAN;
 
 /**
