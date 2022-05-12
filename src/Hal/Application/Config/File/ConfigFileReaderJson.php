@@ -29,6 +29,7 @@ final class ConfigFileReaderJson extends AbstractConfigFileReader
 
         /* @TODO: Remove @noinspection once https://github.com/kalessil/phpinspectionsea/issues/1725 fixed. */
         /** @noinspection JsonEncodingApiUsageInspection */
+        /** @var array<string, mixed> $jsonData As expected if configuration file is written correctly. */
         $jsonData = json_decode($jsonText, true, flags: JSON_THROW_ON_ERROR);
 
         $this->normalizeConfig($config, $jsonData);

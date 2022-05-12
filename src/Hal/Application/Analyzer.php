@@ -15,6 +15,12 @@ use Hal\Violation\ViolationParserInterface;
  */
 final class Analyzer implements AnalyzerInterface
 {
+    /**
+     * @param array<string> $pathsList
+     * @param FinderInterface $finder
+     * @param WorkflowHandlerInterface $workflowHandler
+     * @param ViolationParserInterface $violationParser
+     */
     public function __construct(
         private readonly array $pathsList,
         private readonly FinderInterface $finder,

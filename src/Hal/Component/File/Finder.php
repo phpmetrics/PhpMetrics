@@ -50,6 +50,9 @@ final class Finder implements FinderInterface
                 $files[] = $path;
             } elseif (is_dir($path)) {
                 $path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+
+                // Each iteration produces an array of a single file matching the regular expression set in constructor.
+                /** @var RegexIterator<array{string}> $filteredIterator */
                 $filteredIterator = new RegexIterator(
                     new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path)),
                     sprintf($this->pathFilterRegex, preg_quote($path, '`')),

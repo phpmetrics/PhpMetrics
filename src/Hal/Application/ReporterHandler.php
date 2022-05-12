@@ -12,9 +12,12 @@ use function array_map;
  */
 final class ReporterHandler implements ReporterHandlerInterface
 {
-    /** @var array<int, ReporterInterface> */
-    private array $reporters;
+    /** @var array<int|string, ReporterInterface> */
+    private readonly array $reporters;
 
+    /**
+     * @param ReporterInterface ...$reporters
+     */
     public function __construct(ReporterInterface ...$reporters)
     {
         $this->reporters = $reporters;

@@ -23,6 +23,7 @@ final class ErrorApplication implements ApplicationInterface
      */
     public function run(): int
     {
+        /** @var string|null $error */
         $error = $this->config->get('config-error');
         $this->output->writeln(sprintf("\n<error>%s</error>\n", $error));
         return 1;

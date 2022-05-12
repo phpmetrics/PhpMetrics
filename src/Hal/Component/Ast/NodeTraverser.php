@@ -16,13 +16,14 @@ use function is_array;
 final class NodeTraverser extends Mother
 {
     /**
-     * @param array<int, mixed> $nodes
+     * @param array<array-key, mixed> $nodes
      * @return array<int, mixed>
      */
     protected function traverseArray(array $nodes): array
     {
         $nodesToReplace = [];
 
+        /** @var int $i Original definition must be changed. See: \PhpParser\NodeTraverser::traverseArray */
         foreach ($nodes as $i => &$node) {
             if (is_array($node)) {
                 $node = $this->traverseArray($node);
@@ -67,7 +68,7 @@ final class NodeTraverser extends Mother
      *
      * @param Node $node
      * @param int $nodePosition
-     * @param array<int, array{0:int,1:array<Node>}> $nodesToReplace
+     * @param array<int, array{int, array<Node>}> $nodesToReplace
      */
     private function makeVisitorsLeaveNode(Node $node, int $nodePosition, array &$nodesToReplace): void
     {

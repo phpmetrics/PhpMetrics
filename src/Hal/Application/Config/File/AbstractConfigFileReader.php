@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Hal\Application\Config\File;
 
 use Hal\Application\Config\ConfigBagInterface;
+use Hal\Metric\Group\Group;
 use Hal\Search\Search;
 use function array_filter;
 use function array_keys;
@@ -41,13 +42,24 @@ abstract class AbstractConfigFileReader implements ConfigFileReaderInterface
             'plugins' => [],
             'report' => [],
         ];
+        /**
+         * @var array{
+         *     includes: array<string>,
+         *     groups: array<Group>,
+         *     extensions: array<string>,
+         *     composer: bool,
+         *     searches: array<string, array<string, mixed>>,
+         *     excludes: array<string>,
+         *     report: array<string, string>
+         * } $parsingConfiguration
+         */
         $parsingConfiguration = $data + $defaultConfiguration;
         // Remove all options that are evaluated to an empty array or empty string.
         $options = array_filter([
             'files' => array_map($this->resolvePath(...), $parsingConfiguration['includes']),
             'groups' => $parsingConfiguration['groups'],
             'extensions' => implode(',', $parsingConfiguration['extensions']),
-            'composer' => (bool)$parsingConfiguration['composer'],
+            'composer' => $parsingConfiguration['composer'],
             'searches' => Search::buildListFromArray($parsingConfiguration['searches']),
             'exclude' => implode(',', $parsingConfiguration['excludes']),
             ...array_merge(

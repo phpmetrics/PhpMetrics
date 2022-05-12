@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Hal\Report\Cli;
 
-use Hal\Application\Config\Config;
 use Hal\Application\Config\ConfigBagInterface;
 use Hal\Component\Output\Output;
 use Hal\Metric\Metric;
@@ -23,7 +22,7 @@ use const PHP_EOL;
 final class SearchReporter implements ReporterInterface
 {
     /**
-     * @param Config $config
+     * @param ConfigBagInterface $config
      * @param Output $output
      */
     public function __construct(

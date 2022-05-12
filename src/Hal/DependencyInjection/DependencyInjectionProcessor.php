@@ -42,6 +42,7 @@ use Hal\Metric\System\Packages\Composer\Composer;
 use Hal\Metric\System\Packages\Composer\Packagist;
 use Hal\Report;
 use Hal\Search\SearchesValidator;
+use Hal\Search\SearchInterface;
 use Hal\Violation\Checkers\NoCriticalViolationsAllowed;
 use Hal\Violation\Class_;
 use Hal\Violation\Package;
@@ -100,10 +101,26 @@ final class DependencyInjectionProcessor
             $traverser->addVisitor(new SystemComplexityVisitor($metrics, new SimpleNodeIterator()));
             $traverser->addVisitor(new PackageCollectingVisitor($metrics));
 
+            /**
+             * @var array{
+             *     files: array<string>,
+             *     extensions: array<string>,
+             *     exclude: array<string>,
+             *     composer: bool,
+             *     searches: array<SearchInterface>
+             * } $configuration
+             */
+            $configuration = [
+                'files' => $config->get('files'),
+                'extensions' => $config->get('extensions'),
+                'exclude' => $config->get('exclude'),
+                'composer' => $config->get('composer'),
+                'searches' => $config->get('searches'),
+            ];
             return new PhpMetrics(
                 new Analyzer(
-                    $config->get('files'),
-                    new Finder($config->get('extensions'), $config->get('exclude')),
+                    $configuration['files'],
+                    new Finder($configuration['extensions'], $configuration['exclude']),
                     new Workflow\WorkflowHandler(
                         $metrics,
                         new Workflow\Task\PrepareParserTask(
@@ -124,13 +141,13 @@ final class DependencyInjectionProcessor
                             // Composer
                             new Composer(
                                 $metrics,
-                                $config->get('composer'),
-                                $config->get('files'),
-                                new Finder(['json'], $config->get('exclude')), // Finder for composer.json
-                                new Finder(['lock'], $config->get('exclude')), // Finder for composer.lock
+                                $configuration['composer'],
+                                $configuration['files'],
+                                new Finder(['json'], $configuration['exclude']), // Finder for composer.json
+                                new Finder(['lock'], $configuration['exclude']), // Finder for composer.lock
                                 new Packagist()
                             ),
-                            new Searches($metrics, $config->get('searches'))
+                            new Searches($metrics, $configuration['searches'])
                         ),
                         $output
                     ),
@@ -149,7 +166,6 @@ final class DependencyInjectionProcessor
                 new ReporterHandler(
                     new Report\Cli\Reporter(new Report\Cli\SummaryWriter($config), $output),
                     new Report\Cli\SearchReporter($config, $output),
-                    // TODO: Html\Reporter
                     new Report\Html\Reporter($config, $output, new Report\Html\ViewHelper()),
                     new Report\Csv\Reporter($config, $output),
                     new Report\Json\Reporter($config, $output),

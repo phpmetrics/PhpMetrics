@@ -47,7 +47,9 @@ final class Reporter implements ReporterInterface
     private string $assetPath = '';
 
     /**
-     * @param Config $config
+     * @param ConfigBagInterface $config
+     * @param Output $output
+     * @param ViewHelper $viewHelper
      */
     public function __construct(
         private readonly ConfigBagInterface $config,

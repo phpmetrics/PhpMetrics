@@ -21,16 +21,24 @@ final class ApplicationFactory
      */
     public function buildFromConfig(ConfigBagInterface $config): null|ApplicationInterface
     {
-        if ($config->get('help')) {
+        /** @var bool $help */
+        $help = $config->get('help');
+        if ($help) {
             return new HelpApplication($this->output);
         }
-        if ($config->get('metrics')) {
+        /** @var bool $metrics */
+        $metrics = $config->get('metrics');
+        if ($metrics) {
             return new MetricsApplication($this->output);
         }
-        if ($config->get('version')) {
+        /** @var bool $version */
+        $version = $config->get('version');
+        if ($version) {
             return new VersionApplication($this->output);
         }
-        if ($config->get('config-error')) {
+        /** @var null|string $configError */
+        $configError = $config->get('config-error');
+        if (null === $configError || '' === $configError) {
             return new ErrorApplication($config, $this->output);
         }
 

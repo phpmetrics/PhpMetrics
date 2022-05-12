@@ -12,9 +12,12 @@ use function array_map;
  */
 final class AnalyzerTask implements WorkflowTaskInterface
 {
-    /** @var array<int, CalculableInterface> */
+    /** @var array<int|string, CalculableInterface> */
     private readonly array $calculableAnalysis;
 
+    /**
+     * @param CalculableInterface ...$calculable
+     */
     public function __construct(CalculableInterface ...$calculable)
     {
         $this->calculableAnalysis = $calculable;

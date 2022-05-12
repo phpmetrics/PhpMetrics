@@ -6,6 +6,7 @@ namespace Hal\Application\Config;
 use Hal\Exception\ConfigException;
 use Hal\Metric\Group\Group;
 use Hal\Search\SearchesValidatorInterface;
+use Hal\Search\SearchInterface;
 use function array_filter;
 use function array_map;
 use function explode;
@@ -38,7 +39,9 @@ final class Validator implements ValidatorInterface
         if (!$config->has('files')) {
             throw ConfigException\NoFileToAnalyseException::configHasNoFilesSet();
         }
-        foreach ($config->get('files') as $dir) {
+        /** @var array<string> $files */
+        $files = $config->get('files');
+        foreach ($files as $dir) {
             if (!file_exists($dir)) {
                 throw ConfigException\FileDoesNotExistException::fromConfig($dir);
             }
@@ -48,7 +51,9 @@ final class Validator implements ValidatorInterface
         if (!$config->has('extensions')) {
             $config->set('extensions', 'php,inc');
         }
-        $config->set('extensions', explode(',', $config->get('extensions')));
+        /** @var string $extensions */
+        $extensions = $config->get('extensions');
+        $config->set('extensions', explode(',', $extensions));
 
         // excluded directories
         if (!$config->has('exclude')) {
@@ -57,15 +62,20 @@ final class Validator implements ValidatorInterface
         }
 
         // retro-compatibility with excludes as string in config files
-        if (is_array($config->get('exclude'))) {
-            $config->set('exclude', implode(',', $config->get('exclude')));
+        /** @var string|array<string> $exclude */
+        $exclude = $config->get('exclude');
+        if (is_array($exclude)) {
+            $config->set('exclude', implode(',', $exclude));
         }
-        $config->set('exclude', array_filter(explode(',', $config->get('exclude'))));
+        /** @var string $exclude */
+        $exclude = $config->get('exclude');
+        $config->set('exclude', array_filter(explode(',', $exclude)));
 
         // groups by regex
         if (!$config->has('groups')) {
             $config->set('groups', []);
         }
+        /** @var array<array{name: string, match: string}> $groupsRaw */
         $groupsRaw = $config->get('groups');
         $groups = array_map(static fn (array $raw): Group => new Group($raw['name'], $raw['match']), $groupsRaw);
         $config->set('groups', $groups);
@@ -79,7 +89,9 @@ final class Validator implements ValidatorInterface
         if (!$config->has('searches')) {
             $config->set('searches', []);
         }
-        $this->searchesValidator->validates($config->get('searches'));
+        /** @var array<SearchInterface> $searches */
+        $searches = $config->get('searches');
+        $this->searchesValidator->validates($searches);
 
         // parameters with values
         $keys = [

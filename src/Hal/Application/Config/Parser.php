@@ -7,6 +7,7 @@ use Hal\Application\Config\File\ConfigFileReaderFactory;
 use function array_pop;
 use function array_shift;
 use function explode;
+use function in_array;
 use function preg_match;
 use function str_ends_with;
 use function str_starts_with;
@@ -38,7 +39,7 @@ final class Parser implements ParserInterface
 
         // Checking for a configuration file option key and importing options
         foreach ($argv as $k => $arg) {
-            if (preg_match('!--config=(.*)!', $arg, $matches)) {
+            if (1 === preg_match('!--config=(.*)!', $arg, $matches)) {
                 [, $filename] = $matches;
                 ConfigFileReaderFactory::createFromFileName($filename)->read($config);
                 unset($argv[$k]);
@@ -47,7 +48,7 @@ final class Parser implements ParserInterface
 
         // arguments with options
         foreach ($argv as $k => $arg) {
-            if (preg_match('!--([\w\-]+)=(.*)!', $arg, $matches)) {
+            if (1 === preg_match('!--([\w\-]+)=(.*)!', $arg, $matches)) {
                 [, $parameter, $value] = $matches;
                 $config->set($parameter, trim($value, ' "\''));
                 unset($argv[$k]);
@@ -56,7 +57,7 @@ final class Parser implements ParserInterface
 
         // arguments without options
         foreach ($argv as $k => $arg) {
-            if (preg_match('!--([\w\-]+)$!', $arg, $matches)) {
+            if (1 === preg_match('!--([\w\-]+)$!', $arg, $matches)) {
                 [, $parameter] = $matches;
                 $config->set($parameter, true);
                 unset($argv[$k]);
@@ -65,7 +66,7 @@ final class Parser implements ParserInterface
 
         // last argument
         $files = array_pop($argv);
-        if ($files && !str_starts_with($files, '--')) {
+        if (!in_array($files, [null, ''], true) && !str_starts_with($files, '--')) {
             $config->set('files', explode(',', $files));
         }
 
