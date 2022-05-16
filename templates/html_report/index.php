@@ -147,18 +147,16 @@ require __DIR__ . '/_header.php'; ?>
                             foreach ($classesS as $class) { ?>
                                 <tr>
                                     <td>
-                                        <span class="badge" <?php echo gradientStyleFor($classes, 'pageRank', $class['pageRank']);?>>
-                                        <?php echo $class['pageRank']; ?>
-                                    </td>
+                                        <span class="badge" <?php echo gradientStyleFor($classes, 'pageRank', $class['pageRank']);?>><?php echo $class['pageRank']; ?></span>
                                     </td>
                                     <td>
                                         <span class="path"><?php echo $class['name']; ?></span>
-                                        <?php
-                                            $badgeTitleMIWOC = 'Maintainability Index (w/o comments)';
-                                            $mIwoC = isset($class['mIwoC']) ? $class['mIwoC'] : '';
-                                            $badgeTitleMI = 'Maintainability Index';
-                                            $mi = isset($class['mi']) ? $class['mi'] : '';
-                                        ?>
+<?php
+    $badgeTitleMIWOC = 'Maintainability Index (w/o comments)';
+    $mIwoC = isset($class['mIwoC']) ? $class['mIwoC'] : '';
+    $badgeTitleMI = 'Maintainability Index';
+    $mi = isset($class['mi']) ? $class['mi'] : '';
+?>
                                         <span class="badge" title="<?php echo $badgeTitleMI;?>"><?php echo $mi;?></span>
                                         <span class="badge" title="<?php echo $badgeTitleMIWOC;?>"><?php echo $mIwoC;?></span>
                                     </td>
