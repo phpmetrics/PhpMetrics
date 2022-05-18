@@ -39,4 +39,3 @@ foreach ($classes as $c) {
         </div>
     </div>
 <?php require __DIR__ . '/_footer.php'; ?>
-
