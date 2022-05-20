@@ -44,6 +44,8 @@ Complexity
     Average Weighted method count by class      {$this->avg->wmc}
     Average Relative system complexity          {$this->avg->relativeSystemComplexity}
     Average Difficulty                          {$this->avg->difficulty}
+    MaintainabilityIndex                        {$this->avg->mi}
+    MaintainabilityIndex Without Comments       {$this->avg->mIwoC}
 
 Bugs
     Average bugs by class                       {$this->avg->bugs}
