@@ -1,5 +1,5 @@
-.PHONY: rebuild-qa-tool
-rebuild-qa-tool:
+.PHONY: rebuild-qa-tools
+rebuild-qa-tools:
 	@docker rmi -f phpmetrics_tools >/dev/null 2>&1 ||:
 	@make build-qa-tools
 

@@ -38,7 +38,7 @@ final class ApplicationFactory
         }
         /** @var null|string $configError */
         $configError = $config->get('config-error');
-        if (null === $configError || '' === $configError) {
+        if (null !== $configError && '' !== $configError) {
             return new ErrorApplication($config, $this->output);
         }
 
