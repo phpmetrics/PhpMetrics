@@ -443,6 +443,29 @@ a[target="_blank"]::before {
     color: #333;
     font-size: 0.9em;
 }
+.details {
+    display:none;
+    position:absolute;
+    width:100%;
+    margin:30px 0 0;
+    left:0;
+    right:0;
+    z-index:999;
+    background:#fff;
+}
+.table {
+    display:table;
+    table-layout:fixed;
+    width:100%;
+}
+.methods-list {
+    display:table-row;
+    text-align:left;
+}
+.methods-list > span {
+    display:table-cell;
+    padding:.125em 0 .125em 0;
+}
 
 /* -------- charts ---------------- */
 .tooltip {
@@ -548,7 +571,15 @@ table tr td {
     padding: 0 .5em;
     cursor: pointer;
 }
-
+.js-sort-table {
+    position:relative;
+}
+.js-sort-table tr {
+    position:relative;
+}
+.js-sort-table td {
+    padding:.125em .325em .125em 0;
+}
 .js-sort-table thead th {
     cursor: pointer;
 }

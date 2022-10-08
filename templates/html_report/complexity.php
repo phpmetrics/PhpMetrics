@@ -69,10 +69,15 @@ require __DIR__ . '/_header.php'; ?>
                         <?php } ?>
                     </tr>
                     </thead>
-                    <?php
-                    foreach ($classes as $class) { ?>
+                    <?php foreach ($classes as $class) {
+                        $shortClassName = substr($class['name'], strrpos($class['name'], '\\') + 1);
+                    ?>
                         <tr>
-                            <td><span class="path"><?php echo $class['name']; ?></span></td>
+                            <td class="className">
+                                <a onclick="return toggle('<?php echo $shortClassName; ?>');">
+                                    <span class="path"><?php echo $class['name']; ?></span>
+                                </a>
+                            </td>
                             <?php foreach (['wmc', 'ccn', 'ccnMethodMax', 'relativeSystemComplexity', 'relativeDataComplexity', 'relativeStructuralComplexity', 'bugs', 'kanDefect'] as $attribute) {?>
                                 <td>
                                     <span class="badge" <?php echo gradientStyleFor($classes, $attribute, $class[$attribute]);?>>
@@ -83,23 +88,83 @@ require __DIR__ . '/_header.php'; ?>
                             <?php if ($config->has('junit')) { ?>
                                 <td><?php echo isset($class['numberOfUnitTests']) ? $class['numberOfUnitTests'] : ''; ?></td>
                             <?php } ?>
+                            <td>
+                                <div class="details" id="<?php echo $shortClassName; ?>">
+                                    <div class="table">
+                                        <?php foreach ($class['methods'] as $method) { ?>
+                                            <div class="methods-list">
+                                                <span><?php echo $class['name'] . '::' . $method->getName(); ?></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span><span class="badge" <?php echo gradientStyleFor($classes, 'ccnMethodMax', $method->get('ccn'));?>><?php echo $method->get('ccn'); ?></span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <?php if ($config->has('junit')) { ?>
+                                                    <span></span>
+                                                <?php } ?>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
-                        <?php
-                        foreach ($class['methods'] as $method) { ?>
-                            <tr>
-                                <td><?php echo $class['name'] . '::' . $method->getName(); ?></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td><span class="badge" <?php echo gradientStyleFor($classes, 'ccnMethodMax', $method->get('ccn'));?>><?php echo $method->get('ccn'); ?></span></td>
-                                <td colspan="<?php echo ($config->has('junit')) ? '6' : '5'; ?>">&nbsp;</td>
-                            </tr>
-                        <?php }
-                        ?>
                     <?php } ?>
                 </table>
             </div>
         </div>
     </div>
 
+    <script type="text/javascript">
+        window.onload = window.onresize = function() {
+            initDetails();
+        };
 
+        function initDetails() {
+            var methods = document.getElementsByClassName('methods-list');
+            var measures = extractMeasures(methods[0].parentNode.parentNode.parentNode.parentNode.querySelector('.className'));
+            for (var i = 0; i < methods.length; i++) {
+                methods[i].children[0].style.width = measures('className') + "px";
+                methods[i].children[1].style.width = measures('classWmc') + "px";
+                methods[i].children[2].style.width = measures('classCcn') + "px";
+                methods[i].children[3].style.width = measures('classMax') + "px";
+            }
+        }
+
+        function extractMeasures(element) {
+            if (element == null) throw Error('No element provided.');
+            var cache = {};
+
+            return function (key) {
+                var measurers = {
+                    'className': function () {return element.clientWidth},
+                    'classWmc': function () {return element.nextElementSibling.clientWidth},
+                    'classCcn': function () {return element.nextElementSibling.nextElementSibling.clientWidth},
+                    'classMax': function () {return element.nextElementSibling.nextElementSibling.nextElementSibling.clientWidth},
+                }
+
+                if (measurers[key] === undefined) {
+                    throw Error(`${key} is not supported`)
+                }
+
+                var result = cache[key];
+                result || (result = cache[key] = measurers[key]())
+                return result;
+            };
+        }
+
+        function toggle(id) {
+            var el = document.getElementById(id);
+            if (el.style.display === 'block') {
+                el.parentNode.parentNode.style.height = el.parentNode.parentNode.clientHeight - el.clientHeight + "px";
+                el.style.display = 'none';
+            } else {
+                el.parentNode.parentNode.style.verticalAlign = "baseline";
+                el.style.display = 'block';
+                el.parentNode.parentNode.style.height = el.parentNode.parentNode.clientHeight + el.clientHeight + "px";
+            }
+        }
+    </script>
 <?php require __DIR__ . '/_footer.php'; ?>
