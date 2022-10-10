@@ -578,7 +578,7 @@ table tr td {
     position:relative;
 }
 .js-sort-table td {
-    padding:.125em .325em .125em 0;
+    vertical-align:baseline;
 }
 .js-sort-table thead th {
     cursor: pointer;
