@@ -161,7 +161,6 @@ require __DIR__ . '/_header.php'; ?>
                 el.parentNode.parentNode.style.height = el.parentNode.parentNode.clientHeight - el.clientHeight + "px";
                 el.style.display = 'none';
             } else {
-                el.parentNode.parentNode.style.verticalAlign = "baseline";
                 el.style.display = 'block';
                 el.parentNode.parentNode.style.height = el.parentNode.parentNode.clientHeight + el.clientHeight + "px";
             }
