@@ -22,9 +22,14 @@ PhpMetrics provides metrics about PHP project and classes, with beautiful and re
 ## Quick start
 
 Follow the [quick start guide](https://phpmetrics.github.io/website/getting-started/) to get started.
-    composer require phpmetrics/phpmetrics --dev
-    php ./vendor/bin/phpmetrics --report-html=myreport <folder-to-analyze>
-    
+```bash
+# install the package as a dev dependency
+composer require phpmetrics/phpmetrics --dev
+
+# run PHPMetrics to analyze a folder and generate a report
+php ./vendor/bin/phpmetrics --report-html=myreport <folder-to-analyze>
+```
+
 Then open the generated `./myreport/index.html` file in your browser. 
 
 > You can use a [configuration file](https://phpmetrics.github.io/website/configuration/) to customize 
