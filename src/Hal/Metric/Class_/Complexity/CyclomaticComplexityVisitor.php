@@ -61,7 +61,7 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
 
             $ccn = 1;
             $wmc = 0;
-            $ccnByMethod = [0]; // default maxMethodCcn if no methods are available
+            $ccnFound = [0]; // default maxMethodCcn if no methods are available
 
             $roleDetector = new RoleOfMethodDetector();
 
@@ -118,13 +118,13 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
 
                     $wmc += $methodCcn;
                     $ccn += $methodCcn - 1;
-                    $ccnByMethod[] = $methodCcn;
+                    $ccnFound[] = $methodCcn;
                 }
             }
 
             $class->set('wmc', $wmc);
             $class->set('ccn', $ccn);
-            $class->set('ccnMethodMax', max($ccnByMethod));
+            $class->set('ccnMethodMax', max($ccnFound));
         }
     }
 }
