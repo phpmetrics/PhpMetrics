@@ -121,7 +121,7 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
                     $methodCcn = $cb($stmt) + 1; // each method by default is CCN 1 even if it's empty
 
                     $wmc += $methodCcn;
-                    $ccn += $methodCcn - 1;
+                    $ccn += $methodCcn - 1; // subtract the default method's ccn
                     $ccnFound[] = $methodCcn;
 
                     $ccnByMethod[$methodName] = $methodCcn;
