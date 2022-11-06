@@ -62,15 +62,19 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
             $ccn = 1;
             $wmc = 0;
             $ccnFound = [0]; // default maxMethodCcn if no methods are available
+            $ccnByMethod = [];
 
             $roleDetector = new RoleOfMethodDetector();
 
             foreach ($node->stmts as $stmt) {
                 if ($stmt instanceof Stmt\ClassMethod) {
+                    $methodName = $stmt->name->toString();
 
                     $role = $roleDetector->detects($stmt);
                     if (in_array($role, ['getter', 'setter'])) {
                         // We don't want to increase the CCN for getters and setters,
+
+                        $ccnByMethod[$methodName] = 1;
                         continue;
                     }
 
@@ -119,6 +123,15 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
                     $wmc += $methodCcn;
                     $ccn += $methodCcn - 1;
                     $ccnFound[] = $methodCcn;
+
+                    $ccnByMethod[$methodName] = $methodCcn;
+                }
+            }
+
+            foreach ($class->get('methods') as $method) {
+                $methodName = $method->getName();
+                if (array_key_exists($methodName, $ccnByMethod)) {
+                    $method->set('ccn', $ccnByMethod[$methodName]);
                 }
             }
 

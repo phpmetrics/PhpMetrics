@@ -10,6 +10,32 @@ use PhpParser\ParserFactory;
 
 class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
 {
+
+    public function testCcnOfMethodsIsWellCalculated()
+    {
+        $metrics = new Metrics();
+
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new NameResolver());
+        $traverser->addVisitor(new ClassEnumVisitor($metrics));
+        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
+
+        $code = file_get_contents(__DIR__ . '/../../examples/cyclomatic1.php');
+        $stmts = $parser->parse($code);
+        $traverser->traverse($stmts);
+
+        $this->assertSame(8, $metrics->get('A')->get('ccn'));
+        $this->assertCount(3, $metrics->get('A')->get('methods'));
+        $this->assertSame(3, $metrics->get('A')->get('methods')[0]->get('ccn'));
+        $this->assertSame(6, $metrics->get('A')->get('methods')[1]->get('ccn'));
+        $this->assertSame(1, $metrics->get('A')->get('methods')[2]->get('ccn'));
+
+        $this->assertSame(4, $metrics->get('B')->get('ccn'));
+        $this->assertCount(1, $metrics->get('B')->get('methods'));
+        $this->assertSame(4, $metrics->get('B')->get('methods')[0]->get('ccn'));
+    }
+
     /**
      * @dataProvider provideExamplesForCcn
      */
