@@ -70,10 +70,10 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedCcnMethodMax, $metrics->get($classname)->get('ccnMethodMax'));
     }
 
-    public static function provideExamplesForWmc()
+    public static function provideExamplesForCcn()
     {
         return [
-            'A' => [__DIR__ . '/../../examples/cyclomatic1.php', 'A', 10],
+            'A' => [__DIR__ . '/../../examples/cyclomatic1.php', 'A', 8],
             'B' => [__DIR__ . '/../../examples/cyclomatic1.php', 'B', 4],
             'Foo\\C' => [__DIR__ . '/../../examples/cyclomatic_anon.php', 'Foo\\C', 1],
             'SwitchCase' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'SwitchCase', 4],
@@ -84,10 +84,10 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public static function provideExamplesForCcn()
+    public static function provideExamplesForWmc()
     {
         return [
-            'A' => [__DIR__ . '/../../examples/cyclomatic1.php', 'A', 8],
+            'A' => [__DIR__ . '/../../examples/cyclomatic1.php', 'A', 10],
             'B' => [__DIR__ . '/../../examples/cyclomatic1.php', 'B', 4],
             'Foo\\C' => [__DIR__ . '/../../examples/cyclomatic_anon.php', 'Foo\\C', 1],
             'SwitchCase' => [__DIR__ . '/../../examples/cyclomatic_full.php', 'SwitchCase', 4],
