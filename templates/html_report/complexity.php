@@ -84,6 +84,17 @@ require __DIR__ . '/_header.php'; ?>
                                 <td><?php echo isset($class['numberOfUnitTests']) ? $class['numberOfUnitTests'] : ''; ?></td>
                             <?php } ?>
                         </tr>
+                        <?php
+                        foreach ($class['methods'] as $method) { ?>
+                            <tr>
+                                <td><?php echo $class['name'] . '::' . $method->getName(); ?></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td><span class="badge" <?php echo gradientStyleFor($classes, 'ccnMethodMax', $method->get('ccn'));?>><?php echo $method->get('ccn'); ?></span></td>
+                                <td colspan="<?php echo ($config->has('junit')) ? '6' : '5'; ?>">&nbsp;</td>
+                            </tr>
+                        <?php }
+                        ?>
                     <?php } ?>
                 </table>
             </div>
