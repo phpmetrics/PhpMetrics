@@ -61,7 +61,7 @@ Use the `--config=<file>.json` option. For example:
 
 If want, you can [install](https://github.com/phpmetrics/PhpMetrics/blob/master/doc/installation.md) PhpMetrics globally with your favorite package manager (APT, Brew...). You can also visit our [documentation](http://www.phpmetrics.org/documentation/index.html).
 
-You can integrate PhpMetrics directly [in the debug bar of your Symgony project](https://github.com/phpmetrics/PhpMetricsCollectorBundle), 
+You can integrate PhpMetrics directly [in the debug bar of your Symfony project](https://github.com/phpmetrics/PhpMetricsCollectorBundle), 
 or [in PhpStorm](https://github.com/phpmetrics/PhpMetrics-jetbrains).
 
 ![PhpMetrics Symfony](assets/img/phpmetrics-symfony.png)
