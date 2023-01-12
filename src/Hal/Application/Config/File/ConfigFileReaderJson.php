@@ -122,16 +122,4 @@ class ConfigFileReaderJson implements ConfigFileReaderInterface
             }
         }
     }
-
-    /**
-     * @return string
-     */
-    private function resolvePath($path)
-    {
-        if (DIRECTORY_SEPARATOR !== $path[0]) {
-            $path = dirname($this->filename) . DIRECTORY_SEPARATOR . $path;
-        }
-
-        return $path;
-    }
 }
