@@ -2,6 +2,7 @@ version: "1.0"
 profile:
   name: qodana.starter
 include:
+  # List from profile inspections
   - name: AccessModifierPresentedInspection
   - name: AliasFunctionsUsageInspection
   - name: AlterInForeachInspection
@@ -19,6 +20,7 @@ include:
   - name: AutoloadingIssuesInspection
   - name: BacktickOperatorUsageInspection
   - name: BadExceptionsProcessingInspection
+  - name: BehatDocStepCanBeConvertedToAttributeInspection
   - name: BladeControlDirectives
   - name: CallableMethodValidityInspection
   - name: CallableParameterUseCaseInTypeContextInspection
@@ -55,6 +57,7 @@ include:
   - name: CssMissingSemicolon
   - name: CssNegativeValue
   - name: CssNoGenericFontName
+  - name: CssNonIntegerLengthInPixels
   - name: CssOverwrittenProperties
   - name: CssRedundantUnit
   - name: CssReplaceWithShorthandSafely
@@ -208,9 +211,11 @@ include:
   - name: PgSelectFromProcedureInspection
   - name: PhpArgumentWithoutNamedIdentifierInspection
   - name: PhpArrayAccessCanBeReplacedWithForeachValueInspection
+  - name: PhpArrayAppendUsingCountInspection
   - name: PhpArrayIndexResetIsUnnecessaryInspection
   - name: PhpArrayPushWithOneElementInspection
   - name: PhpArraySearchInBooleanContextInspection
+  - name: PhpArrayTraversableCanBeReplacedWithIterableInspection
   - name: PhpArrayWriteIsNotUsedInspection
   - name: PhpAssignmentInConditionInspection
   - name: PhpAssignmentReplaceableWithOperatorAssignmentInspection
@@ -220,9 +225,14 @@ include:
   - name: PhpBooleanCanBeSimplifiedInspection
   - name: PhpCastIsEvaluableInspection
   - name: PhpCastIsUnnecessaryInspection
+  - name: PhpCatchWithInstanceOfCanBeReplacedWithSpecificCatchesInspection
+  # TODO: Re-enable this rule once PHPCS will understand `class readonly`.
+  #- name: PhpClassCanBeReadonlyInspection
   - name: PhpClassConstantAccessedViaChildClassInspection
+  - name: PhpClassConstantCanBeFinalInspection
   - name: PhpClosureCanBeConvertedToFirstClassCallableInspection
   - name: PhpClosureCanBeConvertedToShortArrowFunctionInspection
+  - name: PhpCombineMultipleIssetCallsIntoOneInspection
   - name: PhpCommentCanBeReplacedWithNamedArgumentInspection
   - name: PhpComposerDuplicatedRequirementInspection
   - name: PhpComposerExtensionStubsInspection
@@ -237,6 +247,8 @@ include:
   - name: PhpDangerousArrayInitializationInspection
   - name: PhpDefineCanBeReplacedWithConstInspection
   - name: PhpDefineConstantNameStartsWithLeadingSlashInspection
+  - name: PhpDeprecatedDollarBraceStringInterpolationInspection
+  - name: PhpDeprecatedPartiallySupportedCallableInspection
   - name: PhpDeprecationInspection
   - name: PhpDisabledExtensionStubsInspection
   - name: PhpDocDuplicateTypeInspection
@@ -246,6 +258,8 @@ include:
   - name: PhpDocSignatureInspection
   - name: PhpDocSignatureIsNotCompleteInspection
   - name: PhpDynamicAsStaticMethodCallInspection
+  - name: PhpDynamicFieldDeclarationInspection
+  - name: PhpEchoOpenTagInspection
   - name: PhpExceptionImmediatelyRethrownInspection
   - name: PhpExpectedValuesShouldBeUsedInspection
   - name: PhpExpressionAlwaysNullInspection
@@ -259,6 +273,7 @@ include:
   - name: PhpGetClassCanBeReplacedWithClassNameLiteralInspection
   - name: PhpIdempotentOperationInspection
   - name: PhpIfCanBeMergedWithSequentialConditionInspection
+  - name: PhpIfCanBeReplacedWithMatchExpressionInspection
   - name: PhpIfWithCommonPartsInspection
   - name: PhpIgnoredClassAliasDeclaration
   - name: PhpIllegalPsrClassPathInspection
@@ -275,11 +290,13 @@ include:
   - name: PhpLoopCanBeConvertedToArrayFilterInspection
   - name: PhpLoopCanBeConvertedToArrayMapInspection
   - name: PhpLoopCanBeReplacedWithImplodeInspection
+  - name: PhpLoopCanBeReplacedWithStdFunctionCallsInspection
   - name: PhpLoopCanBeReplacedWithStrRepeatInspection
   - name: PhpLoopNeverIteratesInspection
   - name: PhpMatchCanBeReplacedWithSwitchStatementInspection
   - name: PhpMatchExpressionCanBeReplacedWithTernaryInspection
   - name: PhpMatchExpressionWithOnlyDefaultArmInspection
+  - name: PhpMethodMayBeInaccessibleInLateStaticBindingInspection
   - name: PhpMethodMayBeStaticInspection
   - name: PhpMethodOrClassCallIsNotCaseSensitiveInspection
   - name: PhpMissingBreakStatementInspection
@@ -295,6 +312,7 @@ include:
   - name: PhpMixedReturnTypeCanBeReducedInspection
   - name: PhpModifierOrderInspection
   - name: PhpMultipleClassesDeclarationsInOneFile
+  - name: PhpNModifierCanBeReplacedWithNonCapturingGroupInspection
   - name: PhpNamedArgumentsWithChangedOrderInspection
   - name: PhpNamedArgumentUsageInspection
   - name: PhpNestedDirNameCallsCanBeReplacedWithLevelParameterInspection
@@ -307,10 +325,17 @@ include:
   - name: PhpOverridingMethodVisibilityInspection
   - name: PhpParameterByRefIsNotUsedAsReferenceInspection
   - name: PhpParameterNameChangedDuringInheritanceInspection
+  - name: PhpPointlessBooleanExpressionInConditionInspection
   - name: PhpPossiblePolymorphicInvocationInspection
+  - name: PhpPowCallCanBeReplacedWithOperatorInspection
+  - name: PhpPregMatchRedundantClosureInspection
+  - name: PhpPregMatchReplaceWithComparisonInspection
   - name: PhpPregMatchWithoutEffectiveRegexpInspection
+  - name: PhpPregReplaceWithEmptyReplacementInspection
+  - name: PhpPregSplitWithoutRegExpInspection
   - name: PhpPrivateFieldCanBeLocalVariableInspection
   - name: PhpPromotedFieldUsageInspection
+  - name: PhpPropertyCanBeReadonlyInspection
   - name: PhpRangesInClassCanBeMergedInspection
   - name: PhpRedundantArrayCallInForeachIteratedValueInspection
   - name: PhpRedundantAssignmentToPromotedFieldInspection
@@ -322,8 +347,10 @@ include:
   - name: PhpRedundantIntersectionTypeInspection
   - name: PhpRedundantMethodOverrideInspection
   - name: PhpRedundantOptionalArgumentInspection
+  - name: PhpRedundantReadonlyModifierInspection
   - name: PhpRedundantTypeInUnionTypeInspection
   - name: PhpRedundantVariableDocTypeInspection
+  - name: PhpRegExpRedundantModifierInspection
   - name: PhpReturnDocTypeMismatchInspection
   - name: PhpReturnValueOfMethodIsNeverUsedInspection
   - name: PhpSameParameterValueInspection
@@ -341,6 +368,7 @@ include:
   - name: PhpSwitchWithCommonPartsInspection
   - name: PhpTernaryExpressionCanBeReducedToShortVersionInspection
   - name: PhpTernaryExpressionCanBeReplacedWithConditionInspection
+  - name: PhpTooLongMemberReferenceChainInspection
   - name: PhpTraditionalSyntaxArrayLiteralInspection
   - name: PhpTraitsUseListInspection
   - name: PhpTraitUsageOutsideUseInspection
@@ -385,7 +413,9 @@ include:
   - name: PhpUnusedPrivateMethodInspection
   - name: PhpUsageOfSilenceOperatorInspection
   - name: PhpUselessTrailingCommaInspection
+  - name: PhpVarTagWithoutVariableNameInspection
   - name: PhpVarUsageInspection
+  - name: PhpVariableIsUsedOnlyInClosureInspection
   - name: PhpWriteAccessToReferencedArrayValueWithoutUnsetInspection
   - name: PhpWrongCatchClausesOrderInspection
   - name: PotentialMalwareInspection
@@ -398,9 +428,12 @@ include:
   - name: PropertyInitializationFlawsInspection
   - name: RandomApiMigrationInspection
   - name: RealpathInStreamContextInspection
+  - name: ReassignedToPlainText
   - name: RedundantElseClauseInspection
   - name: RedundantSuppression
   - name: ReferencingObjectsInspection
+  - name: RegExpRedundantClassElement
+  - name: RegExpSimplifiable
   - name: RepositoryClassInspection
   - name: RequiredAttributes
   - name: ReturnTypeCanBeDeclaredInspection

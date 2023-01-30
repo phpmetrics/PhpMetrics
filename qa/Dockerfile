@@ -17,7 +17,8 @@ RUN apk update && \
     # - jq (to read results from GitHub API and select the good release to fetch)
     # - icu-dev (to install intl for PHP Infection)
     # - packages from $PHPIZE_DEPS (for xdebug installation)
-    apk add --quiet --no-cache --update --virtual .dev-tools icu-dev g++ make autoconf curl jq $PHPIZE_DEPS && \
+    # - linux-headers (required for xDebug) [Since xDebug 3.2]
+    apk add --quiet --no-cache --update --virtual .dev-tools icu-dev g++ make autoconf curl jq $PHPIZE_DEPS linux-headers && \
     pecl -q install xdebug yaml && \
     # Add pcntl to allow multiple processes to be executed at the same time.
     docker-php-ext-configure pcntl --enable-pcntl > /dev/null && \
@@ -38,7 +39,7 @@ RUN apk update && \
     RELEASES=$(curl -sS https://api.github.com/repos/infection/infection/releases | jq --compact-output --raw-output 'map(select( .tag_name | test("^0.26.[0-9]+$") ))') && \
     NB_RELEASES=$(echo "${RELEASES}" | jq --compact-output --raw-output 'length') && \
     if [ "${NB_RELEASES}" == "0" ]; then echo "ERROR: Not a single patch version found for minor version 0.26 of PHP Infection."; exit 1; fi && \
-    LATEST_FOR_MINOR=$(echo "${RELEASES}" | jq --compact-output --raw-output '. | sort_by( .tag_name ) | .[-1] | {tag: .tag_name, src: .assets[]|select(.name == "infection.phar").browser_download_url}') && \
+    LATEST_FOR_MINOR=$(echo "${RELEASES}" | jq --compact-output --raw-output '. | max_by( .tag_name | split(".") | map(tonumber) ) | {tag: .tag_name, src: .assets[]|select(.name == "infection.phar").browser_download_url}') && \
     INFECTION_TAG=$(echo "${LATEST_FOR_MINOR}" | jq --compact-output --raw-output '.tag') && \
     URL_SRC=$(echo "${LATEST_FOR_MINOR}" | jq --compact-output --raw-output '.src') && \
     echo "Downloading version ${INFECTION_TAG}…" && \

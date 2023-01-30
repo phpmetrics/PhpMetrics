@@ -8,6 +8,7 @@ use Hal\Metric\Metrics;
 use Hal\Metric\PackageMetric;
 use function abs;
 use function array_map;
+use function round;
 
 /**
  * This class calculates the distance metric for each package.
@@ -27,7 +28,8 @@ final class PackageDistance implements CalculableInterface
             if (null === $package->getAbstraction() || null === $package->getInstability()) {
                 return;
             }
-            $package->setNormalizedDistance(abs($package->getAbstraction() + $package->getInstability() - 1));
+            $normalizedDistance = abs($package->getAbstraction() + $package->getInstability() - 1);
+            $package->setNormalizedDistance(round($normalizedDistance, 4));
         }, $this->metrics->getPackageMetrics());
     }
 }

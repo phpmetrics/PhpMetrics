@@ -2,3 +2,5 @@
 composer.lock
 vendor
 qa/reports
+tests/resources/report/*
+!tests/resources/report/.gitkeep

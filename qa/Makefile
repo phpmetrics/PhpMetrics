@@ -7,7 +7,7 @@ rebuild-qa-tools:
 build-qa-tools:
 	@if [ $$(docker image ls phpmetrics_tools | grep -ce "phpmetrics_tools") -ne 1 ]; then\
         echo "Installing PhpMetrics tools…";\
-        docker build --pull -t phpmetrics_tools -f ./qa/Dockerfile . >/dev/null;\
+        docker build --pull -t phpmetrics_tools -f ./qa/Dockerfile . ;\
         echo "Done";\
     fi
 
