@@ -106,9 +106,7 @@ final class Reporter implements ReporterInterface
         // copy sources
         array_map(
             function (string $folder) use ($logDir): void {
-                $destination = $logDir . $folder;
-                $this->createFolderIfNotExists($destination);
-                shell_exec('cp -r ' . $this->templateDir . $folder . ' ' . $destination);
+                shell_exec('cp -r ' . $this->templateDir . $folder . ' ' . $logDir);
             },
             ['favicon.ico', 'js', 'css', 'images', 'fonts']
         );
@@ -185,14 +183,13 @@ final class Reporter implements ReporterInterface
             throw new RuntimeException(sprintf('Unable to write in the directory "%s"', dirname($destination)));
         }
 
-        $this->sum = $sum = $consolidated->getSum();
-        $this->avg = $avg = $consolidated->getAvg();
-        $this->classes = $classes = $consolidated->getClasses();
-        $this->files = $files = $consolidated->getFiles();
-        $this->project = $project = $consolidated->getProject();
-        $this->packages = $packages = $consolidated->getPackages();
+        $sum = $consolidated->getSum();
+        $avg = $consolidated->getAvg();
+        $classes = $consolidated->getClasses();
+        $files = $consolidated->getFiles();
+        $project = $consolidated->getProject();
+        $packages = $consolidated->getPackages();
         $config = $this->config;
-        $this->history = $history;
 
         ob_start();
         require $source;
