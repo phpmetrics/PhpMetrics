@@ -8,6 +8,8 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use function array_pop;
 use function array_reverse;
+use function get_class;
+use function gettype;
 use function in_array;
 
 /**
@@ -105,12 +107,14 @@ final class RoleOfMethodDetector implements DetectorInterface
         // Build a fingerprint of the given method
         $fingerprintOfMethod = [];
         $this->nodeIterator->iterateOver($node, static function (Node $node) use (&$fingerprintOfMethod): void {
-            // Ignore identifier, cast, type hint, and nullable type
+            // Ignore identifier, cast, type hint, nullable type, and PHP Attributes.
             if (
                 $node instanceof Node\Identifier
                 || $node instanceof Expr\Cast
                 || $node instanceof Node\Name
                 || $node instanceof Node\ComplexType
+                || $node instanceof Node\AttributeGroup
+                || $node instanceof Node\Attribute
             ) {
                 return;
             }
