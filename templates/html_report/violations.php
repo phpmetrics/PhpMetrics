@@ -13,36 +13,36 @@ $map = [
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">Violations</div>
-                <div class="number"><?php echo $sum->violations->total; ?></div>
+                <div class="number"><?php echo $this->sharedMetrics->sum->violations->total; ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">Information</div>
-                <div class="number"><?php echo $sum->violations->information; ?></div>
+                <div class="number"><?php echo $this->sharedMetrics->sum->violations->information; ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">Warnings</div>
-                <div class="number"><?php echo $sum->violations->warning; ?></div>
+                <div class="number"><?php echo $this->sharedMetrics->sum->violations->warning; ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">Errors</div>
-                <div class="number"><?php echo $sum->violations->error; ?></div>
+                <div class="number"><?php echo $this->sharedMetrics->sum->violations->error; ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="label">Criticals</div>
-                <div class="number"><?php echo $sum->violations->critical; ?></div>
+                <div class="number"><?php echo $this->sharedMetrics->sum->violations->critical; ?></div>
             </div>
         </div>
     </div>
 
-<?php if ($sum->violations->total > 0) { ?>
+<?php if ($this->sharedMetrics->sum->violations->total > 0) { ?>
     <div class="row">
         <div class="column">
             <div class="bloc">
@@ -55,7 +55,7 @@ $map = [
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($classes as $class) {
+                    <?php foreach ($this->sharedMetrics->classes as $class) {
                         if (count($class['violations']) > 0) {
                             $currentId = 'bloc-' . uniqid('', true);
                             ?>
@@ -108,7 +108,7 @@ $map = [
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($packages as $package) {
+                    <?php foreach ($this->sharedMetrics->packages as $package) {
                         if (count($package['violations']) > 0) {
                             $currentId = 'bloc-' . uniqid();
                             ?>

@@ -28,12 +28,12 @@ $viewHelper = $this->viewHelper;
                     <th class="js-sort-number">ClassRank</th>
                 </thead>
                 <tbody>
-                <?php foreach ($classes as $class) { ?>
+                <?php foreach ($this->sharedMetrics->classes as $class) { ?>
                     <tr>
                         <td><span class="path"><?php echo $class['name']; ?></span></td>
                         <?php foreach (['afferentCoupling', 'efferentCoupling', 'instability', 'pageRank'] as $attribute) {?>
                             <td>
-                                <span class="badge" <?php echo $viewHelper->gradientStyleFor($classes, $attribute, $class[$attribute]);?>>
+                                <span class="badge" <?php echo $viewHelper->gradientStyleFor($this->sharedMetrics->classes, $attribute, $class[$attribute]);?>>
                                 <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
                                 </span>
                             </td>

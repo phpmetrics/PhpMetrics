@@ -3,7 +3,7 @@
 <?php
 $relations = [];
 $classesCp = [];
-foreach ($classes as $class) {
+foreach ($this->sharedMetrics->classes as $class) {
 
     $class['name'] = '\\' . $class['name'];
     $classesCp[$class['name']] = $class;
@@ -12,7 +12,7 @@ foreach ($classes as $class) {
 
     foreach ($class['externals'] as &$ext) {
         $ext = '\\' . $ext;
-        if (!isset($classes[$ext])) {
+        if (!isset($this->sharedMetrics->classes[$ext])) {
             $classesCp[$ext] = [
                 'name' => $ext,
                 'externals' => [],

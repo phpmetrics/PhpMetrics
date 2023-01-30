@@ -9,10 +9,10 @@ $viewHelper = $this->viewHelper;
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="label"><a href="violations.html">Violations</a> (<?php echo $sum->violations->critical; ?>
-                    criticals, <?php echo $sum->violations->error; ?> errors)
+                <div class="label"><a href="violations.html">Violations</a> (<?php echo $this->sharedMetrics->sum->violations->critical; ?>
+                    criticals, <?php echo $this->sharedMetrics->sum->violations->error; ?> errors)
                 </div>
-                <div class="number"><?php echo number_format($sum->violations->total, 0); ?></div>
+                <div class="number"><?php echo number_format($this->sharedMetrics->sum->violations->total, 0); ?></div>
                 <div class="bloc-action">
                     <a href="violations.html">View details &gt;</a>
                 </div>
@@ -22,7 +22,7 @@ $viewHelper = $this->viewHelper;
             <div class="bloc bloc-number">
                 <?php echo $this->getTrend('sum', 'loc'); ?>
                 <div class="label"><a href="loc.html">Lines of code</a></div>
-                <div class="number"><?php echo number_format($sum->loc, 0); ?></div>
+                <div class="number"><?php echo number_format($this->sharedMetrics->sum->loc, 0); ?></div>
                 <div class="bloc-action">
                     <a href="loc.html">View details &gt;</a>
                 </div>
@@ -32,7 +32,7 @@ $viewHelper = $this->viewHelper;
             <div class="bloc bloc-number">
                 <?php echo $this->getTrend('sum', 'nbClasses'); ?>
                 <div class="label"><a href="oop.html">Classes</a></div>
-                <div class="number"><?php echo number_format($sum->nbClasses, 0); ?></div>
+                <div class="number"><?php echo number_format($this->sharedMetrics->sum->nbClasses, 0); ?></div>
                 <div class="bloc-action">
                     <a href="loc.html">View details &gt;</a>
                 </div>
@@ -46,7 +46,7 @@ $viewHelper = $this->viewHelper;
             <div class="bloc bloc-number">
                 <?php echo $this->getTrend('avg', 'ccn', true); ?>
                 <div class="label"><a href="complexity.html">Average cyclomatic complexity by class</a></div>
-                <div class="number"><?php echo number_format($avg->ccn, 2); ?></div>
+                <div class="number"><?php echo number_format($this->sharedMetrics->avg->ccn, 2); ?></div>
                 <div class="bloc-action">
                     <a href="complexity.html">View details &gt;</a>
                 </div>
@@ -57,7 +57,7 @@ $viewHelper = $this->viewHelper;
                 <?php echo $this->getTrend('avg', 'bugs', true); ?>
                 <div class="label"><a href="complexity.html">Average bugs by class</a></div>
                 <div class="number">
-                    <?php echo number_format($avg->bugs, 2); ?>
+                    <?php echo number_format($this->sharedMetrics->avg->bugs, 2); ?>
                 </div>
                 <div class="bloc-action">
                     <a href="complexity.html">View details &gt;</a>
@@ -120,7 +120,7 @@ $viewHelper = $this->viewHelper;
                             </thead>
                             <tbody id="contentClassRank" class="clusterize-content">
                             <?php
-                            $classesS = $classes;
+                            $classesS = $this->sharedMetrics->classes;
                             usort($classesS, static function ($a, $b) {
                                 return strcmp($b['pageRank'], $a['pageRank']);
                             });
@@ -128,7 +128,7 @@ $viewHelper = $this->viewHelper;
                             foreach ($classesS as $class) { ?>
                                 <tr>
                                     <td>
-                                        <span class="badge" <?php echo $viewHelper->gradientStyleFor($classes, 'pageRank', $class['pageRank']);?>><?php echo $class['pageRank']; ?></span>
+                                        <span class="badge" <?php echo $viewHelper->gradientStyleFor($this->sharedMetrics->classes, 'pageRank', $class['pageRank']);?>><?php echo $class['pageRank']; ?></span>
                                     </td>
                                     <td>
                                         <span class="path"><?php echo $class['name']; ?></span>
@@ -159,8 +159,8 @@ $viewHelper = $this->viewHelper;
                         <a href="composer.html">Composer</a>
                     </div>
                     <?php
-                    $packages = isset($project['composer']['packages']) ? $project['composer']['packages'] : [];
-                    $packagesInstalled = isset($project['composer']['packages-installed']) ? $project['composer']['packages-installed'] : [];
+                    $packages = isset($this->sharedMetrics->project['composer']['packages']) ? $this->sharedMetrics->project['composer']['packages'] : [];
+                    $packagesInstalled = isset($this->sharedMetrics->project['composer']['packages-installed']) ? $this->sharedMetrics->project['composer']['packages-installed'] : [];
                     if ([] === $packages) { ?>
                         <div class="help number-alternate"><div class="help-inner">No composer.json file found</div></div>
                     <?php } else {?>
@@ -194,7 +194,7 @@ $viewHelper = $this->viewHelper;
                 // prepare json for packages pie
                 <?php
                 $json = [];
-                $packages = isset($project['composer']['packages']) ? $project['composer']['packages'] : [];
+                $packages = isset($this->sharedMetrics->project['composer']['packages']) ? $this->sharedMetrics->project['composer']['packages'] : [];
                 foreach ($packages as $package) {
                     foreach ($package->license as $license) {
                         if (!isset($json[$license])) {

@@ -7,7 +7,7 @@ require __DIR__ . '/_header.php';
 $viewHelper = $this->viewHelper;
 
 // 1. build an associative array
-$logicalLinesOfCodeByClass = array_column($classes, 'lloc');
+$logicalLinesOfCodeByClass = array_column($this->sharedMetrics->classes, 'lloc');
 $nbStats = count($logicalLinesOfCodeByClass);
 
 // 2. percentile map
@@ -54,12 +54,12 @@ if ($nbStats > 1) {
                 </tr>
                 </thead>
                 <?php
-                foreach ($classes as $class) { ?>
+                foreach ($this->sharedMetrics->classes as $class) { ?>
                     <tr>
                         <td><span class="path"><?php echo $class['name']; ?></span></td>
                         <?php foreach (['lloc', 'cloc', 'volume', 'intelligentContent', 'commentWeight'] as $attribute) {?>
                             <td>
-                                <span class="badge" <?php echo $viewHelper->gradientStyleFor($classes, $attribute, $class[$attribute]);?>>
+                                <span class="badge" <?php echo $viewHelper->gradientStyleFor($this->sharedMetrics->classes, $attribute, $class[$attribute]);?>>
                                 <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
                                 </span>
                             </td>

@@ -5,7 +5,7 @@ $relations = [];
 $getPackageName = function ($name) {
     return $name === '\\' ? 'global' : substr($name, 0, -1);
 };
-foreach ($packages as $package) {
+foreach ($this->sharedMetrics->packages as $package) {
     $packageName = $getPackageName($package['name']);
     $outgoingDependencies = array_map(
         $getPackageName,

@@ -23,7 +23,7 @@ require __DIR__ . '/_header.php'; ?>
                     </tr>
                     </thead>
                     <?php
-                    foreach ($packages as $package) { ?>
+                    foreach ($this->sharedMetrics->packages as $package) { ?>
                         <tr>
                             <td><span class="path"><?= $package['name'] === '\\' ? 'global' : substr($package['name'], 0, -1); ?></span></td>
                             <td><?= $package['classes'] ? count($package['classes']) : 0; ?></td>
@@ -43,7 +43,7 @@ require __DIR__ . '/_header.php'; ?>
 <?php require __DIR__ . '/_footer.php'; ?>
 <?php
 $spots = [];
-foreach ($packages as $each) {
+foreach ($this->sharedMetrics->packages as $each) {
     if (isset($each['abstraction'], $each['instability'])) {
         $spots[] = [
             'name' => $each['name'] === '\\' ? 'global' : substr($each['name'], 0, -1),

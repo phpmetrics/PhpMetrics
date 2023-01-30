@@ -5,15 +5,15 @@ require __DIR__ . '/_header.php'; ?>
     <div class="row">
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $sum->loc; ?></div>
+                <div class="number"><?php echo $this->sharedMetrics->sum->loc; ?></div>
                 <div class="label">lines of code <?php echo $this->getTrend('sum', 'loc'); ?></div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="number">
-                    <?php echo $sum->nbClasses; ?>
-                    <small> (<?php echo(count($classes) ? round($sum->nbClasses / count($classes) * 100) : '0'); ?>
+                    <?php echo $this->sharedMetrics->sum->nbClasses; ?>
+                    <small> (<?php echo(count($this->sharedMetrics->classes) ? round($this->sharedMetrics->sum->nbClasses / count($this->sharedMetrics->classes) * 100) : '0'); ?>
                         %)
                     </small>
                 </div>
@@ -22,8 +22,8 @@ require __DIR__ . '/_header.php'; ?>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $sum->nbInterfaces; ?>
-                    <small> (<?php echo(count($classes) ? round($sum->nbInterfaces / count($classes) * 100) : '0'); ?>
+                <div class="number"><?php echo $this->sharedMetrics->sum->nbInterfaces; ?>
+                    <small> (<?php echo(count($this->sharedMetrics->classes) ? round($this->sharedMetrics->sum->nbInterfaces / count($this->sharedMetrics->classes) * 100) : '0'); ?>
                         %)
                     </small>
                 </div>
@@ -39,13 +39,13 @@ require __DIR__ . '/_header.php'; ?>
         <div class="column">
             <div class="bloc bloc-number">
                 <div
-                    class="number"><?php echo $sum->nbClasses ? round($sum->nbMethods / $sum->nbClasses) : '-'; ?></div>
+                    class="number"><?php echo $this->sharedMetrics->sum->nbClasses ? round($this->sharedMetrics->sum->nbMethods / $this->sharedMetrics->sum->nbClasses) : '-'; ?></div>
                 <div class="label">methods by class</div>
             </div>
         </div>
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $sum->nbClasses ? round($sum->lloc / $sum->nbClasses) : '-'; ?></div>
+                <div class="number"><?php echo $this->sharedMetrics->sum->nbClasses ? round($this->sharedMetrics->sum->lloc / $this->sharedMetrics->sum->nbClasses) : '-'; ?></div>
                 <div class="label">logical lines of code by class</div>
             </div>
         </div>
@@ -53,7 +53,7 @@ require __DIR__ . '/_header.php'; ?>
 
         <div class="column">
             <div class="bloc bloc-number">
-                <div class="number"><?php echo $sum->nbMethods ? round($sum->lloc / $sum->nbMethods) : '-'; ?></div>
+                <div class="number"><?php echo $this->sharedMetrics->sum->nbMethods ? round($this->sharedMetrics->sum->lloc / $this->sharedMetrics->sum->nbMethods) : '-'; ?></div>
                 <div class="label">logical lines of code by method</div>
             </div>
         </div>
@@ -61,7 +61,7 @@ require __DIR__ . '/_header.php'; ?>
         <div class="column">
             <div class="bloc bloc-number">
                 <div
-                    class="number"><?php echo $avg->lcom ?></div>
+                    class="number"><?php echo $this->sharedMetrics->avg->lcom ?></div>
                 <div class="label">average LCOM <?php echo $this->getTrend('avg', 'lcom', true); ?></div>
             </div>
         </div>
@@ -80,7 +80,7 @@ require __DIR__ . '/_header.php'; ?>
                     </thead>
                     <tbody>
                     <?php
-                    $classesS = $classes;
+                    $classesS = $this->sharedMetrics->classes;
                     usort($classesS, static function ($a, $b) {
                         return strcmp($b['pageRank'], $a['pageRank']);
                     });
@@ -109,7 +109,7 @@ require __DIR__ . '/_header.php'; ?>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="number">
-                    <?php echo $avg->ccn; ?>
+                    <?php echo $this->sharedMetrics->avg->ccn; ?>
                 </div>
                 <div class="label">Average cyclomatic complexity by class <?php echo $this->getTrend('avg', 'ccn',
                         true); ?></div>

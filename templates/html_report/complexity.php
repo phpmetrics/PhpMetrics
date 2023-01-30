@@ -12,7 +12,7 @@ $viewHelper = $this->viewHelper;
             <div class="bloc bloc-number">
                 <div class="label">Average weighted method count by class <small>(CC)</small></div>
                 <div class="number">
-                    <?php echo $avg->wmc; ?>
+                    <?php echo $this->sharedMetrics->avg->wmc; ?>
                 </div>
                 <?php echo $this->getTrend('avg', 'wmc', true); ?>
             </div>
@@ -21,7 +21,7 @@ $viewHelper = $this->viewHelper;
             <div class="bloc bloc-number">
                 <div class="label">Average cyclomatic complexity by class</div>
                 <div class="number">
-                    <?php echo $avg->ccn; ?>
+                    <?php echo $this->sharedMetrics->avg->ccn; ?>
                 </div>
                 <?php echo $this->getTrend('avg', 'ccn', true); ?>
             </div>
@@ -30,7 +30,7 @@ $viewHelper = $this->viewHelper;
             <div class="bloc bloc-number">
                 <div class="label">Average relative System complexity</div>
                 <div class="number">
-                    <?php echo $avg->relativeSystemComplexity; ?>
+                    <?php echo $this->sharedMetrics->avg->relativeSystemComplexity; ?>
                 </div>
                 <?php echo $this->getTrend('avg', 'relativeSystemComplexity', true); ?>
             </div>
@@ -39,7 +39,7 @@ $viewHelper = $this->viewHelper;
             <div class="bloc bloc-number">
                 <div class="label">Average bugs by class<small>(Halstead)</small></div>
                 <div class="number">
-                    <?php echo $avg->bugs; ?>
+                    <?php echo $this->sharedMetrics->avg->bugs; ?>
                 </div>
                 <?php echo $this->getTrend('avg', 'bugs', true); ?>
             </div>
@@ -48,7 +48,7 @@ $viewHelper = $this->viewHelper;
             <div class="bloc bloc-number">
                 <div class="label">average defects by class <small>(Kan)</small></div>
                 <div class="number">
-                    <?php echo $avg->kanDefect; ?>
+                    <?php echo $this->sharedMetrics->avg->kanDefect; ?>
                 </div>
                 <?php echo $this->getTrend('avg', 'kanDefect', true); ?>
             </div>
@@ -73,12 +73,12 @@ $viewHelper = $this->viewHelper;
                     </tr>
                     </thead>
                     <?php
-                    foreach ($classes as $class) { ?>
+                    foreach ($this->sharedMetrics->classes as $class) { ?>
                         <tr>
                             <td><span class="path"><?php echo $class['name']; ?></span></td>
                             <?php foreach (['wmc', 'ccn', 'ccnMethodMax', 'relativeSystemComplexity', 'relativeDataComplexity', 'relativeStructuralComplexity', 'bugs', 'kanDefect'] as $attribute) {?>
                                 <td>
-                                    <span class="badge" <?php echo $viewHelper->gradientStyleFor($classes, $attribute, $class[$attribute]);?>>
+                                    <span class="badge" <?php echo $viewHelper->gradientStyleFor($this->sharedMetrics->classes, $attribute, $class[$attribute]);?>>
                                     <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>
                                     </span>
                                 </td>

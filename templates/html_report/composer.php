@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/_header.php';
 
-$packages = isset($project['composer']['packages']) ? $project['composer']['packages'] : [];
+$packages = isset($this->sharedMetrics->project['composer']['packages']) ? $this->sharedMetrics->project['composer']['packages'] : [];
 usort($packages, function ($a, $b) {
     return strcmp($a->name, $b->name);
 });

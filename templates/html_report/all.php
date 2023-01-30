@@ -5,7 +5,7 @@ require __DIR__ . '/_header.php'; ?>
 <?php
 
 $classesC = [];
-foreach ($classes as $c) {
+foreach ($this->sharedMetrics->classes as $c) {
     if (!$c['interface']) {
         unset($c['interface']);
         $classesC[$c['name']] = $c;

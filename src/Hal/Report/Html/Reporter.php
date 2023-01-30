@@ -28,6 +28,7 @@ use function mkdir;
 use function natsort;
 use function ob_get_clean;
 use function ob_start;
+use function round;
 use function rtrim;
 use function shell_exec;
 use function sprintf;
@@ -45,6 +46,8 @@ final class Reporter implements ReporterInterface
     private array $groups = [];
     private string|null $currentGroup = null;
     private string $assetPath = '';
+    // List of shared metrics between HTML rendering system and current instance.
+    private object $sharedMetrics;
 
     /**
      * @param ConfigBagInterface $config
@@ -183,13 +186,16 @@ final class Reporter implements ReporterInterface
             throw new RuntimeException(sprintf('Unable to write in the directory "%s"', dirname($destination)));
         }
 
-        $sum = $consolidated->getSum();
-        $avg = $consolidated->getAvg();
-        $classes = $consolidated->getClasses();
-        $files = $consolidated->getFiles();
-        $project = $consolidated->getProject();
-        $packages = $consolidated->getPackages();
-        $config = $this->config;
+        $this->sharedMetrics = (object)[
+            'sum' => $consolidated->getSum(),
+            'avg' => $consolidated->getAvg(),
+            'classes' => $consolidated->getClasses(),
+            'files' => $consolidated->getFiles(),
+            'project' => $consolidated->getProject(),
+            'packages' => $consolidated->getPackages(),
+            'config' => $this->config,
+            'history' => $history,
+        ];
 
         ob_start();
         require $source;
@@ -200,10 +206,10 @@ final class Reporter implements ReporterInterface
     /**
      * @param $type
      * @param $key
-     * @param $lowIsBetter
+     * @param bool $lowIsBetter
      * @return string
      */
-    protected function getTrend($type, $key, $lowIsBetter = false): string
+    protected function getTrend($type, $key, bool $lowIsBetter = false): string
     {
         if (!$this->isHomePage()) {
             return '';
@@ -223,13 +229,13 @@ final class Reporter implements ReporterInterface
     <path d="M0 0h24v24H0z" fill="none"/>
 </svg>';
 
-        $last = end($this->history);
+        $last = end($this->sharedMetrics->history);
         if (!isset($last->$type->$key)) {
             return '';
         }
 
         $oldValue = $last->$type->$key;
-        $newValue = $this->$type->$key ?? 0;
+        $newValue = $this->sharedMetrics->$type->$key ?? 0;
         $trendIndex = 1 + ($newValue <=> $oldValue);
 
         $diff = $newValue - $oldValue;
@@ -243,7 +249,7 @@ final class Reporter implements ReporterInterface
             $oldValue,
             $trendNames[$trendIndex],
             $trendCodes[$trendIndex],
-            $diff,
+            round($diff, 3),
             $svg[$trendCodes[$trendIndex]]
         );
     }
