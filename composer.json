@@ -33,7 +33,7 @@
     },
     "require-dev": {
         "phake/phake": "^4.3.0",
-        "phpstan/extension-installer": "^1.1",
+        "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^1.9",
         "phpstan/phpstan-deprecation-rules": "^1.1",
         "phpstan/phpstan-phpunit": "^1.3",

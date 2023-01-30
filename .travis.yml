@@ -4,6 +4,7 @@ language: php
 
 php:
  - 8.1
+ - 8.2
  - nightly
  - hhvm
  - hhvm-nightly
@@ -24,7 +25,6 @@ services:
   - docker
 
 install:
-  - docker build -t test_phpmetrics .
   - composer self-update --quiet
   - travis_retry composer update --no-interaction --prefer-dist --no-progress $DEPENDENCIES
 
@@ -35,32 +35,3 @@ before_script:
 script:
   - make test
   - make phpcs
-  - docker run --rm test_phpmetrics
-
-before_deploy:
-  - make build
-  - git add -f build/phpmetrics.phar
-
-deploy:
-  - provider: releases
-    api_key:
-      secure: DfUbGENVB2IK6bggZeI89zJizOCSUbYqMEpXYVjhlbP73c7a+s4P6MrmTk8BiLACBeoyaoQDHW06DTHuc3MzgadXcTsPxzdxmZmSHaNsmGuUUJPlBR44Ypw/6ZccILrMVowzMbgRSAvk63XEIaV18DwcDMQaMhYU9uPf2WNpHL4=
-    file:
-      - "releases/phpmetrics.phar"
-    on:
-      repo: phpmetrics/PhpMetrics
-      tags: true
-      php: '8.1'
-      condition: '-z "$DEPENDENCIES"'
-    skip_cleanup: true
-  - provider: bintray
-    file: artifacts/bintray.json
-    user: "halleck45"
-    key:
-      secure: Pa7uB1ePY9bYKGHovrdC/F2HlrjXGapKTp6McAFcnIksvuwu06Xug0BszqQeUSzKX/y1kivC7ksIp6kI3icHv0cm6K0MvAi+PLxplqtwLsKJPtwoxX5L6r0VOQ8uNaNU2K7+9Gb/5WNov7SfESXpyxOmUUj/QwwnRkj2RqlL9rg=
-    on:
-      repo: phpmetrics/PhpMetrics
-      tags: true
-      php: '8.1'
-      condition: '-z "$DEPENDENCIES"'
-    skip_cleanup: true
