@@ -27,9 +27,10 @@ test: build-qa-tools
 	@docker run --rm -it -u$(shell id -u):0 -v $$PWD:/opt/project phpmetrics_tools phpunit -c ./qa/phpunit.xml.dist
 
 # PHP Infection (testing unit tests with code mutations)
-.PHONY: infection
-infection: test
-	@docker run --rm -it -u$(shell id -u):0 -v $$PWD:/opt/project --memory=1g phpmetrics_tools infection --configuration=./qa/infection.json.dist --coverage=reports/phpunit --show-mutations --threads=$(shell nproc)
+# TODO: Issue with mutants preventing a good execution of this qa tool.
+#.PHONY: infection
+#infection: test
+#	@docker run --rm -it -u$(shell id -u):0 -v $$PWD:/opt/project --memory=1g phpmetrics_tools infection --configuration=./qa/infection.json.dist --coverage=reports/phpunit --show-mutations --threads=$(shell nproc)
 
 # Codesniffer check
 .PHONY: phpcs
@@ -71,4 +72,5 @@ qodana:
 
 # All QA
 .PHONY: qa
+#qa: vendor infection phpcs psalm phpstan qodana #TODO once infection is fixed.
 qa: vendor test phpcs psalm phpstan qodana

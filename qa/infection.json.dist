@@ -11,6 +11,10 @@
         "configDir": ".",
         "customPath": "./vendor/bin/phpunit"
     },
+    "logs": {
+        "summaryJson": "./qa/reports/infection/infection-log.json",
+        "html": "./qa/reports/infection/infection.html"
+    },
     "initialTestsPhpOptions": "-d memory_limit=-1 -d zend_extension=xdebug.so",
     "testFrameworkOptions": "--configuration=./qa/phpunit.xml.dist"
 }
