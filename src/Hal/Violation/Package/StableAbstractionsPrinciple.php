@@ -32,7 +32,12 @@ final class StableAbstractionsPrinciple implements Violation
 
         $this->metric = $metric;
 
-        if (abs($metric->getDistance()) > sqrt(2) / 4) {
+        $distance = $metric->getDistance();
+        if (null === $distance) {
+            return;
+        }
+
+        if (abs($distance) > sqrt(2) / 4) {
             /** @var ViolationsHandlerInterface $violationsHandler */
             $violationsHandler = $metric->get('violations');
             $violationsHandler->add($this);

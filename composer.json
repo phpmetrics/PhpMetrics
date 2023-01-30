@@ -28,9 +28,7 @@
     "autoload-dev": {"psr-4": {"Tests\\Hal\\": "tests"}},
     "require": {
         "php": ">=8.1",
-        "ext-dom": "*",
         "ext-tokenizer": "*",
-        "ext-yaml": "*",
         "nikic/php-parser": "^4"
     },
     "require-dev": {
@@ -56,5 +54,9 @@
             "phpstan/extension-installer": true
         },
         "sort-packages": true
+    },
+    "suggest": {
+        "ext-dom": "To allow XML parsing and report results.",
+        "ext-yaml": "To allow yaml parsing of configuration files."
     }
 }
