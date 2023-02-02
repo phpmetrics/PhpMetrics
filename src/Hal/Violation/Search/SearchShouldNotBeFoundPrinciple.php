@@ -35,7 +35,10 @@ final class SearchShouldNotBeFoundPrinciple implements Violation
             return;
         }
 
-        $this->concernedSearches = array_unique([...$this->concernedSearches, ...$metric->get('was-not-expected-by')]);
+        /** @var array<string> $wasNotExpectedBy */
+        $wasNotExpectedBy = $metric->get('was-not-expected-by');
+
+        $this->concernedSearches = array_unique([...$this->concernedSearches, ...$wasNotExpectedBy]);
         /** @var ViolationsHandlerInterface $violationsHandler */
         $violationsHandler = $metric->get('violations');
         $violationsHandler->add($this);

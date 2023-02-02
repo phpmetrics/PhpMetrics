@@ -54,8 +54,11 @@ final class ProbablyBugged implements Violation
      */
     public function getDescription(): string
     {
+        /** @var float $bugsProportion */
+        $bugsProportion = $this->metric->get('bugs');
+
         return <<<EOT
-This component contains in theory {$this->metric->get('bugs')} bugs.
+This component contains in theory $bugsProportion bugs.
 
 * Calculation is based on number of operators, operands, cyclomatic complexity
 * See more details at https://en.wikipedia.org/wiki/Halstead_complexity_measures

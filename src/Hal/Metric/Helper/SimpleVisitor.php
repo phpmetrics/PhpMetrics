@@ -23,8 +23,9 @@ final class SimpleVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): void
+    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
     {
         ($this->callback)($node);
+        return null;
     }
 }

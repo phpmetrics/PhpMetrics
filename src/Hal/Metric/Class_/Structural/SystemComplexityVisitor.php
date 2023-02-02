@@ -54,14 +54,14 @@ final class SystemComplexityVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): void
+    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
     {
         if (
             !$node instanceof Stmt\Class_
             && !$node instanceof Stmt\Trait_
             //TODO: && !$node instanceof Stmt\Enum_
         ) {
-            return;
+            return null;
         }
 
         /** @var Metric $class */
@@ -97,6 +97,8 @@ final class SystemComplexityVisitor extends NodeVisitorAbstract
         $class->set('relativeStructuralComplexity', round($relativeStructuralComplexity, 2));
         $class->set('relativeDataComplexity', round($relativeLocalComplexity, 2));
         $class->set('relativeSystemComplexity', round($relativeSystemComplexity, 2));
+
+        return null;
     }
 
     /**

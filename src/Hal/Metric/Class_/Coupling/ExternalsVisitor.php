@@ -47,16 +47,16 @@ final class ExternalsVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): void
+    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
     {
         if ($node instanceof Stmt\Namespace_) {
             $this->uses = [];
-            return;
+            return null;
         }
 
         if ($node instanceof Stmt\Use_) {
             $this->uses = [...$this->uses, ...$node->uses];
-            return;
+            return null;
         }
 
         if (
@@ -66,7 +66,7 @@ final class ExternalsVisitor extends NodeVisitorAbstract
             //TODO: && !$node instanceof Stmt\Enum_ ?
             //TODO: maybe simply set !$node instanceof Stmt\ClassLike ?
         ) {
-            return;
+            return null;
         }
 
         /** @var Metric $class */
@@ -103,6 +103,8 @@ final class ExternalsVisitor extends NodeVisitorAbstract
         $class->set('externals', $this->dependencies);
         $class->set('parents', $this->parents);
         $class->set('implements', $this->interfaces);
+
+        return null;
     }
 
     /**
@@ -204,7 +206,9 @@ final class ExternalsVisitor extends NodeVisitorAbstract
     private function addDependenciesFromPhpDocAnnotations(Node $node): void
     {
         $comments = $node->getDocComment();
-        preg_match_all('!\s+\*\s+@([\w\\\\]+)!', (string)$comments?->getReformattedText(), $matches);
+        /** @var scalar $reformattedTest */
+        $reformattedTest = $comments?->getReformattedText();
+        preg_match_all('!\s+\*\s+@([\w\\\\]+)!', (string)$reformattedTest, $matches);
         $annotations = $matches[1] ?? [];
         foreach ($annotations as $check) {
             if (null !== ($resolvedName = $this->resolveClassName($check))) {

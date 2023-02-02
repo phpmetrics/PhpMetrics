@@ -69,8 +69,9 @@ final class Reporter implements ReporterInterface
      */
     public function generate(Metrics $metrics): void
     {
+        /** @var false|string $logDir */
         $logDir = $this->config->get('report-html');
-        if (!$logDir) {
+        if (false === $logDir) {
             return;
         }
         $logDir = rtrim($logDir, '/') . '/';
@@ -95,13 +96,19 @@ final class Reporter implements ReporterInterface
             'avg' => $consolidated->getAvg(),
             'sum' => $consolidated->getSum()
         ];
+        /** @var array<string> $files */
         $files = glob($logDir . 'js/history-*.json');
         natsort($files);
         $history = array_map(
             static function (string $filename): stdClass {
-                /* @TODO: Remove @noinspection once https://github.com/kalessil/phpinspectionsea/issues/1725 fixed. */
-                /** @noinspection JsonEncodingApiUsageInspection */
-                return json_decode(file_get_contents($filename), flags: JSON_THROW_ON_ERROR);
+                /** @var string $fileContent File exists as it was globed. */
+                $fileContent = file_get_contents($filename);
+                /**
+                 * TODO: Remove @noinspection once https://github.com/kalessil/phpinspectionsea/issues/1725 fixed.
+                 * @noinspection JsonEncodingApiUsageInspection
+                 * @var stdClass
+                 */
+                return json_decode($fileContent, flags: JSON_THROW_ON_ERROR);
             },
             array_values($files)
         );
@@ -122,11 +129,11 @@ final class Reporter implements ReporterInterface
         file_put_contents($logDir . 'js/latest.json', $currentData);
 
         // consolidated by groups
-        foreach ($consolidatedGroups as $name => $consolidated) {
+        foreach ($consolidatedGroups as $name => $consolidatedGroup) {
             $this->currentGroup = $name;
             $this->assetPath = '../';
 
-            $this->renderHtmlPages($logDir . $name . '/', $consolidated, $history);
+            $this->renderHtmlPages($logDir . $name . '/', $consolidatedGroup, $history);
         }
 
         $this->output->writeln(sprintf('HTML report generated in "%s" directory', $logDir));
@@ -135,7 +142,7 @@ final class Reporter implements ReporterInterface
     /**
      * @param string $destination
      * @param Consolidated $consolidated
-     * @param array $history
+     * @param array<stdClass> $history
      * @return void
      * @throws JsonException
      */
@@ -204,12 +211,12 @@ final class Reporter implements ReporterInterface
     }
 
     /**
-     * @param $type
-     * @param $key
+     * @param string $type
+     * @param string $key
      * @param bool $lowIsBetter
      * @return string
      */
-    protected function getTrend($type, $key, bool $lowIsBetter = false): string
+    protected function getTrend(string $type, string $key, bool $lowIsBetter = false): string
     {
         if (!$this->isHomePage()) {
             return '';
@@ -239,7 +246,6 @@ final class Reporter implements ReporterInterface
         $trendIndex = 1 + ($newValue <=> $oldValue);
 
         $diff = $newValue - $oldValue;
-        $diff = ($diff > 0) ? '+' . $diff : $diff;
 
         $trendCodes = [0 => 'lt', 1 => 'eq', 2 => 'gt'];
         $trendNames = [0 => ($lowIsBetter ? 'good' : 'bad'), 1 => 'neutral', 2 => ($lowIsBetter ? 'bad' : 'good')];
@@ -249,7 +255,7 @@ final class Reporter implements ReporterInterface
             $oldValue,
             $trendNames[$trendIndex],
             $trendCodes[$trendIndex],
-            round($diff, 3),
+            ($diff > 0) ? '+' . round($diff, 3) : round($diff, 3),
             $svg[$trendCodes[$trendIndex]]
         );
     }

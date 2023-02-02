@@ -76,14 +76,15 @@ final class SummaryWriter extends SummaryProvider
     /**
      * {@inheritDoc}
      */
-    public function getReportFile(): string|bool
+    public function getReportFile(): string|bool // TODO PHP 8.2 string|false}
     {
         if ($this->config->has('quiet')) {
             return false;
         }
 
+        /** @var false|string $logFile */
         $logFile = $this->config->get('report-summary-json');
-        if (!$logFile) {
+        if (false === $logFile) {
             return false;
         }
         if (!file_exists(dirname($logFile)) || !is_writable(dirname($logFile))) {

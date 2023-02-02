@@ -61,7 +61,9 @@ final class StableDependenciesPrinciple implements Violation
     public function getDescription(): string
     {
         $count = count($this->violatingInstabilities);
-        $thisInstability = round($this->metric->getInstability(), 3);
+        /** @var float $instability */
+        $instability = $this->metric->getInstability();
+        $thisInstability = round($instability, 3);
         $packages = implode(
             "\n* ",
             array_map(static function (string $name, float $instability): string {
@@ -69,6 +71,7 @@ final class StableDependenciesPrinciple implements Violation
                 return sprintf('%s (%f0.3)', $name, round($instability, 3));
             }, array_keys($this->violatingInstabilities), $this->violatingInstabilities)
         );
+
         return <<<EOT
 Packages should depend in the direction of stability.
 

@@ -53,25 +53,28 @@ final class MaintainabilityIndexVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): void
+    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
     {
         if (
             !$node instanceof Stmt\Class_
             && !$node instanceof Stmt\Trait_
             //TODO: && !$node instanceof Stmt\Enum_
         ) {
-            return;
+            return null;
         }
 
         /** @var Metric $class */
         $class = $this->metrics->get(MetricNameGenerator::getClassName($node));
-        [$lloc, $cloc, $loc, $ccn, $volume] = [
-            $class->get('lloc'),
-            $class->get('cloc'),
-            $class->get('loc'),
-            $class->get('ccn'),
-            $class->get('volume'),
-        ];
+        /** @var null|float $lloc */
+        $lloc = $class->get('lloc');
+        /** @var null|float $cloc */
+        $cloc = $class->get('cloc');
+        /** @var null|float $loc */
+        $loc = $class->get('loc');
+        /** @var null|float $ccn */
+        $ccn = $class->get('ccn');
+        /** @var null|float $volume */
+        $volume = $class->get('volume');
 
         if (null === $lloc || null === $cloc || null === $loc) {
             throw new LogicException('Please enable ' . LengthVisitor::class . ' visitor first');
@@ -84,20 +87,22 @@ final class MaintainabilityIndexVisitor extends NodeVisitorAbstract
         }
 
         // Maintainability index without comment.
-        $MIwoC = max((171 - (5.2 * log($volume)) - (0.23 * $ccn) - (16.2 * log($lloc))) * 100 / 171, 0);
-        if (is_infinite($MIwoC)) {
-            $MIwoC = 171;
+        $miWithoutComments = max((171 - (5.2 * log($volume)) - (0.23 * $ccn) - (16.2 * log($lloc))) * 100 / 171, 0);
+        if (is_infinite($miWithoutComments)) {
+            $miWithoutComments = 171;
         }
 
         // Comment weight
         $commentWeight = ($loc > 0) ? 50 * sin(sqrt(2.4 * $cloc / $loc)) : 0;
 
         // Maintainability index
-        $mi = $MIwoC + $commentWeight;
+        $mi = $miWithoutComments + $commentWeight;
 
         $class->set('mi', round($mi, 2));
-        $class->set('mIwoC', round($MIwoC, 2));
+        $class->set('mIwoC', round($miWithoutComments, 2));
         $class->set('commentWeight', round($commentWeight, 2));
         $this->metrics->attach($class);
+
+        return null;
     }
 }

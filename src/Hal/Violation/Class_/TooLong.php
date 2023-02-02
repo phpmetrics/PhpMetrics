@@ -54,11 +54,16 @@ final class TooLong implements Violation
      */
     public function getDescription(): string
     {
+        /** @var int $lloc */
+        $lloc = $this->metric->get('lloc');
+        /** @var int $loc */
+        $loc = $this->metric->get('loc');
+
         return <<<EOT
 This class looks really long.
 
-* Class has {$this->metric->get('lloc')} logical lines of code
-* Class has {$this->metric->get('loc')} lines of code
+* Class has $lloc logical lines of code
+* Class has $loc lines of code
 
 Maybe your class should not exceed 200 lines of logical code
 EOT;

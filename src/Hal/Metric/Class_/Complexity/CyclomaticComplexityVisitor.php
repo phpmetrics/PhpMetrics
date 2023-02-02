@@ -88,19 +88,19 @@ final class CyclomaticComplexityVisitor extends NodeVisitorAbstract
         private readonly DetectorInterface $roleOfMethodDetector
     ) {
         // Callbacks cannot be used in class declarations (yet?)
-        // TODO: Not instantiating the array already with the key => value syntax because of a glitch in xDebug, failing
-        //       to apply the coverage. Once fixed, it could be written like ['Stmt_Case' => …, 'MatchArm' => …].
-        self::$complexIncrementList = [];
-        // `case ...:` from a `switch`. Ignore `default:`.
-        self::$complexIncrementList['Stmt_Case'] = static fn (Stmt\Case_ $node): int => (null !== $node->cond) ? 1 : 0;
-        // `... => ...` from a `match`. Ignore `default =>`.
-        self::$complexIncrementList['MatchArm'] = static fn (Node\MatchArm $node): int => count((array)$node->conds);
+        /** @phpstan-ignore-next-line Polymorphic calls are handled in self::calculateCC method. */
+        self::$complexIncrementList = [
+            // `case ...:` from a `switch`. Ignore `default:`.
+            'Stmt_Case' => static fn (Stmt\Case_ $node): int => (null !== $node->cond) ? 1 : 0,
+            // `... => ...` from a `match`. Ignore `default =>`.
+            'MatchArm' => static fn (Node\MatchArm $node): int => count((array)$node->conds)
+        ];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): void
+    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
     {
         if (
             !$node instanceof Stmt\Class_
@@ -109,7 +109,7 @@ final class CyclomaticComplexityVisitor extends NodeVisitorAbstract
             //TODO: && !$node instanceof Stmt\Enum_ ?
             //TODO: maybe simply set !$node instanceof Stmt\ClassLike ?
         ) {
-            return;
+            return null;
         }
 
         /** @var Metric $class */
@@ -125,6 +125,8 @@ final class CyclomaticComplexityVisitor extends NodeVisitorAbstract
         $class->set('wmc', $weightMethodCount);
         $class->set('ccn', $classCC);
         $class->set('ccnMethodMax', max([0, ...$ccByMethods]));
+
+        return null;
     }
 
     /**

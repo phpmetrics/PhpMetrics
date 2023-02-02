@@ -42,7 +42,9 @@ final class DepthOfInheritanceTree implements CalculableInterface
         $graph = new GraphDeduplicated();
 
         array_map(static function (ClassMetric $metric) use ($graph): void {
-            $to = $graph->gather($metric->get('name'));
+            /** @var string $name */
+            $name = $metric->get('name');
+            $to = $graph->gather($name);
             /** @var array<string> $parents */
             $parents = $metric->get('parents');
             array_map(static function (string $parent) use ($graph, $to): void {

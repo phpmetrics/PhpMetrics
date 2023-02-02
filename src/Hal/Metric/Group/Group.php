@@ -41,7 +41,7 @@ final class Group implements GroupInterface
     {
         $matched = new Metrics();
         array_map(function (Metric $metric) use ($matched): void {
-            if (!preg_match($this->regex, $metric->getName())) {
+            if (1 !== preg_match($this->regex, $metric->getName())) {
                 return;
             }
             $matched->attach($metric);

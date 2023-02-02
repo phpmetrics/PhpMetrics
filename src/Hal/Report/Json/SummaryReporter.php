@@ -27,6 +27,7 @@ final class SummaryReporter implements ReporterInterface
      */
     public function generate(Metrics $metrics): void
     {
+        /** @var string|false $logFile */
         $logFile = $this->summary->getReportFile();
         if (false === $logFile) {
             return;

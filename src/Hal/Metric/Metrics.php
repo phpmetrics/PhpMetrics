@@ -81,7 +81,7 @@ class Metrics implements JsonSerializable
 
     /**
      * {@inheritDoc}
-     * @return array<string, Metrics>
+     * @return array<string, Metric>
      */
     public function jsonSerialize(): array
     {

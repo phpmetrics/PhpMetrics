@@ -39,8 +39,9 @@ final class Reporter implements ReporterInterface
             return;
         }
 
+        /** @var false|string $logFile */
         $logFile = $this->config->get('report-csv');
-        if (!$logFile) {
+        if (false === $logFile) {
             return;
         }
         if (!file_exists(dirname($logFile)) || !is_writable(dirname($logFile))) {
@@ -48,6 +49,7 @@ final class Reporter implements ReporterInterface
         }
 
         $allMetricsNames = Registry::allForStructures();
+        /** @var resource $csvHandler */
         $csvHandler = fopen($logFile, 'wb');
         fputcsv($csvHandler, $allMetricsNames);
         array_map(function (ClassMetric $metric) use ($csvHandler, $allMetricsNames): void {
@@ -61,7 +63,7 @@ final class Reporter implements ReporterInterface
      *
      * @param ClassMetric $metric
      * @param array<int, string> $allMetricsNames
-     * @return array<int, mixed>
+     * @return array<int, string|int|bool|float>
      */
     private function generateRowData(ClassMetric $metric, array $allMetricsNames): array
     {

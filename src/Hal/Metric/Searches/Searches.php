@@ -46,7 +46,7 @@ final class Searches implements CalculableInterface
      *
      * @param SearchInterface $search The search criterion
      * @param Metrics $metrics Metrics handler.
-     * @return array<int, Metric>
+     * @return array<string, Metric>
      */
     private function findMatchingPattern(SearchInterface $search, Metrics $metrics): array
     {

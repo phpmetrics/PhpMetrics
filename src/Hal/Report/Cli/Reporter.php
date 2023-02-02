@@ -29,6 +29,8 @@ final class Reporter implements ReporterInterface
         }
 
         $this->summary->summarize($metrics);
-        $this->output->write($this->summary->getReport());
+        /** @var string $report */
+        $report = $this->summary->getReport();
+        $this->output->write($report);
     }
 }

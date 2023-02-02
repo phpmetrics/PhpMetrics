@@ -48,7 +48,7 @@ final class KanDefectVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): void
+    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
     {
         if (
             !$node instanceof Stmt\Class_
@@ -57,7 +57,7 @@ final class KanDefectVisitor extends NodeVisitorAbstract
             //TODO: && !$node instanceof Stmt\Enum_
             //TODO: Maybe replace by ClassLike ?
         ) {
-            return;
+            return null;
         }
 
         /** @var Metric $class */
@@ -71,6 +71,8 @@ final class KanDefectVisitor extends NodeVisitorAbstract
 
         $defect = 0.15 + 0.23 * $this->nbDoWhile + 0.22 * $this->nbSelect + 0.07 * $this->nbIf;
         $class->set('kanDefect', round($defect, 2));
+
+        return null;
     }
 
     /**

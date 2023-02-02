@@ -12,6 +12,7 @@ use Hal\Metric\Helper\NodeIteratorInterface;
 use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
 use function array_filter;
@@ -76,14 +77,14 @@ final class LcomVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): void
+    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
     {
         if (
             !$node instanceof Stmt\Class_
             && !$node instanceof Stmt\Trait_
             // TODO: && !$node instanceof Stmt\Enum_
         ) {
-            return;
+            return null;
         }
 
         // We build a graph of internal dependencies in class.
@@ -103,6 +104,8 @@ final class LcomVisitor extends NodeVisitorAbstract
         }
 
         $class->set('lcom', $nbSubGraphs);
+
+        return null;
     }
 
     /**
@@ -174,7 +177,11 @@ final class LcomVisitor extends NodeVisitorAbstract
             return (bool)($param->flags & $mask);
         });
         return array_map(function (Node\Param $param): TreeNode {
-            return $this->graph->gather($param->var->name);
+            /** @var Node\Expr\Variable $var Can't be an error as promoted properties are correctly parsed. */
+            $var = $param->var;
+            /** @var string $name Is mandatory to be a string as promoted properties cannot have expression as name. */
+            $name = $var->name;
+            return $this->graph->gather($name);
         }, $promotions);
     }
 

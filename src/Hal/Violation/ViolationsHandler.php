@@ -16,6 +16,7 @@ final class ViolationsHandler implements ViolationsHandlerInterface
 
     /**
      * {@inheritDoc}
+     * @return ArrayIterator<int, Violation>
      */
     public function getIterator(): ArrayIterator
     {

@@ -38,8 +38,9 @@ final class Reporter implements ReporterInterface
             return;
         }
 
+        /** @var false|string $logFile */
         $logFile = $this->config->get('report-json');
-        if (!$logFile) {
+        if (false === $logFile) {
             return;
         }
         if (!file_exists(dirname($logFile)) || !is_writable(dirname($logFile))) {

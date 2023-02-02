@@ -13,7 +13,7 @@ use function array_map;
  */
 final class ViolationParser implements ViolationParserInterface
 {
-    /** @var array<int, Violation> */
+    /** @var array<Violation> */
     private readonly array $violationsChecker;
 
     /**

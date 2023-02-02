@@ -102,11 +102,13 @@ final class Composer implements CalculableInterface
             if (!str_contains($filename, 'composer.json') && !str_contains($filename, 'composer-dist.json')) {
                 return [];
             }
+            /** @var string $fileContent As the file exists and is readable. */
+            $fileContent = file_get_contents($filename);
             /**
              * @noinspection JsonEncodingApiUsageInspection TODO: Wait for a fix
              * @see https://github.com/kalessil/phpinspectionsea/issues/1725
              */
-            $composerJson = json_decode(file_get_contents($filename), true, flags: JSON_THROW_ON_ERROR);
+            $composerJson = json_decode($fileContent, true, flags: JSON_THROW_ON_ERROR);
             $composerJson += ['require' => []];
             return $composerJson['require'];
         }, $this->composerJsonFinder->fetch([...$this->pathsList, './']));
@@ -127,11 +129,13 @@ final class Composer implements CalculableInterface
             if (!str_contains($filename, 'composer.lock')) {
                 return [];
             }
+            /** @var string $fileContent As the file exists and is readable. */
+            $fileContent = file_get_contents($filename);
             /**
              * @noinspection JsonEncodingApiUsageInspection TODO: Wait for a fix
              * @see https://github.com/kalessil/phpinspectionsea/issues/1725
              */
-            $composerLock = json_decode(file_get_contents($filename), true, flags: JSON_THROW_ON_ERROR);
+            $composerLock = json_decode($fileContent, true, flags: JSON_THROW_ON_ERROR);
             $composerLock += ['packages' => []];
 
             // List all installed packages versions by name.

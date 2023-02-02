@@ -19,6 +19,7 @@ class PackageMetric implements Metric, JsonSerializable
      */
     public function getClasses(): array
     {
+        /** @var array<int, string> */
         return $this->get('classes') ?? [];
     }
 
@@ -43,6 +44,7 @@ class PackageMetric implements Metric, JsonSerializable
      */
     public function getAbstraction(): null|float
     {
+        /** @var null|float */
         return $this->get('abstraction');
     }
 
@@ -59,6 +61,7 @@ class PackageMetric implements Metric, JsonSerializable
      */
     public function getInstability(): null|float
     {
+        /** @var null|float */
         return $this->get('instability');
     }
 
@@ -86,6 +89,7 @@ class PackageMetric implements Metric, JsonSerializable
      */
     public function getOutgoingClassDependencies(): array
     {
+        /** @var array<string> */
         return $this->get('outgoing_class_dependencies') ?? [];
     }
 
@@ -94,6 +98,7 @@ class PackageMetric implements Metric, JsonSerializable
      */
     public function getOutgoingPackageDependencies(): array
     {
+        /** @var array<string> */
         return $this->get('outgoing_package_dependencies') ?? [];
     }
 
@@ -121,6 +126,7 @@ class PackageMetric implements Metric, JsonSerializable
      */
     public function getIncomingClassDependencies(): array
     {
+        /** @var array<string> */
         return $this->get('incoming_class_dependencies') ?? [];
     }
 
@@ -129,6 +135,7 @@ class PackageMetric implements Metric, JsonSerializable
      */
     public function getIncomingPackageDependencies(): array
     {
+        /** @var array<string> */
         return $this->get('incoming_package_dependencies') ?? [];
     }
 
@@ -146,6 +153,7 @@ class PackageMetric implements Metric, JsonSerializable
      */
     public function getDistance(): null|float
     {
+        /** @var null|float */
         return $this->get('distance');
     }
 
@@ -154,6 +162,7 @@ class PackageMetric implements Metric, JsonSerializable
      */
     public function getNormalizedDistance(): null|float
     {
+        /** @var null|float */
         return $this->get('normalized_distance');
     }
 
@@ -170,6 +179,7 @@ class PackageMetric implements Metric, JsonSerializable
      */
     public function getDependentInstabilities(): array
     {
+        /** @var array<float> */
         return $this->get('dependent_instabilities') ?? [];
     }
 }

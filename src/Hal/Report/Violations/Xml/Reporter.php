@@ -1,4 +1,6 @@
 <?php
+
+/** @noinspection PhpComposerExtensionStubsInspection As ext-dom is not required but suggested. */
 declare(strict_types=1);
 
 namespace Hal\Report\Violations\Xml;
@@ -40,8 +42,9 @@ final class Reporter implements ReporterInterface
      */
     public function generate(Metrics $metrics): void
     {
+        /** @var false|string $logFile */
         $logFile = $this->config->get('report-violations');
-        if (!$logFile) {
+        if (false === $logFile) {
             return;
         }
 
@@ -50,13 +53,16 @@ final class Reporter implements ReporterInterface
         $root->setAttribute('timestamp', date('c'));
 
         foreach ($metrics->all() as $metric) {
+            /** @var array<Violation> $violations */
             $violations = $metric->get('violations');
             if ([] === $violations) {
                 continue;
             }
 
             $node = $this->xml->createElement('file');
-            $node->setAttribute('name', $metric->get('name'));
+            /** @var string $name */
+            $name = $metric->get('name');
+            $node->setAttribute('name', $name);
             array_map(function (Violation $violation) use ($node): void {
                 $node->appendChild($this->createXmlViolationItem($violation));
             }, $violations);

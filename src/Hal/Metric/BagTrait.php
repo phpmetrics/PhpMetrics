@@ -11,14 +11,14 @@ use function array_key_exists;
 trait BagTrait
 {
     /** @var array<string, mixed> */
-    private array $bag = [];
+    private array $bag;
 
     /**
      * @param string $name
      */
     public function __construct(string $name)
     {
-        $this->set('name', $name);
+        $this->bag = ['name' => $name];
     }
 
     /**
@@ -26,6 +26,7 @@ trait BagTrait
      */
     public function getName(): string
     {
+        /** @var string As the name given is a string. */
         return $this->bag['name'];
     }
 
@@ -63,6 +64,7 @@ trait BagTrait
 
     /**
      * {@inheritDoc}
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {

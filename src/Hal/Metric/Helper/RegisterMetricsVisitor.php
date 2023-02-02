@@ -29,7 +29,7 @@ final class RegisterMetricsVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): void
+    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
     {
         if (
             !$node instanceof Stmt\Class_
@@ -39,7 +39,7 @@ final class RegisterMetricsVisitor extends NodeVisitorAbstract
             //TODO: && !$node instanceof Stmt\Enum_ ?
             //TODO: maybe simply set !$node instanceof Stmt\ClassLike ?
         ) {
-            return;
+            return null;
         }
 
         // TODO: Add enums.
@@ -60,5 +60,7 @@ final class RegisterMetricsVisitor extends NodeVisitorAbstract
                 $this->metrics->attach(new FunctionMetric((string)$stmt->name));
             }, $node->getMethods());
         }
+
+        return null;
     }
 }

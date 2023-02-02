@@ -65,7 +65,7 @@ final class HalsteadVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): void
+    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
     {
         if (
             !$node instanceof Stmt\Class_
@@ -73,7 +73,7 @@ final class HalsteadVisitor extends NodeVisitorAbstract
             && !$node instanceof Stmt\Trait_
             //TODO: && !$node instanceof Stmt\Enum_
         ) {
-            return;
+            return null;
         }
 
         $nodeName = ($node instanceof Stmt\Function_)
@@ -88,9 +88,14 @@ final class HalsteadVisitor extends NodeVisitorAbstract
 
         $this->nodeIterator->iterateOver($node, $this->getVisitorCallback());
 
+        /** @var array<int, string> $operands */
+        $operands = &self::$operands;
+        /** @var array<int, string> $operators */
+        $operators = &self::$operators;
+
         // Calculate halstead metrics.
-        $uniqueOperators = array_map(unserialize(...), array_unique(array_map(serialize(...), self::$operators)));
-        $uniqueOperands = array_map(unserialize(...), array_unique(array_map(serialize(...), self::$operands)));
+        $uniqueOperators = array_map(unserialize(...), array_unique(array_map(serialize(...), $operators)));
+        $uniqueOperands = array_map(unserialize(...), array_unique(array_map(serialize(...), $operands)));
 
         // Set default values.
         $volume = 0;
@@ -107,11 +112,11 @@ final class HalsteadVisitor extends NodeVisitorAbstract
         $length = 0;
         $vocabulary = 0;
 
-        if ([] !== self::$operands) {
+        if ([] !== $operands) {
             $nbUniqueOperators = count($uniqueOperators);
             $nbUniqueOperands = count($uniqueOperands);
-            $nbOperators = count(self::$operators);
-            $nbOperands = count(self::$operands);
+            $nbOperators = count($operators);
+            $nbOperands = count($operands);
 
             $devAbility = 3000;
             $length = $nbOperators + $nbOperands;
@@ -139,6 +144,8 @@ final class HalsteadVisitor extends NodeVisitorAbstract
         $classOrFunction->set('number_operands', $nbOperands);
         $classOrFunction->set('number_operators_unique', $nbUniqueOperators);
         $classOrFunction->set('number_operands_unique', $nbUniqueOperands);
+
+        return null;
     }
 
     /**
@@ -176,13 +183,11 @@ final class HalsteadVisitor extends NodeVisitorAbstract
                 || $node instanceof Node\Scalar
             ) {
                 // operands
-                match (true) {
-                    property_exists($node, 'value') => $name = $node->value,
-                    property_exists($node, 'name') => $name = $node->name,
-                    default => $name = $node->getType(),
+                self::$operands[] = match (true) {
+                    property_exists($node, 'value') => $node->value,
+                    property_exists($node, 'name') => $node->name,
+                    default => $node->getType(),
                 };
-
-                self::$operands[] = $name;
             }
         };
     }

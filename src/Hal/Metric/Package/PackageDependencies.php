@@ -20,7 +20,7 @@ use function strstr;
  * analyzed project.
  *
  * This calculable metric depends on other visitors.
- * @uses \Hal\Metric\Package\PackageCollectingVisitor for the "package" metric applied on classes
+ * @uses PackageCollectingVisitor for the "package" metric applied on classes
  * @uses \Hal\Metric\Class_\Coupling\ExternalsVisitor for the "externals" metric applied on classes
  */
 final class PackageDependencies implements CalculableInterface
@@ -47,8 +47,10 @@ final class PackageDependencies implements CalculableInterface
      */
     private function increaseDependencies(ClassMetric|InterfaceMetric $class): void
     {
-        /* @var PackageMetric $incomingPackage */
-        $incomingPackage = $this->metrics->get($class->get('package'));
+        /** @var string $packageName */
+        $packageName = $class->get('package');
+        /** @var PackageMetric $incomingPackage */
+        $incomingPackage = $this->metrics->get($packageName);
         /** @var array<string> $externalDependencies */
         $externalDependencies = $class->get('externals');
         foreach ($externalDependencies as $outgoingClassName) {

@@ -35,10 +35,13 @@ final class Blob implements Violation
         }
         $this->metric = $metric;
 
+        /** @var array<mixed> $externalClasses */
+        $externalClasses = $metric->get('externals');
+
         if (
             ($metric->get('nbMethodsPublic') >= 8) &&
             ($metric->get('lcom') >= 3) &&
-            (count($metric->get('externals')) >= 8)
+            (count($externalClasses) >= 8)
         ) {
             /** @var ViolationsHandlerInterface $violationsHandler */
             $violationsHandler = $metric->get('violations');
@@ -59,11 +62,16 @@ final class Blob implements Violation
      */
     public function getDescription(): string
     {
+        /** @var int $nbMethodsPublic */
+        $nbMethodsPublic = $this->metric->get('nbMethodsPublic');
+        /** @var int $lcom */
+        $lcom = $this->metric->get('lcom');
+
         return <<<EOT
 A blob object (or "god class") does not follow the Single responsibility principle.
 
-* object has lot of public methods ({$this->metric->get('nbMethodsPublic')}, excluding getters and setters)
-* object has a high Lack of cohesion of methods (LCOM={$this->metric->get('lcom')})
+* object has lot of public methods ($nbMethodsPublic, excluding getters and setters)
+* object has a high Lack of cohesion of methods (LCOM=$lcom)
 * object knows everything (and use lot of external classes)
 
 Maybe you should reducing the number of methods splitting this object in many sub objects.

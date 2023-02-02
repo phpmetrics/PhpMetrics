@@ -109,7 +109,7 @@ final class Consolidated
         $avg->classesPerPackage = 0;
         if (0 !== $sum->nbPackages) {
             foreach (array_keys($packages) as $eachName) {
-                /* @var PackageMetric $eachPackage */
+                /** @var PackageMetric $eachPackage */
                 $eachPackage = $metrics->get($eachName);
                 $avg->distance += $eachPackage->getDistance();
                 $avg->incomingCDep += count($eachPackage->getIncomingClassDependencies());

@@ -53,8 +53,9 @@ final class SearchReporter implements ReporterInterface
      */
     private function displayCliReport(string $searchName, array $metricsListInViolation): void
     {
-        /** @var SearchInterface $search */
-        $search = $this->config->get('searches')[$searchName];
+        /** @var array<string, SearchInterface> $searches */
+        $searches = $this->config->get('searches');
+        $search = $searches[$searchName];
         $nbFound = count($metricsListInViolation);
 
         $tag = ([] !== $metricsListInViolation && true === $search->getConfig()['failIfFound']) ? 'error' : 'info';

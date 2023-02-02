@@ -29,17 +29,19 @@ final class PackageCollectingVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function enterNode(Node $node): void
+    public function enterNode(Node $node): null|int|Node // TODO PHP 8.2: only return null here.
     {
         if ($node instanceof Stmt\Namespace_) {
             $this->namespace = (string)$node->name;
         }
+
+        return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): void
+    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
     {
         if (
             !$node instanceof Stmt\Class_
@@ -48,16 +50,16 @@ final class PackageCollectingVisitor extends NodeVisitorAbstract
             //TODO: && !$node instanceof Stmt\Enum_
             // TODO : replace by ClassLike ?
         ) {
-            return;
+            return null;
         }
 
         $package = $this->namespace;
 
         $docBlockText = (string)$node->getDocComment()?->getText();
-        if (preg_match('/^\s*\*\s*@package\s+(.*)/m', $docBlockText, $matches)) {
+        if (1 === preg_match('/^\s*\*\s*@package\s+(.*)/m', $docBlockText, $matches)) {
             $package = $matches[1];
         }
-        if (preg_match('/^\s*\*\s*@subpackage\s+(.*)/m', $docBlockText, $matches)) {
+        if (1 === preg_match('/^\s*\*\s*@subpackage\s+(.*)/m', $docBlockText, $matches)) {
             $package .= '\\' . $matches[1];
         }
 
@@ -75,5 +77,7 @@ final class PackageCollectingVisitor extends NodeVisitorAbstract
         /** @var Metric $class */
         $class = $this->metrics->get($elementName);
         $class->set('package', $packageName);
+
+        return null;
     }
 }

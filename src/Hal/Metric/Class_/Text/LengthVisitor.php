@@ -48,7 +48,7 @@ final class LengthVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): void
+    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
     {
         if (
             !$node instanceof Stmt\Class_
@@ -57,7 +57,7 @@ final class LengthVisitor extends NodeVisitorAbstract
             //TODO: && !$node instanceof Stmt\Enum_
             //TODO: && !$node instanceof Stmt\Interface_ ??
         ) {
-            return;
+            return null;
         }
 
         $nodeName = ($node instanceof Stmt\Function_)
@@ -77,27 +77,34 @@ final class LengthVisitor extends NodeVisitorAbstract
         array_map(function (string $commentedCode) use (&$cloc): void {
             $cloc += max(1, $this->countSplitLines($commentedCode));
         }, $matches[0]);
+        /** @var string $code subject and replacement are string, so the return remains a string. */
         $code = preg_replace('!/\*.*?\*/!s', '', $code);
 
         // Count and remove single line comments. New PHP 8: Do not remove PHP Attributes (#[...]).
+        /** @var string $code subject and replacement are string, so the return remains a string. */
         $code = preg_replace_callback(
             '!(\'[^\']*\'|"[^"]*")|((?:#[^\[]|//).*$)!m',
             static function (array $matches) use (&$cloc): string {
                 [, $logicalCode, $commentedCode] = array_pad($matches, 3, null);
                 $cloc += (null !== $commentedCode);
+                /** @var string */
                 return $logicalCode;
             },
             $code
         );
 
         // Count and remove empty lines.
-        $code = trim(preg_replace('!(^\s*[\r\n])!m', '', $code));
+        /** @var string $code subject and replacement are string, so the return remains a string. */
+        $code = preg_replace('!(^\s*[\r\n])!m', '', $code);
+        $code = trim($code);
         $lloc = '' === $code ? 0 : $this->countSplitLines($code);
 
         // save result
         $classOrFunction->set('cloc', $cloc);
         $classOrFunction->set('loc', $loc);
         $classOrFunction->set('lloc', $lloc);
+
+        return null;
     }
 
     /**
@@ -108,6 +115,8 @@ final class LengthVisitor extends NodeVisitorAbstract
      */
     private function countSplitLines(string $code): int
     {
-        return count(preg_split('/\r\n|\r|\n/', $code));
+        /** @var array<string> $lines */
+        $lines = preg_split('/\r\n|\r|\n/', $code);
+        return count($lines);
     }
 }

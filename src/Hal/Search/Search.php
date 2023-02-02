@@ -77,6 +77,7 @@ final class Search implements SearchInterface
         ];
         $matchersStructures = Registry::getDefinitions();
         // This array is a sample of all valid and not empty configurations that can match metric.
+        /** @var array<string>|array<array<string>> $matchableConfig */
         $matchableConfig = array_filter(array_intersect_key($config, [...$matchersCallbacks, ...$matchersStructures]));
 
         // If there are no matchable metrics, nothing can match.
@@ -102,7 +103,9 @@ final class Search implements SearchInterface
         $config += ['failIfFound' => false];
         if (true === $config['failIfFound']) {
             $metric->set('was-not-expected', true);
-            $metric->set('was-not-expected-by', [...($metric->get('was-not-expected-by') ?? []), $this->name]);
+            /** @var array<string> $wasNotExpectedBy */
+            $wasNotExpectedBy = $metric->get('was-not-expected-by') ?? [];
+            $metric->set('was-not-expected-by', [...$wasNotExpectedBy, $this->name]);
         }
         return true;
     }
@@ -156,10 +159,11 @@ final class Search implements SearchInterface
      */
     private function usesClasses(Metric $metric, array $usesClasses): bool
     {
+        /** @var array<string> $externals */
         $externals = (array)$metric->get('externals');
         foreach ($usesClasses as $expectedClass) {
             foreach ($externals as $use) {
-                if (preg_match('@' . $expectedClass . '@i', $use)) {
+                if (1 === preg_match('@' . $expectedClass . '@i', $use)) {
                     return true;
                 }
             }
@@ -177,7 +181,7 @@ final class Search implements SearchInterface
     {
         // TODO: This "if" should probably be duplicated to the SearchesValidator.php file to throw exception earlier
         //       in the process if there is an invalid value for the custom metric.
-        if (!preg_match_all('!^([=><]*)([\d.]+)!', $configMetricValue, $matches, PREG_SET_ORDER)) {
+        if (0 === preg_match_all('!^([=><]*)([\d.]+)!', $configMetricValue, $matches, PREG_SET_ORDER)) {
             throw SearchValidationException::invalidCustomMetricComparison($configMetricValue);
         }
         [, $operator, $expected] = $matches[0];

@@ -47,10 +47,13 @@ final class TooComplexMethodCode implements Violation
 
     public function getDescription(): string
     {
+        /** @var int $ccnMethodMax */
+        $ccnMethodMax = $this->metric->get('ccnMethodMax');
+
         return <<<EOT
 This class looks really complex.
 
-* Algorithms are complex (Max cyclomatic complexity of class methods is {$this->metric->get('ccnMethodMax')})
+* Algorithms are complex (Max cyclomatic complexity of class methods is $ccnMethodMax)
 
 Maybe you should delegate some code to other objects or split complex method.
 EOT;

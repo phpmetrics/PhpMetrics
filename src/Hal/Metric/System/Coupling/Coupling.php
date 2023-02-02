@@ -34,9 +34,11 @@ final class Coupling implements CalculableInterface
         // Analyze relations
         foreach ($this->metrics->getClassMetrics() as $metric) {
             $efferent = $afferent = 0;
+            /** @var string $name */
+            $name = $metric->get('name');
 
             /** @var Node $node */
-            $node = $graph->get($metric->get('name'));
+            $node = $graph->get($name);
             foreach ($node->getEdges() as $edge) {
                 $afferent += ($edge->getTo()->getKey() === $node->getKey());
                 $efferent += ($edge->getFrom()->getKey() === $node->getKey());
@@ -59,7 +61,9 @@ final class Coupling implements CalculableInterface
         $graph = new GraphDeduplicated();
 
         array_map(static function (ClassMetric $metric) use ($graph): void {
-            $from = $graph->gather($metric->get('name'));
+            /** @var string $name */
+            $name = $metric->get('name');
+            $from = $graph->gather($name);
             /** @var array<string> $externals */
             $externals = $metric->get('externals');
             array_map(static function (string $external) use ($graph, $from): void {

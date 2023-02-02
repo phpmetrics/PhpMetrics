@@ -54,7 +54,9 @@ final class TooDependent implements Violation
      */
     public function getDescription(): string
     {
+        /** @var int $coupling */
         $coupling = $this->metric->get('efferentCoupling');
+
         return <<<EOT
 This class looks use really high number of components.
 

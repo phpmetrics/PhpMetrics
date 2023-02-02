@@ -62,7 +62,7 @@ final class SearchesValidator implements SearchesValidatorInterface
      * validation fails, then the exception given in the list for the particular element of configuration must be thrown
      * by the validator.
      *
-     * @return array<string, array{condition: callback(mixed): bool, exception: SearchValidationException}>
+     * @return array<string, array{condition: callable(mixed): bool, exception: SearchValidationException}>
      */
     private static function getConfigurationValidationConditions(): array
     {

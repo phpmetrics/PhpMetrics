@@ -13,7 +13,7 @@ interface CalculableWithFilesInterface extends CalculableInterface
     /**
      * Set the files list that is required for this metric to be calculated.
      *
-     * @param array $files
+     * @param array<int, string> $files List of files to process
      * @return void
      */
     public function setFiles(array $files): void;

@@ -45,7 +45,7 @@ final class Packagist implements ComposerRegistryConnectorInterface
             'favorites' => 0,
         ];
 
-        if (!preg_match('/\w+\/\w+/', $package)) {
+        if (0 === preg_match('/\w+\/\w+/', $package)) {
             return (object)$response;
         }
         $json = $this->getURIContentAsJson(sprintf('https://packagist.org/packages/%s.json', $package));
@@ -70,7 +70,7 @@ final class Packagist implements ComposerRegistryConnectorInterface
 
         foreach ((array)$json->package->versions as $version => $packageDataAtSpecificVersion) {
             $version = ltrim($version, 'v');
-            if (!preg_match('#^(\d|\.)+$#', $version) || version_compare($version, $latest, '<')) {
+            if (0 === preg_match('#^(\d|\.)+$#', $version) || version_compare($version, $latest, '<')) {
                 continue;
             }
 
@@ -112,6 +112,7 @@ final class Packagist implements ComposerRegistryConnectorInterface
         /**
          * @noinspection JsonEncodingApiUsageInspection TODO: Wait for a fix
          * @see https://github.com/kalessil/phpinspectionsea/issues/1725
+         * @var stdClass
          */
         return json_decode($jsonContent, flags: JSON_THROW_ON_ERROR);
     }

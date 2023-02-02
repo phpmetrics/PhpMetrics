@@ -7,6 +7,8 @@ use Hal\Metric\CalculableInterface;
 use Hal\Metric\Metrics;
 use Hal\Metric\PackageMetric;
 use function array_filter;
+use function array_flip;
+use function array_intersect_key;
 use function array_map;
 use function is_float;
 
@@ -46,8 +48,9 @@ final class PackageInstability implements CalculableInterface
         $afferentCoupling = count($package->getIncomingClassDependencies());
         $efferentCoupling = count($package->getOutgoingClassDependencies());
         if (0 !== $afferentCoupling + $efferentCoupling) {
-            $package->setInstability($efferentCoupling / ($afferentCoupling + $efferentCoupling));
-            $this->instabilitiesByPackage[$package->getName()] = $package->getInstability();
+            $instability = $efferentCoupling / ($afferentCoupling + $efferentCoupling);
+            $package->setInstability($instability);
+            $this->instabilitiesByPackage[$package->getName()] = $instability;
         }
     }
 
@@ -59,11 +62,10 @@ final class PackageInstability implements CalculableInterface
      */
     private function setDependentInstabilitiesByPackage(PackageMetric $package): void
     {
-        $dependentInstabilities = [];
-        array_map(function (string $packageName) use (&$dependentInstabilities): void {
-            $dependentInstabilities[$packageName] = $this->instabilitiesByPackage[$packageName] ?? null;
-        }, $package->getOutgoingPackageDependencies());
-
-        $package->setDependentInstabilities(array_filter($dependentInstabilities, is_float(...)));
+        $dependentInstabilities = array_intersect_key(
+            $this->instabilitiesByPackage,
+            array_flip($package->getOutgoingPackageDependencies())
+        );
+        $package->setDependentInstabilities($dependentInstabilities);
     }
 }
