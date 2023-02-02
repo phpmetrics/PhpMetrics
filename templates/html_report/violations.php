@@ -47,7 +47,7 @@ $map = [
         <div class="column">
             <div class="bloc">
                 <h4>Class Violations</h4>
-                <table class="table-pagerank table-small">
+                <table class="table-violations table-small">
                     <thead>
                     <tr>
                         <th>Class</th>
@@ -100,7 +100,7 @@ $map = [
         <div class="column">
             <div class="bloc">
                 <h4>Package Violations</h4>
-                <table class="table-pagerank table-small">
+                <table class="table-violations table-small">
                     <thead>
                     <tr>
                         <th>Package</th>

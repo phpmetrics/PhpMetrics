@@ -31,7 +31,7 @@ $viewHelper = $this->viewHelper;
                 <?php foreach ($this->sharedMetrics->classes as $class) { ?>
                     <tr>
                         <td><span class="path"><?php echo $class['name']; ?></span></td>
-                        <?php foreach (['afferentCoupling', 'efferentCoupling', 'instability', 'pageRank'] as $attribute) {?>
+                        <?php foreach (['afferentCoupling', 'efferentCoupling', 'instability'] as $attribute) {?>
                             <td>
                                 <span class="badge" <?php echo $viewHelper->gradientStyleFor($this->sharedMetrics->classes, $attribute, $class[$attribute]);?>>
                                 <?php echo isset($class[$attribute]) ? $class[$attribute] : ''; ?>

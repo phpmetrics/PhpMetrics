@@ -75,7 +75,6 @@ Main metrics are:
     efferentCoupling                        Efferent coupling
     instability                             Package Instability
     depthOfInheritanceTree                  Depth of inheritance tree
-    pageRank                                PageRank for component
 
 EOT;
     }

@@ -158,11 +158,3 @@ depthOfInheritanceTree
 Measures the length of inheritance from a class up to the root class.
 
 ### Links    
-    
-## Page rank 
-### Metrics: 
-pageRank
-
-### Description
-
-### Links

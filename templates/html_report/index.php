@@ -96,59 +96,6 @@ $viewHelper = $this->viewHelper;
                 </div>
             </div>
         </div>
-
-        <div class="column">
-            <div class="bloc bloc-number" style="min-height: 540px;">
-                <div class="label">ClassRank
-                    <small>(<a href="https://en.wikipedia.org/wiki/PageRank" target="_blank">Google's page rank applied to relations between classes)</a></small>
-                </div>
-                <div class="help">
-                    <div class="help-inner">
-                        <p>
-                            Page Rank is a way to measure the importance of a class. There is no "good" or "bad" page rank. This metric reflects interactions in your code.
-                        </p>
-                    </div>
-                </div>
-                <div class="clusterize small">
-                    <div id="clusterizeClassRank" class="clusterize-scroll">
-                        <table class="table-small">
-                            <thead>
-                            <tr>
-                                <th>ClassRank</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody id="contentClassRank" class="clusterize-content">
-                            <?php
-                            $classesS = $this->sharedMetrics->classes;
-                            usort($classesS, static function ($a, $b) {
-                                return strcmp($b['pageRank'], $a['pageRank']);
-                            });
-                            //$classesS = array_slice($classesS, 0, 10);
-                            foreach ($classesS as $class) { ?>
-                                <tr>
-                                    <td>
-                                        <span class="badge" <?php echo $viewHelper->gradientStyleFor($this->sharedMetrics->classes, 'pageRank', $class['pageRank']);?>><?php echo $class['pageRank']; ?></span>
-                                    </td>
-                                    <td>
-                                        <span class="path"><?php echo $class['name']; ?></span>
-<?php
-    $badgeTitleMIWOC = 'Maintainability Index (w/o comments)';
-    $mIwoC = isset($class['mIwoC']) ? $class['mIwoC'] : '';
-    $badgeTitleMI = 'Maintainability Index';
-    $mi = isset($class['mi']) ? $class['mi'] : '';
-?>
-                                        <span class="badge" title="<?php echo $badgeTitleMI;?>"><?php echo $mi;?></span>
-                                        <span class="badge" title="<?php echo $badgeTitleMIWOC;?>"><?php echo $mIwoC;?></span>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="row">

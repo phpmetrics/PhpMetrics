@@ -68,44 +68,6 @@ require __DIR__ . '/_header.php'; ?>
     </div>
 
     <div class="row">
-        <div class="column column-50">
-            <div class="bloc bloc-number">
-                <div class="label">Top 10 ClassRank</div>
-                <table id="table-pagerank">
-                    <thead>
-                    <tr>
-                        <th>Class</th>
-                        <th>ClassRank</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    $classesS = $this->sharedMetrics->classes;
-                    usort($classesS, static function ($a, $b) {
-                        return strcmp($b['pageRank'], $a['pageRank']);
-                    });
-                    $classesS = array_slice($classesS, 0, 10);
-                    foreach ($classesS as $class) { ?>
-                        <tr>
-                            <td><?php echo $class['name']; ?>
-                                <?php
-                                $badgeTitleMIWOC = 'Maintainability Index (w/o comments)';
-                                $mIwoC = isset($class['mIwoC']) ? $class['mIwoC'] : '';
-                                $badgeTitleMI = 'Maintainability Index';
-                                $mi = isset($class['mi']) ? $class['mi'] : '';
-                                ?>
-                                <span class="badge" title="<?php echo $badgeTitleMI;?>"><?php echo $mi;?></span>
-                                <span class="badge" title="<?php echo $badgeTitleMIWOC;?>"><?php echo $mIwoC;?></span>
-                            </td>
-                            <td><?php echo $class['pageRank']; ?></td>
-                        </tr>
-                    <?php } ?>
-                    </tbody>
-                </table>
-
-            </div>
-
-        </div>
         <div class="column">
             <div class="bloc bloc-number">
                 <div class="number">

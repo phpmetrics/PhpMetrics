@@ -51,7 +51,6 @@ final class RegistryTest extends TestCase
             'efferentCoupling',
             'instability',
             'depthOfInheritanceTree',
-            'pageRank',
         ];
 
         self::assertSame($expected, Registry::allForStructures());
@@ -100,7 +99,6 @@ final class RegistryTest extends TestCase
             'efferentCoupling' => 'Efferent coupling',
             'instability' => 'Package Instability',
             'depthOfInheritanceTree' => 'Depth of inheritance tree',
-            'pageRank' => 'PageRank for component',
         ];
 
         self::assertSame($expected, Registry::getDefinitions());

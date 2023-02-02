@@ -37,7 +37,6 @@ use Hal\Metric\Package\PackageInstability;
 use Hal\Metric\Searches\Searches;
 use Hal\Metric\System\Coupling\Coupling;
 use Hal\Metric\System\Coupling\DepthOfInheritanceTree;
-use Hal\Metric\System\Coupling\PageRank;
 use Hal\Metric\System\Packages\Composer\Composer;
 use Hal\Metric\System\Packages\Composer\Packagist;
 use Hal\Report;
@@ -130,7 +129,6 @@ final class DependencyInjectionProcessor
                         ),
                         new Workflow\Task\AnalyzerTask(
                             // System analyses
-                            new PageRank($metrics),
                             new Coupling($metrics),
                             new DepthOfInheritanceTree($metrics),
                             // Package analyses

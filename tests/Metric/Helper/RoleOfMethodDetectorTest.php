@@ -66,8 +66,6 @@ final class RoleOfMethodDetectorTest extends TestCase
         $code = '<?php class A { function _(NameInterface&Name $x): void { $this->x = $x; } }';
         yield 'Setter with IntersectType hint and return void' => ['setter', $code];
 
-
-
         $code = '<?php class A { function _($x): self { $this->x = $x; return $this; } }';
         yield 'Fluent setter with return self' => ['setter', $code];
 

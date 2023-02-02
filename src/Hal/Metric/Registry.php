@@ -52,7 +52,6 @@ final class Registry
         'efferentCoupling' => 'Efferent coupling',
         'instability' => 'Package Instability',
         'depthOfInheritanceTree' => 'Depth of inheritance tree',
-        'pageRank' => 'PageRank for component',
     ];
 
     /**
