@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title>PhpMetrics report</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/milligram.min.css">
-    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/style.css">
-    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/roboto.css">
-    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/normalize.css">
-    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/material-icons.css">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/milligram.min.css?v=<?php echo getVersion(); ?>">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/style.css?v=<?php echo getVersion(); ?>">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/roboto.css?v=<?php echo getVersion(); ?>">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/normalize.css?v=<?php echo getVersion(); ?>">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/material-icons.css?v=<?php echo getVersion(); ?>">
 </head>
 <body>
 
@@ -16,7 +16,7 @@
 <header class="headerbar">
     <div class="headerbarInner">
         <div class="float-left navigation-title">
-            <a href="https://github.com/phpmetrics/phpmetrics">
+            <a href="index.html">
                 <h1 class="title">PhpMetrics</h1>
                 <span class="subtitle">
                 Static analyzer for PHP
@@ -25,7 +25,7 @@
         </div>
         <ul class="navigation-list float-right">
             <li class="navigation-item">
-                <a class="navigation-link" href="https://www.github.com/phpmetrics/phpmetrics">Support</a>
+                <a class="navigation-link" href="https://github.com/phpmetrics/phpmetrics">Support</a>
                 <a class="navigation-link" href="https://phpmetrics.github.io/website/">Documentation</a>
             </li>
         </ul>
