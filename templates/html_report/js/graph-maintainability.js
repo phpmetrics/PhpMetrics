@@ -69,12 +69,12 @@ function chartMaintainability(withoutComment) {
             var text = '';
             if (true === withoutComment) {
                 text = '<strong>' + d.name + '</strong>'
-                    + "<br />Cyclomatic Complexity : " + d.ccn
-                    + "<br />Maintainability Index (w/o comments): " + d.mIwoC;
+                    + "<br>Cyclomatic Complexity : " + d.ccn
+                    + "<br>Maintainability Index (w/o comments): " + d.mIwoC;
             } else {
                 text = '<strong>' + d.name + '</strong>'
-                    + "<br />Cyclomatic Complexity : " + d.ccn
-                    + "<br />Maintainability Index: " + d.mi;
+                    + "<br>Cyclomatic Complexity : " + d.ccn
+                    + "<br>Maintainability Index: " + d.mi;
             }
             d3.select('.tooltip').html(text);
             d3.select(".tooltip")

@@ -7,7 +7,7 @@
 
             <div class="help">
                 <strong>Afferent coupling (AC)</strong> is the number of classes affected by given class.
-                <br/><strong>Efferent coupling (EC)</strong> is the number of classes from which given class receives
+                <br><strong>Efferent coupling (EC)</strong> is the number of classes from which given class receives
                 effects.
             </div>
 
@@ -44,6 +44,6 @@
 <?php require __DIR__ . '/_footer.php'; ?>
 
 
-<script type="text/javascript">
+<script>
     sortTable(document.getElementById('table-relations'), 1, -1);
 </script>

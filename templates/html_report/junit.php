@@ -131,7 +131,7 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
                                 <td style="padding-bottom: 1em;">
                                     <?php
                                     foreach ($suite->externals as $index => $external) { ?>
-                                        <?php echo ($index === 0) ? '' : '<br />'; ?>
+                                        <?php echo ($index === 0) ? '' : '<br>'; ?>
                                         <span class="badge" title="Cyclomatic complexity of class">
                                             <?php echo $getMetricForClass($external, 'ccn'); ?>
                                         </span>
@@ -148,7 +148,7 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
 </div>
     <?php require __DIR__ . '/_footer.php'; ?>
 
-    <script type="text/javascript">
+    <script>
         var clusterize = new Clusterize({
             scrollId: 'scrollAreaJunitNeverCalled',
             contentId: 'contentAreaJunitNeverCalled'
@@ -161,7 +161,7 @@ $getMetricForClass = function ($classname, $metric) use ($classes) {
     </script>
 
 
-    <script type="text/javascript">
+    <script>
 
         function chartTreeUnit() {
             // from http://bl.ocks.org/masakick/04ad1502068302abbbcb

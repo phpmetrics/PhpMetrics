@@ -101,7 +101,7 @@ if (isset($project['git'], $project['git']['authors'])) {
 <?php require __DIR__ . '/_footer.php'; ?>
 
 
-<script type="text/javascript">
+<script>
     var format = d3.time.format("%Y-%W");
 
     var margin = {top: 20, right: 0, bottom: 40, left: 40},

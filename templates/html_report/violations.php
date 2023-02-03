@@ -151,7 +151,7 @@ $map = [
     </div>
 <?php } ?>
 
-    <script type="text/javascript">
+    <script>
         function toggle(id) {
             var div = document.getElementById(id);
             if (div.style.display === 'block') {

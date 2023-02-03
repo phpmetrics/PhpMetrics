@@ -200,7 +200,7 @@ require __DIR__ . '/_header.php'; ?>
     </div>
 
 
-    <script type="text/javascript">
+    <script>
         document.onreadystatechange = function () {
             if (document.readyState === 'complete') {
                 chartMaintainability();
