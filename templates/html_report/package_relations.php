@@ -44,7 +44,7 @@ $relations = array_values($relations);
 <?php require __DIR__ . '/_footer.php'; ?>
 
 
-<script type="text/javascript">
+<script>
 
 
     var relations = <?php echo json_encode($relations, JSON_PRETTY_PRINT); ?>;

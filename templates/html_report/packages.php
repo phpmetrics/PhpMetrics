@@ -56,7 +56,7 @@ foreach ($packages as $each) {
     }
 }
 ?>
-<script type="text/javascript">
+<script>
     /**
      * Thx to http://bl.ocks.org/weiglemc/6185069
      */
@@ -147,7 +147,7 @@ foreach ($packages as $each) {
             tooltip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            tooltip.html(d.name + "<br/> (" + (Math.round(1000 * xValue(d)) / 1000)
+            tooltip.html(d.name + "<br> (" + (Math.round(1000 * xValue(d)) / 1000)
                 + ", " + (Math.round(1000 * yValue(d)) / 1000) + ")")
                 .style("left", (d3.event.pageX + 5) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
