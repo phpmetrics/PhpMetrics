@@ -109,6 +109,8 @@ class Reporter
             throw new RuntimeExceptionAlias(sprintf('Unable to write in the directory "%s"', $logDir));
         }
 
+        copy($this->templateDir . '/html_report/favicon.ico', $logDir . '/favicon.ico');
+
         recurse_copy($this->templateDir . '/html_report/js', $logDir . '/js');
         recurse_copy($this->templateDir . '/html_report/css', $logDir . '/css');
         recurse_copy($this->templateDir . '/html_report/images', $logDir . '/images');
