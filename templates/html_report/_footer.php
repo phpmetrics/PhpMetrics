@@ -178,18 +178,18 @@
 <?php } ?>
 </div>
 
-<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/functions.js"></script>
-<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/d3.v3.js"></script>
-<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/d3.hexbin.v0.js"></script>
-<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/sort-table.min.js"></script>
-<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/graph-maintainability.js"></script>
-<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/graph-licenses.js"></script>
-<script type="text/javascript" src="<?php echo $this->assetPath; ?>js/FileSaver.min.js"></script>
+<script src="<?php echo $this->assetPath; ?>js/functions.js"></script>
+<script src="<?php echo $this->assetPath; ?>js/d3.v3.js"></script>
+<script src="<?php echo $this->assetPath; ?>js/d3.hexbin.v0.js"></script>
+<script src="<?php echo $this->assetPath; ?>js/sort-table.min.js"></script>
+<script src="<?php echo $this->assetPath; ?>js/graph-maintainability.js"></script>
+<script src="<?php echo $this->assetPath; ?>js/graph-licenses.js"></script>
+<script src="<?php echo $this->assetPath; ?>js/FileSaver.min.js"></script>
 
 <script src="<?php echo $this->assetPath; ?>js/clusterize.min.js"></script>
 <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/clusterize.css">
 
-<script type="text/javascript" src="classes.js"></script>
+<script src="classes.js"></script>
 
 <script>
     var accessibilityEnabled = false;
