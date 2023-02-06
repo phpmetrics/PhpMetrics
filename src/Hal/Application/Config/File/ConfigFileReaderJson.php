@@ -99,12 +99,19 @@ class ConfigFileReaderJson implements ConfigFileReaderInterface
             }
         }
 
-        if (isset($jsonData['plugins'], $jsonData['plugins']['git'], $jsonData['plugins']['git']['binary'])) {
+        if (isset($jsonData['plugins']['git']['binary'])) {
             $config->set('git', $jsonData['plugins']['git']['binary']);
         }
 
-        if (isset($jsonData['plugins'], $jsonData['plugins']['junit'], $jsonData['plugins']['junit']["report"])) {
-            $config->set('junit', $jsonData['plugins']['junit']["report"]);
+        // backward compatibility with typo in documentation
+        // see https://github.com/phpmetrics/PhpMetrics/issues/441
+        // file -> report
+        if (isset($jsonData['plugins']['junit']['file'])) {
+            $jsonData['plugins']['junit']['report'] = $jsonData['plugins']['junit']['file'];
+        }
+
+        if (isset($jsonData['plugins']['junit']['report'])) {
+            $config->set('junit', $jsonData['plugins']['junit']['report']);
         }
 
         // reports

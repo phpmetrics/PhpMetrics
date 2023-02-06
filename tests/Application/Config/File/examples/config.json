@@ -34,7 +34,7 @@
           "binary": "git"
       },
       "junit": {
-          "file": "/tmp/junit.xml"
+          "report": "/tmp/junit.xml"
       }
   }
 }
