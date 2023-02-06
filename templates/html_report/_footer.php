@@ -5,7 +5,7 @@
 <div id="sidebar">
     <div class="content">
         <div class="logo">
-            <a href="https://github.com/phpmetrics/phpmetrics"><img src="<?php echo $this->assetPath;?>images/phpmetrics-maintenability.png"
+            <a href="index.html"><img src="<?php echo $this->assetPath;?>images/phpmetrics-maintenability.png"
                                                  alt="Logo PhpMetrics"></a>
             <h1>PhpMetrics</h1>
         </div>
@@ -178,18 +178,18 @@
 <?php } ?>
 </div>
 
-<script src="<?php echo $this->assetPath; ?>js/functions.js"></script>
+<script src="<?php echo $this->assetPath; ?>js/functions.js?v=<?php echo getVersion(); ?>"></script>
 <script src="<?php echo $this->assetPath; ?>js/d3.v3.js"></script>
 <script src="<?php echo $this->assetPath; ?>js/d3.hexbin.v0.js"></script>
-<script src="<?php echo $this->assetPath; ?>js/sort-table.min.js"></script>
-<script src="<?php echo $this->assetPath; ?>js/graph-maintainability.js"></script>
-<script src="<?php echo $this->assetPath; ?>js/graph-licenses.js"></script>
-<script src="<?php echo $this->assetPath; ?>js/FileSaver.min.js"></script>
+<script src="<?php echo $this->assetPath; ?>js/sort-table.min.js?v=<?php echo getVersion(); ?>"></script>
+<script src="<?php echo $this->assetPath; ?>js/graph-maintainability.js?v=<?php echo getVersion(); ?>"></script>
+<script src="<?php echo $this->assetPath; ?>js/graph-licenses.js?v=<?php echo getVersion(); ?>"></script>
+<script src="<?php echo $this->assetPath; ?>js/FileSaver.min.js?v=<?php echo getVersion(); ?>"></script>
 
-<script src="<?php echo $this->assetPath; ?>js/clusterize.min.js"></script>
-<link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/clusterize.css">
+<script src="<?php echo $this->assetPath; ?>js/clusterize.min.js?v=<?php echo getVersion(); ?>"></script>
+<link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/clusterize.css?v=<?php echo getVersion(); ?>">
 
-<script src="classes.js"></script>
+<script src="classes.js?v=<?php echo getVersion(); ?>"></script>
 
 <script>
     var accessibilityEnabled = false;
