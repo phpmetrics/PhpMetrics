@@ -4,7 +4,10 @@
          xsi:noNamespaceSchemaLocation="../vendor/squizlabs/php_codesniffer/phpcs.xsd"
 >
     <description>The coding standard of PhpMetrics package</description>
+    <!-- Show progress and sniff codes -->
+    <arg value="ps"/>
 
+    <arg name="cache" value="/opt/project/qa/cache/.php_cs.cache"/>
     <arg value="p"/>
     <arg name="colors"/>
     <arg value="s"/>

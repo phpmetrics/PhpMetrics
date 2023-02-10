@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Hal\Report\Html;
 
-use Hal\Application\Config\Config;
 use Hal\Application\Config\ConfigBagInterface;
 use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;

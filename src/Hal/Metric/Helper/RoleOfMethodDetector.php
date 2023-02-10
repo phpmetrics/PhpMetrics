@@ -8,8 +8,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use function array_pop;
 use function array_reverse;
-use function get_class;
-use function gettype;
 use function in_array;
 
 /**

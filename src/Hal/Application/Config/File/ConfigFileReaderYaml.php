@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpComposerExtensionStubsInspection ext-yaml is suggested, but not mandatory. */
 declare(strict_types=1);
 
 namespace Hal\Application\Config\File;

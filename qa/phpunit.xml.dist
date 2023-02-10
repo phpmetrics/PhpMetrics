@@ -2,10 +2,13 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="../vendor/autoload.php"
-         cacheResultFile="reports/phpunit/cache/.phpunit.result.cache"
+         cacheResultFile="cache/phpunit/.phpunit.result.cache"
          colors="true"
+         verbose="true"
 >
     <php>
+        <ini name="display_errors" value="On" />
+        <ini name="display_startup_errors" value="On" />
         <ini name="memory_limit" value="-1" />
         <ini name="error_reporting" value="E_ALL" />
     </php>

@@ -42,9 +42,9 @@ final class Reporter implements ReporterInterface
      */
     public function generate(Metrics $metrics): void
     {
-        /** @var false|string $logFile */
+        /** @var null|string $logFile */
         $logFile = $this->config->get('report-violations');
-        if (false === $logFile) {
+        if (null === $logFile) {
             return;
         }
 

@@ -6,11 +6,9 @@ namespace Hal\Metric\Package;
 use Hal\Metric\CalculableInterface;
 use Hal\Metric\Metrics;
 use Hal\Metric\PackageMetric;
-use function array_filter;
 use function array_flip;
 use function array_intersect_key;
 use function array_map;
-use function is_float;
 
 /**
  * This class is calculating the instability of each package using the afferent and efferent coupling of each package.

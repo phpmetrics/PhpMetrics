@@ -58,10 +58,6 @@ final class PackageInstabilityTest extends TestCase
             );
             Phake::when($package)->__call('setDependentInstabilities', [Phake::anyParameters()])->thenDoNothing();
         }
-        Phake::when($packages[0])->__call('getInstability', [])->thenReturn(null);
-        Phake::when($packages[1])->__call('getInstability', [])->thenReturn(2 / 5);
-        Phake::when($packages[2])->__call('getInstability', [])->thenReturn(null);
-        Phake::when($packages[3])->__call('getInstability', [])->thenReturn(1 / 4);
 
         (new PackageInstability($metricsMock))->calculate();
 
@@ -77,15 +73,12 @@ final class PackageInstabilityTest extends TestCase
         Phake::verify($packages[0])->__call('setDependentInstabilities', [[]]);
         Phake::verify($packages[1])->__call('setInstability', [2 / 5]);
         Phake::verify($packages[1])->__call('getName', []);
-        Phake::verify($packages[1])->__call('getInstability', []);
         Phake::verify($packages[1])->__call('setDependentInstabilities', [[]]);
         Phake::verify($packages[2], Phake::never())->__call('setInstability', [Phake::anyParameters()]);
         Phake::verify($packages[2], Phake::never())->__call('getName', []);
-        Phake::verify($packages[2], Phake::never())->__call('getInstability', []);
         Phake::verify($packages[2])->__call('setDependentInstabilities', [[]]);
         Phake::verify($packages[3])->__call('setInstability', [1 / 4]);
         Phake::verify($packages[3])->__call('getName', []);
-        Phake::verify($packages[3])->__call('getInstability', []);
         Phake::verify($packages[3])->__call('setDependentInstabilities', [['NoPackageDependencies' => 2 / 5]]);
 
         self::assertSame([1 => 2 / 5, 3 => 1 / 4], $instabilityCollector);

@@ -12,7 +12,6 @@ use Hal\Metric\Helper\NodeIteratorInterface;
 use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
 use function array_filter;

@@ -36,9 +36,9 @@ use function sqrt;
  * MI = MIwoc + MIcw
  *
  * To calculate these metrics, the following visitors are required to be executed first:
- * - @uses \Hal\Metric\Class_\Text\LengthVisitor for lloc, cloc and loc.
- * - @uses \Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor for ccn.
- * - @uses \Hal\Metric\Class_\Text\HalsteadVisitor for volume.
+ * - @uses LengthVisitor for lloc, cloc and loc.
+ * - @uses CyclomaticComplexityVisitor for ccn.
+ * - @uses HalsteadVisitor for volume.
  */
 final class MaintainabilityIndexVisitor extends NodeVisitorAbstract
 {

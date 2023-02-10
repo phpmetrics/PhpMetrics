@@ -1,5 +1,5 @@
 </div>
-
+<?php use Hal\Application\VersionInfo; ?>
 <!-- Sidebar -->
 <?php if(!isset($fullwidth) || $fullwidth === false) {?>
 <div id="sidebar">
@@ -159,18 +159,18 @@
 <?php } ?>
 </div>
 
-<script src="<?php echo $this->assetPath; ?>js/functions.js?v=<?php echo getVersion(); ?>"></script>
+<script src="<?php echo $this->assetPath; ?>js/functions.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
 <script src="<?php echo $this->assetPath; ?>js/d3.v3.js"></script>
 <script src="<?php echo $this->assetPath; ?>js/d3.hexbin.v0.js"></script>
-<script src="<?php echo $this->assetPath; ?>js/sort-table.min.js?v=<?php echo getVersion(); ?>"></script>
-<script src="<?php echo $this->assetPath; ?>js/graph-maintainability.js?v=<?php echo getVersion(); ?>"></script>
-<script src="<?php echo $this->assetPath; ?>js/graph-licenses.js?v=<?php echo getVersion(); ?>"></script>
-<script src="<?php echo $this->assetPath; ?>js/FileSaver.min.js?v=<?php echo getVersion(); ?>"></script>
+<script src="<?php echo $this->assetPath; ?>js/sort-table.min.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
+<script src="<?php echo $this->assetPath; ?>js/graph-maintainability.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
+<script src="<?php echo $this->assetPath; ?>js/graph-licenses.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
+<script src="<?php echo $this->assetPath; ?>js/FileSaver.min.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
 
-<script src="<?php echo $this->assetPath; ?>js/clusterize.min.js?v=<?php echo getVersion(); ?>"></script>
-<link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/clusterize.css?v=<?php echo getVersion(); ?>">
+<script src="<?php echo $this->assetPath; ?>js/clusterize.min.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
+<link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/clusterize.css?v=<?php echo VersionInfo::getVersion(); ?>">
 
-<script src="classes.js?v=<?php echo getVersion(); ?>"></script>
+<script src="classes.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
 
 <script>
     var accessibilityEnabled = false;

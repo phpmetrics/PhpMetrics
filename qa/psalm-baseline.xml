@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="5.6.0@e784128902dfe01d489c4123d69918a9f3c1eac5">
+  <file src="../src/Hal/Component/File/Finder.php">
+    <MissingTemplateParam>
+      <code>$filteredIterator</code>
+    </MissingTemplateParam>
+  </file>
+  <file src="../src/Hal/Component/Tree/Edge.php">
+    <ImplicitToStringCast>
+      <code>$this-&gt;from</code>
+      <code>$this-&gt;to</code>
+    </ImplicitToStringCast>
+  </file>
+  <file src="../src/Hal/Component/Tree/Graph.php">
+    <ImplicitToStringCast>
+      <code>$edge</code>
+    </ImplicitToStringCast>
+  </file>
+  <file src="../src/Hal/Metric/BagTrait.php">
+    <LessSpecificImplementedReturnType>
+      <code>array</code>
+    </LessSpecificImplementedReturnType>
+  </file>
+  <file src="../src/Hal/Metric/Class_/ClassEnumVisitor.php">
+    <InvalidOperand>
+      <code>!$isPublic</code>
+      <code>$isPublic</code>
+    </InvalidOperand>
+  </file>
+  <file src="../src/Hal/Metric/Class_/Complexity/CyclomaticComplexityVisitor.php">
+    <PropertyTypeCoercion>
+      <code>[
+            // `case ...:` from a `switch`. Ignore `default:`.
+            'Stmt_Case' =&gt; static fn (Stmt\Case_ $node): int =&gt; (null !== $node-&gt;cond) ? 1 : 0,
+            // `... =&gt; ...` from a `match`. Ignore `default =&gt;`.
+            'MatchArm' =&gt; static fn (Node\MatchArm $node): int =&gt; count((array)$node-&gt;conds)
+        ]</code>
+    </PropertyTypeCoercion>
+  </file>
+  <file src="../src/Hal/Metric/Class_/Coupling/ExternalsVisitor.php">
+    <UndefinedPropertyFetch>
+      <code>$node-&gt;class</code>
+    </UndefinedPropertyFetch>
+  </file>
+  <file src="../src/Hal/Metric/Class_/Structural/LcomVisitor.php">
+    <PossiblyInvalidCast>
+      <code>$node-&gt;name</code>
+    </PossiblyInvalidCast>
+    <PossiblyInvalidOperand>
+      <code>$node-&gt;name</code>
+    </PossiblyInvalidOperand>
+    <UndefinedPropertyFetch>
+      <code>$node-&gt;var-&gt;name</code>
+      <code>$node-&gt;var-&gt;name</code>
+    </UndefinedPropertyFetch>
+  </file>
+  <file src="../src/Hal/Metric/Class_/Text/HalsteadVisitor.php">
+    <NoValue>
+      <code>$operands</code>
+    </NoValue>
+    <TypeDoesNotContainType>
+      <code>[] !== $operands</code>
+    </TypeDoesNotContainType>
+    <UndefinedPropertyFetch>
+      <code>$node-&gt;name</code>
+      <code>$node-&gt;name</code>
+      <code>$node-&gt;name</code>
+      <code>$node-&gt;value</code>
+      <code>$node-&gt;value</code>
+      <code>$node-&gt;value</code>
+      <code>$node-&gt;value</code>
+    </UndefinedPropertyFetch>
+  </file>
+  <file src="../src/Hal/Metric/Consolidated.php">
+    <PropertyTypeCoercion>
+      <code>$avg</code>
+      <code>$sum</code>
+    </PropertyTypeCoercion>
+  </file>
+  <file src="../src/Hal/Metric/Helper/MetricNameGenerator.php">
+    <NoInterfaceProperties>
+      <code>$node-&gt;name</code>
+      <code>$node-&gt;name</code>
+      <code>$node-&gt;namespacedName</code>
+    </NoInterfaceProperties>
+  </file>
+  <file src="../src/Hal/Metric/System/Coupling/Coupling.php">
+    <InvalidOperand>
+      <code>$edge-&gt;getFrom()-&gt;getKey() === $node-&gt;getKey()</code>
+      <code>$edge-&gt;getTo()-&gt;getKey() === $node-&gt;getKey()</code>
+    </InvalidOperand>
+  </file>
+  <file src="../src/Hal/Metric/System/Packages/Composer/Packagist.php">
+    <LessSpecificReturnStatement>
+      <code>(object)$response</code>
+      <code>(object)$response</code>
+      <code>(object)$response</code>
+      <code>(object)[]</code>
+    </LessSpecificReturnStatement>
+    <MoreSpecificReturnType>
+      <code>stdClass</code>
+      <code>stdClass</code>
+    </MoreSpecificReturnType>
+  </file>
+  <file src="../src/Hal/Report/Html/Reporter.php">
+    <ForbiddenCode>
+      <code>shell_exec('cp -r ' . $this-&gt;templateDir . $folder . ' ' . $logDir)</code>
+    </ForbiddenCode>
+  </file>
+  <file src="../src/Hal/Search/Search.php">
+    <PossiblyInvalidArgument>
+      <code>$configStructureValue</code>
+      <code>$matchableConfig[$key]</code>
+    </PossiblyInvalidArgument>
+  </file>
+</files>

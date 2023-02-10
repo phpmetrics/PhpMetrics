@@ -1,5 +1,8 @@
+includes:
+    - phpstan-baseline.neon
 parameters:
     level: max
+    tmpDir: /opt/project/qa/cache/phpstan
     paths:
         - ../src
     featureToggles:

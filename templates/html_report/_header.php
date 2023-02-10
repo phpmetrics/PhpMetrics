@@ -7,11 +7,11 @@ use Hal\Application\VersionInfo;
     <meta charset="UTF-8">
     <title>PhpMetrics report</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/milligram.min.css?v=<?php echo getVersion(); ?>">
-    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/style.css?v=<?php echo getVersion(); ?>">
-    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/roboto.css?v=<?php echo getVersion(); ?>">
-    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/normalize.css?v=<?php echo getVersion(); ?>">
-    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/material-icons.css?v=<?php echo getVersion(); ?>">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/milligram.min.css?v=<?php echo VersionInfo::getVersion(); ?>">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/style.css?v=<?php echo VersionInfo::getVersion(); ?>">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/roboto.css?v=<?php echo VersionInfo::getVersion(); ?>">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/normalize.css?v=<?php echo VersionInfo::getVersion(); ?>">
+    <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/material-icons.css?v=<?php echo VersionInfo::getVersion(); ?>">
 </head>
 <body>
 
