@@ -4,6 +4,83 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.8.1] - 2022-03-24
+
+### Fixed
+- Fixed issue with relative pat when using YAML configuration.
+
+## [2.8.0] - 2022-03-23
+
+### New features
+- Allow to search for patterns of code.
+- Possibility to add custom violation rules via configuration.
+- Allow to use YAML for configuration
+- Add `--metrics` option to display documentation about some metrics calculated and used by PhpMetrics.
+- Exclude getters and setters from the CCN (cyclomatic complexity number) and LCoM (lack in cohesion of method) calculations
+- Add `composer` option to enable or disable the composer packages analysis
+- Add `--report-summary-json` option to report a summarized information from the calculated metrics.
+
+### Fixed
+- Fixed issue with some columns in HTML reports
+
+## [2.7.4] - 2020-06-30
+
+### Fixed
+- Fixed compatibility issue where PHP 5 was no longer available on Debian systems  (#434)
+- Fixed issue with display of charts in groups (#429, #433)
+
+## [2.7.3] - 2020-06-27
+
+### Fixed
+- Fixed missing `composer.json` files when located in the root directory.
+
+## [2.7.2] - 2020-06-27
+
+### Fixed
+- Fixed path of violations HTML templates.
+
+## [2.7.1] - 2020-06-27
+
+### Fixed
+- Fixed error due to permission on generation of HTML report (#429)
+- Fixed analysis on composer packages wrongly reported outdated when latest version is used. (#431)
+
+## [2.7.0] - 2020-06-26
+
+### New features
+- Way to group analysis by layer
+
+### Fixed
+- Improved UI
+
+## [2.6.2] - 2020-04-02
+
+### Fixed
+- Improved UI
+
+## [2.6.1] - 2020-04-02
+
+### Fixed
+- Fixed undefined constant PROJECT_DIR (#426)
+
+## [2.6.0] - 2020-03-28
+
+### New features
+- Way to download report
+- Way to download chart
+- Resolve PHP7 getters / setters (#405)
+- Add metrics description file
+- Add a carousel in the main HTML report page to display both graph at the same time
+
+### Fixed
+- Explicitly define the class \Hal\Component\Ast\NodeTraverser to make PhpMetrics work using composer --classmap-authoritative. (#402)
+- Ensure the packagist license is an array, so they can be displayed. (#404)
+- Fix warning "Division by zero" when no package is defined. (#401)
+
+### Misc
+- Move templates out of src
+- Remove folders from phpcs
+
 ## [2.5.0] - 2019-12-11
 
 ### Changed
