@@ -3,15 +3,28 @@ declare(strict_types=1);
 
 namespace Hal\Application;
 
+use function file_get_contents;
+use function preg_match_all;
+
 /**
  * Accessor for the version of the application.
  */
 final class VersionInfo
 {
+    private static string $version;
+
     public static function getVersion(): string
     {
-        // TODO: write a parser that will read the .semver file.
-        //$semverFile = PROJECT_ROOT . '/.semver';
-        return 'v3.0.0';
+        return self::$version;
+    }
+
+    public static function inferVersionFromSemver(string $semverFile): void
+    {
+        /** @var string $semverContent */
+        $semverContent = file_get_contents($semverFile);
+
+        preg_match_all('#:(?:major|minor|patch|special):\s*(.*)#', $semverContent, $matches);
+        [, $v] = $matches;
+        self::$version = 'v' . $v[0] . '.' . $v[1] . '.' . $v[2] . ('' !== $v[3] ? '-' . $v[3] : '');
     }
 }

@@ -76,7 +76,7 @@ final class SummaryWriter extends SummaryProvider
     /**
      * {@inheritDoc}
      */
-    public function getReportFile(): string|bool // TODO PHP 8.2 string|false}
+    public function getReportFile(): string|bool // TODO PHP 8.2 string|false
     {
         if ($this->config->has('quiet')) {
             return false;

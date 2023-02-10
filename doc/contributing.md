@@ -78,7 +78,7 @@ More information on the [documentation of PHP Infection](https://infection.githu
 
 > :information_source: To only run this tool:
 > ```shell
-> $> make test
+> $> make phpunit
 > ```
 
 This will execute the available unit tests of the project, and generates a CodeCoverage report that will be used by PHP 

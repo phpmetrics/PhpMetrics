@@ -12,6 +12,7 @@ use Hal\Application\Config\Parser;
 use Hal\Application\Config\Validator;
 use Hal\Application\PhpMetrics;
 use Hal\Application\ReporterHandler;
+use Hal\Application\VersionInfo;
 use Hal\Application\Workflow;
 use Hal\Component\Ast\NodeTraverser;
 use Hal\Component\File\Finder;
@@ -50,6 +51,7 @@ use Hal\Violation\ViolationParser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter;
+use function dirname;
 
 /**
  * Class that injects everything and loads up.
@@ -174,6 +176,9 @@ final class DependencyInjectionProcessor
                 $output
             );
         };
+
+        // Infer the version of the project regarding the .semver file.
+        VersionInfo::inferVersionFromSemver(dirname(__DIR__, 3) . '/.semver');
     }
 
     /**
