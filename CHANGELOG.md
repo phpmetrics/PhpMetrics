@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.8.2] - 2023-02-??
+
+### Fixed
+- Fixed errors in HTML template. (thanks @Hikingyo and @gemal)
+- Improved README.md contents. (thanks @kudashevs)
+- Fixed junit parameter in JSON configuration file
+- Minor removals of unnecessary source code
+- Remove wrong artefacts causing download issues
+- Add favicon to HTML rendered pages (thanks @gemal)
+- Add version to CSS and script to counter cache (thanks @gemal)
+
 ## [2.8.1] - 2022-03-24
 
 ### Fixed
