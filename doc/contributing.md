@@ -17,19 +17,17 @@ Please NEVER tag manually.
 
 ### Requirements
 
-+ You will need to install `semver`
+You will need to install :
 
-    gem install semver
-    
-+ Please disable `phar.readonly` in your `php.ini` file
-  
++ [`docker`](https://www.docker.com/)
++ [make](https://www.gnu.org/software/make/)
+
 ### Usage
 
-Git must configure a GPG key on your Github account to verify commits.
+These commands will create `phar`, `debian` and `binary` release, 
+then run all tests and push new release to Github:
 
-These commands will create phar, debian and binary release, 
-then run all tests and push new release to Github :
-
-    make tag VERSION=<VERSION>
-    # <VERSION> can be `major`, `minor` or `patch`
-    make release
+```bash
+make release VERSION=<VERSION>
+# <VERSION> can be `major`, `minor` or `patch`
+```

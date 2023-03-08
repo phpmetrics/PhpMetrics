@@ -1,3 +1,5 @@
+.PHONY: docker build
+
 include artifacts/Makefile
 
 # Run unit tests
@@ -12,9 +14,8 @@ phpcs:
 phpcbf:
 	./vendor/bin/phpcbf src/ tests/ --extensions=php -n
 
-# Publish new release. Usage:
-#   make tag VERSION=(major|minor|patch)
-# You need to install https://github.com/flazz/semver/ before
+# Used for tag releasing
+# Don't use directly, use `make release` instead
 tag:
 	@semver inc $(VERSION)
 	@echo "New release: `semver tag`"
@@ -31,9 +32,17 @@ tag:
 
 
 # Tag git with last release
-release: build
+new_git_version: build tag
 	git add .semver .github/ISSUE_TEMPLATE/Bug_report.md .github/ISSUE_TEMPLATE/Feature_request.md src/functions.php doc/installation.md artifacts/* releases/*
-	git commit -S -m "releasing `semver tag`"
-	git tag -s `semver tag`
+	git commit -m "releasing `semver tag`"
+	git tag `semver tag` -m "releasing `semver tag`"
 	git push -u origin master
 	git push origin `semver tag`
+
+docker:
+	docker build -t phpmetrics/releasing ./docker/releasing
+
+# Publish new release. Usage:
+#   make tag VERSION=(major|minor|patch)
+release: docker
+	docker run -it --rm --mount type=bind,source=$$SSH_AUTH_SOCK,target=/ssh-agent --env SSH_AUTH_SOCK=/ssh-agent -v ~/.gitconfig:/etc/gitconfig -v $(PWD):/app -w /app phpmetrics/releasing make new_git_version VERSION=$(VERSION)
