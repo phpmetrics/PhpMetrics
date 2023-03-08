@@ -1,3 +1,27 @@
+phpmetrics (2.8.1) unstable; urgency=low
+   * Fix error in html template 
+   * Merge pull request #477 from Hikingyo/fix-html-template 
+   * Update README.md fix the code block with quick start example. 
+   * Merge pull request #480 from kudashevs/feature/readme-fix 
+   * [ISSUE-441] Fix junit parameter in json config file 
+   * Remove useless checks in "isset" and replace double quotes by single quotes usages. 
+   * Remove unused method. 
+   * Fix #482: Remove useless artefacts. 
+   * add favicon 
+   * Merge pull request #486 from gemal/favicon 
+   * simplify html 
+   * Update _footer.php 
+   * Merge pull request #487 from gemal/html 
+   * add version to css and script to counter cache 
+   * Merge pull request #488 from gemal/versions 
+   * Merge pull request #457 from phpmetrics/ISSUE-441 
+   * Add missing changelogs from 2.5.0 to 2.8.1. 
+   * Add changelog for incoming version 2.8.2. 
+   * Way to release via docker 
+   * Merge pull request #489 from phpmetrics/way_to_release_with_docker 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 08 Mar 2023 15:03:36 +0000
+
 phpmetrics (2.7.4) unstable; urgency=low
    * Fix readme file (#438) 
    * include by default the composer.lock localized at the root dir 
@@ -908,6 +932,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 

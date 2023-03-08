@@ -16,14 +16,14 @@ export PATH=~/.composer/vendor/bin:$PATH
 ## Phar
 
 ```bash
-curl https://github.com/phpmetrics/PhpMetrics/releases/download/v2.8.1/phpmetrics.phar
+curl https://github.com/phpmetrics/PhpMetrics/releases/download/v2.8.2/phpmetrics.phar
 chmod +x phpmetrics.phar && mv phpmetrics.phar /usr/local/bin/phpmetrics
 ```
 
 ## Apt (Debian, Ubuntu...)
 
 ```bash
-curl https://github.com/phpmetrics/PhpMetrics/releases/download/v2.8.1/phpmetrics.deb
+curl https://github.com/phpmetrics/PhpMetrics/releases/download/v2.8.2/phpmetrics.deb
 dpkg -i phpmetrics.deb
 ``` 
 
