@@ -12,15 +12,16 @@ use Hal\Violation\Violation;
 use Hal\Violation\ViolationsHandlerInterface;
 use Phake;
 use Phake\IMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 
 final class NoCriticalViolationsAllowedTest extends TestCase
 {
     /**
-     * @return Generator<string, array{0: IMock&Metrics, 1: null|ViolationsCheckerException}>
+     * @return Generator<string, array{IMock&Metrics, null|ViolationsCheckerException}>
      */
-    public function provideMetricsThatCouldHaveCriticalViolations(): Generator
+    public static function provideMetricsThatCouldHaveCriticalViolations(): Generator
     {
         $metrics = Phake::mock(Metrics::class);
         $metricList = [Phake::mock(Metric::class), Phake::mock(Metric::class), Phake::mock(Metric::class)];
@@ -118,12 +119,11 @@ final class NoCriticalViolationsAllowedTest extends TestCase
     }
 
     /**
-     * @dataProvider provideMetricsThatCouldHaveCriticalViolations
      * @param Metrics&IMock $metrics
      * @param ViolationsCheckerException|null $expectedException
      * @return void
      */
-    //#[DataProvider('provideMetricsThatCouldHaveCriticalViolations')] TODO: PHPUnit 10.
+    #[DataProvider('provideMetricsThatCouldHaveCriticalViolations')]
     public function testICanCheckTheViolationsOnMetrics(
         IMock&Metrics $metrics,
         null|ViolationsCheckerException $expectedException

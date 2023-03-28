@@ -11,26 +11,26 @@ use Hal\Application\Config\ValidatorInterface;
 use Hal\Component\Output\Output;
 use Hal\Exception\ConfigException\FileDoesNotExistException;
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 
 final class BootstrapTest extends TestCase
 {
     /**
-     * @return Generator<string, array{0: bool}>
+     * @return Generator<string, array{bool}>
      */
-    public function provideValidConfigurations(): Generator
+    public static function provideValidConfigurations(): Generator
     {
         yield 'In normal verbosity mode' => [false];
         yield 'In quiet mode' => [true];
     }
 
     /**
-     * @dataProvider provideValidConfigurations
      * @param bool $quietMode
      * @return void
      */
-    //#[DataProvider('provideValidConfigurations')] // TODO PHPUnit 10.
+    #[DataProvider('provideValidConfigurations')]
     public function testICanBootstrapWithValidConfiguration(bool $quietMode): void
     {
         $mocks = [

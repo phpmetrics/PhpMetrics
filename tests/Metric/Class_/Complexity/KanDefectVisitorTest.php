@@ -11,14 +11,15 @@ use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Phake;
 use PhpParser\Node;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class KanDefectVisitorTest extends TestCase
 {
     /**
-     * @return Generator<string, array{0: Node, 1: array{kanDefect: float}}>
+     * @return Generator<string, array{Node, array{kanDefect: float}}>
      */
-    public function provideNodeToCalculateKanDefect(): Generator
+    public static function provideNodeToCalculateKanDefect(): Generator
     {
         $allowedNodeClasses = [
             'class' => Node\Stmt\Class_::class,
@@ -77,12 +78,11 @@ final class KanDefectVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodeToCalculateKanDefect
      * @param Node $node
      * @param array{kanDefect: float} $expected
      * @return void
      */
-    //#[DataProvider('provideNodeToCalculateKanDefect')] TODO: PHPUnit 10.
+    #[DataProvider('provideNodeToCalculateKanDefect')]
     public function testICanCalculateTheKanDefectFromNode(Node $node, array $expected): void
     {
         $metricsMock = Phake::mock(Metrics::class);

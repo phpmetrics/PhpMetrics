@@ -12,11 +12,12 @@ use Hal\Metric\Metrics;
 use Phake;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 
 /**
- * @phpstan-type ExpectedType array{externals: array<string>, implements: array<string>, parents: array<string>}
+ * @phpstan-type ExpectedType = array{externals: array<string>, implements: array<string>, parents: array<string>}
  */
 final class ExternalsVisitorTest extends TestCase
 {
@@ -39,9 +40,9 @@ final class ExternalsVisitorTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: Node\Stmt\ClassLike, 1: ExpectedType}
+     * @return Generator<string, array{Node\Stmt\ClassLike, ExpectedType}
      */
-    public function provideNodesToCalculateExternals(): Generator
+    public static function provideNodesToCalculateExternals(): Generator
     {
         $node = Phake::mock(Node\Stmt\Class_::class);
         $node->extends = Phake::mock(Node\Name::class);
@@ -316,12 +317,11 @@ final class ExternalsVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodesToCalculateExternals
      * @param Node\Stmt\ClassLike $node
      * @param ExpectedType $expected
      * @return void
      */
-    //#[DataProvider('provideNodesToCalculateExternals')] TODO PHPUnit 10.
+    #[DataProvider('provideNodesToCalculateExternals')]
     public function testICanCalculateExternalsOnClass(Node\Stmt\ClassLike $node, array $expected): void
     {
         $node->namespacedName = Phake::mock(Node\Identifier::class);

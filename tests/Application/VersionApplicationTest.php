@@ -8,6 +8,7 @@ use Hal\Application\VersionInfo;
 use Hal\Component\Output\Output;
 use Phake;
 use PHPUnit\Framework\TestCase;
+use function dirname;
 use function sprintf;
 use const PHP_EOL;
 
@@ -16,6 +17,8 @@ final class VersionApplicationTest extends TestCase
     public function testICanRunVersionApplication(): void
     {
         $mockOutput = Phake::mock(Output::class);
+        // Infer the version of the project regarding the .semver file.
+        VersionInfo::inferVersionFromSemver(dirname(__DIR__, 2) . '/.semver');
 
         $app = new VersionApplication($mockOutput);
         Phake::when($mockOutput)->__call('writeln', [Phake::anyParameters()])->thenDoNothing();

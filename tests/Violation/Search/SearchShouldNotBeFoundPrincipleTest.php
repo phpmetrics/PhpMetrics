@@ -11,6 +11,7 @@ use Hal\Violation\Violation;
 use Hal\Violation\ViolationsHandlerInterface;
 use Phake;
 use Phake\IMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function count;
 
@@ -22,9 +23,9 @@ final class SearchShouldNotBeFoundPrincipleTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: IMock&Metric, 1: IMock&ViolationsHandlerInterface, 2: bool, 3: null|string}>
+     * @return Generator<string, array{IMock&Metric, IMock&ViolationsHandlerInterface, bool, null|string}>
      */
-    public function provideMetricToCheckIfViolationApplies(): Generator
+    public static function provideMetricToCheckIfViolationApplies(): Generator
     {
         yield 'Invalid metric' => [
             [Phake::mock(Metric::class)],
@@ -58,14 +59,13 @@ final class SearchShouldNotBeFoundPrincipleTest extends TestCase
     }
 
     /**
-     * @dataProvider provideMetricToCheckIfViolationApplies
      * @param array<IMock&Metric> $metricList
      * @param ViolationsHandlerInterface&IMock $violationsHandler
      * @param bool $violate
      * @param null|string $expectedName
      * @return void
      */
-    //#[DataProvider('provideMetricToCheckIfViolationApplies')] TODO: PHPUnit 10
+    #[DataProvider('provideMetricToCheckIfViolationApplies')]
     public function testViolationApplies(
         array $metricList,
         IMock&ViolationsHandlerInterface $violationsHandler,

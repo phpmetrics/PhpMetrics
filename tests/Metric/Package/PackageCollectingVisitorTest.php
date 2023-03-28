@@ -13,6 +13,7 @@ use Phake;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class PackageCollectingVisitorTest extends TestCase
@@ -36,9 +37,9 @@ final class PackageCollectingVisitorTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: ClassLike, 1: string}>
+     * @return Generator<string, array{ClassLike, string}>
      */
-    public function provideNodesToAssociateToPackage(): Generator
+    public static function provideNodesToAssociateToPackage(): Generator
     {
         $allowedNodeClasses = [
             'class' => Node\Stmt\Class_::class,
@@ -72,12 +73,11 @@ final class PackageCollectingVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodesToAssociateToPackage
      * @param ClassLike $node
      * @param string $expectedPackageName
      * @return void
      */
-    //#[DataProvider('provideNodesToAssociateToPackage')] TODO: PHPUnit 10
+    #[DataProvider('provideNodesToAssociateToPackage')]
     public function testAlreadyExistingPackageMetricIsAttached(ClassLike $node, string $expectedPackageName): void
     {
         $metricsMock = Phake::mock(Metrics::class);
@@ -109,12 +109,11 @@ final class PackageCollectingVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodesToAssociateToPackage
      * @param ClassLike $node
      * @param string $expectedPackageName
      * @return void
      */
-    //#[DataProvider('provideNodesToAssociateToPackage')] TODO: PHPUnit 10
+    #[DataProvider('provideNodesToAssociateToPackage')]
     public function testMissingPackageMetricIsAttached(ClassLike $node, string $expectedPackageName): void
     {
         $metricsMock = Phake::mock(Metrics::class);

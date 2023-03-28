@@ -8,6 +8,7 @@ use Hal\Metric\Group\Group;
 use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_keys;
 
@@ -16,7 +17,7 @@ final class GroupTest extends TestCase
     /**
      * @return Generator<string, array{0: string, 1: array<string>}>
      */
-    public function provideRegexToGroupMetrics(): Generator
+    public static function provideRegexToGroupMetrics(): Generator
     {
         yield 'Group by name containing "o"' => ['#o#', ['choc', 'knock']];
         yield 'Group by name ending by "ck"' => ['#ck$#', ['click', 'clack', 'knack', 'knock']];
@@ -26,12 +27,11 @@ final class GroupTest extends TestCase
     }
 
     /**
-     * @dataProvider provideRegexToGroupMetrics
      * @param string $regex
      * @param array<string> $expected
      * @return void
      */
-    //#[DataProvider('provideRegexToGroupMetrics')] TODO: PHPUnit 10.
+    #[DataProvider('provideRegexToGroupMetrics')]
     public function testICanGroupMetricsByRegex(string $regex, array $expected): void
     {
         $metricsMock = Phake::mock(Metrics::class);

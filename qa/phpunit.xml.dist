@@ -4,7 +4,12 @@
          bootstrap="../vendor/autoload.php"
          cacheResultFile="cache/phpunit/.phpunit.result.cache"
          colors="true"
-         verbose="true"
+         displayDetailsOnIncompleteTests="true"
+         displayDetailsOnSkippedTests="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
 >
     <php>
         <ini name="display_errors" value="On" />

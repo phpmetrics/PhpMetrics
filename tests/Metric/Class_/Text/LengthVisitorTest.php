@@ -11,11 +11,12 @@ use Hal\Metric\Metrics;
 use Phake;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @phpstan-type ClassOrFunction Node\Stmt\ClassLike|Node\Stmt\Function_
- * @phpstan-type LengthMetrics array{loc: int, cloc: int, lloc: int}
+ * @phpstan-type ClassOrFunction = Node\Stmt\ClassLike|Node\Stmt\Function_
+ * @phpstan-type LengthMetrics = array{loc: int, cloc: int, lloc: int}
  */
 final class LengthVisitorTest extends TestCase
 {
@@ -37,9 +38,9 @@ final class LengthVisitorTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: ClassOrFunction, 1: LengthMetrics, 2: PrettyPrinter\Standard}>
+     * @return Generator<string, array{ClassOrFunction, LengthMetrics, PrettyPrinter\Standard}>
      */
-    public function provideNodesToCalculateLength(): Generator
+    public static function provideNodesToCalculateLength(): Generator
     {
         $allowedNodeClasses = [
             'class' => Node\Stmt\Class_::class,
@@ -91,13 +92,12 @@ final class LengthVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodesToCalculateLength
      * @param ClassOrFunction $node
      * @param LengthMetrics $expected
      * @param PrettyPrinter\Standard $prettyPrintMock
      * @return void
      */
-    //#[DataProvider('provideNodesToCalculateLength')] TODO PHPUnit 10.
+    #[DataProvider('provideNodesToCalculateLength')]
     public function testICanCalculateLength(
         Node\Stmt\ClassLike|Node\Stmt\Function_ $node,
         array $expected,

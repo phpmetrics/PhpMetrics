@@ -11,6 +11,7 @@ use Hal\Search\SearchesValidator;
 use Hal\Search\SearchInterface;
 use Phake;
 use Phake\IMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_fill_keys;
 use function array_map;
@@ -65,7 +66,7 @@ final class SearchesValidatorTest extends TestCase
     /**
      * @return Generator<string, array{array<SearchInterface>, SearchValidationException}>
      */
-    public function provideInvalidSearchesConfigurations(): Generator
+    public static function provideInvalidSearchesConfigurations(): Generator
     {
         $searches = Search::buildListFromArray(['test' => ['type' => 'unknownType']]);
         $exception = SearchValidationException::invalidType();
@@ -85,12 +86,11 @@ final class SearchesValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideInvalidSearchesConfigurations
      * @param array<SearchInterface> $searches
      * @param SearchValidationException $exception
      * @return void
      */
-    //#[DataProvider('provideInvalidSearchesConfigurations')] TODO: PHPUnit 10.
+    #[DataProvider('provideInvalidSearchesConfigurations')]
     public function testICantValidateSearchConfigurationsWithInvalidSpecialSearches(
         array $searches,
         SearchValidationException $exception

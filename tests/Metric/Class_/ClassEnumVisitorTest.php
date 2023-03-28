@@ -12,13 +12,14 @@ use Hal\Metric\Metrics;
 use Phake;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 use function array_values;
 use function explode;
 
 /**
- * @phpstan-type ClassEnumMetrics array{
+ * @phpstan-type ClassEnumMetrics = array{
  *     _functionMetrics: array<array{role: null|string, public: bool, private: bool}>,
  *     interface: bool,
  *     abstract: bool,
@@ -49,9 +50,9 @@ final class ClassEnumVisitorTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: Node\Stmt\ClassLike, 1: ClassEnumMetrics, 2: array<string, ClassMethod>}>
+     * @return Generator<string, array{Node\Stmt\ClassLike, ClassEnumMetrics, array<string, ClassMethod>}>
      */
-    public function provideNodesToCalculateClassEnum(): Generator
+    public static function provideNodesToCalculateClassEnum(): Generator
     {
         $allowedNodeClasses = [
             'class' => Node\Stmt\Class_::class,
@@ -162,13 +163,12 @@ final class ClassEnumVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodesToCalculateClassEnum
      * @param Node\Stmt\ClassLike $node
      * @param ClassEnumMetrics $expected
      * @param array<string, Phake\IMock&ClassMethod> $methods
      * @return void
      */
-    //#[DataProvider('provideNodesToCalculateClassEnum')] TODO PHPUnit 10.
+    #[DataProvider('provideNodesToCalculateClassEnum')]
     public function testICanCalculateClassEnum(Node\Stmt\ClassLike $node, array $expected, array $methods): void
     {
         $metricsMock = Phake::mock(Metrics::class);

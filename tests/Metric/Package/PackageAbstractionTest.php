@@ -9,6 +9,7 @@ use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageAbstraction;
 use Hal\Metric\PackageMetric;
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 use function explode;
@@ -27,9 +28,9 @@ final class PackageAbstractionTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: array<PackageMetric>, 1: array<null|float>}>
+     * @return Generator<string, array{array<PackageMetric>, array<null|float>}>
      */
-    public function providePackagesLists(): Generator
+    public static function providePackagesLists(): Generator
     {
         $packages = [Phake::mock(PackageMetric::class)];
         Phake::when($packages[0])->__call('getClasses', [])->thenReturn([]);
@@ -49,12 +50,11 @@ final class PackageAbstractionTest extends TestCase
     }
 
     /**
-     * @dataProvider providePackagesLists
      * @param array<PackageMetric> $packages
      * @param array<null|float> $expectedPackagesAbstraction
      * @return void
      */
-    //#[DataProvider('providePackagesLists')] TODO: PHPUnit 10
+    #[DataProvider('providePackagesLists')]
     public function testMetricWithPackagesIsCalculable(array $packages, array $expectedPackagesAbstraction): void
     {
         $metricsMock = Phake::mock(Metrics::class);

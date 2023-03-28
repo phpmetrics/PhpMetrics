@@ -5,12 +5,14 @@ namespace Tests\Hal\Application\Config;
 
 use Generator;
 use Hal\Application\Config\Config;
+use Hal\Application\Config\ConfigException as ApplicationConfigException;
 use Hal\Application\Config\Validator;
 use Hal\Exception\ConfigException;
 use Hal\Metric\Group\Group;
 use Hal\Search\SearchesValidatorInterface;
 use Hal\Search\SearchInterface;
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 use function sprintf;
@@ -55,9 +57,9 @@ final class ValidatorTest extends TestCase
      * Provide test cases for configurations that must be non-empty strings, or non-empty arrays. Of course, as we want
      * to test error cases, this provider is only giving wrong elements.
      *
-     * @return Generator<string, array{0: string, 1: mixed}>
+     * @return Generator<string, array{string, mixed}>
      */
-    public function provideBadlyFormattedConfigurations(): Generator
+    public static function provideBadlyFormattedConfigurations(): Generator
     {
         $wrongValues = [
             'report-html' => [42, ''],
@@ -77,11 +79,11 @@ final class ValidatorTest extends TestCase
     /**
      * Ensure the expected exception is thrown when some configurations are not in the expected format.
      *
-     * @dataProvider provideBadlyFormattedConfigurations
      * @param string $configKey The configuration key to check its format.
      * @param mixed $badValue The wrong value set to trigger the exception.
+     * @throws ApplicationConfigException
      */
-    //#[DataProvider('provideBadlyFormattedConfigurations')] // TODO PHPUnit 10: use attribute instead of annotation.
+    #[DataProvider('provideBadlyFormattedConfigurations')]
     public function testICantValidateBadlyFormattedConfiguration(string $configKey, mixed $badValue): void
     {
         $config = new Config();
@@ -100,9 +102,9 @@ final class ValidatorTest extends TestCase
      * Provides valid configuration instances with the associated expected configuration bag the validator must have
      * normalized.
      *
-     * @return Generator<string, array{0: Config, 1: array<string, mixed>}>
+     * @return Generator<string, array{Config, array<string, mixed>}>
      */
-    public function provideConfigurations(): Generator
+    public static function provideConfigurations(): Generator
     {
         // Minimum configuration
         $config = new Config();
@@ -205,12 +207,11 @@ final class ValidatorTest extends TestCase
     /**
      * Test that the given configurations are valid, and normalized.
      *
-     * @dataProvider provideConfigurations
      * @param Config $config The configuration instance to validate.
      * @param array<string, mixed> $expectedConfiguration The validated and normalized configuration data.
-     * @throws ConfigException When configuration instance is not valid, but in this test case, it is always valid.
+     * @throws ApplicationConfigException
      */
-    //#[DataProvider('provideConfigurations')] // TODO PHPUnit 10: use attribute instead of annotation.
+    #[DataProvider('provideConfigurations')]
     public function testICanValidateConfiguration(Config $config, array $expectedConfiguration): void
     {
         $searchesValidator = Phake::mock(SearchesValidatorInterface::class);

@@ -7,15 +7,16 @@ use Generator;
 use Hal\Metric\Helper\MetricNameGenerator;
 use Phake;
 use PhpParser\Node;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function spl_object_hash;
 
 final class MetricNameGeneratorTest extends TestCase
 {
     /**
-     * @return Generator<string, array{0: Node, 1: string}>
+     * @return Generator<string, array{Node, string}>
      */
-    public function provideClassNodeToGetClassName(): Generator
+    public static function provideClassNodeToGetClassName(): Generator
     {
         $node = Phake::mock(Node\Stmt\Class_::class);
         Phake::when($node)->__call('isAnonymous', [])->thenReturn(true);
@@ -41,21 +42,20 @@ final class MetricNameGeneratorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideClassNodeToGetClassName
      * @param Node $node
      * @param string $expected
      * @return void
      */
-    //#[DataProvider('provideClassNodeToGetClassName')] TODO: PHPUnit 10.
+    #[DataProvider('provideClassNodeToGetClassName')]
     public function testICanInferClassNameFromClassNode(Node $node, string $expected): void
     {
         self::assertSame($expected, MetricNameGenerator::getClassName($node));
     }
 
     /**
-     * @return Generator<string, array{0: Node, 1: string}>
+     * @return Generator<string, array{Node, string}>
      */
-    public function provideNodeToGetFunctionName(): Generator
+    public static function provideNodeToGetFunctionName(): Generator
     {
         $node = Phake::mock(Node::class);
         $node->name = Phake::mock(Node\Identifier::class);
@@ -69,12 +69,11 @@ final class MetricNameGeneratorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodeToGetFunctionName
      * @param Node $node
      * @param string $expected
      * @return void
      */
-    //#[DataProvider('provideNodeToGetFunctionName')] TODO: PHPUnit 10.
+    #[DataProvider('provideNodeToGetFunctionName')]
     public function testICanInferFunctionNameFromFunctionNode(Node $node, string $expected): void
     {
         self::assertSame($expected, MetricNameGenerator::getFunctionName($node));

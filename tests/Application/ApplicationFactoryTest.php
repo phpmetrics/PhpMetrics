@@ -14,14 +14,15 @@ use Hal\Application\MetricsApplication;
 use Hal\Application\VersionApplication;
 use Hal\Component\Output\Output;
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class ApplicationFactoryTest extends TestCase
 {
     /**
-     * @return Generator<string, array{0: ConfigBagInterface, 1: null|class-string<ApplicationInterface>}>
+     * @return Generator<string, array{ConfigBagInterface, null|class-string<ApplicationInterface>}>
      */
-    public function provideConfigurationToDetectApplication(): Generator
+    public static function provideConfigurationToDetectApplication(): Generator
     {
         $config = new Config();
         $config->set('help', true);
@@ -43,12 +44,11 @@ final class ApplicationFactoryTest extends TestCase
     }
 
     /**
-     * @dataProvider provideConfigurationToDetectApplication
      * @param ConfigBagInterface $config
      * @param null|class-string<ApplicationInterface> $expectedApplication
      * @return void
      */
-    //#[DataProvider('provideConfigurationToDetectApplication')] TODO: PHPUnit 10.
+    #[DataProvider('provideConfigurationToDetectApplication')]
     public function testICanRunApplicationFactory(ConfigBagInterface $config, null|string $expectedApplication): void
     {
         $mockOutput = Phake::mock(Output::class);

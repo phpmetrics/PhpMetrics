@@ -8,15 +8,16 @@ use Hal\Application\Workflow\Task\AnalyzerTask;
 use Hal\Metric\CalculableInterface;
 use Hal\Metric\CalculableWithFilesInterface;
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 
 final class AnalyzerTaskTest extends TestCase
 {
     /**
-     * @return Generator<string, array{0:array<Phake\IMock&CalculableInterface>}>
+     * @return Generator<string, array{array<Phake\IMock&CalculableInterface>}>
      */
-    public function provideCalculableElements(): Generator
+    public static function provideCalculableElements(): Generator
     {
         yield 'With only calculable element' => [[Phake::mock(CalculableInterface::class)]];
         yield 'With only calculable with file element' => [[Phake::mock(CalculableWithFilesInterface::class)]];
@@ -26,11 +27,10 @@ final class AnalyzerTaskTest extends TestCase
     }
 
     /**
-     * @dataProvider provideCalculableElements
      * @param array<Phake\IMock&CalculableInterface> $calculableElements
      * @return void
      */
-    //#[DataProvider('provideCalculableElements')] TODO PHPUnit 10.
+    #[DataProvider('provideCalculableElements')]
     public function testICanCalculateCalculableMetrics(array $calculableElements): void
     {
         $files = [];

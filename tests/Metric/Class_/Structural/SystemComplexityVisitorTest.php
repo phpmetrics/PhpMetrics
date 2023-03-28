@@ -11,6 +11,7 @@ use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Phake;
 use PhpParser\Node;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class SystemComplexityVisitorTest extends TestCase
@@ -34,9 +35,9 @@ final class SystemComplexityVisitorTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: Node\Stmt\ClassLike, 1: array{structural: float, data: float, system: float}}>
+     * @return Generator<string, array{Node\Stmt\ClassLike, array{structural: float, data: float, system: float}}>
      */
-    public function provideNodesToCalculateSystemComplexity(): Generator
+    public static function provideNodesToCalculateSystemComplexity(): Generator
     {
         $node = Phake::mock(Node\Stmt\Class_::class);
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
@@ -74,12 +75,11 @@ final class SystemComplexityVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodesToCalculateSystemComplexity
      * @param Node\Stmt\ClassLike $node
      * @param array{structural: float, data: float, system: float} $expected
      * @return void
      */
-    //#[DataProvider('provideNodesToCalculateSystemComplexity')] TODO PHPUnit 10.
+    #[DataProvider('provideNodesToCalculateSystemComplexity')]
     public function testICanCalculateSystemComplexity(Node\Stmt\ClassLike $node, array $expected): void
     {
         $node->namespacedName = Phake::mock(Node\Identifier::class);

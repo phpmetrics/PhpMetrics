@@ -14,19 +14,20 @@ use Hal\Metric\Metrics;
 use LogicException;
 use Phake;
 use PhpParser\Node;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_keys;
 
 /**
- * @phpstan-type ExternalMetrics array{lloc: int, cloc: int, loc: int, ccn: int, volume: float}
- * @phpstan-type ExpectedMetrics array{mi: int, mIwoC: int, commentWeight: int}
+ * @phpstan-type ExternalMetrics = array{lloc: int, cloc: int, loc: int, ccn: int, volume: float}
+ * @phpstan-type ExpectedMetrics = array{mi: int, mIwoC: int, commentWeight: int}
  */
 final class MaintainabilityIndexVisitorTest extends TestCase
 {
     /**
-     * @return Generator<string, array{0: Node\Stmt\Class_|Node\Stmt\Trait_, 1: ExternalMetrics, 2: ExpectedMetrics}>
+     * @return Generator<string, array{Node\Stmt\Class_|Node\Stmt\Trait_, ExternalMetrics, ExpectedMetrics}>
      */
-    public function provideMetricsToCalculateMaintainabilityIndex(): Generator
+    public static function provideMetricsToCalculateMaintainabilityIndex(): Generator
     {
         $allowedNodeClasses = [
             'class' => Node\Stmt\Class_::class,
@@ -55,13 +56,12 @@ final class MaintainabilityIndexVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideMetricsToCalculateMaintainabilityIndex
      * @param Node\Stmt\Class_|Node\Stmt\Trait_ $node
      * @param ExternalMetrics $externalMetrics
      * @param ExpectedMetrics $expected
      * @return void
      */
-    //#[DataProvider('provideMetricsToCalculateMaintainabilityIndex')] TODO: PHPUnit 10.
+    #[DataProvider('provideMetricsToCalculateMaintainabilityIndex')]
     public function testICanCalculateMaintainabilityIndexFromNode(
         Node\Stmt\Class_|Node\Stmt\Trait_ $node,
         array $externalMetrics,
@@ -113,9 +113,9 @@ final class MaintainabilityIndexVisitorTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: array<string, null|float>, 1: LogicException}>
+     * @return Generator<string, array{array<string, null|float>, LogicException}>
      */
-    public function provideMissingMetrics(): Generator
+    public static function provideMissingMetrics(): Generator
     {
         $requiredVisitorsByMetrics = [
             'lloc' => LengthVisitor::class,
@@ -137,12 +137,11 @@ final class MaintainabilityIndexVisitorTest extends TestCase
      * Test that an exception occurs if this visitor is executed while some required metrics are not previously
      * calculated.
      *
-     * @dataProvider provideMissingMetrics
      * @param array<string, null|float> $externalMetrics
      * @param LogicException $expectedException
      * @return void
      */
-    //#[DataProvider('provideMissingMetrics')] TODO PHPUnit 10.
+    #[DataProvider('provideMissingMetrics')]
     public function testExternalMetricsAreRequired(array $externalMetrics, LogicException $expectedException): void
     {
         $node = Phake::mock(Node\Stmt\Class_::class);

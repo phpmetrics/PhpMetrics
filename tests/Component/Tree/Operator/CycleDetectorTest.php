@@ -7,6 +7,7 @@ use Generator;
 use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\Node;
 use Hal\Component\Tree\Operator\CycleDetector;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class CycleDetectorTest extends TestCase
@@ -14,9 +15,9 @@ final class CycleDetectorTest extends TestCase
     /**
      * Provides cyclic and acyclic graphs, with their statuses.
      *
-     * @return Generator<string, array{0: Graph, 1: bool}>
+     * @return Generator<string, array{Graph, bool}>
      */
-    public function provideGraphs(): Generator
+    public static function provideGraphs(): Generator
     {
         $graph = new Graph();
         $nodeA = new Node('A');
@@ -116,12 +117,11 @@ final class CycleDetectorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideGraphs
      * @param Graph $graph
      * @param bool $isCyclic
      * @return void
      */
-    //#[DataProvider('provideGraphs')] //TODO: PHPUnit 10.
+    #[DataProvider('provideGraphs')]
     public function testICanDetectCyclicTrees(Graph $graph, bool $isCyclic): void
     {
         self::assertSame($isCyclic, (new CycleDetector())->isCyclic($graph));

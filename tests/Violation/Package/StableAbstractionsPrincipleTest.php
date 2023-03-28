@@ -11,6 +11,7 @@ use Hal\Violation\Violation;
 use Hal\Violation\ViolationsHandlerInterface;
 use Phake;
 use Phake\IMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function sqrt;
 
@@ -27,9 +28,9 @@ final class StableAbstractionsPrincipleTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: IMock&Metric, 1: IMock&ViolationsHandlerInterface, 2: bool}>
+     * @return Generator<string, array{IMock&Metric, IMock&ViolationsHandlerInterface, bool}>
      */
-    public function provideMetricToCheckIfViolationApplies(): Generator
+    public static function provideMetricToCheckIfViolationApplies(): Generator
     {
         yield 'Invalid metric' => [Phake::mock(Metric::class), Phake::mock(ViolationsHandlerInterface::class), false];
 
@@ -77,13 +78,12 @@ final class StableAbstractionsPrincipleTest extends TestCase
     }
 
     /**
-     * @dataProvider provideMetricToCheckIfViolationApplies
      * @param IMock&Metric $metric
      * @param ViolationsHandlerInterface&IMock $violationsHandler
      * @param bool $violate
      * @return void
      */
-    //#[DataProvider('provideMetricToCheckIfViolationApplies')] TODO: PHPUnit 10
+    #[DataProvider('provideMetricToCheckIfViolationApplies')]
     public function testViolationApplies(
         IMock&Metric $metric,
         IMock&ViolationsHandlerInterface $violationsHandler,

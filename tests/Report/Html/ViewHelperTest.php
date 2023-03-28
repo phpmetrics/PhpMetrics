@@ -5,6 +5,7 @@ namespace Tests\Hal\Report\Html;
 
 use Generator;
 use Hal\Report\Html\ViewHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 use function range;
@@ -15,7 +16,7 @@ final class ViewHelperTest extends TestCase
     /**
      * @return Generator<string, array{array<int>, float, float}
      */
-    public function provideListsAndValuesToGetPercentilesFor(): Generator
+    public static function provideListsAndValuesToGetPercentilesFor(): Generator
     {
         // With consecutive values
         $list = range(0, 10);
@@ -34,13 +35,12 @@ final class ViewHelperTest extends TestCase
     }
 
     /**
-     * @dataProvider provideListsAndValuesToGetPercentilesFor
      * @param array<int> $list
      * @param float $value
      * @param float $expectedPercentage
      * @return void
      */
-    //#[DataProvider('provideListsAndValuesToGetPercentilesFor')] TODO: PHPUnit 10.
+    #[DataProvider('provideListsAndValuesToGetPercentilesFor')]
     public function testICanFindGradientStyle(array $list, float $value, float $expectedPercentage): void
     {
         $viewHelper = new ViewHelper();

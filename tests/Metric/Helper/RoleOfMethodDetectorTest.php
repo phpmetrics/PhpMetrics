@@ -8,15 +8,16 @@ use Hal\Metric\Helper\RoleOfMethodDetector;
 use Hal\Metric\Helper\SimpleNodeIterator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 
 final class RoleOfMethodDetectorTest extends TestCase
 {
     /**
-     * @return Generator<string, array{0: null|string, 1: string}>
+     * @return Generator<string, array{null|string, string}>
      */
-    public function provideExamples(): Generator
+    public static function provideExamples(): Generator
     {
         $code = '<?php class A { function _(#[SentitiveParameter] string $x): void { $this->x = $x; } }';
         yield 'Setter with PHP Attribute' => ['setter', $code];
@@ -83,12 +84,11 @@ final class RoleOfMethodDetectorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideExamples
      * @param null|string $expected
      * @param string $code
      * @return void
      */
-    //#[DataProvider('provideExamples')] TODO PHPUnit 10
+    #[DataProvider('provideExamples')]
     public function testICanDetectRoleOfMethod(null|string $expected, string $code): void
     {
         $helper = new RoleOfMethodDetector(new SimpleNodeIterator());

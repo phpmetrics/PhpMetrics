@@ -2,6 +2,8 @@ version: "1.0"
 profile:
   name: qodana.starter
 include:
+  # Enables the check of the licenses
+  - name: CheckDependencyLicenses
   # List from profile inspections
   - name: AccessModifierPresentedInspection
   - name: AliasFunctionsUsageInspection
@@ -567,6 +569,8 @@ include:
   - name: YAMLUnresolvedAlias
   - name: YAMLUnusedAnchor
 exclude:
+  # Exclude PHPCS from Qodana as PHP_CodeSniffer is already tested via the native tool.
+  - name: PhpCSValidationInspection
   - name: PhpClassNamingConventionInspection
   - name: PhpConstantNamingConventionInspection
   - name: PhpFunctionNamingConventionInspection

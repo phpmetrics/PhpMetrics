@@ -16,13 +16,14 @@ use Hal\Report\Json\SummaryWriter;
 use Hal\Violation\Violation;
 use Hal\Violation\ViolationsHandlerInterface;
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function dirname;
 use function realpath;
 
 final class SummaryWriterTest extends TestCase
 {
-    public function provideMetricsToReport(): Generator
+    public static function provideMetricsToReport(): Generator
     {
         $metrics = new Metrics();
         $metrics->attach(new ProjectMetric('tree'));
@@ -262,12 +263,11 @@ final class SummaryWriterTest extends TestCase
     }
 
     /**
-     * @dataProvider provideMetricsToReport
      * @param Metrics $metrics
      * @param array<string, mixed> $expectedOutput
      * @return void
      */
-    //#[DataProvider('provideMetricsToReport')] TODO PHPUnit 10.
+    #[DataProvider('provideMetricsToReport')]
     public function testICanWriteSummaries(Metrics $metrics, array $expectedOutput): void
     {
         $config = Phake::mock(ConfigBagInterface::class);

@@ -10,6 +10,7 @@ use Hal\Application\Config\File\ConfigFileReaderInterface;
 use Hal\Application\Config\File\ConfigFileReaderJson;
 use Hal\Application\Config\File\ConfigFileReaderYaml;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function chmod;
 use function dirname;
@@ -59,9 +60,9 @@ final class ConfigFileReaderFactoryTest extends TestCase
     /**
      * Provide valid configuration files with all allowed extensions.
      *
-     * @return Generator<string, array{0: string, 1: class-string<ConfigFileReaderInterface>}>
+     * @return Generator<string, array{string, class-string<ConfigFileReaderInterface>}>
      */
-    public function provideValidConfigurationFiles(): Generator
+    public static function provideValidConfigurationFiles(): Generator
     {
         $resourcesTestDir = realpath(dirname(__DIR__, 3)) . '/resources';
         yield 'JSON file' => [$resourcesTestDir . '/test_config.json', ConfigFileReaderJson::class];
@@ -73,11 +74,10 @@ final class ConfigFileReaderFactoryTest extends TestCase
     /**
      * Ensure the valid configuration files are usable and produces the expected readers.
      *
-     * @dataProvider provideValidConfigurationFiles
      * @param string $configFilePath
      * @param class-string<ConfigFileReaderInterface> $expectedReaderClassName
      */
-    //#[DataProvider('provideValidConfigurationFiles')] // TODO PHPUnit 10: use attribute instead of annotation.
+    #[DataProvider('provideValidConfigurationFiles')]
     public function testICanUseValidFile(string $configFilePath, string $expectedReaderClassName): void
     {
         self::assertFileExists($configFilePath);

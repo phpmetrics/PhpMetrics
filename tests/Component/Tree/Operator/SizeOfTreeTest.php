@@ -8,6 +8,7 @@ use Hal\Component\Tree\Graph;
 use Hal\Component\Tree\Node;
 use Hal\Component\Tree\Operator\SizeOfTree;
 use Hal\Exception\GraphException\NoSizeForCyclicGraphException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class SizeOfTreeTest extends TestCase
@@ -15,9 +16,9 @@ final class SizeOfTreeTest extends TestCase
     /**
      * Provides cyclic graphs with several examples of cyclic relations.
      *
-     * @return Generator<string, array{0: Graph}>
+     * @return Generator<string, array{Graph}>
      */
-    public function provideCyclicGraphs(): Generator
+    public static function provideCyclicGraphs(): Generator
     {
         $graph = new Graph();
         $nodeA = new Node('A');
@@ -54,11 +55,10 @@ final class SizeOfTreeTest extends TestCase
     }
 
     /**
-     * @dataProvider provideCyclicGraphs
      * @param Graph $graph
      * @return void
      */
-    //#[DataProvider('provideCyclicGraphs')] //TODO: PHPUnit 10.
+    #[DataProvider('provideCyclicGraphs')]
     public function testICantHaveSizeOfCyclicTree(Graph $graph): void
     {
         $this->expectExceptionObject(NoSizeForCyclicGraphException::incalculableSize());
@@ -68,9 +68,9 @@ final class SizeOfTreeTest extends TestCase
     /**
      * Provides acyclic graphs with their average height.
      *
-     * @return Generator<string, array{0: Graph, 1: float}>
+     * @return Generator<string, array{Graph, float}>
      */
-    public function provideAcyclicGraphs(): Generator
+    public static function provideAcyclicGraphs(): Generator
     {
         $graph = new Graph();
         yield 'No node' => [$graph, 0];
@@ -133,18 +133,17 @@ final class SizeOfTreeTest extends TestCase
         $graph->addEdge($nodeE, $nodeC);
         $graph->addEdge($nodeF, $nodeC);
         $graph->addEdge($nodeG, $nodeG);
-        // (A➔B➔C) is ignored as shorter than (A➔D➔B➔C), wth same root node.
+        // (A➔B➔C) is ignored as shorter than (A➔D➔B➔C), with same root node.
         // Therefore, expected average is (4+2+2+1)/4 = 2.25
         yield 'A➔B➔C|A➔D➔B➔C|E➔C|F➔C|G➔G' => [$graph, 2.25];
     }
 
     /**
-     * @dataProvider provideAcyclicGraphs
      * @param Graph $graph
      * @param float $expectedValue
      * @return void
      */
-    //#[DataProvider('provideAcyclicGraphs')] //TODO: PHPUnit 10.
+    #[DataProvider('provideAcyclicGraphs')]
     public function testICanCalculateAverageSizeOfTree(Graph $graph, float $expectedValue): void
     {
         self::assertSame($expectedValue, (new SizeOfTree($graph))->getAverageHeightOfGraph());

@@ -10,12 +10,16 @@ use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
 use Hal\Metric\System\Coupling\DepthOfInheritanceTree;
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 
 final class DepthOfInheritanceTreeTest extends TestCase
 {
-    public function provideClassMetricsForDifferentTrees(): Generator
+    /**
+     * @return Generator<string, array{array<Phake\IMock&ClassMetric>, float|null}>
+     */
+    public static function provideClassMetricsForDifferentTrees(): Generator
     {
         yield 'No ClassMetrics' => [[], 0];
 
@@ -47,12 +51,11 @@ final class DepthOfInheritanceTreeTest extends TestCase
     }
 
     /**
-     * @dataProvider provideClassMetricsForDifferentTrees
      * @param array<Phake\IMock&ClassMetric> $classMetrics
      * @param float|null $expectedDepth
      * @return void
      */
-    //#[DataProvider('provideClassMetricsForDifferentTrees')] TODO: PHPUnit 10
+    #[DataProvider('provideClassMetricsForDifferentTrees')]
     public function testCalculationOfDepthOfInheritanceTree(array $classMetrics, null|float $expectedDepth): void
     {
         $metricsMock = Phake::mock(Metrics::class);

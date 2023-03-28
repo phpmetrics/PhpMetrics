@@ -5,6 +5,7 @@ namespace Tests\Hal\Report\Html;
 
 use DOMNode;
 use Hal\Application\Config\ConfigBagInterface;
+use Hal\Application\VersionInfo;
 use Hal\Component\Output\Output;
 use Hal\Metric\Group\Group;
 use Hal\Metric\Metrics;
@@ -15,6 +16,7 @@ use Phake;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use function array_map;
+use function dirname;
 use function file_get_contents;
 use function implode;
 use function iterator_to_array;
@@ -31,6 +33,9 @@ final class ComplexityReportRegressionTest extends TestCase
      */
     public function testComplexityHtmlReportContainsCorrectOrderOfTableColumns(): void
     {
+        // Infer the version of the project regarding the .semver file.
+        VersionInfo::inferVersionFromSemver(dirname(__DIR__, 3) . '/.semver');
+
         $config = Phake::mock(ConfigBagInterface::class);
         $output = Phake::mock(Output::class);
         $reporter = new Reporter($config, $output, new ViewHelper());

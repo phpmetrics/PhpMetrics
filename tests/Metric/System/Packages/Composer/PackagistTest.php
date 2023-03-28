@@ -7,6 +7,8 @@ use Exception;
 use Generator;
 use Hal\Metric\System\Packages\Composer\Packagist;
 use JsonException;
+use PHPUnit\Framework\Attributes\BackupGlobals;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use function random_int;
@@ -52,24 +54,22 @@ final class PackagistTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: bool}>
+     * @return Generator<string, array{bool}>
      */
-    public function provideSwitchOnUsingProxyToContactPackagist(): Generator
+    public static function provideSwitchOnUsingProxyToContactPackagist(): Generator
     {
         yield 'With proxy' => [true];
         yield 'Without proxy' => [false];
     }
 
     /**
-     * @backupGlobals enabled
-     * @dataProvider provideSwitchOnUsingProxyToContactPackagist
      * @param bool $useProxy
      * @return void
      * @throws JsonException
      * @throws Exception
      */
-    //#[DataProvider('provideSwitchOnUsingProxyToContactPackagist')] TODO: PHPUnit 10
-    //#[BackupGlobals('enabled')] TODO: PHPUnit 10
+    #[DataProvider('provideSwitchOnUsingProxyToContactPackagist')]
+    #[BackupGlobals(true)]
     public function testFetchNonExistentPackage(bool $useProxy): void
     {
         if ($useProxy) {

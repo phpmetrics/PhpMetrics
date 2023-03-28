@@ -12,6 +12,7 @@ use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Phake;
 use PhpParser\Node;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function array_map;
 
@@ -35,9 +36,9 @@ final class RegisterMetricsVisitorTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: Node, 1: array<string, class-string<Metric>>}>
+     * @return Generator<string, array{Node, array<string, class-string<Metric>>}>
      */
-    public function provideNodeToBeRegistered(): Generator
+    public static function provideNodeToBeRegistered(): Generator
     {
         $node = Phake::mock(Node\Stmt\Class_::class);
         Phake::when($node)->__call('isAnonymous', [])->thenReturn(false);
@@ -107,12 +108,11 @@ final class RegisterMetricsVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodeToBeRegistered
      * @param Node $node
      * @param array<string, class-string<Metric>> $expected
      * @return void
      */
-    //#[DataProvider('provideNodeToBeRegistered')] TODO: PHPUnit 10.
+    #[DataProvider('provideNodeToBeRegistered')]
     public function testICanRegisterMetricsFromNode(Node $node, array $expected): void
     {
         $metrics = new Metrics();

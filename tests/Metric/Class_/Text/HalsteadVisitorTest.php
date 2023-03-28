@@ -11,10 +11,11 @@ use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Phake;
 use PhpParser\Node;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @phpstan-type HalsteadMetrics array{
+ * @phpstan-type HalsteadMetrics = array{
  *     length: int,
  *     vocabulary: int,
  *     volume: float,
@@ -51,9 +52,9 @@ final class HalsteadVisitorTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: Node\Stmt\ClassLike|Node\Stmt\Function_, 1: HalsteadMetrics}>
+     * @return Generator<string, array{Node\Stmt\ClassLike|Node\Stmt\Function_, HalsteadMetrics}>
      */
-    public function provideNodesToCalculateHalstead(): Generator
+    public static function provideNodesToCalculateHalstead(): Generator
     {
         $node = Phake::mock(Node\Stmt\Class_::class);
         Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
@@ -229,12 +230,11 @@ final class HalsteadVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodesToCalculateHalstead
      * @param Node\Stmt\ClassLike|Node\Stmt\Function_ $node
      * @param HalsteadMetrics $expected
      * @return void
      */
-    //#[DataProvider('provideNodesToCalculateHalstead')] TODO PHPUnit 10.
+    #[DataProvider('provideNodesToCalculateHalstead')]
     public function testICanCalculateHalstead(Node\Stmt\ClassLike|Node\Stmt\Function_ $node, array $expected): void
     {
         $metricsMock = Phake::mock(Metrics::class);

@@ -7,6 +7,7 @@ use Generator;
 use Hal\Application\Config\Config;
 use Hal\Application\Config\File\ConfigFileReaderYaml;
 use Hal\Exception\ConfigException\ConfigFileReadingException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function chmod;
 use function dirname;
@@ -60,9 +61,9 @@ final class ConfigFileReaderYamlTest extends TestCase
     /**
      * Provides valid Yaml files to be parsed and expected associated loaded configuration.
      *
-     * @return Generator<string, array{0: string, 1: array<string, mixed>}>
+     * @return Generator<string, array{string, array<string, mixed>}>
      */
-    public function provideYamlConfigurationFiles(): Generator
+    public static function provideYamlConfigurationFiles(): Generator
     {
         $resourcesTestDir = realpath(dirname(__DIR__, 3)) . '/resources';
         yield 'Minimum configuration' => [$resourcesTestDir . '/test_config_minimum.yml', ['composer' => true]];
@@ -86,11 +87,10 @@ final class ConfigFileReaderYamlTest extends TestCase
     /**
      * Ensure the Yaml file is parsed and configuration is loaded.
      *
-     * @dataProvider provideYamlConfigurationFiles
      * @param string $configFilePath
      * @param array<string, mixed> $expectedConfig
      */
-    //#[DataProvider('provideYamlConfigurationFiles')] // TODO PHPUnit 10: use attribute instead of annotation.
+    #[DataProvider('provideYamlConfigurationFiles')]
     public function testICanParseYamlFile(string $configFilePath, array $expectedConfig): void
     {
         $config = new Config();

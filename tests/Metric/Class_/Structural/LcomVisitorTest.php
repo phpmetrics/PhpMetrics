@@ -12,6 +12,7 @@ use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Phake;
 use PhpParser\Node;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class LcomVisitorTest extends TestCase
@@ -38,9 +39,9 @@ final class LcomVisitorTest extends TestCase
     }
 
     /**
-     * @return Generator<string, array{0: Node\Stmt\ClassLike, 1: array{lcom: int}}>
+     * @return Generator<string, array{Node\Stmt\ClassLike, array{lcom: int}}>
      */
-    public function provideNodesToCalculateLcom(): Generator
+    public static function provideNodesToCalculateLcom(): Generator
     {
         $node = Phake::mock(Node\Stmt\Class_::class);
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
@@ -208,12 +209,11 @@ final class LcomVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodesToCalculateLcom
      * @param Node\Stmt\ClassLike $node
      * @param array{lcom: int} $expected
      * @return void
      */
-    //#[DataProvider('provideNodesToCalculateLcom')] TODO PHPUnit 10.
+    #[DataProvider('provideNodesToCalculateLcom')]
     public function testICanCalculateLcomOnClass(Node\Stmt\ClassLike $node, array $expected): void
     {
         $node->namespacedName = Phake::mock(Node\Identifier::class);

@@ -16,11 +16,12 @@ use Hal\Violation\Violation;
 use Hal\Violation\ViolationsHandlerInterface;
 use Phake;
 use Phake\IMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class SummaryWriterTest extends TestCase
 {
-    public function provideMetricsToReport(): Generator
+    public static function provideMetricsToReport(): Generator
     {
         $metrics = new Metrics();
         $metrics->attach(new ProjectMetric('tree'));
@@ -264,13 +265,12 @@ final class SummaryWriterTest extends TestCase
     }
 
     /**
-     * @dataProvider provideMetricsToReport
      * @param Metrics $metrics
      * @param ConfigBagInterface&IMock $config
      * @param string $expectedOutput
      * @return void
      */
-    //#[DataProvider('provideMetricsToReport')] TODO PHPUnit 10.
+    #[DataProvider('provideMetricsToReport')]
     public function testICanWriteSummaries(
         Metrics $metrics,
         ConfigBagInterface&IMock $config,

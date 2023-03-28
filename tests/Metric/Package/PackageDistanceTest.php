@@ -8,14 +8,15 @@ use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageDistance;
 use Hal\Metric\PackageMetric;
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class PackageDistanceTest extends TestCase
 {
     /**
-     * @return Generator
+     * @return Generator<string, array{Phake\IMock&PackageMetric, null|float}>
      */
-    public function providePackagesAndExpectedDistance(): Generator
+    public static function providePackagesAndExpectedDistance(): Generator
     {
         $package = Phake::mock(PackageMetric::class);
         Phake::when($package)->__call('getAbstraction', [])->thenReturn(null);
@@ -99,12 +100,11 @@ final class PackageDistanceTest extends TestCase
     }
 
     /**
-     * @dataProvider providePackagesAndExpectedDistance
      * @param Phake\IMock&PackageMetric $package
      * @param float|null $expectedDistance
      * @return void
      */
-    //#[DataProvider('providePackagesAndExpectedDistance')] TODO: PHPUnit 10.
+    #[DataProvider('providePackagesAndExpectedDistance')]
     public function testPackageDistanceIsCalculable(
         Phake\IMock&PackageMetric $package,
         null|float $expectedDistance

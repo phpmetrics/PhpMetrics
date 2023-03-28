@@ -12,6 +12,7 @@ use Hal\Metric\Registry;
 use Hal\Search\Search;
 use Phake;
 use Phake\IMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function in_array;
 
@@ -38,7 +39,7 @@ final class SearchTest extends TestCase
     /**
      * @return Generator<string, array{IMock&Metric, Search, bool, callable(IMock&Metric): void}>
      */
-    public function provideSearchAndMetrics(): Generator
+    public static function provideSearchAndMetrics(): Generator
     {
         [$search] = Search::buildListFromArray(['test' => []]);
         $metric = Phake::mock(Metric::class);
@@ -298,14 +299,13 @@ final class SearchTest extends TestCase
     }
 
     /**
-     * @dataProvider provideSearchAndMetrics
      * @param IMock&Metric $metric
      * @param Search $search
      * @param bool $matches
      * @param callable(IMock&Metric): void $checkMetricInteraction
      * @return void
      */
-    //#[DataProvider('provideSearchAndMetrics')] TODO: PHPUnit 10
+    #[DataProvider('provideSearchAndMetrics')]
     public function testICanMatchSearchesWithMetrics(
         IMock&Metric $metric,
         Search $search,

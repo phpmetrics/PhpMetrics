@@ -8,6 +8,7 @@ use Hal\Application\Config\Config;
 use Hal\Application\Config\File\ConfigFileReaderJson;
 use Hal\Exception\ConfigException\ConfigFileReadingException;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function chmod;
 use function dirname;
@@ -65,9 +66,9 @@ final class ConfigFileReaderJsonTest extends TestCase
     /**
      * Provides valid JSON files to be parsed and expected associated loaded configuration.
      *
-     * @return Generator<string, array{0: string, 1: array<string, mixed>}>
+     * @return Generator<string, array{string, array<string, mixed>}>
      */
-    public function provideJsonConfigurationFiles(): Generator
+    public static function provideJsonConfigurationFiles(): Generator
     {
         $resourcesTestDir = realpath(dirname(__DIR__, 3)) . '/resources';
         yield 'Minimum configuration' => [$resourcesTestDir . '/test_config_minimum.json', ['composer' => true]];
@@ -91,14 +92,13 @@ final class ConfigFileReaderJsonTest extends TestCase
     /**
      * Ensure the JSON file is parsed and configuration is loaded.
      *
-     * @dataProvider provideJsonConfigurationFiles
      * @param string $configFilePath
      * @param array<string, mixed> $expectedConfig
      *
      * @throws JsonException Files is the provider are not expecting to be invalid JSON, therefore, this exception
      *     should never be thrown in this case.
      */
-    //#[DataProvider('provideJsonConfigurationFiles')] // TODO PHPUnit 10: use attribute instead of annotation.
+    #[DataProvider('provideJsonConfigurationFiles')]
     public function testICanParseJsonFile(string $configFilePath, array $expectedConfig): void
     {
         $config = new Config();

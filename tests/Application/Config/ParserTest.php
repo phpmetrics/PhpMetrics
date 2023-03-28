@@ -5,6 +5,7 @@ namespace Tests\Hal\Application\Config;
 
 use Generator;
 use Hal\Application\Config\Parser;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function dirname;
 use function realpath;
@@ -14,9 +15,9 @@ final class ParserTest extends TestCase
     /**
      * Provide different couple of arguments with the related expected configuration.
      *
-     * @return Generator<string, array{0:array<int, string>, 1:array<string, mixed>}>
+     * @return Generator<string, array{array<int, string>, array<string, mixed>}>
      */
-    public function provideArguments(): Generator
+    public static function provideArguments(): Generator
     {
         yield 'No argument' => [[], []];
         yield 'Ignore *.php as arg0' => [['test.php'], []];
@@ -68,10 +69,10 @@ final class ParserTest extends TestCase
      * Test that the parsing of the arguments is working as expected, including different business rules of parsing the
      * arguments.
      *
-     * @dataProvider provideArguments
      * @param array<int, string> $argv
      * @param array<string, mixed> $expectedConfig
      */
+    #[DataProvider('provideArguments')]
     public function testTheParsingOfArguments(array $argv, array $expectedConfig): void
     {
         self::assertSame($expectedConfig, (new Parser())->parse($argv)->all());

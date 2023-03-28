@@ -13,14 +13,15 @@ use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Phake;
 use PhpParser\Node;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class CyclomaticComplexityVisitorTest extends TestCase
 {
     /**
-     * @return Generator<string, array{0: Node, 1: array{wmc: int, ccn: int, ccnMethodMax: int}}>
+     * @return Generator<string, array{Node, array{wmc: int, ccn: int, ccnMethodMax: int}}>
      */
-    public function provideNodeToCalculateCyclomaticComplexity(): Generator
+    public static function provideNodeToCalculateCyclomaticComplexity(): Generator
     {
         $allowedNodeClasses = [
             'class' => Node\Stmt\Class_::class,
@@ -133,12 +134,11 @@ final class CyclomaticComplexityVisitorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideNodeToCalculateCyclomaticComplexity
      * @param Node $node
      * @param array{wmc: int, ccn: int, ccnMethodMax: int} $expected
      * @return void
      */
-    //#[DataProvider('provideNodeToCalculateCyclomaticComplexity')] TODO: PHPUnit 10.
+    #[DataProvider('provideNodeToCalculateCyclomaticComplexity')]
     public function testICanCalculateTheCyclomaticComplexityFromNode(Node $node, array $expected): void
     {
         $metricsMock = Phake::mock(Metrics::class);
