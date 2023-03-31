@@ -43,7 +43,7 @@
         "squizlabs/php_codesniffer": "^3.7",
         "symfony/dom-crawler": "^6.2",
         "roave/security-advisories": "dev-latest",
-        "vimeo/psalm": "^5.8"
+        "vimeo/psalm": "^5.9"
     },
     "bin": [
         "bin/phpmetrics"

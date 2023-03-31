@@ -147,6 +147,7 @@ These commands will create `phar`, `debian` and `binary` release,
 then run all tests and push new release to GitHub:
 
 ```bash
-make release VERSION=<VERSION>
+make release VERSION=<VERSION> [SPECIAL=<SPECIAL>]
 # <VERSION> can be `major`, `minor` or `patch`
+# <SPECIAL> can be any non empty string, and it will create a special tag like "alpha" or "rc.1".
 ```

@@ -10,19 +10,25 @@ $filename = 'build/phpmetrics.phar';
 if (file_exists($filename)) {
     unlink($filename);
 }
+if (!is_dir(dirname($filename))) {
+    mkdir(dirname($filename), 0o777, true);
+}
 
-$phar = new \Phar($filename, 0, 'phpmetrics.phar');
-$phar->setSignatureAlgorithm(\Phar::SHA1);
+$phar = new Phar($filename, 0, 'phpmetrics.phar');
+$phar->setSignatureAlgorithm(Phar::SHA1);
 $phar->startBuffering();
 
-$files = array_merge(rglob('*.php'), rglob('*.js'), rglob('*.html'), rglob('*.css'), rglob('*.png'), rglob('*.ttf'));
-$exclude = '!^(\.git)|(\.svn)|(bin)|([tT]ests)|(doc)|(artifacts)!';
+$extToLoad = ['*.php', '*.js', '*.html', '*.css', '*.png', '*.ttf', '*.ico'];
+$files = array_merge(...array_map(rglob(...), $extToLoad));
+$files[] = '.semver';
+// Remove files that are in unwanted locations.
+$excludes = ['.git/', '.svn/', 'bin/', 'tests/', 'doc/', 'qa/', 'artifacts/'];
+foreach ($excludes as $exclude) {
+    $files = array_filter($files, static fn (string $file): bool => !str_starts_with($file, $exclude));
+}
+
 foreach ($files as $file) {
-    if (preg_match($exclude, $file)) {
-        continue;
-    }
-    $path = str_replace(__DIR__ . '/', '', $file);
-    $phar->addFromString($path, file_get_contents($file));
+    $phar->addFromString(str_replace(__DIR__ . '/', '', $file), file_get_contents($file));
 }
 
 $phar->setStub(<<<'STUB'
@@ -56,7 +62,7 @@ STUB
 );
 $phar->stopBuffering();
 
-chmod($filename, 0755);
+chmod($filename, 0o755);
 
 function rglob($pattern = '*', $flags = 0, $path = '')
 {
