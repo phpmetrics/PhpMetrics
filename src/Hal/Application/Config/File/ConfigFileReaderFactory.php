@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Hal\Application\Config\File;
 
+use Hal\Component\File\Reader;
 use InvalidArgumentException;
-use function is_file;
-use function is_readable;
 use function pathinfo;
 use function sprintf;
 use const PATHINFO_EXTENSION;
@@ -21,14 +20,16 @@ final class ConfigFileReaderFactory
      */
     public static function createFromFileName(string $filename): ConfigFileReaderInterface
     {
-        if (!is_file($filename) || !is_readable($filename)) {
+        $fileReader = new Reader();
+
+        if (!$fileReader->exists($filename) || !$fileReader->isReadable($filename)) {
             throw new InvalidArgumentException(sprintf('Cannot read configuration file "%s".', $filename));
         }
 
         return match (pathinfo($filename, PATHINFO_EXTENSION)) {
-            'json' => new ConfigFileReaderJson($filename),
-            'yaml', 'yml' => new ConfigFileReaderYaml($filename),
-            'ini' => new ConfigFileReaderIni($filename),
+            'json' => new ConfigFileReaderJson($filename, $fileReader),
+            'yaml', 'yml' => new ConfigFileReaderYaml($filename, $fileReader),
+            'ini' => new ConfigFileReaderIni($filename, $fileReader),
             default => throw new InvalidArgumentException(sprintf('Unsupported config file format: "%s".', $filename)),
         };
     }

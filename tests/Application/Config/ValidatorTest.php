@@ -5,8 +5,8 @@ namespace Tests\Hal\Application\Config;
 
 use Generator;
 use Hal\Application\Config\Config;
-use Hal\Application\Config\ConfigException as ApplicationConfigException;
 use Hal\Application\Config\Validator;
+use Hal\Component\File\SystemInterface;
 use Hal\Exception\ConfigException;
 use Hal\Metric\Group\Group;
 use Hal\Search\SearchesValidatorInterface;
@@ -26,12 +26,15 @@ final class ValidatorTest extends TestCase
     {
         $config = new Config();
         $searchesValidator = Phake::mock(SearchesValidatorInterface::class);
-        Phake::when($searchesValidator)->__call('validates', [Phake::anyParameters()])->thenDoNothing();
+        $fileSystem = Phake::mock(SystemInterface::class);
 
         $this->expectException(ConfigException::class);
         $this->expectExceptionMessage('Directory to parse is missing or incorrect');
 
-        (new Validator($searchesValidator))->validate($config);
+        (new Validator($searchesValidator, $fileSystem))->validate($config);
+
+        Phake::verifyNoInteraction($searchesValidator);
+        Phake::verifyNoInteraction($fileSystem);
     }
 
     /**
@@ -45,12 +48,17 @@ final class ValidatorTest extends TestCase
         $config = new Config();
         $config->set('files', [$unknownFilePath]);
         $searchesValidator = Phake::mock(SearchesValidatorInterface::class);
-        Phake::when($searchesValidator)->__call('validates', [Phake::anyParameters()])->thenDoNothing();
+        $fileSystem = Phake::mock(SystemInterface::class);
+        Phake::when($fileSystem)->__call('exists', [$unknownFilePath])->thenReturn(false);
 
         $this->expectException(ConfigException::class);
         $this->expectExceptionMessage(sprintf('Directory %s does not exist', $unknownFilePath));
 
-        (new Validator($searchesValidator))->validate($config);
+        (new Validator($searchesValidator, $fileSystem))->validate($config);
+
+        Phake::verifyNoInteraction($searchesValidator);
+        Phake::verify($fileSystem)->__call('exists', [$unknownFilePath]);
+        Phake::verifyNoOtherInteractions($fileSystem);
     }
 
     /**
@@ -81,7 +89,6 @@ final class ValidatorTest extends TestCase
      *
      * @param string $configKey The configuration key to check its format.
      * @param mixed $badValue The wrong value set to trigger the exception.
-     * @throws ApplicationConfigException
      */
     #[DataProvider('provideBadlyFormattedConfigurations')]
     public function testICantValidateBadlyFormattedConfiguration(string $configKey, mixed $badValue): void
@@ -91,11 +98,16 @@ final class ValidatorTest extends TestCase
         $config->set($configKey, $badValue);
         $searchesValidator = Phake::mock(SearchesValidatorInterface::class);
         Phake::when($searchesValidator)->__call('validates', [Phake::anyParameters()])->thenDoNothing();
+        $fileSystem = Phake::mock(SystemInterface::class);
+        Phake::when($fileSystem)->__call('exists', ['/tmp'])->thenReturn(true);
 
         $this->expectException(ConfigException::class);
         $this->expectExceptionMessage(sprintf('%s option requires a value', $configKey));
 
-        (new Validator($searchesValidator))->validate($config);
+        (new Validator($searchesValidator, $fileSystem))->validate($config);
+
+        Phake::verify($fileSystem)->__call('exists', ['/tmp']);
+        Phake::verifyNoOtherInteractions($fileSystem);
     }
 
     /**
@@ -209,15 +221,16 @@ final class ValidatorTest extends TestCase
      *
      * @param Config $config The configuration instance to validate.
      * @param array<string, mixed> $expectedConfiguration The validated and normalized configuration data.
-     * @throws ApplicationConfigException
      */
     #[DataProvider('provideConfigurations')]
     public function testICanValidateConfiguration(Config $config, array $expectedConfiguration): void
     {
         $searchesValidator = Phake::mock(SearchesValidatorInterface::class);
         Phake::when($searchesValidator)->__call('validates', [Phake::anyParameters()])->thenDoNothing();
+        $fileSystem = Phake::mock(SystemInterface::class);
+        Phake::when($fileSystem)->__call('exists', ['/tmp'])->thenReturn(true);
 
-        (new Validator($searchesValidator))->validate($config);
+        (new Validator($searchesValidator, $fileSystem))->validate($config);
         $actualConfiguration = $config->all();
 
         // Manage the groups on a second time as they are objects and can't be tested to be the same (they're different
@@ -232,6 +245,8 @@ final class ValidatorTest extends TestCase
         }, $expectedGroup, $config->get('groups'));
 
         Phake::verify($searchesValidator)->__call('validates', [$config->get('searches')]);
+        Phake::verify($fileSystem)->__call('exists', ['/tmp']);
         Phake::verifyNoOtherInteractions($searchesValidator);
+        Phake::verifyNoOtherInteractions($fileSystem);
     }
 }

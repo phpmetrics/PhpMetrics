@@ -3,16 +3,11 @@ declare(strict_types=1);
 
 namespace Tests\Hal\Metric\System\Packages\Composer;
 
-use Exception;
-use Generator;
+use Hal\Component\File\ReaderInterface;
 use Hal\Metric\System\Packages\Composer\Packagist;
-use JsonException;
-use PHPUnit\Framework\Attributes\BackupGlobals;
-use PHPUnit\Framework\Attributes\DataProvider;
+use Phake;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use function random_int;
-use const PHP_INT_MAX;
 
 final class PackagistTest extends TestCase
 {
@@ -45,68 +40,106 @@ final class PackagistTest extends TestCase
 
     /**
      * @return void
-     * @throws JsonException
      */
     public function testFetchWrongNamePackage(): void
     {
-        $response = (new Packagist())->get('foo');
+        $fileReader = Phake::mock(ReaderInterface::class);
+        $response = (new Packagist($fileReader))->get('foo');
         self::assertEqualsCanonicalizing($this->defaultResponse, $response);
-    }
-
-    /**
-     * @return Generator<string, array{bool}>
-     */
-    public static function provideSwitchOnUsingProxyToContactPackagist(): Generator
-    {
-        yield 'With proxy' => [true];
-        yield 'Without proxy' => [false];
-    }
-
-    /**
-     * @param bool $useProxy
-     * @return void
-     * @throws JsonException
-     * @throws Exception
-     */
-    #[DataProvider('provideSwitchOnUsingProxyToContactPackagist')]
-    #[BackupGlobals(true)]
-    public function testFetchNonExistentPackage(bool $useProxy): void
-    {
-        if ($useProxy) {
-            $_SERVER['HTTP_PROXY'] = '0.0.0.0:0';
-        }
-        $packageName = 'phpmetrics/this_package_does_not_exists_' . random_int(0, PHP_INT_MAX);
-
-        $response = (new Packagist())->get($packageName);
-        self::assertEqualsCanonicalizing($this->defaultResponse, $response);
+        Phake::verifyNoInteraction($fileReader);
     }
 
     /**
      * @return void
-     * @throws JsonException
+     */
+    public function testFetchNonExistingPackage(): void
+    {
+        $fileReader = Phake::mock(ReaderInterface::class);
+        Phake::when($fileReader)->__call('httpReadJson', [Phake::anyParameters()])->thenReturn((object)[]);
+
+        $response = (new Packagist($fileReader))->get('foo/bar');
+        self::assertEqualsCanonicalizing($this->defaultResponse, $response);
+        Phake::verify($fileReader)->__call('httpReadJson', ['https://packagist.org/packages/foo/bar.json']);
+        Phake::verifyNoOtherInteractions($fileReader);
+    }
+
+    /**
+     * @return void
      */
     public function testFetchExistentPackage(): void
     {
-        $response = (new Packagist())->get('phpmetrics/phpmetrics');
-        self::assertSame('phpmetrics/phpmetrics', $response->name);
+        $expectedResponse = (object)[
+            'package' => (object)[
+                'type' => 'known',
+                'description' => 'This is a description',
+                'github_stars' => 78,
+                'github_watchers' => 147,
+                'github_forks' => 987,
+                'github_open_issues' => 1,
+                'downloads' => (object)[
+                    'total' => 15421478,
+                    'monthly' => 245078,
+                    'daily' => 9547,
+                ],
+                'favers' => 149,
+                'versions' => (object)[
+                    'v1.0.0-alpha' => (object)[ // Not only digits or dots => ignore this version.
+                        'license' => (object)['Copyright v1.0.0'],
+                        'homepage' => 'https://this.is.a.test.100',
+                        'time' => '100ms',
+                        'dist' => (object)[
+                            'url' => '@archiveZip.100',
+                        ]
+                    ],
+                    'v2.0.0' => (object)[ // Version ok, but not the latest.
+                        'license' => (object)['Copyright v2.0.0'],
+                        'homepage' => 'https://this.is.a.test.200',
+                        'time' => '200ms',
+                        'dist' => (object)[
+                            'url' => '@archiveZip.200',
+                        ]
+                    ],
+                    'v2.1.0' => (object)[ // Version ok, latest. We expect those values to be fetched.
+                        'license' => (object)['Copyright v2.1.0'],
+                        'homepage' => 'https://this.is.a.test.210',
+                        'time' => '210ms',
+                        'dist' => (object)[
+                            'url' => '@archiveZip.210',
+                        ]
+                    ],
+                    'v2.0.1' => (object)[ // v2.1.0 already set up.
+                        'license' => (object)['Copyright v2.0.1'],
+                        'homepage' => 'https://this.is.a.test.201',
+                        'time' => '201ms',
+                        'dist' => (object)[
+                            'url' => '@archiveZip.201',
+                        ]
+                    ],
+                ]
+            ],
+        ];
+        $fileReader = Phake::mock(ReaderInterface::class);
+        Phake::when($fileReader)->__call('httpReadJson', [Phake::anyParameters()])->thenReturn($expectedResponse);
 
-        // Expect that all default values are replaced by values from PHPMetrics' package.
-        // Those values are evolving in the project's lifetime, so there is no reason to try to guess them.
-        self::assertNotSame($this->defaultResponse->name, $response->name);
-        self::assertNotSame($this->defaultResponse->latest, $response->latest);
-        self::assertNotSame($this->defaultResponse->license, $response->license);
-        self::assertNotSame($this->defaultResponse->homepage, $response->homepage);
-        self::assertNotSame($this->defaultResponse->time, $response->time);
-        self::assertNotSame($this->defaultResponse->zip, $response->zip);
-        self::assertNotSame($this->defaultResponse->type, $response->type);
-        self::assertNotSame($this->defaultResponse->description, $response->description);
-        self::assertNotSame($this->defaultResponse->github_stars, $response->github_stars);
-        self::assertNotSame($this->defaultResponse->github_watchers, $response->github_watchers);
-        self::assertNotSame($this->defaultResponse->github_forks, $response->github_forks);
-        self::assertNotSame($this->defaultResponse->github_open_issues, $response->github_open_issues);
-        self::assertNotSame($this->defaultResponse->download_total, $response->download_total);
-        self::assertNotSame($this->defaultResponse->download_monthly, $response->download_monthly);
-        self::assertNotSame($this->defaultResponse->download_daily, $response->download_daily);
-        self::assertNotSame($this->defaultResponse->favorites, $response->favorites);
+        $response = (new Packagist($fileReader))->get('foo/bar');
+        self::assertSame('foo/bar', $response->name);
+        self::assertSame('2.1.0', $response->latest);
+        self::assertSame(['Copyright v2.1.0'], $response->license);
+        self::assertSame('https://this.is.a.test.210', $response->homepage);
+        self::assertSame('210ms', $response->time);
+        self::assertSame('@archiveZip.210', $response->zip);
+        self::assertSame('known', $response->type);
+        self::assertSame('This is a description', $response->description);
+        self::assertSame(78, $response->github_stars);
+        self::assertSame(147, $response->github_watchers);
+        self::assertSame(987, $response->github_forks);
+        self::assertSame(1, $response->github_open_issues);
+        self::assertSame(15421478, $response->download_total);
+        self::assertSame(245078, $response->download_monthly);
+        self::assertSame(9547, $response->download_daily);
+        self::assertSame(149, $response->favorites);
+
+        Phake::verify($fileReader)->__call('httpReadJson', ['https://packagist.org/packages/foo/bar.json']);
+        Phake::verifyNoOtherInteractions($fileReader);
     }
 }

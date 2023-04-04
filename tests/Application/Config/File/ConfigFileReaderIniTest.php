@@ -5,33 +5,30 @@ namespace Tests\Hal\Application\Config\File;
 
 use Hal\Application\Config\Config;
 use Hal\Application\Config\File\ConfigFileReaderIni;
+use Hal\Component\File\ReaderInterface;
 use Hal\Exception\ConfigException\ConfigFileReadingException;
+use Phake;
 use PHPUnit\Framework\TestCase;
-use function dirname;
-use function realpath;
-use function restore_error_handler;
-use function set_error_handler;
 
 final class ConfigFileReaderIniTest extends TestCase
 {
     /**
      * Ensure the expected exception occurs when trying to read a file that is not an Ini file.
      */
-    public function testICantParseNotIniFile(): void
+    public function testICantParseIniFile(): void
     {
-        // This test case produce a warning we need to ignore to actually test the exception is thrown.
-        set_error_handler(static function (): void {
-        });
+        $fileReader = Phake::mock(ReaderInterface::class);
+        $configFilePath = '/test/config/foo_bar.ini';
 
-        $configFilePath = realpath(dirname(__DIR__, 3)) . '/resources/invalid_config.ini';
-
+        Phake::when($fileReader)->__call('readIni', [$configFilePath])->thenReturn(false);
         $this->expectExceptionObject(ConfigFileReadingException::inIni($configFilePath));
 
         $config = new Config();
-        $reader = new ConfigFileReaderIni($configFilePath);
+        $reader = new ConfigFileReaderIni($configFilePath, $fileReader);
         $reader->read($config);
 
-        restore_error_handler();
+        Phake::verify($fileReader)->__call('readIni', [$configFilePath]);
+        Phake::verifyNoOtherInteractions($fileReader);
     }
 
     /**
@@ -39,22 +36,36 @@ final class ConfigFileReaderIniTest extends TestCase
      */
     public function testICanParseIniFile(): void
     {
-        $configFilePath = realpath(dirname(__DIR__, 3)) . '/resources/test_config.ini';
+        $fileReader = Phake::mock(ReaderInterface::class);
+        $configFilePath = '/test/config/foo_bar.ini';
+        $fakeConfig = [
+            'includes' => ['Controller'],
+            'exclude' => 'tests,Tests',
+            'report' => [
+                'html' => '/tmp/report/',
+                'csv' => '/tmp/report.csv',
+                'json' => 'tmp/report.json',
+                'violations' => '/tmp/violations.xml',
+            ]
+        ];
+        Phake::when($fileReader)->__call('readIni', [$configFilePath])->thenReturn($fakeConfig);
 
         $config = new Config();
-        $reader = new ConfigFileReaderIni($configFilePath);
+        $reader = new ConfigFileReaderIni($configFilePath, $fileReader);
         $reader->read($config);
 
-        // Expectations are inferred from ./tests/resources/test_config.ini.
         $expectedConfig = [
-            'files' => [realpath(dirname(__DIR__, 3)) . '/resources/Controller'],
+            'files' => ['/test/config/Controller'],
             'composer' => true,
             'report-html' => '/tmp/report/',
             'report-csv' => '/tmp/report.csv',
-            'report-json' => '/tmp/report.json',
+            'report-json' => '/test/config/tmp/report.json',
             'report-violations' => '/tmp/violations.xml',
         ];
 
         self::assertSame($expectedConfig, $config->all());
+
+        Phake::verify($fileReader)->__call('readIni', [$configFilePath]);
+        Phake::verifyNoOtherInteractions($fileReader);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Hal\Report\Csv;
 
 use Hal\Application\Config\ConfigBagInterface;
+use Hal\Component\File\WriterInterface;
 use Hal\Component\Output\Output;
 use Hal\Exception\NotWritableCsvReportException;
 use Hal\Metric\ClassMetric;
@@ -12,12 +13,7 @@ use Hal\Metric\Registry;
 use Hal\Report\ReporterInterface;
 use function array_map;
 use function dirname;
-use function fclose;
-use function file_exists;
-use function fopen;
-use function fputcsv;
 use function is_scalar;
-use function is_writable;
 
 /**
  * This class is responsible for the report on a CSV file.
@@ -26,7 +22,8 @@ final class Reporter implements ReporterInterface
 {
     public function __construct(
         private readonly ConfigBagInterface $config,
-        private readonly Output $output
+        private readonly Output $output,
+        private readonly WriterInterface $fileWriter,
     ) {
     }
 
@@ -44,32 +41,28 @@ final class Reporter implements ReporterInterface
         if (null === $logFile) {
             return;
         }
-        if (!file_exists(dirname($logFile)) || !is_writable(dirname($logFile))) {
+        if (!$this->fileWriter->exists(dirname($logFile)) || !$this->fileWriter->isWritable(dirname($logFile))) {
             throw NotWritableCsvReportException::noPermission($logFile);
         }
 
-        $allMetricsNames = Registry::allForStructures();
-        /** @var resource $csvHandler */
-        $csvHandler = fopen($logFile, 'wb');
-        fputcsv($csvHandler, $allMetricsNames);
-        array_map(function (ClassMetric $metric) use ($csvHandler, $allMetricsNames): void {
-            fputcsv($csvHandler, $this->generateRowData($metric, $allMetricsNames));
-        }, $metrics->getClassMetrics());
-        fclose($csvHandler);
+        $this->fileWriter->writeCsv(
+            $logFile,
+            array_map($this->generateRowData(...), $metrics->getClassMetrics()),
+            Registry::allForStructures()
+        );
     }
 
     /**
      * Generates a list of metrics value for the given ClassMetric object, ready to be added in the CSV handler.
      *
      * @param ClassMetric $metric
-     * @param array<int, string> $allMetricsNames
      * @return array<int, string|int|bool|float>
      */
-    private function generateRowData(ClassMetric $metric, array $allMetricsNames): array
+    private function generateRowData(ClassMetric $metric): array
     {
         return array_map(static function (string $key) use ($metric): string|int|bool|float {
             $value = $metric->get($key);
             return is_scalar($value) ? $value : 'N/A';
-        }, $allMetricsNames);
+        }, Registry::allForStructures());
     }
 }

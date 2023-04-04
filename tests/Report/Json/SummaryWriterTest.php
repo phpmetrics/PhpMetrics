@@ -5,6 +5,7 @@ namespace Tests\Hal\Report\Json;
 
 use Generator;
 use Hal\Application\Config\ConfigBagInterface;
+use Hal\Component\File\WriterInterface;
 use Hal\Exception\NotWritableJsonReportException;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\FileMetric;
@@ -18,11 +19,12 @@ use Hal\Violation\ViolationsHandlerInterface;
 use Phake;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use function dirname;
-use function realpath;
 
 final class SummaryWriterTest extends TestCase
 {
+    /**
+     * @return Generator<string, array{Metrics, array<string, array<string, int|float>>}>
+     */
     public static function provideMetricsToReport(): Generator
     {
         $metrics = new Metrics();
@@ -264,72 +266,110 @@ final class SummaryWriterTest extends TestCase
 
     /**
      * @param Metrics $metrics
-     * @param array<string, mixed> $expectedOutput
+     * @param array<string, array<string, int|float>> $expectedOutput
      * @return void
      */
     #[DataProvider('provideMetricsToReport')]
     public function testICanWriteSummaries(Metrics $metrics, array $expectedOutput): void
     {
         $config = Phake::mock(ConfigBagInterface::class);
-        $writer = new SummaryWriter($config);
+        $fileWriter = Phake::mock(WriterInterface::class);
+        $writer = new SummaryWriter($config, $fileWriter);
         $writer->summarize($metrics);
 
         self::assertSame($expectedOutput, $writer->getReport());
 
+        Phake::verifyNoInteraction($fileWriter);
         Phake::verifyNoInteraction($config);
     }
 
     public function testGetReportFile(): void
     {
         $config = Phake::mock(ConfigBagInterface::class);
-        $folder = realpath(dirname(__DIR__, 2)) . '/resources/report/json';
+        $fileWriter = Phake::mock(WriterInterface::class);
+        $file = '/test/report/summary/report.json';
         Phake::when($config)->__call('has', ['quiet'])->thenReturn(false);
-        Phake::when($config)->__call('get', ['report-summary-json'])->thenReturn($folder . '/report.json');
+        Phake::when($config)->__call('get', ['report-summary-json'])->thenReturn($file);
+        Phake::when($fileWriter)->__call('exists', ['/test/report/summary'])->thenReturn(true);
+        Phake::when($fileWriter)->__call('isWritable', ['/test/report/summary'])->thenReturn(true);
 
-        self::assertSame($folder . '/report.json', (new SummaryWriter($config))->getReportFile());
+        self::assertSame($file, (new SummaryWriter($config, $fileWriter))->getReportFile());
 
         Phake::verify($config)->__call('has', ['quiet']);
         Phake::verify($config)->__call('get', ['report-summary-json']);
+        Phake::verify($fileWriter)->__call('exists', ['/test/report/summary']);
+        Phake::verify($fileWriter)->__call('isWritable', ['/test/report/summary']);
+        Phake::verifyNoOtherInteractions($fileWriter);
         Phake::verifyNoOtherInteractions($config);
     }
 
     public function testThereIsNoReportFileIfQuiet(): void
     {
         $config = Phake::mock(ConfigBagInterface::class);
+        $fileWriter = Phake::mock(WriterInterface::class);
         Phake::when($config)->__call('has', ['quiet'])->thenReturn(true);
 
-        self::assertFalse((new SummaryWriter($config))->getReportFile());
+        self::assertFalse((new SummaryWriter($config, $fileWriter))->getReportFile());
 
         Phake::verify($config)->__call('has', ['quiet']);
+        Phake::verifyNoInteraction($fileWriter);
         Phake::verifyNoOtherInteractions($config);
     }
 
     public function testThereIsNoReportFileIfNoReportFileSetInConfig(): void
     {
         $config = Phake::mock(ConfigBagInterface::class);
+        $fileWriter = Phake::mock(WriterInterface::class);
         Phake::when($config)->__call('has', ['quiet'])->thenReturn(false);
         Phake::when($config)->__call('get', ['report-summary-json'])->thenReturn(false);
 
-        self::assertFalse((new SummaryWriter($config))->getReportFile());
+        self::assertFalse((new SummaryWriter($config, $fileWriter))->getReportFile());
 
         Phake::verify($config)->__call('has', ['quiet']);
         Phake::verify($config)->__call('get', ['report-summary-json']);
+        Phake::verifyNoInteraction($fileWriter);
         Phake::verifyNoOtherInteractions($config);
     }
 
-    public function testThereIsNoReportFileWhenFolderIsNotWriteable(): void
+    public function testThereIsNoReportFileWhenFolderDoesNotExist(): void
     {
         $config = Phake::mock(ConfigBagInterface::class);
-        $folder = realpath(dirname(__DIR__, 2)) . '/resources/report/no-perm-json';
+        $fileWriter = Phake::mock(WriterInterface::class);
+        $file = '/test/report/summary/report.json';
         Phake::when($config)->__call('has', ['quiet'])->thenReturn(false);
-        Phake::when($config)->__call('get', ['report-summary-json'])->thenReturn($folder . '/report.json');
+        Phake::when($config)->__call('get', ['report-summary-json'])->thenReturn($file);
+        Phake::when($fileWriter)->__call('exists', ['/test/report/summary'])->thenReturn(false);
 
-        $this->expectExceptionObject(NotWritableJsonReportException::noPermission($folder . '/report.json'));
+        $this->expectExceptionObject(NotWritableJsonReportException::noPermission($file));
 
-        (new SummaryWriter($config))->getReportFile();
+        (new SummaryWriter($config, $fileWriter))->getReportFile();
 
         Phake::verify($config)->__call('has', ['quiet']);
         Phake::verify($config)->__call('get', ['report-summary-json']);
+        Phake::verify($fileWriter)->__call('exists', ['/test/report/summary']);
+        Phake::verifyNoOtherInteractions($fileWriter);
+        Phake::verifyNoOtherInteractions($config);
+    }
+
+    public function testThereIsNoReportFileWhenFolderIsNotWritable(): void
+    {
+        $config = Phake::mock(ConfigBagInterface::class);
+        $fileWriter = Phake::mock(WriterInterface::class);
+        $file = '/test/report/summary/report.json';
+        Phake::when($config)->__call('has', ['quiet'])->thenReturn(false);
+        Phake::when($config)->__call('get', ['report-summary-json'])->thenReturn($file);
+        Phake::when($fileWriter)->__call('exists', ['/test/report/summary'])->thenReturn(true);
+        Phake::when($fileWriter)->__call('isWritable', ['/test/report/summary'])->thenReturn(false);
+
+        $this->expectExceptionObject(NotWritableJsonReportException::noPermission($file));
+
+        (new SummaryWriter($config, $fileWriter))->getReportFile();
+
+        Phake::verify($config)->__call('has', ['quiet']);
+        Phake::verify($config)->__call('get', ['report-summary-json']);
+        Phake::verify($fileWriter)->__call('exists', ['/test/report/summary']);
+        Phake::verify($fileWriter)->__call('isWritable', ['/test/report/summary']);
+        Phake::verifyNoOtherInteractions($fileWriter);
         Phake::verifyNoOtherInteractions($config);
     }
 }

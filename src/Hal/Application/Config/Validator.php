@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Hal\Application\Config;
 
+use Hal\Component\File\SystemInterface;
 use Hal\Exception\ConfigException;
 use Hal\Metric\Group\Group;
 use Hal\Search\SearchesValidatorInterface;
@@ -10,7 +11,6 @@ use Hal\Search\SearchInterface;
 use function array_filter;
 use function array_map;
 use function explode;
-use function file_exists;
 use function filter_var;
 use function implode;
 use function is_array;
@@ -25,9 +25,12 @@ final class Validator implements ValidatorInterface
 {
     /**
      * @param SearchesValidatorInterface $searchesValidator
+     * @param SystemInterface $fileSystem
      */
-    public function __construct(private readonly SearchesValidatorInterface $searchesValidator)
-    {
+    public function __construct(
+        private readonly SearchesValidatorInterface $searchesValidator,
+        private readonly SystemInterface $fileSystem,
+    ) {
     }
 
     /**
@@ -42,7 +45,7 @@ final class Validator implements ValidatorInterface
         /** @var array<string> $files */
         $files = $config->get('files');
         foreach ($files as $dir) {
-            if (!file_exists($dir)) {
+            if (!$this->fileSystem->exists($dir)) {
                 throw ConfigException\FileDoesNotExistException::fromConfig($dir);
             }
         }

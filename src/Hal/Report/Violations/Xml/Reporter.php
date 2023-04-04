@@ -1,5 +1,4 @@
 <?php
-
 /** @noinspection PhpComposerExtensionStubsInspection As ext-dom is not required but suggested. */
 declare(strict_types=1);
 
@@ -9,6 +8,7 @@ use DOMDocument;
 use DOMElement;
 use DOMException;
 use Hal\Application\Config\ConfigBagInterface;
+use Hal\Component\File\WriterInterface;
 use Hal\Component\Output\Output;
 use Hal\Metric\Metrics;
 use Hal\Report\ReporterInterface;
@@ -16,9 +16,6 @@ use Hal\Violation\Violation;
 use function array_map;
 use function date;
 use function dirname;
-use function file_exists;
-use function file_put_contents;
-use function mkdir;
 use function sprintf;
 
 /**
@@ -30,7 +27,8 @@ final class Reporter implements ReporterInterface
 
     public function __construct(
         private readonly ConfigBagInterface $config,
-        private readonly Output $output
+        private readonly Output $output,
+        private readonly WriterInterface $fileWriter,
     ) {
         $this->xml = new DOMDocument('1.0', 'UTF-8');
         $this->xml->formatOutput = true;
@@ -72,10 +70,12 @@ final class Reporter implements ReporterInterface
         $this->xml->appendChild($root);
 
         // Save XML file.
-        file_exists(dirname($logFile)) || mkdir(dirname($logFile), 0o755, true);
-        file_put_contents($logFile, $this->xml->saveXML());
+        $this->fileWriter->ensureDirectoryExists(dirname($logFile));
+        /** @var string $xml */
+        $xml = $this->xml->saveXML();
+        $this->fileWriter->write($logFile, $xml);
 
-        $this->output->writeln(sprintf('XML report generated in "%s"', $logFile));
+        $this->output->writeln(sprintf('XML report generated in "%s".', $logFile));
     }
 
     /**

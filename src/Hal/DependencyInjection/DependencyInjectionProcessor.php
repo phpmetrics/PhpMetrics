@@ -16,6 +16,9 @@ use Hal\Application\VersionInfo;
 use Hal\Application\Workflow;
 use Hal\Component\Ast\NodeTraverser;
 use Hal\Component\File\Finder;
+use Hal\Component\File\Reader;
+use Hal\Component\File\System;
+use Hal\Component\File\Writer;
 use Hal\Component\Output\CliOutput;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
@@ -69,9 +72,20 @@ final class DependencyInjectionProcessor
     public function __construct()
     {
         $this->dependencyInjectionLoader = static function (array $cliArguments): ApplicationInterface {
+            $fileSystem = new System();
+            $fileReader = new Reader();
+            $fileWriter = new Writer();
+
+            $versionInfo = new VersionInfo($fileReader);
+            $versionInfo->inferVersionFromSemver(dirname(__DIR__, 3) . '/.semver');
+
             $output = new CliOutput();
             $config = (
-                new Bootstrap(new Parser(), new Validator(new SearchesValidator()), $output)
+                new Bootstrap(
+                    new Parser(),
+                    new Validator(new SearchesValidator(), $fileSystem),
+                    $output
+                )
             )->prepare($cliArguments);
             $app = (new ApplicationFactory($output))->buildFromConfig($config);
             if (null !== $app) {
@@ -127,7 +141,8 @@ final class DependencyInjectionProcessor
                         new Workflow\Task\PrepareParserTask(
                             (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
                             $traverser,
-                            $output
+                            $output,
+                            $fileReader
                         ),
                         new Workflow\Task\AnalyzerTask(
                             // System analyses
@@ -145,7 +160,8 @@ final class DependencyInjectionProcessor
                                 $configuration['files'],
                                 new Finder(['json'], $configuration['exclude']), // Finder for composer.json
                                 new Finder(['lock'], $configuration['exclude']), // Finder for composer.lock
-                                new Packagist()
+                                $fileReader,
+                                new Packagist($fileReader)
                             ),
                             new Searches($metrics, $configuration['searches'])
                         ),
@@ -166,19 +182,25 @@ final class DependencyInjectionProcessor
                 new ReporterHandler(
                     new Report\Cli\Reporter(new Report\Cli\SummaryWriter($config), $output),
                     new Report\Cli\SearchReporter($config, $output),
-                    new Report\Html\Reporter($config, $output, new Report\Html\ViewHelper()),
-                    new Report\Csv\Reporter($config, $output),
-                    new Report\Json\Reporter($config, $output),
-                    new Report\Json\SummaryReporter(new Report\Json\SummaryWriter($config)),
-                    new Report\Violations\Xml\Reporter($config, $output),
+                    new Report\Html\Reporter(
+                        $config,
+                        $output,
+                        $fileWriter,
+                        $fileReader,
+                        new Report\Html\ViewHelper()
+                    ),
+                    new Report\Csv\Reporter($config, $output, $fileWriter),
+                    new Report\Json\Reporter($config, $output, $fileWriter),
+                    new Report\Json\SummaryReporter(
+                        new Report\Json\SummaryWriter($config, $fileWriter),
+                        $fileWriter
+                    ),
+                    new Report\Violations\Xml\Reporter($config, $output, $fileWriter),
                 ),
                 new NoCriticalViolationsAllowed($metrics),
                 $output
             );
         };
-
-        // Infer the version of the project regarding the .semver file.
-        VersionInfo::inferVersionFromSemver(dirname(__DIR__, 3) . '/.semver');
     }
 
     /**

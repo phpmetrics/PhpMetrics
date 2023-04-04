@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Hal\Metric\System\Packages\Composer;
 
 use Hal\Component\File\FinderInterface;
+use Hal\Component\File\ReaderInterface;
 use Hal\Metric\CalculableInterface;
 use Hal\Metric\Metrics;
 use Hal\Metric\ProjectMetric;
-use JsonException;
 use function array_column;
 use function array_filter;
 use function array_flip;
@@ -16,15 +16,12 @@ use function array_keys;
 use function array_map;
 use function array_merge;
 use function array_walk;
-use function file_get_contents;
-use function json_decode;
 use function preg_replace;
 use function str_contains;
 use function str_starts_with;
 use function strtolower;
 use function version_compare;
 use const ARRAY_FILTER_USE_KEY;
-use const JSON_THROW_ON_ERROR;
 
 /**
  * This class computes information from Composer dependencies used in the analysed project.
@@ -37,6 +34,7 @@ final class Composer implements CalculableInterface
      * @param array<string> $pathsList
      * @param FinderInterface $composerJsonFinder
      * @param FinderInterface $composerLockFinder
+     * @param ReaderInterface $fileReader
      * @param ComposerRegistryConnectorInterface $composerRegistryConnector
      */
     public function __construct(
@@ -45,13 +43,13 @@ final class Composer implements CalculableInterface
         private readonly array $pathsList,
         private readonly FinderInterface $composerJsonFinder,
         private readonly FinderInterface $composerLockFinder,
+        private readonly ReaderInterface $fileReader,
         private readonly ComposerRegistryConnectorInterface $composerRegistryConnector,
     ) {
     }
 
     /**
      * {@inheritDoc}
-     * @throws JsonException
      */
     public function calculate(): void
     {
@@ -94,21 +92,14 @@ final class Composer implements CalculableInterface
      * Returns the requirements defined in the "composer(-dist)?.json" file.
      *
      * @return array<string, string>
-     * @throws JsonException When the "composer.json" file cannot be decoded from JSON.
      */
     private function getComposerJsonRequirements(): array
     {
-        $rawRequirements = array_map(static function (string $filename): array {
+        $rawRequirements = array_map(function (string $filename): array {
             if (!str_contains($filename, 'composer.json') && !str_contains($filename, 'composer-dist.json')) {
                 return [];
             }
-            /** @var string $fileContent As the file exists and is readable. */
-            $fileContent = file_get_contents($filename);
-            /**
-             * @noinspection JsonEncodingApiUsageInspection TODO: Wait for a fix
-             * @see https://github.com/kalessil/phpinspectionsea/issues/1725
-             */
-            $composerJson = json_decode($fileContent, true, flags: JSON_THROW_ON_ERROR);
+            $composerJson = $this->fileReader->readJson($filename);
             $composerJson += ['require' => []];
             return $composerJson['require'];
         }, $this->composerJsonFinder->fetch([...$this->pathsList, './']));
@@ -121,21 +112,14 @@ final class Composer implements CalculableInterface
      *
      * @param array<string> $rootPackageRequired List of root required packages to only match installed packages.
      * @return array<string, string>
-     * @throws JsonException When the "composer.lock" file cannot be decoded from JSON.
      */
     private function getComposerLockInstalled(array $rootPackageRequired): array
     {
-        $rawInstalled = array_map(static function (string $filename) use ($rootPackageRequired): array {
+        $rawInstalled = array_map(function (string $filename) use ($rootPackageRequired): array {
             if (!str_contains($filename, 'composer.lock')) {
                 return [];
             }
-            /** @var string $fileContent As the file exists and is readable. */
-            $fileContent = file_get_contents($filename);
-            /**
-             * @noinspection JsonEncodingApiUsageInspection TODO: Wait for a fix
-             * @see https://github.com/kalessil/phpinspectionsea/issues/1725
-             */
-            $composerLock = json_decode($fileContent, true, flags: JSON_THROW_ON_ERROR);
+            $composerLock = $this->fileReader->readJson($filename);
             $composerLock += ['packages' => []];
 
             // List all installed packages versions by name.

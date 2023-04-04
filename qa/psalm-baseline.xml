@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.6.0@e784128902dfe01d489c4123d69918a9f3c1eac5">
+<files psalm-version="5.9.0@8b9ad1eb9e8b7d3101f949291da2b9f7767cd163">
   <file src="../src/Hal/Component/File/Finder.php">
     <MissingTemplateParam>
       <code>$filteredIterator</code>
     </MissingTemplateParam>
   </file>
+  <file src="../src/Hal/Component/File/Reader.php">
+    <LessSpecificReturnStatement>
+      <code>(object)[]</code>
+    </LessSpecificReturnStatement>
+    <MoreSpecificReturnType>
+      <code>stdClass</code>
+    </MoreSpecificReturnType>
+  </file>
   <file src="../src/Hal/Component/Tree/Edge.php">
     <ImplicitToStringCast>
-      <code>$this-&gt;from</code>
-      <code>$this-&gt;to</code>
+      <code><![CDATA[$this->from]]></code>
+      <code><![CDATA[$this->to]]></code>
     </ImplicitToStringCast>
   </file>
   <file src="../src/Hal/Component/Tree/Graph.php">
@@ -29,29 +37,29 @@
   </file>
   <file src="../src/Hal/Metric/Class_/Complexity/CyclomaticComplexityVisitor.php">
     <PropertyTypeCoercion>
-      <code>[
+      <code><![CDATA[[
             // `case ...:` from a `switch`. Ignore `default:`.
-            'Stmt_Case' =&gt; static fn (Stmt\Case_ $node): int =&gt; (null !== $node-&gt;cond) ? 1 : 0,
-            // `... =&gt; ...` from a `match`. Ignore `default =&gt;`.
-            'MatchArm' =&gt; static fn (Node\MatchArm $node): int =&gt; count((array)$node-&gt;conds)
-        ]</code>
+            'Stmt_Case' => static fn (Stmt\Case_ $node): int => (null !== $node->cond) ? 1 : 0,
+            // `... => ...` from a `match`. Ignore `default =>`.
+            'MatchArm' => static fn (Node\MatchArm $node): int => count((array)$node->conds)
+        ]]]></code>
     </PropertyTypeCoercion>
   </file>
   <file src="../src/Hal/Metric/Class_/Coupling/ExternalsVisitor.php">
     <UndefinedPropertyFetch>
-      <code>$node-&gt;class</code>
+      <code><![CDATA[$node->class]]></code>
     </UndefinedPropertyFetch>
   </file>
   <file src="../src/Hal/Metric/Class_/Structural/LcomVisitor.php">
     <PossiblyInvalidCast>
-      <code>$node-&gt;name</code>
+      <code><![CDATA[$node->name]]></code>
     </PossiblyInvalidCast>
     <PossiblyInvalidOperand>
-      <code>$node-&gt;name</code>
+      <code><![CDATA[$node->name]]></code>
     </PossiblyInvalidOperand>
     <UndefinedPropertyFetch>
-      <code>$node-&gt;var-&gt;name</code>
-      <code>$node-&gt;var-&gt;name</code>
+      <code><![CDATA[$node->var->name]]></code>
+      <code><![CDATA[$node->var->name]]></code>
     </UndefinedPropertyFetch>
   </file>
   <file src="../src/Hal/Metric/Class_/Text/HalsteadVisitor.php">
@@ -62,13 +70,13 @@
       <code>[] !== $operands</code>
     </TypeDoesNotContainType>
     <UndefinedPropertyFetch>
-      <code>$node-&gt;name</code>
-      <code>$node-&gt;name</code>
-      <code>$node-&gt;name</code>
-      <code>$node-&gt;value</code>
-      <code>$node-&gt;value</code>
-      <code>$node-&gt;value</code>
-      <code>$node-&gt;value</code>
+      <code><![CDATA[$node->name]]></code>
+      <code><![CDATA[$node->name]]></code>
+      <code><![CDATA[$node->name]]></code>
+      <code><![CDATA[$node->value]]></code>
+      <code><![CDATA[$node->value]]></code>
+      <code><![CDATA[$node->value]]></code>
+      <code><![CDATA[$node->value]]></code>
     </UndefinedPropertyFetch>
   </file>
   <file src="../src/Hal/Metric/Consolidated.php">
@@ -79,15 +87,15 @@
   </file>
   <file src="../src/Hal/Metric/Helper/MetricNameGenerator.php">
     <NoInterfaceProperties>
-      <code>$node-&gt;name</code>
-      <code>$node-&gt;name</code>
-      <code>$node-&gt;namespacedName</code>
+      <code><![CDATA[$node->name]]></code>
+      <code><![CDATA[$node->name]]></code>
+      <code><![CDATA[$node->namespacedName]]></code>
     </NoInterfaceProperties>
   </file>
   <file src="../src/Hal/Metric/System/Coupling/Coupling.php">
     <InvalidOperand>
-      <code>$edge-&gt;getFrom()-&gt;getKey() === $node-&gt;getKey()</code>
-      <code>$edge-&gt;getTo()-&gt;getKey() === $node-&gt;getKey()</code>
+      <code><![CDATA[$edge->getFrom()->getKey() === $node->getKey()]]></code>
+      <code><![CDATA[$edge->getTo()->getKey() === $node->getKey()]]></code>
     </InvalidOperand>
   </file>
   <file src="../src/Hal/Metric/System/Packages/Composer/Packagist.php">
@@ -95,17 +103,10 @@
       <code>(object)$response</code>
       <code>(object)$response</code>
       <code>(object)$response</code>
-      <code>(object)[]</code>
     </LessSpecificReturnStatement>
     <MoreSpecificReturnType>
       <code>stdClass</code>
-      <code>stdClass</code>
     </MoreSpecificReturnType>
-  </file>
-  <file src="../src/Hal/Report/Html/Reporter.php">
-    <ForbiddenCode>
-      <code>shell_exec('cp -r ' . $this-&gt;templateDir . $folder . ' ' . $logDir)</code>
-    </ForbiddenCode>
   </file>
   <file src="../src/Hal/Search/Search.php">
     <PossiblyInvalidArgument>

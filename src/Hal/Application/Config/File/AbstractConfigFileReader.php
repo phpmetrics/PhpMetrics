@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Hal\Application\Config\File;
 
 use Hal\Application\Config\ConfigBagInterface;
+use Hal\Component\File\ReaderInterface;
 use Hal\Metric\Group\Group;
 use Hal\Search\Search;
 use function array_filter;
@@ -19,8 +20,10 @@ use const DIRECTORY_SEPARATOR;
  */
 abstract class AbstractConfigFileReader implements ConfigFileReaderInterface
 {
-    final public function __construct(protected readonly string $filename)
-    {
+    final public function __construct(
+        protected readonly string $filename,
+        protected readonly ReaderInterface $fileReader,
+    ) {
     }
 
     /**

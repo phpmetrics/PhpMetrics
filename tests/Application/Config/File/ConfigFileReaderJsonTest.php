@@ -6,61 +6,32 @@ namespace Tests\Hal\Application\Config\File;
 use Generator;
 use Hal\Application\Config\Config;
 use Hal\Application\Config\File\ConfigFileReaderJson;
+use Hal\Component\File\ReaderInterface;
 use Hal\Exception\ConfigException\ConfigFileReadingException;
-use JsonException;
+use Phake;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use function chmod;
-use function dirname;
-use function realpath;
-use function restore_error_handler;
-use function set_error_handler;
 
 final class ConfigFileReaderJsonTest extends TestCase
 {
-    public static function setUpBeforeClass(): void
-    {
-        // Update the permissions to some files to make sure they're unreadable.
-        $file = realpath(dirname(__DIR__, 3)) . '/resources/test_config.no_read_perm';
-        chmod($file, 0o200);
-    }
-
     /**
      * Ensure the expected exception occurs when trying to read a file that is unreadable, or missing.
-     *
-     * @throws JsonException Ignored in this case as we do not even reach the json_decode call.
      */
-    public function testICantParseUnreadableFile(): void
+    public function testICantParseJsonFile(): void
     {
-        // This test case produce a warning we need to ignore to actually test the exception is thrown.
-        set_error_handler(static function (): void {
-        });
+        $fileReader = Phake::mock(ReaderInterface::class);
+        $configFilePath = '/test/config/foo_bar.json';
 
-        $configFilePath = realpath(dirname(__DIR__, 3)) . '/resources/test_config.no_read_perm';
+        Phake::when($fileReader)->__call('readJson', [$configFilePath])->thenReturn(false);
 
         $this->expectExceptionObject(ConfigFileReadingException::inJson($configFilePath));
 
         $config = new Config();
-        $reader = new ConfigFileReaderJson($configFilePath);
+        $reader = new ConfigFileReaderJson($configFilePath, $fileReader);
         $reader->read($config);
 
-        restore_error_handler();
-    }
-
-    /**
-     * Ensure the expected exception occurs when trying to read a file that is not a JSON file.
-     *
-     * @throws JsonException That is exactly the expected exception in this case.
-     */
-    public function testICantParseNotJsonFile(): void
-    {
-        $configFilePath = realpath(dirname(__DIR__, 3)) . '/resources/test_config.ini';
-
-        $this->expectException(JsonException::class);
-
-        $config = new Config();
-        $reader = new ConfigFileReaderJson($configFilePath);
-        $reader->read($config);
+        Phake::verify($fileReader)->__call('readJson', [$configFilePath]);
+        Phake::verifyNoOtherInteractions($fileReader);
     }
 
     /**
@@ -70,12 +41,26 @@ final class ConfigFileReaderJsonTest extends TestCase
      */
     public static function provideJsonConfigurationFiles(): Generator
     {
-        $resourcesTestDir = realpath(dirname(__DIR__, 3)) . '/resources';
-        yield 'Minimum configuration' => [$resourcesTestDir . '/test_config_minimum.json', ['composer' => true]];
+        yield 'Minimum configuration' => [[], ['composer' => true]];
 
-        // Expectations are inferred from associated configuration file.
+        $fakeConfig = [
+            'includes' => ['Controller', '/src/other/files'],
+            'excludes' => ['tests', 'Tests'],
+            'extensions' => ['php', 'php.inc', 'php8'],
+            'report' => [
+                'html' => 'report/with/relative/path',
+                'csv' => '/report/with/absolute/path',
+            ],
+            'groups' => [
+                ['name' => 'Component', 'match' => '!component!i'],
+                ['name' => 'Reporters', 'match' => '!Report!']
+            ],
+            'plugins' => [
+                'junit' => ['report' => '/tmp/junit.xml']
+            ],
+        ];
         $expectedConfig = [
-            'files' => [$resourcesTestDir . '/Controller', '/src/other/files'],
+            'files' => ['/test/config/Controller', '/src/other/files'],
             'groups' => [
                 ['name' => 'Component', 'match' => '!component!i'],
                 ['name' => 'Reporters', 'match' => '!Report!'],
@@ -83,34 +68,32 @@ final class ConfigFileReaderJsonTest extends TestCase
             'extensions' => 'php,php.inc,php8',
             'composer' => true,
             'exclude' => 'tests,Tests',
-            'report-html' => $resourcesTestDir . '/report/with/relative/path',
+            'report-html' => '/test/config/report/with/relative/path',
             'report-csv' => '/report/with/absolute/path',
         ];
-        yield 'Complete configuration' => [$resourcesTestDir . '/test_config.json', $expectedConfig];
+        yield 'Complete configuration' => [$fakeConfig, $expectedConfig];
     }
 
     /**
      * Ensure the JSON file is parsed and configuration is loaded.
      *
-     * @param string $configFilePath
+     * @param array<string, mixed> $fakeConfig
      * @param array<string, mixed> $expectedConfig
-     *
-     * @throws JsonException Files is the provider are not expecting to be invalid JSON, therefore, this exception
-     *     should never be thrown in this case.
      */
     #[DataProvider('provideJsonConfigurationFiles')]
-    public function testICanParseJsonFile(string $configFilePath, array $expectedConfig): void
+    public function testICanParseJsonFile(array $fakeConfig, array $expectedConfig): void
     {
+        $fileReader = Phake::mock(ReaderInterface::class);
+        $configFilePath = '/test/config/foo_bar.json';
+
+        Phake::when($fileReader)->__call('readJson', [$configFilePath])->thenReturn($fakeConfig);
+
         $config = new Config();
-        $reader = new ConfigFileReaderJson($configFilePath);
+        $reader = new ConfigFileReaderJson($configFilePath, $fileReader);
         $reader->read($config);
         self::assertSame($expectedConfig, $config->all());
-    }
 
-    public static function tearDownAfterClass(): void
-    {
-        // Update the permissions to reset them for updated files.
-        $file = realpath(dirname(__DIR__, 3)) . '/resources/test_config.no_read_perm';
-        chmod($file, 0o644);
+        Phake::verify($fileReader)->__call('readJson', [$configFilePath]);
+        Phake::verifyNoOtherInteractions($fileReader);
     }
 }

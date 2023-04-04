@@ -3,17 +3,24 @@ declare(strict_types=1);
 
 namespace Hal\Report\Json;
 
+use Hal\Application\Config\ConfigBagInterface;
+use Hal\Component\File\WriterInterface;
 use Hal\Exception\NotWritableJsonReportException;
 use Hal\Report\SummaryProvider;
 use function dirname;
-use function file_exists;
-use function is_writable;
 
 /**
  * Dedicated writer that defines the content to write in a JSON file when exporting the summary of the metrics.
  */
 final class SummaryWriter extends SummaryProvider
 {
+    public function __construct(
+        ConfigBagInterface $config,
+        private readonly WriterInterface $fileWriter
+    ) {
+        parent::__construct($config);
+    }
+
     /**
      * Return the report of the summary, into an array adapted for the JSON report format.
      *
@@ -76,7 +83,7 @@ final class SummaryWriter extends SummaryProvider
     /**
      * {@inheritDoc}
      */
-    public function getReportFile(): string|bool // TODO PHP 8.2 string|false
+    public function getReportFile(): string|false
     {
         if ($this->config->has('quiet')) {
             return false;
@@ -87,7 +94,8 @@ final class SummaryWriter extends SummaryProvider
         if (false === $logFile) {
             return false;
         }
-        if (!file_exists(dirname($logFile)) || !is_writable(dirname($logFile))) {
+
+        if (!$this->fileWriter->exists(dirname($logFile)) || !$this->fileWriter->isWritable(dirname($logFile))) {
             throw NotWritableJsonReportException::noPermission($logFile);
         }
 

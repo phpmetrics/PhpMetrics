@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Hal\Application\Config;
 
 use Hal\Application\Config\File\ConfigFileReaderFactory;
-use JsonException;
 use function array_pop;
 use function array_shift;
 use function explode;
@@ -21,7 +20,6 @@ final class Parser implements ParserInterface
 {
     /**
      * {@inheritDoc}
-     * @throws JsonException
      */
     public function parse(array $argv): Config
     {

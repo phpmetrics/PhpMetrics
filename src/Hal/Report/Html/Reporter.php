@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Hal\Report\Html;
 
 use Hal\Application\Config\ConfigBagInterface;
+use Hal\Component\File\ReaderInterface;
+use Hal\Component\File\WriterInterface;
 use Hal\Component\Output\Output;
 use Hal\Metric\Consolidated;
 use Hal\Metric\Group\Group;
@@ -16,20 +18,12 @@ use function array_map;
 use function array_values;
 use function dirname;
 use function end;
-use function file_exists;
-use function file_get_contents;
-use function file_put_contents;
-use function glob;
-use function is_writable;
-use function json_decode;
 use function json_encode;
-use function mkdir;
 use function natsort;
 use function ob_get_clean;
 use function ob_start;
 use function round;
 use function rtrim;
-use function shell_exec;
 use function sprintf;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
@@ -51,11 +45,15 @@ final class Reporter implements ReporterInterface
     /**
      * @param ConfigBagInterface $config
      * @param Output $output
+     * @param WriterInterface $fileWriter
+     * @param ReaderInterface $fileReader
      * @param ViewHelper $viewHelper
      */
     public function __construct(
         private readonly ConfigBagInterface $config,
         private readonly Output $output,
+        private readonly WriterInterface $fileWriter,
+        private readonly ReaderInterface $fileReader,
         private readonly ViewHelper $viewHelper
     ) {
         $this->templateDir = dirname(__DIR__, 4) . '/templates/html_report/';
@@ -74,8 +72,8 @@ final class Reporter implements ReporterInterface
             return;
         }
         $logDir = rtrim($logDir, '/') . '/';
-        $this->createFolderIfNotExists($logDir);
-        if (!is_writable($logDir)) {
+        $this->fileWriter->ensureDirectoryExists($logDir);
+        if (!$this->fileWriter->isWritable($logDir)) {
             throw new RuntimeException(sprintf('Unable to write in the directory "%s"', $logDir));
         }
 
@@ -96,36 +94,23 @@ final class Reporter implements ReporterInterface
             'sum' => $consolidated->getSum()
         ];
         /** @var array<string> $files */
-        $files = glob($logDir . 'js/history-*.json');
+        $files = $this->fileReader->glob($logDir . 'js/history-*.json');
         natsort($files);
-        $history = array_map(
-            static function (string $filename): stdClass {
-                /** @var string $fileContent File exists as it was globed. */
-                $fileContent = file_get_contents($filename);
-                /**
-                 * TODO: Remove @noinspection once https://github.com/kalessil/phpinspectionsea/issues/1725 fixed.
-                 * @noinspection JsonEncodingApiUsageInspection
-                 * @var stdClass
-                 */
-                return json_decode($fileContent, flags: JSON_THROW_ON_ERROR);
-            },
-            array_values($files)
-        );
+        /** @var array<stdClass> $history */
+        $history = array_map($this->fileReader->readJson(...), array_values($files));
 
         // copy sources
-        array_map(
-            function (string $folder) use ($logDir): void {
-                shell_exec('cp -r ' . $this->templateDir . $folder . ' ' . $logDir);
-            },
-            ['favicon.ico', 'js', 'css', 'images', 'fonts']
-        );
+        $this->fileWriter->recursiveCopy($this->templateDir . 'favicon.ico', $logDir);
+        $this->fileWriter->recursiveCopy($this->templateDir . 'js', $logDir);
+        $this->fileWriter->recursiveCopy($this->templateDir . 'css', $logDir);
+        $this->fileWriter->recursiveCopy($this->templateDir . 'images', $logDir);
+        $this->fileWriter->recursiveCopy($this->templateDir . 'fonts', $logDir);
         // render dynamic pages
         $this->renderHtmlPages($logDir, $consolidated, $history);
 
         // js data
-        $currentData = json_encode($today, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
-        file_put_contents($logDir . sprintf('js/history-%d.json', count($files) + 1), $currentData);
-        file_put_contents($logDir . 'js/latest.json', $currentData);
+        $this->fileWriter->writePrettyJson($logDir . sprintf('js/history-%d.json', count($files) + 1), $today);
+        $this->fileWriter->writePrettyJson($logDir . 'js/latest.json', $today);
 
         // consolidated by groups
         foreach ($consolidatedGroups as $name => $consolidatedGroup) {
@@ -163,7 +148,7 @@ final class Reporter implements ReporterInterface
             'composer',
         ];
 
-        $this->createFolderIfNotExists($destination);
+        $this->fileWriter->ensureDirectoryExists($destination);
 
         foreach ($filesToGenerate as $filename) {
             $this->renderPage(
@@ -173,7 +158,7 @@ final class Reporter implements ReporterInterface
                 $history
             );
 
-            file_put_contents(
+            $this->fileWriter->write(
                 $destination . 'classes.js',
                 'var classes = ' . json_encode($consolidated->getClasses(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
             );
@@ -188,7 +173,7 @@ final class Reporter implements ReporterInterface
      */
     public function renderPage(string $source, string $destination, Consolidated $consolidated, array $history): void
     {
-        if (!is_writable(dirname($destination))) {
+        if (!$this->fileWriter->isWritable(dirname($destination))) {
             throw new RuntimeException(sprintf('Unable to write in the directory "%s"', dirname($destination)));
         }
 
@@ -205,8 +190,9 @@ final class Reporter implements ReporterInterface
 
         ob_start();
         require $source;
+        /** @var string $content Cannot be false as the file is required. */
         $content = ob_get_clean();
-        file_put_contents($destination, $content);
+        $this->fileWriter->write($destination, $content);
     }
 
     /**
@@ -265,19 +251,5 @@ final class Reporter implements ReporterInterface
     private function isHomePage(): bool
     {
         return null === $this->currentGroup;
-    }
-
-    /**
-     * Creates the folder at the location given in argument if not already exists.
-     * Rights given to this folder are 755.
-     *
-     * @param string $path
-     * @return void
-     */
-    private function createFolderIfNotExists(string $path): void
-    {
-        if (!file_exists($path)) {
-            mkdir($path, 0o755, true);
-        }
     }
 }

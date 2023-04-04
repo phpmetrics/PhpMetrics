@@ -1,10 +1,12 @@
 <?php
+/** @noinspection PhpComposerExtensionStubsInspection As ext-dom is not required but suggested. */
 declare(strict_types=1);
 
 namespace Tests\Hal\Report\Violations\Xml;
 
 use DOMException;
 use Hal\Application\Config\ConfigBagInterface;
+use Hal\Component\File\WriterInterface;
 use Hal\Component\Output\Output;
 use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
@@ -14,11 +16,7 @@ use Phake;
 use PHPUnit\Framework\TestCase;
 use function array_keys;
 use function array_map;
-use function dirname;
-use function file_get_contents;
 use function preg_quote;
-use function realpath;
-use function shell_exec;
 use function sprintf;
 
 final class ReporterTest extends TestCase
@@ -31,13 +29,15 @@ final class ReporterTest extends TestCase
         $metrics = Phake::mock(Metrics::class);
         $config = Phake::mock(ConfigBagInterface::class);
         $output = Phake::mock(Output::class);
+        $fileWriter = Phake::mock(WriterInterface::class);
         Phake::when($config)->__call('get', ['report-violations'])->thenReturn(null);
 
-        $reporter = new Reporter($config, $output);
+        $reporter = new Reporter($config, $output, $fileWriter);
         $reporter->generate($metrics);
 
         Phake::verify($config)->__call('get', ['report-violations']);
         Phake::verifyNoOtherInteractions($config);
+        Phake::verifyNoInteraction($fileWriter);
         Phake::verifyNoInteraction($output);
         Phake::verifyNoInteraction($metrics);
     }
@@ -45,14 +45,16 @@ final class ReporterTest extends TestCase
     /**
      * @throws DOMException
      */
-    public function testViolationsXmlReportWithNoViolationsTargetFolderExists(): void
+    public function testViolationsXmlReportWithoutViolation(): void
     {
         $metrics = Phake::mock(Metrics::class);
         $config = Phake::mock(ConfigBagInterface::class);
         $output = Phake::mock(Output::class);
-        $folder = realpath(dirname(__DIR__, 3)) . '/resources/report/violations/xml';
-        shell_exec('rm -rf ' . $folder . '/violations.xml');
-        Phake::when($config)->__call('get', ['report-violations'])->thenReturn($folder . '/violations.xml');
+        $fileWriter = Phake::mock(WriterInterface::class);
+        $file = '/test/report/violations.xml';
+        Phake::when($config)->__call('get', ['report-violations'])->thenReturn($file);
+        Phake::when($fileWriter)->__call('ensureDirectoryExists', ['/test/report'])->thenDoNothing();
+        Phake::when($fileWriter)->__call('write', [$file, Phake::ignoreRemaining()])->thenDoNothing();
 
         $metricsList = [
             Phake::mock(Metric::class),
@@ -64,91 +66,40 @@ final class ReporterTest extends TestCase
         }
         Phake::when($metrics)->__call('all', [])->thenReturn($metricsList);
 
-        $reporter = new Reporter($config, $output);
+        $reporter = new Reporter($config, $output, $fileWriter);
         $reporter->generate($metrics);
 
+        Phake::verify($config)->__call('get', ['report-violations']);
+        Phake::verify($metrics)->__call('all', []);
+        Phake::verify($fileWriter)->__call('ensureDirectoryExists', ['/test/report']);
+        $verifyWrite = Phake::verify($fileWriter)->__call('write', [$file, Phake::ignoreRemaining()]);
         $xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
         $expectedXml = <<<XML
             $xmlHeader
             <pmd version="@package_version@" timestamp="%s"/>
             XML;
-        $dateFormatPattern = '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2}';
-
-        self::assertFileExists($folder . '/violations.xml');
-        self::assertMatchesRegularExpression(
-            sprintf('#^' . preg_quote($expectedXml, '#') . '$#', $dateFormatPattern),
-            file_get_contents($folder . '/violations.xml')
-        );
-
-        Phake::verify($config)->__call('get', ['report-violations']);
-        Phake::verify($metrics)->__call('all', []);
-        Phake::verify($output)->__call('writeln', ['XML report generated in "' . $folder . '/violations.xml"']);
+        $actualXml = $verifyWrite[0]->getCall()->getArguments()[1];
+        self::assertXmlMatches($expectedXml, $actualXml);
+        Phake::verify($output)->__call('writeln', ['XML report generated in "' . $file . '".']);
         Phake::verifyNoOtherInteractions($output);
         Phake::verifyNoOtherInteractions($config);
+        Phake::verifyNoOtherInteractions($fileWriter);
         Phake::verifyNoOtherInteractions($metrics);
-        shell_exec('rm -rf ' . $folder . '/violations.xml');
     }
 
     /**
      * @throws DOMException
      */
-    public function testViolationsXmlReportWithNoViolationsTargetFolderDoesNotExist(): void
+    public function testViolationsXmlReportWithViolations(): void
     {
         $metrics = Phake::mock(Metrics::class);
         $config = Phake::mock(ConfigBagInterface::class);
         $output = Phake::mock(Output::class);
-        $folder = realpath(dirname(__DIR__, 3)) . '/resources/report/violations';
-        shell_exec('rm -rf ' . $folder . '/no-existing-xml/');
-        $folder .= '/no-existing-xml';
-        Phake::when($config)->__call('get', ['report-violations'])->thenReturn($folder . '/violations.xml');
-
-        $metricsList = [
-            Phake::mock(Metric::class),
-            Phake::mock(Metric::class),
-            Phake::mock(Metric::class),
-        ];
-        foreach ($metricsList as $metric) {
-            Phake::when($metric)->__call('get', ['violations'])->thenReturn([]);
-        }
-        Phake::when($metrics)->__call('all', [])->thenReturn($metricsList);
-
-        $reporter = new Reporter($config, $output);
-        $reporter->generate($metrics);
-
-        $xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
-        $expectedXml = <<<XML
-            $xmlHeader
-            <pmd version="@package_version@" timestamp="%s"/>
-            XML;
-        $dateFormatPattern = '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2}';
-
-        self::assertFileExists($folder . '/violations.xml');
-        self::assertMatchesRegularExpression(
-            sprintf('#^' . preg_quote($expectedXml, '#') . '$#', $dateFormatPattern),
-            file_get_contents($folder . '/violations.xml')
-        );
-
-        Phake::verify($config)->__call('get', ['report-violations']);
-        Phake::verify($metrics)->__call('all', []);
-        Phake::verify($output)->__call('writeln', ['XML report generated in "' . $folder . '/violations.xml"']);
-        Phake::verifyNoOtherInteractions($output);
-        Phake::verifyNoOtherInteractions($config);
-        Phake::verifyNoOtherInteractions($metrics);
-        $folder = realpath(dirname(__DIR__, 3)) . '/resources/report/violations';
-        shell_exec('rm -rf ' . $folder . '/no-existing-xml/');
-    }
-
-    /**
-     * @throws DOMException
-     */
-    public function testViolationsXmlReportWithViolationsAndTargetFolderExists(): void
-    {
-        $metrics = Phake::mock(Metrics::class);
-        $config = Phake::mock(ConfigBagInterface::class);
-        $output = Phake::mock(Output::class);
-        $folder = realpath(dirname(__DIR__, 3)) . '/resources/report/violations/xml';
-        shell_exec('rm -rf ' . $folder . '/violations.xml');
-        Phake::when($config)->__call('get', ['report-violations'])->thenReturn($folder . '/violations.xml');
+        $fileWriter = Phake::mock(WriterInterface::class);
+        $file = '/test/report/violations.xml';
+        Phake::when($config)->__call('get', ['report-violations'])->thenReturn($file);
+        Phake::when($fileWriter)->__call('ensureDirectoryExists', ['/test/report'])->thenDoNothing();
+        Phake::when($fileWriter)->__call('write', [$file, Phake::ignoreRemaining()])->thenDoNothing();
 
         $metricsList = [
             Phake::mock(Metric::class),
@@ -178,7 +129,7 @@ final class ReporterTest extends TestCase
         }
         Phake::when($metrics)->__call('all', [])->thenReturn($metricsList);
 
-        $reporter = new Reporter($config, $output);
+        $reporter = new Reporter($config, $output, $fileWriter);
         $reporter->generate($metrics);
 
         $xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -210,20 +161,32 @@ final class ReporterTest extends TestCase
             </pmd>
 
             XML;
-        $dateFormatPattern = '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2}';
-
-        self::assertFileExists($folder . '/violations.xml');
-        self::assertMatchesRegularExpression(
-            sprintf('#^' . preg_quote($expectedXml, '#') . '$#', $dateFormatPattern),
-            file_get_contents($folder . '/violations.xml')
-        );
 
         Phake::verify($config)->__call('get', ['report-violations']);
         Phake::verify($metrics)->__call('all', []);
-        Phake::verify($output)->__call('writeln', ['XML report generated in "' . $folder . '/violations.xml"']);
+        Phake::verify($fileWriter)->__call('ensureDirectoryExists', ['/test/report']);
+        $verifyWrite = Phake::verify($fileWriter)->__call('write', [$file, Phake::ignoreRemaining()]);
+        $actualXml = $verifyWrite[0]->getCall()->getArguments()[1];
+        self::assertXmlMatches($expectedXml, $actualXml);
+        Phake::verify($output)->__call('writeln', ['XML report generated in "' . $file . '".']);
         Phake::verifyNoOtherInteractions($output);
         Phake::verifyNoOtherInteractions($config);
+        Phake::verifyNoOtherInteractions($fileWriter);
         Phake::verifyNoOtherInteractions($metrics);
-        shell_exec('rm -rf ' . $folder . '/violations.xml');
+    }
+
+    /**
+     * Ensure the expected XML pattern (modified because of the management of the date in the XML content) matches the
+     * actual saved XML by the original method.
+     *
+     * @param string $expected
+     * @param string $actual
+     * @return void
+     */
+    private static function assertXmlMatches(string $expected, string $actual): void
+    {
+        $dateFormatPattern = '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2}';
+        $expectedPattern = sprintf('#^' . preg_quote($expected, '#') . '$#', $dateFormatPattern);
+        self::assertMatchesRegularExpression($expectedPattern, $actual);
     }
 }

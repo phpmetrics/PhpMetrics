@@ -3,65 +3,51 @@ declare(strict_types=1);
 
 namespace Tests\Hal\Report\Json;
 
+use Hal\Component\File\WriterInterface;
 use Hal\Metric\Metrics;
 use Hal\Report\Json\SummaryReporter;
 use Hal\Report\SummaryProviderInterface;
-use JsonException;
 use Phake;
 use PHPUnit\Framework\TestCase;
-use function dirname;
-use function file_get_contents;
-use function realpath;
-use function unlink;
 
 final class SummaryReporterTest extends TestCase
 {
-    /**
-     * @throws JsonException
-     */
     public function testICantGenerateReportIfNoFileDefined(): void
     {
         $summary = Phake::mock(SummaryProviderInterface::class);
         $metrics = Phake::mock(Metrics::class);
+        $fileWriter = Phake::mock(WriterInterface::class);
 
         Phake::when($summary)->__call('getReportFile', [])->thenReturn(false);
 
-        (new SummaryReporter($summary))->generate($metrics);
+        (new SummaryReporter($summary, $fileWriter))->generate($metrics);
 
         Phake::verify($summary)->__call('getReportFile', []);
         Phake::verifyNoOtherInteractions($summary);
+        Phake::verifyNoInteraction($fileWriter);
         Phake::verifyNoInteraction($metrics);
     }
 
-    /**
-     * @throws JsonException
-     */
     public function testICanGenerateReportWhenTargetFileDefined(): void
     {
         $summary = Phake::mock(SummaryProviderInterface::class);
         $metrics = Phake::mock(Metrics::class);
+        $fileWriter = Phake::mock(WriterInterface::class);
 
-        $reportFile = realpath(dirname(__DIR__, 2)) . '/resources/report/json/report.json';
+        $reportFile = '/test/report/summary.json';
         Phake::when($summary)->__call('getReportFile', [])->thenReturn($reportFile);
         Phake::when($summary)->__call('summarize', [$metrics])->thenDoNothing();
         Phake::when($summary)->__call('getReport', [])->thenReturn(['test' => true]);
+        Phake::when($fileWriter)->__call('writePrettyJson', [Phake::anyParameters()])->thenDoNothing();
 
-        (new SummaryReporter($summary))->generate($metrics);
+        (new SummaryReporter($summary, $fileWriter))->generate($metrics);
 
         Phake::verify($summary)->__call('getReportFile', []);
         Phake::verify($summary)->__call('summarize', [$metrics]);
         Phake::verify($summary)->__call('getReport', []);
+        Phake::verify($fileWriter)->__call('writePrettyJson', [$reportFile, ['test' => true]]);
         Phake::verifyNoOtherInteractions($summary);
+        Phake::verifyNoOtherInteractions($fileWriter);
         Phake::verifyNoInteraction($metrics);
-
-        self::assertFileExists($reportFile);
-        $expectedContent = <<<'JSON'
-        {
-            "test": true
-        }
-        JSON;
-        self::assertSame($expectedContent, file_get_contents($reportFile));
-
-        unlink($reportFile);
     }
 }

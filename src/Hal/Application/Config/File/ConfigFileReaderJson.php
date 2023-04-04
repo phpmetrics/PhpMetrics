@@ -5,10 +5,6 @@ namespace Hal\Application\Config\File;
 
 use Hal\Application\Config\ConfigBagInterface;
 use Hal\Exception\ConfigException\ConfigFileReadingException;
-use JsonException;
-use function file_get_contents;
-use function json_decode;
-use const JSON_THROW_ON_ERROR;
 
 /**
  * Reader of a .json configuration file.
@@ -17,20 +13,15 @@ final class ConfigFileReaderJson extends AbstractConfigFileReader
 {
     /**
      * {@inheritDoc}
-     * @throws JsonException when the JSON file is not well JSON encoded.
      */
     public function read(ConfigBagInterface $config): void
     {
-        $jsonText = file_get_contents($this->filename);
+        /** @var false|array<string, mixed> $jsonData */
+        $jsonData = $this->fileReader->readJson($this->filename);
 
-        if (false === $jsonText) {
+        if (false === $jsonData) {
             throw ConfigFileReadingException::inJson($this->filename);
         }
-
-        /* @TODO: Remove @noinspection once https://github.com/kalessil/phpinspectionsea/issues/1725 fixed. */
-        /** @noinspection JsonEncodingApiUsageInspection */
-        /** @var array<string, mixed> $jsonData As expected if configuration file is written correctly. */
-        $jsonData = json_decode($jsonText, true, flags: JSON_THROW_ON_ERROR);
 
         $this->normalizeConfig($config, $jsonData);
     }

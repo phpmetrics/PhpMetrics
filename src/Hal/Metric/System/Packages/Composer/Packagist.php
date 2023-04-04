@@ -3,26 +3,24 @@ declare(strict_types=1);
 
 namespace Hal\Metric\System\Packages\Composer;
 
-use JsonException;
+use Hal\Component\File\ReaderInterface;
 use stdClass;
-use function file_get_contents;
-use function json_decode;
 use function ltrim;
 use function preg_match;
 use function sprintf;
-use function str_replace;
-use function stream_context_create;
 use function version_compare;
-use const JSON_THROW_ON_ERROR;
 
 /**
  * Responsible for the fetching of the information related to external dependencies using Packagist as a registry.
  */
 final class Packagist implements ComposerRegistryConnectorInterface
 {
+    public function __construct(private readonly ReaderInterface $fileReader)
+    {
+    }
+
     /**
      * {@inheritDoc}
-     * @throws JsonException
      */
     public function get(string $package): stdClass
     {
@@ -48,7 +46,7 @@ final class Packagist implements ComposerRegistryConnectorInterface
         if (0 === preg_match('/\w+\/\w+/', $package)) {
             return (object)$response;
         }
-        $json = $this->getURIContentAsJson(sprintf('https://packagist.org/packages/%s.json', $package));
+        $json = $this->fileReader->httpReadJson(sprintf('https://packagist.org/packages/%s.json', $package));
 
         if (!isset($json->package)) {
             return (object)$response;
@@ -84,36 +82,5 @@ final class Packagist implements ComposerRegistryConnectorInterface
         }
 
         return (object)$response;
-    }
-
-    /**
-     * Download the given URI and decode it as JSON.
-     *
-     * @param string $uri
-     *
-     * @return stdClass
-     * @throws JsonException When the content of the request is not possible to decode the response in JSON.
-     */
-    private function getURIContentAsJson(string $uri): stdClass
-    {
-        $_SERVER += ['HTTP_PROXY' => ''];
-        $httpOptions = ['ignore_errors' => true];
-        if ('' !== $_SERVER['HTTP_PROXY']) {
-            $httpOptions += [
-                'proxy' => str_replace(['http://', 'https://'], 'tcp://', $_SERVER['HTTP_PROXY']),
-                'request_fulluri' => true,
-            ];
-        }
-        $jsonContent = file_get_contents($uri, context: stream_context_create(['http' => $httpOptions]));
-        if (false === $jsonContent) {
-            return (object)[];
-        }
-
-        /**
-         * @noinspection JsonEncodingApiUsageInspection TODO: Wait for a fix
-         * @see https://github.com/kalessil/phpinspectionsea/issues/1725
-         * @var stdClass
-         */
-        return json_decode($jsonContent, flags: JSON_THROW_ON_ERROR);
     }
 }

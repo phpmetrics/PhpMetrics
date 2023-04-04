@@ -5,6 +5,7 @@ namespace Tests\Hal\Application\Workflow\Task;
 
 use Error;
 use Hal\Application\Workflow\Task\PrepareParserTask;
+use Hal\Component\File\ReaderInterface;
 use Hal\Component\Output\Output;
 use Phake;
 use PhpParser\Node;
@@ -12,48 +13,65 @@ use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use PHPUnit\Framework\TestCase;
 use function array_map;
-use function array_values;
-use function dirname;
-use function file_get_contents;
-use function realpath;
 
 final class PrepareParserTaskTest extends TestCase
 {
     public function testICanTraverseSomeFilesWithParser(): void
     {
-        $resourcesTestDir = realpath(dirname(__DIR__, 3)) . '/resources';
         $files = [
-            'is_ok' => $resourcesTestDir . '/parser_ok.php',
-            'will_throw_error' => $resourcesTestDir . '/parser_ko.php',
+            '/test/parser/ok.php',
+            '/test/parser/ko.php'
         ];
-        $fileContents = array_map(file_get_contents(...), $files);
+        $fileContents = [
+            '/test/parser/ok.php' => <<<'PHP'
+            <?php
+            // This file does not need to contain anything. Only its name is important.
+            // Name: parser_ok.php
+
+            PHP,
+            '/test/parser/ko.php' => <<<'PHP'
+            <?php
+            // This file does not need to contain anything. Only its name is important.
+            // Name: parser_ko.php
+
+            PHP,
+        ];
 
         $mocks = [
             'parser' => Phake::mock(Parser::class),
             'nodeTraverser' => Phake::mock(NodeTraverserInterface::class),
             'output' => Phake::mock(Output::class),
+            'fileReader' => Phake::mock(ReaderInterface::class),
         ];
         $mockNodes = [Phake::mock(Node::class), Phake::mock(Node::class)];
 
-        Phake::when($mocks['parser'])->__call('parse', [$fileContents['is_ok']])->thenReturn($mockNodes);
-        Phake::when($mocks['parser'])->__call('parse', [$fileContents['will_throw_error']])
+        Phake::when($mocks['parser'])->__call('parse', [$fileContents['/test/parser/ok.php']])->thenReturn($mockNodes);
+        Phake::when($mocks['parser'])->__call('parse', [$fileContents['/test/parser/ko.php']])
             ->thenThrow(new Error('Error'));
         Phake::when($mocks['nodeTraverser'])->__call('traverse', [$mockNodes])->thenReturn($mockNodes);
         Phake::when($mocks['output'])->__call('writeln', [Phake::anyParameters()])->thenDoNothing();
+        foreach ($files as $file) {
+            Phake::when($mocks['fileReader'])->__call('read', [$file])->thenReturn($fileContents[$file]);
+        }
 
         $task = new PrepareParserTask(
             $mocks['parser'],
             $mocks['nodeTraverser'],
-            $mocks['output']
+            $mocks['output'],
+            $mocks['fileReader'],
         );
 
-        $task->process(array_values($files));
+        $task->process($files);
 
-        Phake::verify($mocks['parser'])->__call('parse', [$fileContents['is_ok']]);
-        Phake::verify($mocks['parser'])->__call('parse', [$fileContents['will_throw_error']]);
+        foreach ($files as $file) {
+            Phake::verify($mocks['parser'])->__call('parse', [$fileContents[$file]]);
+        }
         Phake::verify($mocks['nodeTraverser'])->__call('traverse', [$mockNodes]);
-        $expectedOutput = '<error>Cannot parse ' . $resourcesTestDir . '/parser_ko.php</error>';
+        $expectedOutput = '<error>Cannot parse /test/parser/ko.php</error>';
         Phake::verify($mocks['output'])->__call('writeln', [$expectedOutput]);
+        foreach ($files as $file) {
+            Phake::verify($mocks['fileReader'])->__call('read', [$file]);
+        }
         array_map(Phake::verifyNoOtherInteractions(...), $mocks);
         array_map(Phake::verifyNoOtherInteractions(...), $mockNodes);
     }

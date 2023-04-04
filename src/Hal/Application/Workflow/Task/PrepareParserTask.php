@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Hal\Application\Workflow\Task;
 
 use Error;
+use Hal\Component\File\ReaderInterface;
 use Hal\Component\Output\Output;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
-use function file_get_contents;
 use function sprintf;
 
 /**
@@ -20,7 +20,8 @@ final class PrepareParserTask implements WorkflowTaskInterface
     public function __construct(
         private readonly Parser $parser,
         private readonly NodeTraverserInterface $nodeTraverser,
-        private readonly Output $output
+        private readonly Output $output,
+        private readonly ReaderInterface $fileReader
     ) {
     }
 
@@ -31,7 +32,7 @@ final class PrepareParserTask implements WorkflowTaskInterface
     {
         foreach ($files as $file) {
             /** @var string $content File exists as this have been tested in the validation earlier. */
-            $content = file_get_contents($file);
+            $content = $this->fileReader->read($file);
             try {
                 /** @var array<Stmt> $nodes Can not be NULL as an exception is thrown if any error. */
                 $nodes = $this->parser->parse($content);
