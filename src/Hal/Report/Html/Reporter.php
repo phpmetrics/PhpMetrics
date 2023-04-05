@@ -103,10 +103,10 @@ final class Reporter implements ReporterInterface
 
         // copy sources
         $this->fileWriter->copy($this->templateDir . 'favicon.ico', $logDir . 'favicon.ico');
-        $this->fileWriter->recursiveCopy($this->templateDir . 'js', $logDir);
-        $this->fileWriter->recursiveCopy($this->templateDir . 'css', $logDir);
-        $this->fileWriter->recursiveCopy($this->templateDir . 'images', $logDir);
-        $this->fileWriter->recursiveCopy($this->templateDir . 'fonts', $logDir);
+        $this->fileWriter->recursiveCopy($this->templateDir . 'js', $logDir . 'js');
+        $this->fileWriter->recursiveCopy($this->templateDir . 'css', $logDir . 'css');
+        $this->fileWriter->recursiveCopy($this->templateDir . 'images', $logDir . 'images');
+        $this->fileWriter->recursiveCopy($this->templateDir . 'fonts', $logDir . 'fonts');
         // render dynamic pages
         $this->renderHtmlPages($logDir, $consolidated, $history);
 

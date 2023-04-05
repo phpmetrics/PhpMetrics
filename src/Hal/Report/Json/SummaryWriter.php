@@ -89,9 +89,9 @@ final class SummaryWriter extends SummaryProvider
             return false;
         }
 
-        /** @var false|string $logFile */
+        /** @var null|string $logFile */
         $logFile = $this->config->get('report-summary-json');
-        if (false === $logFile) {
+        if (null === $logFile) {
             return false;
         }
 

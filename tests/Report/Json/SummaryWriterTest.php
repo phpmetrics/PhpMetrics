@@ -321,7 +321,7 @@ final class SummaryWriterTest extends TestCase
         $config = Phake::mock(ConfigBagInterface::class);
         $fileWriter = Phake::mock(WriterInterface::class);
         Phake::when($config)->__call('has', ['quiet'])->thenReturn(false);
-        Phake::when($config)->__call('get', ['report-summary-json'])->thenReturn(false);
+        Phake::when($config)->__call('get', ['report-summary-json'])->thenReturn(null);
 
         self::assertFalse((new SummaryWriter($config, $fileWriter))->getReportFile());
 

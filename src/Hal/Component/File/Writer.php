@@ -92,7 +92,7 @@ final class Writer extends System implements WriterInterface
             if ($file->isDir()) {
                 mkdir($dest . '/' . $relativeName);
             } else {
-                copy($file->getRealPath(), $dest . '/' . $relativeName);
+                copy($file->getPathname(), $dest . '/' . $relativeName);
             }
         }
     }

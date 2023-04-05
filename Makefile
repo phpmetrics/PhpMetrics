@@ -1,4 +1,4 @@
-.PHONY: docker build
+.PHONY: release
 
 export HOST_PWD ?=$(shell pwd)
 
@@ -16,7 +16,8 @@ tag:
 	@sed -i -r "s/([0-9]{4}\-[0-9]{2}\-[0-9]{2})/`date +%Y-%m-%d`/g" artifacts/bintray.json
 
 # Tag git with last release
-new_git_version: build tag
+# Don't use directly, use `make release` instead
+new_git_version: tag build
 	git add .semver artifacts/bintray.json releases/*
 	git commit -m "releasing `semver tag`"
 	git tag `semver tag` -m "releasing `semver tag`"
