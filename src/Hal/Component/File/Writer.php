@@ -69,6 +69,14 @@ final class Writer extends System implements WriterInterface
     /**
      * {@inheritDoc}
      */
+    public function copy(string $src, string $dest): void
+    {
+        copy($src, $dest);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function recursiveCopy(string $src, string $dest): void
     {
         $this->ensureDirectoryExists($dest);

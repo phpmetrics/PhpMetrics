@@ -91,6 +91,16 @@ final class WriterTest extends TestCase
         self::assertFalse((new Writer())->isWritable($file));
     }
 
+    public function testCopy(): void
+    {
+        $file = self::getAbsoluteRandomFolderPath() . '/src';
+        touch($file);
+        $dest = self::getAbsoluteRandomFolderPath() . '/dest';
+        (new Writer())->copy($file, $dest);
+
+        self::assertFileExists($dest);
+    }
+
     public function testRecursiveCopy(): void
     {
         $src = self::getAbsoluteRandomFolderPath() . '/recursive-copy-src';

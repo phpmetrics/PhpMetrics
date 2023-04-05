@@ -37,6 +37,15 @@ interface WriterInterface extends SystemInterface
     public function isWritable(string $path): bool;
 
     /**
+     * Copy a single file from its source to a destination folder.
+     *
+     * @param string $src
+     * @param string $dest
+     * @return void
+     */
+    public function copy(string $src, string $dest): void;
+
+    /**
      * Processes a recursive copy of ech folder and file found in $src into $dest.
      *
      * @param string $src

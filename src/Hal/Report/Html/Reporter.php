@@ -102,7 +102,7 @@ final class Reporter implements ReporterInterface
         $history = array_map($this->fileReader->readJson(...), array_values($files));
 
         // copy sources
-        $this->fileWriter->recursiveCopy($this->templateDir . 'favicon.ico', $logDir);
+        $this->fileWriter->copy($this->templateDir . 'favicon.ico', $logDir . 'favicon.ico');
         $this->fileWriter->recursiveCopy($this->templateDir . 'js', $logDir);
         $this->fileWriter->recursiveCopy($this->templateDir . 'css', $logDir);
         $this->fileWriter->recursiveCopy($this->templateDir . 'images', $logDir);
