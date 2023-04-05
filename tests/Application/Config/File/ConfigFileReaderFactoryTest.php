@@ -9,36 +9,33 @@ use Hal\Application\Config\File\ConfigFileReaderIni;
 use Hal\Application\Config\File\ConfigFileReaderInterface;
 use Hal\Application\Config\File\ConfigFileReaderJson;
 use Hal\Application\Config\File\ConfigFileReaderYaml;
+use Hal\Component\File\ReaderInterface;
 use InvalidArgumentException;
+use Phake;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use function chmod;
-use function dirname;
 use function get_class;
-use function realpath;
 use function sprintf;
 
 final class ConfigFileReaderFactoryTest extends TestCase
 {
-    public static function setUpBeforeClass(): void
-    {
-        // Update the permissions to some files to make sure they're unreadable.
-        $file = realpath(dirname(__DIR__, 3)) . '/resources/test_config.no_read_perm';
-        chmod($file, 0o200);
-    }
-
     /**
      * Ensure the expected exception occurs when trying to load a configuration file that does not exist.
      */
     public function testICantUseMissingFile(): void
     {
-        $configFilePath = realpath(dirname(__DIR__, 3)) . '/resources/this_is_not_an_existing_file';
-        self::assertFileDoesNotExist($configFilePath);
+        $fileReader = Phake::mock(ReaderInterface::class);
+        $file = '/test/config/factory/missing.txt';
+
+        Phake::when($fileReader)->__call('exists', [$file])->thenReturn(false);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('Cannot read configuration file "%s".', $configFilePath));
+        $this->expectExceptionMessage(sprintf('Cannot read configuration file "%s".', $file));
 
-        ConfigFileReaderFactory::createFromFileName($configFilePath);
+        (new ConfigFileReaderFactory($fileReader))->createFromFileName($file);
+
+        Phake::verify($fileReader)->__call('exists', [$file]);
+        Phake::verifyNoOtherInteractions($fileReader);
     }
 
     /**
@@ -46,15 +43,20 @@ final class ConfigFileReaderFactoryTest extends TestCase
      */
     public function testICantUseUnreadableFile(): void
     {
-        $configFilePath = realpath(dirname(__DIR__, 3)) . '/resources/test_config.no_read_perm';
+        $fileReader = Phake::mock(ReaderInterface::class);
+        $file = '/test/config/factory/unreadable.txt';
 
-        self::assertFileExists($configFilePath);
-        self::assertIsNotReadable($configFilePath);
+        Phake::when($fileReader)->__call('exists', [$file])->thenReturn(true);
+        Phake::when($fileReader)->__call('isReadable', [$file])->thenReturn(false);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('Cannot read configuration file "%s".', $configFilePath));
+        $this->expectExceptionMessage(sprintf('Cannot read configuration file "%s".', $file));
 
-        ConfigFileReaderFactory::createFromFileName($configFilePath);
+        (new ConfigFileReaderFactory($fileReader))->createFromFileName($file);
+
+        Phake::verify($fileReader)->__call('exists', [$file]);
+        Phake::verify($fileReader)->__call('isReadable', [$file]);
+        Phake::verifyNoOtherInteractions($fileReader);
     }
 
     /**
@@ -64,27 +66,31 @@ final class ConfigFileReaderFactoryTest extends TestCase
      */
     public static function provideValidConfigurationFiles(): Generator
     {
-        $resourcesTestDir = realpath(dirname(__DIR__, 3)) . '/resources';
-        yield 'JSON file' => [$resourcesTestDir . '/test_config.json', ConfigFileReaderJson::class];
-        yield 'Ini file' => [$resourcesTestDir . '/test_config.ini', ConfigFileReaderIni::class];
-        yield 'Yaml file' => [$resourcesTestDir . '/test_config.yaml', ConfigFileReaderYaml::class];
-        yield 'YML file' => [$resourcesTestDir . '/test_config_minimum.yml', ConfigFileReaderYaml::class];
+        yield 'JSON file' => ['/test/config/test_config.json', ConfigFileReaderJson::class];
+        yield 'Ini file' => ['/test/config/test_config.ini', ConfigFileReaderIni::class];
+        yield 'Yaml file' => ['/test/config/test_config.yaml', ConfigFileReaderYaml::class];
+        yield 'YML file' => ['/test/config/test_config_minimum.yml', ConfigFileReaderYaml::class];
     }
 
     /**
      * Ensure the valid configuration files are usable and produces the expected readers.
      *
-     * @param string $configFilePath
+     * @param string $file
      * @param class-string<ConfigFileReaderInterface> $expectedReaderClassName
      */
     #[DataProvider('provideValidConfigurationFiles')]
-    public function testICanUseValidFile(string $configFilePath, string $expectedReaderClassName): void
+    public function testICanUseValidFile(string $file, string $expectedReaderClassName): void
     {
-        self::assertFileExists($configFilePath);
-        self::assertIsReadable($configFilePath);
+        $fileReader = Phake::mock(ReaderInterface::class);
+        Phake::when($fileReader)->__call('exists', [$file])->thenReturn(true);
+        Phake::when($fileReader)->__call('isReadable', [$file])->thenReturn(true);
 
-        $reader = ConfigFileReaderFactory::createFromFileName($configFilePath);
+        $reader = (new ConfigFileReaderFactory($fileReader))->createFromFileName($file);
         self::assertSame($expectedReaderClassName, get_class($reader));
+
+        Phake::verify($fileReader)->__call('exists', [$file]);
+        Phake::verify($fileReader)->__call('isReadable', [$file]);
+        Phake::verifyNoOtherInteractions($fileReader);
     }
 
     /**
@@ -92,20 +98,15 @@ final class ConfigFileReaderFactoryTest extends TestCase
      */
     public function testICantUseDisallowedFile(): void
     {
-        $configFilePath = realpath(dirname(__DIR__, 3)) . '/resources/test_config.txt';
-        self::assertFileExists($configFilePath);
-        self::assertIsReadable($configFilePath);
+        $fileReader = Phake::mock(ReaderInterface::class);
+        $file = '/test/config/factory/unsupported.txt';
+
+        Phake::when($fileReader)->__call('exists', [$file])->thenReturn(true);
+        Phake::when($fileReader)->__call('isReadable', [$file])->thenReturn(true);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('Unsupported config file format: "%s".', $configFilePath));
+        $this->expectExceptionMessage(sprintf('Unsupported config file format: "%s".', $file));
 
-        ConfigFileReaderFactory::createFromFileName($configFilePath);
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        // Update the permissions to reset them for updated files.
-        $file = realpath(dirname(__DIR__, 3)) . '/resources/test_config.no_read_perm';
-        chmod($file, 0o644);
+        (new ConfigFileReaderFactory($fileReader))->createFromFileName($file);
     }
 }

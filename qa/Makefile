@@ -27,7 +27,7 @@ vendor-update: build-qa-tools
 # Run unit tests
 .PHONY: phpunit
 phpunit: build-qa-tools prepare-qa-cache
-	@docker run --rm -it -u$(shell id -u):0 -v ${HOST_PWD}:/opt/project phpmetrics_tools phpunit -c ./qa/phpunit.xml.dist --cache-result
+	@docker run --rm -it -u$(shell id -u):0 -v ${HOST_PWD}:/opt/project phpmetrics_tools phpunit -c ./qa/phpunit.xml.dist --cache-result $(SRC)
 .PHONY: test #Alias.
 test: phpunit
 

@@ -4,18 +4,20 @@ declare(strict_types=1);
 namespace Tests\Hal\Application\Config;
 
 use Generator;
+use Hal\Application\Config\Config;
+use Hal\Application\Config\File\ConfigFileReaderFactoryInterface;
+use Hal\Application\Config\File\ConfigFileReaderInterface;
 use Hal\Application\Config\Parser;
+use Phake;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use function dirname;
-use function realpath;
 
 final class ParserTest extends TestCase
 {
     /**
      * Provide different couple of arguments with the related expected configuration.
      *
-     * @return Generator<string, array{array<int, string>, array<string, mixed>}>
+     * @return Generator<string, array{array<int, string>, array<string, mixed>, array<string, callable(Config):void>}>
      */
     public static function provideArguments(): Generator
     {
@@ -33,10 +35,23 @@ final class ParserTest extends TestCase
         yield 'Files list (no -- trick)' => [['src,application,bin'], ['files' => ['src', 'application', 'bin']]];
         yield 'Files list (with -- trick)' => [['--'], []];
 
-        $resourceTestRootDir = realpath(dirname(__DIR__, 2)) . '/resources';
-        $testConfigJsonPath = $resourceTestRootDir . '/test_config.json';
+        $whatConfigReadingDoes = static function (Config $config): void {
+            $config->set('files', ['/tmp/foo', '/tmp/bar']);
+            $config->set(
+                'groups',
+                [
+                    ['name' => 'Component', 'match' => '!component!i'],
+                    ['name' => 'Reporters', 'match' => '!Report!'],
+                ]
+            );
+            $config->set('extensions', 'php,php.inc,php8');
+            $config->set('composer', true);
+            $config->set('exclude', 'tests,Tests');
+            $config->set('report-html', '/tmp/foo/report.html');
+            $config->set('report-csv', '/tmp/foo/report.csv');
+        };
         $expectedConfigFromJson = [
-            'files' => [$resourceTestRootDir . '/Controller', '/src/other/files'],
+            'files' => ['/tmp/foo', '/tmp/bar'],
             'groups' => [
                 ['name' => 'Component', 'match' => '!component!i'],
                 ['name' => 'Reporters', 'match' => '!Report!'],
@@ -44,25 +59,44 @@ final class ParserTest extends TestCase
             'extensions' => 'php,php.inc,php8',
             'composer' => true,
             'exclude' => 'tests,Tests',
-            'report-html' => $resourceTestRootDir . '/report/with/relative/path',
-            'report-csv' => '/report/with/absolute/path',
+            'report-html' => '/tmp/foo/report.html',
+            'report-csv' => '/tmp/foo/report.csv',
         ];
-        $injectedArgv = ['--config=' . $testConfigJsonPath];
-        yield 'Using config file' => [$injectedArgv, $expectedConfigFromJson];
+        $injectedArgv = ['--config=/test/config/input'];
+        yield 'Using config file' => [
+            $injectedArgv,
+            $expectedConfigFromJson,
+            ['/test/config/input' => $whatConfigReadingDoes]
+        ];
+
+        $whatConfigReadingDoes = static function (Config $config): void {
+            $config->set('files', ['/tmp/foo', '/tmp/bar']);
+            $config->set('extensions', 'html');
+            $config->set('composer', false);
+            $config->set('exclude', 'tests,Tests');
+        };
+        $expectedConfigFromJson = [
+            'files' => ['/and', '/files', 'too'],
+            'extensions' => 'html',
+            'composer' => false,
+            'exclude' => 'exclusion,rule,has,changed',
+            'report-json' => '/report/json',
+            'quiet' => true,
+        ];
 
         $injectedArgv = [
             'phpmetrics',
-            '--config=' . $testConfigJsonPath,
+            '--config=/test/config/input-multiple',
             '--report-json=/report/json',
             '--quiet',
             '--exclude=exclusion,rule,has,changed',
             '/and,/files,too'
         ];
-        $expectedConfigFromJson['files'] = ['/and', '/files', 'too'];
-        $expectedConfigFromJson['exclude'] = 'exclusion,rule,has,changed';
-        $expectedConfigFromJson['report-json'] = '/report/json';
-        $expectedConfigFromJson['quiet'] = true;
-        yield 'Multiple kind of arguments' => [$injectedArgv, $expectedConfigFromJson];
+        yield 'Multiple kind of arguments' => [
+            $injectedArgv,
+            $expectedConfigFromJson,
+            ['/test/config/input-multiple' => $whatConfigReadingDoes]
+        ];
     }
 
     /**
@@ -71,10 +105,34 @@ final class ParserTest extends TestCase
      *
      * @param array<int, string> $argv
      * @param array<string, mixed> $expectedConfig
+     * @param array<string, callable(Config):void> $whatConfigReadingDoes
      */
     #[DataProvider('provideArguments')]
-    public function testTheParsingOfArguments(array $argv, array $expectedConfig): void
-    {
-        self::assertSame($expectedConfig, (new Parser())->parse($argv)->all());
+    public function testTheParsingOfArguments(
+        array $argv,
+        array $expectedConfig,
+        array $whatConfigReadingDoes = []
+    ): void {
+        $configFileReaderFactory = Phake::mock(ConfigFileReaderFactoryInterface::class);
+        $configFileReader = Phake::mock(ConfigFileReaderInterface::class);
+        if ([] !== $whatConfigReadingDoes) {
+            foreach ($whatConfigReadingDoes as $configFileName => $callback) {
+                Phake::when($configFileReaderFactory)->__call('createFromFileName', [$configFileName])
+                    ->thenReturn($configFileReader);
+                Phake::when($configFileReader)->__call('read', [Phake::anyParameters()])->thenReturnCallback($callback);
+            }
+        }
+
+        self::assertSame($expectedConfig, (new Parser($configFileReaderFactory))->parse($argv)->all());
+
+        if ([] !== $whatConfigReadingDoes) {
+            foreach ($whatConfigReadingDoes as $configFileName => $callback) {
+                Phake::verify($configFileReaderFactory)->__call('createFromFileName', [$configFileName]);
+                Phake::verify($configFileReader)->__call('read', [Phake::anyParameters()]);
+            }
+        }
+
+        Phake::verifyNoOtherInteractions($configFileReaderFactory);
+        Phake::verifyNoOtherInteractions($configFileReader);
     }
 }

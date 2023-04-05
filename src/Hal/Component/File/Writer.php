@@ -7,6 +7,7 @@ use FilesystemIterator;
 use JsonException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 use function array_map;
 use function copy;
 use function fclose;
@@ -16,6 +17,8 @@ use function fputcsv;
 use function is_writable;
 use function json_encode;
 use function mkdir;
+use function strlen;
+use function substr_replace;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 
@@ -73,13 +76,15 @@ final class Writer extends System implements WriterInterface
             new RecursiveDirectoryIterator($src, FilesystemIterator::SKIP_DOTS),
             RecursiveIteratorIterator::SELF_FIRST
         );
+
         foreach ($fileIterator as $file) {
-            /** @var RecursiveDirectoryIterator $file */
+            /** @var SplFileInfo $file */
+            $relativeName = substr_replace($file->getPathname(), '', 0, strlen($src));
 
             if ($file->isDir()) {
-                mkdir($dest . '/' . $file->getSubPathname());
+                mkdir($dest . '/' . $relativeName);
             } else {
-                copy($file->getRealPath(), $dest . '/' . $file->getSubPathname());
+                copy($file->getRealPath(), $dest . '/' . $relativeName);
             }
         }
     }

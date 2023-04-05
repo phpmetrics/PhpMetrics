@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Hal\Application\Config;
 
-use Hal\Application\Config\File\ConfigFileReaderFactory;
+use Hal\Application\Config\File\ConfigFileReaderFactoryInterface;
 use function array_pop;
 use function array_shift;
 use function explode;
@@ -18,6 +18,10 @@ use function trim;
  */
 final class Parser implements ParserInterface
 {
+    public function __construct(private readonly ConfigFileReaderFactoryInterface $configFileReaderFactory)
+    {
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -41,7 +45,7 @@ final class Parser implements ParserInterface
         foreach ($argv as $k => $arg) {
             if (1 === preg_match('!--config=(.*)!', $arg, $matches)) {
                 [, $filename] = $matches;
-                ConfigFileReaderFactory::createFromFileName($filename)->read($config);
+                $this->configFileReaderFactory->createFromFileName($filename)->read($config);
                 unset($argv[$k]);
             }
         }

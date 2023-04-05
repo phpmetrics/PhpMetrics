@@ -8,6 +8,7 @@ use Hal\Application\Analyzer;
 use Hal\Application\ApplicationFactory;
 use Hal\Application\ApplicationInterface;
 use Hal\Application\Bootstrap;
+use Hal\Application\Config\File\ConfigFileReaderFactory;
 use Hal\Application\Config\Parser;
 use Hal\Application\Config\Validator;
 use Hal\Application\PhpMetrics;
@@ -82,7 +83,7 @@ final class DependencyInjectionProcessor
             $output = new CliOutput();
             $config = (
                 new Bootstrap(
-                    new Parser(),
+                    new Parser(new ConfigFileReaderFactory($fileReader)),
                     new Validator(new SearchesValidator(), $fileSystem),
                     $output
                 )

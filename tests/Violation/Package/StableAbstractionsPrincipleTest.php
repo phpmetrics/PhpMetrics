@@ -36,6 +36,11 @@ final class StableAbstractionsPrincipleTest extends TestCase
 
         $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
         $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($packageMetric)->__call('getDistance', [])->thenReturn(null);
+        yield 'Distance is null' => [$packageMetric, $violationsHandler, false];
+
+        $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
+        $packageMetric = Phake::mock(PackageMetric::class);
         Phake::when($packageMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
         Phake::when($packageMetric)->__call('getDistance', [])->thenReturn(0);
         yield 'Distance is 0' => [$packageMetric, $violationsHandler, false];

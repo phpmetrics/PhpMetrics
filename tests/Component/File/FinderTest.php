@@ -12,7 +12,7 @@ final class FinderTest extends TestCase
 {
     public function testFinderCanFetchFilesRegardingConfiguration(): void
     {
-        $resourceFilePath = realpath(dirname(__DIR__, 2)) . '/resources/component/file';
+        $resourceFilePath = realpath(dirname(__DIR__, 2)) . '/resources/component/file/FinderTest';
 
         $finder = new Finder(['php', 'inc'], ['excluded', '.excluded']);
         $fetchedFiles = $finder->fetch([$resourceFilePath, $resourceFilePath . '/directIncludedFile.txt']);

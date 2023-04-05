@@ -42,10 +42,11 @@ final class Reader extends System implements ReaderInterface
      */
     public function readJson(string $path): mixed
     {
-        $content = $this->read($path);
-        if (false === $content) {
+        if (false === $this->isReadable($path)) {
             return false;
         }
+        /** @var string $content as file is readable. */
+        $content = $this->read($path);
         /* @TODO: Remove @noinspection once https://github.com/kalessil/phpinspectionsea/issues/1725 fixed. */
         /** @noinspection JsonEncodingApiUsageInspection */
         return json_decode($content, true, flags: JSON_THROW_ON_ERROR);
@@ -54,6 +55,8 @@ final class Reader extends System implements ReaderInterface
     /**
      * {@inheritDoc}
      * @throws JsonException
+     * @codeCoverageIgnore Cannot be tested as file_get_contents is calling a URI, and we cannot fake its results.
+     * @infection-ignore-all Cannot be tested as file_get_contents is calling a URI, and we cannot fake its results.
      */
     public function httpReadJson(string $uri): stdClass
     {
