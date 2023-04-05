@@ -73,6 +73,9 @@ final class TooComplexClassCodeTest extends TestCase
         $violation = new TooComplexClassCode();
         $violation->apply($metric);
 
+        if (!$metric instanceof ClassMetric) {
+            Phake::verifyNoInteraction($metric);
+        }
         if (false === $violate) {
             Phake::verifyNoInteraction($violationsHandler);
             return;

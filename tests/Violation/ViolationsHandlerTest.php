@@ -16,15 +16,23 @@ final class ViolationsHandlerTest extends TestCase
         self::assertSame([], $violationsHandler->getAll());
         self::assertCount(0, $violationsHandler);
 
-        $violation = Phake::mock(Violation::class);
-        Phake::when($violation)->__call('getName', [])->thenReturn('UnitTestViolation');
+        $violations = [
+            Phake::mock(Violation::class),
+            Phake::mock(Violation::class),
+        ];
+        Phake::when($violations[0])->__call('getName', [])->thenReturn('UnitTestViolation');
+        Phake::when($violations[1])->__call('getName', [])->thenReturn('AnotherViolation');
 
-        $violationsHandler->add($violation);
-
-        foreach ($violationsHandler as $violationElement) {
-            self::assertSame($violationElement, $violation);
+        foreach ($violations as $violation) {
+            $violationsHandler->add($violation);
         }
 
-        self::assertSame('UnitTestViolation,', (string)$violationsHandler);
+        self::assertSame('UnitTestViolation,AnotherViolation,', (string)$violationsHandler);
+
+        foreach ($violationsHandler as $index => $violationElement) {
+            self::assertSame($violationElement, $violations[$index]);
+            Phake::verify($violation)->__call('getName', []);
+            Phake::verifyNoOtherInteractions($violation);
+        }
     }
 }

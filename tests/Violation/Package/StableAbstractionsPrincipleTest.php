@@ -110,6 +110,45 @@ final class StableAbstractionsPrincipleTest extends TestCase
     }
 
     /**
+     * @return Generator<string, array{float, string}>
+     */
+    public static function provideGetDescription(): Generator
+    {
+        $unstableAndAbstractDescription = <<<'DESC'
+        Packages should be either abstract and stable or concrete and unstable.
+        
+        This package is unstable and abstract.
+        DESC;
+        $stableAndConcreteDescription = <<<'DESC'
+        Packages should be either abstract and stable or concrete and unstable.
+        
+        This package is stable and concrete.
+        DESC;
+
+        yield 'Positive distance' => [0.001, $unstableAndAbstractDescription];
+        yield 'Equal distance' => [0, $stableAndConcreteDescription];
+        yield 'Negative distance' => [-0.001, $stableAndConcreteDescription];
+    }
+
+    /**
+     * @param float $distance
+     * @param string $expectedDescription
+     */
+    #[DataProvider('provideGetDescription')]
+    public function testGetDescription(float $distance, string $expectedDescription): void
+    {
+        $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($packageMetric)->__call('getDistance', [])->thenReturn($distance);
+
+        $violation = new StableAbstractionsPrinciple();
+        $violation->apply($packageMetric);
+        self::assertSame($expectedDescription, $violation->getDescription());
+
+        Phake::verify($packageMetric, Phake::times(2))->__call('getDistance', []);
+        Phake::verifyNoOtherInteractions($packageMetric);
+    }
+
+    /**
      * Returns the expected description of the current violation based on the values stored in the given metrics.
      *
      * @param PackageMetric $metric

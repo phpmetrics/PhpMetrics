@@ -31,6 +31,8 @@ use const JSON_THROW_ON_ERROR;
 /**
  * This class is responsible for the report on HTML files.
  * TODO: Create a View class that manages the rendering.
+ *
+ * @infection-ignore-all TODO: this class must be refactored. Enable mutation testing once refactoring is OK.
  */
 final class Reporter implements ReporterInterface
 {

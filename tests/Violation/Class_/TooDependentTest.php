@@ -67,6 +67,9 @@ final class TooDependentTest extends TestCase
         $violation = new TooDependent();
         $violation->apply($metric);
 
+        if (!$metric instanceof ClassMetric) {
+            Phake::verifyNoInteraction($metric);
+        }
         if (false === $violate) {
             Phake::verifyNoInteraction($violationsHandler);
             return;

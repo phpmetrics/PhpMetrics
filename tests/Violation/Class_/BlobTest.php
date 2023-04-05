@@ -91,6 +91,9 @@ final class BlobTest extends TestCase
         $violation = new Blob();
         $violation->apply($metric);
 
+        if (!$metric instanceof ClassMetric) {
+            Phake::verifyNoInteraction($metric);
+        }
         if (false === $violate) {
             Phake::verifyNoInteraction($violationsHandler);
             return;
