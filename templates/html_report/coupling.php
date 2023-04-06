@@ -25,7 +25,6 @@ $viewHelper = $this->viewHelper;
                     <th class="js-sort-number">Afferent coupling</th>
                     <th class="js-sort-number">Efferent coupling</th>
                     <th class="js-sort-number">Instability</th>
-                    <th class="js-sort-number">ClassRank</th>
                 </thead>
                 <tbody>
                 <?php foreach ($this->sharedMetrics->classes as $class) { ?>

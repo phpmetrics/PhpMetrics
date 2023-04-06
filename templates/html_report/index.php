@@ -96,47 +96,36 @@ $viewHelper = $this->viewHelper;
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="row">
         <?php if($this->isHomePage()) {?>
-            <div class="column">
-                <div class="bloc bloc-number">
-                    <div class="label">
-                        <a href="composer.html">Composer</a>
-                    </div>
-                    <?php
-                    $packages = isset($this->sharedMetrics->project['composer']['packages']) ? $this->sharedMetrics->project['composer']['packages'] : [];
-                    $packagesInstalled = isset($this->sharedMetrics->project['composer']['packages-installed']) ? $this->sharedMetrics->project['composer']['packages-installed'] : [];
-                    if ([] === $packages) { ?>
-                        <div class="help number-alternate"><div class="help-inner">No composer.json file found</div></div>
-                    <?php } else {?>
-                        <div class="number">
-                            <?php echo count($packages);?> dependencies
-                        </div>
-                    <?php } ?>
+          <div class="column">
+            <div class="bloc bloc-number">
+              <div class="label">
+                <a href="composer.html">Composer</a>
+              </div>
+                <?php
+                $packages = isset($this->sharedMetrics->project['composer']['packages']) ? $this->sharedMetrics->project['composer']['packages'] : [];
+                $packagesInstalled = isset($this->sharedMetrics->project['composer']['packages-installed']) ? $this->sharedMetrics->project['composer']['packages-installed'] : [];
+                if ([] === $packages) { ?>
+                  <div class="help number-alternate"><div class="help-inner">No composer.json file found</div></div>
+                <?php } else {?>
+                  <div class="number">
+                      <?php echo count($packages);?> dependencies
+                  </div>
+                <?php } ?>
 
-                    <div id="svg-licenses" class="chart-in-number"></div>
-                    <div class="bloc-action">
-                        <a href="composer.html">View details &gt;</a>
-                    </div>
-                </div>
+              <div id="svg-licenses" class="chart-in-number"></div>
+              <div class="bloc-action">
+                <a href="composer.html">View details &gt;</a>
+              </div>
             </div>
+          </div>
         <?php }?>
-        <div class="column"></div>
-        <div class="column"></div>
     </div>
-
 
     <script>
         document.onreadystatechange = function () {
             if (document.readyState === 'complete') {
                 chartMaintainability();
-
-                new Clusterize({
-                    scrollId: 'clusterizeClassRank',
-                    contentId: 'contentClassRank'
-                });
 
                 // prepare json for packages pie
                 <?php

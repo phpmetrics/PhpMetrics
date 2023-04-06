@@ -166,12 +166,7 @@
 <script src="<?php echo $this->assetPath; ?>js/graph-maintainability.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
 <script src="<?php echo $this->assetPath; ?>js/graph-licenses.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
 <script src="<?php echo $this->assetPath; ?>js/FileSaver.min.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
-
-<script src="<?php echo $this->assetPath; ?>js/clusterize.min.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
-<link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/clusterize.css?v=<?php echo VersionInfo::getVersion(); ?>">
-
 <script src="classes.js?v=<?php echo VersionInfo::getVersion(); ?>"></script>
-
 <script>
     var accessibilityEnabled = false;
 </script>
