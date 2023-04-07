@@ -68,7 +68,7 @@ $viewHelper = $this->viewHelper;
 
     <div class="row">
         <div class="column column-help">
-            <div class="bloc" style="min-height: 540px;">
+            <div class="bloc" style="min-height: 475px;">
                 <div class="column column-help-inner">
                     <div class="row">
                         <div class="column with-help">
@@ -98,7 +98,7 @@ $viewHelper = $this->viewHelper;
         </div>
         <?php if($this->isHomePage()) {?>
           <div class="column">
-            <div class="bloc bloc-number">
+            <div class="bloc" style="min-height: 475px;">
               <div class="label">
                 <a href="composer.html">Composer</a>
               </div>

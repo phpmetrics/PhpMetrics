@@ -101,7 +101,7 @@ function chartMaintainability(withoutComment) {
     var button = d3.select('#' + chartId).append('button');
     button
         .classed('btn-save-image', true)
-        .text('download')
+        .attr('title', 'Download bubble chart')
         .on('click', function () {
             var svg = d3.select('#' + chartId + ' svg')[0][0];
             var nameImage = (withoutComment)
