@@ -1,11 +1,14 @@
 <?php
 use Hal\Application\VersionInfo;
+
+$date = date('Y-m-d H:i:s');
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PhpMetrics report</title>
+    <title>PhpMetrics report [<?php echo $date ?>]</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=<?php echo VersionInfo::getVersion(); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/milligram.min.css?v=<?php echo VersionInfo::getVersion(); ?>">
     <link rel="stylesheet" href="<?php echo $this->assetPath; ?>css/style.css?v=<?php echo VersionInfo::getVersion(); ?>">
@@ -52,7 +55,7 @@ use Hal\Application\VersionInfo;
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at <?php echo date('Y-m-d H:i:s'); ?>
+            Created at <?php echo $date; ?>
         , with PHPMetrics <?php echo VersionInfo::getVersion(); ?> (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
