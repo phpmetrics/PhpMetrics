@@ -117,7 +117,9 @@ final class ExternalsVisitor extends NodeVisitorAbstract
         if (in_array(strtolower($dependency), ['self', 'parent'], true)) {
             return;
         }
-        $this->dependencies[] = $dependency;
+        if (null !== ($resolvedName = $this->resolveClassName($dependency))) {
+            $this->dependencies[] = $resolvedName;
+        }
     }
 
     /**
@@ -210,11 +212,7 @@ final class ExternalsVisitor extends NodeVisitorAbstract
         $reformattedTest = $comments?->getReformattedText();
         preg_match_all('!\s+\*\s+@([\w\\\\]+)!', (string)$reformattedTest, $matches);
         $annotations = $matches[1] ?? [];
-        foreach ($annotations as $check) {
-            if (null !== ($resolvedName = $this->resolveClassName($check))) {
-                $this->addDependency($resolvedName);
-            }
-        }
+        array_map($this->addDependency(...), $annotations);
     }
 
     /**
