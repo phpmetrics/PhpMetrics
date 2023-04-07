@@ -28,8 +28,6 @@ use function array_map;
  * - number of methods excluding accessors
  * - number of private or protected methods
  * - number of public methods
- * - number of setters
- * - number of getters
  */
 final class ClassEnumVisitor extends NodeVisitorAbstract
 {
@@ -73,8 +71,6 @@ final class ClassEnumVisitor extends NodeVisitorAbstract
         $dataMethods = (object)[
             'nbPublic' => 0,
             'nbPrivate' => 0,
-            'nbGetters' => 0,
-            'nbSetters' => 0,
         ];
         $functionMetrics = array_map(function (Stmt\ClassMethod $stmt) use ($dataMethods): FunctionMetric {
             /** @var FunctionMetric $function */

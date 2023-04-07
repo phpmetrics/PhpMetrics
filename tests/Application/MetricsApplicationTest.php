@@ -65,12 +65,9 @@ Main metrics are:
     loc                                     Lines of Code
     lloc                                    Logical Lines of Code
     methods                                 List of methods
-    nbMethodsIncludingGettersSetters        Number of methods including getters and setters
-    nbMethods                               Number of methods excluding getters and setters
+    nbMethods                               Number of methods
     nbMethodsPrivate                        Number of private methods
     nbMethodsPublic                         Number of public methods
-    nbMethodsGetters                        Number of getters
-    nbMethodsSetters                        Number of setters
     afferentCoupling                        Afferent coupling
     efferentCoupling                        Efferent coupling
     instability                             Package Instability
