@@ -4,7 +4,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [2.8.2] - 2023-02-??
+## [3.0.0-rc1] - 2023-04-11
+
+This new major version is containing lots of internal re-architecture processes in the source code, and upgrades the 
+internal quality of PhpMetrics to a new level. Nevertheless, it contains also some BC Breaks and some metrics are 
+remove. Please take a look at the detailed changelog below if you experiment any trouble.  
+
+### BC Break
+- PhpMetrics 3.0 is requiring PHP 8.1 minimum. To parse projects that are not yet in PHP 8.1, please use a docker 
+  installation based on a PHP 8.1 Docker Image
+- Git and JUnit plugins are no longer allowed in the configuration file
+
+### Removed
+- Installation and usage from Debian package. Please use the phar, composer, or docker instead
+- **Metric removed**: Git related metrics
+- **Metric removed**: PHPUnit related metrics
+- **Metric removed**: PageRank metric
+- **Metric removed**: On System Complexity, totalStructuralComplexity, totalDataComplexity and totalSystemComplexity. 
+- **Metric removed**: On class-method enumeration, nbGetters and nbSetters are removed as no particular metric needs them. 
+
+### New features
+- __Internal__: Install a real dedicated QA system to secure PhpMetrics as mch as possible
+- __Internal__: QA System is composed of PHP_CodeSniffer, PHPUnit, PHP Infection, PHPStan, Psalm and Qodana
+- __Internal__: Make possible to create releases with suffixed names 
+- Minor UX/UI improvements on the HTML report. 
+
+### Fixed
+- __Internal__: QA completely upgraded. PHPCS, PHPStan, Psalm and Qodana are no longer having errors except on baseline.
+  Coverage is very close to 100%. All unit tests are passing. Mutation Score >94%. Some improvements are yet to come
+- **Metric calculations**: Fix LCoM calculation that was not able to understand promoted properties in constructor.
+- **Metric calculations**: Ignore PHP Attributes in the detection of getters and setters. This fixes LCoM calculation.
+- **Metric calculations**: Improve calculation on Afferent Coupling and Efferent Coupling (+ related metrics) thanks to
+  enlarged context of external classes usages detection.
+- **Metric calculations**: Take NullSafeMethodCall (`$x?->y()`) into account for WeightMethodCount and Cyclomatic Complexity calculation.
+- **Metric calculations**: Take NullSafePropertyFetch (`$x?->y`) into account for WeightMethodCount and Cyclomatic Complexity calculation.
+- **Metric calculations**: Take newly introduced `match` structure into account for WeightMethodCount and Cyclomatic Complexity calculation.
+- **Metric calculations**: Improve KanDefect metrics as `match` are now took into account as number of selects, along with switches.
+- **Metric calculations**: On System Complexity, relative complexities are now calculated including NullSafeMethodCall (`$x?->y()`).
+
+## [2.8.2] - 2023-03-08
 
 ### Fixed
 - Fixed errors in HTML template. (thanks @Hikingyo and @gemal)
