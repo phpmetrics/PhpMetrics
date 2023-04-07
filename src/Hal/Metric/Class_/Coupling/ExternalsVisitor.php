@@ -129,7 +129,7 @@ final class ExternalsVisitor extends NodeVisitorAbstract
     private function addParent(string|Stringable $parent): void
     {
         $parent = (string)$parent;
-        $this->parents[] = $parent;
+        $this->parents[] = ltrim($parent, '\\');
         // Parenting is a dependency.
         $this->addDependency($parent);
     }
@@ -141,7 +141,7 @@ final class ExternalsVisitor extends NodeVisitorAbstract
     private function addImplementation(string|Stringable $implements): void
     {
         $implements = (string)$implements;
-        $this->interfaces[] = $implements;
+        $this->interfaces[] = ltrim($implements, '\\');
         // Implementation is a dependency.
         $this->addDependency($implements);
     }

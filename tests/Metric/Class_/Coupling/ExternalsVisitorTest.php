@@ -46,15 +46,15 @@ final class ExternalsVisitorTest extends TestCase
     {
         $node = Phake::mock(Node\Stmt\Class_::class);
         $node->extends = Phake::mock(Node\Name::class);
-        Phake::when($node->extends)->__call('__toString', [])->thenReturn('A');
+        Phake::when($node->extends)->__call('__toString', [])->thenReturn('\\A');
         $node->implements = [
-            Phake::mock(Node\Name::class), // "B"
-            Phake::mock(Node\Name::class), // "C"
+            Phake::mock(Node\Name::class), // "\B"
+            Phake::mock(Node\Name::class), // "\C"
             Phake::mock(Node\Name::class), // Ignored in dependencies, as "SELF"
             Phake::mock(Node\Name::class), // Ignored in dependencies, as "paRenT"
         ];
-        Phake::when($node->implements[0])->__call('__toString', [])->thenReturn('B');
-        Phake::when($node->implements[1])->__call('__toString', [])->thenReturn('C');
+        Phake::when($node->implements[0])->__call('__toString', [])->thenReturn('\\B');
+        Phake::when($node->implements[1])->__call('__toString', [])->thenReturn('\\C');
         Phake::when($node->implements[2])->__call('__toString', [])->thenReturn('SELF');
         Phake::when($node->implements[3])->__call('__toString', [])->thenReturn('paRenT');
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
@@ -78,15 +78,15 @@ final class ExternalsVisitorTest extends TestCase
 
         $node = Phake::mock(Node\Stmt\Interface_::class);
         $node->extends = [
-            Phake::mock(Node\Name::class), // "A"
+            Phake::mock(Node\Name::class), // "\A"
             Phake::mock(Node\Name::class), // Ignored in dependencies, as "sElF"
             Phake::mock(Node\Name::class), // Ignored in dependencies, as "PARent"
-            Phake::mock(Node\Name::class), // "B"
+            Phake::mock(Node\Name::class), // "\B"
         ];
-        Phake::when($node->extends[0])->__call('__toString', [])->thenReturn('A');
+        Phake::when($node->extends[0])->__call('__toString', [])->thenReturn('\\A');
         Phake::when($node->extends[1])->__call('__toString', [])->thenReturn('sElF');
         Phake::when($node->extends[2])->__call('__toString', [])->thenReturn('PARent');
-        Phake::when($node->extends[3])->__call('__toString', [])->thenReturn('B');
+        Phake::when($node->extends[3])->__call('__toString', [])->thenReturn('\\B');
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         Phake::when($node)->__call('getDocComment', [])->thenReturn(null);
         $expected = [
@@ -97,8 +97,8 @@ final class ExternalsVisitorTest extends TestCase
         yield 'Interface without method' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        $node->extends = 'A';
-        $node->implements = ['B', 'C', 'self', 'SELF', 'parent', 'PARENT', 'D'];
+        $node->extends = '\\A';
+        $node->implements = ['\\B', '\\C', 'self', 'SELF', 'parent', 'PARENT', '\\D'];
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         Phake::when($node)->__call('getDocComment', [])->thenReturn(null);
         $expected = [
@@ -158,10 +158,10 @@ final class ExternalsVisitorTest extends TestCase
 
         // (Name): Name / no doc, no sub nodes
         $methods[1]->returnType = Phake::mock(Node\Name::class);
-        Phake::when($methods[1]->returnType)->__call('__toString', [])->thenReturn('A');
+        Phake::when($methods[1]->returnType)->__call('__toString', [])->thenReturn('\\A');
         $methods[1]->params = [Phake::mock(Node\Param::class)];
         $methods[1]->params[0]->type = Phake::mock(Node\Name::class);
-        Phake::when($methods[1]->params[0]->type)->__call('__toString', [])->thenReturn('B');
+        Phake::when($methods[1]->params[0]->type)->__call('__toString', [])->thenReturn('\\B');
         Phake::when($methods[1])->__call('getDocComment', [])->thenReturn(null);
         Phake::when($methods[1])->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
         $methods[1]->unitTestSubNodes = [];
@@ -181,11 +181,11 @@ final class ExternalsVisitorTest extends TestCase
         // IntersectionType is Identifier|Name
         $methods[3]->returnType = Phake::mock(Node\IntersectionType::class);
         $methods[3]->returnType->types = [Phake::mock(Node\Identifier::class), Phake::mock(Node\Name::class)];
-        Phake::when($methods[3]->returnType->types[1])->__call('__toString', [])->thenReturn('C');
+        Phake::when($methods[3]->returnType->types[1])->__call('__toString', [])->thenReturn('\\C');
         $methods[3]->params = [Phake::mock(Node\Param::class)];
         $methods[3]->params[0]->type = Phake::mock(Node\UnionType::class);
         $methods[3]->params[0]->type->types = [Phake::mock(Node\Name::class), Phake::mock(Node\Identifier::class)];
-        Phake::when($methods[3]->params[0]->type->types[0])->__call('__toString', [])->thenReturn('D');
+        Phake::when($methods[3]->params[0]->type->types[0])->__call('__toString', [])->thenReturn('\\D');
         Phake::when($methods[3])->__call('getDocComment', [])->thenReturn(null);
         Phake::when($methods[3])->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
         $methods[3]->unitTestSubNodes = [];
@@ -195,11 +195,11 @@ final class ExternalsVisitorTest extends TestCase
         // UnionType is Identifier|Name
         $methods[4]->returnType = Phake::mock(Node\UnionType::class);
         $methods[4]->returnType->types = [Phake::mock(Node\Identifier::class), Phake::mock(Node\Name::class)];
-        Phake::when($methods[4]->returnType->types[1])->__call('__toString', [])->thenReturn('E');
+        Phake::when($methods[4]->returnType->types[1])->__call('__toString', [])->thenReturn('\\E');
         $methods[4]->params = [Phake::mock(Node\Param::class)];
         $methods[4]->params[0]->type = Phake::mock(Node\IntersectionType::class);
         $methods[4]->params[0]->type->types = [Phake::mock(Node\Name::class), Phake::mock(Node\Identifier::class)];
-        Phake::when($methods[4]->params[0]->type->types[0])->__call('__toString', [])->thenReturn('F');
+        Phake::when($methods[4]->params[0]->type->types[0])->__call('__toString', [])->thenReturn('\\F');
         Phake::when($methods[4])->__call('getDocComment', [])->thenReturn(null);
         Phake::when($methods[4])->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
         $methods[4]->unitTestSubNodes = [];
@@ -212,13 +212,13 @@ final class ExternalsVisitorTest extends TestCase
             Phake::mock(Node\Param::class),
         ];
         $methods[5]->returnType = Phake::mock(Node\Name::class);
-        Phake::when($methods[5]->returnType)->__call('__toString', [])->thenReturn('G');
+        Phake::when($methods[5]->returnType)->__call('__toString', [])->thenReturn('\\G');
         $methods[5]->params[0]->type = Phake::mock(Node\Name::class);
-        Phake::when($methods[5]->params[0]->type)->__call('__toString', [])->thenReturn('H');
+        Phake::when($methods[5]->params[0]->type)->__call('__toString', [])->thenReturn('\\H');
         $methods[5]->params[1]->type = Phake::mock(Node\Identifier::class);
         $methods[5]->params[2]->type = null;
         $methods[5]->params[3]->type = Phake::mock(Node\Name::class);
-        Phake::when($methods[5]->params[3]->type)->__call('__toString', [])->thenReturn('I');
+        Phake::when($methods[5]->params[3]->type)->__call('__toString', [])->thenReturn('\\I');
         Phake::when($methods[5])->__call('getDocComment', [])->thenReturn(null);
         Phake::when($methods[5])->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
         $methods[5]->unitTestSubNodes = [];
@@ -289,17 +289,17 @@ final class ExternalsVisitorTest extends TestCase
             Phake::mock(Node::class),
         ];
         $methods[9]->unitTestSubNodes[0]->class = Phake::mock(Node\Name::class);
-        Phake::when($methods[9]->unitTestSubNodes[0]->class)->__call('__toString', [])->thenReturn('K');
+        Phake::when($methods[9]->unitTestSubNodes[0]->class)->__call('__toString', [])->thenReturn('\\K');
         $methods[9]->unitTestSubNodes[1]->class = null;
 
         // (NullableType): NullableType / no doc, no sub nodes
         $methods[10]->returnType = Phake::mock(Node\NullableType::class);
         $methods[10]->returnType->type = Phake::mock(Node\Identifier::class);
-        Phake::when($methods[10]->returnType->type)->__call('__toString', [])->thenReturn('L');
+        Phake::when($methods[10]->returnType->type)->__call('__toString', [])->thenReturn('\\L');
         $methods[10]->params = [Phake::mock(Node\Param::class)];
         $methods[10]->params[0]->type = Phake::mock(Node\NullableType::class);
         $methods[10]->params[0]->type->type = Phake::mock(Node\Identifier::class);
-        Phake::when($methods[10]->params[0]->type->type)->__call('__toString', [])->thenReturn('M');
+        Phake::when($methods[10]->params[0]->type->type)->__call('__toString', [])->thenReturn('\\M');
         Phake::when($methods[10])->__call('getDocComment', [])->thenReturn(null);
         Phake::when($methods[10])->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
         $methods[10]->unitTestSubNodes = [];
