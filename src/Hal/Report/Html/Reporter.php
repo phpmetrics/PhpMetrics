@@ -68,9 +68,9 @@ final class Reporter implements ReporterInterface
      */
     public function generate(Metrics $metrics): void
     {
-        /** @var false|string $logDir */
+        /** @var null|string $logDir */
         $logDir = $this->config->get('report-html');
-        if (false === $logDir) {
+        if (null === $logDir) {
             return;
         }
         $logDir = rtrim($logDir, '/') . '/';
