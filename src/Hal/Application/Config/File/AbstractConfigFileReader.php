@@ -42,7 +42,6 @@ abstract class AbstractConfigFileReader implements ConfigFileReaderInterface
             'composer' => true,
             'searches' => [],
             'excludes' => [],
-            'plugins' => [],
             'report' => [],
         ];
         /**

@@ -16,6 +16,3 @@ groups:
       match: "!component!i"
     - name: Metric
       match: "!metric!i"
-plugins:
-    junit:
-        file: "/tmp/junit.xml"
