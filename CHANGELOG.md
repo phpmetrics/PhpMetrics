@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Fatal error when analyzing snippets like `$a->$b()` or `$c()`.
+- Special versions are now taken into account on `artefacts/bintray.json` when a new release comes out.
 
 ## [3.0.0-rc1] - 2023-04-11
 
