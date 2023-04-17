@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.0-rc2] - 2023-04-17
+
+### New features
+- **Documentation**: Fix #491 by adding the possibility of running PhpMetrics via `sh` rather than `php`, for some OS.
+
+### Fixed
+- Fatal error when analyzing snippets like `$a->$b()` or `$c()`.
+
 ## [3.0.0-rc1] - 2023-04-11
 
 This new major version is containing lots of internal re-architecture processes in the source code, and upgrades the 
