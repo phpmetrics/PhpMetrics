@@ -217,6 +217,7 @@ final class LcomVisitor extends NodeVisitorAbstract
             $node instanceof Node\Expr\MethodCall
             && !$node->var instanceof Node\Expr\New_
             && property_exists($node->var, 'name')
+            && !($node->var->name instanceof Node\Expr\Variable) // Prevents failure when $a->$b(), or $c().
             && 'this' === (string)$node->var->name
         ) {
             return [$this->graph->gather($node->name . '()')];
