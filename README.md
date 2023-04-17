@@ -24,6 +24,8 @@ composer require phpmetrics/phpmetrics --dev
 
 # run PHPMetrics to analyze a folder and generate a report
 php ./vendor/bin/phpmetrics --report-html=myreport <folder-to-analyze>
+# or, if `php` does not work:
+sh ./vendor/bin/phpmetrics --report-html=myreport <folder-to-analyze>
 ```
 
 Then open the generated `./myreport/index.html` file in your browser. 
