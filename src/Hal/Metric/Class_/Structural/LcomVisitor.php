@@ -14,9 +14,11 @@ use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
+use Stringable;
 use function array_filter;
 use function array_map;
 use function in_array;
+use function is_string;
 use function property_exists;
 
 /**
@@ -198,6 +200,8 @@ final class LcomVisitor extends NodeVisitorAbstract
             && property_exists($node->var, 'name')
             && !($node->var->name instanceof Node\Expr\Variable) // Prevents failure when $a->$b.
             && 'this' === (string)$node->var->name
+            // Prevents failures when $a->{$name} or $a->{<expr>}
+            && (is_string($node->name) || $node->name instanceof Stringable)
         ) {
             return [$this->graph->gather((string)$node->name)];
         }
@@ -219,6 +223,8 @@ final class LcomVisitor extends NodeVisitorAbstract
             && property_exists($node->var, 'name')
             && !($node->var->name instanceof Node\Expr\Variable) // Prevents failure when $a->$b(), or $c().
             && 'this' === (string)$node->var->name
+            // Prevents failures when $a->{$name}() or $a->{<expr>}()
+            && (is_string($node->name) || $node->name instanceof Stringable)
         ) {
             return [$this->graph->gather($node->name . '()')];
         }

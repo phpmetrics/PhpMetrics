@@ -24,11 +24,12 @@
         </testsuite>
     </testsuites>
 
-    <coverage>
+    <source>
         <include>
             <directory suffix=".php">../src</directory>
         </include>
-
+    </source>
+    <coverage>
         <report>
             <html outputDirectory="reports/phpunit/coverage-html/"/>
             <xml outputDirectory="reports/phpunit/coverage-xml/"/>

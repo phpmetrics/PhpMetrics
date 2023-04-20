@@ -55,7 +55,6 @@ final class Reader extends System implements ReaderInterface
     /**
      * {@inheritDoc}
      * @throws JsonException
-     * @codeCoverageIgnore Cannot be tested as file_get_contents is calling a URI, and we cannot fake its results.
      * @infection-ignore-all Cannot be tested as file_get_contents is calling a URI, and we cannot fake its results.
      */
     public function httpReadJson(string $uri): stdClass

@@ -62,7 +62,6 @@ use function dirname;
  * This class is the technical entrypoint and thus, can't be unit tested.
  * The behavior of this class is tested via functional tests.
  *
- * @codeCoverageIgnore Technical class that can only be tested functionally.
  * @infection-ignore-all Technical class that can only be tested functionally.
  */
 final class DependencyInjectionProcessor

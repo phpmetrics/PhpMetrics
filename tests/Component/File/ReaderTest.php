@@ -5,11 +5,14 @@ namespace Tests\Hal\Component\File;
 
 use Hal\Component\File\Reader;
 use JsonException;
+use PHPUnit\Framework\Attributes\IgnoreMethodForCodeCoverage;
 use PHPUnit\Framework\TestCase;
 use function chmod;
 use function file_put_contents;
 use function touch;
 
+// Cannot be tested as file_get_contents is calling a URI, and we cannot fake its results.
+#[IgnoreMethodForCodeCoverage(Reader::class, 'httpReadJson')]
 final class ReaderTest extends TestCase
 {
     use TraitTestSystem;
