@@ -12,6 +12,7 @@ use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Hal\Report\Violations\Xml\Reporter;
 use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
 use Phake;
 use PHPUnit\Framework\TestCase;
 use function array_keys;
@@ -51,6 +52,7 @@ final class ReporterTest extends TestCase
         $config = Phake::mock(ConfigBagInterface::class);
         $output = Phake::mock(Output::class);
         $fileWriter = Phake::mock(WriterInterface::class);
+        $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
         $file = '/test/report/violations.xml';
         Phake::when($config)->__call('get', ['report-violations'])->thenReturn($file);
         Phake::when($fileWriter)->__call('ensureDirectoryExists', ['/test/report'])->thenDoNothing();
@@ -62,7 +64,8 @@ final class ReporterTest extends TestCase
             Phake::mock(Metric::class),
         ];
         foreach ($metricsList as $metric) {
-            Phake::when($metric)->__call('get', ['violations'])->thenReturn([]);
+            Phake::when($metric)->__call('get', ['violations'])->thenReturn($violationsHandler);
+            Phake::when($violationsHandler)->__call('getAll', [])->thenReturn([]);
         }
         Phake::when($metrics)->__call('all', [])->thenReturn($metricsList);
 
@@ -106,6 +109,11 @@ final class ReporterTest extends TestCase
             Phake::mock(Metric::class),
             Phake::mock(Metric::class),
         ];
+        $violationsHandlers = [
+            Phake::mock(ViolationsHandlerInterface::class),
+            Phake::mock(ViolationsHandlerInterface::class),
+            Phake::mock(ViolationsHandlerInterface::class),
+        ];
         $violations = [
             Phake::mock(Violation::class),
             Phake::mock(Violation::class),
@@ -115,13 +123,15 @@ final class ReporterTest extends TestCase
             Phake::mock(Violation::class),
         ];
         Phake::when($metricsList[0])->__call('get', ['name'])->thenReturn('Two violations in index 0');
-        Phake::when($metricsList[0])->__call('get', ['violations'])->thenReturn([$violations[0], $violations[1]]);
+        Phake::when($metricsList[0])->__call('get', ['violations'])->thenReturn($violationsHandlers[0]);
+        Phake::when($violationsHandlers[0])->__call('getAll', [])->thenReturn([$violations[0], $violations[1]]);
         Phake::when($metricsList[1])->__call('get', ['name'])->thenReturn('Single violation in index 1');
-        Phake::when($metricsList[1])->__call('get', ['violations'])->thenReturn([$violations[2]]);
+        Phake::when($metricsList[1])->__call('get', ['violations'])->thenReturn($violationsHandlers[1]);
+        Phake::when($violationsHandlers[1])->__call('getAll', [])->thenReturn([$violations[2]]);
         Phake::when($metricsList[2])->__call('get', ['name'])->thenReturn('Three violations in index 2');
-        Phake::when($metricsList[2])->__call('get', ['violations'])->thenReturn(
-            [$violations[3], $violations[4], $violations[5]]
-        );
+        Phake::when($metricsList[2])->__call('get', ['violations'])->thenReturn($violationsHandlers[2]);
+        Phake::when($violationsHandlers[2])->__call('getAll', [])->thenReturn([$violations[3], $violations[4], $violations[5]]);
+
         foreach ($violations as $violationIndex => $violation) {
             Phake::when($violation)->__call('getName', [])->thenReturn('Violation #' . $violationIndex);
             Phake::when($violation)->__call('getDescription', [])->thenReturn('Description about ' . $violationIndex);

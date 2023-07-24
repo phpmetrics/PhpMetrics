@@ -13,6 +13,7 @@ use Hal\Component\Output\Output;
 use Hal\Metric\Metrics;
 use Hal\Report\ReporterInterface;
 use Hal\Violation\Violation;
+use Hal\Violation\ViolationsHandlerInterface;
 use function array_map;
 use function date;
 use function dirname;
@@ -51,8 +52,10 @@ final class Reporter implements ReporterInterface
         $root->setAttribute('timestamp', date('c'));
 
         foreach ($metrics->all() as $metric) {
+            /** @var ViolationsHandlerInterface $violationsHandler */
+            $violationsHandler = $metric->get('violations');
             /** @var array<Violation> $violations */
-            $violations = $metric->get('violations');
+            $violations = $violationsHandler->getAll();
             if ([] === $violations) {
                 continue;
             }
