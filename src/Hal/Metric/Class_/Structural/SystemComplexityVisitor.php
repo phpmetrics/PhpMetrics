@@ -50,14 +50,26 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
                     $output = 0;
                     $fanout = [];
 
-                    iterate_over_node($node, function ($node) use (&$output, &$fanout) {
+                    $parentNode = $node;
+                    iterate_over_node($node, function ($node) use (&$output, &$fanout, $parentNode) {
                         switch (true) {
                             case $node instanceof Stmt\Return_:
                                 $output++;
                                 break;
                             case $node instanceof Node\Expr\StaticCall:
+                                $class = getNameOfNode($node->class);
+                                if ('static' === $class || 'self' === $class) {
+                                    $class = getNameOfNode($parentNode);
+                                }
+                                $fanout[] = $class . '::' . getNameOfNode($node->name) . '()';
+                                break;
                             case $node instanceof Node\Expr\MethodCall:
-                                array_push($fanout, getNameOfNode($node));
+                                $class = getNameOfNode($node->var);
+                                if ('this' === $class) {
+                                    $class = getNameOfNode($parentNode);
+                                }
+                                $fanout[] = $class . '->' . getNameOfNode($node->name) . '()';
+                                break;
                         }
                     });
 
