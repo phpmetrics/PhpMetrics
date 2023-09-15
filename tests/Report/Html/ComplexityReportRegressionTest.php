@@ -72,11 +72,11 @@ final class ComplexityReportRegressionTest extends TestCase
         $expectedTableHeader = [
             'Class',
             'WMC',
-            'Class cycl.',
-            'Max method cycl.',
-            'Relative system complexity',
-            'Relative data complexity',
-            'Relative structural complexity',
+            'CC',
+            'Max MC',
+            'System comp.',
+            'Data comp.',
+            'Structural comp.',
             'Bugs',
             'Defects',
         ];

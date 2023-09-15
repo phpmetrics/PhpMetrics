@@ -26,7 +26,7 @@ final class CyclomaticComplexityVisitorTest extends TestCase
     /**
      * @return Generator<string, array{
      *     Node,
-     *     array{wmc: int, ccn: int, ccnMethodMax: int, ccnByMethod: array<string, int>}
+     *     array{wmc: int, ccn: int, ccnMethodMax: int, ccnByMethod: array<string, array{ccn: int, isAccessor: bool}>}
      * }>
      */
     public static function provideNodeToCalculateCyclomaticComplexity(): Generator
@@ -127,9 +127,9 @@ final class CyclomaticComplexityVisitorTest extends TestCase
         Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:ComplexClass');
         $ccnByMethod = [
-            'emptyMethod' => 1,
-            'nestedMethod' => 25,
-            'simpleMethod' => 25,
+            'emptyMethod' => ['ccn' => 1, 'isAccessor' => false],
+            'nestedMethod' => ['ccn' => 25, 'isAccessor' => false],
+            'simpleMethod' => ['ccn' => 25, 'isAccessor' => false],
         ];
         $expected = ['wmc' => 51, 'ccn' => 49, 'ccnMethodMax' => 25, 'ccnByMethod' => $ccnByMethod];
         yield 'With a complex class containing all complex structures' => [$node, $expected];
@@ -157,10 +157,10 @@ final class CyclomaticComplexityVisitorTest extends TestCase
         Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:AccessorsClass');
         $ccnByMethod = [
-            'getterOne' => 1,
-            'getterTwo' => 1,
-            'setterOne' => 1,
-            'setterTwo' => 1,
+            'getterOne' => ['ccn' => 1, 'isAccessor' => true],
+            'getterTwo' => ['ccn' => 1, 'isAccessor' => true],
+            'setterOne' => ['ccn' => 1, 'isAccessor' => true],
+            'setterTwo' => ['ccn' => 1, 'isAccessor' => true],
         ];
         $expected = ['wmc' => 0, 'ccn' => 1, 'ccnMethodMax' => 0, 'ccnByMethod' => $ccnByMethod];
         yield 'With only getters and setters in class' => [$node, $expected];
@@ -201,9 +201,11 @@ final class CyclomaticComplexityVisitorTest extends TestCase
         Phake::verify($classMetricMock)->__call('set', ['ccn', $expected['ccn']]);
         Phake::verify($classMetricMock)->__call('set', ['ccnMethodMax', $expected['ccnMethodMax']]);
         foreach ($expected['ccnByMethod'] as $methodName => $ccnByMethod) {
-            Phake::verify($classMethodsMetricsMock[$methodName])->__call('getName', []);
-            Phake::verify($classMethodsMetricsMock[$methodName])->__call('set', ['ccn', $ccnByMethod]);
-            Phake::verifyNoOtherInteractions($classMethodsMetricsMock[$methodName]);
+            $mock = $classMethodsMetricsMock[$methodName];
+            Phake::verify($mock)->__call('getName', []);
+            Phake::verify($mock)->__call('set', ['ccn', $ccnByMethod['ccn']]);
+            Phake::verify($mock)->__call('set', ['isAccessor', $ccnByMethod['isAccessor']]);
+            Phake::verifyNoOtherInteractions($mock);
         }
         Phake::verifyNoOtherInteractions($classMetricMock);
         Phake::verifyNoOtherInteractions($metricsMock);

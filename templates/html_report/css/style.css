@@ -298,7 +298,11 @@ a {
   color:#2F855A;
   background-color:#F0FFF4;
   display:inline-block;
-  padding:1px 4px;
+  letter-spacing: -0.03em;
+}
+.path.ignored {
+  color:#888;
+  background-color:#f8f8f8;
 }
 
 a[target="_blank"]::before {
@@ -536,6 +540,27 @@ table tr td {
 
 .table-small {
   font-size:0.8em;
+}
+
+.nested-table-top tr td {
+  vertical-align: top;
+}
+
+.nested-table-top .toggle-complexity > i {
+  display:inline-block;
+}
+
+.nested-table-top .toggle-complexity.nested-table-opened > i {
+  transform:rotate(90deg);
+  -ms-transform:rotate(90deg);
+}
+
+.nested-table-top div[id^="table-complexity-class-"] {
+  display: none;
+}
+
+.nested-table-top div[id^="table-complexity-class-"].opened {
+  display: block;
 }
 
 #pagination a {
