@@ -18,7 +18,7 @@ final class Group implements GroupInterface
      * Group constructor.
      *
      * @param string $name
-     * @param string $regex
+     * @param non-empty-string $regex
      */
     public function __construct(
         public readonly string $name,
@@ -41,7 +41,7 @@ final class Group implements GroupInterface
     {
         $matched = new Metrics();
         array_map(function (Metric $metric) use ($matched): void {
-            if (1 !== preg_match($this->regex, $metric->getName())) {
+            if (1 !== preg_match($this->getRegex(), $metric->getName())) {
                 return;
             }
             $matched->attach($metric);

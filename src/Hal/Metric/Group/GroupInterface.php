@@ -11,7 +11,7 @@ use Hal\Metric\Metrics;
 interface GroupInterface
 {
     /**
-     * @return string
+     * @return non-empty-string
      */
     public function getRegex(): string;
 

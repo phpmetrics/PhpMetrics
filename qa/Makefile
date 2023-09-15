@@ -71,7 +71,7 @@ qodana:
 	    -v ${HOST_PWD}/qa/cache/qodana:/data/cache \
 	    --env _JAVA_OPTIONS=-Xmx2048m \
 	    --pull always \
-	    jetbrains/qodana-php \
+	    jetbrains/qodana-php:2023.2-eap \
 	    --source-directory src \
 	    --baseline /data/project/qa/qodana.sarif.json \
 	    --cache-dir=/data/cache \

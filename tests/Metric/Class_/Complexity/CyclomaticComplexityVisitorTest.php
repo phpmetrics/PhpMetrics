@@ -5,6 +5,7 @@ namespace Tests\Hal\Metric\Class_\Complexity;
 
 use Generator;
 use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
+use Hal\Metric\FunctionMetric;
 use Hal\Metric\Helper\DetectorInterface;
 use Hal\Metric\Helper\MetricNameGenerator;
 use Hal\Metric\Helper\RoleOfMethodDetector;
@@ -15,11 +16,18 @@ use Phake;
 use PhpParser\Node;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use function array_combine;
+use function array_keys;
+use function array_map;
+use function array_values;
 
 final class CyclomaticComplexityVisitorTest extends TestCase
 {
     /**
-     * @return Generator<string, array{Node, array{wmc: int, ccn: int, ccnMethodMax: int}}>
+     * @return Generator<string, array{
+     *     Node,
+     *     array{wmc: int, ccn: int, ccnMethodMax: int, ccnByMethod: array<string, array{ccn: int, isAccessor: bool}>}
+     * }>
      */
     public static function provideNodeToCalculateCyclomaticComplexity(): Generator
     {
@@ -33,7 +41,7 @@ final class CyclomaticComplexityVisitorTest extends TestCase
             $node->namespacedName = Phake::mock(Node\Identifier::class);
             Phake::when($node)->__call('getMethods', [])->thenReturn([]);
             Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:' . $kind);
-            $expected = ['wmc' => 0, 'ccn' => 1, 'ccnMethodMax' => 0];
+            $expected = ['wmc' => 0, 'ccn' => 1, 'ccnMethodMax' => 0, 'ccnByMethod' => []];
             yield 'With an empty ' . $kind => [$node, $expected];
         }
 
@@ -107,12 +115,23 @@ final class CyclomaticComplexityVisitorTest extends TestCase
         $nodeContainingComplexSetOfNodes = Phake::mock(Node::class);
         $nodeContainingComplexSetOfNodes->stmts = $complexSetOfNodes;
 
+        $methods[0]->name = Phake::mock(Node\Identifier::class);
+        Phake::when($methods[0]->name)->__call('toString', [])->thenReturn('emptyMethod');
         $methods[1]->stmts = $nodeContainingComplexSetOfNodes;
+        $methods[1]->name = Phake::mock(Node\Identifier::class);
+        Phake::when($methods[1]->name)->__call('toString', [])->thenReturn('nestedMethod');
         $methods[2]->stmts = $complexSetOfNodes;
+        $methods[2]->name = Phake::mock(Node\Identifier::class);
+        Phake::when($methods[2]->name)->__call('toString', [])->thenReturn('simpleMethod');
 
         Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:ComplexClass');
-        $expected = ['wmc' => 51, 'ccn' => 49, 'ccnMethodMax' => 25];
+        $ccnByMethod = [
+            'emptyMethod' => ['ccn' => 1, 'isAccessor' => false],
+            'nestedMethod' => ['ccn' => 25, 'isAccessor' => false],
+            'simpleMethod' => ['ccn' => 25, 'isAccessor' => false],
+        ];
+        $expected = ['wmc' => 51, 'ccn' => 49, 'ccnMethodMax' => 25, 'ccnByMethod' => $ccnByMethod];
         yield 'With a complex class containing all complex structures' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
@@ -124,18 +143,32 @@ final class CyclomaticComplexityVisitorTest extends TestCase
             Phake::mock(Node\Stmt\ClassMethod::class), // Setter 2.
         ];
         $methods[0]->role = 'getter';
+        $methods[0]->name = Phake::mock(Node\Identifier::class);
+        Phake::when($methods[0]->name)->__call('toString', [])->thenReturn('getterOne');
         $methods[1]->role = 'getter';
+        $methods[1]->name = Phake::mock(Node\Identifier::class);
+        Phake::when($methods[1]->name)->__call('toString', [])->thenReturn('getterTwo');
         $methods[2]->role = 'setter';
+        $methods[2]->name = Phake::mock(Node\Identifier::class);
+        Phake::when($methods[2]->name)->__call('toString', [])->thenReturn('setterOne');
         $methods[3]->role = 'setter';
+        $methods[3]->name = Phake::mock(Node\Identifier::class);
+        Phake::when($methods[3]->name)->__call('toString', [])->thenReturn('setterTwo');
         Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:AccessorsClass');
-        $expected = ['wmc' => 0, 'ccn' => 1, 'ccnMethodMax' => 0];
+        $ccnByMethod = [
+            'getterOne' => ['ccn' => 1, 'isAccessor' => true],
+            'getterTwo' => ['ccn' => 1, 'isAccessor' => true],
+            'setterOne' => ['ccn' => 1, 'isAccessor' => true],
+            'setterTwo' => ['ccn' => 1, 'isAccessor' => true],
+        ];
+        $expected = ['wmc' => 0, 'ccn' => 1, 'ccnMethodMax' => 0, 'ccnByMethod' => $ccnByMethod];
         yield 'With only getters and setters in class' => [$node, $expected];
     }
 
     /**
      * @param Node $node
-     * @param array{wmc: int, ccn: int, ccnMethodMax: int} $expected
+     * @param array{wmc: int, ccn: int, ccnMethodMax: int, ccnByMethod: array<string, int>} $expected
      * @return void
      */
     #[DataProvider('provideNodeToCalculateCyclomaticComplexity')]
@@ -150,14 +183,30 @@ final class CyclomaticComplexityVisitorTest extends TestCase
         Phake::when($detector)->__call('detects', [Phake::anyParameters()])->thenReturnCallback(
             static fn (Node $node): string|null => $node->role ?? null
         );
+        $methodsNames = array_keys($expected['ccnByMethod']);
+        $classMethodsMetricsMock = array_map(static function (string $methodName): Phake\IMock&FunctionMetric {
+            $mock = Phake::mock(FunctionMetric::class);
+            Phake::when($mock)->__call('getName', [])->thenReturn($methodName);
+            return $mock;
+        }, $methodsNames);
+        $classMethodsMetricsMock = array_combine($methodsNames, $classMethodsMetricsMock);
+        Phake::when($classMetricMock)->__call('get', ['methods'])->thenReturn(array_values($classMethodsMetricsMock));
 
         $visitor = new CyclomaticComplexityVisitor($metricsMock, $detector);
         $visitor->leaveNode($node);
 
         Phake::verify($metricsMock)->__call('get', [$nodeName]);
+        Phake::verify($classMetricMock)->__call('get', ['methods']);
         Phake::verify($classMetricMock)->__call('set', ['wmc', $expected['wmc']]);
         Phake::verify($classMetricMock)->__call('set', ['ccn', $expected['ccn']]);
         Phake::verify($classMetricMock)->__call('set', ['ccnMethodMax', $expected['ccnMethodMax']]);
+        foreach ($expected['ccnByMethod'] as $methodName => $ccnByMethod) {
+            $mock = $classMethodsMetricsMock[$methodName];
+            Phake::verify($mock)->__call('getName', []);
+            Phake::verify($mock)->__call('set', ['ccn', $ccnByMethod['ccn']]);
+            Phake::verify($mock)->__call('set', ['isAccessor', $ccnByMethod['isAccessor']]);
+            Phake::verifyNoOtherInteractions($mock);
+        }
         Phake::verifyNoOtherInteractions($classMetricMock);
         Phake::verifyNoOtherInteractions($metricsMock);
     }

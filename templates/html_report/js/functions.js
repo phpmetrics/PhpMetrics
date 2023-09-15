@@ -38,3 +38,9 @@ function saveSvgAsImage(svg, name, width, height) {
     };
     canvas.parentNode.removeChild(canvas);
 }
+
+function toggleNestedTable(element, tableId) {
+    document.getElementById(tableId).classList.toggle('opened');
+    element.classList.toggle('nested-table-opened');
+    return false;
+}

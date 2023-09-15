@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Hal\Metric\Class_\Complexity;
 
+use Hal\Metric\FunctionMetric;
 use Hal\Metric\Helper\DetectorInterface;
 use Hal\Metric\Helper\MetricNameGenerator;
 use Hal\Metric\Metric;
@@ -10,6 +11,8 @@ use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
+use function array_column;
+use function array_combine;
 use function array_filter;
 use function array_key_exists;
 use function array_map;
@@ -114,11 +117,11 @@ final class CyclomaticComplexityVisitor extends NodeVisitorAbstract
 
         /** @var Metric $class */
         $class = $this->metrics->get(MetricNameGenerator::getClassName($node));
-        // We don't want to increase the CCN for getters and setters.
-        $methods = array_filter($node->getMethods(), function (Stmt\ClassMethod $stmt): bool {
-            return !in_array($this->roleOfMethodDetector->detects($stmt), ['getter', 'setter'], true);
-        });
-        $ccByMethods = array_map(fn (Stmt\ClassMethod $stmt): int => $this->calculateCC($stmt) + 1, $methods);
+
+        $allMethods = $this->discoverMethods($node->getMethods());
+        // We don't want to increase the CCN of the class for getters and setters.
+        $methods = array_filter($allMethods, static fn (array $method): bool => !$method['isAccessor']);
+        $ccByMethods = array_column($methods, 'ccn');
         $weightMethodCount = array_sum($ccByMethods);
         $classCC = 1 + $weightMethodCount - count($methods);
 
@@ -126,6 +129,14 @@ final class CyclomaticComplexityVisitor extends NodeVisitorAbstract
         $class->set('ccn', $classCC);
         $class->set('ccnMethodMax', max([0, ...$ccByMethods]));
 
+        // Apply the CCN of the method for each method found in the class.
+        /** @var array<FunctionMetric> $classMethods */
+        $classMethods = $class->get('methods'); // $class->get('methods') is defined in ClassEnumVisitor.
+        array_map(static function (FunctionMetric $method) use ($allMethods): void {
+            $methodName = $method->getName();
+            $method->set('ccn', $allMethods[$methodName]['ccn']);
+            $method->set('isAccessor', $allMethods[$methodName]['isAccessor']);
+        }, $classMethods);
         return null;
     }
 
@@ -157,5 +168,26 @@ final class CyclomaticComplexityVisitor extends NodeVisitorAbstract
             return $cyclomaticComplexity + self::$complexIncrementList[$type]($node);
         }
         return $cyclomaticComplexity;
+    }
+
+    /**
+     * Discover the CCN for all given methods and keep information if the method is an accessor or not.
+     *
+     * @param array<Stmt\ClassMethod> $stmts Lost of methods
+     * @return array<string, array{ccn: int, isAccessor: bool}> Data calculated by the discovering.
+     */
+    private function discoverMethods(array $stmts): array
+    {
+        $methodsNames = array_map(static fn (Stmt\ClassMethod $stmt): string => $stmt->name->toString(), $stmts);
+        $methodsData = array_map(function (Stmt\ClassMethod $stmt): array {
+            $isAccessor = in_array($this->roleOfMethodDetector->detects($stmt), ['getter', 'setter'], true);
+            return [
+                // Each method by default is CCN 1 even if it's empty. Ignoring accessors and give them the default CCN.
+                'ccn' => $isAccessor ? 1 : $this->calculateCC($stmt) + 1,
+                'isAccessor' => $isAccessor
+            ];
+        }, $stmts);
+
+        return array_combine($methodsNames, $methodsData);
     }
 }

@@ -10,6 +10,7 @@ use function array_keys;
 use function array_map;
 use function array_sum;
 use function get_class;
+use function get_object_vars;
 use function round;
 
 /**
@@ -89,7 +90,7 @@ final class Consolidated
             $sum->cloc += $item->get('cloc');
             $sum->nbMethods += $item->get('nbMethods');
 
-            foreach ($avg as $k => $a) {
+            foreach (get_object_vars($avg) as $k => $a) {
                 $avg->$k[] = $item->get($k);
             }
         }
@@ -97,9 +98,10 @@ final class Consolidated
         $sum->nbInterfaces = $nbInterfaces;
         $sum->nbPackages = count($packages);
 
-        foreach ($avg as &$a) {
-            $a = ([] !== $a) ? round(array_sum((array)$a) / count($a), 2) : 0;
-        } unset($a);
+        foreach (get_object_vars($avg) as $k => $a) {
+            /** @var array<mixed> $a */
+            $avg->$k = ([] !== $a) ? round(array_sum($a) / count($a), 2) : 0;
+        }
 
         $avg->distance = 0;
         $avg->incomingCDep = 0;

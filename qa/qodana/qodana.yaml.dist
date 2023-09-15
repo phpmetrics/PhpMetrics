@@ -305,7 +305,6 @@ include:
   - name: PhpMissingDocCommentInspection
   - name: PhpMissingFieldTypeInspection
   - name: PhpMissingParamTypeInspection
-  - name: PhpMissingParentCallCommonInspection
   - name: PhpMissingParentCallMagicInspection
   - name: PhpMissingParentConstructorInspection
   - name: PhpMissingReturnTypeInspection
