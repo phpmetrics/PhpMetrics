@@ -10,7 +10,6 @@ use Hal\Metric\Metrics;
 use Hal\Metric\PackageMetric;
 use function array_map;
 use function in_array;
-use function str_contains;
 use function strrev;
 use function strstr;
 
@@ -81,6 +80,12 @@ final class PackageDependencies implements CalculableInterface
     {
         /** @var null|string $packageName */
         $packageName = $this->metrics->get($className)?->get('package');
-        return $packageName ?? (str_contains($className, '\\') ? strrev(strstr(strrev($className), '\\')) : '\\');
+        if ($packageName !== null) {
+            return $packageName;
+        }
+
+        // Proceed the string in reverse to try to infer the package name.
+        $revPackageName = strstr(strrev($className), '\\');
+        return $revPackageName !== false ? strrev($revPackageName) : '\\';
     }
 }

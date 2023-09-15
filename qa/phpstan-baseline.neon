@@ -1,36 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Binary operation \"\\.\" between PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier and '\\(\\)' results in an error\\.$#"
-			count: 1
-			path: ../src/Hal/Metric/Class_/Structural/LcomVisitor.php
-
-		-
-			message: "#^Cannot cast PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier to string\\.$#"
-			count: 1
-			path: ../src/Hal/Metric/Class_/Structural/LcomVisitor.php
-
-		-
-			message: "#^Argument of an invalid type stdClass supplied for foreach, only iterables are supported\\.$#"
-			count: 2
-			path: ../src/Hal/Metric/Consolidated.php
-
-		-
-			message: "#^Call to function unset\\(\\) contains undefined variable \\$a\\.$#"
-			count: 1
-			path: ../src/Hal/Metric/Consolidated.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function strrev expects string, string\\|false given\\.$#"
-			count: 1
-			path: ../src/Hal/Metric/Package/PackageDependencies.php
-
-		-
-			message: "#^Binary operation \"/\" between 0\\|1 and 0\\|1\\|2 results in an error\\.$#"
-			count: 1
-			path: ../src/Hal/Metric/System/Coupling/Coupling.php
-
-		-
 			message: "#^Access to an undefined property object\\:\\:\\$history\\.$#"
 			count: 1
 			path: ../src/Hal/Report/Html/Reporter.php

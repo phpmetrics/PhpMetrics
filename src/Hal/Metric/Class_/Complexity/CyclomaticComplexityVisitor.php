@@ -130,11 +130,13 @@ final class CyclomaticComplexityVisitor extends NodeVisitorAbstract
         $class->set('ccnMethodMax', max([0, ...$ccByMethods]));
 
         // Apply the CCN of the method for each method found in the class.
+        /** @var array<FunctionMetric> $classMethods */
+        $classMethods = $class->get('methods'); // $class->get('methods') is defined in ClassEnumVisitor.
         array_map(static function (FunctionMetric $method) use ($allMethods): void {
             $methodName = $method->getName();
             $method->set('ccn', $allMethods[$methodName]['ccn']);
             $method->set('isAccessor', $allMethods[$methodName]['isAccessor']);
-        }, $class->get('methods')); // $class->get('methods') is defined in ClassEnumVisitor.
+        }, $classMethods);
         return null;
     }
 

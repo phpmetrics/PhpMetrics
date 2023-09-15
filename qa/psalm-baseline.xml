@@ -51,24 +51,11 @@
     </UndefinedPropertyFetch>
   </file>
   <file src="../src/Hal/Metric/Class_/Structural/LcomVisitor.php">
-    <PossiblyInvalidCast>
-      <code><![CDATA[$node->name]]></code>
-    </PossiblyInvalidCast>
-    <PossiblyInvalidOperand>
-      <code><![CDATA[$node->name]]></code>
-    </PossiblyInvalidOperand>
     <UndefinedPropertyFetch>
-      <code><![CDATA[$node->var->name]]></code>
       <code><![CDATA[$node->var->name]]></code>
     </UndefinedPropertyFetch>
   </file>
   <file src="../src/Hal/Metric/Class_/Text/HalsteadVisitor.php">
-    <NoValue>
-      <code>$operands</code>
-    </NoValue>
-    <TypeDoesNotContainType>
-      <code>[] !== $operands</code>
-    </TypeDoesNotContainType>
     <UndefinedPropertyFetch>
       <code><![CDATA[$node->name]]></code>
       <code><![CDATA[$node->name]]></code>

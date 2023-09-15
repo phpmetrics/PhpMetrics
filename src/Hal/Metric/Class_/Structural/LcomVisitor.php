@@ -195,15 +195,8 @@ final class LcomVisitor extends NodeVisitorAbstract
      */
     private function getPropertyFetchTreeNodes(Node $node): array
     {
-        if (
-            $node instanceof Node\Expr\PropertyFetch
-            && property_exists($node->var, 'name')
-            && !($node->var->name instanceof Node\Expr\Variable) // Prevents failure when $a->$b.
-            && 'this' === (string)$node->var->name
-            // Prevents failures when $a->{$name} or $a->{<expr>}
-            && (is_string($node->name) || $node->name instanceof Stringable)
-        ) {
-            return [$this->graph->gather((string)$node->name)];
+        if ($node instanceof Node\Expr\PropertyFetch && null !== ($nodeName = $this->readMemberNodeClearName($node))) {
+            return [$this->graph->gather($nodeName)];
         }
         return [];
     }
@@ -219,15 +212,40 @@ final class LcomVisitor extends NodeVisitorAbstract
     {
         if (
             $node instanceof Node\Expr\MethodCall
-            && !$node->var instanceof Node\Expr\New_
-            && property_exists($node->var, 'name')
-            && !($node->var->name instanceof Node\Expr\Variable) // Prevents failure when $a->$b(), or $c().
-            && 'this' === (string)$node->var->name
-            // Prevents failures when $a->{$name}() or $a->{<expr>}()
-            && (is_string($node->name) || $node->name instanceof Stringable)
+            && !$node->var instanceof Node\Expr\New_ // Prevents `(new X())->methodCall()` issues.
+            && null !== ($nodeName = $this->readMemberNodeClearName($node))
         ) {
-            return [$this->graph->gather($node->name . '()')];
+            return [$this->graph->gather($nodeName . '()')];
         }
         return [];
+    }
+
+    /**
+     * Reads the given node about a property or a method call to match its deterministic name.
+     * It might not be a deterministic name if any of the following is true:
+     * - variable has no name (usually due to a syntax error)
+     * - variable name is a variable itself (prevents $a->$b(), $c(), or $a->$b)
+     * - variable is not from "this"
+     * - node name is not a string, but an expression (prevents $a->{$name} or $a->{<expr>})
+     * In any of this case, this method returns NULL.
+     *
+     * @param Node\Expr\PropertyFetch|Node\Expr\MethodCall $node
+     * @return string|null
+     */
+    private function readMemberNodeClearName(Node\Expr\PropertyFetch|Node\Expr\MethodCall $node): string|null
+    {
+        // No matter what the PHPDoc says, sometimes `$node->name` is actually a pure string.
+        /** @var string|Node\Expr|Node\Identifier $nodeName */
+        $nodeName = $node->name;
+
+        if (
+            property_exists($node->var, 'name')
+            && !($node->var->name instanceof Node\Expr\Variable)
+            && 'this' === (string)$node->var->name
+            && (is_string($nodeName) || $nodeName instanceof Stringable)
+        ) {
+            return (string)$nodeName;
+        }
+        return null;
     }
 }

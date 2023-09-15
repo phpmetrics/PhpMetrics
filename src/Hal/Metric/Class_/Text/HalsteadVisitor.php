@@ -63,6 +63,42 @@ final class HalsteadVisitor extends NodeVisitorAbstract
     }
 
     /**
+     * Reset the list of operators and operands.
+     * @return void
+     */
+    private static function resetOperatorsAndOperands(): void
+    {
+        self::$operands = [];
+        self::$operators = [];
+    }
+
+    /**
+     * Returns the list of all operators and operands
+     * @return array{array<int, string>, array<int, string>}
+     */
+    private static function getOperatorsAndOperands(): array
+    {
+        return [self::$operators, self::$operands];
+    }
+
+    /**
+     * Returns the list of unique operators and operands.
+     * @return array{array<int, string>, array<int, string>}
+     */
+    private static function getUniqueOperatorsAndOperands(): array
+    {
+        $uniq = static function (array $elementsToDedupe): array {
+            return array_map(unserialize(...), array_unique(array_map(serialize(...), $elementsToDedupe)));
+        };
+
+        /** @var array<int, string> $uniqueOperators */
+        $uniqueOperators = $uniq(self::$operators);
+        /** @var array<int, string> $uniqueOperands */
+        $uniqueOperands = $uniq(self::$operands);
+        return [$uniqueOperators, $uniqueOperands];
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
@@ -82,20 +118,12 @@ final class HalsteadVisitor extends NodeVisitorAbstract
         /** @var Metric $classOrFunction */
         $classOrFunction = $this->metrics->get($nodeName);
 
-        // Search for operands and operators.
-        self::$operands = [];
-        self::$operators = [];
+        // Search for operands and operators and calculate halstead metrics.
+        self::resetOperatorsAndOperands();
 
         $this->nodeIterator->iterateOver($node, $this->getVisitorCallback());
-
-        /** @var array<int, string> $operands */
-        $operands = &self::$operands;
-        /** @var array<int, string> $operators */
-        $operators = &self::$operators;
-
-        // Calculate halstead metrics.
-        $uniqueOperators = array_map(unserialize(...), array_unique(array_map(serialize(...), $operators)));
-        $uniqueOperands = array_map(unserialize(...), array_unique(array_map(serialize(...), $operands)));
+        [$operators, $operands] = self::getOperatorsAndOperands();
+        [$uniqueOperators, $uniqueOperands] = self::getUniqueOperatorsAndOperands();
 
         // Set default values.
         $volume = 0;

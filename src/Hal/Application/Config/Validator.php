@@ -78,7 +78,7 @@ final class Validator implements ValidatorInterface
         if (!$config->has('groups')) {
             $config->set('groups', []);
         }
-        /** @var array<array{name: string, match: string}> $groupsRaw */
+        /** @var array<array{name: string, match: non-empty-string}> $groupsRaw */
         $groupsRaw = $config->get('groups');
         $groups = array_map(static fn (array $raw): Group => new Group($raw['name'], $raw['match']), $groupsRaw);
         $config->set('groups', $groups);
