@@ -8,6 +8,7 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\InterfaceMetric;
 use Hal\Metric\Metric;
 use Hal\Metric\Registry;
+use function array_combine;
 use function array_filter;
 use function array_intersect_key;
 use function array_key_exists;
@@ -39,12 +40,13 @@ final class Search implements SearchInterface
      * Builds a list of Search object from the array given in argument.
      *
      * @param array<string, array<string, mixed>> $searches
-     * @return array<int, Search>
+     * @return array<string, Search>
      */
     public static function buildListFromArray(array $searches): array
     {
         $builder = static fn (string $name, array $search): Search => new self($name, $search);
-        return array_map($builder, array_keys($searches), $searches);
+        $searchesNames = array_keys($searches);
+        return array_combine($searchesNames, array_map($builder, $searchesNames, $searches));
     }
 
     /**

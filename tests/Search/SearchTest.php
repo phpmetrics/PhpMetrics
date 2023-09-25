@@ -26,7 +26,12 @@ final class SearchTest extends TestCase
             'withNestedData' => ['foo' => 'FOO-FOO', 'bar' => ['bar' => ['bar' => 'BAR']]],
         ];
 
-        [$searchA, $searchB, $searchC] = Search::buildListFromArray($rawArrayOfSearches);
+        $list = Search::buildListFromArray($rawArrayOfSearches);
+        self::assertCount(3, $list);
+        self::assertArrayHasKey('empty', $list);
+        self::assertArrayHasKey('withData', $list);
+        self::assertArrayHasKey('withNestedData', $list);
+        [$searchA, $searchB, $searchC] = $list;
 
         self::assertSame('empty', $searchA->getName());
         self::assertSame([], $searchA->getConfig());
