@@ -14,6 +14,8 @@ use Phake;
 use Phake\IMock;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+
+use function array_values;
 use function in_array;
 
 final class SearchTest extends TestCase
@@ -31,7 +33,7 @@ final class SearchTest extends TestCase
         self::assertArrayHasKey('empty', $list);
         self::assertArrayHasKey('withData', $list);
         self::assertArrayHasKey('withNestedData', $list);
-        [$searchA, $searchB, $searchC] = $list;
+        [$searchA, $searchB, $searchC] = array_values($list);
 
         self::assertSame('empty', $searchA->getName());
         self::assertSame([], $searchA->getConfig());
@@ -46,28 +48,28 @@ final class SearchTest extends TestCase
      */
     public static function provideSearchAndMetrics(): Generator
     {
-        [$search] = Search::buildListFromArray(['test' => []]);
+        ['test' => $search] = Search::buildListFromArray(['test' => []]);
         $metric = Phake::mock(Metric::class);
         $checkCallback = static function (IMock&Metric $metric): void {
             Phake::verifyNoInteraction($metric);
         };
         yield 'No search configuration' => [$metric, $search, false, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['type' => 'class']]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['type' => 'class']]);
         $metric = Phake::mock(Metric::class);
         $checkCallback = static function (IMock&Metric $metric): void {
             Phake::verifyNoInteraction($metric);
         };
         yield 'Search type "class", none found' => [$metric, $search, false, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['type' => 'class']]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['type' => 'class']]);
         $metric = Phake::mock(ClassMetric::class);
         $checkCallback = static function (IMock&Metric $metric): void {
             Phake::verifyNoInteraction($metric);
         };
         yield 'Search type "class", found' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['type' => 'class', 'failIfFound' => true]]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['type' => 'class', 'failIfFound' => true]]);
         $metric = Phake::mock(ClassMetric::class);
         Phake::when($metric)->__call('get', ['was-not-expected-by'])->thenReturn(null);
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -78,28 +80,28 @@ final class SearchTest extends TestCase
         };
         yield 'Search type "class", found. Fail if found.' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['type' => 'class']]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['type' => 'class']]);
         $metric = Phake::mock(InterfaceMetric::class);
         $checkCallback = static function (IMock&Metric $metric): void {
             Phake::verifyNoInteraction($metric);
         };
         yield 'Search type "class", interface found' => [$metric, $search, false, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['type' => 'interface']]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['type' => 'interface']]);
         $metric = Phake::mock(Metric::class);
         $checkCallback = static function (IMock&Metric $metric): void {
             Phake::verifyNoInteraction($metric);
         };
         yield 'Search type "interface", none found' => [$metric, $search, false, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['type' => 'interface']]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['type' => 'interface']]);
         $metric = Phake::mock(InterfaceMetric::class);
         $checkCallback = static function (IMock&Metric $metric): void {
             Phake::verifyNoInteraction($metric);
         };
         yield 'Search type "interface", found' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['type' => 'interface', 'failIfFound' => true]]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['type' => 'interface', 'failIfFound' => true]]);
         $metric = Phake::mock(InterfaceMetric::class);
         Phake::when($metric)->__call('get', ['was-not-expected-by'])->thenReturn(null);
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -110,7 +112,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search type "interface", found. Fail if found.' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['nameMatches' => '^a|b|c$']]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['nameMatches' => '^a|b|c$']]);
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('getName', [])->thenReturn('d');
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -119,7 +121,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search name matches, but does not match' => [$metric, $search, false, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['nameMatches' => '^a|b|c$']]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['nameMatches' => '^a|b|c$']]);
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('getName', [])->thenReturn('B');
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -128,7 +130,9 @@ final class SearchTest extends TestCase
         };
         yield 'Search name matches, and matches' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['nameMatches' => '^a|b|c$', 'failIfFound' => true]]);
+        ['test' => $search] = Search::buildListFromArray(
+            ['test' => ['nameMatches' => '^a|b|c$', 'failIfFound' => true]]
+        );
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('getName', [])->thenReturn('B');
         Phake::when($metric)->__call('get', ['was-not-expected-by'])->thenReturn(null);
@@ -141,7 +145,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search name matches, and matches. Fail if found.' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['instanceOf' => ['\\A', 'B']]]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['instanceOf' => ['\\A', 'B']]]);
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('get', ['implements'])->thenReturn('');
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -150,7 +154,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search instance of, none found' => [$metric, $search, false, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['instanceOf' => ['\\A', 'B']]]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['instanceOf' => ['\\A', 'B']]]);
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('get', ['implements'])->thenReturn(['A']);
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -159,7 +163,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search instance of, but only 1' => [$metric, $search, false, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['instanceOf' => ['\\A', 'B']]]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['instanceOf' => ['\\A', 'B']]]);
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('get', ['implements'])->thenReturn(['A', 'B']);
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -168,7 +172,9 @@ final class SearchTest extends TestCase
         };
         yield 'Search instance of, and got all' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['instanceOf' => ['\\A', 'B'], 'failIfFound' => true]]);
+        ['test' => $search] = Search::buildListFromArray(
+            ['test' => ['instanceOf' => ['\\A', 'B'], 'failIfFound' => true]]
+        );
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('get', ['implements'])->thenReturn(['A', 'B']);
         Phake::when($metric)->__call('get', ['was-not-expected-by'])->thenReturn(null);
@@ -181,7 +187,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search instance of, and got all. Fail if found.' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['instanceOf' => ['\\A', 'B']]]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['instanceOf' => ['\\A', 'B']]]);
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('get', ['implements'])->thenReturn(['A', 'B', 'C']);
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -190,7 +196,9 @@ final class SearchTest extends TestCase
         };
         yield 'Search instance of, and got more than all' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['instanceOf' => ['\\A', 'B'], 'failIfFound' => true]]);
+        ['test' => $search] = Search::buildListFromArray(
+            ['test' => ['instanceOf' => ['\\A', 'B'], 'failIfFound' => true]]
+        );
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('get', ['implements'])->thenReturn(['A', 'B', 'C']);
         Phake::when($metric)->__call('get', ['was-not-expected-by'])->thenReturn(null);
@@ -203,7 +211,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search instance of, and got more than all. Fail if found.' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['usesClasses' => ['^(A|B)$', '^C', 'D$']]]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['usesClasses' => ['^(A|B)$', '^C', 'D$']]]);
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('get', ['externals'])->thenReturn('');
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -212,7 +220,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search uses of, none found' => [$metric, $search, false, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['usesClasses' => ['^(A|B)$', '^C', 'D$']]]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['usesClasses' => ['^(A|B)$', '^C', 'D$']]]);
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('get', ['externals'])->thenReturn(['XxX', 'xXx', 'xxx', 'XXX']);
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -221,7 +229,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search uses of, none found but externals exist' => [$metric, $search, false, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['usesClasses' => ['^(A|B)$', '^C', 'D$']]]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['usesClasses' => ['^(A|B)$', '^C', 'D$']]]);
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('get', ['externals'])->thenReturn(['b']);
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -230,7 +238,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search uses of, found 1st time' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['usesClasses' => ['^(A|B)$', '^C', 'D$']]]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['usesClasses' => ['^(A|B)$', '^C', 'D$']]]);
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('get', ['externals'])->thenReturn(['XxX', 'classThatWorks']);
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -239,7 +247,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search uses of, found 2nd time' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(['test' => ['usesClasses' => ['^(A|B)$', '^C', 'D$']]]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['usesClasses' => ['^(A|B)$', '^C', 'D$']]]);
         $metric = Phake::mock(Metric::class);
         Phake::when($metric)->__call('get', ['externals'])->thenReturn(['XxX', 'xXx', 'NowWeEnd']);
         $checkCallback = static function (IMock&Metric $metric): void {
@@ -248,7 +256,7 @@ final class SearchTest extends TestCase
         };
         yield 'Search uses of, found 3rd time' => [$metric, $search, true, $checkCallback];
 
-        [$search] = Search::buildListFromArray(
+        ['test' => $search] = Search::buildListFromArray(
             ['test' => ['usesClasses' => ['^(A|B)$', '^C', 'D$'], 'failIfFound' => true]]
         );
         $metric = Phake::mock(Metric::class);
@@ -267,7 +275,7 @@ final class SearchTest extends TestCase
         foreach (Registry::allForStructures() as $structName) {
             // Represent every managed operator that passes the regex check. Added ">=<" for default case.
             foreach (['', '=', '>', '<', '>=', '=>', '<=', '=<', '>=<'] as $operator) {
-                [$search] = Search::buildListFromArray(['test' => [$structName => $operator . '0.5']]);
+                ['test' => $search] = Search::buildListFromArray(['test' => [$structName => $operator . '0.5']]);
                 $metric = Phake::mock(Metric::class);
                 Phake::when($metric)->__call('get', [$structName])->thenReturn(0.5);
                 $match = in_array($operator, ['', '=', '>=', '=>', '<=', '=<'], true);
@@ -278,7 +286,7 @@ final class SearchTest extends TestCase
                 yield 'Search ' . $structName . ', operator "' . $operator . '", metric is same value' =>
                     [$metric, $search, $match, $checkCallback];
 
-                [$search] = Search::buildListFromArray(['test' => [$structName => $operator . '0.5']]);
+                ['test' => $search] = Search::buildListFromArray(['test' => [$structName => $operator . '0.5']]);
                 $metric = Phake::mock(Metric::class);
                 Phake::when($metric)->__call('get', [$structName])->thenReturn(0.3);
                 $match = in_array($operator, ['<=', '<', '=<'], true);
@@ -289,7 +297,7 @@ final class SearchTest extends TestCase
                 yield 'Search ' . $structName . ', operator "' . $operator . '", metric is less' =>
                     [$metric, $search, $match, $checkCallback];
 
-                [$search] = Search::buildListFromArray(['test' => [$structName => $operator . '0.5']]);
+                ['test' => $search] = Search::buildListFromArray(['test' => [$structName => $operator . '0.5']]);
                 $metric = Phake::mock(Metric::class);
                 Phake::when($metric)->__call('get', [$structName])->thenReturn(2.8);
                 $match = in_array($operator, ['>=', '>', '=>'], true);
@@ -323,7 +331,7 @@ final class SearchTest extends TestCase
 
     public function testExceptionIsThrownWhenCustomSearchMetricsIsInvalid(): void
     {
-        [$search] = Search::buildListFromArray(['test' => ['loc' => '= invalidValue']]);
+        ['test' => $search] = Search::buildListFromArray(['test' => ['loc' => '= invalidValue']]);
         $metric = Phake::mock(Metric::class);
 
         $this->expectExceptionObject(SearchValidationException::invalidCustomMetricComparison('= invalidValue'));

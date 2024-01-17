@@ -24,10 +24,10 @@ new_git_version: tag build
 	git push -u origin master
 	git push origin `semver tag`
 
-docker:
+docker-releasing:
 	docker build -t phpmetrics/releasing ./docker/releasing
 
 # Publish new release. Usage:
 #   make release VERSION=(major|minor|patch) SPECIAL=…
-release: qa docker
+release: qa docker-releasing
 	docker run -it --rm --mount type=bind,source=$$SSH_AUTH_SOCK,target=/ssh-agent --env SSH_AUTH_SOCK=/ssh-agent -v ~/.gitconfig:/etc/gitconfig -v /var/run/docker.sock:/var/run/docker.sock -v ${HOST_PWD}:/app -w /app --env HOST_PWD=${HOST_PWD} phpmetrics/releasing make new_git_version VERSION=$(VERSION) SPECIAL=$(SPECIAL)
