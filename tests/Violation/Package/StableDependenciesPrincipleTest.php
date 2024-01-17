@@ -43,6 +43,13 @@ final class StableDependenciesPrincipleTest extends TestCase
         $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
         $packageMetric = Phake::mock(PackageMetric::class);
         Phake::when($packageMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
+        Phake::when($packageMetric)->__call('getInstability', [])->thenReturn(null);
+        Phake::when($packageMetric)->__call('getDependentInstabilities', [])->thenReturn([]);
+        yield 'Instability not defined' => [$packageMetric, $violationsHandler, false];
+
+        $violationsHandler = Phake::mock(ViolationsHandlerInterface::class);
+        $packageMetric = Phake::mock(PackageMetric::class);
+        Phake::when($packageMetric)->__call('get', ['violations'])->thenReturn($violationsHandler);
         Phake::when($packageMetric)->__call('getInstability', [])->thenReturn(32.45);
         Phake::when($packageMetric)->__call('getDependentInstabilities', [])->thenReturn([]);
         yield 'No dependencies' => [$packageMetric, $violationsHandler, false];
@@ -113,6 +120,14 @@ final class StableDependenciesPrincipleTest extends TestCase
         Phake::verify($violationsHandler)->__call('add', [$violation]);
         Phake::verifyNoOtherInteractions($violationsHandler);
         $instability = $metric->getInstability();
+
+        if (null === $instability) {
+            $expectedDescription = 'Packages should depend in the direction of stability.';
+            self::assertSame($expectedDescription, $violation->getDescription());
+            return;
+        }
+        /** @var int $violatingInstabilities the inference */
+
         $violatingInstabilities = array_filter(
             $metric->getDependentInstabilities(),
             static fn (float $otherInstability): bool => $otherInstability >= $instability
