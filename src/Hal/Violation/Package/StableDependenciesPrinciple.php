@@ -60,9 +60,12 @@ final class StableDependenciesPrinciple implements Violation
 
     public function getDescription(): string
     {
-        $count = count($this->violatingInstabilities);
-        /** @var float $instability */
         $instability = $this->metric->getInstability();
+        if (null === $instability) {
+            return 'Packages should depend in the direction of stability.';
+        }
+
+        $count = count($this->violatingInstabilities);
         $thisInstability = round($instability, 3);
         $packages = implode(
             "\n* ",
