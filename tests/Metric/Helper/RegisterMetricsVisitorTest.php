@@ -42,25 +42,25 @@ final class RegisterMetricsVisitorTest extends TestCase
     {
         $node = Phake::mock(Node\Stmt\Class_::class);
         Phake::when($node)->__call('isAnonymous', [])->thenReturn(false);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('ClassNoMethod');
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         yield 'Class without methods' => [$node, ['ClassNoMethod' => ClassMetric::class]];
 
         $node = Phake::mock(Node\Stmt\Interface_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('InterfaceNoMethod');
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         yield 'Interface without methods' => [$node, ['InterfaceNoMethod' => InterfaceMetric::class]];
 
         $node = Phake::mock(Node\Stmt\Trait_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('TraitNoMethod');
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         yield 'Trait without methods' => [$node, ['TraitNoMethod' => ClassMetric::class]];
 
         $node = Phake::mock(Node\Stmt\Enum_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('EnumNoMethod');
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         // Todo: manage Enum.
@@ -82,25 +82,25 @@ final class RegisterMetricsVisitorTest extends TestCase
 
         $node = Phake::mock(Node\Stmt\Class_::class);
         Phake::when($node)->__call('isAnonymous', [])->thenReturn(false);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('Class+Method');
         Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
         yield 'Class with methods' => [$node, ['Class+Method' => ClassMetric::class, ...$expectedMethods]];
 
         $node = Phake::mock(Node\Stmt\Interface_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('Interface+Method');
         Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
         yield 'Interface with methods' => [$node, ['Interface+Method' => InterfaceMetric::class, ...$expectedMethods]];
 
         $node = Phake::mock(Node\Stmt\Trait_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('Trait+Method');
         Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
         yield 'Trait with methods' => [$node, ['Trait+Method' => ClassMetric::class, ...$expectedMethods]];
 
         $node = Phake::mock(Node\Stmt\Enum_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('Enum+Method');
         Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
         // Todo: manage Enum.

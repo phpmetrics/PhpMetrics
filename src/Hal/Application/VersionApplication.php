@@ -21,7 +21,7 @@ final class VersionApplication implements ApplicationInterface
      */
     public function run(): int
     {
-        $versionMsg = 'PhpMetrics %s <http://www.phpmetrics.org>' . PHP_EOL .
+        $versionMsg = 'PhpMetrics %s <https://www.phpmetrics.org>' . PHP_EOL .
             'by Jean-François Lépine <https://twitter.com/Halleck45>' . PHP_EOL;
         $this->output->writeln(sprintf($versionMsg, VersionInfo::getVersion()));
         return 0;

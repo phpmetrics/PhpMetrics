@@ -13,13 +13,14 @@ final class SimpleVisitorTest extends TestCase
     public function testICanVisitTheNode(): void
     {
         $callback = static function (Node $node): void {
-            /** @noinspection PhpUndefinedFieldInspection Willing to be undefined, to be checked later. */
-            $node->unitTestData = 'FooBar';
+            $node->getType();
         };
         $visitor = new SimpleVisitor($callback);
 
         $node = Phake::mock(Node::class);
+        Phake::when($node)->__call('getType', [])->thenReturn('Foo');
         $visitor->leaveNode($node);
-        self::assertSame('FooBar', $node->unitTestData);
+        Phake::verify($node)->__call('getType', []);
+        Phake::verifyNoOtherInteractions($node);
     }
 }

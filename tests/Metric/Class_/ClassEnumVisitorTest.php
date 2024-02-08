@@ -61,7 +61,7 @@ final class ClassEnumVisitorTest extends TestCase
         ];
         foreach ($allowedNodeClasses as $kind => $allowedNodeClass) {
             $node = Phake::mock($allowedNodeClass);
-            $node->namespacedName = Phake::mock(Node\Identifier::class);
+            $node->namespacedName = Phake::mock(Node\Name::class);
             Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:' . $kind);
             Phake::when($node)->__call('getMethods', [])->thenReturn([]);
             Phake::when($node)->__call('isAbstract', [])->thenReturn(false);
@@ -80,7 +80,7 @@ final class ClassEnumVisitorTest extends TestCase
         }
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:Class');
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         Phake::when($node)->__call('isAbstract', [])->thenReturn(true);
@@ -98,7 +98,7 @@ final class ClassEnumVisitorTest extends TestCase
         yield 'Empty abstract class' => [$node, $expected, []];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:Class');
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         Phake::when($node)->__call('isAbstract', [])->thenReturn(false);
@@ -116,7 +116,7 @@ final class ClassEnumVisitorTest extends TestCase
         yield 'Empty final class' => [$node, $expected, []];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:Class');
         $methods = [
             'Public-A' => Phake::mock(ClassMethod::class),

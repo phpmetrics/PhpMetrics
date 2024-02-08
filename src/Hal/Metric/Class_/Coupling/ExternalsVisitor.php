@@ -9,6 +9,7 @@ use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\UseItem;
 use PhpParser\NodeVisitorAbstract;
 use Stringable;
 use function array_map;
@@ -25,7 +26,7 @@ use function strtolower;
  */
 final class ExternalsVisitor extends NodeVisitorAbstract
 {
-    /** @var array<Stmt\UseUse> */
+    /** @var array<UseItem> */
     private array $uses = [];
     /** @var array<string> */
     private array $dependencies = [];

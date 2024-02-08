@@ -49,7 +49,7 @@ final class PackageCollectingVisitorTest extends TestCase
         ];
         foreach ($allowedNodeClasses as $kind => $allowedNodeClass) {
             $node = Phake::mock($allowedNodeClass);
-            $node->namespacedName = Phake::mock(Node\Identifier::class);
+            $node->namespacedName = Phake::mock(Node\Name::class);
             Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:' . $kind);
             $nodeDoc = Phake::mock(Doc::class);
             Phake::when($node)->__call('getDocComment', [])->thenReturn($nodeDoc);
@@ -64,7 +64,7 @@ final class PackageCollectingVisitorTest extends TestCase
             yield 'Package name from PHPDoc for ' . $kind => [$node, $expected];
 
             $node = Phake::mock($allowedNodeClass);
-            $node->namespacedName = Phake::mock(Node\Identifier::class);
+            $node->namespacedName = Phake::mock(Node\Name::class);
             Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:' . $kind);
             Phake::when($node)->__call('getDocComment', [])->thenReturn(null);
             $expected = 'UnitTestNamespace\\';
@@ -84,7 +84,7 @@ final class PackageCollectingVisitorTest extends TestCase
         $nodeName = MetricNameGenerator::getClassName($node);
         Phake::when($metricsMock)->__call('has', [$expectedPackageName])->thenReturn(true);
         $namespaceNode = Phake::mock(Node\Stmt\Namespace_::class);
-        $namespaceNode->name = Phake::mock(Node\Identifier::class);
+        $namespaceNode->name = Phake::mock(Node\Name::class);
         Phake::when($namespaceNode->name)->__call('__toString', [])->thenReturn('UnitTestNamespace');
 
         $packageMetric = Phake::mock(PackageMetric::class);
@@ -120,7 +120,7 @@ final class PackageCollectingVisitorTest extends TestCase
         $nodeName = MetricNameGenerator::getClassName($node);
         Phake::when($metricsMock)->__call('has', [$expectedPackageName])->thenReturn(false);
         $namespaceNode = Phake::mock(Node\Stmt\Namespace_::class);
-        $namespaceNode->name = Phake::mock(Node\Identifier::class);
+        $namespaceNode->name = Phake::mock(Node\Name::class);
         Phake::when($namespaceNode->name)->__call('__toString', [])->thenReturn('UnitTestNamespace');
 
         $packageMetricCollector = null;

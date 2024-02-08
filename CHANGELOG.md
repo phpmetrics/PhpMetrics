@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.0-rc6] - 2024-02-08
+
+### Updates
+- Upgrade to nikic/php-parser v5. Related BC Breaks are solved.
+- Upgrade to PHPUnit 10.5
+- Temporary remove Psalm as not compatible with nikic/php-parser v5.
+- Remove Qodana as licence is mandatory
+
+## [3.0.0-rc5] - 2024-01-17
+
+### Fixed
+- PHP8 Issue Uncaught TypeError: round()
+- __Internal__: Unit tests that were not updated from latest changes
+- __Internal__: docker-releasing process when built-in docker image is no longer available.
+
+## [3.0.0-rc4] - 2023-09-15
+
+### New features
+- Add cyclomatic complexity for each method in a class
+- Complexity table slightly updated to more comfortable table width
+
+### Updates
+- Upgrade to PHPUnit 10.3
+- Upgrade to Psalm 5.15
+- Upgrade to Qodana 2023.2-eap
+
 ## [3.0.0-rc3] - 2023-04-17
 
 ### Fixed
@@ -43,7 +69,7 @@ remove. Please take a look at the detailed changelog below if you experiment any
 
 ### New features
 - __Internal__: Install a real dedicated QA system to secure PhpMetrics as mch as possible
-- __Internal__: QA System is composed of PHP_CodeSniffer, PHPUnit, PHP Infection, PHPStan, Psalm and Qodana
+- __Internal__: QA System is composed of PHP_CodeSniffer, PHPUnit, PHP Infection, PHPStan and Psalm and Qodana
 - __Internal__: Make possible to create releases with suffixed names 
 - Minor UX/UI improvements on the HTML report. 
 

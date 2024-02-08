@@ -11,6 +11,7 @@ use Hal\Metric\Helper\SimpleNodeIterator;
 use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
 use Phake;
+use PhpParser\Modifiers;
 use PhpParser\Node;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -81,16 +82,16 @@ final class LcomVisitorTest extends TestCase
             Phake::mock(Node\Param::class), // pri
             Phake::mock(Node\Param::class), // ro
         ];
-        $constructorParams[0]->flags = Node\Stmt\Class_::MODIFIER_PUBLIC;
+        $constructorParams[0]->flags = Modifiers::PUBLIC;
         $constructorParams[0]->var = Phake::mock(Node\Expr\Variable::class);
         $constructorParams[0]->var->name = 'pub';
-        $constructorParams[1]->flags = Node\Stmt\Class_::MODIFIER_PROTECTED;
+        $constructorParams[1]->flags = Modifiers::PROTECTED;
         $constructorParams[1]->var = Phake::mock(Node\Expr\Variable::class);
         $constructorParams[1]->var->name = 'pro';
-        $constructorParams[2]->flags = Node\Stmt\Class_::MODIFIER_PRIVATE;
+        $constructorParams[2]->flags = Modifiers::PRIVATE;
         $constructorParams[2]->var = Phake::mock(Node\Expr\Variable::class);
         $constructorParams[2]->var->name = 'pri';
-        $constructorParams[3]->flags = Node\Stmt\Class_::MODIFIER_READONLY;
+        $constructorParams[3]->flags = Modifiers::READONLY;
         $constructorParams[3]->var = Phake::mock(Node\Expr\Variable::class);
         $constructorParams[3]->var->name = 'ro';
         Phake::when($methods[0])->__call('getParams', [])->thenReturn($constructorParams);
@@ -216,7 +217,7 @@ final class LcomVisitorTest extends TestCase
     #[DataProvider('provideNodesToCalculateLcom')]
     public function testICanCalculateLcomOnClass(Node\Stmt\ClassLike $node, array $expected): void
     {
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node');
         $metricsMock = Phake::mock(Metrics::class);
         $classMetricMock = Phake::mock(Metric::class);

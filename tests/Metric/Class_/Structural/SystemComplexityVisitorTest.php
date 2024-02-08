@@ -82,7 +82,7 @@ final class SystemComplexityVisitorTest extends TestCase
     #[DataProvider('provideNodesToCalculateSystemComplexity')]
     public function testICanCalculateSystemComplexity(Node\Stmt\ClassLike $node, array $expected): void
     {
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node');
         $metricsMock = Phake::mock(Metrics::class);
         $classMetricMock = Phake::mock(Metric::class);

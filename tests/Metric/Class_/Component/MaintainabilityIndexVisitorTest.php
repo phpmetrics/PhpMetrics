@@ -67,7 +67,7 @@ final class MaintainabilityIndexVisitorTest extends TestCase
         array $externalMetrics,
         array $expected
     ): void {
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node');
         $metricsMock = Phake::mock(Metrics::class);
         $classMetricMock = Phake::mock(Metric::class);
@@ -145,7 +145,7 @@ final class MaintainabilityIndexVisitorTest extends TestCase
     public function testExternalMetricsAreRequired(array $externalMetrics, LogicException $expectedException): void
     {
         $node = Phake::mock(Node\Stmt\Class_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:Class');
         $metricsMock = Phake::mock(Metrics::class);
         $classMetricMock = Phake::mock(Metric::class);

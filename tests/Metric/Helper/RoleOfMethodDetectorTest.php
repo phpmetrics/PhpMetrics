@@ -99,6 +99,6 @@ final class RoleOfMethodDetectorTest extends TestCase
             foreach ($node->stmts as $sub) {
                 self::assertSame($expected, $helper->detects($sub));
             }
-        }, (new ParserFactory())->create(ParserFactory::PREFER_PHP7)->parse($code));
+        }, (new ParserFactory())->createForNewestSupportedVersion()->parse($code));
     }
 }

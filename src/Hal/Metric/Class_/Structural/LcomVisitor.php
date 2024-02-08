@@ -11,6 +11,7 @@ use Hal\Metric\Helper\MetricNameGenerator;
 use Hal\Metric\Helper\NodeIteratorInterface;
 use Hal\Metric\Metric;
 use Hal\Metric\Metrics;
+use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
@@ -174,7 +175,7 @@ final class LcomVisitor extends NodeVisitorAbstract
         // Promoted properties in constructors are defined by the presence of "public", "protected" or "private" flag.
         // Since PHP 8.1, the presence of "readonly" flag also promotes a property, with a "public" default visibility.
         $promotions = array_filter($node->getParams(), static function (Node\Param $param): bool {
-            $mask = (Stmt\Class_::VISIBILITY_MODIFIER_MASK | Stmt\Class_::MODIFIER_READONLY);
+            $mask = (Modifiers::VISIBILITY_MASK | Modifiers::READONLY);
             return (bool)($param->flags & $mask);
         });
         return array_map(function (Node\Param $param): TreeNode {
@@ -234,6 +235,10 @@ final class LcomVisitor extends NodeVisitorAbstract
      */
     private function readMemberNodeClearName(Node\Expr\PropertyFetch|Node\Expr\MethodCall $node): string|null
     {
+        if (!isset($node->name)) {
+            return null;
+        }
+
         // No matter what the PHPDoc says, sometimes `$node->name` is actually a pure string.
         /** @var string|Node\Expr|Node\Identifier $nodeName */
         $nodeName = $node->name;
@@ -242,7 +247,7 @@ final class LcomVisitor extends NodeVisitorAbstract
             property_exists($node->var, 'name')
             && !($node->var->name instanceof Node\Expr\Variable)
             && 'this' === (string)$node->var->name
-            && (is_string($nodeName) || $nodeName instanceof Stringable)
+            && ($nodeName instanceof Stringable || is_string($nodeName))
         ) {
             return (string)$nodeName;
         }

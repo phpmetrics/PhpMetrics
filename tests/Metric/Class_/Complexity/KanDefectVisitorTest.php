@@ -28,7 +28,7 @@ final class KanDefectVisitorTest extends TestCase
         ];
         foreach ($allowedNodeClasses as $kind => $allowedNodeClass) {
             $node = Phake::mock($allowedNodeClass);
-            $node->namespacedName = Phake::mock(Node\Identifier::class);
+            $node->namespacedName = Phake::mock(Node\Name::class);
             Phake::when($node)->__call('getMethods', [])->thenReturn([]);
             Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:' . $kind);
             $expected = ['kanDefect' => 0.15];
@@ -36,7 +36,7 @@ final class KanDefectVisitorTest extends TestCase
         }
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:SimpleClass');
         Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['stmtsForUnitTest']);
         $node->stmtsForUnitTest = [
@@ -52,7 +52,7 @@ final class KanDefectVisitorTest extends TestCase
         yield "With a class containing only once each structure that increases Kan's defect" => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:ComplexClass');
         Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['stmtsForUnitTest']);
         $node->stmtsForUnitTest = [

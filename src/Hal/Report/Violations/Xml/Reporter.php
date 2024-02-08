@@ -95,7 +95,7 @@ final class Reporter implements ReporterInterface
         $item->setAttribute('beginLine', '1');
         $item->setAttribute('rule', $violationName);
         $item->setAttribute('ruleset', $violationName);
-        $item->setAttribute('externalInfoUrl', 'http://www.phpmetrics.org');
+        $item->setAttribute('externalInfoUrl', 'https://www.phpmetrics.org');
         $item->setAttribute('priority', (string)(4 - $violation->getLevel())); // Priority = reversed level.
         $item->nodeValue = $violation->getDescription();
 

@@ -54,14 +54,14 @@ final class NodeTraverserTest extends TestCase
             Phake::when($mocksVisitor[0])->__call('enterNode', [$mockNode])->thenReturn(null);
             Phake::when($mocksVisitor[0])->__call('leaveNode', [$mockNode])->thenReturn(null);
             $mocksVisitor[0]->doesTraverseChildren = true;
-            Phake::when($mocksVisitor[1])->__call('enterNode', [$mockNode])->thenReturn(Mother::DONT_TRAVERSE_CHILDREN);
+            Phake::when($mocksVisitor[1])->__call('enterNode', [$mockNode])->thenReturn(NodeVisitor::DONT_TRAVERSE_CHILDREN);
             Phake::when($mocksVisitor[1])->__call('leaveNode', [$mockNode])->thenReturn(null);
             $mocksVisitor[1]->doesTraverseChildren = false;
             Phake::when($mocksVisitor[2])->__call('enterNode', [$mockNode])->thenReturn($mocksReplacementNode[0]);
             Phake::when($mocksVisitor[2])->__call('leaveNode', [$mockNode])->thenReturn(null);
             $mocksVisitor[2]->doesTraverseChildren = true;
             Phake::when($mocksVisitor[3])->__call('enterNode', [$mockNode])->thenReturn(null);
-            Phake::when($mocksVisitor[3])->__call('leaveNode', [$mockNode])->thenReturn(Mother::REMOVE_NODE);
+            Phake::when($mocksVisitor[3])->__call('leaveNode', [$mockNode])->thenReturn(NodeVisitor::REMOVE_NODE);
             $mocksVisitor[3]->doesTraverseChildren = true;
             Phake::when($mocksVisitor[4])->__call('enterNode', [$mockNode])->thenReturn(null);
             Phake::when($mocksVisitor[4])->__call('leaveNode', [$mockNode])
@@ -75,7 +75,7 @@ final class NodeTraverserTest extends TestCase
             Phake::when($mockNode)->__call('getSubNodeNames', [])->thenReturn(['testSubNode']);
             $mockNode->{'testSubNode'} = $subNode;
             foreach ($mocksVisitor as $mockVisitor) {
-                Phake::when($mockVisitor)->__call('enterNode', [$subNode])->thenReturn(Mother::STOP_TRAVERSAL);
+                Phake::when($mockVisitor)->__call('enterNode', [$subNode])->thenReturn(NodeVisitor::STOP_TRAVERSAL);
             }
         }
 

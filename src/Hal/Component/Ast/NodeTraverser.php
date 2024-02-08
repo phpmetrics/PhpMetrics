@@ -6,6 +6,8 @@ namespace Hal\Component\Ast;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeTraverser as Mother;
+use PhpParser\NodeVisitor;
+
 use function array_splice;
 use function is_array;
 
@@ -37,7 +39,7 @@ final class NodeTraverser extends Mother
 
             $this->makeVisitorsEnterNode($node, $traverseChildren);
             if ($traverseChildren) {
-                $node = $this->traverseNode($node);
+                $this->traverseNode($node);
             }
             $this->makeVisitorsLeaveNode($node, $i, $nodesToReplace);
         } unset($node);
@@ -55,9 +57,10 @@ final class NodeTraverser extends Mother
     {
         foreach ($this->visitors as $visitor) {
             $return = $visitor->enterNode($node);
-            if (Mother::DONT_TRAVERSE_CHILDREN === $return) {
+            if (NodeVisitor::DONT_TRAVERSE_CHILDREN === $return) {
                 $traverseChildren = false;
             } elseif ($return instanceof Node) {
+                /** @var Node $return */
                 $node = $return;
             }
         }
@@ -75,7 +78,7 @@ final class NodeTraverser extends Mother
         foreach ($this->visitors as $visitor) {
             $return = $visitor->leaveNode($node);
 
-            if (Mother::REMOVE_NODE === $return) {
+            if (NodeVisitor::REMOVE_NODE === $return) {
                 $nodesToReplace[] = [$nodePosition, []];
                 break;
             }
