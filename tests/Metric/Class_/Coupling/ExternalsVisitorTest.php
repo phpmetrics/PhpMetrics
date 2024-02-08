@@ -97,8 +97,24 @@ final class ExternalsVisitorTest extends TestCase
         yield 'Interface without method' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        $node->extends = '\\A';
-        $node->implements = ['\\B', '\\C', 'self', 'SELF', 'parent', 'PARENT', '\\D'];
+        $node->extends = Phake::mock(Node\Name::class);
+        Phake::when($node->extends)->__call('__toString', [])->thenReturn('\\A');
+        $node->implements = [
+            Phake::mock(Node\Name::class), // "\B"
+            Phake::mock(Node\Name::class), // "\C"
+            Phake::mock(Node\Name::class), // "self"
+            Phake::mock(Node\Name::class), // "SELF"
+            Phake::mock(Node\Name::class), // "parent"
+            Phake::mock(Node\Name::class), // "PARENT"
+            Phake::mock(Node\Name::class), // "\D"
+        ];
+        Phake::when($node->implements[0])->__call('__toString', [])->thenReturn('\\B');
+        Phake::when($node->implements[1])->__call('__toString', [])->thenReturn('\\C');
+        Phake::when($node->implements[2])->__call('__toString', [])->thenReturn('self');
+        Phake::when($node->implements[3])->__call('__toString', [])->thenReturn('SELF');
+        Phake::when($node->implements[4])->__call('__toString', [])->thenReturn('parent');
+        Phake::when($node->implements[5])->__call('__toString', [])->thenReturn('PARENT');
+        Phake::when($node->implements[6])->__call('__toString', [])->thenReturn('\\D');
         Phake::when($node)->__call('getMethods', [])->thenReturn([]);
         Phake::when($node)->__call('getDocComment', [])->thenReturn(null);
         $expected = [
@@ -324,7 +340,7 @@ final class ExternalsVisitorTest extends TestCase
     #[DataProvider('provideNodesToCalculateExternals')]
     public function testICanCalculateExternalsOnClass(Node\Stmt\ClassLike $node, array $expected): void
     {
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node');
         $metricsMock = Phake::mock(Metrics::class);
         $classMetricMock = Phake::mock(Metric::class);

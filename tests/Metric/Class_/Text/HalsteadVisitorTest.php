@@ -119,31 +119,53 @@ final class HalsteadVisitorTest extends TestCase
         $node = Phake::mock(Node\Stmt\Class_::class);
         Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
         $node->unitTestSubNodes = [
-            Phake::mock(Node\Param::class), // Ignored as Param->var is Variable.
-            Phake::mock(Node\Expr\BinaryOp::class),
-            Phake::mock(Node\Expr\AssignOp::class),
-            Phake::mock(Node\Stmt\If_::class),
-            Phake::mock(Node\Stmt\If_::class), // Second with same name (to differ from number of unique operator)
-            Phake::mock(Node\Stmt\If_::class), // Third with same name (to differ from number of unique operator)
-            Phake::mock(Node\Stmt\For_::class),
-            Phake::mock(Node\Stmt\Switch_::class),
-            Phake::mock(Node\Stmt\Catch_::class),
-            Phake::mock(Node\Stmt\Return_::class),
-            Phake::mock(Node\Stmt\While_::class),
-            Phake::mock(Node\Expr\Assign::class),
-            Phake::mock(Node\Expr\Cast::class), // using value as node name.
-            Phake::mock(Node\Expr\Cast::class), // using name as node name.
-            Phake::mock(Node\Expr\Cast::class), // using getType as node name, same name as value.
-            Phake::mock(Node\Expr\Variable::class), // using value as node name.
-            Phake::mock(Node\Expr\Variable::class), // using name as node name.
-            Phake::mock(Node\Param::class), // using value as node name.
-            Phake::mock(Node\Param::class), // using name as node name.
-            Phake::mock(Node\Param::class), // using getType as node name, same name as value.
-            Phake::mock(Node\Scalar::class), // using value as node name.
-            Phake::mock(Node\Scalar::class), // using name as node name.
-            Phake::mock(Node\Scalar::class), // using getType as node name, same name as value.
+            0 => Phake::mock(Node\Param::class), // Ignored as Param->var is Variable.
+            1 => Phake::mock(Node\Expr\BinaryOp::class),
+            2 => Phake::mock(Node\Expr\AssignOp::class),
+            3 => Phake::mock(Node\Stmt\If_::class),
+            4 => Phake::mock(Node\Stmt\If_::class), // Second with same name (to differ from number of unique operator)
+            5 => Phake::mock(Node\Stmt\If_::class), // Third with same name (to differ from number of unique operator)
+            6 => Phake::mock(Node\Stmt\For_::class),
+            7 => Phake::mock(Node\Stmt\Switch_::class),
+            8 => Phake::mock(Node\Stmt\Catch_::class),
+            9 => Phake::mock(Node\Stmt\Return_::class),
+            10 => Phake::mock(Node\Stmt\While_::class),
+            11 => Phake::mock(Node\Expr\Assign::class),
+            12 => Phake::mock(Node\Expr\Cast::class), // using value as node name.
+            13 => Phake::mock(Node\Expr\Cast::class), // using name as node name.
+            14 => Phake::mock(Node\Expr\Cast::class), // using getType as node name, same name as value.
+            15 => Phake::mock(Node\Expr\Variable::class), // using value as node name.
+            16 => Phake::mock(Node\Expr\Variable::class), // using name as node name.
+            17 => Phake::mock(Node\Param::class), // using value as node name.
+            18 => Phake::mock(Node\Param::class), // using name as node name.
+            19 => Phake::mock(Node\Param::class), // using getType as node name, same name as value.
+            20 => Phake::mock(Node\Scalar::class), // using value as node name.
+            21 => Phake::mock(Node\Scalar::class), // using name as node name.
+            22 => Phake::mock(Node\Scalar::class), // using getType as node name, same name as value.
         ];
         $node->unitTestSubNodes[0]->var = Phake::mock(Node\Expr\Variable::class);
+        $node->unitTestSubNodes[1]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[2]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[3]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[4]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[5]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[6]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[7]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[8]->var = null;
+        $node->unitTestSubNodes[9]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[10]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[11]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[12]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[13]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[14]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[15]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[16]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[17]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[18]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[19]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[20]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[21]->var = Phake::mock(Node\Expr::class);
+        $node->unitTestSubNodes[22]->var = Phake::mock(Node\Expr::class);
         Phake::when($node->unitTestSubNodes[1])->__call('getType', [])->thenReturn('BinaryOp');
         Phake::when($node->unitTestSubNodes[2])->__call('getType', [])->thenReturn('AssignOp');
         Phake::when($node->unitTestSubNodes[3])->__call('getType', [])->thenReturn('If_');
@@ -244,7 +266,7 @@ final class HalsteadVisitorTest extends TestCase
             Phake::when($node->name)->__call('toString', [])->thenReturn('UnitTest@Node');
             $nodeName = MetricNameGenerator::getFunctionName($node);
         } else {
-            $node->namespacedName = Phake::mock(Node\Identifier::class);
+            $node->namespacedName = Phake::mock(Node\Name::class);
             Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node');
             $nodeName = MetricNameGenerator::getClassName($node);
         }

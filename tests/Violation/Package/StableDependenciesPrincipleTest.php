@@ -126,7 +126,6 @@ final class StableDependenciesPrincipleTest extends TestCase
             self::assertSame($expectedDescription, $violation->getDescription());
             return;
         }
-        /** @var int $violatingInstabilities the inference */
 
         $violatingInstabilities = array_filter(
             $metric->getDependentInstabilities(),

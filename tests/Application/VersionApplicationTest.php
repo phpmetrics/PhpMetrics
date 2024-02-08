@@ -28,7 +28,7 @@ final class VersionApplicationTest extends TestCase
         :special: ''
 
         TXT;
-        $expected = 'PhpMetrics v1.2.3 <http://www.phpmetrics.org>' . PHP_EOL .
+        $expected = 'PhpMetrics v1.2.3 <https://www.phpmetrics.org>' . PHP_EOL .
             'by Jean-François Lépine <https://twitter.com/Halleck45>' . PHP_EOL;
         yield 'Basic X.Y.Z' => [$fakeSemver, $expected];
 
@@ -40,7 +40,7 @@ final class VersionApplicationTest extends TestCase
         :special: 'rc-7'
 
         TXT;
-        $expected = 'PhpMetrics v42.45.87-rc-7 <http://www.phpmetrics.org>' . PHP_EOL .
+        $expected = 'PhpMetrics v42.45.87-rc-7 <https://www.phpmetrics.org>' . PHP_EOL .
             'by Jean-François Lépine <https://twitter.com/Halleck45>' . PHP_EOL;
         yield 'With special' => [$fakeSemver, $expected];
     }

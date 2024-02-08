@@ -13,17 +13,17 @@ final class SimpleNodeIteratorTest extends TestCase
     public function testICanIterateSimpleCallbackOnNode(): void
     {
         $node = Phake::mock(Node::class);
+        Phake::when($node)->__call('getType', [])->thenReturn('Foo');
         $callback = static function (Node $node): void {
-            /** @noinspection PhpUndefinedFieldInspection Willing to be undefined, to be checked later. */
-            $node->unitTestData = 'FooBar';
+            $node->getType();
         };
-        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
+        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn([]);
 
         $nodeIterator = new SimpleNodeIterator();
         $nodeIterator->iterateOver($node, $callback);
 
         Phake::verify($node)->__call('getSubNodeNames', []);
+        Phake::verify($node)->__call('getType', []);
         Phake::verifyNoOtherInteractions($node);
-        self::assertSame('FooBar', $node->unitTestData);
     }
 }

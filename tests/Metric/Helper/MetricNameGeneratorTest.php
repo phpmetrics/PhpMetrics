@@ -25,7 +25,7 @@ final class MetricNameGeneratorTest extends TestCase
 
         $node = Phake::mock(Node\Stmt\Class_::class);
         Phake::when($node)->__call('isAnonymous', [])->thenReturn(false);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('FooBar');
         $expected = 'FooBar';
         yield 'With a named class, by namespace' => [$node, $expected];

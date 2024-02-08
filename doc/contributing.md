@@ -123,17 +123,6 @@ More information on the [documentation of Psalm](https://psalm.dev/docs/).
 
 More information on the [documentation of PHPStan](https://phpstan.org/user-guide/getting-started).
 
-### Qodana
-
-> :information_source: To only run this tool:
-> ```shell
-> $> make qodana
-> ```
-
-[Qodana](https://www.jetbrains.com/qodana/) is analyzing the project over tons of inspections and rules provided by 
-JetBrains. If you are using PhpStorm as IDE, you can include the profile in your settings to directly benefit of the
-inspections reports on runtime during your development.
-
 ## Releasing
 
 You will need to install :

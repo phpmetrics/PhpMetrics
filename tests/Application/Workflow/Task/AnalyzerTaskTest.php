@@ -39,6 +39,7 @@ final class AnalyzerTaskTest extends TestCase
 
         array_map(static function (Phake\IMock $mock) use ($files): void {
             if ($mock instanceof CalculableWithFilesInterface) {
+                /** @var Phake\IMock&CalculableWithFilesInterface $mock */
                 Phake::when($mock)->__call('setFiles', [$files])->thenDoNothing();
             }
             Phake::when($mock)->__call('calculate', [])->thenDoNothing();
@@ -48,6 +49,7 @@ final class AnalyzerTaskTest extends TestCase
 
         array_map(static function (Phake\IMock $mock) use ($files): void {
             if ($mock instanceof CalculableWithFilesInterface) {
+                /** @var Phake\IMock&CalculableWithFilesInterface $mock */
                 Phake::verify($mock)->__call('setFiles', [$files]);
             }
             Phake::verify($mock)->__call('calculate', []);

@@ -147,7 +147,7 @@ final class ReporterTest extends TestCase
             return '<violation beginLine="1" '
                 . 'rule="Violation #' . $violationIndex . '" '
                 . 'ruleset="Violation #' . $violationIndex . '" '
-                . 'externalInfoUrl="http://www.phpmetrics.org" '
+                . 'externalInfoUrl="https://www.phpmetrics.org" '
                 . 'priority="' . 4 - ($violationIndex % 4) . '">'
                 . 'Description about ' . $violationIndex
                 . '</violation>';

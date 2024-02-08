@@ -56,28 +56,6 @@ psalm: build-qa-tools prepare-qa-cache
 phpstan: build-qa-tools prepare-qa-cache
 	@-docker run --rm -it -u$(shell id -u):0 -v ${HOST_PWD}:/opt/project phpmetrics_tools phpstan analyse --configuration=qa/phpstan.neon.dist --xdebug # --generate-baseline qa/phpstan-baseline.neon
 
-# Qodana
-.PHONY: qodana
-qodana:
-	@mkdir -p qa/cache/qodana
-	@mkdir -p qa/reports/qodana
-	@chmod u+w qa/reports/qodana
-	@-docker run --rm -it -u$(shell id -u):0 -v ${HOST_PWD}:/data/project \
-	    $(ls qa/qodana/plugins | xargs -I {} echo "--volume ${HOST_PWD}/qa/qodana/plugins/{}:/opt/idea/plugins/{}" | tr '\n' ' ') \
-	    $(ls qa/qodana/options | xargs -I {} echo "--volume ${HOST_PWD}/qa/qodana/options/{}:/root/.config/idea/options/{}" | tr '\n' ' ') \
-	    -v ${HOST_PWD}/qa/qodana/profile.xml.dist:/data/profile.xml \
-	    -v ${HOST_PWD}/qa/qodana/qodana.yaml.dist:/data/project/qodana.yaml \
-	    -v ${HOST_PWD}/qa/reports/qodana:/data/results \
-	    -v ${HOST_PWD}/qa/cache/qodana:/data/cache \
-	    --env _JAVA_OPTIONS=-Xmx2048m \
-	    --pull always \
-	    jetbrains/qodana-php:2023.2-eap \
-	    --source-directory src \
-	    --baseline /data/project/qa/qodana.sarif.json \
-	    --cache-dir=/data/cache \
-	    --save-report
-	@rm -rf ${HOST_PWD}/qodana.yaml
-
 # All QA
 .PHONY: qa
-qa: vendor infection phpcs psalm phpstan qodana
+qa: vendor infection phpcs psalm phpstan

@@ -80,12 +80,12 @@ final class PackageDependencies implements CalculableInterface
     {
         /** @var null|string $packageName */
         $packageName = $this->metrics->get($className)?->get('package');
-        if ($packageName !== null) {
+        if (null !== $packageName) {
             return $packageName;
         }
 
         // Proceed the string in reverse to try to infer the package name.
         $revPackageName = strstr(strrev($className), '\\');
-        return $revPackageName !== false ? strrev($revPackageName) : '\\';
+        return false !== $revPackageName ? strrev($revPackageName) : '\\';
     }
 }

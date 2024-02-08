@@ -51,7 +51,7 @@ final class LengthVisitorTest extends TestCase
         $prettyPrintMock = Phake::mock(PrettyPrinter\Standard::class);
         foreach ($allowedNodeClasses as $kind => $allowedNodeClass) {
             $node = Phake::mock($allowedNodeClass);
-            $node->namespacedName = Phake::mock(Node\Identifier::class);
+            $node->namespacedName = Phake::mock(Node\Name::class);
             Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:' . $kind);
             $code = <<<'PHP'
             
@@ -62,7 +62,7 @@ final class LengthVisitorTest extends TestCase
         }
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:Class');
         $code = <<<'PHP'
         /**
@@ -110,7 +110,7 @@ final class LengthVisitorTest extends TestCase
             Phake::when($node->name)->__call('toString', [])->thenReturn('UnitTest@Node');
             $nodeName = MetricNameGenerator::getFunctionName($node);
         } else {
-            $node->namespacedName = Phake::mock(Node\Identifier::class);
+            $node->namespacedName = Phake::mock(Node\Name::class);
             Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node');
             $nodeName = MetricNameGenerator::getClassName($node);
         }

@@ -63,6 +63,7 @@ use function dirname;
  * The behavior of this class is tested via functional tests.
  *
  * @infection-ignore-all Technical class that can only be tested functionally.
+ * @codeCoverageIgnore Technical class that can only be tested functionally.
  */
 final class DependencyInjectionProcessor
 {
@@ -139,7 +140,7 @@ final class DependencyInjectionProcessor
                     new Workflow\WorkflowHandler(
                         $metrics,
                         new Workflow\Task\PrepareParserTask(
-                            (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
+                            (new ParserFactory())->createForNewestSupportedVersion(),
                             $traverser,
                             $output,
                             $fileReader

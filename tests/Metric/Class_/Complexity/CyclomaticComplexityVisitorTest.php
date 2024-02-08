@@ -38,7 +38,7 @@ final class CyclomaticComplexityVisitorTest extends TestCase
         ];
         foreach ($allowedNodeClasses as $kind => $allowedNodeClass) {
             $node = Phake::mock($allowedNodeClass);
-            $node->namespacedName = Phake::mock(Node\Identifier::class);
+            $node->namespacedName = Phake::mock(Node\Name::class);
             Phake::when($node)->__call('getMethods', [])->thenReturn([]);
             Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:' . $kind);
             $expected = ['wmc' => 0, 'ccn' => 1, 'ccnMethodMax' => 0, 'ccnByMethod' => []];
@@ -46,7 +46,7 @@ final class CyclomaticComplexityVisitorTest extends TestCase
         }
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
 
         $methods = [
             Phake::mock(Node\Stmt\ClassMethod::class), // No nodes in var members.
@@ -117,7 +117,7 @@ final class CyclomaticComplexityVisitorTest extends TestCase
 
         $methods[0]->name = Phake::mock(Node\Identifier::class);
         Phake::when($methods[0]->name)->__call('toString', [])->thenReturn('emptyMethod');
-        $methods[1]->stmts = $nodeContainingComplexSetOfNodes;
+        $methods[1]->stmts = [$nodeContainingComplexSetOfNodes];
         $methods[1]->name = Phake::mock(Node\Identifier::class);
         Phake::when($methods[1]->name)->__call('toString', [])->thenReturn('nestedMethod');
         $methods[2]->stmts = $complexSetOfNodes;
@@ -135,7 +135,7 @@ final class CyclomaticComplexityVisitorTest extends TestCase
         yield 'With a complex class containing all complex structures' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        $node->namespacedName = Phake::mock(Node\Identifier::class);
+        $node->namespacedName = Phake::mock(Node\Name::class);
         $methods = [
             Phake::mock(Node\Stmt\ClassMethod::class), // Getter 1.
             Phake::mock(Node\Stmt\ClassMethod::class), // Getter 2.
