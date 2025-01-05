@@ -15,7 +15,7 @@ class SummaryWriter extends SummaryProvider
                 'commentLinesOfCode' => $this->sum->cloc,
                 'avgVolume' => $this->avg->volume,
                 'avgCommentWeight' => $this->avg->commentWeight,
-                'avgIntelligentContent ' => $this->avg->commentWeight,
+                'avgIntelligentContent' => $this->avg->commentWeight,
                 'logicalLinesByClass' => $this->locByClass,
                 'logicalLinesByMethod' => $this->locByMethod,
             ],
@@ -34,7 +34,7 @@ class SummaryWriter extends SummaryProvider
             ],
             'Package' => [
                 'packages' => $this->sum->nbPackages,
-                'acgClassesPerPackage ' => $this->avg->classesPerPackage,
+                'acgClassesPerPackage' => $this->avg->classesPerPackage,
                 'avgDistance' => $this->avg->distance,
                 'avgIncomingClassDependencies' => $this->avg->incomingCDep,
                 'avgOutgoingClassDependencies' => $this->avg->outgoingCDep,
