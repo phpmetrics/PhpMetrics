@@ -100,8 +100,9 @@ final class Validator implements ValidatorInterface
         $keys = [
             'report-html' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
             'report-csv' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
-            'report-violation' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
+            'report-violations' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
             'report-summary-json' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
+            'report-openmetrics' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
             'report-json' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
             'config' => static fn (mixed $value): bool => is_string($value) && '' !== $value,
         ];

@@ -72,8 +72,9 @@ final class ValidatorTest extends TestCase
         $wrongValues = [
             'report-html' => [42, ''],
             'report-csv' => [42, ''],
-            'report-violation' => [42, ''],
+            'report-violations' => [42, ''],
             'report-json' => [42, ''],
+            'report-openmetrics' => [42, ''],
             'config' => [42, ''],
         ];
 

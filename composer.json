@@ -32,6 +32,7 @@
         "nikic/php-parser": "^5.0"
     },
     "require-dev": {
+        "openmetrics-php/exposition-text": "^0.4.1",
         "phake/phake": "^4.4.0",
         "phpstan/extension-installer": "^1.3",
         "phpstan/phpstan": "^1.10",
@@ -56,6 +57,7 @@
     },
     "suggest": {
         "ext-dom": "To allow XML parsing and report results.",
-        "ext-yaml": "To allow yaml parsing of configuration files."
+        "ext-yaml": "To allow yaml parsing of configuration files.",
+        "openmetrics-php/exposition-text": "To allow OpenMetrics report."
     }
 }
