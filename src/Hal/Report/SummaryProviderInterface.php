@@ -21,7 +21,7 @@ interface SummaryProviderInterface
 
     /**
      * Return the report of the summary, into a type adapted for the report format:
-     * - returns "string" for CLI
+     * - returns "string" for CLI or OpenMetrics
      * - returns "array" for JSON
      *
      * @return string|array<string, mixed>

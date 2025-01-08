@@ -196,6 +196,10 @@ final class DependencyInjectionProcessor
                         new Report\Json\SummaryWriter($config, $fileWriter),
                         $fileWriter
                     ),
+                    new Report\OpenMetrics\Reporter(
+                        new Report\OpenMetrics\SummaryWriter($config, $fileWriter),
+                        $fileWriter
+                    ),
                     new Report\Violations\Xml\Reporter($config, $output, $fileWriter),
                 ),
                 new NoCriticalViolationsAllowed($metrics),

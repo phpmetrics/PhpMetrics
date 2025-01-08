@@ -38,6 +38,7 @@ Optional:
     --report-csv=<file>               File where report CSV will be generated
     --report-json=<file>              File where report Json will be generated
     --report-summary-json=<file>      File where the summary report Json will be generated
+    --report-openmetrics=<file>       File where the OpenMetrics report will be generated
     --report-violations=<file>        File where XML violations report will be generated
     --quiet                           Enable the quiet mode
     --version                         Display current version

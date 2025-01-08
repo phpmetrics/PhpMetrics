@@ -56,7 +56,7 @@ final class SummaryWriterTest extends TestCase
             ],
             'Package' => [
                 'packages' => 0,
-                'acgClassesPerPackage' => 0,
+                'avgClassesPerPackage' => 0,
                 'avgDistance' => 0,
                 'avgIncomingClassDependencies' => 0,
                 'avgOutgoingClassDependencies' => 0,
@@ -218,7 +218,7 @@ final class SummaryWriterTest extends TestCase
                 'commentLinesOfCode' => 2185,
                 'avgVolume' => 43101.6,
                 'avgCommentWeight' => 4154.08,
-                'avgIntelligentContent' => 4154.08,
+                'avgIntelligentContent' => 152.11,
                 'logicalLinesByClass' => 718.5,
                 'logicalLinesByMethod' => 39.92,
             ],
@@ -237,7 +237,7 @@ final class SummaryWriterTest extends TestCase
             ],
             'Package' => [
                 'packages' => 3,
-                'acgClassesPerPackage' => 1.67,
+                'avgClassesPerPackage' => 1.67,
                 'avgDistance' => 18.3,
                 'avgIncomingClassDependencies' => 1.67,
                 'avgOutgoingClassDependencies' => 1.67,
