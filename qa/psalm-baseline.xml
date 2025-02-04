@@ -13,17 +13,6 @@
       <code>stdClass</code>
     </MoreSpecificReturnType>
   </file>
-  <file src="../src/Hal/Component/Tree/Edge.php">
-    <ImplicitToStringCast>
-      <code><![CDATA[$this->from]]></code>
-      <code><![CDATA[$this->to]]></code>
-    </ImplicitToStringCast>
-  </file>
-  <file src="../src/Hal/Component/Tree/Graph.php">
-    <ImplicitToStringCast>
-      <code>$edge</code>
-    </ImplicitToStringCast>
-  </file>
   <file src="../src/Hal/Metric/BagTrait.php">
     <LessSpecificImplementedReturnType>
       <code>array</code>
@@ -46,14 +35,25 @@
     </PropertyTypeCoercion>
   </file>
   <file src="../src/Hal/Metric/Class_/Coupling/ExternalsVisitor.php">
+    <PossiblyUndefinedArrayOffset>
+      <code><![CDATA[$resolvedClassName]]></code>
+    </PossiblyUndefinedArrayOffset>
     <UndefinedPropertyFetch>
       <code><![CDATA[$node->class]]></code>
     </UndefinedPropertyFetch>
   </file>
   <file src="../src/Hal/Metric/Class_/Structural/LcomVisitor.php">
+    <DocblockTypeContradiction>
+      <code><![CDATA[isset($node->name)]]></code>
+    </DocblockTypeContradiction>
     <UndefinedPropertyFetch>
       <code><![CDATA[$node->var->name]]></code>
     </UndefinedPropertyFetch>
+  </file>
+  <file src="../src/Hal/Metric/Class_/Structural/SystemComplexityVisitor.php">
+    <InvalidOperand>
+      <code><![CDATA[null !== $node->expr]]></code>
+    </InvalidOperand>
   </file>
   <file src="../src/Hal/Metric/Class_/Text/HalsteadVisitor.php">
     <UndefinedPropertyFetch>
@@ -65,6 +65,11 @@
       <code><![CDATA[$node->value]]></code>
       <code><![CDATA[$node->value]]></code>
     </UndefinedPropertyFetch>
+  </file>
+  <file src="../src/Hal/Metric/Class_/Text/LengthVisitor.php">
+    <InvalidOperand>
+      <code><![CDATA[null !== $commentedCode]]></code>
+    </InvalidOperand>
   </file>
   <file src="../src/Hal/Metric/Consolidated.php">
     <PropertyTypeCoercion>
@@ -84,6 +89,11 @@
       <code><![CDATA[$edge->getFrom()->getKey() === $node->getKey()]]></code>
       <code><![CDATA[$edge->getTo()->getKey() === $node->getKey()]]></code>
     </InvalidOperand>
+  </file>
+  <file src="../src/Hal/Metric/System/Packages/Composer/Composer.php">
+    <ReferenceConstraintViolation>
+      <code>$packageVersion</code>
+    </ReferenceConstraintViolation>
   </file>
   <file src="../src/Hal/Metric/System/Packages/Composer/Packagist.php">
     <LessSpecificReturnStatement>
