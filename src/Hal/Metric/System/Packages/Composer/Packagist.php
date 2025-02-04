@@ -67,7 +67,7 @@ final class Packagist implements ComposerRegistryConnectorInterface
         $latest = '0.0.0';
 
         foreach ((array)$json->package->versions as $version => $packageDataAtSpecificVersion) {
-            $version = ltrim((string) $version, 'v');
+            $version = ltrim((string)$version, 'v');
             if (0 === preg_match('#^(\d|\.)+$#', $version) || version_compare($version, $latest, '<')) {
                 continue;
             }

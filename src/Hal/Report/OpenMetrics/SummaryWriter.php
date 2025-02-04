@@ -5,12 +5,14 @@ namespace Hal\Report\OpenMetrics;
 
 use Hal\Application\Config\ConfigBagInterface;
 use Hal\Component\File\WriterInterface;
-use Hal\Exception\NotInstalledOpenMetricsPhpExpositionTextException;
 use Hal\Exception\NotWritableOpenMetricsReportException;
 use Hal\Report\SummaryProvider;
 use OpenMetricsPhp\Exposition\Text\Collections\GaugeCollection;
 use OpenMetricsPhp\Exposition\Text\Metrics\Gauge;
 use OpenMetricsPhp\Exposition\Text\Types\MetricName;
+
+use function dirname;
+use function implode;
 
 /**
  * Dedicated writer that defines the content to write in a file when exporting the OpenMetrics summary of the metrics.
@@ -31,10 +33,6 @@ final class SummaryWriter extends SummaryProvider
      */
     public function getReport(): string
     {
-        if (!class_exists(GaugeCollection::class)) {
-            throw NotInstalledOpenMetricsPhpExpositionTextException::notInstalled();
-        }
-
         $reportMetrics = [
             // LOC
             'lines_of_code' => [$this->sum->loc, 'Lines of code'],

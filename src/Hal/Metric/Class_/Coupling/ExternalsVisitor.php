@@ -13,6 +13,7 @@ use PhpParser\Node\UseItem;
 use PhpParser\NodeVisitorAbstract;
 use Stringable;
 use function array_map;
+use function explode;
 use function in_array;
 use function ltrim;
 use function preg_match_all;
@@ -236,8 +237,9 @@ final class ExternalsVisitor extends NodeVisitorAbstract
             if ($useAlias === $classNameToResolve && !str_contains($classNameToResolve, '\\')) {
                 return (string)$use->name;
             }
-            if ($useAlias === strstr($classNameToResolve, '\\', true)) {
-                return $use->name . strstr($classNameToResolve, '\\');
+            [$resolvedAlias, $resolvedClassName] = explode('\\', $classNameToResolve, 2);
+            if ($useAlias === $resolvedAlias) {
+                return $use->name . '\\' . $resolvedClassName;
             }
         }
 

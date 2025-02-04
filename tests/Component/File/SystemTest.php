@@ -105,7 +105,11 @@ final class SystemTest extends TestCase
 
     public static function tearDownAfterClass(): void
     {
-        self::rm(self::getAbsoluteRandomFolderPath());
+        $path = self::getAbsoluteRandomFolderPath();
+        // Reset permissions on specific folder to be able to remove it.
+        chmod($path . '/providerExists/subfolder', 0o777);
+
+        self::rm($path);
         parent::tearDownAfterClass();
     }
 }

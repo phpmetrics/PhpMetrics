@@ -5,5 +5,3 @@ parameters:
     tmpDir: /opt/project/qa/cache/phpstan
     paths:
         - ../src
-    featureToggles:
-        disableRuntimeReflectionProvider: true
