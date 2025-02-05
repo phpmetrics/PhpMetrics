@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.0-rc8] - 2025-02-05
+
+### Fixes
+- Warning message on ExternalsVisitor.php
+- PHP Infection rolled back to 0.28 as 0.29 is not compatible with PHP 8.1
+
+### Updates
+- Upgrade Psalm to 6.3.0
+
+## [3.0.0-rc7] - 2025-02-04
+
+### Fixes
+- Fix numeric version array key in Composer\Packagist.php (thanks @Klemo1997)
+
+### Updates
+- Add OpenMetrics format (thanks @alanpoulain)
+- Re-add Psalm as it is now compatible with nikic/php-parser v5
+- Upgrade QA
+
 ## [3.0.0-rc6] - 2024-02-08
 
 ### Updates
