@@ -35,9 +35,9 @@
     </PropertyTypeCoercion>
   </file>
   <file src="../src/Hal/Metric/Class_/Coupling/ExternalsVisitor.php">
-    <PossiblyUndefinedArrayOffset>
-      <code><![CDATA[$resolvedClassName]]></code>
-    </PossiblyUndefinedArrayOffset>
+    <PossiblyFalseOperand>
+      <code><![CDATA[strstr($classNameToResolve, '\\')]]></code>
+    </PossiblyFalseOperand>
     <UndefinedPropertyFetch>
       <code><![CDATA[$node->class]]></code>
     </UndefinedPropertyFetch>
