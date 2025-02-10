@@ -15,15 +15,12 @@ final class SimpleVisitor extends NodeVisitorAbstract
     /**
      * @param Closure $callback
      */
-    public function __construct(
-        private readonly Closure $callback
-    ) {
-    }
+    public function __construct(private readonly Closure $callback) {}
 
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
+    public function leaveNode(Node $node): null
     {
         ($this->callback)($node);
         return null;

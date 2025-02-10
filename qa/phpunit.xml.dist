@@ -2,7 +2,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="../vendor/autoload.php"
-         cacheResultFile="cache/phpunit/.phpunit.result.cache"
+         cacheDirectory="cache/phpunit"
          colors="true"
          displayDetailsOnIncompleteTests="true"
          displayDetailsOnSkippedTests="true"
@@ -26,7 +26,7 @@
 
     <source>
         <include>
-            <directory suffix=".php">../src</directory>
+            <directory>../src</directory>
         </include>
     </source>
     <coverage>

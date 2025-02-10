@@ -56,19 +56,19 @@ final class SystemComplexityVisitorTest extends TestCase
         ];
         $params = [Phake::mock(Node\Param::class), Phake::mock(Node\Param::class), Phake::mock(Node\Param::class)];
         Phake::when($methods[0])->__call('getParams', [])->thenReturn($params);
-        Phake::when($methods[0])->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
-        $methods[0]->unitTestSubNodes = [];
+        Phake::when($methods[0])->__call('getSubNodeNames', [])->thenReturn(['stmts']);
+        $methods[0]->stmts = [];
         Phake::when($methods[1])->__call('getParams', [])->thenReturn([]);
-        Phake::when($methods[1])->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
-        $methods[1]->unitTestSubNodes = [
+        Phake::when($methods[1])->__call('getSubNodeNames', [])->thenReturn(['stmts']);
+        $methods[1]->stmts = [
             Phake::mock(Node\Stmt\Return_::class), // expr is null
             Phake::mock(Node\Stmt\Return_::class), // expr is not null
             Phake::mock(Node\Expr\StaticCall::class),
             Phake::mock(Node\Expr\MethodCall::class),
             Phake::mock(Node\Expr\NullsafeMethodCall::class),
         ];
-        $methods[1]->unitTestSubNodes[0]->expr = null;
-        $methods[1]->unitTestSubNodes[1]->expr = Phake::mock(Node\Expr::class);
+        $methods[1]->stmts[0]->expr = null;
+        $methods[1]->stmts[1]->expr = Phake::mock(Node\Expr::class);
         Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
         $expected = ['structural' => 4.5, 'data' => 1.63, 'system' => 6.13];
         yield 'Class with 2 methods, all use cases covered' => [$node, $expected];

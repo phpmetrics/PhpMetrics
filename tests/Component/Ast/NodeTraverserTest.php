@@ -8,27 +8,29 @@ use Phake;
 use Phake\IMock;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\NodeTraverser as Mother;
 use PhpParser\NodeVisitor;
 use PHPUnit\Framework\TestCase;
+
 use function is_array;
 
 final class NodeTraverserTest extends TestCase
 {
     public function testItCanBeTraversed(): void
     {
+        eval('abstract class AbstractNodeVisitor implements \PhpParser\NodeVisitor {public bool $doesTraverseChildren;}');
+
         // Visitors that will be applied 1 by 1.
         $mocksVisitor = [
-            Phake::mock(NodeVisitor::class), // enterNode => null, leaveNode => null
-            Phake::mock(NodeVisitor::class), // enterNode => DONT_TRAVERSE_CHILDREN, leaveNode => null
-            Phake::mock(NodeVisitor::class), // enterNode => otherNode, leaveNode => null
-            Phake::mock(NodeVisitor::class), // enterNode => null, leaveNode => REMOVE_NODE
-            Phake::mock(NodeVisitor::class), // enterNode => null, leaveNode => array<Node>
-            Phake::mock(NodeVisitor::class), // enterNode => null, leaveNode => otherNode
+            Phake::mock('AbstractNodeVisitor'), // enterNode => null, leaveNode => null
+            Phake::mock('AbstractNodeVisitor'), // enterNode => DONT_TRAVERSE_CHILDREN, leaveNode => null
+            Phake::mock('AbstractNodeVisitor'), // enterNode => otherNode, leaveNode => null
+            Phake::mock('AbstractNodeVisitor'), // enterNode => null, leaveNode => REMOVE_NODE
+            Phake::mock('AbstractNodeVisitor'), // enterNode => null, leaveNode => array<Node>
+            Phake::mock('AbstractNodeVisitor'), // enterNode => null, leaveNode => otherNode
         ];
         // Input of nodes.
         $mocksNode = [
-            [Phake::mock(Node::class)], // array<Node> for recursive call
+            [Phake::mock(Node\Expr\MethodCall::class)], // array<Node> for recursive call
             Phake::mock(Phake::class), // Node that is not a node (so, abort)
             Phake::mock(ClassLike::class), // Node that is a ClassLike node (so, don't traverse children)
         ];
@@ -40,7 +42,7 @@ final class NodeTraverserTest extends TestCase
             Phake::mock(Node::class), // Used by leaveNode, when replacing.
         ];
         // Sub-node, used when traversing children (internal PhpParser behavior).
-        $subNode = Phake::mock(Node::class);
+        $subNode = Phake::mock(Node\Identifier::class);
 
         foreach ($mocksNode as $mockNode) {
             if (is_array($mockNode)) {
@@ -72,8 +74,8 @@ final class NodeTraverserTest extends TestCase
             $mocksVisitor[5]->doesTraverseChildren = true;
 
             /** @var IMock&Node $mockNode */
-            Phake::when($mockNode)->__call('getSubNodeNames', [])->thenReturn(['testSubNode']);
-            $mockNode->{'testSubNode'} = $subNode;
+            Phake::when($mockNode)->__call('getSubNodeNames', [])->thenReturn(['name']);
+            $mockNode->{'name'} = $subNode;
             foreach ($mocksVisitor as $mockVisitor) {
                 Phake::when($mockVisitor)->__call('enterNode', [$subNode])->thenReturn(NodeVisitor::STOP_TRAVERSAL);
             }

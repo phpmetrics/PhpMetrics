@@ -30,7 +30,7 @@ final class MetricNameGeneratorTest extends TestCase
         $expected = 'FooBar';
         yield 'With a named class, by namespace' => [$node, $expected];
 
-        $node = Phake::mock(Node::class);
+        $node = Phake::mock(Node\Expr\Variable::class);
         $node->name = Phake::mock(Node\Identifier::class);
         Phake::when($node->name)->__call('toString', [])->thenReturn('FooBar');
         $expected = 'FooBar';
@@ -57,7 +57,7 @@ final class MetricNameGeneratorTest extends TestCase
      */
     public static function provideNodeToGetFunctionName(): Generator
     {
-        $node = Phake::mock(Node::class);
+        $node = Phake::mock(Node\Expr\Variable::class);
         $node->name = Phake::mock(Node\Identifier::class);
         Phake::when($node->name)->__call('toString', [])->thenReturn('FooBar');
         $expected = 'FooBar';

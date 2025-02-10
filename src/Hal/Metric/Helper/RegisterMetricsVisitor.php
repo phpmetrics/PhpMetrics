@@ -21,15 +21,12 @@ final class RegisterMetricsVisitor extends NodeVisitorAbstract
     /**
      * @param Metrics $metrics
      */
-    public function __construct(
-        private readonly Metrics $metrics,
-    ) {
-    }
+    public function __construct(private readonly Metrics $metrics) {}
 
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
+    public function leaveNode(Node $node): null
     {
         if (
             !$node instanceof Stmt\Class_

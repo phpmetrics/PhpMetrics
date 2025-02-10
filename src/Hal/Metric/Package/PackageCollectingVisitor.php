@@ -21,15 +21,12 @@ final class PackageCollectingVisitor extends NodeVisitorAbstract
 {
     private string $namespace = '';
 
-    public function __construct(
-        private readonly Metrics $metrics
-    ) {
-    }
+    public function __construct(private readonly Metrics $metrics) {}
 
     /**
      * {@inheritDoc}
      */
-    public function enterNode(Node $node): null|int|Node // TODO PHP 8.2: only return null here.
+    public function enterNode(Node $node): null
     {
         if ($node instanceof Stmt\Namespace_) {
             $this->namespace = (string)$node->name;
@@ -41,7 +38,7 @@ final class PackageCollectingVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
+    public function leaveNode(Node $node): null
     {
         if (
             !$node instanceof Stmt\Class_
