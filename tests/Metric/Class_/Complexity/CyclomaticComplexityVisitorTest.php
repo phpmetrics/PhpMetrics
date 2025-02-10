@@ -20,6 +20,7 @@ use function array_combine;
 use function array_keys;
 use function array_map;
 use function array_values;
+use function str_starts_with;
 
 final class CyclomaticComplexityVisitorTest extends TestCase
 {
@@ -112,7 +113,8 @@ final class CyclomaticComplexityVisitorTest extends TestCase
         ];
         $complexSetOfNodes['match-arm-default']->conds = null;
 
-        $nodeContainingComplexSetOfNodes = Phake::mock(Node::class);
+        // Could be any kind of Node, but let's choose one with statements.
+        $nodeContainingComplexSetOfNodes = Phake::mock(Node\Stmt\Block::class);
         $nodeContainingComplexSetOfNodes->stmts = $complexSetOfNodes;
 
         $methods[0]->name = Phake::mock(Node\Identifier::class);
@@ -142,16 +144,16 @@ final class CyclomaticComplexityVisitorTest extends TestCase
             Phake::mock(Node\Stmt\ClassMethod::class), // Setter 1.
             Phake::mock(Node\Stmt\ClassMethod::class), // Setter 2.
         ];
-        $methods[0]->role = 'getter';
+        //$methods[0]->role = 'getter';
         $methods[0]->name = Phake::mock(Node\Identifier::class);
         Phake::when($methods[0]->name)->__call('toString', [])->thenReturn('getterOne');
-        $methods[1]->role = 'getter';
+        //$methods[1]->role = 'getter';
         $methods[1]->name = Phake::mock(Node\Identifier::class);
         Phake::when($methods[1]->name)->__call('toString', [])->thenReturn('getterTwo');
-        $methods[2]->role = 'setter';
+        //$methods[2]->role = 'setter';
         $methods[2]->name = Phake::mock(Node\Identifier::class);
         Phake::when($methods[2]->name)->__call('toString', [])->thenReturn('setterOne');
-        $methods[3]->role = 'setter';
+        //$methods[3]->role = 'setter';
         $methods[3]->name = Phake::mock(Node\Identifier::class);
         Phake::when($methods[3]->name)->__call('toString', [])->thenReturn('setterTwo');
         Phake::when($node)->__call('getMethods', [])->thenReturn($methods);
@@ -181,7 +183,11 @@ final class CyclomaticComplexityVisitorTest extends TestCase
 
         Phake::when($metricsMock)->__call('get', [$nodeName])->thenReturn($classMetricMock);
         Phake::when($detector)->__call('detects', [Phake::anyParameters()])->thenReturnCallback(
-            static fn (Node $node): string|null => $node->role ?? null
+            static fn (Node $node): string|null => match (true) {
+                str_starts_with($node->name->toString(), 'getter') => 'getter',
+                str_starts_with($node->name->toString(), 'setter') => 'setter',
+                default => null,
+            }
         );
         $methodsNames = array_keys($expected['ccnByMethod']);
         $classMethodsMetricsMock = array_map(static function (string $methodName): Phake\IMock&FunctionMetric {

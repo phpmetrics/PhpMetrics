@@ -48,7 +48,7 @@ final class ExternalsVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): null|int|Node|array // TODO PHP 8.2: only return null here.
+    public function leaveNode(Node $node): null
     {
         if ($node instanceof Stmt\Namespace_) {
             $this->uses = [];

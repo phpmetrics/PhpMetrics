@@ -57,8 +57,8 @@ final class HalsteadVisitorTest extends TestCase
     public static function provideNodesToCalculateHalstead(): Generator
     {
         $node = Phake::mock(Node\Stmt\Class_::class);
-        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
-        $node->unitTestSubNodes = [];
+        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['stmts']);
+        $node->stmts = [];
         $expected = [
             'length' => 0,
             'vocabulary' => 0,
@@ -77,8 +77,8 @@ final class HalsteadVisitorTest extends TestCase
         yield 'Class without any sub nodes' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Trait_::class);
-        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
-        $node->unitTestSubNodes = [];
+        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['stmts']);
+        $node->stmts = [];
         $expected = [
             'length' => 0,
             'vocabulary' => 0,
@@ -97,8 +97,8 @@ final class HalsteadVisitorTest extends TestCase
         yield 'Trait without any sub nodes' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Function_::class);
-        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
-        $node->unitTestSubNodes = [];
+        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['stmts']);
+        $node->stmts = [];
         $expected = [
             'length' => 0,
             'vocabulary' => 0,
@@ -117,8 +117,8 @@ final class HalsteadVisitorTest extends TestCase
         yield 'Function without any sub nodes' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
-        $node->unitTestSubNodes = [
+        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['stmts']);
+        $node->stmts = [
             0 => Phake::mock(Node\Param::class), // Ignored as Param->var is Variable.
             1 => Phake::mock(Node\Expr\BinaryOp::class),
             2 => Phake::mock(Node\Expr\AssignOp::class),
@@ -131,83 +131,49 @@ final class HalsteadVisitorTest extends TestCase
             9 => Phake::mock(Node\Stmt\Return_::class),
             10 => Phake::mock(Node\Stmt\While_::class),
             11 => Phake::mock(Node\Expr\Assign::class),
-            12 => Phake::mock(Node\Expr\Cast::class), // using value as node name.
-            13 => Phake::mock(Node\Expr\Cast::class), // using name as node name.
             14 => Phake::mock(Node\Expr\Cast::class), // using getType as node name, same name as value.
-            15 => Phake::mock(Node\Expr\Variable::class), // using value as node name.
             16 => Phake::mock(Node\Expr\Variable::class), // using name as node name.
-            17 => Phake::mock(Node\Param::class), // using value as node name.
-            18 => Phake::mock(Node\Param::class), // using name as node name.
             19 => Phake::mock(Node\Param::class), // using getType as node name, same name as value.
-            20 => Phake::mock(Node\Scalar::class), // using value as node name.
-            21 => Phake::mock(Node\Scalar::class), // using name as node name.
             22 => Phake::mock(Node\Scalar::class), // using getType as node name, same name as value.
         ];
-        $node->unitTestSubNodes[0]->var = Phake::mock(Node\Expr\Variable::class);
-        $node->unitTestSubNodes[1]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[2]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[3]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[4]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[5]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[6]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[7]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[8]->var = null;
-        $node->unitTestSubNodes[9]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[10]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[11]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[12]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[13]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[14]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[15]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[16]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[17]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[18]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[19]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[20]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[21]->var = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[22]->var = Phake::mock(Node\Expr::class);
-        Phake::when($node->unitTestSubNodes[1])->__call('getType', [])->thenReturn('BinaryOp');
-        Phake::when($node->unitTestSubNodes[2])->__call('getType', [])->thenReturn('AssignOp');
-        Phake::when($node->unitTestSubNodes[3])->__call('getType', [])->thenReturn('If_');
-        Phake::when($node->unitTestSubNodes[4])->__call('getType', [])->thenReturn('If_');
-        Phake::when($node->unitTestSubNodes[5])->__call('getType', [])->thenReturn('If_');
-        Phake::when($node->unitTestSubNodes[6])->__call('getType', [])->thenReturn('For_');
-        Phake::when($node->unitTestSubNodes[7])->__call('getType', [])->thenReturn('Switch_');
-        Phake::when($node->unitTestSubNodes[8])->__call('getType', [])->thenReturn('Catch_');
-        Phake::when($node->unitTestSubNodes[9])->__call('getType', [])->thenReturn('Return_');
-        Phake::when($node->unitTestSubNodes[10])->__call('getType', [])->thenReturn('While_');
-        Phake::when($node->unitTestSubNodes[11])->__call('getType', [])->thenReturn('Assign');
-        $node->unitTestSubNodes[12]->value = 'Cast';
-        $node->unitTestSubNodes[13]->name = Phake::mock(Node\Expr::class);
-        Phake::when($node->unitTestSubNodes[14])->__call('getType', [])->thenReturn('Cast');
-        $node->unitTestSubNodes[15]->value = 'Variable';
-        $node->unitTestSubNodes[16]->name = Phake::mock(Node\Expr::class);
-        $node->unitTestSubNodes[17]->value = 'Param';
-        $node->unitTestSubNodes[18]->name = Phake::mock(Node\Expr::class);
-        Phake::when($node->unitTestSubNodes[19])->__call('getType', [])->thenReturn('Param');
-        $node->unitTestSubNodes[20]->value = 'Scalar';
-        $node->unitTestSubNodes[21]->name = Phake::mock(Node\Expr::class);
-        Phake::when($node->unitTestSubNodes[22])->__call('getType', [])->thenReturn('Scalar');
+        $node->stmts[0]->var = Phake::mock(Node\Expr\Variable::class);
+        $node->stmts[8]->var = null;
+        $node->stmts[19]->var = Phake::mock(Node\Expr::class);
+        Phake::when($node->stmts[1])->__call('getType', [])->thenReturn('BinaryOp');
+        Phake::when($node->stmts[2])->__call('getType', [])->thenReturn('AssignOp');
+        Phake::when($node->stmts[3])->__call('getType', [])->thenReturn('If_');
+        Phake::when($node->stmts[4])->__call('getType', [])->thenReturn('If_');
+        Phake::when($node->stmts[5])->__call('getType', [])->thenReturn('If_');
+        Phake::when($node->stmts[6])->__call('getType', [])->thenReturn('For_');
+        Phake::when($node->stmts[7])->__call('getType', [])->thenReturn('Switch_');
+        Phake::when($node->stmts[8])->__call('getType', [])->thenReturn('Catch_');
+        Phake::when($node->stmts[9])->__call('getType', [])->thenReturn('Return_');
+        Phake::when($node->stmts[10])->__call('getType', [])->thenReturn('While_');
+        Phake::when($node->stmts[11])->__call('getType', [])->thenReturn('Assign');
+        Phake::when($node->stmts[14])->__call('getType', [])->thenReturn('Cast');
+        $node->stmts[16]->name = Phake::mock(Node\Expr::class);
+        Phake::when($node->stmts[19])->__call('getType', [])->thenReturn('Param');
+        Phake::when($node->stmts[22])->__call('getType', [])->thenReturn('Scalar');
         $expected = [
-            'length' => 22,
-            'vocabulary' => 17,
-            'volume' => 89.92,
-            'difficulty' => 6.19,
-            'effort' => 556.41,
-            'level' => 0.16,
-            'bugs' => 0.02,
-            'time' => 31,
-            'intelligentContent' => 14.53,
+            'length' => 15,
+            'vocabulary' => 13,
+            'volume' => 55.51,
+            'difficulty' => 4.5,
+            'effort' => 249.78,
+            'level' => 0.22,
+            'bugs' => 0.01,
+            'time' => 14,
+            'intelligentContent' => 12.33,
             'number_operators' => 11,
-            'number_operands' => 11,
+            'number_operands' => 4,
             'number_operators_unique' => 9,
-            'number_operands_unique' => 8,
+            'number_operands_unique' => 4,
         ];
         yield 'Class with several operators and operands' => [$node, $expected];
 
         $node = Phake::mock(Node\Stmt\Class_::class);
-        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['unitTestSubNodes']);
-        $node->unitTestSubNodes = [
+        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['stmts']);
+        $node->stmts = [
             Phake::mock(Node\Param::class), // Ignored as Param->var is Variable.
             Phake::mock(Node\Expr\BinaryOp::class),
             Phake::mock(Node\Expr\AssignOp::class),
@@ -221,18 +187,18 @@ final class HalsteadVisitorTest extends TestCase
             Phake::mock(Node\Stmt\While_::class),
             Phake::mock(Node\Expr\Assign::class),
         ];
-        $node->unitTestSubNodes[0]->var = Phake::mock(Node\Expr\Variable::class);
-        Phake::when($node->unitTestSubNodes[1])->__call('getType', [])->thenReturn('BinaryOp');
-        Phake::when($node->unitTestSubNodes[2])->__call('getType', [])->thenReturn('AssignOp');
-        Phake::when($node->unitTestSubNodes[3])->__call('getType', [])->thenReturn('If_');
-        Phake::when($node->unitTestSubNodes[4])->__call('getType', [])->thenReturn('If_');
-        Phake::when($node->unitTestSubNodes[5])->__call('getType', [])->thenReturn('If_');
-        Phake::when($node->unitTestSubNodes[6])->__call('getType', [])->thenReturn('For_');
-        Phake::when($node->unitTestSubNodes[7])->__call('getType', [])->thenReturn('Switch_');
-        Phake::when($node->unitTestSubNodes[8])->__call('getType', [])->thenReturn('Catch_');
-        Phake::when($node->unitTestSubNodes[9])->__call('getType', [])->thenReturn('Return_');
-        Phake::when($node->unitTestSubNodes[10])->__call('getType', [])->thenReturn('While_');
-        Phake::when($node->unitTestSubNodes[11])->__call('getType', [])->thenReturn('Assign');
+        $node->stmts[0]->var = Phake::mock(Node\Expr\Variable::class);
+        Phake::when($node->stmts[1])->__call('getType', [])->thenReturn('BinaryOp');
+        Phake::when($node->stmts[2])->__call('getType', [])->thenReturn('AssignOp');
+        Phake::when($node->stmts[3])->__call('getType', [])->thenReturn('If_');
+        Phake::when($node->stmts[4])->__call('getType', [])->thenReturn('If_');
+        Phake::when($node->stmts[5])->__call('getType', [])->thenReturn('If_');
+        Phake::when($node->stmts[6])->__call('getType', [])->thenReturn('For_');
+        Phake::when($node->stmts[7])->__call('getType', [])->thenReturn('Switch_');
+        Phake::when($node->stmts[8])->__call('getType', [])->thenReturn('Catch_');
+        Phake::when($node->stmts[9])->__call('getType', [])->thenReturn('Return_');
+        Phake::when($node->stmts[10])->__call('getType', [])->thenReturn('While_');
+        Phake::when($node->stmts[11])->__call('getType', [])->thenReturn('Assign');
         $expected = [
             'length' => 0,
             'vocabulary' => 0,

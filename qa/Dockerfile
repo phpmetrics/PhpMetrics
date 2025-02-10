@@ -1,4 +1,4 @@
-FROM php:8.1-alpine
+FROM php:8.3-alpine
 
 ENV COMPOSER_VENDOR_DIR=vendor COMPOSER_CACHE_DIR=/tmp/.composer COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_ROOT_VERSION=3.0.0
 
@@ -35,10 +35,10 @@ RUN apk update && \
     # Allow phar writing.
     echo 'phar.readonly=0' >> ${PHP_INI_DIR}/conf.d/docker-php-phar-readonly.ini && \
     # Fetching the PHP Infection from release to fetch.
-    echo "Looking for the latest PHP Infection 0.28.x version…" && \
-    RELEASES=$(curl -sS https://api.github.com/repos/infection/infection/releases | jq --compact-output --raw-output 'map(select( .tag_name | test("^0.28.[0-9]+$") ))') && \
+    echo "Looking for the latest PHP Infection 0.29.x version…" && \
+    RELEASES=$(curl -sS https://api.github.com/repos/infection/infection/releases | jq --compact-output --raw-output 'map(select( .tag_name | test("^0.29.[0-9]+$") ))') && \
     NB_RELEASES=$(echo "${RELEASES}" | jq --compact-output --raw-output 'length') && \
-    if [ "${NB_RELEASES}" == "0" ]; then echo "ERROR: Not a single patch version found for minor version 0.28 of PHP Infection."; exit 1; fi && \
+    if [ "${NB_RELEASES}" == "0" ]; then echo "ERROR: Not a single patch version found for minor version 0.29 of PHP Infection."; exit 1; fi && \
     LATEST_FOR_MINOR=$(echo "${RELEASES}" | jq --compact-output --raw-output '. | max_by( .tag_name | split(".") | map(tonumber) ) | {tag: .tag_name, src: .assets[]|select(.name == "infection.phar").browser_download_url}') && \
     INFECTION_TAG=$(echo "${LATEST_FOR_MINOR}" | jq --compact-output --raw-output '.tag') && \
     URL_SRC=$(echo "${LATEST_FOR_MINOR}" | jq --compact-output --raw-output '.src') && \

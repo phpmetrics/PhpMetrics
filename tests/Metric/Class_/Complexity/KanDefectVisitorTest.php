@@ -38,8 +38,8 @@ final class KanDefectVisitorTest extends TestCase
         $node = Phake::mock(Node\Stmt\Class_::class);
         $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:SimpleClass');
-        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['stmtsForUnitTest']);
-        $node->stmtsForUnitTest = [
+        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['stmts']);
+        $node->stmts = [
             Phake::mock(Node\Stmt\Do_::class), //doWhile: 1
             Phake::mock(Node\Stmt\Foreach_::class), //doWhile: 2
             Phake::mock(Node\Stmt\While_::class), //doWhile: 3
@@ -54,8 +54,8 @@ final class KanDefectVisitorTest extends TestCase
         $node = Phake::mock(Node\Stmt\Class_::class);
         $node->namespacedName = Phake::mock(Node\Name::class);
         Phake::when($node->namespacedName)->__call('toString', [])->thenReturn('UnitTest@Node:ComplexClass');
-        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['stmtsForUnitTest']);
-        $node->stmtsForUnitTest = [
+        Phake::when($node)->__call('getSubNodeNames', [])->thenReturn(['stmts']);
+        $node->stmts = [
             Phake::mock(Node\Stmt\Do_::class), //doWhile: 1
             Phake::mock(Node\Stmt\Foreach_::class), //doWhile: 2
             Phake::mock(Node\Stmt\While_::class), //doWhile: 3

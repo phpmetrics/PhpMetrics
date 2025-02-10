@@ -15,10 +15,10 @@ use Hal\Metric\Metric;
  */
 interface Violation
 {
-    public const INFO = 0;
-    public const WARNING = 1;
-    public const ERROR = 2;
-    public const CRITICAL = 3;
+    public const int INFO = 0;
+    public const int WARNING = 1;
+    public const int ERROR = 2;
+    public const int CRITICAL = 3;
 
     /**
      * Returns the name of the violation.
