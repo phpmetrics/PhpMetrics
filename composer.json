@@ -29,7 +29,7 @@
     "require": {
         "php": ">=8.3",
         "ext-tokenizer": "*",
-        "nikic/php-parser": "^5.4",
+        "nikic/php-parser": "^5.4 || ^6.0",
         "openmetrics-php/exposition-text": "^0.4.1"
     },
     "require-dev": {
