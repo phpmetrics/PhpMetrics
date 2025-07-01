@@ -17,7 +17,6 @@ use Hal\Metric\ProjectMetric;
  */
 class DepthOfInheritanceTree
 {
-
     /**
      * @param Metrics $metrics
      */

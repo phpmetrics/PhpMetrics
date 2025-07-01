@@ -12,7 +12,7 @@ use Hal\Component\Tree\Node;
 class GraphDeduplicatedTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function testEdgeDeduplication()
+    public function testEdgeDeduplication(): void
     {
         $graph = new GraphDeduplicated();
         $a = new Node('A');

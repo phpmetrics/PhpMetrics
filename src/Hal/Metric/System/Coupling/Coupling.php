@@ -14,7 +14,6 @@ use Hal\Metric\Metrics;
  */
 class Coupling
 {
-
     /**
      * @param Metrics $metrics
      */

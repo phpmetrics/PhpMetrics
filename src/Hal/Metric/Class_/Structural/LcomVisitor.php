@@ -1,9 +1,10 @@
 <?php
+
 namespace Hal\Metric\Class_\Structural;
 
+use Hal\Component\Ast\NodeTyper;
 use Hal\Component\Tree\GraphDeduplicated;
 use Hal\Component\Tree\Node as TreeNode;
-use Hal\Metric\Helper\MetricClassNameGenerator;
 use Hal\Metric\Helper\RoleOfMethodDetector;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
@@ -17,7 +18,6 @@ use PhpParser\NodeVisitorAbstract;
  */
 class LcomVisitor extends NodeVisitorAbstract
 {
-
     /**
      * @var Metrics
      */
@@ -36,10 +36,10 @@ class LcomVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
+        if (NodeTyper::isOrganizedLogicalClassStructure($node)) {
             // we build a graph of internal dependencies in class
             $graph = new GraphDeduplicated();
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+            $class = $this->metrics->get(getNameOfNode($node));
 
             $roleDetector = new RoleOfMethodDetector();
 

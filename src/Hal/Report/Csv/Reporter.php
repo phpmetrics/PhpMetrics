@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Report\Csv;
 
 use Hal\Application\Config\Config;

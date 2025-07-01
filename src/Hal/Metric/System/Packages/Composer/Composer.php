@@ -13,7 +13,6 @@ use Hal\Metric\ProjectMetric;
  */
 class Composer
 {
-
     /**
      * @var Config
      */
@@ -79,23 +78,25 @@ class Composer
         $rawRequirements = [[]];
 
         // find composer.json files
-        $finder = new Finder(['json'], $this->config->get('exclude'));
+        $exclude = $this->config->has('exclude') ? $this->config->get('exclude') : [];
+        $finder = new Finder(['json'], $exclude);
 
         // include root dir by default
-        $files = array_merge($this->config->get('files'), ['./']);
+        $files = $this->config->has('files') ? $this->config->get('files') : [];
+        $files = array_merge($files, ['./']);
         $files = $finder->fetch($files);
 
         foreach ($files as $filename) {
             if (!\preg_match('/composer(-dist)?\.json/', $filename)) {
                 continue;
             }
-            $composerJson = (object)\json_decode(\file_get_contents($filename));
+            $composerJson = (object) \json_decode(\file_get_contents($filename));
 
             if (!isset($composerJson->require)) {
                 continue;
             }
 
-            $rawRequirements[] = (array)$composerJson->require;
+            $rawRequirements[] = (array) $composerJson->require;
         }
 
         return \call_user_func_array('array_merge', $rawRequirements);
@@ -111,10 +112,12 @@ class Composer
         $rawInstalled = [[]];
 
         // Find composer.lock file
-        $finder = new Finder(['lock'], $this->config->get('exclude'));
+        $exclude = $this->config->has('exclude') ? $this->config->get('exclude') : [];
+        $finder = new Finder(['lock'], $exclude);
 
         // include root dir by default
-        $files = array_merge($this->config->get('files'), ['./']);
+        $files = $this->config->has('files') ? $this->config->get('files') : [];
+        $files = array_merge($files, ['./']);
         $files = $finder->fetch($files);
 
         // List all composer.lock found in the project.
@@ -122,7 +125,7 @@ class Composer
             if (false === \strpos($filename, 'composer.lock')) {
                 continue;
             }
-            $composerLockJson = (object)\json_decode(\file_get_contents($filename));
+            $composerLockJson = (object) \json_decode(\file_get_contents($filename));
 
             if (!isset($composerLockJson->packages)) {
                 continue;

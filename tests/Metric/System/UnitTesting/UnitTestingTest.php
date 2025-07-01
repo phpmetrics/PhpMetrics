@@ -11,7 +11,7 @@ use Hal\Metric\System\UnitTesting\UnitTesting;
 class UnitTestingTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function testICanParseJunitXmlFile()
+    public function testICanParseJunitXmlFile(): void
     {
         $config = new Config();
         $config->set('junit', __DIR__ . '/xml/junit1.xml');
@@ -31,11 +31,9 @@ class UnitTestingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(6, $tests['Test\Hal\Component\Issue\IssuerTest']->assertions);
     }
 
-    /**
-     * @expectedException Hal\Application\Config\ConfigException
-     */
-    public function testExceptionIsThrownIfJunitFileDoesNotExist()
+    public function testExceptionIsThrownIfJunitFileDoesNotExist(): void
     {
+        $this->expectException(\Hal\Application\Config\ConfigException::class);
         $config = new Config();
         $config->set('junit', __DIR__ . '/xml/junit-not-found.xml');
         $unit = new UnitTesting($config, []);
@@ -43,7 +41,7 @@ class UnitTestingTest extends \PHPUnit\Framework\TestCase
         $unit->calculate($metrics);
     }
 
-    public function testICanParseCodeceptionFile()
+    public function testICanParseCodeceptionFile(): void
     {
         $config = new Config();
         $config->set('junit', __DIR__ . '/xml/codeception1.xml');

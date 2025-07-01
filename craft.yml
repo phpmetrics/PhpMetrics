@@ -1,0 +1,6 @@
+php-version: 8.4
+extensions: "apcu,phar,curl,dom,fileinfo,filter,intl,mbstring,mysqlnd,openssl,tokenizer,zlib"
+sapi: micro
+build-options:
+    with-upx-pack: true
+    prefer-pre-built: true

@@ -11,7 +11,7 @@ use Hal\Component\Tree\Node;
 class HashMapTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function testICanWorkWithHashMap()
+    public function testICanWorkWithHashMap(): void
     {
         $hash = new HashMap;
         $hash
@@ -28,7 +28,7 @@ class HashMapTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($node2, $hash->get('B'));
     }
 
-    public function testICanIterateThroughHashMap()
+    public function testICanIterateThroughHashMap(): void
     {
         $hash = new HashMap;
         $hash

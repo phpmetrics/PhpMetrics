@@ -6,6 +6,7 @@ use Hal\Metric\Metric;
 use Hal\Metric\PackageMetric;
 use Hal\Violation\Package\StableAbstractionsPrinciple;
 use Hal\Violation\Violations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use \PHPUnit\Framework\TestCase;
 
 /**
@@ -13,24 +14,26 @@ use \PHPUnit\Framework\TestCase;
  */
 class StableAbstractionsPrincipleTest extends TestCase
 {
-    public function testItIgnoresNonPackageMetrics()
+    public function testItIgnoresNonPackageMetrics(): void
     {
-        $metric = $this->prophesize(Metric::class);
+        $metric = $this->getMockBuilder(Metric::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $metric->expects($this->never())
+            ->method('get')
+            ->with('violations');
 
         $object = new StableAbstractionsPrinciple();
 
-        $object->apply($metric->reveal());
-
-        $metric->get('violations')->shouldNotHaveBeenCalled();
+        $object->apply($metric);
     }
 
     /**
      * @dataProvider provideExamples
-     * @param float $abstractness
-     * @param float $instability
-     * @param int $expectedViolationCount
      */
-    public function testItAddsViolationsIfAPackageIsEitherStableAndConcreteOrInstableAndAbstract($abstractness, $instability, $expectedViolationCount)
+    #[DataProvider('provideExamples')]
+    public function testItAddsViolationsIfAPackageIsEitherStableAndConcreteOrInstableAndAbstract($abstractness, $instability, $expectedViolationCount): void
     {
         $metric = new PackageMetric('package');
         $metric->set('violations', new Violations());

@@ -11,7 +11,7 @@ use Hal\Component\Tree\Operator\CycleDetector;
  */
 class CycleDetectorTest extends \PHPUnit\Framework\TestCase
 {
-    public function testCycleIsDetected()
+    public function testCycleIsDetected(): void
     {
         $graph = new Graph();
         $a = new Node('A');
@@ -45,7 +45,7 @@ class CycleDetectorTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($f->cyclic);
     }
 
-    public function testAllCyclesAreFound()
+    public function testAllCyclesAreFound(): void
     {
         $graph = new Graph();
         $a = new Node('A');
@@ -79,7 +79,7 @@ class CycleDetectorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($f->cyclic);
     }
 
-    public function testCycleIsNotDetected()
+    public function testCycleIsNotDetected(): void
     {
         $graph = new Graph();
         $a = new Node('A');
@@ -112,7 +112,7 @@ class CycleDetectorTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($f->cyclic);
     }
 
-    public function testPartCycleIsDetected()
+    public function testPartCycleIsDetected(): void
     {
         $graph = new Graph();
         $a = new Node('A');

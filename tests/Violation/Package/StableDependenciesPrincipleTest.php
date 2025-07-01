@@ -6,6 +6,7 @@ use Hal\Metric\Metric;
 use Hal\Metric\PackageMetric;
 use Hal\Violation\Package\StableDependenciesPrinciple;
 use Hal\Violation\Violations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use \PHPUnit\Framework\TestCase;
 
 /**
@@ -13,7 +14,7 @@ use \PHPUnit\Framework\TestCase;
  */
 class StableDependenciesPrincipleTest extends TestCase
 {
-    public function testItIgnoresNonPackageMetrics()
+    public function testItIgnoresNonPackageMetrics(): void
     {
         $metric = $this->getMockBuilder(Metric::class)->getMock();
         $metric->expects($this->never())->method('get');
@@ -24,15 +25,13 @@ class StableDependenciesPrincipleTest extends TestCase
 
     /**
      * @dataProvider provideExamples
-     * @param float $packageInstability
-     * @param float[] $dependentInstabilities
-     * @param int $expectedViolationCount
      */
+    #[DataProvider('provideExamples')]
     public function testItAddsViolationsIfOneDependentPackageIsMoreUnstableOrAsUnstableAsThePackageItself(
         $packageInstability,
         array $dependentInstabilities,
         $expectedViolationCount
-    ) {
+    ): void {
         $violations = new Violations();
         $metric = $this->getMockBuilder(PackageMetric::class)->disableOriginalConstructor()->getMock();
         $metric->method('getInstability')->willReturn($packageInstability);

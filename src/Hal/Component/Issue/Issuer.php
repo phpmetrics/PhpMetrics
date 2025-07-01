@@ -72,43 +72,41 @@ class Issuer
 
         $message = <<<EOT
 
-<error>We're sorry : an unexpected error occured.</error>
- 
-<question>Can you help us ?</question> Please open a new issue at https://github.com/phpmetrics/PhpMetrics/issues/new, and copy-paste the content 
-of this file: $logfile ?
+            <error>We're sorry : an unexpected error occured.</error>
 
-Thanks for your help :)
+            <question>Can you help us ?</question> Please open a new issue at https://github.com/phpmetrics/PhpMetrics/issues/new, and copy-paste the content
+            of this file: $logfile ?
 
+            Thanks for your help :)
 EOT;
 
         $log = <<<EOT
-## Title: $errstr
+            ## Title: $errstr
 
-## Message:
+            ## Message:
 
-Hi,
+            Hi,
 
-This issue occured:
+            This issue occured:
 
-$errstr
+            $errstr
 
-**Environment**
+            **Environment**
 
-+ PHP: $php
-+ PhpMetrics: $phpmetrics
-+ Operating System: $os
-+ File: $errfile (line $errline)
+            + PHP: $php
+            + PhpMetrics: $phpmetrics
+            + Operating System: $os
+            + File: $errfile (line $errline)
 
-<details>
-  <summary>Details</summary>
-  ```
-$trace
+            <details>
+              <summary>Details</summary>
+              ```
+            $trace
 
 
-$debug
-```
-</details>
-
+            $debug
+            ```
+            </details>
 EOT;
 
         $this->output->write($message);

@@ -1,7 +1,8 @@
 <?php
+
 namespace Hal\Metric\Class_\Structural;
 
-use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Component\Ast\NodeTyper;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -20,7 +21,6 @@ use PhpParser\NodeVisitorAbstract;
  */
 class SystemComplexityVisitor extends NodeVisitorAbstract
 {
-
     /**
      * @var Metrics
      */
@@ -39,8 +39,11 @@ class SystemComplexityVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+        if (NodeTyper::isOrganizedLogicalClassStructure($node)) {
+            $class = $this->metrics->get(getNameOfNode($node));
+            if (null === $class) {
+                throw new \RuntimeException('Class metric not found for ' . getNameOfNode($node));
+            }
 
             $sy = $dc = $sc = [];
 

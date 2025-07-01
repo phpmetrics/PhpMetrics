@@ -2,36 +2,47 @@
 
 namespace Test\Hal\Component\Issue;
 
+use Hal\Component\Ast\ParserFactoryBridge;
 use Hal\Component\Issue\Issuer;
 use Hal\Component\Output\TestOutput;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\RequiresPhp;
+use Polyfill\TestCaseCompatible;
 
 /**
  * @group issue
  */
 class IssuerTest extends \PHPUnit\Framework\TestCase
 {
-    public function testICanEnableIssuerPhp5()
+    use TestCaseCompatible;
+    /**
+     * @requires PHP < 7.0
+     */
+    #[RequiresPhp('< 7.0')]
+    public function testICanEnableIssuerPhp5(): void
     {
         $output = new TestOutput();
         $issuer = (new TestIssuer($output))->enable();
         $issuer->set('Firstname', 'Jean-François');
 
         try {
-            trigger_error('Object of class stdClass could not be converted to string', E_USER_ERROR);
+            trigger_error('Object of class stdClass could not be converted to string', E_USER_WARNING);
         } catch (\Exception $e) {
         }
 
-        $this->assertContains('Object of class stdClass could not be converted to string', $issuer->log);
-        $this->assertContains('Operating System', $issuer->log);
-        $this->assertContains('Details', $issuer->log);
-        $this->assertContains('https://github.com/phpmetrics/PhpMetrics/issues/new', $output->output);
-        $this->assertContains('Firstname: Jean-François', $issuer->log);
-        $this->assertContains('IssuerTest.php (line 21)', $issuer->log);
+        $this->assertStringContainsString('Object of class stdClass could not be converted to string', $issuer->log);
+        $this->assertStringContainsString('Operating System', $issuer->log);
+        $this->assertStringContainsString('Details', $issuer->log);
+        $this->assertStringContainsString('https://github.com/phpmetrics/PhpMetrics/issues/new', $output->output);
+        $this->assertStringContainsString('Firstname: Jean-François', $issuer->log);
+        $this->assertStringContainsString('IssuerTest.php (line 26)', $issuer->log);
         $issuer->disable();
     }
 
-    public function testIssuerDisplayStatements()
+    /**
+     * @requires PHP < 7.0
+     */
+    public function testIssuerDisplayStatements(): void
     {
         $output = new TestOutput();
         $issuer = (new TestIssuer($output))->enable();
@@ -39,12 +50,12 @@ class IssuerTest extends \PHPUnit\Framework\TestCase
 <?php
 class A{
    public function foo() {
-   
+
    }
 }
 EOT;
 
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactoryBridge())->create();
         $stmt = $parser->parse($code);
         $issuer->set('code', $stmt);
 
@@ -54,7 +65,7 @@ EOT;
         }
 
         $issuer->disable();
-        $this->assertContains('class A', $issuer->log);
+        $this->assertStringContainsString('class A', $issuer->log);
     }
 }
 

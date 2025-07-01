@@ -21,7 +21,7 @@ class StableAbstractionsPrinciple implements Violation
         if (! $metric instanceof PackageMetric) {
             return;
         }
-        if (abs($metric->getDistance()) > sqrt(2)/4) {
+        if (abs($metric->getDistance()) > sqrt(2) / 4) {
             $this->metric = $metric;
             $metric->get('violations')->add($this);
         }
@@ -39,9 +39,9 @@ class StableAbstractionsPrinciple implements Violation
             : 'stable and concrete';
 
         return <<<EOT
-Packages should be either abstract and stable or concrete and instable.
+            Packages should be either abstract and stable or concrete and instable.
 
-This package is {$violation}.
+            This package is {$violation}.
 EOT;
     }
 }

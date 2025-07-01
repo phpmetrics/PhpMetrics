@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric\Helper;
 
 use PhpParser\Node\Expr\Cast;
@@ -89,7 +90,7 @@ class RoleOfMethodDetector
                 'PhpParser\\Node\\Param',
                 'PhpParser\\Node\\Expr\\Variable',
             ],
-        ]
+        ],
     ];
 
     /**

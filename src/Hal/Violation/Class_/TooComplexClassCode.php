@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
@@ -42,12 +43,12 @@ class TooComplexClassCode implements Violation
     public function getDescription()
     {
         return <<<EOT
-This class looks really complex.
+            This class looks really complex.
 
-* Algorithms are complex (Total cyclomatic complexity of class is {$this->metric->get('ccn')})
-* Component uses {$this->metric->get('number_operators')} operators
+            * Algorithms are complex (Total cyclomatic complexity of class is {$this->metric->get('ccn')})
+            * Component uses {$this->metric->get('number_operators')} operators
 
-Maybe you should delegate some code to other objects.
+            Maybe you should delegate some code to other objects.
 EOT;
     }
 }

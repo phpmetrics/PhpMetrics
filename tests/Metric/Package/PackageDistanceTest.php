@@ -6,6 +6,7 @@ use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageDistance;
 use Hal\Metric\PackageMetric;
+use PHPUnit\Framework\Attributes\DataProvider;
 use \PHPUnit\Framework\TestCase;
 
 /**
@@ -16,11 +17,9 @@ class PackageDistanceTest extends TestCase
 {
     /**
      * @dataProvider provideExamples
-     * @param float|null $instability
-     * @param float|null $abstraction
-     * @param float|null $expectedDistance
      */
-    public function testItCalculatesTheNormalizedDistanceOfAllPackages($instability, $abstraction, $expectedDistance)
+    #[DataProvider('provideExamples')]
+    public function testItCalculatesTheNormalizedDistanceOfAllPackages($instability, $abstraction, $expectedDistance): void
     {
         $metrics = new Metrics();
         $metrics->attach(new ClassMetric('Ignored'));

@@ -4,6 +4,7 @@ BUILD_DIR=releases
 
 include artifacts/phar/Makefile
 include artifacts/debian/Makefile
+include artifacts/standalone/Makefile
 
 prepare-build:
 	@# Disable the deletion of all releases packages as task build-debian is disabled.
@@ -12,5 +13,5 @@ prepare-build:
 	@# Only remove the phar that must be replaced by the new release.
 	@rm -f ${BUILD_DIR}/phpmetrics.phar
 
-build: prepare-build build-phar build-deb
+build: prepare-build build-phar build-deb build-standalone
 

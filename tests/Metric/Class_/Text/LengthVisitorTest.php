@@ -1,10 +1,14 @@
 <?php
 namespace Test\Hal\Metric\Class_\Structural;
 
+use Hal\Component\Ast\ParserFactoryBridge;
+use Hal\Component\Ast\ParserTraverserVisitorsAssigner;
 use Hal\Metric\Class_\ClassEnumVisitor;
+use Hal\Metric\Class_\Coupling\ExternalsVisitor;
 use Hal\Metric\Class_\Text\LengthVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @group loc
@@ -15,15 +19,18 @@ class LengthVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testLineCountsAreWellCalculated($example, $functionName, $loc, $lloc, $cloc)
+    #[DataProvider('provideExamples')]
+    public function testLineCountsAreWellCalculated($example, $functionName, $loc, $lloc, $cloc): void
     {
         $metrics = new Metrics();
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactoryBridge())->create();
         $traverser = new \PhpParser\NodeTraverser();
-        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new LengthVisitor($metrics));
+        (new ParserTraverserVisitorsAssigner())->assign($traverser, [
+            new \PhpParser\NodeVisitor\NameResolver(),
+            new ClassEnumVisitor($metrics),
+            new LengthVisitor($metrics)
+        ]);
 
         $code = file_get_contents($example);
         $stmts = $parser->parse($code);
@@ -34,7 +41,7 @@ class LengthVisitorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($loc, $metrics->get($functionName)->get('loc'));
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         return [
             [ __DIR__ . '/../../examples/loc1.php', 'A', 21, 13, 8],

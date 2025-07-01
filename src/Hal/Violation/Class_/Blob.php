@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
@@ -7,7 +8,6 @@ use Hal\Violation\Violation;
 
 class Blob implements Violation
 {
-
     /**
      * @inheritdoc
      */
@@ -59,13 +59,13 @@ class Blob implements Violation
     public function getDescription()
     {
         return <<<EOT
-A blob object (or "god class") does not follow the Single responsibility principle.
+            A blob object (or "god class") does not follow the Single responsibility principle.
 
-* object has lot of public methods  ({$this->metric->get('nbMethodsPublic')}, excluding getters and setters)
-* object has a high Lack of cohesion of methods (LCOM={$this->metric->get('lcom')})
-* object knows everything (and use lot of external classes)
+            * object has lot of public methods  ({$this->metric->get('nbMethodsPublic')}, excluding getters and setters)
+            * object has a high Lack of cohesion of methods (LCOM={$this->metric->get('lcom')})
+            * object knows everything (and use lot of external classes)
 
-Maybe you should reducing the number of methods splitting this object in many sub objects.
+            Maybe you should reducing the number of methods splitting this object in many sub objects.
 EOT;
     }
 }

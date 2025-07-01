@@ -2,6 +2,8 @@
 
 namespace Test\Hal\Metric\Package;
 
+use Hal\Component\Ast\ParserFactoryBridge;
+use Hal\Component\Ast\ParserTraverserVisitorsAssigner;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Metrics;
 use Hal\Metric\Package\PackageCollectingVisitor;
@@ -17,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PackageCollectingVisitorTest extends TestCase
 {
-    public function testItUsesThePackageAndTheSubpackageAnnotationAsPackageName()
+    public function testItUsesThePackageAndTheSubpackageAnnotationAsPackageName(): void
     {
         $metrics = $this->analyzeCode(<<<'CODE'
 <?php
@@ -37,7 +39,7 @@ CODE
         $this->assertSame('PackA\\SubA\\', $metrics->get('PackageA\\ClassA')->get('package'));
     }
 
-    public function testItUsesThePackageAnnotationAsPackageNameIfNoSubpackageAnnotationExist()
+    public function testItUsesThePackageAnnotationAsPackageNameIfNoSubpackageAnnotationExist(): void
     {
         $metrics = $this->analyzeCode(<<<'CODE'
 <?php
@@ -56,7 +58,7 @@ CODE
         $this->assertSame('PackA\\', $metrics->get('PackageA\\ClassA')->get('package'));
     }
 
-    public function testItUsesTheNamespaceAsPackageNameIfNoPackageAnnotationAreAvailable()
+    public function testItUsesTheNamespaceAsPackageNameIfNoPackageAnnotationAreAvailable(): void
     {
         $metrics = $this->analyzeCode(<<<'CODE'
 <?php
@@ -79,11 +81,13 @@ CODE
     private function analyzeCode($code)
     {
         $metrics = new Metrics();
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactoryBridge())->create();
         $traverser = new NodeTraverser();
-        $traverser->addVisitor(new NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new PackageCollectingVisitor($metrics));
+        (new ParserTraverserVisitorsAssigner())->assign($traverser, [
+            new \PhpParser\NodeVisitor\NameResolver(),
+            new ClassEnumVisitor($metrics),
+            new PackageCollectingVisitor($metrics)
+        ]);
 
         $stmts = $parser->parse($code);
         $traverser->traverse($stmts);

@@ -17,12 +17,12 @@ class SearchesValidator
                 'nameMatches',
                 'instanceOf',
                 'usesClasses',
-                'failIfFound'
+                'failIfFound',
             ];
             $registry = new Registry();
             $allowedKeys = array_merge($allowedKeys, $registry->allForStructures());
 
-            $diff = array_diff(array_keys((array)$config), $allowedKeys);
+            $diff = array_diff(array_keys((array) $config), $allowedKeys);
             if (count($diff) > 0) {
                 throw new ConfigException(
                     sprintf(

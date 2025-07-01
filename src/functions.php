@@ -2,7 +2,6 @@
 
 class MyVisitor extends \PhpParser\NodeVisitorAbstract
 {
-
     /**
      * @var
      */
@@ -85,9 +84,15 @@ function getNameOfNode($node)
         return $node;
     }
 
-    if ($node instanceof \PhpParser\Node\Name\FullyQualified) {
-        return (string)$node;
+    if (isset($node->namespacedName) && null !== $node->namespacedName) {
+        // Return the fully qualified name of the class, interface, or trait
+        return (string) $node->namespacedName;
     }
+
+    if ($node instanceof \PhpParser\Node\Name\FullyQualified) {
+        return (string) $node;
+    }
+
     if ($node instanceof \PhpParser\Node\Expr\New_) {
         return getNameOfNode($node->class);
     }
@@ -97,7 +102,10 @@ function getNameOfNode($node)
     }
 
     if ($node instanceof \PhpParser\Node\Name) {
-        return (string)implode($node->parts);
+        if(!property_exists($node, 'parts') || null === $node->parts) {
+            return (string) $node->name;
+        }
+        return (string) implode($node->parts);
     }
 
     if (isset($node->name) && $node->name instanceof \PhpParser\Node\Expr\Variable) {
@@ -124,12 +132,13 @@ function getNameOfNode($node)
         return getNameOfNode($node->name);
     }
 
-    if (isset($node->name) && null === $node->name) {
+    // do not use isset here, we want to check if property is set
+    if (property_exists($node, 'name') && null === $node->name) {
         return 'anonymous@' . spl_object_hash($node);
     }
 
     if (isset($node->name)) {
-        return (string)$node->name;
+        return (string) $node->name;
     }
 
     return null;
@@ -175,16 +184,16 @@ function gradientAlphaFor($array, $attribute, $currentValue)
 {
     // memory cache
     static $caches;
-    if(null === $caches) {
+    if (null === $caches) {
         $caches = [];
     }
 
-    if(!isset($caches[$attribute])) {
+    if (!isset($caches[$attribute])) {
         // avoid to iterate over array too many times
         $max = 0;
         $min = 1;
-        foreach($array as $item) {
-            if(!isset($item[$attribute])) {
+        foreach ($array as $item) {
+            if (!isset($item[$attribute])) {
                 continue;
             }
 
@@ -211,7 +220,8 @@ function gradientAlphaFor($array, $attribute, $currentValue)
  * @param mixed $currentValue
  * @return string
  */
-function gradientStyleFor($array, $attribute, $currentValue) {
+function gradientStyleFor($array, $attribute, $currentValue)
+{
     return sprintf(' style="background-color: hsla(203, 82%%, 76%%, %s);"', gradientAlphaFor($array, $attribute, $currentValue));
 }
 

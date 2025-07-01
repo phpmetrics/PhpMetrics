@@ -29,6 +29,7 @@ class PackageInstability
         // Set depending instabilities
         foreach ($packages as $eachPackage) {
             $dependentInstabilities = array_map(function ($packageName) use ($instabilitiesByPackage) {
+                //return $instabilitiesByPackage[$packageName] ?? null;
                 return isset($instabilitiesByPackage[$packageName]) ? $instabilitiesByPackage[$packageName] : null;
             }, $eachPackage->getOutgoingPackageDependencies());
             $dependentInstabilities = array_combine(

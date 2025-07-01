@@ -1,0 +1,76 @@
+name: CI
+
+on:
+    push:
+        branches: [ master, main ]
+    pull_request:
+        branches: [ master, main ]
+    release:
+        types: [created]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php-version: [7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4]
+                #php-version: [5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4]
+                include:
+                    - php-version: nightly
+            fail-fast: false
+
+        services:
+            docker:
+                image: docker:20.10.16
+                options: --privileged
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Set up PHP ${{ matrix.php-version }}
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
+
+            - name: "Remove ': void' return type hint for older PHP versions"
+              run: |
+                # if php version < 7.1, remove ': void' return type hint
+                if [[ "${{ matrix.php-version }}" < "7.1" ]]; then
+                    echo "Removing ': void' return type hint for PHP version ${{ matrix.php-version }}"
+                    # Find and replace ': void' in all PHP files
+                    find . -type f -name "*.php" -exec sed -i 's/: void//g' {} +
+                fi
+
+            - name: Install Composer dependencies (${{ matrix.php-version }})
+              run: composer install --no-interaction --prefer-dist --no-progress
+
+            - name: Run tests (${{ matrix.php-version }})
+              run: make test
+
+            - name: Run Docker tests
+              run: docker run --rm test_phpmetrics
+
+    build:
+        if: github.event_name == 'release' && startsWith(github.ref, 'refs/tags/')
+        needs: test
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v4
+
+            -   name: Set up PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.0
+
+            -   name: Build project
+                run: make build
+
+            -   name: Add build artifact
+                run: git add -f build/phpmetrics.phar
+
+            -   name: Upload release asset
+                uses: softprops/action-gh-release@v2
+                with:
+                    files: build/phpmetrics.phar
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

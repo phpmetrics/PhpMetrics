@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PackageAbstractionTest extends TestCase
 {
-    public function testItCalculatesTheAbstractionOfEachPackage()
+    public function testItCalculatesTheAbstractionOfEachPackage(): void
     {
         $metrics = $this->metricsOf([
             $this->aPackage('SemiAbstract\\', [

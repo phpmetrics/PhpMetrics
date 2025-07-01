@@ -2,17 +2,17 @@
 
 include artifacts/Makefile
 
-# Run unit tests
+# Run unit tests
 test:
 	./vendor/bin/phpunit -c phpunit.xml.dist
 
 # Codesniffer check
 phpcs:
-	./vendor/bin/phpcs src/ tests/ --extensions=php -n
+	./tooling/vendor/bin/php-cs-fixer check src
 
-# Codesniffer fix
-phpcbf:
-	./vendor/bin/phpcbf src/ tests/ --extensions=php -n
+# Compatibility check
+compatibility:
+	(docker run --rm -v `pwd`:/www --workdir=/www  php:5.6-cli find src -iname "*.php" -exec php -l {} \; |grep -v "Php7NodeTraverser.php" | grep -v "No syntax errors detected") && echo OK
 
 # Used for tag releasing
 # Don't use directly, use `make release` instead

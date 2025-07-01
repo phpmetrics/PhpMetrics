@@ -78,7 +78,7 @@ class ConfigFileReaderJson implements ConfigFileReaderInterface
 
         // Composer
         if (array_key_exists('composer', $jsonData)) {
-            $config->set('composer', (bool)$jsonData['composer']);
+            $config->set('composer', (bool) $jsonData['composer']);
         }
 
         // Search

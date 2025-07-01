@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FinderTest extends TestCase
 {
-    public function testPathsGivenAreRecoveredOverExcluded()
+    public function testPathsGivenAreRecoveredOverExcluded(): void
     {
         $exampleRoot = __DIR__ . DIRECTORY_SEPARATOR . 'examples';
 
@@ -37,7 +37,7 @@ class FinderTest extends TestCase
         static::assertSame($expected, $files);
     }
 
-    public function testGivenPathsAreIgnoredRegardingExclusion()
+    public function testGivenPathsAreIgnoredRegardingExclusion(): void
     {
         $exampleRoot = __DIR__ . DIRECTORY_SEPARATOR . 'examples';
         $actualFoundFiles = (new Finder(['php'], ['tests']))->fetch([$exampleRoot]);

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PackageDependenciesTest extends TestCase
 {
-    public function testItCollectsAllIncomingAndOutgoingPackageDependencies()
+    public function testItCollectsAllIncomingAndOutgoingPackageDependencies(): void
     {
         $packageA = new PackageMetric('PackageA\\');
         $packageB = new PackageMetric('PackageB\\');
@@ -45,26 +45,26 @@ class PackageDependenciesTest extends TestCase
         $this->assertSame(['PackageA\\'], $packageB->getIncomingPackageDependencies());
     }
 
-    public function testItSkipsClassesThatHasNoDependencies()
+    public function testItSkipsClassesThatHasNoDependencies(): void
     {
         $classMetric = (new ClassMetric('OneClass'))->set('package', 'PackageA\\');
         $metrics = $this->getMockBuilder(Metrics::class)->disableOriginalConstructor()->getMock();
         $metrics
             ->expects($this->once())
             ->method('all')
-            ->will($this->returnValue([$classMetric]));
+            ->willReturn([$classMetric]);
 
         (new PackageDependencies())->calculate($metrics);
     }
 
-    public function testItSkipsClassesThatHasNoPackage()
+    public function testItSkipsClassesThatHasNoPackage(): void
     {
         $classMetric = (new ClassMetric('OneClass'))->set('externals', ['AnotherClass']);
         $metrics = $this->getMockBuilder(Metrics::class)->disableOriginalConstructor()->getMock();
         $metrics
             ->expects($this->once())
             ->method('all')
-            ->will($this->returnValue([$classMetric]));
+            ->willReturn([$classMetric]);
 
         (new PackageDependencies())->calculate($metrics);
     }

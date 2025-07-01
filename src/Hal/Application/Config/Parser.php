@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Application\Config;
 
 use Hal\Application\Config\File\ConfigFileReaderFactory;

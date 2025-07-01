@@ -1,4 +1,5 @@
 <?php
+
 /*
  * (c) Jean-François Lépine <https://twitter.com/Halleck45>
  *
@@ -8,7 +9,9 @@
 
 namespace Hal\Component\Ast;
 
-if (PHP_VERSION_ID >= 70000) {
+if (PHP_VERSION_ID >= 80000) {
+    class_alias(Php8NodeTraverser::class, __NAMESPACE__ . '\\ActualNodeTraverser');
+}elseif (PHP_VERSION_ID >= 70000) {
     class_alias(Php7NodeTraverser::class, __NAMESPACE__ . '\\ActualNodeTraverser');
 } else {
     class_alias(Php5NodeTraverser::class, __NAMESPACE__ . '\\ActualNodeTraverser');
@@ -21,6 +24,4 @@ if (PHP_VERSION_ID >= 70000) {
  * @see https://github.com/phpmetrics/PhpMetrics/issues/373
  */
 /** @noinspection PhpUndefinedClassInspection */
-class NodeTraverser extends ActualNodeTraverser
-{
-}
+class NodeTraverser extends ActualNodeTraverser {}

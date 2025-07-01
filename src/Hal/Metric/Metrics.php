@@ -7,7 +7,6 @@ namespace Hal\Metric;
  */
 class Metrics implements \JsonSerializable
 {
-
     /**
      * @var array
      */

@@ -66,7 +66,7 @@ class Traverser
                     $return = $visitor->enterNode($node);
                     if (Mother::DONT_TRAVERSE_CHILDREN === $return) {
                         $traverseChildren = false;
-                    } else if (null !== $return) {
+                    } elseif (null !== $return) {
                         $node = $return;
                     }
                 }

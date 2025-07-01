@@ -17,7 +17,6 @@ use Hal\Violation\ViolationParser;
 
 class Application
 {
-
     /**
      * @param array $argv
      */
@@ -46,8 +45,10 @@ class Application
 
         // Version
         if ($config->has('version')) {
-            $output->writeln(sprintf("PhpMetrics %s <http://www.phpmetrics.org>\nby Jean-François Lépine <https://twitter.com/Halleck45>\n",
-                getVersion()));
+            $output->writeln(sprintf(
+                "PhpMetrics %s <http://www.phpmetrics.org>\nby Jean-François Lépine <https://twitter.com/Halleck45>\n",
+                getVersion()
+            ));
             exit(0);
         }
 
@@ -113,8 +114,10 @@ class Application
         }
         if (!empty($shouldExitDueToCriticalViolationsCount)) {
             $output->writeln('');
-            $output->writeln(sprintf('<error>[ERR] Failed du to %d critical violations</error>',
-                $shouldExitDueToCriticalViolationsCount));
+            $output->writeln(sprintf(
+                '<error>[ERR] Failed du to %d critical violations</error>',
+                $shouldExitDueToCriticalViolationsCount
+            ));
             $output->writeln('');
             exit(1);
         }

@@ -1,8 +1,11 @@
 <?php
+
 namespace Hal\Metric\System\UnitTesting;
 
 use Hal\Application\Config\Config;
 use Hal\Application\Config\ConfigException;
+use Hal\Component\Ast\ParserFactoryBridge;
+use Hal\Component\Ast\ParserTraverserVisitorsAssigner;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Coupling\ExternalsVisitor;
 use Hal\Metric\ClassMetric;
@@ -12,7 +15,6 @@ use PhpParser\ParserFactory;
 
 class UnitTesting
 {
-
     /**
      * @var array
      */
@@ -69,7 +71,7 @@ class UnitTesting
 
         // JUNIT format
         foreach ($xpath->query('//testsuite[@file]') as $suite) {
-            array_push($testsuites, (object)[
+            array_push($testsuites, (object) [
                 'file' => $suite->getAttribute('file'),
                 'name' => $suite->getAttribute('name'),
                 'assertions' => $suite->getAttribute('assertions'),
@@ -98,7 +100,7 @@ class UnitTesting
                 $assertions = $case === $suite->firstChild->nextSibling ? $suite->getAttribute('assertions') : 0;
             }
 
-            $testsuites[$case->getAttribute('class')] = (object)[
+            $testsuites[$case->getAttribute('class')] = (object) [
                 'file' => $case->getAttribute('file'),
                 'name' => $case->getAttribute('class'),
                 'assertions' => $assertions,
@@ -110,11 +112,13 @@ class UnitTesting
         // This code is slow and can be optimized
         foreach ($testsuites as $suite) {
             $metricsOfUnitTest = new Metrics();
-            $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+            $parser = (new ParserFactoryBridge())->create();
             $traverser = new \PhpParser\NodeTraverser();
-            $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
-            $traverser->addVisitor(new ClassEnumVisitor($metricsOfUnitTest));
-            $traverser->addVisitor(new ExternalsVisitor($metricsOfUnitTest));
+            (new ParserTraverserVisitorsAssigner())->assign($traverser, [
+                new \PhpParser\NodeVisitor\NameResolver(),
+                new ClassEnumVisitor($metricsOfUnitTest),
+                new ExternalsVisitor($metricsOfUnitTest)
+            ]);
 
             if (!file_exists($suite->file) || !is_readable($suite->file)) {
                 throw new \LogicException('Cannot find source file referenced in testsuite: ' . $suite->file);
@@ -130,10 +134,10 @@ class UnitTesting
 
             // list of externals sources of unit test
             $metric = $metricsOfUnitTest->get($suite->name);
-            $externals = (array)$metric->get('externals');
+            $externals = (array) $metric->get('externals');
 
             // global stats for each test
-            $infoAboutTests[$suite->name] = (object)[
+            $infoAboutTests[$suite->name] = (object) [
                 'nbExternals' => count(array_unique($externals)),
                 'externals' => array_unique($externals),
                 'filename' => $suite->file,
