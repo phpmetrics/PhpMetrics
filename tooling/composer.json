@@ -8,8 +8,7 @@
     },
     "authors": [
         {
-            "name": "Jean-François Lépine",
-            "email": "lepinejeanfrancois@gmail.com"
+            "name": "Jean-François Lépine"
         }
     ],
     "require-dev": {
