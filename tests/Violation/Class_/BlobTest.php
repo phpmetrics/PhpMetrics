@@ -14,7 +14,7 @@ class BlobTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testGlobIsFound($expected, $nbMethodsPublic, $lcom, $nbExternals)
+    public function testGlobIsFound($expected, $nbMethodsPublic, $lcom, $nbExternals): void
     {
         $class = $this->getMockBuilder(ClassMetric::class)->disableOriginalConstructor()->getMock();
 
@@ -42,7 +42,7 @@ class BlobTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $class->get('violations')->count());
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         return [
             [1, 9, 3, 10],

@@ -15,7 +15,7 @@ class LengthVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testLineCountsAreWellCalculated($example, $functionName, $loc, $lloc, $cloc)
+    public function testLineCountsAreWellCalculated($example, $functionName, $loc, $lloc, $cloc): void
     {
         $metrics = new Metrics();
 
@@ -34,7 +34,7 @@ class LengthVisitorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($loc, $metrics->get($functionName)->get('loc'));
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         return [
             [ __DIR__ . '/../../examples/loc1.php', 'A', 21, 13, 8],

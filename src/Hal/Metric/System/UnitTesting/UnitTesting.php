@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric\System\UnitTesting;
 
 use Hal\Application\Config\Config;
@@ -12,7 +13,6 @@ use PhpParser\ParserFactory;
 
 class UnitTesting
 {
-
     /**
      * @var array
      */
@@ -69,7 +69,7 @@ class UnitTesting
 
         // JUNIT format
         foreach ($xpath->query('//testsuite[@file]') as $suite) {
-            array_push($testsuites, (object)[
+            array_push($testsuites, (object) [
                 'file' => $suite->getAttribute('file'),
                 'name' => $suite->getAttribute('name'),
                 'assertions' => $suite->getAttribute('assertions'),
@@ -98,7 +98,7 @@ class UnitTesting
                 $assertions = $case === $suite->firstChild->nextSibling ? $suite->getAttribute('assertions') : 0;
             }
 
-            $testsuites[$case->getAttribute('class')] = (object)[
+            $testsuites[$case->getAttribute('class')] = (object) [
                 'file' => $case->getAttribute('file'),
                 'name' => $case->getAttribute('class'),
                 'assertions' => $assertions,
@@ -130,10 +130,10 @@ class UnitTesting
 
             // list of externals sources of unit test
             $metric = $metricsOfUnitTest->get($suite->name);
-            $externals = (array)$metric->get('externals');
+            $externals = (array) $metric->get('externals');
 
             // global stats for each test
-            $infoAboutTests[$suite->name] = (object)[
+            $infoAboutTests[$suite->name] = (object) [
                 'nbExternals' => count(array_unique($externals)),
                 'externals' => array_unique($externals),
                 'filename' => $suite->file,

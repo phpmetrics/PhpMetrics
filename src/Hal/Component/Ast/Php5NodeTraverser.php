@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Component\Ast;
 
 use PhpParser\Node;

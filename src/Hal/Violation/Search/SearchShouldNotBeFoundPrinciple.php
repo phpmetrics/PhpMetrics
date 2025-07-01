@@ -7,7 +7,6 @@ use Hal\Violation\Violation;
 
 class SearchShouldNotBeFoundPrinciple implements Violation
 {
-
     private $concernedSearches = [];
 
     public function getName()

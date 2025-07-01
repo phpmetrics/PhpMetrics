@@ -8,6 +8,7 @@ use Hal\Metric\Group\Group;
 use Hal\Metric\Metrics;
 use Hal\Report\Html\Reporter;
 use PHPUnit\Framework\TestCase;
+use Polyfill\TestCaseCompatible;
 
 /**
  * @group reporter
@@ -15,7 +16,9 @@ use PHPUnit\Framework\TestCase;
  */
 class ReporterTest extends TestCase
 {
-    public function testICanGenerateHtmlReport()
+    use TestCaseCompatible;
+
+    public function testICanGenerateHtmlReport(): void
     {
         $config = new Config();
         $output = new TestOutput();
@@ -46,6 +49,6 @@ class ReporterTest extends TestCase
 
         // ensure basic content is generated
         $content = file_get_contents(sprintf('%s/index.html', $destination));
-        $this->assertContains('PhpMetrics report', $content);
+        $this->assertStringContainsString('PhpMetrics report', $content);
     }
 }

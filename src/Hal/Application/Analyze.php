@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Application;
 
 use Hal\Application\Config\Config;
@@ -35,7 +36,6 @@ use PhpParser\ParserFactory;
  */
 class Analyze
 {
-
     /**
      * @var Output
      */
@@ -77,7 +77,7 @@ class Analyze
         };
 
         // prepare parser
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser(false, $whenToStop);
         $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
         $traverser->addVisitor(new ClassEnumVisitor($metrics));

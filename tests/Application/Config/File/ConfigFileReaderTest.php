@@ -11,7 +11,7 @@ use Hal\Search\Searches;
  */
 class ConfigFileReaderTest extends \PHPUnit\Framework\TestCase
 {
-    public function testICanParseBasicJsonFIle()
+    public function testICanParseBasicJsonFIle(): void
     {
         $filename = __DIR__ . '/examples/config.json';
 
@@ -55,7 +55,7 @@ class ConfigFileReaderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testICanParseConfigWithSearch()
+    public function testICanParseConfigWithSearch(): void
     {
         $filename = __DIR__ . '/examples/config-with-search.json';
 

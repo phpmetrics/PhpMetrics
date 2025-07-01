@@ -11,7 +11,7 @@ class LcomVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $classname, $expected)
+    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $classname, $expected): void
     {
         $metrics = new Metrics();
 
@@ -28,7 +28,7 @@ class LcomVisitorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $metrics->get($classname)->get('lcom'));
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         return [
             [ __DIR__ . '/../../examples/lcom1.php', 'MyClassA', 2]

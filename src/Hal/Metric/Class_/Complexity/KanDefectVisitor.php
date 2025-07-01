@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric\Class_\Complexity;
 
 use Hal\Component\Reflected\Method;

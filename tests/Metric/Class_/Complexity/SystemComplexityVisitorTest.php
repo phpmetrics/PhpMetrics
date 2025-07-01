@@ -16,7 +16,7 @@ class SystemComplexityVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($filename, $class, $rdc, $rsc, $rsysc)
+    public function testLackOfCohesionOfMethodsIsWellCalculated($filename, $class, $rdc, $rsc, $rsysc): void
     {
         $metrics = new Metrics();
 
@@ -35,7 +35,7 @@ class SystemComplexityVisitorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($rsysc, $metrics->get('A')->get('relativeSystemComplexity'));
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         return [
             [ __DIR__ . '/../../examples/systemcomplexity1.php', 'A', 0.5, 36.0, 36.5],

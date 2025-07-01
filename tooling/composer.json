@@ -1,0 +1,19 @@
+{
+    "name": "phpmetrics/tooling",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Phpmetrics\\Tooling\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jean-François Lépine",
+            "email": "lepinejeanfrancois@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "rector/rector": "^2.1",
+        "friendsofphp/php-cs-fixer": "^3.76"
+    }
+}

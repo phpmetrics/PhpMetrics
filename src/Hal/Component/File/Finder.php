@@ -18,7 +18,6 @@ use RegexIterator;
  */
 class Finder
 {
-
     /**
      * Follow symlinks
      */

@@ -4,7 +4,6 @@ namespace Hal\Search;
 
 class Searches
 {
-
     /**
      * @var array
      */

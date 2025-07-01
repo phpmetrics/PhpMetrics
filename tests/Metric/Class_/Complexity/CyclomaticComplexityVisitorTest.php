@@ -13,7 +13,7 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamplesForCcn
      */
-    public function testCcnOfClassesIsWellCalculated($example, $classname, $expectedCcn)
+    public function testCcnOfClassesIsWellCalculated($example, $classname, $expectedCcn): void
     {
         $metrics = new Metrics();
 
@@ -33,7 +33,7 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamplesForWmc
      */
-    public function testWeightedMethodCountOfClassesIsWellCalculated($example, $classname, $expectedWmc)
+    public function testWeightedMethodCountOfClassesIsWellCalculated($example, $classname, $expectedWmc): void
     {
         $metrics = new Metrics();
 
@@ -53,7 +53,7 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamplesForMaxCc
      */
-    public function testMaximalCyclomaticComplexityOfMethodsIsWellCalculated($example, $classname, $expectedCcnMethodMax)
+    public function testMaximalCyclomaticComplexityOfMethodsIsWellCalculated($example, $classname, $expectedCcnMethodMax): void
     {
         $metrics = new Metrics();
 

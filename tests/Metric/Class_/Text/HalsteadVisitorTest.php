@@ -15,7 +15,7 @@ class HalsteadVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $functionName, $nbOperators, $nbOperands, $difficulty)
+    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $functionName, $nbOperators, $nbOperands, $difficulty): void
     {
         $metrics = new Metrics();
 
@@ -46,7 +46,7 @@ class HalsteadVisitorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         return [
             [ __DIR__ . '/../../examples/halstead1.php', 'twice', 2, 3, 1.5],

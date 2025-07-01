@@ -13,7 +13,6 @@ use Hal\Metric\ProjectMetric;
  */
 class Composer
 {
-
     /**
      * @var Config
      */
@@ -89,13 +88,13 @@ class Composer
             if (!\preg_match('/composer(-dist)?\.json/', $filename)) {
                 continue;
             }
-            $composerJson = (object)\json_decode(\file_get_contents($filename));
+            $composerJson = (object) \json_decode(\file_get_contents($filename));
 
             if (!isset($composerJson->require)) {
                 continue;
             }
 
-            $rawRequirements[] = (array)$composerJson->require;
+            $rawRequirements[] = (array) $composerJson->require;
         }
 
         return \call_user_func_array('array_merge', $rawRequirements);
@@ -122,7 +121,7 @@ class Composer
             if (false === \strpos($filename, 'composer.lock')) {
                 continue;
             }
-            $composerLockJson = (object)\json_decode(\file_get_contents($filename));
+            $composerLockJson = (object) \json_decode(\file_get_contents($filename));
 
             if (!isset($composerLockJson->packages)) {
                 continue;

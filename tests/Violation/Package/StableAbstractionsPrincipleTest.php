@@ -13,15 +13,19 @@ use \PHPUnit\Framework\TestCase;
  */
 class StableAbstractionsPrincipleTest extends TestCase
 {
-    public function testItIgnoresNonPackageMetrics()
+    public function testItIgnoresNonPackageMetrics(): void
     {
-        $metric = $this->prophesize(Metric::class);
+        $metric = $this->getMockBuilder(Metric::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $metric->expects($this->never())
+            ->method('get')
+            ->with('violations');
 
         $object = new StableAbstractionsPrinciple();
 
-        $object->apply($metric->reveal());
-
-        $metric->get('violations')->shouldNotHaveBeenCalled();
+        $object->apply($metric);
     }
 
     /**
@@ -30,7 +34,7 @@ class StableAbstractionsPrincipleTest extends TestCase
      * @param float $instability
      * @param int $expectedViolationCount
      */
-    public function testItAddsViolationsIfAPackageIsEitherStableAndConcreteOrInstableAndAbstract($abstractness, $instability, $expectedViolationCount)
+    public function testItAddsViolationsIfAPackageIsEitherStableAndConcreteOrInstableAndAbstract($abstractness, $instability, $expectedViolationCount): void
     {
         $metric = new PackageMetric('package');
         $metric->set('violations', new Violations());

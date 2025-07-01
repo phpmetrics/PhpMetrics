@@ -1,9 +1,9 @@
 <?php
+
 namespace Hal\Application\Config;
 
 class Config
 {
-
     /**
      * @var array
      */

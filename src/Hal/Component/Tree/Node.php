@@ -11,7 +11,6 @@ namespace Hal\Component\Tree;
 
 class Node
 {
-
     /**
      * @var mixed
      */

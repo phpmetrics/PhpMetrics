@@ -1,5 +1,6 @@
 composer.lock
 vendor
+tooling/vendor
 .idea
 md5sums
 control
@@ -8,3 +9,5 @@ build/phpmetrics.dsc
 build/phpmetrics.deb
 build/phpmetrics.tar.gz
 build/phpmetrics.changes
+.php-cs-fixer.cache
+.phpunit.result.cache

@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric\Class_\Structural;
 
 use Hal\Component\Tree\GraphDeduplicated;
@@ -17,7 +18,6 @@ use PhpParser\NodeVisitorAbstract;
  */
 class LcomVisitor extends NodeVisitorAbstract
 {
-
     /**
      * @var Metrics
      */

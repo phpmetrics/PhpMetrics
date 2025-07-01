@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric\Class_\Structural;
 
 use Hal\Metric\Helper\MetricClassNameGenerator;
@@ -20,7 +21,6 @@ use PhpParser\NodeVisitorAbstract;
  */
 class SystemComplexityVisitor extends NodeVisitorAbstract
 {
-
     /**
      * @var Metrics
      */

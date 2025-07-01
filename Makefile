@@ -2,17 +2,13 @@
 
 include artifacts/Makefile
 
-# Run unit tests
+# Run unit tests
 test:
 	./vendor/bin/phpunit -c phpunit.xml.dist
 
 # Codesniffer check
 phpcs:
-	./vendor/bin/phpcs src/ tests/ --extensions=php -n
-
-# Codesniffer fix
-phpcbf:
-	./vendor/bin/phpcbf src/ tests/ --extensions=php -n
+	./tooling/vendor/bin/php-cs-fixer check src
 
 # Used for tag releasing
 # Don't use directly, use `make release` instead

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 class SearchTest extends TestCase
 {
 
-    public function testSearchCanReduceSearchByName()
+    public function testSearchCanReduceSearchByName(): void
     {
         $config = [
             'nameMatches' => 'awesome'
@@ -31,7 +31,7 @@ class SearchTest extends TestCase
         $this->assertTrue($search->matches($metric));
     }
 
-    public function testSearchCanReduceSearchByType()
+    public function testSearchCanReduceSearchByType(): void
     {
         $config = [
             'type' => 'class'
@@ -49,7 +49,7 @@ class SearchTest extends TestCase
     /**
      * @dataProvider providesMetrics
      */
-    public function testSearchCanReduceSearchByMetric($searchExpression, $value, $expected)
+    public function testSearchCanReduceSearchByMetric($searchExpression, $value, $expected): void
     {
         $config = [
             'ccn' => $searchExpression
@@ -66,7 +66,7 @@ class SearchTest extends TestCase
         $this->assertEquals($expected, $search->matches($metric));
     }
 
-    public function providesMetrics()
+    public static function providesMetrics()
     {
         return [
             ['>=2.5', 6, true],

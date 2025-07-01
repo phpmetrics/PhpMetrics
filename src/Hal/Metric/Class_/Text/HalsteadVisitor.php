@@ -23,7 +23,6 @@ use PhpParser\NodeVisitorAbstract;
  */
 class HalsteadVisitor extends NodeVisitorAbstract
 {
-
     /**
      * @var Metrics
      */
@@ -44,10 +43,10 @@ class HalsteadVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Function_ || $node instanceof Stmt\Trait_) {
             if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-                $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
+                $name = isset($node->namespacedName) ? (string) $node->namespacedName : 'anonymous@' . spl_object_hash($node);
                 $classOrFunction = $this->metrics->get($name);
             } else {
-                $classOrFunction = new FunctionMetric((string)$node->name);
+                $classOrFunction = new FunctionMetric((string) $node->name);
                 $this->metrics->attach($classOrFunction);
             }
 

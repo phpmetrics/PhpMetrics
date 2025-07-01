@@ -20,7 +20,7 @@ class ComplexityReportRegressionTest extends TestCase
     /**
      * @dataProvider tableHeaderDataProvider
      */
-    public function testComplexityHtmlReportContainsCorrectOrderOfTableColumns($junitEnabled, $expectedTableHeader)
+    public function testComplexityHtmlReportContainsCorrectOrderOfTableColumns($junitEnabled, $expectedTableHeader): void
     {
         $config = new Config();
         $output = new TestOutput();
@@ -54,7 +54,7 @@ class ComplexityReportRegressionTest extends TestCase
         $this->assertEquals($expectedTableHeader, $actualTableHeader);
     }
 
-    public function tableHeaderDataProvider()
+    public static function tableHeaderDataProvider()
     {
         $defaultTableHeader = [
             'Class',
@@ -80,12 +80,24 @@ class ComplexityReportRegressionTest extends TestCase
 
     private function getActualTableHeader($content)
     {
-        $tableHeaderColumnNodes = (new Crawler($content))
-            ->filterXPath('.//table[contains(concat(" ",normalize-space(@class)," ")," js-sort-table ")]/thead/tr')
-            ->children();
+        $dom = new \DOMDocument();
+        @$dom->loadHTML($content);
 
-        return array_map(function (DomNode $node) {
-            return $node->textContent;
-        }, iterator_to_array($tableHeaderColumnNodes));
+        $xpath = new \DOMXPath($dom);
+        $rows = $xpath->query('//table[contains(concat(" ",normalize-space(@class)," ")," js-sort-table ")]/thead/tr');
+
+        if ($rows->length === 0) {
+            return [];
+        }
+
+        $headerRow = $rows->item(0);
+        $headers = [];
+        foreach ($headerRow->childNodes as $node) {
+            if ($node->nodeType === XML_ELEMENT_NODE) {
+                $headers[] = $node->textContent;
+            }
+        }
+
+        return $headers;
     }
 }

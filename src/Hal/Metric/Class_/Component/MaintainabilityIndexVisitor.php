@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric\Class_\Component;
 
 use Hal\Metric\FunctionMetric;
@@ -27,7 +28,6 @@ use PhpParser\NodeVisitorAbstract;
  */
 class MaintainabilityIndexVisitor extends NodeVisitorAbstract
 {
-
     /**
      * @var Metrics
      */
@@ -47,7 +47,7 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-            $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
+            $name = isset($node->namespacedName) ? (string) $node->namespacedName : 'anonymous@' . spl_object_hash($node);
             $classOrFunction = $this->metrics->get($name);
 
             if (null === $lloc = $classOrFunction->get('lloc')) {
@@ -68,7 +68,8 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
 
             // maintainability index without comment
             $MIwoC = max(
-                (171
+                (
+                    171
                     - (5.2 * \log($volume))
                     - (0.23 * $ccn)
                     - (16.2 * \log($lloc))

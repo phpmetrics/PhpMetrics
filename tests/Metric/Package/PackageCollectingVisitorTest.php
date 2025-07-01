@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PackageCollectingVisitorTest extends TestCase
 {
-    public function testItUsesThePackageAndTheSubpackageAnnotationAsPackageName()
+    public function testItUsesThePackageAndTheSubpackageAnnotationAsPackageName(): void
     {
         $metrics = $this->analyzeCode(<<<'CODE'
 <?php
@@ -37,7 +37,7 @@ CODE
         $this->assertSame('PackA\\SubA\\', $metrics->get('PackageA\\ClassA')->get('package'));
     }
 
-    public function testItUsesThePackageAnnotationAsPackageNameIfNoSubpackageAnnotationExist()
+    public function testItUsesThePackageAnnotationAsPackageNameIfNoSubpackageAnnotationExist(): void
     {
         $metrics = $this->analyzeCode(<<<'CODE'
 <?php
@@ -56,7 +56,7 @@ CODE
         $this->assertSame('PackA\\', $metrics->get('PackageA\\ClassA')->get('package'));
     }
 
-    public function testItUsesTheNamespaceAsPackageNameIfNoPackageAnnotationAreAvailable()
+    public function testItUsesTheNamespaceAsPackageNameIfNoPackageAnnotationAreAvailable(): void
     {
         $metrics = $this->analyzeCode(<<<'CODE'
 <?php

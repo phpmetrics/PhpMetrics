@@ -20,7 +20,7 @@ class PackageDistanceTest extends TestCase
      * @param float|null $abstraction
      * @param float|null $expectedDistance
      */
-    public function testItCalculatesTheNormalizedDistanceOfAllPackages($instability, $abstraction, $expectedDistance)
+    public function testItCalculatesTheNormalizedDistanceOfAllPackages($instability, $abstraction, $expectedDistance): void
     {
         $metrics = new Metrics();
         $metrics->attach(new ClassMetric('Ignored'));

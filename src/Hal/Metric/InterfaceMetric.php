@@ -1,7 +1,5 @@
 <?php
+
 namespace Hal\Metric;
 
-class InterfaceMetric extends ClassMetric
-{
-
-}
+class InterfaceMetric extends ClassMetric {}

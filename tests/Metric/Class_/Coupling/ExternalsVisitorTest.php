@@ -16,7 +16,7 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testDependenciesAreFound($example, $classname, $expected)
+    public function testDependenciesAreFound($example, $classname, $expected): void
     {
         $metrics = new Metrics();
 
@@ -33,7 +33,7 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $metrics->get($classname)->get('externals'));
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         return [
             [ __DIR__ . '/../../examples/externals1.php', 'A', ['H', 'C', 'B', 'D']],
@@ -52,7 +52,7 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamplesAnnotation
      */
-    public function testDependenciesAreFoundEvenInAnnotation($example, $classname, $expected)
+    public function testDependenciesAreFoundEvenInAnnotation($example, $classname, $expected): void
     {
         $metrics = new Metrics();
 
@@ -69,7 +69,7 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $metrics->get($classname)->get('externals'));
     }
 
-    public function provideExamplesAnnotation()
+    public static function provideExamplesAnnotation()
     {
         return [
             [ __DIR__ . '/../../examples/annotations1.php', 'C\\A', ['A\\Route', 'B\\Json']],

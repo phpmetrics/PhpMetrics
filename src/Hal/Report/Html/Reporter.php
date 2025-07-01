@@ -79,9 +79,9 @@ class Reporter
         $consolidated = new Consolidated($metrics);
 
         // history of builds
-        $today = (object)[
+        $today = (object) [
             'avg' => $consolidated->getAvg(),
-            'sum' => $consolidated->getSum()
+            'sum' => $consolidated->getSum(),
         ];
         $files = glob($logDir . '/js/history-*.json');
         $next = count($files) + 1;
@@ -252,7 +252,7 @@ class Reporter
         }
 
         $oldValue = $last->$type->$key;
-        $newValue = isset($this->$type->$key) ? $this->$type->$key : 0;
+        $newValue = isset($this->sum->$type->$key) ? $this->sum->$type->$key : 0;
         if ($newValue > $oldValue) {
             $r = 'gt';
         } elseif ($newValue < $oldValue) {

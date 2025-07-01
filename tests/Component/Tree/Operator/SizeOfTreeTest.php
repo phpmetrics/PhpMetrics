@@ -13,12 +13,10 @@ use Hal\Component\Tree\Operator\SizeOfTree;
 class SizeOfTreeTest extends \PHPUnit\Framework\TestCase
 {
 
-    /**
-     * @expectedException  LogicException
-     * @expectedExceptionMessage Cannot get size informations of cyclic graph
-     */
-    public function testICannotGetInfoAboutGraphWhenItIsCyclic()
+    public function testICannotGetInfoAboutGraphWhenItIsCyclic(): void
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Cannot get size informations of cyclic graph');
         $graph = new Graph();
         $a = new Node('A');
         $b = new Node('B');
@@ -32,7 +30,7 @@ class SizeOfTreeTest extends \PHPUnit\Framework\TestCase
         $size = new SizeOfTree($graph);
     }
 
-    public function testICanGetDepthOfNode()
+    public function testICanGetDepthOfNode(): void
     {
         $graph = new Graph();
         $a = new Node('A');
@@ -58,7 +56,7 @@ class SizeOfTreeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $size->getDepthOfNode($e));
     }
 
-    public function testICanGetNbChildsOfNode()
+    public function testICanGetNbChildsOfNode(): void
     {
         $graph = new Graph();
         $a = new Node('A');
@@ -84,7 +82,7 @@ class SizeOfTreeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, $size->getNumberOfChilds($e));
     }
 
-    public function testICanGetInfoAboutAverageHeightOfTree()
+    public function testICanGetInfoAboutAverageHeightOfTree(): void
     {
         $graph = new Graph();
         $a = new Node('A');

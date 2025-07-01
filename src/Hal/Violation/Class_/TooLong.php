@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
@@ -7,7 +8,6 @@ use Hal\Violation\Violation;
 
 class TooLong implements Violation
 {
-
     /**
      * @inheritdoc
      */
@@ -46,12 +46,12 @@ class TooLong implements Violation
     public function getDescription()
     {
         return <<<EOT
-This class looks really long.
+            This class looks really long.
 
-* Class has {$this->metric->get('lloc')} logical lines of code
-* Class has {$this->metric->get('loc')} lines of code
+            * Class has {$this->metric->get('lloc')} logical lines of code
+            * Class has {$this->metric->get('loc')} lines of code
 
-Maybe your class should not exceed 200 lines of logical code
+            Maybe your class should not exceed 200 lines of logical code
 EOT;
     }
 }

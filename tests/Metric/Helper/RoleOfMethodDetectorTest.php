@@ -16,7 +16,7 @@ class RoleOfMethodDetectorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testICanDetectRoleOfMethod($expected, $code)
+    public function testICanDetectRoleOfMethod($expected, $code): void
     {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $stmt = $parser->parse($code);
@@ -35,7 +35,7 @@ class RoleOfMethodDetectorTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         $examples = [
             'getter' => ['getter', '<?php class A { function getName(){ return $this->name; } }  ?>'],

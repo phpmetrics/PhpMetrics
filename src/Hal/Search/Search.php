@@ -26,7 +26,7 @@ class Search
     public function __construct($name, array $config)
     {
         $this->name = $name;
-        $this->config = (object)$config;
+        $this->config = (object) $config;
     }
 
     /**
@@ -47,7 +47,7 @@ class Search
 
     public function matches(Metric $metric)
     {
-        $configAsArray = (array)$this->config;
+        $configAsArray = (array) $this->config;
 
         if (!empty($this->config->type)) {
             // Does the search concerns type ?
@@ -125,7 +125,7 @@ class Search
     {
         foreach ($instanceOf as $expectedInterface) {
             $expectedInterface = ltrim($expectedInterface, '\\');
-            if (!in_array($expectedInterface, (array)$metric->get('implements'))) {
+            if (!in_array($expectedInterface, (array) $metric->get('implements'))) {
                 return false;
             }
         }
@@ -136,7 +136,7 @@ class Search
     private function usesClasses(Metric $metric, $usesClasses)
     {
         foreach ($usesClasses as $expectedClass) {
-            foreach ((array)$metric->get('externals') as $use) {
+            foreach ((array) $metric->get('externals') as $use) {
                 if (preg_match('@' . $expectedClass . '@i', $use)) {
                     return true;
                 }

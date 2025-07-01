@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric;
 
 use Hal\Violation\Violation;
@@ -66,13 +67,13 @@ class Consolidated
         }
 
         // sums
-        $sum = (object)[
+        $sum = (object) [
             'loc' => 0,
             'cloc' => 0,
             'lloc' => 0,
             'nbMethods' => 0,
         ];
-        $avg = (object)[
+        $avg = (object) [
             'wmc' => [],
             'ccn' => [],
             'bugs' => [],
@@ -107,7 +108,7 @@ class Consolidated
 
         foreach ($avg as &$a) {
             if (count($a) > 0) {
-                $a = round(array_sum((array)$a) / count($a), 2);
+                $a = round(array_sum((array) $a) / count($a), 2);
             } else {
                 $a = 0;
             }
@@ -166,7 +167,7 @@ class Consolidated
                 $violations[$name]++;
             }
         }
-        $sum->violations = (object)$violations;
+        $sum->violations = (object) $violations;
 
         $this->avg = $avg;
         $this->sum = $sum;

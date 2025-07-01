@@ -16,7 +16,7 @@ class KanDefectVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $classname, $expected)
+    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $classname, $expected): void
     {
         $metrics = new Metrics();
 
@@ -33,7 +33,7 @@ class KanDefectVisitorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $metrics->get($classname)->get('kanDefect'));
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         return [
             [ __DIR__ . '/../../examples/kan1.php', 'A', .89],

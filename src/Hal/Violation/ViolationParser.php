@@ -9,7 +9,6 @@ use Hal\Violation\Search\SearchShouldNotBeFoundPrinciple;
 
 class ViolationParser
 {
-
     /**
      * @param Metrics $metrics
      * @return $this
@@ -29,7 +28,7 @@ class ViolationParser
         ];
 
         foreach ($metrics->all() as $metric) {
-            $metric->set('violations', new Violations);
+            $metric->set('violations', new Violations());
 
             foreach ($violations as $violation) {
                 $violation->apply($metric);

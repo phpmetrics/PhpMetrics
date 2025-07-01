@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Violation;
 
 use Hal\Metric\Metric;

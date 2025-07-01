@@ -2,6 +2,7 @@
 namespace Test\Hal\Metric\Class_\Structural;
 
 use Hal\Metric\Class_\Component\MaintainabilityIndexVisitor;
+use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
 
@@ -15,30 +16,16 @@ class MaintainabilityIndexVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($ccn, $lloc, $cloc, $volume, $mIwoC, $mi, $commentWeight)
+    public function testLackOfCohesionOfMethodsIsWellCalculated($ccn, $lloc, $cloc, $volume, $mIwoC, $mi, $commentWeight): void
     {
         $metrics = new Metrics();
-        $prophet = $this->prophesize('Hal\Metric\ClassMetric');
-        $prophet->getName()->willReturn('A');
-        $prophet->get('lloc')->willReturn($lloc);
-        $prophet->get('loc')->willReturn($lloc + $cloc);
-        $prophet->get('ccn')->willReturn($ccn);
-        $prophet->get('cloc')->willReturn($cloc);
-        $prophet->get('volume')->willReturn($volume);
-
-        // spy
-        $prophet->set('mIwoC', $mIwoC)->will(function () use ($prophet) {
-            return $prophet->reveal();
-        })->shouldBeCalled();
-        $prophet->set('mi', $mi)->will(function () use ($prophet) {
-            return $prophet->reveal();
-        })->shouldBeCalled();
-        $prophet->set('commentWeight', $commentWeight)->will(function () use ($prophet) {
-            return $prophet->reveal();
-        })->shouldBeCalled();
-
-        $class = $prophet->reveal();
-        $metrics->attach($class);
+        $classMetrics = new ClassMetric('A');
+        $classMetrics->set('lloc', $lloc);
+        $classMetrics->set('loc', $lloc + $cloc);
+        $classMetrics->set('ccn', $ccn);
+        $classMetrics->set('cloc', $cloc);
+        $classMetrics->set('volume', $volume);
+        $metrics->attach($classMetrics);
 
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new \PhpParser\NodeTraverser();
@@ -46,17 +33,22 @@ class MaintainabilityIndexVisitorTest extends \PHPUnit\Framework\TestCase
         $traverser->addVisitor(new MaintainabilityIndexVisitor($metrics));
 
         $code = <<<EOT
-<?php class A {
-    public function foo() {
-    
+    <?php class A {
+        public function foo() {
+
+        }
     }
-}
 EOT;
         $stmts = $parser->parse($code);
         $traverser->traverse($stmts);
+
+        // And now, mi, mIwoC and commentWeight should be set
+        $this->assertEquals($mi, $classMetrics->get('mi'));
+        $this->assertEquals($mIwoC, $classMetrics->get('mIwoC'));
+        $this->assertEquals($commentWeight, $classMetrics->get('commentWeight'));
     }
 
-    public function provideValues()
+    public static function provideValues()
     {
         return [
             //    CC    LLOC    CLOC        Volume      MIwoC      mi          commentWeight

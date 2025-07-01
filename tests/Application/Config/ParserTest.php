@@ -12,14 +12,14 @@ class ParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider providesExample
      */
-    public function testICanParseArguments($argv, $expected)
+    public function testICanParseArguments($argv, $expected): void
     {
         $parser = new Parser();
         $config = $parser->parse($argv);
         $this->assertEquals($expected, $config->all());
     }
 
-    public function providesExample()
+    public static function providesExample()
     {
         return [
             [

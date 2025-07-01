@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Report\Json;
 
 use Hal\Application\Config\Config;
@@ -7,7 +8,6 @@ use Hal\Metric\Metrics;
 
 class Reporter
 {
-
     /**
      * @var Config
      */

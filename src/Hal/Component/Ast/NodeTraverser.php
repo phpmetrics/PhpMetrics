@@ -1,4 +1,5 @@
 <?php
+
 /*
  * (c) Jean-François Lépine <https://twitter.com/Halleck45>
  *
@@ -21,6 +22,4 @@ if (PHP_VERSION_ID >= 70000) {
  * @see https://github.com/phpmetrics/PhpMetrics/issues/373
  */
 /** @noinspection PhpUndefinedClassInspection */
-class NodeTraverser extends ActualNodeTraverser
-{
-}
+class NodeTraverser extends ActualNodeTraverser {}

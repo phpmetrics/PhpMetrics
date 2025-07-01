@@ -53,12 +53,12 @@ class StableDependenciesPrinciple implements Violation
             return "$name ($instability)";
         }, array_keys($this->violatingInstabilities), $this->violatingInstabilities));
         return <<<EOT
-Packages should depend in the direction of stability.
+            Packages should depend in the direction of stability.
 
-This package is more stable ({$thisInstability}) than {$count} package(s) that it depends on.
-The packages that are more stable are
+            This package is more stable ({$thisInstability}) than {$count} package(s) that it depends on.
+            The packages that are more stable are
 
-* {$packages}
+            * {$packages}
 EOT;
     }
 }
