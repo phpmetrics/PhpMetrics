@@ -6,10 +6,6 @@ include artifacts/Makefile
 test:
 	./vendor/bin/phpunit -c phpunit.xml.dist
 
-# Codesniffer check
-phpcs:
-	./tooling/vendor/bin/php-cs-fixer check src
-
 # Compatibility check
 compatibility:
 	(docker run --rm -v `pwd`:/www --workdir=/www  php:5.6-cli find src -iname "*.php" -exec php -l {} \; |grep -v "Php7NodeTraverser.php" | grep -v "No syntax errors detected") && echo OK

@@ -99,48 +99,48 @@ class Validator
     public function help()
     {
         return <<<EOT
-            Usage:
+Usage:
 
-                phpmetrics [...options...] <directories>
+    phpmetrics [...options...] <directories>
 
-            Required:
+Required:
 
-                <directories>                     List of directories to parse, separated by a comma (,)
+    <directories>                     List of directories to parse, separated by a comma (,)
 
-            Optional:
+Optional:
 
-                --config=<file>                   Use a file for configuration. File can be a JSON, YAML or INI file.
-                --exclude=<directory>             List of directories to exclude, separated by a comma (,)
-                --extensions=<php,inc>            List of extensions to parse, separated by a comma (,)
-                --metrics                         Display list of available metrics
-                --report-html=<directory>         Folder where report HTML will be generated
-                --report-csv=<file>               File where report CSV will be generated
-                --report-json=<file>              File where report Json will be generated
-                --report-summary-json=<file>      File where the summary report Json will be generated
-                --report-violations=<file>        File where XML violations report will be generated
-                --git[=</path/to/git_binary>]     Perform analyses based on Git History (default binary path: "git")
-                --junit[=</path/to/junit.xml>]    Evaluates metrics according to JUnit logs
-                --quiet                           Quiet mode
-                --version                         Display current version
+    --config=<file>                   Use a file for configuration. File can be a JSON, YAML or INI file.
+    --exclude=<directory>             List of directories to exclude, separated by a comma (,)
+    --extensions=<php,inc>            List of extensions to parse, separated by a comma (,)
+    --metrics                         Display list of available metrics
+    --report-html=<directory>         Folder where report HTML will be generated
+    --report-csv=<file>               File where report CSV will be generated
+    --report-json=<file>              File where report Json will be generated
+    --report-summary-json=<file>      File where the summary report Json will be generated
+    --report-violations=<file>        File where XML violations report will be generated
+    --git[=</path/to/git_binary>]     Perform analyses based on Git History (default binary path: "git")
+    --junit[=</path/to/junit.xml>]    Evaluates metrics according to JUnit logs
+    --quiet                           Quiet mode
+    --version                         Display current version
 
-            Examples:
+Examples:
 
-                phpmetrics --report-html="./report" ./src
+    phpmetrics --report-html="./report" ./src
 
-                    Analyze the "./src" directory and generate a HTML report on the "./report" folder
+        Analyze the "./src" directory and generate a HTML report on the "./report" folder
 
 
-                phpmetrics --report-violations="./build/violations.xml" ./src,./lib
+    phpmetrics --report-violations="./build/violations.xml" ./src,./lib
 
-                    Analyze the "./src" and "./lib" directories, and generate the "./build/violations.xml" file. This file could
-                    be read by any Continuous Integration Platform, and follows the "PMD Violation" standards.
+        Analyze the "./src" and "./lib" directories, and generate the "./build/violations.xml" file. This file could
+        be read by any Continuous Integration Platform, and follows the "PMD Violation" standards.
 EOT;
     }
 
     public function metrics()
     {
         $help = <<<EOT
-            Main metrics are:
+Main metrics are:
 EOT;
 
         $registry = new Registry();
