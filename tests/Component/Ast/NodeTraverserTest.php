@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class NodeTraverserTest extends TestCase
 {
-    public function testItCanBeInstantiated()
+    public function testItCanBeInstantiated(): void
     {
         $this->assertInstanceOf(BaseTraverser::class, new NodeTraverser());
     }

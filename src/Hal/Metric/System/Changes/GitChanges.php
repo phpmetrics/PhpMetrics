@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric\System\Changes;
 
 use Hal\Application\Config\Config;
@@ -9,7 +10,6 @@ use Hal\Metric\ProjectMetric;
 
 class GitChanges
 {
-
     /**
      * @var array
      */

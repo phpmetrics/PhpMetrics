@@ -1,8 +1,9 @@
 <?php
+
 namespace Hal\Metric\Class_\Complexity;
 
+use Hal\Component\Ast\NodeTyper;
 use Hal\Component\Reflected\Method;
-use Hal\Metric\Helper\MetricClassNameGenerator;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -33,11 +34,8 @@ class KanDefectVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_
-            || $node instanceof Stmt\Interface_
-            || $node instanceof Stmt\Trait_
-        ) {
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+        if (NodeTyper::isOrganizedStructure($node)) {
+            $class = $this->metrics->get(getNameOfNode($node));
 
             $select = $while = $if = 0;
 

@@ -14,7 +14,6 @@ namespace Hal\Component\Output;
  */
 class ProgressBar
 {
-
     /**
      * @var Output
      */

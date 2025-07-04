@@ -1,27 +1,33 @@
 <?php
 namespace Test\Hal\Metric\Class_\Coupling;
 
+use Hal\Component\Ast\ParserFactoryBridge;
+use Hal\Component\Ast\ParserTraverserVisitorsAssigner;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Complexity\CyclomaticComplexityVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideExamplesForCcn
      */
-    public function testCcnOfClassesIsWellCalculated($example, $classname, $expectedCcn)
+    #[DataProvider('provideExamplesForCcn')]
+    public function testCcnOfClassesIsWellCalculated($example, $classname, $expectedCcn): void
     {
         $metrics = new Metrics();
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactoryBridge())->create();
         $traverser = new NodeTraverser();
-        $traverser->addVisitor(new NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
+        (new ParserTraverserVisitorsAssigner())->assign($traverser, [
+            new NameResolver(),
+            new ClassEnumVisitor($metrics),
+            new CyclomaticComplexityVisitor($metrics),
+        ]);
 
         $code = file_get_contents($example);
         $stmts = $parser->parse($code);
@@ -33,15 +39,18 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamplesForWmc
      */
-    public function testWeightedMethodCountOfClassesIsWellCalculated($example, $classname, $expectedWmc)
+    #[DataProvider('provideExamplesForWmc')]
+    public function testWeightedMethodCountOfClassesIsWellCalculated($example, $classname, $expectedWmc): void
     {
         $metrics = new Metrics();
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactoryBridge)->create();
         $traverser = new NodeTraverser();
-        $traverser->addVisitor(new NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
+        (new ParserTraverserVisitorsAssigner())->assign($traverser, [
+            new NameResolver(),
+            new ClassEnumVisitor($metrics),
+            new CyclomaticComplexityVisitor($metrics),
+        ]);
 
         $code = file_get_contents($example);
         $stmts = $parser->parse($code);
@@ -53,15 +62,18 @@ class CyclomaticComplexityVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamplesForMaxCc
      */
-    public function testMaximalCyclomaticComplexityOfMethodsIsWellCalculated($example, $classname, $expectedCcnMethodMax)
+    #[DataProvider('provideExamplesForMaxCc')]
+    public function testMaximalCyclomaticComplexityOfMethodsIsWellCalculated($example, $classname, $expectedCcnMethodMax): void
     {
         $metrics = new Metrics();
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactoryBridge)->create();
         $traverser = new NodeTraverser();
-        $traverser->addVisitor(new NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
+        (new ParserTraverserVisitorsAssigner())->assign($traverser, [
+            new NameResolver(),
+            new ClassEnumVisitor($metrics),
+            new CyclomaticComplexityVisitor($metrics),
+        ]);
 
         $code = file_get_contents($example);
         $stmts = $parser->parse($code);

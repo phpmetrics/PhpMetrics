@@ -1,10 +1,12 @@
 <?php
 namespace Test\Hal\Metric\Helper;
 
+use Hal\Component\Ast\ParserFactoryBridge;
 use Hal\Metric\Helper\RoleOfMethodDetector;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @group method
@@ -16,9 +18,10 @@ class RoleOfMethodDetectorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testICanDetectRoleOfMethod($expected, $code)
+    #[DataProvider('provideExamples')]
+    public function testICanDetectRoleOfMethod($expected, $code): void
     {
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactoryBridge())->create();
         $stmt = $parser->parse($code);
 
         $helper = new RoleOfMethodDetector();
@@ -35,7 +38,7 @@ class RoleOfMethodDetectorTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         $examples = [
             'getter' => ['getter', '<?php class A { function getName(){ return $this->name; } }  ?>'],

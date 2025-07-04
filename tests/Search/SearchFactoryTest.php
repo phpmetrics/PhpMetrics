@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 class SearchFactoryTest extends TestCase
 {
 
-    public function testIShoulBeAbleToFactorySearches()
+    public function testIShoulBeAbleToFactorySearches(): void
     {
         $config = [
             'search1' => [

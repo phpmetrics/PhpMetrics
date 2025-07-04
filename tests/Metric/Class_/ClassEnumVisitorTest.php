@@ -1,11 +1,13 @@
 <?php
 namespace Test\Hal\Metric\Class_;
 
+use Hal\Component\Ast\ParserFactoryBridge;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Metrics;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @group class
@@ -15,6 +17,7 @@ class ClassEnumVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
+    #[DataProvider('provideExamples')]
     public function testMethodsAreFoundAndCountedAccordingTheirRole(
         $example,
         $classname,
@@ -22,7 +25,7 @@ class ClassEnumVisitorTest extends \PHPUnit\Framework\TestCase
         $nbMethodsPrivate,
         $nbMethodsPublic,
         $nbMethodsIncludingGettersSetters
-    ) {
+    ): void {
         $code = file_get_contents($example);
         $metrics = $this->analyzeCode($code);
 
@@ -62,7 +65,7 @@ class ClassEnumVisitorTest extends \PHPUnit\Framework\TestCase
     private function analyzeCode($code)
     {
         $metrics = new Metrics();
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactoryBridge())->create();
         $traverser = new NodeTraverser();
         $traverser->addVisitor(new NameResolver());
         $traverser->addVisitor(new ClassEnumVisitor($metrics));
@@ -73,7 +76,7 @@ class ClassEnumVisitorTest extends \PHPUnit\Framework\TestCase
         return $metrics;
     }
 
-    public function testAnonymousClassIsHandledCorrectly()
+    public function testAnonymousClassIsHandledCorrectly(): void
     {
         $code = '<?php new class {};';
         $metrics = $this->analyzeCode($code);
@@ -84,7 +87,7 @@ class ClassEnumVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @link https://github.com/phpmetrics/PhpMetrics/issues/238
      */
-    public function testDynamicAttributeClassIsHandledCorrectly()
+    public function testDynamicAttributeClassIsHandledCorrectly(): void
     {
         $code = '
 class A {
@@ -105,7 +108,7 @@ class A {
     /**
      * @link https://github.com/phpmetrics/PhpMetrics/issues/238#issuecomment-292466274
      */
-    public function testDynamicAttributeClassIsHandledCorrectly2()
+    public function testDynamicAttributeClassIsHandledCorrectly2(): void
     {
         $code = '<?php
 namespace Blackprism\CouchbaseODM\Observer;
@@ -130,28 +133,28 @@ interface NotifyPropertyChangedInterface
         $this->assertInstanceOf(Metrics::class, $metrics);
     }
 
-    public function testItDoesNotMarkClassesAsAbstract()
+    public function testItDoesNotMarkClassesAsAbstract(): void
     {
         $code = '<?php class Foo {}';
         $metrics = $this->analyzeCode($code);
         $this->assertFalse($metrics->get('Foo')->get('abstract'));
     }
 
-    public function testItMarksAbstractClassesAsAbstract()
+    public function testItMarksAbstractClassesAsAbstract(): void
     {
         $code = '<?php abstract class Foo {}';
         $metrics = $this->analyzeCode($code);
         $this->assertTrue($metrics->get('Foo')->get('abstract'));
     }
 
-    public function testItMarksInterfacesAsAbstract()
+    public function testItMarksInterfacesAsAbstract(): void
     {
         $code = '<?php interface Foo {}';
         $metrics = $this->analyzeCode($code);
         $this->assertTrue($metrics->get('Foo')->get('abstract'));
     }
 
-    public function testItMarksTraitsAsAbstract()
+    public function testItMarksTraitsAsAbstract(): void
     {
         $code = '<?php trait Foo {}';
         $metrics = $this->analyzeCode($code);

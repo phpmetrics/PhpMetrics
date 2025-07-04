@@ -1,6 +1,8 @@
 <?php
+
 namespace Hal\Metric\Class_\Component;
 
+use Hal\Component\Ast\NodeTyper;
 use Hal\Metric\FunctionMetric;
 use Hal\Metric\Metrics;
 use Hoa\Ruler\Model\Bag\Scalar;
@@ -27,7 +29,6 @@ use PhpParser\NodeVisitorAbstract;
  */
 class MaintainabilityIndexVisitor extends NodeVisitorAbstract
 {
-
     /**
      * @var Metrics
      */
@@ -46,9 +47,13 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-            $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
+        if (NodeTyper::isOrganizedLogicalClassStructure($node)) {
+            $name = getNameOfNode($node);
             $classOrFunction = $this->metrics->get($name);
+
+            if(null === $classOrFunction) {
+                throw new \LogicException('class or function ' . $name . ' not found in metrics');
+            }
 
             if (null === $lloc = $classOrFunction->get('lloc')) {
                 throw new \LogicException('please enable length (lloc) visitor first');
@@ -68,7 +73,8 @@ class MaintainabilityIndexVisitor extends NodeVisitorAbstract
 
             // maintainability index without comment
             $MIwoC = max(
-                (171
+                (
+                    171
                     - (5.2 * \log($volume))
                     - (0.23 * $ccn)
                     - (16.2 * \log($lloc))

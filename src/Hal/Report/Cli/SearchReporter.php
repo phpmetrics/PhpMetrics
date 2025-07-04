@@ -63,7 +63,7 @@ class SearchReporter
         );
 
         $config = $this->config->get('searches')->get($searchName)->getConfig();
-        if(!empty($foundSearch) && !empty($config->failIfFound) && true === $config->failIfFound) {
+        if (!empty($foundSearch) && !empty($config->failIfFound) && true === $config->failIfFound) {
             $title = sprintf(
                 '<error>[ERR] Found %d occurrences for search "%s"</error>',
                 sizeof($foundSearch),

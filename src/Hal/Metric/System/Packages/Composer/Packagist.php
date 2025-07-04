@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Metric\System\Packages\Composer;
 
 /**
@@ -6,14 +7,13 @@ namespace Hal\Metric\System\Packages\Composer;
  */
 class Packagist
 {
-
     /**
      * @param $package
      * @return \StdClass
      */
     public function get($package)
     {
-        $response = new \StdClass;
+        $response = new \StdClass();
         $response->latest = null;
         $response->license = [];
         $response->homepage = null;
@@ -56,7 +56,7 @@ class Packagist
 
         // get latest version
         $latest = '0.0.0';
-        foreach ((array)$json->package->versions as $version => $datas) {
+        foreach ((array) $json->package->versions as $version => $datas) {
             if ($version[0] === 'v') {
                 $version = substr($version, 1);
             }
@@ -67,7 +67,7 @@ class Packagist
                 $latest = $version;
                 $response->name = $package;
                 $response->latest = $version;
-                $response->license = (array)$datas->license;
+                $response->license = (array) $datas->license;
                 $response->homepage = $datas->homepage;
                 $response->time = $datas->time;
                 $response->zip = $datas->dist->url;

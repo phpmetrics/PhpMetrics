@@ -51,9 +51,7 @@ class Registry
         'pageRank' => "PageRank for component",
     ];
 
-    public function allForProject()
-    {
-    }
+    public function allForProject() {}
 
     public function allForStructures()
     {

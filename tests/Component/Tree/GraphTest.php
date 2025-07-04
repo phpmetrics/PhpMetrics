@@ -10,7 +10,7 @@ use Hal\Component\Tree\Node;
  */
 class GraphTest extends \PHPUnit\Framework\TestCase
 {
-    public function testICanAddEdge()
+    public function testICanAddEdge(): void
     {
         $graph = new Graph();
         $a = new Node('node_a');
@@ -27,11 +27,9 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($b, $a->getEdges()[0]->getTo());
     }
 
-    /**
-     * @expectedException \LogicException
-     */
-    public function testICanAddEdgeWithUnexistantFromNode()
+    public function testICanAddEdgeWithUnexistantFromNode(): void
     {
+        $this->expectException(\LogicException::class);
         $graph = new Graph();
         $a = new Node('A');
         $b = new Node('B');
@@ -40,11 +38,9 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         $graph->addEdge($a, $b);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
-    public function testICanAddEdgeWithUnexistantToNode()
+    public function testICanAddEdgeWithUnexistantToNode(): void
     {
+        $this->expectException(\LogicException::class);
         $graph = new Graph();
         $a = new Node('A');
         $b = new Node('B');
@@ -53,18 +49,16 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         $graph->addEdge($a, $b);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
-    public function testICanInsertSameNodeTwice()
+    public function testICanInsertSameNodeTwice(): void
     {
+        $this->expectException(\LogicException::class);
         $graph = new Graph();
         $node = new Node('A');
         $graph->insert($node);
         $graph->insert($node);
     }
 
-    public function testICanListEdges()
+    public function testICanListEdges(): void
     {
         $graph = new Graph();
         $a = new Node('A');
@@ -77,7 +71,7 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $graph->getEdges());
     }
 
-    public function testEdgeIsAddedToFromAndToNode()
+    public function testEdgeIsAddedToFromAndToNode(): void
     {
         $graph = new Graph();
         $a = new Node('A');
@@ -96,7 +90,7 @@ class GraphTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testICanListRootNodes()
+    public function testICanListRootNodes(): void
     {
         $graph = new Graph();
         $a = new Node('A'); // root

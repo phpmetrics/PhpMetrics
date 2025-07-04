@@ -1,6 +1,8 @@
 <?php
+
 namespace Hal\Metric\Class_\Text;
 
+use Hal\Component\Ast\NodeTyper;
 use Hal\Metric\FunctionMetric;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
@@ -13,7 +15,6 @@ use PhpParser\PrettyPrinter;
  */
 class LengthVisitor extends NodeVisitorAbstract
 {
-
     /**
      * @var Metrics
      */
@@ -32,12 +33,17 @@ class LengthVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Function_ || $node instanceof Stmt\Trait_) {
-            if ($node instanceof Stmt\Class_ || $node instanceof Stmt\Trait_) {
-                $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
+        if (
+            NodeTyper::isOrganizedLogicalClassStructure($node)
+            || $node instanceof Stmt\Function_
+        ) {
+            if (
+                NodeTyper::isOrganizedLogicalClassStructure($node)
+            ) {
+                $name = getNameOfNode($node);
                 $classOrFunction = $this->metrics->get($name);
             } else {
-                $classOrFunction = new FunctionMetric((string)$node->name);
+                $classOrFunction = new FunctionMetric((string) $node->name);
                 $this->metrics->attach($classOrFunction);
             }
 

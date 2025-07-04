@@ -2,7 +2,7 @@
 
 namespace Hal\Metric\Class_\Complexity;
 
-use Hal\Metric\Helper\MetricClassNameGenerator;
+use Hal\Component\Ast\NodeTyper;
 use Hal\Metric\Helper\RoleOfMethodDetector;
 use Hal\Metric\Metrics;
 use PhpParser\Node;
@@ -53,11 +53,11 @@ class CyclomaticComplexityVisitor extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_
-            || $node instanceof Stmt\Interface_
-            || $node instanceof Stmt\Trait_
-        ) {
-            $class = $this->metrics->get(MetricClassNameGenerator::getName($node));
+        if (NodeTyper::isOrganizedStructure($node)) {
+            $class = $this->metrics->get(getNameOfNode($node));
+            if ($class === null) {
+                throw new \RuntimeException('Class metric not found for ' . getNameOfNode($node));
+            }
 
             $ccn = 1;
             $wmc = 0;

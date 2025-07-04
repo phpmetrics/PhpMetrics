@@ -10,7 +10,6 @@ use Hal\Metric\Metrics;
  */
 class PageRank
 {
-
     /**
      * @param Metrics $metrics
      */

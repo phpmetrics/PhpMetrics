@@ -1,8 +1,11 @@
 <?php
+
 namespace Hal\Application;
 
 use Hal\Application\Config\Config;
 use Hal\Component\Ast\NodeTraverser;
+use Hal\Component\Ast\ParserFactoryBridge;
+use Hal\Component\Ast\ParserTraverserVisitorsAssigner;
 use Hal\Component\Issue\Issuer;
 use Hal\Component\Output\Output;
 use Hal\Component\Output\ProgressBar;
@@ -28,6 +31,7 @@ use Hal\Metric\System\Coupling\PageRank;
 use Hal\Metric\System\Packages\Composer\Composer;
 use Hal\Metric\System\UnitTesting\UnitTesting;
 use PhpParser\Error;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 
 /**
@@ -35,7 +39,6 @@ use PhpParser\ParserFactory;
  */
 class Analyze
 {
-
     /**
      * @var Output
      */
@@ -77,20 +80,26 @@ class Analyze
         };
 
         // prepare parser
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $traverser = new NodeTraverser(false, $whenToStop);
-        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
-        $traverser->addVisitor(new ExternalsVisitor($metrics));
-        $traverser->addVisitor(new LcomVisitor($metrics));
-        $traverser->addVisitor(new HalsteadVisitor($metrics));
-        $traverser->addVisitor(new LengthVisitor($metrics));
-        $traverser->addVisitor(new CyclomaticComplexityVisitor($metrics));
-        $traverser->addVisitor(new MaintainabilityIndexVisitor($metrics));
-        $traverser->addVisitor(new KanDefectVisitor($metrics));
-        $traverser->addVisitor(new SystemComplexityVisitor($metrics));
-        $traverser->addVisitor(new PackageCollectingVisitor($metrics));
+        $parser = (new ParserFactoryBridge())->create();
+        $traverser = new NodeTraverser();
+
+        (new ParserTraverserVisitorsAssigner())->assign(
+            $traverser,
+            [
+                new NameResolver(),
+                new ClassEnumVisitor($metrics),
+                new CyclomaticComplexityVisitor($metrics),
+                new ExternalsVisitor($metrics),
+                new LcomVisitor($metrics),
+                new HalsteadVisitor($metrics),
+                new LengthVisitor($metrics),
+                new CyclomaticComplexityVisitor($metrics),
+                new MaintainabilityIndexVisitor($metrics),
+                new KanDefectVisitor($metrics),
+                new SystemComplexityVisitor($metrics),
+                new PackageCollectingVisitor($metrics)
+            ]
+        );
 
         // create a new progress bar (50 units)
         $progress = new ProgressBar($this->output, count($files));

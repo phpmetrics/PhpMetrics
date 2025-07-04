@@ -1,9 +1,13 @@
 <?php
 namespace Test\Hal\Metric\Class_\Structural;
 
+use Hal\Component\Ast\ParserFactoryBridge;
+use Hal\Component\Ast\ParserTraverserVisitorsAssigner;
 use Hal\Metric\Class_\Component\MaintainabilityIndexVisitor;
+use Hal\Metric\ClassMetric;
 use Hal\Metric\Metrics;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @group metric
@@ -15,48 +19,42 @@ class MaintainabilityIndexVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($ccn, $lloc, $cloc, $volume, $mIwoC, $mi, $commentWeight)
+    #[DataProvider('provideValues')]
+    public function testLackOfCohesionOfMethodsIsWellCalculated($ccn, $lloc, $cloc, $volume, $mIwoC, $mi, $commentWeight): void
     {
         $metrics = new Metrics();
-        $prophet = $this->prophesize('Hal\Metric\ClassMetric');
-        $prophet->getName()->willReturn('A');
-        $prophet->get('lloc')->willReturn($lloc);
-        $prophet->get('loc')->willReturn($lloc + $cloc);
-        $prophet->get('ccn')->willReturn($ccn);
-        $prophet->get('cloc')->willReturn($cloc);
-        $prophet->get('volume')->willReturn($volume);
+        $classMetrics = new ClassMetric('A');
+        $classMetrics->set('lloc', $lloc);
+        $classMetrics->set('loc', $lloc + $cloc);
+        $classMetrics->set('ccn', $ccn);
+        $classMetrics->set('cloc', $cloc);
+        $classMetrics->set('volume', $volume);
+        $metrics->attach($classMetrics);
 
-        // spy
-        $prophet->set('mIwoC', $mIwoC)->will(function () use ($prophet) {
-            return $prophet->reveal();
-        })->shouldBeCalled();
-        $prophet->set('mi', $mi)->will(function () use ($prophet) {
-            return $prophet->reveal();
-        })->shouldBeCalled();
-        $prophet->set('commentWeight', $commentWeight)->will(function () use ($prophet) {
-            return $prophet->reveal();
-        })->shouldBeCalled();
-
-        $class = $prophet->reveal();
-        $metrics->attach($class);
-
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactoryBridge())->create();
         $traverser = new \PhpParser\NodeTraverser();
-        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
-        $traverser->addVisitor(new MaintainabilityIndexVisitor($metrics));
+        (new ParserTraverserVisitorsAssigner())->assign($traverser, [
+            new \PhpParser\NodeVisitor\NameResolver(),
+            new MaintainabilityIndexVisitor($metrics)
+        ]);
 
         $code = <<<EOT
-<?php class A {
-    public function foo() {
-    
+    <?php class A {
+        public function foo() {
+
+        }
     }
-}
 EOT;
         $stmts = $parser->parse($code);
         $traverser->traverse($stmts);
+
+        // And now, mi, mIwoC and commentWeight should be set
+        $this->assertEquals($mi, $classMetrics->get('mi'));
+        $this->assertEquals($mIwoC, $classMetrics->get('mIwoC'));
+        $this->assertEquals($commentWeight, $classMetrics->get('commentWeight'));
     }
 
-    public function provideValues()
+    public static function provideValues()
     {
         return [
             //    CC    LLOC    CLOC        Volume      MIwoC      mi          commentWeight

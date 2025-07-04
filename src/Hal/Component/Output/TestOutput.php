@@ -47,9 +47,7 @@ class TestOutput implements Output
     /**
      * @inheritdoc
      */
-    public function clearln()
-    {
-    }
+    public function clearln() {}
 
     /**
      * @inheritdoc

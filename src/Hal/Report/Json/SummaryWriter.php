@@ -56,7 +56,7 @@ class SummaryWriter extends SummaryProvider
                 'error' => $this->sum->violations->error,
                 'warning' => $this->sum->violations->warning,
                 'information' => $this->sum->violations->information,
-            ]
+            ],
         ];
     }
 }

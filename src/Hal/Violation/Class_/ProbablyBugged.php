@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Violation\Class_;
 
 use Hal\Metric\ClassMetric;
@@ -7,7 +8,6 @@ use Hal\Violation\Violation;
 
 class ProbablyBugged implements Violation
 {
-
     /**
      * @inheritdoc
      */
@@ -48,13 +48,13 @@ class ProbablyBugged implements Violation
     public function getDescription()
     {
         return <<<EOT
-This component contains in theory {$this->metric->get('bugs')} bugs.
+            This component contains in theory {$this->metric->get('bugs')} bugs.
 
-* Calculation is based on number of operators, operands, cyclomatic complexity
-* See more details at https://en.wikipedia.org/wiki/Halstead_complexity_measures
-* {$this->metric->get('numberOfUnitTests')} testsuites has dependency to this class.
+            * Calculation is based on number of operators, operands, cyclomatic complexity
+            * See more details at https://en.wikipedia.org/wiki/Halstead_complexity_measures
+            * {$this->metric->get('numberOfUnitTests')} testsuites has dependency to this class.
 
-Maybe you should check your unit tests for this class.
+            Maybe you should check your unit tests for this class.
 EOT;
     }
 }

@@ -1,10 +1,14 @@
 <?php
 namespace Test\Hal\Metric\Class_\Coupling;
 
+use Hal\Component\Ast\ParserFactoryBridge;
+use Hal\Component\Ast\ParserTraverserVisitorsAssigner;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Complexity\KanDefectVisitor;
 use Hal\Metric\Metrics;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @group metric
@@ -16,15 +20,18 @@ class KanDefectVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $classname, $expected)
+    #[DataProvider('provideExamples')]
+    public function testLackOfCohesionOfMethodsIsWellCalculated($example, $classname, $expected): void
     {
         $metrics = new Metrics();
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactoryBridge())->create();
         $traverser = new \PhpParser\NodeTraverser();
-        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new KanDefectVisitor($metrics));
+        (new ParserTraverserVisitorsAssigner())->assign($traverser, [
+            new NameResolver(),
+            new ClassEnumVisitor($metrics),
+            new KanDefectVisitor($metrics)
+        ]);
 
         $code = file_get_contents($example);
         $stmts = $parser->parse($code);
@@ -33,7 +40,7 @@ class KanDefectVisitorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $metrics->get($classname)->get('kanDefect'));
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         return [
             [ __DIR__ . '/../../examples/kan1.php', 'A', .89],

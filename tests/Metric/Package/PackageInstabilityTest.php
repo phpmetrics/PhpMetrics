@@ -13,7 +13,7 @@ use \PHPUnit\Framework\TestCase;
  */
 class PackageInstabilityTest extends TestCase
 {
-    public function testItCalculatesTheInstabilityOfEachPackage()
+    public function testItCalculatesTheInstabilityOfEachPackage(): void
     {
         $packageA = new PackageMetric('PackageA\\');
         $packageB = new PackageMetric('PackageB\\');
@@ -37,7 +37,7 @@ class PackageInstabilityTest extends TestCase
         $this->assertSame(0.0, $packageC->getInstability());
     }
 
-    public function testItStoresTheInstabilityOfTheDependentPackagesOfEachPackage()
+    public function testItStoresTheInstabilityOfTheDependentPackagesOfEachPackage(): void
     {
         $packageA = new PackageMetric('PackageA\\');
         $packageB = new PackageMetric('PackageB\\');
@@ -61,7 +61,7 @@ class PackageInstabilityTest extends TestCase
         $this->assertSame([], $packageC->getDependentInstabilities());
     }
 
-    public function testItDoesNotCrashIfOnePackageHasNoIncomingAndNoOutgoingDependencies()
+    public function testItDoesNotCrashIfOnePackageHasNoIncomingAndNoOutgoingDependencies(): void
     {
         $package = new PackageMetric('PackageA\\');
 

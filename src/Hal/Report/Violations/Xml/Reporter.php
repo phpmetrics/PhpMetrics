@@ -1,4 +1,5 @@
 <?php
+
 namespace Hal\Report\Violations\Xml;
 
 use Hal\Application\Config\Config;
@@ -8,7 +9,6 @@ use Hal\Violation\Violation;
 
 class Reporter
 {
-
     /**
      * @var Config
      */
@@ -32,7 +32,7 @@ class Reporter
 
     public function generate(Metrics $metrics)
     {
-        if(!class_exists('\DOMDocument')) {
+        if (!class_exists('\DOMDocument')) {
             $this->output->writeln('<error>The DOM extension is not available. Please install it if you want to use the Xml Violations report.</error>');
             return;
         }

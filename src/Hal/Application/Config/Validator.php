@@ -37,8 +37,10 @@ class Validator
 
         // excluded directories
         if (!$config->has('exclude')) {
-            $config->set('exclude',
-                'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec');
+            $config->set(
+                'exclude',
+                'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec'
+            );
         }
 
         // retro-compatibility with excludes as string in config files
@@ -61,7 +63,18 @@ class Validator
         if (!$config->has('composer')) {
             $config->set('composer', true);
         }
-        $config->set('composer', filter_var($config->get('composer'), FILTER_VALIDATE_BOOLEAN));
+
+        if (function_exists('filter_var')) {
+            $config->set('composer', filter_var($config->get('composer'), FILTER_VALIDATE_BOOLEAN));
+        } else {
+            // When PHP is not compiled with the filter extension, we need to do it manually
+            $bool = $config->get('composer');
+            if( is_string($bool) ) {
+                $bool = strtolower($bool);
+                $bool = in_array($bool, ['true', '1', 'yes', 'on'], true);
+            }
+            $config->set('composer', (bool) $bool);
+        }
 
         // Search
         $validator = new SearchesValidator();
@@ -121,7 +134,6 @@ Examples:
 
         Analyze the "./src" and "./lib" directories, and generate the "./build/violations.xml" file. This file could
         be read by any Continuous Integration Platform, and follows the "PMD Violation" standards.
-
 EOT;
     }
 
@@ -129,7 +141,6 @@ EOT;
     {
         $help = <<<EOT
 Main metrics are:
-
 EOT;
 
         $registry = new Registry();

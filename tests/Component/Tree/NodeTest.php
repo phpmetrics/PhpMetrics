@@ -10,7 +10,7 @@ use Hal\Component\Tree\Node;
  */
 class NodeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testICanWorkWithNode()
+    public function testICanWorkWithNode(): void
     {
         $node = new Node('A');
         $to = new Node('B');

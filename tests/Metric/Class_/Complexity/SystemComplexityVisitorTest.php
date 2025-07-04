@@ -1,10 +1,14 @@
 <?php
 namespace Test\Hal\Metric\Class_\Coupling;
 
+use Hal\Component\Ast\ParserFactoryBridge;
+use Hal\Component\Ast\ParserTraverserVisitorsAssigner;
 use Hal\Metric\Class_\ClassEnumVisitor;
 use Hal\Metric\Class_\Structural\SystemComplexityVisitor;
 use Hal\Metric\Metrics;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @group metric
@@ -16,15 +20,18 @@ class SystemComplexityVisitorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideExamples
      */
-    public function testLackOfCohesionOfMethodsIsWellCalculated($filename, $class, $rdc, $rsc, $rsysc)
+    #[DataProvider('provideExamples')]
+    public function testLackOfCohesionOfMethodsIsWellCalculated($filename, $class, $rdc, $rsc, $rsysc): void
     {
         $metrics = new Metrics();
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactoryBridge())->create();
         $traverser = new \PhpParser\NodeTraverser();
-        $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
-        $traverser->addVisitor(new ClassEnumVisitor($metrics));
-        $traverser->addVisitor(new SystemComplexityVisitor($metrics));
+        (new ParserTraverserVisitorsAssigner())->assign($traverser, [
+            new NameResolver(),
+            new ClassEnumVisitor($metrics),
+            new SystemComplexityVisitor($metrics),
+        ]);
 
         $code = file_get_contents($filename);
         $stmts = $parser->parse($code);
@@ -35,7 +42,7 @@ class SystemComplexityVisitorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($rsysc, $metrics->get('A')->get('relativeSystemComplexity'));
     }
 
-    public function provideExamples()
+    public static function provideExamples()
     {
         return [
             [ __DIR__ . '/../../examples/systemcomplexity1.php', 'A', 0.5, 36.0, 36.5],

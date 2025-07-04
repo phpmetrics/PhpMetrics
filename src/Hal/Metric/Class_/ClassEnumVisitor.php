@@ -1,6 +1,8 @@
 <?php
+
 namespace Hal\Metric\Class_;
 
+use Hal\Component\Ast\NodeTyper;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\FunctionMetric;
 use Hal\Metric\Helper\RoleOfMethodDetector;
@@ -28,20 +30,34 @@ class ClassEnumVisitor extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Stmt\Class_
-            || $node instanceof Stmt\Interface_
-            || $node instanceof Stmt\Trait_
+        if (
+            NodeTyper::isOrganizedStructure($node)
         ) {
             if ($node instanceof Stmt\Interface_) {
                 $class = new InterfaceMetric($node->namespacedName->toString());
                 $class->set('interface', true);
                 $class->set('abstract', true);
             } else {
-                $name = (string)(isset($node->namespacedName) ? $node->namespacedName : 'anonymous@' . spl_object_hash($node));
+                $name = getNameOfNode($node);
                 $class = new ClassMetric($name);
                 $class->set('interface', false);
-                $class->set('abstract', $node instanceof Stmt\Trait_ || $node->isAbstract());
-                $class->set('final', !$node instanceof Stmt\Trait_ && $node->isFinal());
+
+                $isAbstract = false;
+                if ($node instanceof Stmt\Class_) {
+                    $isAbstract = $node->isAbstract();
+                } elseif ($node instanceof Stmt\Trait_) {
+                    $isAbstract = true; // Traits are always abstract
+                }
+
+                $isFinal = false;
+                if ($node instanceof Stmt\Class_) {
+                    $isFinal = $node->isFinal();
+                } elseif ($node instanceof Stmt\Trait_) {
+                    $isFinal = false; // Traits cannot be final
+                }
+
+                $class->set('abstract', $isAbstract);
+                $class->set('final', $isFinal);
             }
 
             $methods = [];
