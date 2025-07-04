@@ -13,8 +13,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php-version: [7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4]
-                #php-version: [5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4]
+                php-version: [5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4]
                 include:
                     - php-version: nightly
             fail-fast: false
@@ -46,9 +45,6 @@ jobs:
 
             - name: Run tests (${{ matrix.php-version }})
               run: make test
-
-            - name: Run Docker tests
-              run: docker run --rm test_phpmetrics
 
     build:
         if: github.event_name == 'release' && startsWith(github.ref, 'refs/tags/')

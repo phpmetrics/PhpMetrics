@@ -1,11 +1,13 @@
 <?php
 namespace Test\Binary;
 
+use PHPUnit\Framework\Attributes\Group;
 use Polyfill\TestCaseCompatible;
 
 /**
  * @group binary
  */
+#[Group('binary')]
 class PharTest extends \PHPUnit\Framework\TestCase
 {
 

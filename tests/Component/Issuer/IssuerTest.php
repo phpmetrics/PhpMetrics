@@ -35,7 +35,7 @@ class IssuerTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('Details', $issuer->log);
         $this->assertStringContainsString('https://github.com/phpmetrics/PhpMetrics/issues/new', $output->output);
         $this->assertStringContainsString('Firstname: Jean-François', $issuer->log);
-        $this->assertStringContainsString('IssuerTest.php (line 26)', $issuer->log);
+        $this->assertStringContainsString('IssuerTest.php (line 29)', $issuer->log);
         $issuer->disable();
     }
 

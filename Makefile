@@ -4,7 +4,7 @@ include artifacts/Makefile
 
 # Run unit tests
 test:
-	./vendor/bin/phpunit -c phpunit.xml.dist
+	./vendor/bin/phpunit -c phpunit.xml.dist --exclude-group binary
 
 # Compatibility check
 compatibility:

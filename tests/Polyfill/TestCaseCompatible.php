@@ -7,12 +7,12 @@ if (!method_exists(\PHPUnit\Framework\Assert::class, 'assertStringContainsString
     {
         public function assertStringContainsString($needle, $haystack, $message = '')
         {
-            $this->assertStringContainsString($needle, $haystack, $message);
+            $this->assertContains($needle, $haystack, $message);
         }
 
         public function assertMatchesRegularExpression($pattern, $string, $message = '')
         {
-            $this->assertMatchesRegularExpression($pattern, $string, $message);
+            $this->assertRegExp($pattern, $string, $message);
         }
     }
 } else {
