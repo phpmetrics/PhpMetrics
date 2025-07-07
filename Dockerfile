@@ -1,4 +1,4 @@
-FROM php:7.1
+FROM php:8.4
 
 MAINTAINER "niconoe-" <nicolas.giraud.dev@gmail.com>
 
