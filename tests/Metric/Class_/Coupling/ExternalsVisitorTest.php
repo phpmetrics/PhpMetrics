@@ -41,7 +41,7 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
 
     public static function provideExamples()
     {
-        return [
+        $cases = [
             [ __DIR__ . '/../../examples/externals1.php', 'A', ['H', 'C', 'B', 'D']],
             [ __DIR__ . '/../../examples/externals1.php', 'B', []],
             [ __DIR__ . '/../../examples/externals1.php', 'C', []],
@@ -52,6 +52,13 @@ class ExternalsVisitorTest extends \PHPUnit\Framework\TestCase
             [ __DIR__ . '/../../examples/externals1.php', 'H', []],
             [ __DIR__ . '/../../examples/externals1.php', 'NS1\\A', ['NS2\\B']],
         ];
+
+        // at least php 8.4:
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $cases[] = [ __DIR__ . '/../../examples/php8.4.dereferencing_new.php', 'A', ['NS1\\B']];
+        }
+
+        return $cases;
     }
 
 
