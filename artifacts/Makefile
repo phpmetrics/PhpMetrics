@@ -14,4 +14,5 @@ prepare-build:
 	@rm -f ${BUILD_DIR}/phpmetrics.phar
 
 build: prepare-build build-phar build-deb build-standalone
+	./vendor/bin/phpunit -c phpunit.xml.dist --group=binary &&	echo "Done"
 

@@ -49,6 +49,6 @@ These commands will create `phar`, `debian` and `binary` release,
 then run all tests and push new release to Github:
 
 ```bash
-make release VERSION=<VERSION>
-# <VERSION> can be `major`, `minor` or `patch`
+make release TAG=<vx.y.z>
+# where x is the major version, y is the minor version and z is the patch version
 ```
