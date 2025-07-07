@@ -1,68 +1,118 @@
 Format: 1.8
-Date: Wed, 08 Mar 2023 15:03:35 +0000
+Date: Mon, 07 Jul 2025 13:50:31 +0200
 Source: phpmetrics
 Binary: phpmetrics
+Built-For-Profiles: noudeb
 Architecture: source all
-Version: 2.7.4
+Version: 3.0.0rc7
 Distribution: unstable
 Urgency: low
 Maintainer: Jean-François Lépine <lepinejeanfrancois@yahoo.fr>
 Description:
  phpmetrics - Static analyzer for PHP
 Changes:
- phpmetrics (2.7.4) unstable; urgency=low
+ phpmetrics (3.0.0rc7) unstable; urgency=low
  .
-    * Fix readme file (#438)
-    * include by default the composer.lock localized at the root dir
-    * Allow usage behind proxy
-    * PR review changes
-    * Refactor  following PR comments
-    * PR review applied changes
-    * Add php8 in travis  ci
-    * Merge pull request #1 from phpmetrics/master
-    * Fix typo
-    * Removing PHP 7+ return value typehint
-    * Merge pull request #454 from crimsonkissaki/crimsonkissaki-patch-1
-    * Merge pull request #449 from ssfinney/master
-    * Merge pull request #446 from alediator/proxy_env_use
-    * Merge pull request #442 from AlexHowansky/master
-    * [ISSUE-445] Fix warning with test on ansi
-    * Merge pull request #456 from phpmetrics/ISSUE-445
-    * [ISSUE-451] remove auto scrolling of charts
-    * Merge pull request #447 from Big-Shark/patch-2
-    * [ISSUE-436] Restore deb compilation
-    * Fixed issue with incorrect table header on the complexity report page
-    * Removed extraneous and invalid HTML syntax
-    * Merge pull request #455 from phpmetrics/ISSUE-451
-    * Solve passing null instead of int by removing the flag on the Finder, that is unused by the code.
-    * Add PHP Attribute "ReturnTypeWillChange" on internal overload definitions as return type is missing.
-    * Add "unknown" status for private packages to avoid deprecated error in version_compare usage.
-    * Merge pull request #458 from phpmetrics/ISSUE-436
-    * Add command to get summary as Json
-    * Merge pull request #466 from phpmetrics/remove-php8.1-deprecations
-    * Way to search patterns of code
-    * Merge pull request #472 from phpmetrics/searches
-    * Merge pull request #467 from roelbaka/addJsonSummary
-    * Merge pull request #464 from denniscoorn-paqt/fix/complexity-table-columns
-    * releasing v2.8.0
-    * Fixes issues with paths
-    * Merge pull request #474 from phpmetrics/fixes_permissions_path
-    * Updates test for phpunit compatibility
-    * Merge pull request #475 from phpmetrics/phpunit-compatibility
+    * Prepare v3. WIP.
+    * Rebase on master (current 2.8.1) with adaptation for 3.x. Coverage got down. WIP.
+    * Add some missing unit test. Coverage is still not back to previous state. WIP.
+    * Continue to add up some coverage. WIP.
+    * Set the coverage back to previous state. WIP: work on uncovered files.
+    * Remove Git related metrics.
+    * Remove PHPUnit metrics checks. Start but stop reviewing Html Reporter (too complex). File functions.php removed.
+    * Fix some PHPStan issues. WIP.
+    * Apply HTML error fixes from #477.
+    * Update dependencies and fix unit tests.
+    * Update QA and dev-dependencies.
+    * Disable PHP Infection as some mutants are breaking analyse.
+    * Add multiple locations for composer-autoloading.
+    * Do not oblige usage of YAML extention as configuration can be set in another way.
+    * Fix HTML rednering.
+    * Fix HTML rednering.
+    * Ignore PHP Attributes in detecting getter/setters.
+    * Keep only composer installation to simplify tool usage.
+    * Remove PageRank metric.
+    * Get rid of more than 150 PHPStan errors.
+    * Add cache and baselines on qa tools.
+    * Dynamically manage version number via .semver file. Also minor fixes.
+    * Rebase on master + update dependencies + improve QA. PHPUnit 10 is now used.
+    * Use env variable to share volume to mount with DockerInDocker.
+    * Adapt the releasing process with the current v3 + minor fixes.
+    * Decouple file system operations to split responsibilities.
+    * Complete the unit tests related to file system.
+    * Kill some mutants.
+    * Add a copy function to manage the copy of single files.
+    * Fix tag management on release + recursive copy for HTML rendering.
+    * Remove Clusterize as only used for removed Class Rank and remove useless logos.
+    * Fix SVG icons on sidebar.
+    * Fix resolving of FQCN when inferring externals.
+    * Fix parsing issue on LComVisitor when code to parse contains variable property fetch.
+    * Fix error when HTML report is not requested.
+    * Add missing favicon + add report date in title.
+    * Improve CSS + button to download the bubble graph.
+    * Update minimum versions of dependencies for composer.json.
+    * Fix unit tests for ExternalVisitor.
+    * Remove example and management of plugins (JUnit).
+    * Remove useless metric nbGetters/nbSetters.
+    * Prepare changelog fro release 3.0.0-rc1.
+    * releasing v3.0.0rc1
+    * Fix #491: add shell command in case PHP command does not work for some OS in documenation.
+    * Fix Fatal error when analyzing snippets like `$a->$b()` or `$c()`.
+    * Prepare release 3.0.0-rc2.
+    * releasing v3.0.0rc2
+    * Fix special version label that were not taken into account on bintray.
+    * releasing v3.0.0rc2
+    * Fix possible parsing error + upgrade to PHPUnit 10.1.
+    * Fix violations reporter which was trying to rely on Violations directly, rather than ViolationsHandler
+    * Merge pull request #495 from Tithugues/fix/report-violations
+    * SystemComplexityVisitor fix for calling methods with the same name on different objects
+    * releasing v3.0.0rc3
+    * Upgrade deps + add ccn value by method. Need to fnd how to display it on HTML reports now.
+    * Merge pull request #497 from andrii-pukhalevych/patch1
+    * Add elegant way to display CCN values for methods.
+    * QA review: fix PHPStan/Psalm/PHPUnit/Qodana errors.
+    * Merge pull request #498 from phpmetrics/add-ccn-value-to-every-class-method
+    * releasing v3.0.0rc4
+    * Fix URLs and search configuration usage.
+    * Manage better description inference for stable dependencies principle.
+    * Merge pull request #502 from phpmetrics/fix/501
+    * Fix some unit tests + releasing process.
+    * releasing v3.0.0rc5
+    * Upgrade to PhpParser v5 + adapt code. Remove Qodana. Upgrade to PHPUnit 10.5
+    * Merge pull request #504 from phpmetrics/fix/php-parser-v5
+    * releasing v3.0.0rc6
+    * Fix numeric version array key in Composer\Packagist.php - if there is an integer string set as a key of associative array, it will automatically be converted to integer, which causes the call of `ltrim` to fail, because of `declare(strict_types=1)` configuration
+    * Merge pull request #509 from Klemo1997/fix/packagist-array-key-type-error
+    * fix typo
+    * Merge pull request #513 from YAhiru/fix-typo
+    * feat: add OpenMetrics report
+    * Merge pull request #512 from alanpoulain/feat-openmetrics
+    * test: add OpenMetrics SummaryWriter test
+    * Merge pull request #514 from alanpoulain/test-openmetrics-summary-writer
+    * Make sure OpenMetrics format is available and upgrade QA.
+    * Merge pull request #515 from phpmetrics/update/3.x-qa
+    * releasing v3.0.0rc7
+    * Updated tests in order to be executed in PHP 8.4, and supports Php 8.4
+    * fixed issue introduced by phpcs, and removed phpcs
+    * added build script for standalone build
+    * fixed CI
+    * Merge pull request #524 from phpmetrics/php84-standalone
+    * #518 test about deferencing new without parenthesis in PHP 8.4
+    * updated build
  .
-   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Thu, 24 Mar 2022 11:19:14 +0100
+   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Mon, 07 Jul 2025 13:48:16 +0200
 Checksums-Sha1:
- cb7f8ba0cc808e726861becc06adbe7459e18888 666 phpmetrics_2.7.4.dsc
- ab088f535fff0533c6ae046b3adfd6fe012b9c04 845881 phpmetrics_2.7.4.tar.gz
- 55a7133e55a1073c8e11d989f86c15f24c23c055 367616 phpmetrics_2.7.4_all.deb
- f803b6a62eec7daa8755220a86d3b333935b62d4 4153 phpmetrics_2.7.4_amd64.buildinfo
+ ee4b1f47df6a7d6f0a1f1a75f2f8d890717a0b9e 681 phpmetrics_3.0.0rc7.dsc
+ 71f106ff21c05825dc6658feee43e1ec9b48b792 2720950 phpmetrics_3.0.0rc7.tar.gz
+ bda5a2b684d229756d9cadbde5df06fcaf7c02a2 1601474 phpmetrics_3.0.0rc7_all.deb
+ f659b6eba8c9b954f61c3ffb1da2275da7a5648b 5219 phpmetrics_3.0.0rc7_amd64.buildinfo
 Checksums-Sha256:
- 1e4a7cc2f643c33e38c2921c6c8a4efea01427512d59890f2025a50e0a36bfa3 666 phpmetrics_2.7.4.dsc
- f0bfca0c6dd85e5aac678438b08392071dc8c5274dc73172485a13bc29e0b79d 845881 phpmetrics_2.7.4.tar.gz
- c5c37e4fe0023b3d6a884aa700f2beca5602932de992a0e0701c3b70bdff9a21 367616 phpmetrics_2.7.4_all.deb
- d1c2bc2834d035e34e7591ac118bcfcbf043de5b4e9919fe055a9a3e5e27b071 4153 phpmetrics_2.7.4_amd64.buildinfo
+ a63a622ba4d79c9dcbb9fd4f7cb78e7f07fa19a5ecee68cd28630fc9ef1c02a7 681 phpmetrics_3.0.0rc7.dsc
+ dcdaa76e774d1c2b77b61799a11ed883ddad3ab798f41b4a28d6d4172a3f0765 2720950 phpmetrics_3.0.0rc7.tar.gz
+ 4d0b80e7b12fcca8f563887b68b64dffae00f1d40d5ce2dbe51fb7dddac1f4e4 1601474 phpmetrics_3.0.0rc7_all.deb
+ a930aaded1568741df61342ae34598d0c8519d59996a1f09434c8a78ae436fbf 5219 phpmetrics_3.0.0rc7_amd64.buildinfo
 Files:
- 7ece862094f51de22e43269fe572dea6 666 base optional phpmetrics_2.7.4.dsc
- 984c326064b5d3f9fcacff2e60859263 845881 base optional phpmetrics_2.7.4.tar.gz
- 6f996dd248af254907078e80ca199318 367616 base optional phpmetrics_2.7.4_all.deb
- 6c238f3f6f95a7a9c4c84be5336fcfb5 4153 base optional phpmetrics_2.7.4_amd64.buildinfo
+ d1e010a31674d7c80d3f04e6e594a324 681 base optional phpmetrics_3.0.0rc7.dsc
+ d6a8f3c3354a44651314ca74ec350b5e 2720950 base optional phpmetrics_3.0.0rc7.tar.gz
+ 9401ea4391c70d0fdb93edf0ce59677d 1601474 base optional phpmetrics_3.0.0rc7_all.deb
+ 63adbc1407be9b484c953078415853e3 5219 base optional phpmetrics_3.0.0rc7_amd64.buildinfo

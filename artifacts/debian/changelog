@@ -1,3 +1,272 @@
+phpmetrics (3.0.0rc7) unstable; urgency=low
+   * Prepare v3. WIP. 
+   * Rebase on master (current 2.8.1) with adaptation for 3.x. Coverage got down. WIP. 
+   * Add some missing unit test. Coverage is still not back to previous state. WIP. 
+   * Continue to add up some coverage. WIP. 
+   * Set the coverage back to previous state. WIP: work on uncovered files. 
+   * Remove Git related metrics. 
+   * Remove PHPUnit metrics checks. Start but stop reviewing Html Reporter (too complex). File functions.php removed. 
+   * Fix some PHPStan issues. WIP. 
+   * Apply HTML error fixes from #477. 
+   * Update dependencies and fix unit tests. 
+   * Update QA and dev-dependencies. 
+   * Disable PHP Infection as some mutants are breaking analyse. 
+   * Add multiple locations for composer-autoloading. 
+   * Do not oblige usage of YAML extention as configuration can be set in another way. 
+   * Fix HTML rednering. 
+   * Fix HTML rednering. 
+   * Ignore PHP Attributes in detecting getter/setters. 
+   * Keep only composer installation to simplify tool usage. 
+   * Remove PageRank metric. 
+   * Get rid of more than 150 PHPStan errors. 
+   * Add cache and baselines on qa tools. 
+   * Dynamically manage version number via .semver file. Also minor fixes. 
+   * Rebase on master + update dependencies + improve QA. PHPUnit 10 is now used. 
+   * Use env variable to share volume to mount with DockerInDocker. 
+   * Adapt the releasing process with the current v3 + minor fixes. 
+   * Decouple file system operations to split responsibilities. 
+   * Complete the unit tests related to file system. 
+   * Kill some mutants. 
+   * Add a copy function to manage the copy of single files. 
+   * Fix tag management on release + recursive copy for HTML rendering. 
+   * Remove Clusterize as only used for removed Class Rank and remove useless logos. 
+   * Fix SVG icons on sidebar. 
+   * Fix resolving of FQCN when inferring externals. 
+   * Fix parsing issue on LComVisitor when code to parse contains variable property fetch. 
+   * Fix error when HTML report is not requested. 
+   * Add missing favicon + add report date in title. 
+   * Improve CSS + button to download the bubble graph. 
+   * Update minimum versions of dependencies for composer.json. 
+   * Fix unit tests for ExternalVisitor. 
+   * Remove example and management of plugins (JUnit). 
+   * Remove useless metric nbGetters/nbSetters. 
+   * Prepare changelog fro release 3.0.0-rc1. 
+   * releasing v3.0.0rc1 
+   * Fix #491: add shell command in case PHP command does not work for some OS in documenation. 
+   * Fix Fatal error when analyzing snippets like `$a->$b()` or `$c()`. 
+   * Prepare release 3.0.0-rc2. 
+   * releasing v3.0.0rc2 
+   * Fix special version label that were not taken into account on bintray. 
+   * releasing v3.0.0rc2 
+   * Fix possible parsing error + upgrade to PHPUnit 10.1. 
+   * Fix violations reporter which was trying to rely on Violations directly, rather than ViolationsHandler 
+   * Merge pull request #495 from Tithugues/fix/report-violations 
+   * SystemComplexityVisitor fix for calling methods with the same name on different objects 
+   * releasing v3.0.0rc3 
+   * Upgrade deps + add ccn value by method. Need to fnd how to display it on HTML reports now. 
+   * Merge pull request #497 from andrii-pukhalevych/patch1 
+   * Add elegant way to display CCN values for methods. 
+   * QA review: fix PHPStan/Psalm/PHPUnit/Qodana errors. 
+   * Merge pull request #498 from phpmetrics/add-ccn-value-to-every-class-method 
+   * releasing v3.0.0rc4 
+   * Fix URLs and search configuration usage. 
+   * Manage better description inference for stable dependencies principle. 
+   * Merge pull request #502 from phpmetrics/fix/501 
+   * Fix some unit tests + releasing process. 
+   * releasing v3.0.0rc5 
+   * Upgrade to PhpParser v5 + adapt code. Remove Qodana. Upgrade to PHPUnit 10.5 
+   * Merge pull request #504 from phpmetrics/fix/php-parser-v5 
+   * releasing v3.0.0rc6 
+   * Fix numeric version array key in Composer\Packagist.php - if there is an integer string set as a key of associative array, it will automatically be converted to integer, which causes the call of `ltrim` to fail, because of `declare(strict_types=1)` configuration 
+   * Merge pull request #509 from Klemo1997/fix/packagist-array-key-type-error 
+   * fix typo 
+   * Merge pull request #513 from YAhiru/fix-typo 
+   * feat: add OpenMetrics report 
+   * Merge pull request #512 from alanpoulain/feat-openmetrics 
+   * test: add OpenMetrics SummaryWriter test 
+   * Merge pull request #514 from alanpoulain/test-openmetrics-summary-writer 
+   * Make sure OpenMetrics format is available and upgrade QA. 
+   * Merge pull request #515 from phpmetrics/update/3.x-qa 
+   * releasing v3.0.0rc7 
+   * Updated tests in order to be executed in PHP 8.4, and supports Php 8.4 
+   * fixed issue introduced by phpcs, and removed phpcs 
+   * added build script for standalone build 
+   * fixed CI 
+   * Merge pull request #524 from phpmetrics/php84-standalone 
+   * #518 test about deferencing new without parenthesis in PHP 8.4 
+   * updated build 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Mon, 07 Jul 2025 13:56:00 +0200
+
+phpmetrics (3.0.0rc7) unstable; urgency=low
+   * Prepare v3. WIP. 
+   * Rebase on master (current 2.8.1) with adaptation for 3.x. Coverage got down. WIP. 
+   * Add some missing unit test. Coverage is still not back to previous state. WIP. 
+   * Continue to add up some coverage. WIP. 
+   * Set the coverage back to previous state. WIP: work on uncovered files. 
+   * Remove Git related metrics. 
+   * Remove PHPUnit metrics checks. Start but stop reviewing Html Reporter (too complex). File functions.php removed. 
+   * Fix some PHPStan issues. WIP. 
+   * Apply HTML error fixes from #477. 
+   * Update dependencies and fix unit tests. 
+   * Update QA and dev-dependencies. 
+   * Disable PHP Infection as some mutants are breaking analyse. 
+   * Add multiple locations for composer-autoloading. 
+   * Do not oblige usage of YAML extention as configuration can be set in another way. 
+   * Fix HTML rednering. 
+   * Fix HTML rednering. 
+   * Ignore PHP Attributes in detecting getter/setters. 
+   * Keep only composer installation to simplify tool usage. 
+   * Remove PageRank metric. 
+   * Get rid of more than 150 PHPStan errors. 
+   * Add cache and baselines on qa tools. 
+   * Dynamically manage version number via .semver file. Also minor fixes. 
+   * Rebase on master + update dependencies + improve QA. PHPUnit 10 is now used. 
+   * Use env variable to share volume to mount with DockerInDocker. 
+   * Adapt the releasing process with the current v3 + minor fixes. 
+   * Decouple file system operations to split responsibilities. 
+   * Complete the unit tests related to file system. 
+   * Kill some mutants. 
+   * Add a copy function to manage the copy of single files. 
+   * Fix tag management on release + recursive copy for HTML rendering. 
+   * Remove Clusterize as only used for removed Class Rank and remove useless logos. 
+   * Fix SVG icons on sidebar. 
+   * Fix resolving of FQCN when inferring externals. 
+   * Fix parsing issue on LComVisitor when code to parse contains variable property fetch. 
+   * Fix error when HTML report is not requested. 
+   * Add missing favicon + add report date in title. 
+   * Improve CSS + button to download the bubble graph. 
+   * Update minimum versions of dependencies for composer.json. 
+   * Fix unit tests for ExternalVisitor. 
+   * Remove example and management of plugins (JUnit). 
+   * Remove useless metric nbGetters/nbSetters. 
+   * Prepare changelog fro release 3.0.0-rc1. 
+   * releasing v3.0.0rc1 
+   * Fix #491: add shell command in case PHP command does not work for some OS in documenation. 
+   * Fix Fatal error when analyzing snippets like `$a->$b()` or `$c()`. 
+   * Prepare release 3.0.0-rc2. 
+   * releasing v3.0.0rc2 
+   * Fix special version label that were not taken into account on bintray. 
+   * releasing v3.0.0rc2 
+   * Fix possible parsing error + upgrade to PHPUnit 10.1. 
+   * Fix violations reporter which was trying to rely on Violations directly, rather than ViolationsHandler 
+   * Merge pull request #495 from Tithugues/fix/report-violations 
+   * SystemComplexityVisitor fix for calling methods with the same name on different objects 
+   * releasing v3.0.0rc3 
+   * Upgrade deps + add ccn value by method. Need to fnd how to display it on HTML reports now. 
+   * Merge pull request #497 from andrii-pukhalevych/patch1 
+   * Add elegant way to display CCN values for methods. 
+   * QA review: fix PHPStan/Psalm/PHPUnit/Qodana errors. 
+   * Merge pull request #498 from phpmetrics/add-ccn-value-to-every-class-method 
+   * releasing v3.0.0rc4 
+   * Fix URLs and search configuration usage. 
+   * Manage better description inference for stable dependencies principle. 
+   * Merge pull request #502 from phpmetrics/fix/501 
+   * Fix some unit tests + releasing process. 
+   * releasing v3.0.0rc5 
+   * Upgrade to PhpParser v5 + adapt code. Remove Qodana. Upgrade to PHPUnit 10.5 
+   * Merge pull request #504 from phpmetrics/fix/php-parser-v5 
+   * releasing v3.0.0rc6 
+   * Fix numeric version array key in Composer\Packagist.php - if there is an integer string set as a key of associative array, it will automatically be converted to integer, which causes the call of `ltrim` to fail, because of `declare(strict_types=1)` configuration 
+   * Merge pull request #509 from Klemo1997/fix/packagist-array-key-type-error 
+   * fix typo 
+   * Merge pull request #513 from YAhiru/fix-typo 
+   * feat: add OpenMetrics report 
+   * Merge pull request #512 from alanpoulain/feat-openmetrics 
+   * test: add OpenMetrics SummaryWriter test 
+   * Merge pull request #514 from alanpoulain/test-openmetrics-summary-writer 
+   * Make sure OpenMetrics format is available and upgrade QA. 
+   * Merge pull request #515 from phpmetrics/update/3.x-qa 
+   * releasing v3.0.0rc7 
+   * Updated tests in order to be executed in PHP 8.4, and supports Php 8.4 
+   * fixed issue introduced by phpcs, and removed phpcs 
+   * added build script for standalone build 
+   * fixed CI 
+   * Merge pull request #524 from phpmetrics/php84-standalone 
+   * #518 test about deferencing new without parenthesis in PHP 8.4 
+   * updated build 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Mon, 07 Jul 2025 13:48:16 +0200
+
+phpmetrics (3.0.0rc7) unstable; urgency=low
+   * Prepare v3. WIP. 
+   * Rebase on master (current 2.8.1) with adaptation for 3.x. Coverage got down. WIP. 
+   * Add some missing unit test. Coverage is still not back to previous state. WIP. 
+   * Continue to add up some coverage. WIP. 
+   * Set the coverage back to previous state. WIP: work on uncovered files. 
+   * Remove Git related metrics. 
+   * Remove PHPUnit metrics checks. Start but stop reviewing Html Reporter (too complex). File functions.php removed. 
+   * Fix some PHPStan issues. WIP. 
+   * Apply HTML error fixes from #477. 
+   * Update dependencies and fix unit tests. 
+   * Update QA and dev-dependencies. 
+   * Disable PHP Infection as some mutants are breaking analyse. 
+   * Add multiple locations for composer-autoloading. 
+   * Do not oblige usage of YAML extention as configuration can be set in another way. 
+   * Fix HTML rednering. 
+   * Fix HTML rednering. 
+   * Ignore PHP Attributes in detecting getter/setters. 
+   * Keep only composer installation to simplify tool usage. 
+   * Remove PageRank metric. 
+   * Get rid of more than 150 PHPStan errors. 
+   * Add cache and baselines on qa tools. 
+   * Dynamically manage version number via .semver file. Also minor fixes. 
+   * Rebase on master + update dependencies + improve QA. PHPUnit 10 is now used. 
+   * Use env variable to share volume to mount with DockerInDocker. 
+   * Adapt the releasing process with the current v3 + minor fixes. 
+   * Decouple file system operations to split responsibilities. 
+   * Complete the unit tests related to file system. 
+   * Kill some mutants. 
+   * Add a copy function to manage the copy of single files. 
+   * Fix tag management on release + recursive copy for HTML rendering. 
+   * Remove Clusterize as only used for removed Class Rank and remove useless logos. 
+   * Fix SVG icons on sidebar. 
+   * Fix resolving of FQCN when inferring externals. 
+   * Fix parsing issue on LComVisitor when code to parse contains variable property fetch. 
+   * Fix error when HTML report is not requested. 
+   * Add missing favicon + add report date in title. 
+   * Improve CSS + button to download the bubble graph. 
+   * Update minimum versions of dependencies for composer.json. 
+   * Fix unit tests for ExternalVisitor. 
+   * Remove example and management of plugins (JUnit). 
+   * Remove useless metric nbGetters/nbSetters. 
+   * Prepare changelog fro release 3.0.0-rc1. 
+   * releasing v3.0.0rc1 
+   * Fix #491: add shell command in case PHP command does not work for some OS in documenation. 
+   * Fix Fatal error when analyzing snippets like `$a->$b()` or `$c()`. 
+   * Prepare release 3.0.0-rc2. 
+   * releasing v3.0.0rc2 
+   * Fix special version label that were not taken into account on bintray. 
+   * releasing v3.0.0rc2 
+   * Fix possible parsing error + upgrade to PHPUnit 10.1. 
+   * Fix violations reporter which was trying to rely on Violations directly, rather than ViolationsHandler 
+   * Merge pull request #495 from Tithugues/fix/report-violations 
+   * SystemComplexityVisitor fix for calling methods with the same name on different objects 
+   * releasing v3.0.0rc3 
+   * Upgrade deps + add ccn value by method. Need to fnd how to display it on HTML reports now. 
+   * Merge pull request #497 from andrii-pukhalevych/patch1 
+   * Add elegant way to display CCN values for methods. 
+   * QA review: fix PHPStan/Psalm/PHPUnit/Qodana errors. 
+   * Merge pull request #498 from phpmetrics/add-ccn-value-to-every-class-method 
+   * releasing v3.0.0rc4 
+   * Fix URLs and search configuration usage. 
+   * Manage better description inference for stable dependencies principle. 
+   * Merge pull request #502 from phpmetrics/fix/501 
+   * Fix some unit tests + releasing process. 
+   * releasing v3.0.0rc5 
+   * Upgrade to PhpParser v5 + adapt code. Remove Qodana. Upgrade to PHPUnit 10.5 
+   * Merge pull request #504 from phpmetrics/fix/php-parser-v5 
+   * releasing v3.0.0rc6 
+   * Fix numeric version array key in Composer\Packagist.php - if there is an integer string set as a key of associative array, it will automatically be converted to integer, which causes the call of `ltrim` to fail, because of `declare(strict_types=1)` configuration 
+   * Merge pull request #509 from Klemo1997/fix/packagist-array-key-type-error 
+   * fix typo 
+   * Merge pull request #513 from YAhiru/fix-typo 
+   * feat: add OpenMetrics report 
+   * Merge pull request #512 from alanpoulain/feat-openmetrics 
+   * test: add OpenMetrics SummaryWriter test 
+   * Merge pull request #514 from alanpoulain/test-openmetrics-summary-writer 
+   * Make sure OpenMetrics format is available and upgrade QA. 
+   * Merge pull request #515 from phpmetrics/update/3.x-qa 
+   * releasing v3.0.0rc7 
+   * Updated tests in order to be executed in PHP 8.4, and supports Php 8.4 
+   * fixed issue introduced by phpcs, and removed phpcs 
+   * added build script for standalone build 
+   * fixed CI 
+   * Merge pull request #524 from phpmetrics/php84-standalone 
+   * #518 test about deferencing new without parenthesis in PHP 8.4 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Mon, 07 Jul 2025 09:50:33 +0200
+
 phpmetrics (2.8.1) unstable; urgency=low
    * Fix error in html template 
    * Merge pull request #477 from Hikingyo/fix-html-template 
@@ -932,6 +1201,12 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
+
+
+
+
 
 
 

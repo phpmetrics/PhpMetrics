@@ -17,5 +17,3 @@ build-phar: test
 	@cp /tmp/phpmetrics-build/build/phpmetrics.phar ${BUILD_DIR}/phpmetrics.phar
 	@rm -Rf /tmp/phpmetrics-build
 
-	@echo Testing phar
-	./vendor/bin/phpunit -c phpunit.xml.dist --group=binary &&	echo "Done"
