@@ -171,7 +171,7 @@ function recurse_copy($src, $dst)
  */
 function getVersion()
 {
-    return 'v2.8.2';
+    return 'v2.9.0';
 }
 
 /**
