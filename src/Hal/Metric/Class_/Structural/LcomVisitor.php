@@ -246,7 +246,7 @@ final class LcomVisitor extends NodeVisitorAbstract
         if (
             property_exists($node->var, 'name')
             && !($node->var->name instanceof Node\Expr\Variable)
-            && 'this' === (string)$node->var->name
+            && 'this' === ($node->var->name instanceof Stringable ? (string)$node->var->name : '')
             && ($nodeName instanceof Stringable || is_string($nodeName))
         ) {
             return (string)$nodeName;
