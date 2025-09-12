@@ -243,10 +243,14 @@ final class LcomVisitor extends NodeVisitorAbstract
         /** @var string|Node\Expr|Node\Identifier $nodeName */
         $nodeName = $node->name;
 
+        if ($nodeName instanceof Node\Scalar\String_) {
+            $nodeName = $nodeName->value;
+        }
+
         if (
             property_exists($node->var, 'name')
             && !($node->var->name instanceof Node\Expr\Variable)
-            && 'this' === (string)$node->var->name
+            && 'this' === (($node->var->name instanceof Stringable || is_string($node->var->name)) ? (string)$node->var->name : '')
             && ($nodeName instanceof Stringable || is_string($nodeName))
         ) {
             return (string)$nodeName;
