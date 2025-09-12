@@ -13,6 +13,8 @@ use Hal\Metric\Metrics;
 use Phake;
 use PhpParser\Modifiers;
 use PhpParser\Node;
+use PhpParser\NodeTraverser;
+use PhpParser\ParserFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -243,5 +245,45 @@ final class LcomVisitorTest extends TestCase
 
         Phake::verifyNoOtherInteractions($classMetricMock);
         Phake::verifyNoOtherInteractions($metricsMock);
+    }
+
+    public function testCurlyBraceStringPropertyFetch(): void
+    {
+        $code = <<<'PHP'
+    <?php
+    class UnitTestCurly {
+        public function a() {
+            $this->{'foo.bar'}->stuff();
+        }
+        public function b() {
+            $this->{'foo.bar'};
+        }
+    }
+    PHP;
+
+        $parser = new ParserFactory();
+        $parser = $parser->createForNewestSupportedVersion();
+        $ast = $parser->parse($code);
+
+        $metricsMock = Phake::mock(Metrics::class);
+        $classMetricMock = Phake::mock(Metric::class);
+        $detectorMock = Phake::mock(DetectorInterface::class);
+
+        $classNode = $ast[0];
+        $classNode->namespacedName = new Node\Name('UnitTestCurly');
+        Phake::when($metricsMock)->get('UnitTestCurly')->thenReturn($classMetricMock);
+        Phake::when($detectorMock)->detects(Phake::anyParameters())->thenReturn(null);
+
+        $visitor = new LcomVisitor(
+            $metricsMock,
+            new SimpleNodeIterator(),
+            $detectorMock
+        );
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor($visitor);
+
+        $traverser->traverse($ast);
+
+        Phake::verify($classMetricMock)->set('lcom', 1);
     }
 }
