@@ -82,8 +82,7 @@ class Composer
         $finder = new Finder(['json'], $exclude);
 
         // include root dir by default
-        $files = $this->config->has('files') ? $this->config->get('files') : [];
-        $files = array_merge($files, ['./']);
+        $files = $this->config->has('files') ? $this->config->get('files') : ['./'];
         $files = $finder->fetch($files);
 
         foreach ($files as $filename) {
@@ -116,8 +115,7 @@ class Composer
         $finder = new Finder(['lock'], $exclude);
 
         // include root dir by default
-        $files = $this->config->has('files') ? $this->config->get('files') : [];
-        $files = array_merge($files, ['./']);
+        $files = $this->config->has('files') ? $this->config->get('files') : ['./'];
         $files = $finder->fetch($files);
 
         // List all composer.lock found in the project.
