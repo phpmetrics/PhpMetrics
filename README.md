@@ -1,14 +1,13 @@
 # PhpMetrics
 
 
+![Packagist Downloads](https://img.shields.io/packagist/dt/phpmetrics/phpmetrics)
 [![License](https://poser.pugx.org/phpmetrics/phpmetrics/license.svg)](https://packagist.org/packages/phpmetrics/phpmetrics)
 [![Latest Stable Version](https://poser.pugx.org/phpmetrics/phpmetrics/v/stable.svg)](https://packagist.org/packages/phpmetrics/phpmetrics)
-[![Slack](https://img.shields.io/badge/slack/phpmetrics-yellow.svg?logo=slack)](https://join.slack.com/t/phpmetrics/shared_invite/enQtODU3MjQ4ODAxOTM5LWRhOGFhODMxN2JmMDRmOGVjNGQ0ZjNjNzVlNDIwNzQ2MWQ2YzgxYmRlNmM5NzIzZjlhYTFjZjZhYzAyMjM0YmE)
+<a href="https://github.com/sponsors/Halleck45"><img src="https://img.shields.io/static/v1?label=Sponsor&amp;message=%E2%9D%A4&amp;logo=GitHub&amp;color=%23fe8e86" alt=""></a>
 
 
-
-![Standard report](https://phpmetrics.github.io/website/assets/preview.png)
-
+![Standard report](./doc/overview.png)
 
 <img src="https://phpmetrics.org/imagesmetrics-maintenability.png" height="80px" alt="PhpMetrics" align="left" style="margin-right:20px"/>
 
