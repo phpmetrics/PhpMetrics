@@ -16,3 +16,6 @@ prepare-build:
 build: prepare-build build-phar build-deb build-standalone
 	./vendor/bin/phpunit -c phpunit.xml.dist --group=binary &&	echo "Done"
 
+clear:
+	rm -Rf *.buildinfo
+	rm -Rf bin/build
