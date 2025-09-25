@@ -9,7 +9,7 @@
 
 ![Standard report](./doc/overview.png)
 
-<img src="https://phpmetrics.org/imagesmetrics-maintenability.png" height="80px" alt="PhpMetrics" align="left" style="margin-right:20px"/>
+<img src="https://raw.githubusercontent.com/phpmetrics/PhpMetrics/master/doc/phpmetrics-logo.png" height="80px" alt="PhpMetrics" align="left" style="margin-right:20px"/>
 
 PhpMetrics provides metrics about PHP project and classes, with beautiful and readable HTML report. 
 
