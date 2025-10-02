@@ -28,7 +28,7 @@ require __DIR__ . '/_header.php'; ?>
                 <div class="label"><a href="oop.html">Classes</a></div>
                 <div class="number"><?php echo number_format($sum->nbClasses, 0); ?></div>
                 <div class="bloc-action">
-                    <a href="loc.html">View details &gt;</a>
+                    <a href="oop.html">View details &gt;</a>
                 </div>
             </div>
         </div>
