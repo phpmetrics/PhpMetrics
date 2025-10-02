@@ -252,7 +252,7 @@ class Reporter
         }
 
         $oldValue = $last->$type->$key;
-        $newValue = isset($this->sum->$type->$key) ? $this->sum->$type->$key : 0;
+        $newValue = isset($this->$type->$key) ? $this->$type->$key : 0;
         if ($newValue > $oldValue) {
             $r = 'gt';
         } elseif ($newValue < $oldValue) {
