@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Hal\Application\Workflow\Task;
 
-use Error;
 use Hal\Component\File\ReaderInterface;
 use Hal\Component\Output\Output;
+use PhpParser\Error;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
