@@ -77,13 +77,19 @@ class Composer
     {
         $rawRequirements = [[]];
 
-        // find composer.json files
-        $exclude = $this->config->has('exclude') ? $this->config->get('exclude') : [];
-        $finder = new Finder(['json'], $exclude);
+        $composer = $this->config->get('composer');
+        if (\is_string($composer) && '' !== $composer) {
+            // A composer path is explicitly provided: read it directly.
+            $files = $this->composerFilesFromPath($composer, 'json');
+        } else {
+            // find composer.json files
+            $exclude = $this->config->has('exclude') ? $this->config->get('exclude') : [];
+            $finder = new Finder(['json'], $exclude);
 
-        // include root dir by default
-        $files = $this->config->has('files') ? $this->config->get('files') : ['./'];
-        $files = $finder->fetch($files);
+            // include root dir by default
+            $files = $this->config->has('files') ? $this->config->get('files') : ['./'];
+            $files = $finder->fetch($files);
+        }
 
         foreach ($files as $filename) {
             if (!\preg_match('/composer(-dist)?\.json/', $filename)) {
@@ -110,13 +116,19 @@ class Composer
     {
         $rawInstalled = [[]];
 
-        // Find composer.lock file
-        $exclude = $this->config->has('exclude') ? $this->config->get('exclude') : [];
-        $finder = new Finder(['lock'], $exclude);
+        $composer = $this->config->get('composer');
+        if (\is_string($composer) && '' !== $composer) {
+            // A composer path is explicitly provided: read the sibling composer.lock.
+            $files = $this->composerFilesFromPath($composer, 'lock');
+        } else {
+            // Find composer.lock file
+            $exclude = $this->config->has('exclude') ? $this->config->get('exclude') : [];
+            $finder = new Finder(['lock'], $exclude);
 
-        // include root dir by default
-        $files = $this->config->has('files') ? $this->config->get('files') : ['./'];
-        $files = $finder->fetch($files);
+            // include root dir by default
+            $files = $this->config->has('files') ? $this->config->get('files') : ['./'];
+            $files = $finder->fetch($files);
+        }
 
         // List all composer.lock found in the project.
         foreach ($files as $filename) {
@@ -142,5 +154,29 @@ class Composer
         }
 
         return \call_user_func_array('array_merge', $rawInstalled);
+    }
+
+    /**
+     * Resolves the composer file to read when the "composer" option holds an explicit
+     * path, decoupling the discovery from the analyzed directories.
+     *
+     * The given path may point either to a composer.json file or to the directory that
+     * contains it. The composer.lock is looked up as a sibling of the composer.json.
+     *
+     * @param string $composer  The explicit path provided through the "composer" option.
+     * @param string $extension Either "json" (composer.json) or "lock" (composer.lock).
+     * @return array List containing the matching filename, or empty if it does not exist.
+     */
+    private function composerFilesFromPath($composer, $extension)
+    {
+        $composerJson = \is_dir($composer)
+            ? \rtrim($composer, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'composer.json'
+            : $composer;
+
+        $filename = 'lock' === $extension
+            ? \dirname($composerJson) . DIRECTORY_SEPARATOR . 'composer.lock'
+            : $composerJson;
+
+        return \is_file($filename) ? [$filename] : [];
     }
 }
