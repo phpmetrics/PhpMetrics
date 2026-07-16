@@ -20,7 +20,7 @@ class HashMap implements \Countable, \IteratorAggregate
      * @param Node $node
      * @return $this
      */
-    public function attach(Node $node)
+    public function attach(Node $node): self
     {
         $this->nodes[$node->getKey()] = $node;
         return $this;
@@ -28,9 +28,9 @@ class HashMap implements \Countable, \IteratorAggregate
 
     /**
      * @param $key
-     * @return Node
+     * @return Node|null
      */
-    public function get($key)
+    public function get($key):? Node
     {
         return $this->has($key) ? $this->nodes[$key] : null;
     }
@@ -39,7 +39,7 @@ class HashMap implements \Countable, \IteratorAggregate
      * @param $key
      * @return bool
      */
-    public function has($key)
+    public function has($key): bool
     {
         return isset($this->nodes[$key]);
     }
@@ -47,7 +47,7 @@ class HashMap implements \Countable, \IteratorAggregate
     /**
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->nodes);
     }
@@ -55,7 +55,7 @@ class HashMap implements \Countable, \IteratorAggregate
     /**
      * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->nodes);
     }

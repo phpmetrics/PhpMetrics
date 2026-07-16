@@ -1,11 +1,10 @@
 <?php
 
-namespace Test\Hal\Component\Issue;
+namespace Test\Hal\Component\Issuer;
 
 use Hal\Component\Ast\ParserFactoryBridge;
 use Hal\Component\Issue\Issuer;
 use Hal\Component\Output\TestOutput;
-use PhpParser\ParserFactory;
 use PHPUnit\Framework\Attributes\RequiresPhp;
 use Polyfill\TestCaseCompatible;
 
@@ -16,9 +15,9 @@ class IssuerTest extends \PHPUnit\Framework\TestCase
 {
     use TestCaseCompatible;
     /**
-     * @requires PHP < 7.0
+     * Test only for PHP < 7.0
      */
-    #[RequiresPhp('< 7.0')]
+    #[RequiresPhp('<7.0.0')]
     public function testICanEnableIssuerPhp5(): void
     {
         $output = new TestOutput();
@@ -39,11 +38,11 @@ class IssuerTest extends \PHPUnit\Framework\TestCase
         $issuer->disable();
     }
 
-    /**
-     * @requires PHP < 7.0
-     */
     public function testIssuerDisplayStatements(): void
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->markTestSkipped('This test is only for PHP < 7.0');
+        }
         $output = new TestOutput();
         $issuer = (new TestIssuer($output))->enable();
         $code = <<<EOT

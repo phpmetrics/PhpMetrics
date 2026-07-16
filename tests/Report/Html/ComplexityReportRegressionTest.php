@@ -83,7 +83,9 @@ class ComplexityReportRegressionTest extends TestCase
     private function getActualTableHeader($content)
     {
         $dom = new \DOMDocument();
-        @$dom->loadHTML($content);
+        libxml_use_internal_errors(true);
+        $dom->loadHTML($content);
+        libxml_clear_errors();
 
         $xpath = new \DOMXPath($dom);
         $rows = $xpath->query('//table[contains(concat(" ",normalize-space(@class)," ")," js-sort-table ")]/thead/tr');

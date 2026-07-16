@@ -9,6 +9,11 @@ use Hal\Violation\Violation;
 class Blob implements Violation
 {
     /**
+     * @var \Hal\Metric\Metric
+     */
+    private $metric;
+
+    /**
      * @inheritdoc
      */
     public function getName()

@@ -33,7 +33,7 @@ class StableDependenciesPrincipleTest extends TestCase
         $expectedViolationCount
     ): void {
         $violations = new Violations();
-        $metric = $this->getMockBuilder(PackageMetric::class)->disableOriginalConstructor()->getMock();
+        $metric = $this->createStub(PackageMetric::class);
         $metric->method('getInstability')->willReturn($packageInstability);
         $metric->method('getDependentInstabilities')->willReturn($dependentInstabilities);
         $metric->method('get')->willReturn($violations);
