@@ -16,9 +16,9 @@ class IssuerTest extends \PHPUnit\Framework\TestCase
 {
     use TestCaseCompatible;
     /**
-     * @requires PHP < 7.0
+     * @requires PHP < 7.0.0
      */
-    #[RequiresPhp('< 7.0')]
+    #[RequiresPhp('< 7.0.0')]
     public function testICanEnableIssuerPhp5(): void
     {
         $output = new TestOutput();
@@ -40,8 +40,9 @@ class IssuerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @requires PHP < 7.0
+     * @requires PHP < 7.0.0
      */
+    #[RequiresPhp('< 7.0.0')]
     public function testIssuerDisplayStatements(): void
     {
         $output = new TestOutput();
