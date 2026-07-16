@@ -15,13 +15,13 @@
                 <testcase name="testICanParseArguments with data set #6" assertions="1" time="0.000118"/>
             </testsuite>
         </testsuite>
-        <testsuite name="Test\Hal\Component\Issue\IssuerTest"
+        <testsuite name="Test\Hal\Component\Issuer\IssuerTest"
                    file="tests/Component/Issuer/IssuerTest.php" tests="2"
                    assertions="6" failures="0" errors="0" time="0.024517">
-            <testcase name="testICanEnableIssuer" class="Test\Hal\Component\Issue\IssuerTest"
+            <testcase name="testICanEnableIssuer" class="Test\Hal\Component\Issuer\IssuerTest"
                       file="tests/Component/Issuer/IssuerTest.php" line="15"
                       assertions="5" time="0.002145"/>
-            <testcase name="testIssuerDisplayStatements" class="Test\Hal\Component\Issue\IssuerTest"
+            <testcase name="testIssuerDisplayStatements" class="Test\Hal\Component\Issuer\IssuerTest"
                       file="tests/Component/Issuer/IssuerTest.php" line="35"
                       assertions="1" time="0.022372"/>
         </testsuite>

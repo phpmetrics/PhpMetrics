@@ -18,7 +18,7 @@ class BlobTest extends \PHPUnit\Framework\TestCase
     #[DataProvider('provideExamples')]
     public function testGlobIsFound($expected, $nbMethodsPublic, $lcom, $nbExternals): void
     {
-        $class = $this->getMockBuilder(ClassMetric::class)->disableOriginalConstructor()->getMock();
+        $class = $this->createStub(ClassMetric::class);
 
         $violations = new Violations();
         $class->method('get')->willReturnCallback(function ($param) use (

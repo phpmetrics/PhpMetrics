@@ -38,8 +38,8 @@ class SearchTest extends TestCase
             'type' => 'class'
         ];
 
-        $classMetric = $this->getMockBuilder(ClassMetric::class)->disableOriginalConstructor()->getMock();
-        $interfaceMetric = $this->getMockBuilder(InterfaceMetric::class)->disableOriginalConstructor()->getMock();
+        $classMetric = $this->createStub(ClassMetric::class);
+        $interfaceMetric = $this->createStub(InterfaceMetric::class);
 
         $search = new Search('my-search', $config);
 

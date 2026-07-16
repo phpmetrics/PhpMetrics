@@ -27,8 +27,8 @@ class UnitTestingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(7, $tests['Test\Hal\Application\Config\ParserTest']->assertions);
 
         $tests = $metrics->get('unitTesting')->get('tests');
-        $this->assertArrayHasKey('Test\Hal\Component\Issue\IssuerTest', $tests);
-        $this->assertEquals(6, $tests['Test\Hal\Component\Issue\IssuerTest']->assertions);
+        $this->assertArrayHasKey('Test\Hal\Component\Issuer\IssuerTest', $tests);
+        $this->assertEquals(6, $tests['Test\Hal\Component\Issuer\IssuerTest']->assertions);
     }
 
     public function testExceptionIsThrownIfJunitFileDoesNotExist(): void
