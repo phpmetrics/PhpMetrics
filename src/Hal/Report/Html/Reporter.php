@@ -47,6 +47,41 @@ class Reporter
     private $assetPath = '';
 
     /**
+     * @var mixed
+     */
+    private $sum;
+
+    /**
+     * @var mixed
+     */
+    private $avg;
+
+    /**
+     * @var mixed
+     */
+    private $classes;
+
+    /**
+     * @var mixed
+     */
+    private $files;
+
+    /**
+     * @var mixed
+     */
+    private $project;
+
+    /**
+     * @var mixed
+     */
+    private $packages;
+
+    /**
+     * @var mixed
+     */
+    private $history;
+
+    /**
      * @param Config $config
      * @param Output $output
      */
