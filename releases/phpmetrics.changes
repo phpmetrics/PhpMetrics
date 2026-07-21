@@ -1,5 +1,5 @@
 Format: 1.8
-Date: Thu, 25 Sep 2025 05:20:39 +0000
+Date: Tue, 21 Jul 2026 16:15:32 +0000
 Source: phpmetrics
 Binary: phpmetrics
 Architecture: source all
@@ -100,20 +100,29 @@ Changes:
     * Merge pull request #525 from phpmetrics/php84-standalone
     * updated build
     * releasing
+    * releasing
+    * update: replace MAINTAINER with LABEL fix: change cache clearing directory
+    * Merge pull request #526 from ShotaroMuraoka/fix/dockerfile-improvement
+    * fix: to avoid scanning the current directory for composer.json
+    * Merge pull request #528 from ShotaroMuraoka/fix/scanning-invalid-directories
+    * Use phpacker for binary release
+    * Merge pull request #530 from phpmetrics/binary-phpacker
+    * updated documentation
+    * Updated logo
  .
-   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Mon, 07 Jul 2025 14:08:33 +0200
+   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Thu, 25 Sep 2025 05:20:57 +0000
 Checksums-Sha1:
- a07572e1480f47efa271f9b7ceac7f6b99a0875d 681 phpmetrics_3.0.0rc7.dsc
- c269202e51d4190e2516356bf200e155bcde9685 2648505 phpmetrics_3.0.0rc7.tar.gz
- fa399774819833c0183bb48b5be414b8d1e0b1c8 1598116 phpmetrics_3.0.0rc7_all.deb
- 7ec454cd5264c23b8f73974c3b3bc44b4a6077d0 4235 phpmetrics_3.0.0rc7_amd64.buildinfo
+ 6b02140e49bb662c910b30d8a13b6aa2fd49f937 681 phpmetrics_3.0.0rc7.dsc
+ 5e3f9afef381e811a20086c842a51e24e7a452f1 2314369 phpmetrics_3.0.0rc7.tar.gz
+ 6476a4181a653a3fe4b93c13f02ca289ead4ee8b 1340192 phpmetrics_3.0.0rc7_all.deb
+ d1138a3ffca2d017bfce6cb74f8d1523dd4f09e2 4235 phpmetrics_3.0.0rc7_amd64.buildinfo
 Checksums-Sha256:
- a0969eda88729048540df8178904a43064fb41f56146a3d0071f78cf2f1f18a4 681 phpmetrics_3.0.0rc7.dsc
- 9589fec5faca278be389e6e2429ee686300fb8147fd42dfe87c1d72ac60b1cf6 2648505 phpmetrics_3.0.0rc7.tar.gz
- 41365d3d226adabde613f10319fd242aca097eeea462c025d469e830eb5d92c9 1598116 phpmetrics_3.0.0rc7_all.deb
- 29d86a1089393c62b11e1511b64769f5ff55aad48d6839abeeb5a0f7d65e2f04 4235 phpmetrics_3.0.0rc7_amd64.buildinfo
+ 23054c03ad5890aae716284f7ad505bb7818662f8c581c4bb33d5a33a46e806c 681 phpmetrics_3.0.0rc7.dsc
+ 89fad79dcd32eaf7166281836b095a16b415fba9831879d210f604025c5d927a 2314369 phpmetrics_3.0.0rc7.tar.gz
+ 932315b38efbfd2595fdd5d8c5fcfb493556284dba8cda2e8fc6f70efda397bb 1340192 phpmetrics_3.0.0rc7_all.deb
+ 310b69096e7bd276fe3f01f275df79ad3d537f7c155d13aee6d509557ecc9360 4235 phpmetrics_3.0.0rc7_amd64.buildinfo
 Files:
- aec6df4c4ffa8437df3f18cc831c1963 681 base optional phpmetrics_3.0.0rc7.dsc
- 3e55ea7f75b7a3e11ce577912633d351 2648505 base optional phpmetrics_3.0.0rc7.tar.gz
- e516abbb5b47f455fb953f52eef06c4a 1598116 base optional phpmetrics_3.0.0rc7_all.deb
- a2191a6d213464ce914e8cddc96d3094 4235 base optional phpmetrics_3.0.0rc7_amd64.buildinfo
+ 8e50b125a3799f6822f1ae9e61a5eb42 681 base optional phpmetrics_3.0.0rc7.dsc
+ f218d28f7336222e7a63c85387a47de2 2314369 base optional phpmetrics_3.0.0rc7.tar.gz
+ c5f5daf31dc1bb203ca90688ae34a00f 1340192 base optional phpmetrics_3.0.0rc7_all.deb
+ 481d8ba572503c5c1946a328d3196c75 4235 base optional phpmetrics_3.0.0rc7_amd64.buildinfo
