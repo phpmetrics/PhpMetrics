@@ -1,5 +1,5 @@
 Format: 1.8
-Date: Tue, 21 Jul 2026 16:15:32 +0000
+Date: Tue, 21 Jul 2026 16:19:34 +0000
 Source: phpmetrics
 Binary: phpmetrics
 Architecture: source all
@@ -109,20 +109,31 @@ Changes:
     * Merge pull request #530 from phpmetrics/binary-phpacker
     * updated documentation
     * Updated logo
+    * releasing v2.8.2
+    * fix trends not displayed correctly
+    * fix wrong details link to oop page
+    * Fix PHP 8.2+ deprecation about dynamic property
+    * Merge pull request #536 from davidmpaz/deprecation-warnings-dynamic-property
+    * Merge pull request #532 from zimmer-yan/fix/wrong-details-link-for-oop
+    * Merge pull request #531 from zimmer-yan/fix/trends-not-displayed-correctly
+    * Avoid depreciations with PHP >= 8.3
+    * Merge pull request #538 from phpmetrics/fixes_ci_php83
+    * [#533] Way to set the composer path
+    * Merge pull request #539 from phpmetrics/composer_path
  .
-   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Thu, 25 Sep 2025 05:20:57 +0000
+   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Tue, 21 Jul 2026 16:15:54 +0000
 Checksums-Sha1:
- 6b02140e49bb662c910b30d8a13b6aa2fd49f937 681 phpmetrics_3.0.0rc7.dsc
- 5e3f9afef381e811a20086c842a51e24e7a452f1 2314369 phpmetrics_3.0.0rc7.tar.gz
- 6476a4181a653a3fe4b93c13f02ca289ead4ee8b 1340192 phpmetrics_3.0.0rc7_all.deb
- d1138a3ffca2d017bfce6cb74f8d1523dd4f09e2 4235 phpmetrics_3.0.0rc7_amd64.buildinfo
+ bf359f796d47b8d5d49a937bd200f770cd9d2104 681 phpmetrics_3.0.0rc7.dsc
+ bbbca35f26dc550bcf5491035b1bdf112dff0639 2314645 phpmetrics_3.0.0rc7.tar.gz
+ c6e3ae1c8d842cf65680eacc7fab62f5186bae22 1340428 phpmetrics_3.0.0rc7_all.deb
+ d3309b798b1a170c6d2175f0a2b902889bda5a73 4236 phpmetrics_3.0.0rc7_amd64.buildinfo
 Checksums-Sha256:
- 23054c03ad5890aae716284f7ad505bb7818662f8c581c4bb33d5a33a46e806c 681 phpmetrics_3.0.0rc7.dsc
- 89fad79dcd32eaf7166281836b095a16b415fba9831879d210f604025c5d927a 2314369 phpmetrics_3.0.0rc7.tar.gz
- 932315b38efbfd2595fdd5d8c5fcfb493556284dba8cda2e8fc6f70efda397bb 1340192 phpmetrics_3.0.0rc7_all.deb
- 310b69096e7bd276fe3f01f275df79ad3d537f7c155d13aee6d509557ecc9360 4235 phpmetrics_3.0.0rc7_amd64.buildinfo
+ 5c7a4bc92f4d81a41083d1511ee43bf8bce98812ab1d5e21776037b0aadb39ee 681 phpmetrics_3.0.0rc7.dsc
+ 400bd3651fd7ab27d407517734aff9ed5fbf31ad9890e02cc27058518015ad10 2314645 phpmetrics_3.0.0rc7.tar.gz
+ b77d20a34a02df7241eec55dce7e7165ad8866c4c94e877e7019847326db68bb 1340428 phpmetrics_3.0.0rc7_all.deb
+ 70f99195e5ed1b9f596d4796bef0a02bace56b489b44833c050229a2a5f1e81b 4236 phpmetrics_3.0.0rc7_amd64.buildinfo
 Files:
- 8e50b125a3799f6822f1ae9e61a5eb42 681 base optional phpmetrics_3.0.0rc7.dsc
- f218d28f7336222e7a63c85387a47de2 2314369 base optional phpmetrics_3.0.0rc7.tar.gz
- c5f5daf31dc1bb203ca90688ae34a00f 1340192 base optional phpmetrics_3.0.0rc7_all.deb
- 481d8ba572503c5c1946a328d3196c75 4235 base optional phpmetrics_3.0.0rc7_amd64.buildinfo
+ 0164985464e490b3b89c3c28ff97c64f 681 base optional phpmetrics_3.0.0rc7.dsc
+ 5ee06602eeeff005ab95b83279212260 2314645 base optional phpmetrics_3.0.0rc7.tar.gz
+ 30f7f19bb7c50c87edaa788e91fb7945 1340428 base optional phpmetrics_3.0.0rc7_all.deb
+ 9ebfddd4c74c5a843764020c17682b17 4236 base optional phpmetrics_3.0.0rc7_amd64.buildinfo

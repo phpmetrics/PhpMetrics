@@ -12,8 +12,8 @@ Build-Depends: make
 Package-List:
  phpmetrics deb base optional arch=all
 Checksums-Sha1:
- 5e3f9afef381e811a20086c842a51e24e7a452f1 2314369 phpmetrics_3.0.0rc7.tar.gz
+ bbbca35f26dc550bcf5491035b1bdf112dff0639 2314645 phpmetrics_3.0.0rc7.tar.gz
 Checksums-Sha256:
- 89fad79dcd32eaf7166281836b095a16b415fba9831879d210f604025c5d927a 2314369 phpmetrics_3.0.0rc7.tar.gz
+ 400bd3651fd7ab27d407517734aff9ed5fbf31ad9890e02cc27058518015ad10 2314645 phpmetrics_3.0.0rc7.tar.gz
 Files:
- f218d28f7336222e7a63c85387a47de2 2314369 phpmetrics_3.0.0rc7.tar.gz
+ 5ee06602eeeff005ab95b83279212260 2314645 phpmetrics_3.0.0rc7.tar.gz
