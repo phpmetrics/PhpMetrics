@@ -1,0 +1,12 @@
+{
+    "packages": [
+        {
+            "name": "monolog/monolog",
+            "version": "1.25.3"
+        },
+        {
+            "name": "some/other",
+            "version": "3.1.0"
+        }
+    ]
+}

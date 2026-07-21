@@ -64,12 +64,21 @@ class Validator
             $config->set('composer', true);
         }
 
-        if (function_exists('filter_var')) {
-            $config->set('composer', filter_var($config->get('composer'), FILTER_VALIDATE_BOOLEAN));
+        // The "composer" option is dual-purpose:
+        //  - a boolean enabling/disabling the Composer analysis (default: true);
+        //  - a path to a composer.json (file or directory) used to decouple the
+        //    dependency discovery from the analyzed directories.
+        // Any value that is not a boolean-like keyword is kept as-is (a path), and
+        // the Composer analysis stays enabled.
+        $composer = $config->get('composer');
+        if (is_string($composer) && !in_array(strtolower(trim($composer)), ['true', 'false', '1', '0', 'yes', 'no', 'on', 'off', ''], true)) {
+            $config->set('composer', trim($composer));
+        } elseif (function_exists('filter_var')) {
+            $config->set('composer', filter_var($composer, FILTER_VALIDATE_BOOLEAN));
         } else {
             // When PHP is not compiled with the filter extension, we need to do it manually
-            $bool = $config->get('composer');
-            if( is_string($bool) ) {
+            $bool = $composer;
+            if (is_string($bool)) {
                 $bool = strtolower($bool);
                 $bool = in_array($bool, ['true', '1', 'yes', 'on'], true);
             }
@@ -112,6 +121,9 @@ Optional:
     --config=<file>                   Use a file for configuration. File can be a JSON, YAML or INI file.
     --exclude=<directory>             List of directories to exclude, separated by a comma (,)
     --extensions=<php,inc>            List of extensions to parse, separated by a comma (,)
+    --composer[=<path|bool>]          Composer dependency analysis. Set to "false" to disable it. Set to a
+                                      composer.json path (file or directory) to decouple the dependency
+                                      discovery from the analyzed directories (default: enabled, auto-discovery).
     --metrics                         Display list of available metrics
     --report-html=<directory>         Folder where report HTML will be generated
     --report-csv=<file>               File where report CSV will be generated
