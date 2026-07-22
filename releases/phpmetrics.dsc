@@ -2,7 +2,7 @@ Format: 1.0
 Source: phpmetrics
 Binary: phpmetrics
 Architecture: all
-Version: 3.0.0rc7
+Version: 2.10.0
 Maintainer: Jean-François Lépine <lepinejeanfrancois@yahoo.fr>
 Homepage: http://www.phpmetrics.org
 Standards-Version: 0.0.0
@@ -12,8 +12,8 @@ Build-Depends: make
 Package-List:
  phpmetrics deb base optional arch=all
 Checksums-Sha1:
- bbbca35f26dc550bcf5491035b1bdf112dff0639 2314645 phpmetrics_3.0.0rc7.tar.gz
+ 406e94f35c001c042899e682a570c09d14b4354d 858282 phpmetrics_2.10.0.tar.gz
 Checksums-Sha256:
- 400bd3651fd7ab27d407517734aff9ed5fbf31ad9890e02cc27058518015ad10 2314645 phpmetrics_3.0.0rc7.tar.gz
+ 91b847b9cabe3195ba16b96cbaa66ce6b737b17caac8d98d91c0f3d4ff1bf06a 858282 phpmetrics_2.10.0.tar.gz
 Files:
- 5ee06602eeeff005ab95b83279212260 2314645 phpmetrics_3.0.0rc7.tar.gz
+ 295239b4952ff13e04b95497312d6e36 858282 phpmetrics_2.10.0.tar.gz

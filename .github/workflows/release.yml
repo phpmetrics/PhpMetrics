@@ -1,0 +1,80 @@
+name: Release
+
+on:
+    # A version tag pushed (usually by `make release`) builds all the artifacts
+    # and creates a DRAFT release with them attached and generated notes.
+    # Last manual step: review the draft on the releases page and publish it.
+    # Tags with an rc/alpha/beta suffix are automatically flagged pre-release;
+    # GitHub then handles the "latest" label (a pre-release is never "latest").
+    push:
+        tags: ['v*']
+    # Manual trigger: rebuilds and re-attaches the artifacts to the release of
+    # the given tag (the tag must exist). Note: this can put a published
+    # release back in draft state; check the releases page afterwards.
+    workflow_dispatch:
+        inputs:
+            version:
+                description: 'Version to build, format vX.Y.Z (the git tag must exist)'
+                required: true
+                type: string
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        env:
+            VERSION: ${{ inputs.version || github.ref_name }}
+        steps:
+            # Fail fast, before any checkout. Keep this regex in sync with the
+            # `check-tag` target of the Makefile.
+            -   name: Check version format
+                run: |
+                    if ! echo "$VERSION" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+([.-]?(alpha|beta|rc)[0-9]+)?$'; then
+                        echo "::error::Invalid version '$VERSION' (expected format: vX.Y.Z, e.g. v2.10.0)"
+                        exit 1
+                    fi
+
+            -   uses: actions/checkout@v4
+                with:
+                    ref: ${{ env.VERSION }}
+                    # Tags and history are needed by CURRENT_TAG (git describe) in artifacts/Makefile
+                    fetch-depth: 0
+
+            # The PHP version here does not drive the phar compatibility:
+            # artifacts/phar/Makefile pins composer platform.php to 7.0,
+            # so the phar keeps supporting PHP 7.0+ whatever runs the build.
+            # Tests require PHP >= 7.1 (": void" hints), hence a modern PHP.
+            -   name: Set up PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.3
+
+            -   name: Install Composer dependencies
+                run: composer install --no-interaction --prefer-dist --no-progress
+
+            # debhelper (dh) is needed by dpkg-buildpackage for the .deb and
+            # is not preinstalled on ubuntu-latest runners
+            -   name: Install Debian packaging tools
+                run: sudo apt-get update && sudo apt-get install -y --no-install-recommends debhelper
+
+            -   name: Build project
+                run: make build
+
+            -   name: Create or update draft release with assets
+                uses: softprops/action-gh-release@v2
+                with:
+                    tag_name: ${{ env.VERSION }}
+                    draft: true
+                    prerelease: ${{ contains(env.VERSION, 'rc') || contains(env.VERSION, 'alpha') || contains(env.VERSION, 'beta') }}
+                    generate_release_notes: true
+                    files: |
+                        releases/phpmetrics.phar
+                        releases/phpmetrics-linux-x86_64
+                        releases/phpmetrics-linux-arm
+                        releases/phpmetrics-macos-x86_64
+                        releases/phpmetrics-macos-arm64
+                        releases/phpmetrics-windows-x86_64.exe
+                        releases/phpmetrics.deb
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

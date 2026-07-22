@@ -7,6 +7,9 @@ if (!file_exists('vendor/autoload.php')) {
 }
 
 $filename = 'build/phpmetrics.phar';
+if (!is_dir('build')) {
+    mkdir('build');
+}
 if (file_exists($filename)) {
     unlink($filename);
 }

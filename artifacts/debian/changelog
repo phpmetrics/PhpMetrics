@@ -1,4 +1,4 @@
-phpmetrics (3.0.0rc7) unstable; urgency=low
+phpmetrics (2.10.0) unstable; urgency=low
    * Prepare v3. WIP. 
    * Rebase on master (current 2.8.1) with adaptation for 3.x. Coverage got down. WIP. 
    * Add some missing unit test. Coverage is still not back to previous state. WIP. 
