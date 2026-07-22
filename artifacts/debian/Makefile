@@ -16,8 +16,10 @@ build-deb:
 	mv phpmetrics*.changes ${BUILD_DIR}/phpmetrics.changes
 	rm -Rf artifacts/debian/phpmetrics artifacts/debian/tmp artifacts/debian/bin artifacts/debian/*.log
 
+# The new entry gets the version being released ($(TAG)); the git log range starts
+# at the latest existing tag (CURRENT_TAG), as the new tag does not exist yet here.
 changelog-deb:
-	@echo "phpmetrics ($(RELEASE_VERSION)) unstable; urgency=low" >/tmp/changelog
+	@echo "phpmetrics ($(shell echo $(TAG) | sed s/^v//)) unstable; urgency=low" >/tmp/changelog
 	@echo >> artifacts/debian/changelog
 	@git log $(CURRENT_TAG)...HEAD --pretty=format:'   * %s ' --reverse >> /tmp/changelog
 	@echo >> /tmp/changelog

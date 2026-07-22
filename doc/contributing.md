@@ -45,10 +45,37 @@ You will need to install :
 
 ### Usage
 
-These commands will create `phar`, `debian` and `binary` release, 
-then run all tests and push new release to Github:
+This command updates the version in the sources, commits, then creates and
+pushes the git tag:
 
 ```bash
 make release TAG=<vx.y.z>
 # where x is the major version, y is the minor version and z is the patch version
 ```
+
+The tag MUST start with `v` and follow the `vX.Y.Z` format; an optional
+`rcN`, `alphaN` or `betaN` suffix is allowed (e.g. `v3.0.0rc9`). Any other
+format is refused, both by `make release` and by the workflow.
+
+Once the tag is pushed, the `Release` GitHub Actions workflow
+(`.github/workflows/release.yml`) takes over: it runs the test suite, builds
+the artifacts (phar, Debian package, standalone binaries) and creates a
+**draft release** on GitHub with everything attached and generated notes.
+
+Last manual step: open the draft on the
+[releases page](https://github.com/phpmetrics/PhpMetrics/releases), review
+the notes, and publish it.
+
+Good to know:
+
++ tags with an `rc`/`alpha`/`beta` suffix are automatically flagged as
+  pre-release; GitHub handles the "latest" label by itself (the most recent
+  published stable release is "latest", a pre-release never is);
++ if the build failed or the assets must be regenerated, re-run the workflow
+  from the Actions tab (`Release` workflow, "Run workflow", give the tag);
+  it rebuilds and re-attaches the assets to the existing release (which can
+  go back to draft state: check the releases page and re-publish if needed);
++ Packagist indexes git tags, not GitHub releases: composer users see the
+  version as soon as the tag is pushed, whatever the state of the GitHub
+  release. This is also why test tags must never be pushed to this
+  repository.

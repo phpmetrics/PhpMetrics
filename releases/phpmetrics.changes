@@ -1,16 +1,17 @@
 Format: 1.8
-Date: Tue, 21 Jul 2026 16:19:34 +0000
+Date: Tue, 21 Jul 2026 21:33:28 +0200
 Source: phpmetrics
 Binary: phpmetrics
+Built-For-Profiles: noudeb
 Architecture: source all
-Version: 3.0.0rc7
+Version: 2.10.0
 Distribution: unstable
 Urgency: low
 Maintainer: Jean-François Lépine <lepinejeanfrancois@yahoo.fr>
 Description:
  phpmetrics - Static analyzer for PHP
 Changes:
- phpmetrics (3.0.0rc7) unstable; urgency=low
+ phpmetrics (2.10.0) unstable; urgency=low
  .
     * Prepare v3. WIP.
     * Rebase on master (current 2.8.1) with adaptation for 3.x. Coverage got down. WIP.
@@ -120,20 +121,21 @@ Changes:
     * Merge pull request #538 from phpmetrics/fixes_ci_php83
     * [#533] Way to set the composer path
     * Merge pull request #539 from phpmetrics/composer_path
+    * releasing v2.8.2
  .
-   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Tue, 21 Jul 2026 16:15:54 +0000
+   -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Tue, 21 Jul 2026 16:19:56 +0000
 Checksums-Sha1:
- bf359f796d47b8d5d49a937bd200f770cd9d2104 681 phpmetrics_3.0.0rc7.dsc
- bbbca35f26dc550bcf5491035b1bdf112dff0639 2314645 phpmetrics_3.0.0rc7.tar.gz
- c6e3ae1c8d842cf65680eacc7fab62f5186bae22 1340428 phpmetrics_3.0.0rc7_all.deb
- d3309b798b1a170c6d2175f0a2b902889bda5a73 4236 phpmetrics_3.0.0rc7_amd64.buildinfo
+ 497b577224722cb10b568dea1170998ac150d7a3 670 phpmetrics_2.10.0.dsc
+ 406e94f35c001c042899e682a570c09d14b4354d 858282 phpmetrics_2.10.0.tar.gz
+ c1a8b12ccdb547795dde24b10ddedbabad9ce720 377694 phpmetrics_2.10.0_all.deb
+ 823fc3e902b7c69b2b442fb209ca821d689069fa 5356 phpmetrics_2.10.0_amd64.buildinfo
 Checksums-Sha256:
- 5c7a4bc92f4d81a41083d1511ee43bf8bce98812ab1d5e21776037b0aadb39ee 681 phpmetrics_3.0.0rc7.dsc
- 400bd3651fd7ab27d407517734aff9ed5fbf31ad9890e02cc27058518015ad10 2314645 phpmetrics_3.0.0rc7.tar.gz
- b77d20a34a02df7241eec55dce7e7165ad8866c4c94e877e7019847326db68bb 1340428 phpmetrics_3.0.0rc7_all.deb
- 70f99195e5ed1b9f596d4796bef0a02bace56b489b44833c050229a2a5f1e81b 4236 phpmetrics_3.0.0rc7_amd64.buildinfo
+ 02802852b691b33ac6094e4636a3f757b7250d111cb6b7efbbffb399b61f265d 670 phpmetrics_2.10.0.dsc
+ 91b847b9cabe3195ba16b96cbaa66ce6b737b17caac8d98d91c0f3d4ff1bf06a 858282 phpmetrics_2.10.0.tar.gz
+ db261a9b471eccf2e818844f872b4f937335a86409801829e9db7023f52e607e 377694 phpmetrics_2.10.0_all.deb
+ 86f53634880366e53c7d699033eca7f8eb0222b3b598c29831d9ae84382bbb22 5356 phpmetrics_2.10.0_amd64.buildinfo
 Files:
- 0164985464e490b3b89c3c28ff97c64f 681 base optional phpmetrics_3.0.0rc7.dsc
- 5ee06602eeeff005ab95b83279212260 2314645 base optional phpmetrics_3.0.0rc7.tar.gz
- 30f7f19bb7c50c87edaa788e91fb7945 1340428 base optional phpmetrics_3.0.0rc7_all.deb
- 9ebfddd4c74c5a843764020c17682b17 4236 base optional phpmetrics_3.0.0rc7_amd64.buildinfo
+ 22488b4cbff8b782f47f56d5ec4dc322 670 base optional phpmetrics_2.10.0.dsc
+ 295239b4952ff13e04b95497312d6e36 858282 base optional phpmetrics_2.10.0.tar.gz
+ 4e7123df6c498496b8517bf1f4dce554 377694 base optional phpmetrics_2.10.0_all.deb
+ f7661a7b40c652f1dfdfe1343c6b6496 5356 base optional phpmetrics_2.10.0_amd64.buildinfo

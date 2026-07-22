@@ -1,6 +1,11 @@
-.PHONY: docker build
+.PHONY: docker build check-tag
 
 include artifacts/Makefile
+
+# Ensure the tag starts with "v" and follows the vX.Y.Z format (optional rcN/alphaN/betaN suffix)
+check-tag:
+	@echo "$(TAG)" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+([.-]?(alpha|beta|rc)[0-9]+)?$$' \
+		|| { echo "Error: invalid TAG '$(TAG)' (expected format: vX.Y.Z, e.g. v2.10.0)"; exit 1; }
 
 # Run unit tests
 test:
@@ -12,7 +17,7 @@ compatibility:
 
 # Used for tag releasing
 # Don't use directly, use `make release` instead
-tag:
+tag: check-tag
 	echo "New release: $(TAG)"
 	echo Releasing sources
 	sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/$(TAG)/g" \
@@ -39,5 +44,5 @@ docker:
 
 # Publish new release. Usage:
 #   make tag TAG=x.y.z
-release: docker
+release: check-tag docker
 	docker run -it --rm --mount type=bind,source=$$SSH_AUTH_SOCK,target=/ssh-agent --env SSH_AUTH_SOCK=/ssh-agent -v ~/.gitconfig:/etc/gitconfig -v $(PWD):/app -w /app phpmetrics/releasing make new_git_version TAG=$(TAG)

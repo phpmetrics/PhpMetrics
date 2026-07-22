@@ -27,6 +27,6 @@ build-standalone-all: phpacker
 	mv ${BUILD_DIR}/mac/mac-arm ${BUILD_DIR}/phpmetrics-macos-arm64
 	rm -rf ${BUILD_DIR}/linux
 	rm -rf ${BUILD_DIR}/windows
-	rm -rf ${BUILD_DIR}/macos
+	rm -rf ${BUILD_DIR}/mac
 	rm -rf ${BUILD_DIR}/phpacker
 	rm -rf phpacker

@@ -1,5 +1,5 @@
-CURRENT_TAG=$(shell git tag |tail -n 2 |head -n 1)
-PREVIOUS_TAG=$(shell git tag |tail -n 1)
+# Latest tag reachable from HEAD (git tag alone sorts alphabetically: v3.0.0rc7 > v2.10.0)
+CURRENT_TAG=$(shell git describe --tags --abbrev=0)
 BUILD_DIR=releases
 
 include artifacts/phar/Makefile

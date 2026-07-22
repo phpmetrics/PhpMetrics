@@ -5,8 +5,6 @@ on:
         branches: [ master, main ]
     pull_request:
         branches: [ master, main ]
-    release:
-        types: [created]
 
 jobs:
     test:
@@ -45,28 +43,3 @@ jobs:
 
             - name: Run tests (${{ matrix.php-version }})
               run: make test
-
-    build:
-        if: github.event_name == 'release' && startsWith(github.ref, 'refs/tags/')
-        needs: test
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v4
-
-            -   name: Set up PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: 7.0
-
-            -   name: Build project
-                run: make build
-
-            -   name: Add build artifact
-                run: git add -f build/phpmetrics.phar
-
-            -   name: Upload release asset
-                uses: softprops/action-gh-release@v2
-                with:
-                    files: build/phpmetrics.phar
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
