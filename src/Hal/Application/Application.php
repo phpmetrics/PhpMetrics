@@ -9,6 +9,7 @@ use Hal\Application\Config\Validator;
 use Hal\Component\File\Finder;
 use Hal\Component\Issue\Issuer;
 use Hal\Component\Output\CliOutput;
+use Hal\Component\Output\Output;
 use Hal\Metric\SearchMetric;
 use Hal\Report;
 use Hal\Search\PatternSearcher;
@@ -52,6 +53,10 @@ class Application
             exit(0);
         }
 
+        // the validator injects the default exclusion list, so remember whether
+        // the user provided their own before validating
+        $hasCustomExclude = $config->has('exclude');
+
         try {
             (new Validator())->validate($config);
         } catch (ConfigException $e) {
@@ -67,6 +72,10 @@ class Application
         // find files
         $finder = new Finder($config->get('extensions'), $config->get('exclude'));
         $files = $finder->fetch($config->get('files'));
+
+        if ($hasCustomExclude) {
+            $this->warnIfVendorIsAnalyzed($files, $output);
+        }
 
         // analyze
         try {
@@ -126,5 +135,30 @@ class Application
         $output->writeln('');
         $output->writeln('<success>Done</success>');
         $output->writeln('');
+    }
+
+    /**
+     * A custom --exclude replaces the default exclusion list instead of extending
+     * it: warn the user when files located in a "vendor" directory are about to
+     * be analyzed.
+     *
+     * @param string[] $files files collected by the finder, exclusions already applied
+     * @param Output $output
+     */
+    public function warnIfVendorIsAnalyzed(array $files, Output $output)
+    {
+        $needle = DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
+        foreach ($files as $file) {
+            if (false !== strpos($file, $needle)) {
+                $output->writeln(sprintf(
+                    '<warning>[!] Files located in a "vendor" directory are included in the analysis. '
+                    . 'Note that the --exclude option replaces the default exclusion list (%s) '
+                    . 'instead of extending it.</warning>',
+                    Validator::DEFAULT_EXCLUDE
+                ));
+                $output->writeln('');
+                return;
+            }
+        }
     }
 }

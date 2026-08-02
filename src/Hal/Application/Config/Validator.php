@@ -13,6 +13,8 @@ use Hal\Search\SearchesValidator;
  */
 class Validator
 {
+    const DEFAULT_EXCLUDE = 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec';
+
     /**
      * @param Config $config
      * @throws ConfigException
@@ -37,10 +39,7 @@ class Validator
 
         // excluded directories
         if (!$config->has('exclude')) {
-            $config->set(
-                'exclude',
-                'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec'
-            );
+            $config->set('exclude', self::DEFAULT_EXCLUDE);
         }
 
         // retro-compatibility with excludes as string in config files
@@ -107,6 +106,7 @@ class Validator
      */
     public function help()
     {
+        $defaultExclude = self::DEFAULT_EXCLUDE;
         return <<<EOT
 Usage:
 
@@ -119,7 +119,10 @@ Required:
 Optional:
 
     --config=<file>                   Use a file for configuration. File can be a JSON, YAML or INI file.
-    --exclude=<directory>             List of directories to exclude, separated by a comma (,)
+    --exclude=<directory>             List of directories to exclude, separated by a comma (,).
+                                      Caution: this option replaces the default exclusion list
+                                      instead of extending it. Default:
+                                      {$defaultExclude}
     --extensions=<php,inc>            List of extensions to parse, separated by a comma (,)
     --composer[=<path|bool>]          Composer dependency analysis. Set to "false" to disable it. Set to a
                                       composer.json path (file or directory) to decouple the dependency
