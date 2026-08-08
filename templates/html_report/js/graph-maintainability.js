@@ -1,11 +1,23 @@
 function chartMaintainability(withoutComment) {
     var chartId = 'svg-maintainability';
     withoutComment = typeof (withoutComment) !== 'undefined' ? withoutComment : false;
-    var diameter = document.getElementById(chartId).offsetWidth;
+    var chart = document.getElementById(chartId);
+    if (!chart) {
+        return;
+    }
+
+    var diameter = chart.offsetWidth;
+    var chartClasses = classes.filter(function (item) {
+        return item && isFinite(item.ccn) && item.ccn > 0;
+    });
+
+    if (!diameter || !chartClasses.length) {
+        return;
+    }
 
     var json = {
         name: 'chart',
-        children: classes
+        children: chartClasses
     };
 
     // if already loaded, removed previous node
