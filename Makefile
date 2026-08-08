@@ -23,10 +23,12 @@ tag: check-tag
 	sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/$(TAG)/g" \
 		.github/ISSUE_TEMPLATE/Bug_report.md \
 		.github/ISSUE_TEMPLATE/Feature_request.md \
-		src/functions.php \
 		artifacts/debian/control \
 		artifacts/bintray.json \
 		doc/installation.md
+	@# getVersion() is displayed to the user and returns the version without
+	@# the "v" prefix, so it needs its own substitution.
+	sed -i -r "s/return '[0-9]+\.[0-9]+\.[0-9]+';/return '$(patsubst v%,%,$(TAG))';/" src/functions.php
 	sed -i -r "s/([0-9]{4}\-[0-9]{2}\-[0-9]{2})/`date +%Y-%m-%d`/g" artifacts/bintray.json
 	make changelog-deb
 
