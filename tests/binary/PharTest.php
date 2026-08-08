@@ -37,6 +37,17 @@ class PharTest extends \PHPUnit\Framework\TestCase
         $this->assertMatchesRegularExpression('!Classes\s+2!', $r);
     }
 
+    /**
+     * The HTML reporter copies the favicon out of the phar: when it is missing
+     * from the archive, the report emits a PHP warning (see issue #542).
+     */
+    public function testFaviconIsPackagedInThePhar(): void
+    {
+        $phar = new \Phar($this->phar);
+
+        $this->assertTrue(isset($phar['templates/html_report/favicon.ico']));
+    }
+
     public function testICanProvideMultipleDirectoriesToParse(): void
     {
         $command = sprintf(
