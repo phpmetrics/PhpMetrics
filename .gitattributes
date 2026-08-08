@@ -2,6 +2,7 @@
 releases/           export-ignore
 tests/              export-ignore
 artifacts/          export-ignore
+Formula/            export-ignore
 build/              export-ignore
 doc/                export-ignore
 

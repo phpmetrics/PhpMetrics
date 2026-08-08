@@ -1,0 +1,142 @@
+name: Homebrew
+
+# Points the Homebrew formula at a newly promoted release.
+#
+# release.yml publishes every release as a pre-release, to be promoted by hand
+# once the artifacts have been checked. This workflow listens to the "released"
+# event, which GitHub fires when a release is published as a real release *or*
+# when an existing pre-release is promoted to one. Pre-releases never trigger it,
+# so `brew install phpmetrics` can never end up serving an rc.
+#
+# It does two things:
+#   1. rewrites Formula/phpmetrics.rb on master, so the formula stays versioned
+#      and reviewable next to the code it installs;
+#   2. mirrors that file to the PhpMetrics/homebrew-phpmetrics tap, which is what
+#      `brew tap phpmetrics/phpmetrics && brew install phpmetrics` actually reads.
+#      Homebrew only resolves formulae from repositories named homebrew-<name>,
+#      hence the separate repository.
+#
+# Step 2 needs a token allowed to write to *another* repository, which the
+# default GITHUB_TOKEN is not. Create a fine-grained PAT (or a GitHub App token)
+# with "Contents: read and write" on the tap, and store it as the
+# HOMEBREW_TAP_TOKEN secret. Until that secret exists the job still updates the
+# formula here and simply skips the mirroring, with a warning.
+on:
+    release:
+        types: [released]
+    workflow_dispatch:
+        inputs:
+            version:
+                description: 'Version to point the formula at, format vX.Y.Z (e.g. v2.10.1). The release must already be published.'
+                required: true
+                type: string
+
+jobs:
+    formula:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        env:
+            TAP_REPOSITORY: PhpMetrics/homebrew-phpmetrics
+        steps:
+            -   uses: actions/checkout@v4
+                with:
+                    # The formula is committed back to master, whatever branch
+                    # the workflow has been dispatched from.
+                    ref: master
+
+            -   name: Resolve version
+                id: resolve
+                env:
+                    VERSION: ${{ inputs.version || github.event.release.tag_name }}
+                run: |
+                    # Stable versions only. A tag carrying an alpha/beta/rc suffix
+                    # is skipped rather than failed: promoting a release candidate
+                    # by mistake should not turn the release red, it should just
+                    # leave the formula where it is.
+                    if ! echo "$VERSION" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+                        echo "::warning::$VERSION is not a stable version, leaving the Homebrew formula untouched"
+                        echo "skip=true" >> "$GITHUB_OUTPUT"
+                        exit 0
+                    fi
+                    echo "skip=false" >> "$GITHUB_OUTPUT"
+                    echo "tag=$VERSION" >> "$GITHUB_OUTPUT"
+
+            -   name: Checksum the released phar
+                id: phar
+                if: steps.resolve.outputs.skip == 'false'
+                env:
+                    TAG: ${{ steps.resolve.outputs.tag }}
+                run: |
+                    URL="https://github.com/PhpMetrics/PhpMetrics/releases/download/$TAG/phpmetrics.phar"
+                    curl -fsSL -o phpmetrics.phar "$URL"
+                    echo "url=$URL" >> "$GITHUB_OUTPUT"
+                    echo "sha256=$(sha256sum phpmetrics.phar | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+                    rm -f phpmetrics.phar
+
+            -   name: Update the formula
+                if: steps.resolve.outputs.skip == 'false'
+                env:
+                    URL: ${{ steps.phar.outputs.url }}
+                    SHA256: ${{ steps.phar.outputs.sha256 }}
+                run: |
+                    # Only url and sha256: Homebrew derives the version from the
+                    # tag in the url, and `brew audit` rejects a redundant
+                    # `version` line.
+                    sed -i -E \
+                        -e "s|^  url \".*\"|  url \"$URL\"|" \
+                        -e "s|^  sha256 \".*\"|  sha256 \"$SHA256\"|" \
+                        Formula/phpmetrics.rb
+                    grep -E '^  (url|sha256) ' Formula/phpmetrics.rb
+
+            # Advisory only: a Homebrew style rule changing upstream should not
+            # be able to block a release from reaching the tap.
+            -   name: Check the formula style
+                if: steps.resolve.outputs.skip == 'false'
+                continue-on-error: true
+                run: brew style Formula/phpmetrics.rb
+
+            -   name: Commit the formula
+                if: steps.resolve.outputs.skip == 'false'
+                env:
+                    TAG: ${{ steps.resolve.outputs.tag }}
+                run: |
+                    git config user.name 'github-actions[bot]'
+                    git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+                    if git diff --quiet -- Formula/phpmetrics.rb; then
+                        echo "Formula already up to date"
+                        exit 0
+                    fi
+                    git add Formula/phpmetrics.rb
+                    git commit -m "Point the Homebrew formula at $TAG"
+                    # A release is promoted by hand, possibly long after the tag,
+                    # so master may have moved since the checkout.
+                    git pull --rebase origin master
+                    git push origin HEAD:master
+
+            -   name: Mirror the formula to the tap
+                if: steps.resolve.outputs.skip == 'false'
+                env:
+                    TAG: ${{ steps.resolve.outputs.tag }}
+                    TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+                run: |
+                    if [ -z "$TAP_TOKEN" ]; then
+                        echo "::warning::HOMEBREW_TAP_TOKEN is not set, skipping the push to $TAP_REPOSITORY. Create the tap repository and the secret to enable 'brew install phpmetrics'."
+                        exit 0
+                    fi
+                    git clone --depth 1 "https://x-access-token:$TAP_TOKEN@github.com/$TAP_REPOSITORY.git" tap
+                    mkdir -p tap/Formula
+                    cp Formula/phpmetrics.rb tap/Formula/phpmetrics.rb
+                    git -C tap config user.name 'github-actions[bot]'
+                    git -C tap config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+                    # `git add` before comparing: on the very first run the file
+                    # is untracked, and `git diff` alone would report no change.
+                    git -C tap add Formula/phpmetrics.rb
+                    if git -C tap diff --cached --quiet; then
+                        echo "Tap already up to date"
+                        exit 0
+                    fi
+                    git -C tap commit -m "phpmetrics $TAG"
+                    # `push origin HEAD` rather than a bare `push`: it needs no
+                    # upstream, so it still works on a freshly created tap.
+                    git -C tap push origin HEAD
