@@ -16,23 +16,33 @@ export PATH=~/.composer/vendor/bin:$PATH
 ## Phar
 
 ```bash
-curl https://github.com/phpmetrics/PhpMetrics/releases/download/2.10.0/phpmetrics.phar
+curl -fsSL -o phpmetrics.phar https://github.com/phpmetrics/PhpMetrics/releases/download/v2.10.0/phpmetrics.phar
 chmod +x phpmetrics.phar && mv phpmetrics.phar /usr/local/bin/phpmetrics
 ```
 
 ## Apt (Debian, Ubuntu...)
 
 ```bash
-curl https://github.com/phpmetrics/PhpMetrics/releases/download/2.10.0/phpmetrics.deb
+curl -fsSL -o phpmetrics.deb https://github.com/phpmetrics/PhpMetrics/releases/download/v2.10.0/phpmetrics.deb
 dpkg -i phpmetrics.deb
 ``` 
 
-## Brew (OSX)
+## Homebrew (macOS, Linux)
 
+PhpMetrics is not in homebrew-core, it is published through its own tap:
 
 ```bash
+brew tap phpmetrics/phpmetrics
+brew trust --tap phpmetrics/phpmetrics
 brew install phpmetrics
 ```
+
+Recent versions of Homebrew refuse to load formulae from a tap they don't know,
+hence the `brew trust` line. On older versions that command does not exist, and
+`brew install` works straight after `brew tap`.
+
+The formula installs the phar and depends on the `php` formula, so Homebrew
+pulls PHP in if you don't have it already.
 
 ## PhpArch
 
