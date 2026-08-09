@@ -1,3 +1,54 @@
+phpmetrics (2.11.0) unstable; urgency=low
+   * SystemComplexityVisitor fix for calling methods with the same name on different objects 
+   * Merge pull request #497 from andrii-pukhalevych/patch1 
+   * fix typo 
+   * Merge pull request #513 from YAhiru/fix-typo 
+   * Updated tests in order to be executed in PHP 8.4, and supports Php 8.4 
+   * fixed issue introduced by phpcs, and removed phpcs 
+   * added build script for standalone build 
+   * fixed CI 
+   * Merge pull request #524 from phpmetrics/php84-standalone 
+   * #518 test about deferencing new without parenthesis in PHP 8.4 
+   * Merge pull request #525 from phpmetrics/php84-standalone 
+   * updated build 
+   * releasing 
+   * releasing 
+   * update: replace MAINTAINER with LABEL fix: change cache clearing directory 
+   * Merge pull request #526 from ShotaroMuraoka/fix/dockerfile-improvement 
+   * fix: to avoid scanning the current directory for composer.json 
+   * Merge pull request #528 from ShotaroMuraoka/fix/scanning-invalid-directories 
+   * Use phpacker for binary release 
+   * Merge pull request #530 from phpmetrics/binary-phpacker 
+   * updated documentation 
+   * Updated logo 
+   * releasing v2.8.2 
+   * fix trends not displayed correctly 
+   * fix wrong details link to oop page 
+   * Fix PHP 8.2+ deprecation about dynamic property 
+   * Merge pull request #536 from davidmpaz/deprecation-warnings-dynamic-property 
+   * Merge pull request #532 from zimmer-yan/fix/wrong-details-link-for-oop 
+   * Merge pull request #531 from zimmer-yan/fix/trends-not-displayed-correctly 
+   * Avoid depreciations with PHP >= 8.3 
+   * Merge pull request #538 from phpmetrics/fixes_ci_php83 
+   * [#533] Way to set the composer path 
+   * Merge pull request #539 from phpmetrics/composer_path 
+   * releasing v2.8.2 
+   * releasing v2.8.2 
+   * Automate releases and fix release packaging 
+   * Merge pull request #540 from phpmetrics/release_auto 
+   * Clarify that --exclude replaces the default exclusion list 
+   * Merge pull request #541 from phpmetrics/exclude_vendor_warning 
+   * fix: Removed warnings in HTML report generation from PHAR builds and fixes paths 
+   * Merge pull request #543 from phpmetrics/fix_phar_report 
+   * fix: Trying to fix the Github Workflow for tagging 
+   * Merge pull request #544 from phpmetrics/fix_release 
+   * Publish PhpMetrics on Homebrew via a dedicated tap 
+   * Merge pull request #545 from phpmetrics/homebrew_formula 
+   * simplified releasing workflow 
+   * Merge pull request #546 from phpmetrics/stop_rlease_master 
+
+  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Sun, 09 Aug 2026 06:56:46 +0000
+
 phpmetrics (2.10.0) unstable; urgency=low
    * Prepare v3. WIP. 
    * Rebase on master (current 2.8.1) with adaptation for 3.x. Coverage got down. WIP. 
@@ -1619,6 +1670,8 @@ phpmetrics (1.8.2) unstable; urgency=low
    * wip debian
 
  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  Wed, 24 Feb 2016 17:44:56 +0100
+
+
 
 
 
