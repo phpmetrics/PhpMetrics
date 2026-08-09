@@ -18,7 +18,7 @@ Thanks for your help.
 PhpMetrics has several goals:
 + be stable
 + be performant
-+ run on the **maximum of PHP versions** (PHP 5.3 to PHP 8.4)
++ run on the **maximum of PHP versions** (PHP 5.6 to PHP 8.4)
 + be installable everywhere, **without dependency conflicts**
 
 For these reasons, the code of PhpMetrics is intentionally written in "legacy" PHP.
