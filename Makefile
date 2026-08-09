@@ -33,12 +33,12 @@ tag: check-tag
 	make changelog-deb
 
 
-# Tag git with last release
+# Tag git with last release. master is protected and is never pushed to: the
+# commit only lives under the tag.
 new_git_version: build tag
 	git add .github/ISSUE_TEMPLATE/Bug_report.md .github/ISSUE_TEMPLATE/Feature_request.md src/functions.php doc/installation.md artifacts/* releases/*
 	git commit -m "releasing `semver tag`"
 	git tag $(TAG) -m "releasing $(TAG)"
-	git push -u origin master
 	git push origin $(TAG)
 
 docker:

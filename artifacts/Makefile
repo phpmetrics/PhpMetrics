@@ -1,5 +1,7 @@
-# Latest tag reachable from HEAD (git tag alone sorts alphabetically: v3.0.0rc7 > v2.10.0)
-CURRENT_TAG=$(shell git describe --tags --abbrev=0)
+# Latest tag by version, not by reachability from HEAD: since release commits are
+# no longer merged into master, git describe wouldn't find them as ancestors
+# (git tag alone sorts alphabetically: v3.0.0rc7 > v2.10.0)
+CURRENT_TAG=$(shell git tag --sort=-v:refname | head -1)
 BUILD_DIR=releases
 
 include artifacts/phar/Makefile

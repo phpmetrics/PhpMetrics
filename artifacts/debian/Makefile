@@ -21,7 +21,7 @@ build-deb:
 changelog-deb:
 	@echo "phpmetrics ($(shell echo $(TAG) | sed s/^v//)) unstable; urgency=low" >/tmp/changelog
 	@echo >> artifacts/debian/changelog
-	@git log $(CURRENT_TAG)...HEAD --pretty=format:'   * %s ' --reverse >> /tmp/changelog
+	@git log $(CURRENT_TAG)..HEAD --pretty=format:'   * %s ' --reverse >> /tmp/changelog
 	@echo >> /tmp/changelog
 	@echo >> /tmp/changelog
 	@echo  "  -- Jean-François Lépine <lepinejeanfrancois@yahoo.fr>  $(shell date --rfc-2822)" >> /tmp/changelog
