@@ -50,3 +50,10 @@ See the [LICENSE](LICENSE) file.
 ## Contributing
 
 See the [CONTRIBUTING](doc/contributing.md) file.
+
+## Support the project
+
+PHPMetrics is built and maintained on free time. If it saved you some of yours:
+
+- ⭐ **Star the repository**. It costs nothing and it is how most developers discover the tool.
+- ❤️ **[Become a sponsor](https://github.com/sponsors/Halleck45)**. Sponsorship directly funds maintenance time and the addition of new features and metrics.
