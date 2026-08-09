@@ -3,9 +3,10 @@ name: Release
 # Manual release: you give the version, the job runs the release you used to run
 # locally with `make release TAG=vX.Y.Z`, on a runner instead of in Docker.
 #
-# It builds the artifacts (make build), bumps the version (make tag), pushes the
-# "releasing vX.Y.Z" commit and the tag on master, then publishes the GitHub
-# release with the artifacts attached.
+# It builds the artifacts (make build), bumps the version (make tag), commits the
+# bump and the built artifacts, tags that commit and pushes the tag (master is
+# protected and is never pushed to: the commit only lives under the tag), then
+# publishes the GitHub release with the artifacts attached.
 #
 # The release is published as a pre-release, so GitHub never labels it "latest".
 # Once the artifacts are checked, edit the release and untick "Set as a
@@ -73,14 +74,13 @@ jobs:
             # Same steps as the `new_git_version` target of the Makefile, inlined
             # because its commit message relies on the `semver` binary, which
             # only exists in the phpmetrics/releasing Docker image.
-            -   name: Push commit and tag
+            -   name: Tag and push
                 run: |
                     git config user.name 'github-actions[bot]'
                     git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
                     git add .github/ISSUE_TEMPLATE/Bug_report.md .github/ISSUE_TEMPLATE/Feature_request.md src/functions.php doc/installation.md artifacts/* releases/*
                     git commit -m "releasing $VERSION"
                     git tag "$VERSION" -m "releasing $VERSION"
-                    git push origin master
                     git push origin "$VERSION"
 
             -   name: Publish release
