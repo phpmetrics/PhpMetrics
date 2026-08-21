@@ -64,6 +64,12 @@ class SupportedVersionTest extends TestCase
         if (version_compare(PHP_VERSION, '8.4.0', '>=')) {
             $cases['php8.4.propertyhook'] = ['php8.4.propertyhook', 'Foo', ['nbMethods' => 0, 'number_operands_unique' => 2]];
         }
+        if (version_compare(PHP_VERSION, '8.5.0', '>=')) {
+            $cases['php8.5.pipe'] = ['php8.5.pipe', 'Foo', ['nbMethods' => 1]];
+        }
+        if (version_compare(PHP_VERSION, '8.6.0', '>=')) {
+            $cases['php8.6.readonlydefault'] = ['php8.6.readonlydefault', 'Foo', ['nbMethods' => 0]];
+        }
 
         return $cases;
     }
