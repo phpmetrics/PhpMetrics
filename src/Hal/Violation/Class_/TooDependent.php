@@ -8,6 +8,9 @@ use Hal\Violation\Violation;
 
 class TooDependent implements Violation
 {
+    /** @var ClassMetric|null */
+    private $metric;
+
     /**
      * @inheritdoc
      */
