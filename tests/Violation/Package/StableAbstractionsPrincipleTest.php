@@ -14,6 +14,24 @@ use \PHPUnit\Framework\TestCase;
  */
 class StableAbstractionsPrincipleTest extends TestCase
 {
+    public function testItIgnoresPackagesWithoutDistanceWithoutDeprecations(): void
+    {
+        $metric = new PackageMetric('package');
+        $metric->set('violations', new Violations());
+        $this->assertNull($metric->getDistance());
+
+        set_error_handler(function ($severity, $message, $file, $line) {
+            throw new \ErrorException($message, 0, $severity, $file, $line);
+        }, E_DEPRECATED);
+        try {
+            $object = new StableAbstractionsPrinciple();
+            $object->apply($metric);
+            $this->assertSame(0, $metric->get('violations')->count());
+        } finally {
+            restore_error_handler();
+        }
+    }
+
     public function testItIgnoresNonPackageMetrics(): void
     {
         $metric = $this->getMockBuilder(Metric::class)
